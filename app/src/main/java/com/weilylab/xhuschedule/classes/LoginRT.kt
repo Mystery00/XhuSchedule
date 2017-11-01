@@ -3,7 +3,7 @@ package com.weilylab.xhuschedule.classes
 /**
  * Created by myste.
  */
-open class RT
+class LoginRT : RT()
 {
-	lateinit var rt: String
+	lateinit var name: String
 }

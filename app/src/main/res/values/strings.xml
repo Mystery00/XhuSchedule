@@ -6,6 +6,7 @@
 
     <string name="url_vcode">http://tomcat.weilylab.com:8888/course/Course/getVCode?type=1</string>
     <string name="url_login">http://tomcat.weilylab.com:8888/course/Course/login</string>
+    <string name="url_get_content">http://tomcat.weilylab.com:8888/course/Course/getContent</string>
 
     <string name="action_settings">Settings</string>
     <string name="title_activity_login">Sign in</string>
