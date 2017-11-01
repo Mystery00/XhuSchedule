@@ -6,6 +6,7 @@ import android.text.TextUtils
 import android.view.View
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.weilylab.xhuschedule.classes.RT
 import io.reactivex.Observable
 import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -90,6 +91,23 @@ class LoginActivity : AppCompatActivity()
 
 	private fun login()
 	{
+		val observer=object :Observer<RT>
+		{
+			override fun onSubscribe(d: Disposable)
+			{
+			}
 
+			override fun onError(e: Throwable)
+			{
+			}
+
+			override fun onComplete()
+			{
+			}
+
+			override fun onNext(t: RT)
+			{
+			}
+		}
 	}
 }
