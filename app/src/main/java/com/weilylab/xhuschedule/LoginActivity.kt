@@ -9,9 +9,6 @@ import android.widget.TextView
 
 import kotlinx.android.synthetic.main.activity_login.*
 
-/**
- * A login screen that offers login via email/password.
- */
 class LoginActivity : AppCompatActivity()
 {
 
@@ -22,7 +19,6 @@ class LoginActivity : AppCompatActivity()
 		password.setOnEditorActionListener(TextView.OnEditorActionListener { _, id, _ ->
 			if (id == EditorInfo.IME_ACTION_DONE || id == EditorInfo.IME_NULL)
 			{
-				attemptLogin()
 				return@OnEditorActionListener true
 			}
 			false
