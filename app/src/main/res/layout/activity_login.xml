@@ -81,8 +81,8 @@
 
         <ImageView
             android:id="@+id/vcode_image_view"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
+            android:layout_width="72dp"
+            android:layout_height="27dp"
             android:layout_margin="8dp"
             android:contentDescription="@string/app_name"
             app:layout_constraintBottom_toBottomOf="@+id/vcode_text_input_layout"

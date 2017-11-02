@@ -1,17 +1,17 @@
 package com.weilylab.xhuschedule.activity
 
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.View
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.DiskCacheStrategy
+import android.widget.Toast
 import com.google.gson.Gson
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.classes.LoginRT
 import com.weilylab.xhuschedule.classes.RT
-import com.weilylab.xhuschedule.util.FileUtil
 import com.zyao89.view.zloading.ZLoadingDialog
 import com.zyao89.view.zloading.Z_TYPE
 import io.reactivex.Observable
@@ -27,7 +27,6 @@ import vip.mystery0.tools.hTTPok.HTTPokException
 import vip.mystery0.tools.hTTPok.HTTPokResponse
 import vip.mystery0.tools.hTTPok.HTTPokResponseListener
 import vip.mystery0.tools.logs.Logs
-import java.io.File
 
 class LoginActivity : AppCompatActivity()
 {
@@ -59,13 +58,16 @@ class LoginActivity : AppCompatActivity()
 
 		loadVcode()
 
+		vcode_image_view.setOnClickListener { loadVcode() }
 		username_sign_in_button.setOnClickListener { attemptLogin() }
 	}
 
 	private fun loadVcode()
 	{
-		val observer = object : Observer<File>
+		val observer = object : Observer<Bitmap>
 		{
+			lateinit var bitmap: Bitmap
+
 			override fun onSubscribe(d: Disposable)
 			{
 				Logs.i(TAG, "onSubscribe: ")
@@ -79,19 +81,17 @@ class LoginActivity : AppCompatActivity()
 			override fun onComplete()
 			{
 				Logs.i(TAG, "onComplete: ")
+				vcode_image_view.setImageBitmap(bitmap)
 			}
 
-			override fun onNext(file: File)
+			override fun onNext(bitmap: Bitmap)
 			{
 				Logs.i(TAG, "onNext: ")
-				Glide.with(this@LoginActivity)
-						.load(file)
-						.diskCacheStrategy(DiskCacheStrategy.NONE)
-						.into(vcode_image_view)
+				this.bitmap = bitmap
 			}
 		}
 
-		val observable = Observable.create<File> { subscriber ->
+		val observable = Observable.create<Bitmap> { subscriber ->
 			HTTPok().setOkHttpClient(client)
 					.setURL(getString(R.string.url_vcode))
 					.setRequestMethod(HTTPok.GET)
@@ -104,9 +104,7 @@ class LoginActivity : AppCompatActivity()
 
 						override fun onResponse(response: HTTPokResponse)
 						{
-							val file = File(cacheDir.absolutePath + "/vcode")
-							FileUtil.saveFile(response.inputStream, file)
-							subscriber.onNext(file)
+							subscriber.onNext(BitmapFactory.decodeStream(response.inputStream))
 							subscriber.onComplete()
 						}
 					})
@@ -205,6 +203,8 @@ class LoginActivity : AppCompatActivity()
 				if (rt.rt == "1")
 				{
 					rt = gson.fromJson(message, LoginRT::class.java)
+					Toast.makeText(this@LoginActivity, rt.name, Toast.LENGTH_SHORT)
+							.show()
 				}
 			}
 		}
