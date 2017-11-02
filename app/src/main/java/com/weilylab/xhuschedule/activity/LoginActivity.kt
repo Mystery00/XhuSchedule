@@ -1,5 +1,7 @@
 package com.weilylab.xhuschedule.activity
 
+import android.content.Context
+import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Color
@@ -12,7 +14,7 @@ import com.google.gson.Gson
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.classes.LoginRT
 import com.weilylab.xhuschedule.classes.RT
-import com.weilylab.xhuschedule.util.CookieUtil
+import com.weilylab.xhuschedule.util.ScheduleHelper
 import com.zyao89.view.zloading.ZLoadingDialog
 import com.zyao89.view.zloading.Z_TYPE
 import io.reactivex.Observable
@@ -28,6 +30,11 @@ import vip.mystery0.tools.hTTPok.HTTPokException
 import vip.mystery0.tools.hTTPok.HTTPokResponse
 import vip.mystery0.tools.hTTPok.HTTPokResponseListener
 import vip.mystery0.tools.logs.Logs
+import com.franmontiel.persistentcookiejar.persistence.SharedPrefsCookiePersistor
+import com.franmontiel.persistentcookiejar.cache.SetCookieCache
+import com.franmontiel.persistentcookiejar.PersistentCookieJar
+import java.util.concurrent.TimeUnit
+
 
 class LoginActivity : AppCompatActivity()
 {
@@ -36,31 +43,18 @@ class LoginActivity : AppCompatActivity()
 		private val TAG = "LoginActivity"
 	}
 
-	private val client = OkHttpClient.Builder()
-			.cookieJar(object : CookieJar
-			{
-				private val cookieStore = HashMap<String, MutableList<Cookie>?>()
-
-				override fun saveFromResponse(url: HttpUrl, cookies: MutableList<Cookie>?)
-				{
-					cookieStore.put(url.host(), cookies)
-					CookieUtil.getInstance(this@LoginActivity).saveCookies(url.host(), cookies)
-				}
-
-				override fun loadForRequest(url: HttpUrl): MutableList<Cookie>
-				{
-					return if (cookieStore.containsKey(url.host()))
-						cookieStore[url.host()] ?: ArrayList()
-					else
-						CookieUtil.getInstance(this@LoginActivity).getCookies(url.host()) ?: ArrayList()
-				}
-			})
-			.build()
+	private lateinit var client: OkHttpClient
 
 	override fun onCreate(savedInstanceState: Bundle?)
 	{
 		super.onCreate(savedInstanceState)
 		setContentView(R.layout.activity_login)
+		client = OkHttpClient.Builder()
+				.connectTimeout(10, TimeUnit.SECONDS)
+				.readTimeout(10, TimeUnit.SECONDS)
+				.writeTimeout(10, TimeUnit.SECONDS)
+				.cookieJar(PersistentCookieJar(SetCookieCache(), SharedPrefsCookiePersistor(this)))
+				.build()
 
 		loadVcode()
 
@@ -70,34 +64,44 @@ class LoginActivity : AppCompatActivity()
 
 	private fun loadVcode()
 	{
+		val dialog = ZLoadingDialog(this)
+				.setLoadingBuilder(Z_TYPE.SNAKE_CIRCLE)
+				.setLoadingColor(Color.BLACK)
+				.setHintText("Login......")
+				.setHintTextSize(16F)
+				.setHintTextColor(Color.BLACK)
+
 		val observer = object : Observer<Bitmap>
 		{
 			lateinit var bitmap: Bitmap
 
 			override fun onSubscribe(d: Disposable)
 			{
-				Logs.i(TAG, "onSubscribe: ")
+				dialog.show()
 			}
 
 			override fun onError(e: Throwable)
 			{
-				Logs.i(TAG, "onError: ")
+				e.printStackTrace()
+				dialog.dismiss()
+				Toast.makeText(this@LoginActivity, e.message, Toast.LENGTH_SHORT)
+						.show()
 			}
 
 			override fun onComplete()
 			{
-				Logs.i(TAG, "onComplete: ")
+				dialog.dismiss()
 				vcode_image_view.setImageBitmap(bitmap)
 			}
 
 			override fun onNext(bitmap: Bitmap)
 			{
-				Logs.i(TAG, "onNext: ")
 				this.bitmap = bitmap
 			}
 		}
 
 		val observable = Observable.create<Bitmap> { subscriber ->
+			Logs.i(TAG, "loadVcode: ")
 			HTTPok().setOkHttpClient(client)
 					.setURL(getString(R.string.url_vcode))
 					.setRequestMethod(HTTPok.GET)
@@ -182,36 +186,61 @@ class LoginActivity : AppCompatActivity()
 
 		val observer = object : Observer<String>
 		{
+			lateinit var message: String
+
 			override fun onSubscribe(d: Disposable)
 			{
-				Logs.i(TAG, "onSubscribe: ")
 				dialog.show()
 			}
 
 			override fun onError(e: Throwable)
 			{
-				Logs.i(TAG, "onError: ")
+				e.printStackTrace()
 				dialog.dismiss()
+				Toast.makeText(this@LoginActivity, e.message, Toast.LENGTH_SHORT)
+						.show()
 			}
 
 			override fun onComplete()
 			{
-				Logs.i(TAG, "onComplete: ")
 				dialog.dismiss()
+				val gson = Gson()
+				var rt: RT = gson.fromJson(message, RT::class.java)
+				if (rt.rt == "1")
+				{
+					rt = gson.fromJson(message, LoginRT::class.java)
+					ScheduleHelper.getInstance().isCookieAvailable = true
+					Toast.makeText(this@LoginActivity, getString(R.string.success_login, rt.name, getString(R.string.app_name)), Toast.LENGTH_SHORT)
+							.show()
+
+					val sharedPreference = getSharedPreferences("cache", Context.MODE_PRIVATE)
+					val editor = sharedPreference.edit()
+					editor.putString("studentNumber", usernameStr)
+					editor.putString("studentName", rt.name)
+					editor.apply()
+
+					startActivity(Intent(this@LoginActivity, MainActivity::class.java))
+					finish()
+				}
+				else
+				{
+					ScheduleHelper.getInstance().isCookieAvailable = false
+					Toast.makeText(this@LoginActivity,
+							when (rt.rt)
+							{
+								"2" -> "用户名错误！"
+								"3" -> "密码错误！"
+								"4" -> "验证码错误！"
+								else -> "登陆错误！"
+							}, Toast.LENGTH_SHORT)
+							.show()
+					loadVcode()
+				}
 			}
 
 			override fun onNext(message: String)
 			{
-				Logs.i(TAG, "onNext: ")
-				val gson = Gson()
-				var rt: RT = gson.fromJson(message, RT::class.java)
-				Logs.i(TAG, "onNext: " + rt.rt)
-				if (rt.rt == "1")
-				{
-					rt = gson.fromJson(message, LoginRT::class.java)
-					Toast.makeText(this@LoginActivity, rt.name, Toast.LENGTH_SHORT)
-							.show()
-				}
+				this.message = message
 			}
 		}
 
@@ -220,9 +249,6 @@ class LoginActivity : AppCompatActivity()
 			params.put("username", usernameStr)
 			params.put("password", passwordStr)
 			params.put("vcode", vcodeStr)
-			Logs.i(TAG, "login: " + usernameStr)
-			Logs.i(TAG, "login: " + passwordStr)
-			Logs.i(TAG, "login: " + vcodeStr)
 			HTTPok().setOkHttpClient(client)
 					.setURL(getString(R.string.url_login))
 					.setRequestMethod(HTTPok.POST)

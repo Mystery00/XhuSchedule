@@ -16,4 +16,6 @@ class ScheduleHelper private constructor()
 			return scheduleHelper!!
 		}
 	}
+
+	var isCookieAvailable = false
 }

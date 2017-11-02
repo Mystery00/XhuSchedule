@@ -43,6 +43,7 @@ dependencies {
     compile 'io.reactivex.rxjava2:rxjava:2.1.5'
     compile 'com.github.Mystery00.ToolsDemo:tools:2.2.1'
     compile 'com.zyao89:zloading:1.0.8'
+    compile 'com.github.franmontiel:PersistentCookieJar:v1.0.1'
 }
 repositories {
     mavenCentral()
