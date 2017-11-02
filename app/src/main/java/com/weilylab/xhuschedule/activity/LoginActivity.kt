@@ -12,6 +12,7 @@ import com.google.gson.Gson
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.classes.LoginRT
 import com.weilylab.xhuschedule.classes.RT
+import com.weilylab.xhuschedule.util.CookieUtil
 import com.zyao89.view.zloading.ZLoadingDialog
 import com.zyao89.view.zloading.Z_TYPE
 import io.reactivex.Observable
@@ -33,23 +34,28 @@ class LoginActivity : AppCompatActivity()
 	companion object
 	{
 		private val TAG = "LoginActivity"
-		private val client = OkHttpClient.Builder()
-				.cookieJar(object : CookieJar
-				{
-					private val cookieStore = HashMap<String, MutableList<Cookie>?>()
-
-					override fun saveFromResponse(url: HttpUrl, cookies: MutableList<Cookie>?)
-					{
-						cookieStore.put(url.host(), cookies)
-					}
-
-					override fun loadForRequest(url: HttpUrl): MutableList<Cookie>
-					{
-						return cookieStore[url.host()] ?: ArrayList()
-					}
-				})
-				.build()
 	}
+
+	private val client = OkHttpClient.Builder()
+			.cookieJar(object : CookieJar
+			{
+				private val cookieStore = HashMap<String, MutableList<Cookie>?>()
+
+				override fun saveFromResponse(url: HttpUrl, cookies: MutableList<Cookie>?)
+				{
+					cookieStore.put(url.host(), cookies)
+					CookieUtil.getInstance(this@LoginActivity).saveCookies(url.host(), cookies)
+				}
+
+				override fun loadForRequest(url: HttpUrl): MutableList<Cookie>
+				{
+					return if (cookieStore.containsKey(url.host()))
+						cookieStore[url.host()] ?: ArrayList()
+					else
+						CookieUtil.getInstance(this@LoginActivity).getCookies(url.host()) ?: ArrayList()
+				}
+			})
+			.build()
 
 	override fun onCreate(savedInstanceState: Bundle?)
 	{

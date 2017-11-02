@@ -1,13 +1,26 @@
 package com.weilylab.xhuschedule.util
 
+import android.content.Context
+import okhttp3.Cookie
 import java.io.*
 
 /**
  * Created by myste.
  */
-object FileUtil
+class FileUtil private constructor()
 {
-	@JvmStatic
+	companion object
+	{
+		private var fileUtil: FileUtil? = null
+
+		fun getInstance(): FileUtil
+		{
+			if (fileUtil == null)
+				fileUtil = FileUtil()
+			return fileUtil!!
+		}
+	}
+
 	fun saveFile(inputStream: InputStream, file: File): Boolean
 	{
 		try
