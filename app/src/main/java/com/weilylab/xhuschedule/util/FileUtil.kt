@@ -12,6 +12,8 @@ object FileUtil
 	{
 		try
 		{
+			if (file.exists())
+				file.delete()
 			val dataInputStream = DataInputStream(BufferedInputStream(inputStream))
 			val dataOutputStream = DataOutputStream(BufferedOutputStream(FileOutputStream(file)))
 			val bytes = ByteArray(1024 * 1024)

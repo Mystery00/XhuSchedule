@@ -6,7 +6,10 @@ import android.os.Bundle
 import android.text.TextUtils
 import android.view.View
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.google.gson.Gson
 import com.weilylab.xhuschedule.R
+import com.weilylab.xhuschedule.classes.LoginRT
 import com.weilylab.xhuschedule.classes.RT
 import com.weilylab.xhuschedule.util.FileUtil
 import com.zyao89.view.zloading.ZLoadingDialog
@@ -19,9 +22,12 @@ import io.reactivex.schedulers.Schedulers
 
 import kotlinx.android.synthetic.main.activity_login.*
 import okhttp3.*
+import vip.mystery0.tools.hTTPok.HTTPok
+import vip.mystery0.tools.hTTPok.HTTPokException
+import vip.mystery0.tools.hTTPok.HTTPokResponse
+import vip.mystery0.tools.hTTPok.HTTPokResponseListener
 import vip.mystery0.tools.logs.Logs
 import java.io.File
-import java.io.IOException
 
 class LoginActivity : AppCompatActivity()
 {
@@ -58,15 +64,6 @@ class LoginActivity : AppCompatActivity()
 
 	private fun loadVcode()
 	{
-//		Glide.with(this)
-//				.load(getString(R.string.url_vcode))
-//				.diskCacheStrategy(DiskCacheStrategy.NONE)
-//				.into(vcode_image_view)
-
-		val request = Request.Builder()
-				.url(getString(R.string.url_vcode))
-				.build()
-
 		val observer = object : Observer<File>
 		{
 			override fun onSubscribe(d: Disposable)
@@ -89,25 +86,31 @@ class LoginActivity : AppCompatActivity()
 				Logs.i(TAG, "onNext: ")
 				Glide.with(this@LoginActivity)
 						.load(file)
-						.asBitmap()
+						.diskCacheStrategy(DiskCacheStrategy.NONE)
 						.into(vcode_image_view)
 			}
 		}
 
 		val observable = Observable.create<File> { subscriber ->
-			val response = client.newCall(request).execute()
-			if (!response.isSuccessful) throw IOException("Unexpected code " + response)
+			HTTPok().setOkHttpClient(client)
+					.setURL(getString(R.string.url_vcode))
+					.setRequestMethod(HTTPok.GET)
+					.setListener(object : HTTPokResponseListener
+					{
+						override fun onError(message: String?)
+						{
+							subscriber.onError(HTTPokException(message!!))
+						}
 
-			val responseHeaders = response.headers()
-			for (i in 0 until responseHeaders.size())
-			{
-				Logs.i(TAG, "loadVcode: " + responseHeaders.name(i))
-				Logs.i(TAG, "loadVcode: " + responseHeaders.value(i))
-			}
-			val file = File(cacheDir.absolutePath + "/vcode")
-			FileUtil.saveFile(response.body().byteStream(), file)
-			subscriber.onNext(file)
-			subscriber.onComplete()
+						override fun onResponse(response: HTTPokResponse)
+						{
+							val file = File(cacheDir.absolutePath + "/vcode")
+							FileUtil.saveFile(response.inputStream, file)
+							subscriber.onNext(file)
+							subscriber.onComplete()
+						}
+					})
+					.open()
 		}
 
 		observable.subscribeOn(Schedulers.newThread())
@@ -173,7 +176,7 @@ class LoginActivity : AppCompatActivity()
 				.setHintTextSize(16F)
 				.setHintTextColor(Color.BLACK)
 
-		val observer = object : Observer<RT>
+		val observer = object : Observer<String>
 		{
 			override fun onSubscribe(d: Disposable)
 			{
@@ -193,13 +196,20 @@ class LoginActivity : AppCompatActivity()
 				dialog.dismiss()
 			}
 
-			override fun onNext(rt: RT)
+			override fun onNext(message: String)
 			{
+				Logs.i(TAG, "onNext: ")
+				val gson = Gson()
+				var rt: RT = gson.fromJson(message, RT::class.java)
 				Logs.i(TAG, "onNext: " + rt.rt)
+				if (rt.rt == "1")
+				{
+					rt = gson.fromJson(message, LoginRT::class.java)
+				}
 			}
 		}
 
-		val observable = Observable.create<RT> { subscriber ->
+		val observable = Observable.create<String> { subscriber ->
 			val params = HashMap<String, String>()
 			params.put("username", usernameStr)
 			params.put("password", passwordStr)
@@ -207,21 +217,25 @@ class LoginActivity : AppCompatActivity()
 			Logs.i(TAG, "login: " + usernameStr)
 			Logs.i(TAG, "login: " + passwordStr)
 			Logs.i(TAG, "login: " + vcodeStr)
+			HTTPok().setOkHttpClient(client)
+					.setURL(getString(R.string.url_login))
+					.setRequestMethod(HTTPok.POST)
+					.setParams(params)
+					.setListener(object : HTTPokResponseListener
+					{
+						override fun onError(message: String?)
+						{
+							subscriber.onError(HTTPokException(message!!))
+						}
 
-			val requestBody = FormBody.Builder()
-					.add("username", usernameStr)
-					.add("password", passwordStr)
-					.add("vcode", vcodeStr)
-					.build()
-			val request = Request.Builder()
-					.url(getString(R.string.url_login))
-					.post(requestBody)
-					.build()
-			val response = client.newCall(request).execute()
-			if (!response.isSuccessful) throw IOException("Unexpected code " + response)
-			Logs.i(TAG, "login: " + response.body().string())
+						override fun onResponse(response: HTTPokResponse)
+						{
+							subscriber.onNext(response.getMessage())
+							subscriber.onComplete()
+						}
+					})
+					.open()
 		}
-
 		observable.subscribeOn(Schedulers.newThread())
 				.observeOn(AndroidSchedulers.mainThread())
 				.subscribe(observer)
