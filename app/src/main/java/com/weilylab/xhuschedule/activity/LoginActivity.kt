@@ -6,11 +6,9 @@ import android.os.Bundle
 import android.text.TextUtils
 import android.view.View
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.google.gson.Gson
 import com.weilylab.xhuschedule.R
-import com.weilylab.xhuschedule.classes.LoginRT
 import com.weilylab.xhuschedule.classes.RT
+import com.weilylab.xhuschedule.util.FileUtil
 import com.zyao89.view.zloading.ZLoadingDialog
 import com.zyao89.view.zloading.Z_TYPE
 import io.reactivex.Observable
@@ -20,18 +18,32 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 
 import kotlinx.android.synthetic.main.activity_login.*
-import vip.mystery0.tools.hTTPok.HTTPok
-import vip.mystery0.tools.hTTPok.HTTPokException
-import vip.mystery0.tools.hTTPok.HTTPokResponse
-import vip.mystery0.tools.hTTPok.HTTPokResponseListener
+import okhttp3.*
 import vip.mystery0.tools.logs.Logs
-import java.io.InputStreamReader
+import java.io.File
+import java.io.IOException
 
 class LoginActivity : AppCompatActivity()
 {
 	companion object
 	{
 		private val TAG = "LoginActivity"
+		private val client = OkHttpClient.Builder()
+				.cookieJar(object : CookieJar
+				{
+					private val cookieStore = HashMap<String, MutableList<Cookie>?>()
+
+					override fun saveFromResponse(url: HttpUrl, cookies: MutableList<Cookie>?)
+					{
+						cookieStore.put(url.host(), cookies)
+					}
+
+					override fun loadForRequest(url: HttpUrl): MutableList<Cookie>
+					{
+						return cookieStore[url.host()] ?: ArrayList()
+					}
+				})
+				.build()
 	}
 
 	override fun onCreate(savedInstanceState: Bundle?)
@@ -46,10 +58,61 @@ class LoginActivity : AppCompatActivity()
 
 	private fun loadVcode()
 	{
-		Glide.with(this)
-				.load(getString(R.string.url_vcode))
-				.diskCacheStrategy(DiskCacheStrategy.NONE)
-				.into(vcode_image_view)
+//		Glide.with(this)
+//				.load(getString(R.string.url_vcode))
+//				.diskCacheStrategy(DiskCacheStrategy.NONE)
+//				.into(vcode_image_view)
+
+		val request = Request.Builder()
+				.url(getString(R.string.url_vcode))
+				.build()
+
+		val observer = object : Observer<File>
+		{
+			override fun onSubscribe(d: Disposable)
+			{
+				Logs.i(TAG, "onSubscribe: ")
+			}
+
+			override fun onError(e: Throwable)
+			{
+				Logs.i(TAG, "onError: ")
+			}
+
+			override fun onComplete()
+			{
+				Logs.i(TAG, "onComplete: ")
+			}
+
+			override fun onNext(file: File)
+			{
+				Logs.i(TAG, "onNext: ")
+				Glide.with(this@LoginActivity)
+						.load(file)
+						.asBitmap()
+						.into(vcode_image_view)
+			}
+		}
+
+		val observable = Observable.create<File> { subscriber ->
+			val response = client.newCall(request).execute()
+			if (!response.isSuccessful) throw IOException("Unexpected code " + response)
+
+			val responseHeaders = response.headers()
+			for (i in 0 until responseHeaders.size())
+			{
+				Logs.i(TAG, "loadVcode: " + responseHeaders.name(i))
+				Logs.i(TAG, "loadVcode: " + responseHeaders.value(i))
+			}
+			val file = File(cacheDir.absolutePath + "/vcode")
+			FileUtil.saveFile(response.body().byteStream(), file)
+			subscriber.onNext(file)
+			subscriber.onComplete()
+		}
+
+		observable.subscribeOn(Schedulers.newThread())
+				.observeOn(AndroidSchedulers.mainThread())
+				.subscribe(observer)
 	}
 
 	private fun attemptLogin()
@@ -141,24 +204,22 @@ class LoginActivity : AppCompatActivity()
 			params.put("username", usernameStr)
 			params.put("password", passwordStr)
 			params.put("vcode", vcodeStr)
-			HTTPok().setURL(getString(R.string.url_login))
-					.setRequestMethod(HTTPok.GET)
-					.setParams(params)
-					.setListener(object : HTTPokResponseListener
-					{
-						override fun onError(message: String?)
-						{
-							subscriber.onError(HTTPokException(message!!))
-						}
+			Logs.i(TAG, "login: " + usernameStr)
+			Logs.i(TAG, "login: " + passwordStr)
+			Logs.i(TAG, "login: " + vcodeStr)
 
-						override fun onResponse(response: HTTPokResponse)
-						{
-							val rt = Gson().fromJson(InputStreamReader(response.inputStream), RT::class.java)
-							subscriber.onNext(rt)
-							subscriber.onComplete()
-						}
-					})
-					.open()
+			val requestBody = FormBody.Builder()
+					.add("username", usernameStr)
+					.add("password", passwordStr)
+					.add("vcode", vcodeStr)
+					.build()
+			val request = Request.Builder()
+					.url(getString(R.string.url_login))
+					.post(requestBody)
+					.build()
+			val response = client.newCall(request).execute()
+			if (!response.isSuccessful) throw IOException("Unexpected code " + response)
+			Logs.i(TAG, "login: " + response.body().string())
 		}
 
 		observable.subscribeOn(Schedulers.newThread())

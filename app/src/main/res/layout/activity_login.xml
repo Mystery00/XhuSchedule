@@ -71,7 +71,7 @@
                 android:id="@+id/vcode"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:digits="0123456789abcdefghigklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+                android:digits="0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
                 android:imeActionLabel="@string/action_sign_in_short"
                 android:imeOptions="actionDone"
                 android:maxLines="1"
