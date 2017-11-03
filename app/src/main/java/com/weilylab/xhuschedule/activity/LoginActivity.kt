@@ -21,7 +21,6 @@ import io.reactivex.Observable
 import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
-import io.reactivex.functions.Function
 import io.reactivex.schedulers.Schedulers
 
 import kotlinx.android.synthetic.main.activity_login.*
@@ -89,7 +88,7 @@ class LoginActivity : AppCompatActivity()
 
 		val observable = Observable.create<Bitmap> { subscriber ->
 			Logs.i(TAG, "loadVcode: ")
-			HTTPok().setOkHttpClient(ScheduleHelper.getInstance().client)
+			HTTPok().setOkHttpClient(ScheduleHelper.getInstance().getClient(this))
 					.setURL(getString(R.string.url_vcode))
 					.setRequestMethod(HTTPok.GET)
 					.setListener(object : HTTPokResponseListener
@@ -99,9 +98,9 @@ class LoginActivity : AppCompatActivity()
 							subscriber.onError(HTTPokException(message!!))
 						}
 
-						override fun onResponse(response: HTTPokResponse)
+						override fun onResponse(response: HTTPokResponse?)
 						{
-							subscriber.onNext(BitmapFactory.decodeStream(response.inputStream))
+							subscriber.onNext(BitmapFactory.decodeStream(response?.inputStream))
 							subscriber.onComplete()
 						}
 					})
@@ -236,7 +235,7 @@ class LoginActivity : AppCompatActivity()
 			params.put("username", usernameStr)
 			params.put("password", passwordStr)
 			params.put("vcode", vcodeStr)
-			HTTPok().setOkHttpClient(ScheduleHelper.getInstance().client)
+			HTTPok().setOkHttpClient(ScheduleHelper.getInstance().getClient(this))
 					.setURL(getString(R.string.url_login))
 					.setRequestMethod(HTTPok.POST)
 					.setParams(params)
@@ -247,9 +246,9 @@ class LoginActivity : AppCompatActivity()
 							subscriber.onError(HTTPokException(message!!))
 						}
 
-						override fun onResponse(response: HTTPokResponse)
+						override fun onResponse(response: HTTPokResponse?)
 						{
-							subscriber.onNext(response.getMessage())
+							subscriber.onNext(response!!.getMessage())
 							subscriber.onComplete()
 						}
 					})

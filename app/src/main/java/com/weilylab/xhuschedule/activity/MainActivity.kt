@@ -10,7 +10,11 @@ import android.support.v7.app.AppCompatActivity
 import android.util.Base64
 import android.view.Menu
 import android.view.MenuItem
+import com.google.gson.Gson
 import com.weilylab.xhuschedule.R
+import com.weilylab.xhuschedule.classes.ContentRT
+import com.weilylab.xhuschedule.classes.RT
+import com.weilylab.xhuschedule.util.FileUtil
 import com.weilylab.xhuschedule.util.ScheduleHelper
 import io.reactivex.Observable
 import io.reactivex.Observer
@@ -19,9 +23,12 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
+import kotlinx.android.synthetic.main.content_main.*
+import vip.mystery0.tools.hTTPok.HTTPok
 import vip.mystery0.tools.logs.Logs
 import java.io.File
-import java.util.function.Function
+import java.io.FileInputStream
+import java.io.InputStreamReader
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener
 {
@@ -29,6 +36,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 	{
 		private val TAG = "MainActivity"
 	}
+
+	private lateinit var rt: RT
 
 	override fun onCreate(savedInstanceState: Bundle?)
 	{
@@ -75,27 +84,78 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 					finish()
 					return
 				}
+				else
+				{
+					textView.text = (rt as ContentRT).courses.contentToString()
+				}
 			}
 		}
 
 		val observable = Observable.create<Boolean> { subscriber ->
-			val parentFile = File(cacheDir.absolutePath + File.separator + "caches")
+			val parentFile = File(cacheDir.absolutePath + File.separator + "caches/")
+			if (!parentFile.exists())
+				parentFile.mkdirs()
 			val sharedPreference = getSharedPreferences("cache", Context.MODE_PRIVATE)
 			val studentNumber = sharedPreference.getString("studentNumber", "0")
 			val studentName = sharedPreference.getString("studentName", "0")
+			Logs.i(TAG, "checkCache: " + studentName)
+			Logs.i(TAG, "checkCache: " + studentNumber)
 			if (studentNumber == "0" || studentName == "0")
 			{
 				subscriber.onNext(false)
 				subscriber.onComplete()
+				return@create
+			}
+			val base64Name = Base64.encodeToString(studentNumber.toByteArray(), Base64.DEFAULT)
+			//判断是否有缓存
+			Logs.i(TAG, "checkCache: 检查缓存文件")
+			val cacheResult = parentFile.listFiles().filter { it.name == base64Name }.size == 1
+			subscriber.onNext(cacheResult)
+			val httpOK = HTTPok()
+			val httpOKResponse = httpOK.setOkHttpClient(ScheduleHelper.getInstance().getClient(this))
+					.setURL(getString(R.string.url_get_content))
+					.setRequestMethod(HTTPok.POST)
+					.connect()
+			if (!httpOKResponse.response.isSuccessful)
+			{
+				Logs.i(TAG, "checkCache: 不成功")
+				subscriber.onNext(false)
+				subscriber.onComplete()
+				return@create
+			}
+			val newFile = File(parentFile, base64Name + ".temp")
+			Logs.i(TAG, "checkCache: 获取文件")
+			val createResult = httpOKResponse.getFile(newFile)
+			subscriber.onNext(createResult)
+			val newMD5 = FileUtil.getInstance().getMD5(newFile)
+			val oldFile = File(parentFile, base64Name)
+			var oldMD5 = ""
+			if (oldFile.exists())
+			{
+				oldMD5 = FileUtil.getInstance().getMD5(oldFile)!!
+			}
+			val gson = Gson()
+			rt = gson.fromJson(InputStreamReader(FileInputStream(newFile)), RT::class.java)
+			if (rt.rt != "1")
+			{
+				Logs.i(TAG, "checkCache: 格式错误")
+				subscriber.onNext(false)
+				subscriber.onComplete()
+				return@create
+			}
+			if (newMD5 != oldMD5)
+			{
+				Logs.i(TAG, "checkCache: 文件内容不同")
+				oldFile.delete()
+				newFile.renameTo(oldFile)
 			}
 			else
 			{
-				val base64Name = Base64.encodeToString(studentNumber.toByteArray(), Base64.DEFAULT)
-				//判断是否有缓存
-				subscriber.onNext(parentFile.listFiles().filter { it.name == base64Name }.size == 1)
-
-				subscriber.onComplete()
+				newFile.delete()
 			}
+			rt = gson.fromJson(InputStreamReader(FileInputStream(oldFile)), ContentRT::class.java)
+			subscriber.onNext(true)
+			subscriber.onComplete()
 		}
 
 		observable.subscribeOn(Schedulers.io())
