@@ -1,7 +1,5 @@
 package com.weilylab.xhuschedule.util
 
-import android.content.Context
-import okhttp3.Cookie
 import java.io.*
 
 /**
@@ -11,6 +9,7 @@ class FileUtil private constructor()
 {
 	companion object
 	{
+		private val TAG = "FileUtil"
 		private var fileUtil: FileUtil? = null
 
 		fun getInstance(): FileUtil

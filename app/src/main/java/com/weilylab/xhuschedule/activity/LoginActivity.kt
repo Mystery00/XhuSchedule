@@ -21,20 +21,15 @@ import io.reactivex.Observable
 import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
+import io.reactivex.functions.Function
 import io.reactivex.schedulers.Schedulers
 
 import kotlinx.android.synthetic.main.activity_login.*
-import okhttp3.*
 import vip.mystery0.tools.hTTPok.HTTPok
 import vip.mystery0.tools.hTTPok.HTTPokException
 import vip.mystery0.tools.hTTPok.HTTPokResponse
 import vip.mystery0.tools.hTTPok.HTTPokResponseListener
 import vip.mystery0.tools.logs.Logs
-import com.franmontiel.persistentcookiejar.persistence.SharedPrefsCookiePersistor
-import com.franmontiel.persistentcookiejar.cache.SetCookieCache
-import com.franmontiel.persistentcookiejar.PersistentCookieJar
-import java.util.concurrent.TimeUnit
-
 
 class LoginActivity : AppCompatActivity()
 {
@@ -43,18 +38,10 @@ class LoginActivity : AppCompatActivity()
 		private val TAG = "LoginActivity"
 	}
 
-	private lateinit var client: OkHttpClient
-
 	override fun onCreate(savedInstanceState: Bundle?)
 	{
 		super.onCreate(savedInstanceState)
 		setContentView(R.layout.activity_login)
-		client = OkHttpClient.Builder()
-				.connectTimeout(10, TimeUnit.SECONDS)
-				.readTimeout(10, TimeUnit.SECONDS)
-				.writeTimeout(10, TimeUnit.SECONDS)
-				.cookieJar(PersistentCookieJar(SetCookieCache(), SharedPrefsCookiePersistor(this)))
-				.build()
 
 		loadVcode()
 
@@ -102,7 +89,7 @@ class LoginActivity : AppCompatActivity()
 
 		val observable = Observable.create<Bitmap> { subscriber ->
 			Logs.i(TAG, "loadVcode: ")
-			HTTPok().setOkHttpClient(client)
+			HTTPok().setOkHttpClient(ScheduleHelper.getInstance().client)
 					.setURL(getString(R.string.url_vcode))
 					.setRequestMethod(HTTPok.GET)
 					.setListener(object : HTTPokResponseListener
@@ -249,7 +236,7 @@ class LoginActivity : AppCompatActivity()
 			params.put("username", usernameStr)
 			params.put("password", passwordStr)
 			params.put("vcode", vcodeStr)
-			HTTPok().setOkHttpClient(client)
+			HTTPok().setOkHttpClient(ScheduleHelper.getInstance().client)
 					.setURL(getString(R.string.url_login))
 					.setRequestMethod(HTTPok.POST)
 					.setParams(params)

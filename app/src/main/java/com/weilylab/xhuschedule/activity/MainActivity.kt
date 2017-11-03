@@ -21,6 +21,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 import vip.mystery0.tools.logs.Logs
 import java.io.File
+import java.util.function.Function
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener
 {
@@ -90,7 +91,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 			else
 			{
 				val base64Name = Base64.encodeToString(studentNumber.toByteArray(), Base64.DEFAULT)
-//				subscriber.onNext(parentFile.listFiles().filter { it.name == base64Name }.size == 1)
+				//判断是否有缓存
+				subscriber.onNext(parentFile.listFiles().filter { it.name == base64Name }.size == 1)
+
 				subscriber.onComplete()
 			}
 		}

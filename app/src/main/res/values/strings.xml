@@ -4,9 +4,9 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
-    <string name="url_vcode">http://raspberrypi.weilylab.com:8080/course/Course/getVCode?type=1</string>
-    <string name="url_login">http://raspberrypi.weilylab.com:8080/course/Course/login</string>
-    <string name="url_get_content">http://raspberrypi.weilylab.com:8080/course/Course/getContent</string>
+    <string name="url_vcode">http://tomcat.weilylab.com:7823/course/Course/getVCode?type=1</string>
+    <string name="url_login">http://tomcat.weilylab.com:7823/course/Course/login</string>
+    <string name="url_get_content">http://tomcat.weilylab.com:7823/course/Course/getContent</string>
 
     <string name="action_settings">Settings</string>
     <string name="title_activity_login">Sign in</string>
