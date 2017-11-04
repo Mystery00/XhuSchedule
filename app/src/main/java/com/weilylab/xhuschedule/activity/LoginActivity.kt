@@ -23,8 +23,9 @@ import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
-
 import kotlinx.android.synthetic.main.activity_login.*
+
+import kotlinx.android.synthetic.main.content_login.*
 import vip.mystery0.tools.hTTPok.HTTPokException
 import vip.mystery0.tools.logs.Logs
 
@@ -45,7 +46,7 @@ class LoginActivity : AppCompatActivity()
 		loadVcode()
 
 		vcode_image_view.setOnClickListener { loadVcode() }
-		username_sign_in_button.setOnClickListener { attemptLogin() }
+		login_button.setOnClickListener { attemptLogin() }
 	}
 
 	private fun loadVcode()

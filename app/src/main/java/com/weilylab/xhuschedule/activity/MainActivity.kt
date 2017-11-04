@@ -25,8 +25,6 @@ import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlinx.android.synthetic.main.content_main.*
-import vip.mystery0.tools.hTTPok.HTTPok
-import vip.mystery0.tools.hTTPok.HTTPokResponse
 import vip.mystery0.tools.logs.Logs
 import java.io.File
 import java.io.FileInputStream
@@ -95,6 +93,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 		}
 
 		val observable = Observable.create<Boolean> { subscriber ->
+			//调试登陆界面
+//			subscriber.onComplete()
 			val parentFile = File(cacheDir.absolutePath + File.separator + "caches/")
 			if (!parentFile.exists())
 				parentFile.mkdirs()
@@ -126,7 +126,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 			}
 			val newFile = File(parentFile, base64Name + ".temp")
 			Logs.i(TAG, "checkCache: 获取文件")
-			val createResult = FileUtil.getInstance().saveFile(response.body()?.byteStream(),newFile)
+			val createResult = FileUtil.getInstance().saveFile(response.body()?.byteStream(), newFile)
 			subscriber.onNext(createResult)
 			val newMD5 = FileUtil.getInstance().getMD5(newFile)
 			val oldFile = File(parentFile, base64Name)

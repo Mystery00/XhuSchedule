@@ -185,7 +185,7 @@ open class PersistentCookieStore(context: Context)
 		val stringBuilder = StringBuilder(bytes.size * 2)
 		for (element in bytes)
 		{
-			val v = (element.toInt() and 0xff).shl(8)
+			val v = (element.toInt() and 0xff)
 			if (v < 16)
 			{
 				stringBuilder.append('0')
