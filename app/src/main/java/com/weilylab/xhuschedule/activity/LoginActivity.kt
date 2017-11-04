@@ -4,7 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.graphics.Color
+import android.os.Build
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.text.TextUtils
@@ -37,11 +37,16 @@ class LoginActivity : AppCompatActivity()
 	}
 
 	private val retrofit = ScheduleHelper.getInstance().getRetrofit()
+	private lateinit var vcodeDialog: ZLoadingDialog
+
+	private lateinit var loginDialog: ZLoadingDialog
 
 	override fun onCreate(savedInstanceState: Bundle?)
 	{
 		super.onCreate(savedInstanceState)
 		setContentView(R.layout.activity_login)
+
+		initView()
 
 		loadVcode()
 
@@ -49,35 +54,49 @@ class LoginActivity : AppCompatActivity()
 		login_button.setOnClickListener { attemptLogin() }
 	}
 
+	private fun initView()
+	{
+		vcodeDialog = ZLoadingDialog(this)
+				.setLoadingBuilder(Z_TYPE.SNAKE_CIRCLE)
+				.setHintText("updating......")
+				.setHintTextSize(16F)
+
+		loginDialog = ZLoadingDialog(this)
+				.setLoadingBuilder(Z_TYPE.STAR_LOADING)
+				.setHintText("logging in......")
+				.setHintTextSize(16F)
+
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+		{
+			vcodeDialog.setLoadingColor(resources.getColor(R.color.colorAccent, null))
+			vcodeDialog.setHintTextColor(resources.getColor(R.color.colorAccent, null))
+			loginDialog.setLoadingColor(resources.getColor(R.color.colorAccent, null))
+			loginDialog.setHintTextColor(resources.getColor(R.color.colorAccent, null))
+		}
+	}
+
 	private fun loadVcode()
 	{
-		val dialog = ZLoadingDialog(this)
-				.setLoadingBuilder(Z_TYPE.SNAKE_CIRCLE)
-				.setLoadingColor(Color.BLACK)
-				.setHintText("Login......")
-				.setHintTextSize(16F)
-				.setHintTextColor(Color.BLACK)
-
 		val observer = object : Observer<Bitmap>
 		{
 			lateinit var bitmap: Bitmap
 
 			override fun onSubscribe(d: Disposable)
 			{
-				dialog.show()
+				vcodeDialog.show()
 			}
 
 			override fun onError(e: Throwable)
 			{
 				e.printStackTrace()
-				dialog.dismiss()
+				vcodeDialog.dismiss()
 				Toast.makeText(this@LoginActivity, e.message, Toast.LENGTH_SHORT)
 						.show()
 			}
 
 			override fun onComplete()
 			{
-				dialog.dismiss()
+				vcodeDialog.dismiss()
 				vcode_image_view.setImageBitmap(bitmap)
 			}
 
@@ -159,33 +178,26 @@ class LoginActivity : AppCompatActivity()
 		val passwordStr = password.text.toString()
 		val vcodeStr = vcode.text.toString()
 
-		val dialog = ZLoadingDialog(this)
-				.setLoadingBuilder(Z_TYPE.STAR_LOADING)
-				.setLoadingColor(Color.BLACK)
-				.setHintText("Login......")
-				.setHintTextSize(16F)
-				.setHintTextColor(Color.BLACK)
-
 		val observer = object : Observer<String>
 		{
 			lateinit var message: String
 
 			override fun onSubscribe(d: Disposable)
 			{
-				dialog.show()
+				loginDialog.show()
 			}
 
 			override fun onError(e: Throwable)
 			{
 				e.printStackTrace()
-				dialog.dismiss()
+				loginDialog.dismiss()
 				Toast.makeText(this@LoginActivity, e.message, Toast.LENGTH_SHORT)
 						.show()
 			}
 
 			override fun onComplete()
 			{
-				dialog.dismiss()
+				loginDialog.dismiss()
 				val gson = Gson()
 				var rt: RT = gson.fromJson(message, RT::class.java)
 				if (rt.rt == "1")
