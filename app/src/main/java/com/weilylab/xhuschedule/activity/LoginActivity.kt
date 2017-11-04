@@ -27,15 +27,9 @@ import kotlinx.android.synthetic.main.activity_login.*
 
 import kotlinx.android.synthetic.main.content_login.*
 import vip.mystery0.tools.hTTPok.HTTPokException
-import vip.mystery0.tools.logs.Logs
 
 class LoginActivity : AppCompatActivity()
 {
-	companion object
-	{
-		private val TAG = "LoginActivity"
-	}
-
 	private val retrofit = ScheduleHelper.getInstance().getRetrofit()
 	private lateinit var vcodeDialog: ZLoadingDialog
 
@@ -107,7 +101,6 @@ class LoginActivity : AppCompatActivity()
 		}
 
 		val observable = Observable.create<Bitmap> { subscriber ->
-			Logs.i(TAG, "loadVcode: ")
 			val service = retrofit.create(RTResponse::class.java)
 			val call = service.getVCodeCall(1)
 			val response = call.execute()

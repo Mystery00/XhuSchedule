@@ -48,6 +48,7 @@ dependencies {
     compile 'com.squareup.okhttp3:okhttp:3.9.0'
     compile 'com.github.Mystery00.ToolsDemo:tools:2.2.6'
     compile 'com.zyao89:zloading:1.0.8'
+    compile 'de.hdodenhof:circleimageview:2.2.0'
 }
 repositories {
     mavenCentral()

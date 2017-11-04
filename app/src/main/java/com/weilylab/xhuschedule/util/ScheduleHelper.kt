@@ -28,6 +28,8 @@ class ScheduleHelper private constructor()
 	var isCookieAvailable = false
 	private var client: OkHttpClient? = null
 	private var retrofit: Retrofit? = null
+	var studentName = "0"
+	var studentNumber = "0"
 
 	private fun getClient(): OkHttpClient
 	{

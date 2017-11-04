@@ -4,6 +4,7 @@ import java.io.*
 import java.math.BigInteger
 import java.nio.channels.FileChannel
 import java.security.MessageDigest
+import java.util.regex.Pattern
 
 /**
  * Created by myste.
@@ -21,6 +22,14 @@ class FileUtil private constructor()
 				fileUtil = FileUtil()
 			return fileUtil!!
 		}
+	}
+
+	fun filterString(name: String): String
+	{
+		val regEx = "[^a-zA-Z0-9]"
+		val pattern = Pattern.compile(regEx)
+		val matcher = pattern.matcher(name)
+		return matcher.replaceAll("").trim()
 	}
 
 	fun saveFile(data: String, file: File): Boolean
