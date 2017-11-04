@@ -25,11 +25,16 @@ class FileUtil private constructor()
 
 	fun saveFile(data: String, file: File): Boolean
 	{
+		return saveFile(data.byteInputStream(), file)
+	}
+
+	fun saveFile(inputStream: InputStream?, file: File): Boolean
+	{
 		try
 		{
 			if (file.exists())
 				file.delete()
-			val dataInputStream = DataInputStream(BufferedInputStream(data.byteInputStream()))
+			val dataInputStream = DataInputStream(BufferedInputStream(inputStream))
 			val dataOutputStream = DataOutputStream(BufferedOutputStream(FileOutputStream(file)))
 			val bytes = ByteArray(1024 * 1024)
 			while (true)

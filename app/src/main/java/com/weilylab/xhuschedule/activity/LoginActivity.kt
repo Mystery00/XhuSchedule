@@ -14,6 +14,7 @@ import com.google.gson.Gson
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.classes.LoginRT
 import com.weilylab.xhuschedule.classes.RT
+import com.weilylab.xhuschedule.interfaces.RTResponse
 import com.weilylab.xhuschedule.util.ScheduleHelper
 import com.zyao89.view.zloading.ZLoadingDialog
 import com.zyao89.view.zloading.Z_TYPE
@@ -24,10 +25,7 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 
 import kotlinx.android.synthetic.main.activity_login.*
-import vip.mystery0.tools.hTTPok.HTTPok
 import vip.mystery0.tools.hTTPok.HTTPokException
-import vip.mystery0.tools.hTTPok.HTTPokResponse
-import vip.mystery0.tools.hTTPok.HTTPokResponseListener
 import vip.mystery0.tools.logs.Logs
 
 class LoginActivity : AppCompatActivity()
@@ -36,6 +34,8 @@ class LoginActivity : AppCompatActivity()
 	{
 		private val TAG = "LoginActivity"
 	}
+
+	private val retrofit = ScheduleHelper.getInstance().getRetrofit()
 
 	override fun onCreate(savedInstanceState: Bundle?)
 	{
@@ -88,23 +88,18 @@ class LoginActivity : AppCompatActivity()
 
 		val observable = Observable.create<Bitmap> { subscriber ->
 			Logs.i(TAG, "loadVcode: ")
-			HTTPok().setOkHttpClient(ScheduleHelper.getInstance().getClient(this))
-					.setURL(getString(R.string.url_vcode))
-					.setRequestMethod(HTTPok.GET)
-					.setListener(object : HTTPokResponseListener
-					{
-						override fun onError(message: String?)
-						{
-							subscriber.onError(HTTPokException(message!!))
-						}
-
-						override fun onResponse(response: HTTPokResponse?)
-						{
-							subscriber.onNext(BitmapFactory.decodeStream(response?.inputStream))
-							subscriber.onComplete()
-						}
-					})
-					.open()
+			val service = retrofit.create(RTResponse::class.java)
+			val call = service.getVCodeCall(1)
+			val response = call.execute()
+			if (response.isSuccessful)
+			{
+				subscriber.onNext(BitmapFactory.decodeStream(response.body()?.byteStream()))
+				subscriber.onComplete()
+			}
+			else
+			{
+				subscriber.onError(HTTPokException(response.errorBody().toString()))
+			}
 		}
 
 		observable.subscribeOn(Schedulers.newThread())
@@ -235,24 +230,18 @@ class LoginActivity : AppCompatActivity()
 			params.put("username", usernameStr)
 			params.put("password", passwordStr)
 			params.put("vcode", vcodeStr)
-			HTTPok().setOkHttpClient(ScheduleHelper.getInstance().getClient(this))
-					.setURL(getString(R.string.url_login))
-					.setRequestMethod(HTTPok.POST)
-					.setParams(params)
-					.setListener(object : HTTPokResponseListener
-					{
-						override fun onError(message: String?)
-						{
-							subscriber.onError(HTTPokException(message!!))
-						}
-
-						override fun onResponse(response: HTTPokResponse?)
-						{
-							subscriber.onNext(response!!.getMessage())
-							subscriber.onComplete()
-						}
-					})
-					.open()
+			val service = retrofit.create(RTResponse::class.java)
+			val call = service.loginCall(usernameStr, passwordStr, vcodeStr)
+			val response = call.execute()
+			if (response.isSuccessful)
+			{
+				subscriber.onNext(response.body()?.string()!!)
+				subscriber.onComplete()
+			}
+			else
+			{
+				subscriber.onError(HTTPokException(response.errorBody().toString()))
+			}
 		}
 		observable.subscribeOn(Schedulers.newThread())
 				.observeOn(AndroidSchedulers.mainThread())

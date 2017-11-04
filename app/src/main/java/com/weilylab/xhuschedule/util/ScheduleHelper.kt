@@ -1,13 +1,11 @@
 package com.weilylab.xhuschedule.util
 
 import android.content.Context
-import com.franmontiel.persistentcookiejar.PersistentCookieJar
-import com.franmontiel.persistentcookiejar.cache.SetCookieCache
-import com.franmontiel.persistentcookiejar.persistence.SharedPrefsCookiePersistor
 import com.weilylab.xhuschedule.APP
-import com.weilylab.xhuschedule.util.cookie.AddCookiesInterceptor
-import com.weilylab.xhuschedule.util.cookie.SaveCookiesInterceptor
+import com.weilylab.xhuschedule.util.cookie.CookieManger
 import okhttp3.OkHttpClient
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
 /**
@@ -29,8 +27,9 @@ class ScheduleHelper private constructor()
 
 	var isCookieAvailable = false
 	private var client: OkHttpClient? = null
+	private var retrofit: Retrofit? = null
 
-	fun getClient(context: Context): OkHttpClient
+	private fun getClient(): OkHttpClient
 	{
 		if (client == null)
 		{
@@ -38,11 +37,22 @@ class ScheduleHelper private constructor()
 					.connectTimeout(10, TimeUnit.SECONDS)
 					.readTimeout(10, TimeUnit.SECONDS)
 					.writeTimeout(10, TimeUnit.SECONDS)
-					.addInterceptor(AddCookiesInterceptor(context))
-					.addInterceptor(SaveCookiesInterceptor(context))
-//					.cookieJar(PersistentCookieJar(SetCookieCache(), SharedPrefsCookiePersistor(context)))
+					.cookieJar(CookieManger(APP.getContext()))
 					.build()
 		}
 		return client!!
+	}
+
+	fun getRetrofit(): Retrofit
+	{
+		if (retrofit == null)
+		{
+			retrofit = Retrofit.Builder()
+					.client(getClient())
+					.baseUrl("http://tomcat.weilylab.com:7823")
+					.addConverterFactory(GsonConverterFactory.create())
+					.build()
+		}
+		return retrofit!!
 	}
 }

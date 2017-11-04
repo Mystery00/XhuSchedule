@@ -14,6 +14,7 @@ import com.google.gson.Gson
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.classes.ContentRT
 import com.weilylab.xhuschedule.classes.RT
+import com.weilylab.xhuschedule.interfaces.RTResponse
 import com.weilylab.xhuschedule.util.FileUtil
 import com.weilylab.xhuschedule.util.ScheduleHelper
 import io.reactivex.Observable
@@ -25,6 +26,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlinx.android.synthetic.main.content_main.*
 import vip.mystery0.tools.hTTPok.HTTPok
+import vip.mystery0.tools.hTTPok.HTTPokResponse
 import vip.mystery0.tools.logs.Logs
 import java.io.File
 import java.io.FileInputStream
@@ -38,6 +40,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 	}
 
 	private lateinit var rt: RT
+	private val retrofit = ScheduleHelper.getInstance().getRetrofit()
 
 	override fun onCreate(savedInstanceState: Bundle?)
 	{
@@ -111,12 +114,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 			Logs.i(TAG, "checkCache: 检查缓存文件")
 			val cacheResult = parentFile.listFiles().filter { it.name == base64Name }.size == 1
 			subscriber.onNext(cacheResult)
-			val httpOK = HTTPok()
-			val httpOKResponse = httpOK.setOkHttpClient(ScheduleHelper.getInstance().getClient(this))
-					.setURL(getString(R.string.url_get_content))
-					.setRequestMethod(HTTPok.POST)
-					.connect()
-			if (!httpOKResponse.response.isSuccessful)
+			val service = retrofit.create(RTResponse::class.java)
+			val call = service.getContentCall()
+			val response = call.execute()
+			if (!response.isSuccessful)
 			{
 				Logs.i(TAG, "checkCache: 不成功")
 				subscriber.onNext(false)
@@ -125,7 +126,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 			}
 			val newFile = File(parentFile, base64Name + ".temp")
 			Logs.i(TAG, "checkCache: 获取文件")
-			val createResult = httpOKResponse.getFile(newFile)
+			val createResult = FileUtil.getInstance().saveFile(response.body()?.byteStream(),newFile)
 			subscriber.onNext(createResult)
 			val newMD5 = FileUtil.getInstance().getMD5(newFile)
 			val oldFile = File(parentFile, base64Name)
