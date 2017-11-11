@@ -2,37 +2,37 @@ package com.weilylab.xhuschedule.fragment
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.support.v7.widget.StaggeredGridLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.weilylab.xhuschedule.R
-import com.weilylab.xhuschedule.adapter.TodayAdapter
+import com.weilylab.xhuschedule.adapter.TableAdapter
 import com.weilylab.xhuschedule.classes.Course
 import vip.mystery0.tools.logs.Logs
 
 /**
  * Created by myste.
  */
-class TodayFragment : Fragment()
+class TableFragment : Fragment()
 {
 	companion object
 	{
-		private val TAG = "TodayFragment"
+		private val TAG = "TableFragment"
 
-		fun newInstance(list: ArrayList<Course>): TodayFragment
+		fun newInstance(list: ArrayList<Course>): TableFragment
 		{
 			val bundle = Bundle()
 			bundle.putSerializable("list", list)
-			val fragment = TodayFragment()
+			val fragment = TableFragment()
 			fragment.arguments = bundle
 			return fragment
 		}
 	}
 
 	private lateinit var list: ArrayList<Course>
-	lateinit var adapter: TodayAdapter
+	lateinit var adapter: TableAdapter
 
 	override fun onCreate(savedInstanceState: Bundle?)
 	{
@@ -40,16 +40,16 @@ class TodayFragment : Fragment()
 		super.onCreate(savedInstanceState)
 		@Suppress("UNCHECKED_CAST")
 		list = arguments.getSerializable("list") as ArrayList<Course>
-		adapter = TodayAdapter(list)
+		adapter = TableAdapter(activity, list)
 	}
 
 	override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
 							  savedInstanceState: Bundle?): View?
 	{
 		Logs.i(TAG, "onCreateView: ")
-		val view = inflater.inflate(R.layout.fragment_today, container, false)
+		val view = inflater.inflate(R.layout.fragment_table, container, false)
 		val recyclerView: RecyclerView = view.findViewById(R.id.recycler_view)
-		recyclerView.layoutManager = LinearLayoutManager(activity)
+		recyclerView.layoutManager = StaggeredGridLayoutManager(7, StaggeredGridLayoutManager.VERTICAL)
 		recyclerView.adapter = adapter
 		return view
 	}

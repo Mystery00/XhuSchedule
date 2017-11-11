@@ -17,6 +17,7 @@ import com.weilylab.xhuschedule.adapter.ViewPagerAdapter
 import com.weilylab.xhuschedule.classes.ContentRT
 import com.weilylab.xhuschedule.classes.Course
 import com.weilylab.xhuschedule.classes.RT
+import com.weilylab.xhuschedule.fragment.TableFragment
 import com.weilylab.xhuschedule.fragment.TodayFragment
 import com.weilylab.xhuschedule.interfaces.RTResponse
 import com.weilylab.xhuschedule.util.FileUtil
@@ -48,6 +49,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 	private var list = ArrayList<Course>()
 	private val showList = ArrayList<Course>()
 	private val todayFragment = TodayFragment.newInstance(list)//更改为showList
+	private var tableFragment = TableFragment.newInstance(list)
 
 	override fun onCreate(savedInstanceState: Bundle?)
 	{
@@ -74,7 +76,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 				.setHintTextSize(16F)
 		val viewPagerAdapter = ViewPagerAdapter(supportFragmentManager)
 		viewPagerAdapter.addFragment(todayFragment, "Today")
-		viewPagerAdapter.addFragment(TodayFragment.newInstance(list), "All")
+		viewPagerAdapter.addFragment(tableFragment, "ALL")
 		viewpager.adapter = viewPagerAdapter
 		tabLayout.setupWithViewPager(viewpager)
 	}
@@ -103,6 +105,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 				studentNameTextView.text = ScheduleHelper.getInstance().studentName
 				studentNumberTextView.text = ScheduleHelper.getInstance().studentNumber
 				todayFragment.adapter.notifyDataSetChanged()
+				tableFragment.adapter.notifyDataSetChanged()
 			}
 
 			override fun onError(e: Throwable)

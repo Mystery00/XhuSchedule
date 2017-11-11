@@ -1,7 +1,7 @@
 package com.weilylab.xhuschedule.util
 
-import android.content.Context
 import com.weilylab.xhuschedule.APP
+import com.weilylab.xhuschedule.classes.Course
 import com.weilylab.xhuschedule.util.cookie.CookieManger
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
@@ -56,5 +56,10 @@ class ScheduleHelper private constructor()
 					.build()
 		}
 		return retrofit!!
+	}
+
+	fun formatCourses(courses: Array<Course>): ArrayList<Course>
+	{
+		return ArrayList()
 	}
 }
