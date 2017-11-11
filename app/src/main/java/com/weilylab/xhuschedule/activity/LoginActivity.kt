@@ -10,10 +10,7 @@ import android.os.Bundle
 import android.text.TextUtils
 import android.view.View
 import android.widget.Toast
-import com.google.gson.Gson
 import com.weilylab.xhuschedule.R
-import com.weilylab.xhuschedule.classes.LoginRT
-import com.weilylab.xhuschedule.classes.RT
 import com.weilylab.xhuschedule.interfaces.RTResponse
 import com.weilylab.xhuschedule.util.ScheduleHelper
 import com.zyao89.view.zloading.ZLoadingDialog
@@ -26,13 +23,17 @@ import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_login.*
 
 import kotlinx.android.synthetic.main.content_login.*
-import vip.mystery0.tools.hTTPok.HTTPokException
+import vip.mystery0.tools.logs.Logs
 
 class LoginActivity : AppCompatActivity()
 {
+	companion object
+	{
+		private val TAG = "LoginActivity"
+	}
+
 	private val retrofit = ScheduleHelper.getInstance().getRetrofit()
 	private lateinit var vcodeDialog: ZLoadingDialog
-
 	private lateinit var loginDialog: ZLoadingDialog
 
 	override fun onCreate(savedInstanceState: Bundle?)
@@ -111,7 +112,8 @@ class LoginActivity : AppCompatActivity()
 			}
 			else
 			{
-				subscriber.onError(HTTPokException(response.errorBody().toString()))
+				Toast.makeText(this@LoginActivity, response.errorBody().toString(), Toast.LENGTH_SHORT)
+						.show()
 			}
 		}
 
@@ -171,9 +173,9 @@ class LoginActivity : AppCompatActivity()
 		val passwordStr = password.text.toString()
 		val vcodeStr = vcode.text.toString()
 
-		val observer = object : Observer<String>
+		val observer = object : Observer<Int>
 		{
-			lateinit var message: String
+			private var result = -1
 
 			override fun onSubscribe(d: Disposable)
 			{
@@ -191,61 +193,53 @@ class LoginActivity : AppCompatActivity()
 			override fun onComplete()
 			{
 				loginDialog.dismiss()
-				val gson = Gson()
-				var rt: RT = gson.fromJson(message, RT::class.java)
-				if (rt.rt == "1")
+				when (result)
 				{
-					rt = gson.fromJson(message, LoginRT::class.java)
-					ScheduleHelper.getInstance().isCookieAvailable = true
-					Toast.makeText(this@LoginActivity, getString(R.string.success_login, rt.name, getString(R.string.app_name)), Toast.LENGTH_SHORT)
-							.show()
-
-					val sharedPreference = getSharedPreferences("cache", Context.MODE_PRIVATE)
-					val editor = sharedPreference.edit()
-					editor.putString("studentNumber", usernameStr)
-					editor.putString("studentName", rt.name)
-					editor.apply()
-
-					startActivity(Intent(this@LoginActivity, MainActivity::class.java))
-					finish()
-				}
-				else
-				{
-					ScheduleHelper.getInstance().isCookieAvailable = false
-					when (rt.rt)
+					1 ->
 					{
-						"2" ->
-						{
-							username.error = getString(R.string.error_invalid_username)
-							username.requestFocus()
-						}
-						"3" ->
-						{
-							password.error = getString(R.string.error_invalid_password)
-							password.requestFocus()
-						}
-						"4" ->
-						{
-							vcode.error = getString(R.string.error_invalid_vcode)
-							vcode.requestFocus()
-						}
-						else ->
-						{
-							Toast.makeText(this@LoginActivity, R.string.error_other, Toast.LENGTH_SHORT)
-									.show()
-						}
+						ScheduleHelper.getInstance().isLogin = true
+						Toast.makeText(this@LoginActivity, getString(R.string.success_login, ScheduleHelper.getInstance().studentName, getString(R.string.app_name)), Toast.LENGTH_SHORT)
+								.show()
+						startActivity(Intent(this@LoginActivity, MainActivity::class.java))
+						finish()
+						return
 					}
-					loadVcode()
+					2 ->
+					{
+						ScheduleHelper.getInstance().isLogin = false
+						username.error = getString(R.string.error_invalid_username)
+						username.requestFocus()
+					}
+					3 ->
+					{
+						ScheduleHelper.getInstance().isLogin = false
+						password.error = getString(R.string.error_invalid_password)
+						password.requestFocus()
+					}
+					4 ->
+					{
+						ScheduleHelper.getInstance().isLogin = false
+						vcode.error = getString(R.string.error_invalid_vcode)
+						vcode.requestFocus()
+					}
+					else ->
+					{
+						ScheduleHelper.getInstance().isLogin = false
+						Toast.makeText(this@LoginActivity, R.string.error_other, Toast.LENGTH_SHORT)
+								.show()
+					}
 				}
+				loadVcode()
 			}
 
-			override fun onNext(message: String)
+			override fun onNext(result: Int)
 			{
-				this.message = message
+				Logs.i(TAG, "onNext: ")
+				this.result = result
 			}
 		}
 
-		val observable = Observable.create<String> { subscriber ->
+		val observable = Observable.create<Int> { subscriber ->
 			val params = HashMap<String, String>()
 			params.put("username", usernameStr)
 			params.put("password", passwordStr)
@@ -253,15 +247,22 @@ class LoginActivity : AppCompatActivity()
 			val service = retrofit.create(RTResponse::class.java)
 			val call = service.loginCall(usernameStr, passwordStr, vcodeStr)
 			val response = call.execute()
-			if (response.isSuccessful)
+			if (!response.isSuccessful)
 			{
-				subscriber.onNext(response.body()?.string()!!)
+				Logs.i(TAG, "login: 请求失败")
 				subscriber.onComplete()
+				return@create
 			}
-			else
+			subscriber.onNext(response.body()!!.rt.toInt())
+			if (response.body()?.rt == "1")
 			{
-				subscriber.onError(HTTPokException(response.errorBody().toString()))
+				val sharedPreference = getSharedPreferences("cache", Context.MODE_PRIVATE)
+				val editor = sharedPreference.edit()
+				editor.putString("studentNumber", usernameStr)
+				editor.putString("studentName", response.body()?.name)
+				editor.apply()
 			}
+			subscriber.onComplete()
 		}
 		observable.subscribeOn(Schedulers.newThread())
 				.observeOn(AndroidSchedulers.mainThread())

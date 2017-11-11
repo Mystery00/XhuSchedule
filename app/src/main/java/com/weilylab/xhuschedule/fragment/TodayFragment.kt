@@ -10,6 +10,11 @@ import android.view.ViewGroup
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.adapter.TodayAdapter
 import com.weilylab.xhuschedule.classes.Course
+import io.reactivex.Observable
+import io.reactivex.Observer
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
+import io.reactivex.schedulers.Schedulers
 import vip.mystery0.tools.logs.Logs
 
 /**
@@ -32,7 +37,8 @@ class TodayFragment : Fragment()
 	}
 
 	private lateinit var list: ArrayList<Course>
-	lateinit var adapter: TodayAdapter
+	private lateinit var adapter: TodayAdapter
+	private var isReady = false
 
 	override fun onCreate(savedInstanceState: Bundle?)
 	{
@@ -51,6 +57,43 @@ class TodayFragment : Fragment()
 		val recyclerView: RecyclerView = view.findViewById(R.id.recycler_view)
 		recyclerView.layoutManager = LinearLayoutManager(activity)
 		recyclerView.adapter = adapter
+		isReady = true
 		return view
+	}
+
+	fun refreshData()
+	{
+		val observer = object : Observer<Boolean>
+		{
+			override fun onComplete()
+			{
+				adapter.notifyDataSetChanged()
+			}
+
+			override fun onSubscribe(d: Disposable)
+			{
+			}
+
+			override fun onError(e: Throwable)
+			{
+			}
+
+			override fun onNext(t: Boolean)
+			{
+			}
+		}
+		val observable = Observable.create<Boolean> { subscriber ->
+			while (true)
+			{
+				if (isReady)
+					break
+				Thread.sleep(200)
+			}
+			subscriber.onComplete()
+		}
+
+		observable.subscribeOn(Schedulers.io())
+				.observeOn(AndroidSchedulers.mainThread())
+				.subscribe(observer)
 	}
 }

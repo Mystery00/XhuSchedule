@@ -1,5 +1,7 @@
 package com.weilylab.xhuschedule.util
 
+import com.weilylab.xhuschedule.classes.Course
+import vip.mystery0.tools.logs.Logs
 import java.io.*
 import java.math.BigInteger
 import java.nio.channels.FileChannel
@@ -59,6 +61,43 @@ class FileUtil private constructor()
 		catch (e: Exception)
 		{
 			return false
+		}
+	}
+
+	fun saveObjectToFile(obj: Any, file: File): Boolean
+	{
+		Logs.i(TAG, "saveObjectToFile: ")
+		return try
+		{
+			if (file.exists())
+				file.delete()
+			val objectOutputStream = ObjectOutputStream(BufferedOutputStream(FileOutputStream(file)))
+			objectOutputStream.writeObject(obj)
+			objectOutputStream.close()
+			true
+		}
+		catch (e: Exception)
+		{
+			e.printStackTrace()
+			false
+		}
+	}
+
+	fun getCoursesFromFile(file: File): Array<Course>
+	{
+		Logs.i(TAG, "getCoursesFromFile: ")
+		try
+		{
+			if (!file.exists())
+				return emptyArray()
+			val objectInputStream = ObjectInputStream(BufferedInputStream(FileInputStream(file)))
+			@Suppress("UNCHECKED_CAST")
+			return objectInputStream.readObject() as Array<Course>
+		}
+		catch (e: Exception)
+		{
+			e.printStackTrace()
+			return emptyArray()
 		}
 	}
 

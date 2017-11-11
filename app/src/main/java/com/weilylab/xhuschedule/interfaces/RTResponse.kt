@@ -1,5 +1,7 @@
 package com.weilylab.xhuschedule.interfaces
 
+import com.weilylab.xhuschedule.classes.ContentRT
+import com.weilylab.xhuschedule.classes.LoginRT
 import com.weilylab.xhuschedule.classes.RT
 import okhttp3.ResponseBody
 
@@ -19,8 +21,8 @@ interface RTResponse
 	fun getVCodeCall(@Query("type") type: Int): Call<ResponseBody>
 
 	@POST("/course/Course/login")
-	fun loginCall(@Query("username") username: String, @Query("password") password: String, @Query("vcode") vcode: String): Call<ResponseBody>
+	fun loginCall(@Query("username") username: String, @Query("password") password: String, @Query("vcode") vcode: String): Call<LoginRT>
 
 	@POST("/course/Course/getContent")
-	fun getContentCall(): Call<ResponseBody>
+	fun getContentCall(): Call<ContentRT>
 }
