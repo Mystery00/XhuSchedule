@@ -91,7 +91,7 @@ class ScheduleHelper private constructor()
 	{
 		val startCalendar = Calendar.getInstance()
 		//开学时间
-		startCalendar.set(2017, 8, 4)//月数减一
+		startCalendar.set(2017, 8, 4, 0, 0, 0)//月数减一
 		val currentCalendar = Calendar.getInstance()
 		startCalendar.firstDayOfWeek = Calendar.MONDAY
 		currentCalendar.firstDayOfWeek = Calendar.MONDAY
@@ -129,7 +129,7 @@ class ScheduleHelper private constructor()
 	{
 		val startCalendar = Calendar.getInstance()
 		//开学时间
-		startCalendar.set(2017, 8, 4)
+		startCalendar.set(2017, 8, 4, 0, 0, 0)
 		val currentCalendar = Calendar.getInstance()
 		//当前星期几
 		val weekIndex = currentCalendar.get(Calendar.DAY_OF_WEEK) - 1
@@ -142,7 +142,7 @@ class ScheduleHelper private constructor()
 			val weekArray = it.week.split('-')
 			val startWeek = weekArray[0].toInt()
 			val endWeek = weekArray[1].toInt()
-			currentWeek in startWeek..endWeek && (it.day.toInt() - 1) == weekIndex
+			currentWeek in startWeek..endWeek && (it.day.toInt()) == weekIndex
 		}
 				.forEach {
 					list.add(it)
