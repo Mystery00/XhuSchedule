@@ -2,6 +2,7 @@ package com.weilylab.xhuschedule.fragment
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.StaggeredGridLayoutManager
 import android.view.LayoutInflater
@@ -21,7 +22,7 @@ class TableFragment : Fragment()
 	{
 		private val TAG = "TableFragment"
 
-		fun newInstance(list: ArrayList<Course>): TableFragment
+		fun newInstance(list: ArrayList<Course?>): TableFragment
 		{
 			val bundle = Bundle()
 			bundle.putSerializable("list", list)
@@ -31,25 +32,23 @@ class TableFragment : Fragment()
 		}
 	}
 
-	private lateinit var list: ArrayList<Course>
+	private lateinit var list: ArrayList<Course?>
 	lateinit var adapter: TableAdapter
 
 	override fun onCreate(savedInstanceState: Bundle?)
 	{
-		Logs.i(TAG, "onCreate: ")
 		super.onCreate(savedInstanceState)
 		@Suppress("UNCHECKED_CAST")
-		list = arguments.getSerializable("list") as ArrayList<Course>
+		list = arguments.getSerializable("list") as ArrayList<Course?>
 		adapter = TableAdapter(activity, list)
 	}
 
 	override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
 							  savedInstanceState: Bundle?): View?
 	{
-		Logs.i(TAG, "onCreateView: ")
 		val view = inflater.inflate(R.layout.fragment_table, container, false)
 		val recyclerView: RecyclerView = view.findViewById(R.id.recycler_view)
-		recyclerView.layoutManager = StaggeredGridLayoutManager(7, StaggeredGridLayoutManager.VERTICAL)
+		recyclerView.layoutManager = GridLayoutManager(activity, 7, StaggeredGridLayoutManager.VERTICAL, false)
 		recyclerView.adapter = adapter
 		return view
 	}

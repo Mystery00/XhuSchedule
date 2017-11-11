@@ -46,9 +46,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 	private lateinit var rt: RT
 	private val retrofit = ScheduleHelper.getInstance().getRetrofit()
 	private lateinit var loadingDialog: ZLoadingDialog
-	private var list = ArrayList<Course>()
-	private val showList = ArrayList<Course>()
-	private val todayFragment = TodayFragment.newInstance(list)//更改为showList
+	private var list = ArrayList<Course?>()
+	private val todayList = ArrayList<Course>()
+	private val todayFragment = TodayFragment.newInstance(todayList)//更改为showList
 	private var tableFragment = TableFragment.newInstance(list)
 
 	override fun onCreate(savedInstanceState: Bundle?)
@@ -83,7 +83,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
 	private fun updateView()
 	{
-		val observer = object : Observer<HashMap<String, ArrayList<Course>>>
+		val observer = object : Observer<HashMap<String, ArrayList<Course?>>>
 		{
 			override fun onSubscribe(d: Disposable)
 			{
@@ -92,8 +92,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
 			override fun onComplete()
 			{
-				loadingDialog.dismiss()
-				Logs.i(TAG, "onComplete: " + list.size)
 				if (list.size == 0)
 				{
 					startActivity(Intent(this@MainActivity, LoginActivity::class.java))
@@ -106,6 +104,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 				studentNumberTextView.text = ScheduleHelper.getInstance().studentNumber
 				todayFragment.adapter.notifyDataSetChanged()
 				tableFragment.adapter.notifyDataSetChanged()
+				loadingDialog.dismiss()
 			}
 
 			override fun onError(e: Throwable)
@@ -114,21 +113,13 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 				loadingDialog.dismiss()
 			}
 
-			override fun onNext(map: HashMap<String, ArrayList<Course>>)
+			override fun onNext(map: HashMap<String, ArrayList<Course?>>)
 			{
-				if (map.containsKey("today"))
-				{
-					showList.clear()
-					showList.addAll(map["today"]!!)
-				}
-				list.clear()
-				list.addAll(map["all"]!!)
-				loadingDialog.dismiss()
+				Logs.i(TAG, "onNext: ")
 			}
 		}
 
-		val observable = Observable.create<HashMap<String, ArrayList<Course>>> { subscriber ->
-			val map = HashMap<String, ArrayList<Course>>()
+		val observable = Observable.create<HashMap<String, ArrayList<Course?>>> { subscriber ->
 			val parentFile = File(cacheDir.absolutePath + File.separator + "caches/")
 			if (!parentFile.exists())
 				parentFile.mkdirs()
@@ -137,8 +128,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 			val studentName = sharedPreference.getString("studentName", "0")
 			if (studentNumber == "0" || studentName == "0")
 			{
-				map.put("all", ArrayList())
-				subscriber.onNext(map)
 				subscriber.onComplete()
 				return@create
 			}
@@ -149,24 +138,23 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 			val cacheResult = parentFile.listFiles().filter { it.name == base64Name }.size == 1
 			if (!cacheResult)
 			{
-				map.put("all", ArrayList())
-				subscriber.onNext(map)
 				subscriber.onComplete()
 				return@create
 			}
 			val oldFile = File(parentFile, base64Name)
 			if (!oldFile.exists())
 			{
-				map.put("all", ArrayList())
-				subscriber.onNext(map)
 				subscriber.onComplete()
 				return@create
 			}
 			val gson = Gson()
 			val rt = gson.fromJson(InputStreamReader(FileInputStream(oldFile)), ContentRT::class.java)
-			val array = ScheduleHelper.getInstance().formatCourses(rt.courses)
-			map.put("all", array)
-			subscriber.onNext(map)
+//			val allArray = ScheduleHelper.getInstance().formatCourses(rt.courses)
+//			list.addAll(allArray)
+			val weekArray = ScheduleHelper.getInstance().getWeekCourses(rt.courses)
+			list.addAll(weekArray)
+			val todayArray = ScheduleHelper.getInstance().getTodayCourses(rt.courses)
+			todayList.addAll(todayArray)
 			subscriber.onComplete()
 		}
 
@@ -179,6 +167,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 	{
 		val observer = object : Observer<Boolean>
 		{
+			private var isCookieAvailable = false
 			override fun onSubscribe(d: Disposable)
 			{
 				Logs.i(TAG, "onSubscribe: ")
@@ -187,24 +176,21 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 			override fun onNext(t: Boolean)
 			{
 				Logs.i(TAG, "onNext: " + t)
-				ScheduleHelper.getInstance().isCookieAvailable = t
+				isCookieAvailable = t
 			}
 
 			override fun onError(e: Throwable)
 			{
 				e.printStackTrace()
-				ScheduleHelper.getInstance().isCookieAvailable = false
+				isCookieAvailable = false
 			}
 
 			override fun onComplete()
 			{
-				Logs.i(TAG, "onComplete: " + ScheduleHelper.getInstance().isCookieAvailable)
-				if (!ScheduleHelper.getInstance().isCookieAvailable)
+				ScheduleHelper.getInstance().isCookieAvailable = isCookieAvailable
+				if (!isCookieAvailable)
 				{
 					Logs.i(TAG, "onComplete: cookie无效")
-//					startActivity(Intent(this@MainActivity, LoginActivity::class.java))
-//					finish()
-//					return
 				}
 				else
 				{
@@ -220,10 +206,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 			if (studentNumber == "0")
 			{
 				Logs.i(TAG, "updateData: 学号错误")
-				subscriber.onNext(false)
-				subscriber.onComplete()
+				ScheduleHelper.getInstance().isLogin = false
+				startActivity(Intent(this@MainActivity, LoginActivity::class.java))
+				finish()
 				return@create
 			}
+			ScheduleHelper.getInstance().isLogin = true
 			val base64Name = FileUtil.getInstance().filterString(Base64.encodeToString(studentNumber.toByteArray(), Base64.DEFAULT))
 			val service = retrofit.create(RTResponse::class.java)
 			val call = service.getContentCall()
@@ -248,7 +236,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 			rt = gson.fromJson(InputStreamReader(FileInputStream(newFile)), RT::class.java)
 			if (rt.rt != "1")
 			{
-				Logs.i(TAG, "updateData: " + rt.rt)
+				Logs.i(TAG, "updateData: ")
 				subscriber.onNext(false)
 				subscriber.onComplete()
 				return@create

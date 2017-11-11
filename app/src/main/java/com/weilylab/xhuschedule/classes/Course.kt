@@ -18,6 +18,11 @@ class Course : Serializable
 
 	fun with(course: Course)
 	{
+		if (course.name == name)
+		{
+			location = "$location ($week)\n${course.location} (${course.week})"
+			return
+		}
 		if (other == null)
 			other = course
 	}

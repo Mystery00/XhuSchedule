@@ -2,6 +2,7 @@ package com.weilylab.xhuschedule.adapter
 
 import android.content.Context
 import android.support.v7.widget.RecyclerView
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,7 +16,7 @@ import vip.mystery0.tools.logs.Logs
  * Created by myste.
  */
 class TableAdapter(private val context: Context,
-				   private val list: ArrayList<Course>) : RecyclerView.Adapter<TableAdapter.ViewHolder>()
+				   private val list: ArrayList<Course?>) : RecyclerView.Adapter<TableAdapter.ViewHolder>()
 {
 	companion object
 	{
@@ -25,18 +26,18 @@ class TableAdapter(private val context: Context,
 	override fun onBindViewHolder(holder: ViewHolder, position: Int)
 	{
 		holder.linearLayout.removeAllViews()
+		var course: Course? = list[position] ?: return
 		val layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, 1F)
-		var course = list[position]
 		val view = LayoutInflater.from(context).inflate(R.layout.item_course, null)
 		val textViewName: TextView = view.findViewById(R.id.textView_name)
 		val textViewTeacher: TextView = view.findViewById(R.id.textView_teacher)
 		val textViewLocation: TextView = view.findViewById(R.id.textView_location)
-		textViewName.text = course.name
+		textViewName.text = course!!.name
 		textViewTeacher.text = course.teacher
 		textViewLocation.text = course.location
 		view.layoutParams = layoutParams
 		holder.linearLayout.addView(view)
-		while (course.other != null)
+		while (course!!.other != null)
 		{
 			course = course.other!!
 			val tempView = LayoutInflater.from(context).inflate(R.layout.item_course, null)
