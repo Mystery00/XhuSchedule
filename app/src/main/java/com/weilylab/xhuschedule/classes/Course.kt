@@ -15,6 +15,7 @@ class Course : Serializable
 	var type: String = ""
 	var day: String = ""
 	var other: Course? = null
+	var color = -1
 
 	fun with(course: Course)
 	{

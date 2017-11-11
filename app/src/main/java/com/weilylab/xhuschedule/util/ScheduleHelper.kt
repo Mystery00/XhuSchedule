@@ -102,7 +102,17 @@ class ScheduleHelper private constructor()
 			val weekArray = it.week.split('-')
 			val startWeek = weekArray[0].toInt()
 			val endWeek = weekArray[1].toInt()
-			currentWeek in startWeek..endWeek
+			var other = false
+			when (it.type)
+			{
+				"0" -> other = true
+				"1" -> if (currentWeek % 2 == 1)
+					other = true
+				"2" -> if (currentWeek % 2 == 0)
+					other = true
+				else -> other = false
+			}
+			currentWeek in startWeek..endWeek && other
 		}
 				.forEach {
 					val timeArray = it.time.split('-')
@@ -142,7 +152,17 @@ class ScheduleHelper private constructor()
 			val weekArray = it.week.split('-')
 			val startWeek = weekArray[0].toInt()
 			val endWeek = weekArray[1].toInt()
-			currentWeek in startWeek..endWeek && (it.day.toInt()) == weekIndex
+			var other = false
+			when (it.type)
+			{
+				"0" -> other = true
+				"1" -> if (currentWeek % 2 == 1)
+					other = true
+				"2" -> if (currentWeek % 2 == 0)
+					other = true
+				else -> other = false
+			}
+			currentWeek in startWeek..endWeek && other && (it.day.toInt()) == weekIndex
 		}
 				.forEach {
 					list.add(it)
