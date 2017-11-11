@@ -72,8 +72,8 @@ class FileUtil private constructor()
 			val byteBuffer = fileInputStream.channel.map(FileChannel.MapMode.READ_ONLY, 0, file.length())
 			val md5 = MessageDigest.getInstance("MD5")
 			md5.update(byteBuffer)
-			val bi = BigInteger(1, md5.digest())
-			value = bi.toString(16)
+			val bigInteger = BigInteger(1, md5.digest())
+			value = bigInteger.toString(16)
 		}
 		catch (e: Exception)
 		{

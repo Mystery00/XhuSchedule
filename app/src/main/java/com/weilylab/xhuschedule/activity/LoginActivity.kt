@@ -52,12 +52,12 @@ class LoginActivity : AppCompatActivity()
 	{
 		vcodeDialog = ZLoadingDialog(this)
 				.setLoadingBuilder(Z_TYPE.SNAKE_CIRCLE)
-				.setHintText("updating......")
+				.setHintText(getString(R.string.hint_dialog_update))
 				.setHintTextSize(16F)
 
 		loginDialog = ZLoadingDialog(this)
 				.setLoadingBuilder(Z_TYPE.STAR_LOADING)
-				.setHintText("logging in......")
+				.setHintText(getString(R.string.hint_dialog_login))
 				.setHintTextSize(16F)
 
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
@@ -212,15 +212,29 @@ class LoginActivity : AppCompatActivity()
 				else
 				{
 					ScheduleHelper.getInstance().isCookieAvailable = false
-					Toast.makeText(this@LoginActivity,
-							when (rt.rt)
-							{
-								"2" -> "用户名错误！"
-								"3" -> "密码错误！"
-								"4" -> "验证码错误！"
-								else -> "登陆错误！"
-							}, Toast.LENGTH_SHORT)
-							.show()
+					when (rt.rt)
+					{
+						"2" ->
+						{
+							username.error = getString(R.string.error_invalid_username)
+							username.requestFocus()
+						}
+						"3" ->
+						{
+							password.error = getString(R.string.error_invalid_password)
+							password.requestFocus()
+						}
+						"4" ->
+						{
+							vcode.error = getString(R.string.error_invalid_vcode)
+							vcode.requestFocus()
+						}
+						else ->
+						{
+							Toast.makeText(this@LoginActivity, R.string.error_other, Toast.LENGTH_SHORT)
+									.show()
+						}
+					}
 					loadVcode()
 				}
 			}

@@ -8,6 +8,7 @@ import android.support.v7.widget.StaggeredGridLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.adapter.TableAdapter
 import com.weilylab.xhuschedule.classes.Course
@@ -48,8 +49,17 @@ class TableFragment : Fragment()
 	{
 		val view = inflater.inflate(R.layout.fragment_table, container, false)
 		val recyclerView: RecyclerView = view.findViewById(R.id.recycler_view)
+		val linearLayout: LinearLayout = view.findViewById(R.id.table_nav)
 		recyclerView.layoutManager = GridLayoutManager(activity, 7, StaggeredGridLayoutManager.VERTICAL, false)
 		recyclerView.adapter = adapter
+		recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener()
+		{
+			override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int)
+			{
+				super.onScrolled(recyclerView, dx, dy)
+				linearLayout.scrollBy(dx, dy)
+			}
+		})
 		return view
 	}
 }

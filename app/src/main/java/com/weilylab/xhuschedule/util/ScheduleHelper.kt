@@ -1,5 +1,6 @@
 package com.weilylab.xhuschedule.util
 
+import android.graphics.Color
 import com.weilylab.xhuschedule.APP
 import com.weilylab.xhuschedule.classes.Course
 import com.weilylab.xhuschedule.util.cookie.CookieManger
@@ -7,6 +8,8 @@ import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import vip.mystery0.tools.logs.Logs
+import java.math.BigInteger
+import java.security.MessageDigest
 import java.util.*
 import java.util.concurrent.TimeUnit
 import kotlin.collections.ArrayList
@@ -168,5 +171,36 @@ class ScheduleHelper private constructor()
 					list.add(it)
 				}
 		return list
+	}
+
+	fun getRandomColor(): Int
+	{
+		val random = Random()
+		var red = random.nextInt(256).toString(16).toUpperCase()
+		var green = random.nextInt(256).toString(16).toUpperCase()
+		var blue = random.nextInt(256).toString(16).toUpperCase()
+		//判断红色代码的位数
+		red = if (red.length == 1) "0" + red else green
+		//判断绿色代码的位数
+		green = if (green.length == 1) "0" + green else green
+		//判断蓝色代码的位数
+		blue = if (blue.length == 1) "0" + blue else blue
+		return Color.parseColor("#33" + red + green + blue)
+	}
+
+	fun getMD5(message: String): String
+	{
+		try
+		{
+			val md5 = MessageDigest.getInstance("MD5")
+			md5.update(message.toByteArray())
+			val bigInteger = BigInteger(1, md5.digest())
+			return bigInteger.toString(16)
+		}
+		catch (e: Exception)
+		{
+			e.printStackTrace()
+		}
+		return "ERROR"
 	}
 }

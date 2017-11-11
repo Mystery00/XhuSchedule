@@ -151,6 +151,20 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 			val rt = gson.fromJson(InputStreamReader(FileInputStream(oldFile)), ContentRT::class.java)
 //			val allArray = ScheduleHelper.getInstance().formatCourses(rt.courses)
 //			list.addAll(allArray)
+			val colorSharedPreference = getSharedPreferences("course_color", Context.MODE_PRIVATE)
+			rt.courses.forEach {
+				val md5 = ScheduleHelper.getInstance().getMD5(it.name)
+				val savedColor = colorSharedPreference.getInt(md5, -1)
+				val color: Int
+				if (savedColor == -1)
+				{
+					color = ScheduleHelper.getInstance().getRandomColor()
+					colorSharedPreference.edit().putInt(md5, color).apply()
+				}
+				else
+					color = savedColor
+				it.color = color
+			}
 			val weekArray = ScheduleHelper.getInstance().getWeekCourses(rt.courses)
 			list.addAll(weekArray)
 			val todayArray = ScheduleHelper.getInstance().getTodayCourses(rt.courses)
