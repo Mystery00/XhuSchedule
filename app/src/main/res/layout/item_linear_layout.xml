@@ -3,5 +3,5 @@
     android:id="@+id/linearLayout"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="240dp"
+    android:layout_height="@dimen/table_item_height"
     android:orientation="vertical"/>

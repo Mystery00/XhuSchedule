@@ -6,6 +6,7 @@ import com.weilylab.xhuschedule.util.cookie.CookieManger
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import vip.mystery0.tools.logs.Logs
 import java.util.concurrent.TimeUnit
 
 /**
@@ -15,6 +16,7 @@ class ScheduleHelper private constructor()
 {
 	companion object
 	{
+		private val TAG = "ScheduleHelper"
 		private var scheduleHelper: ScheduleHelper? = null
 
 		fun getInstance(): ScheduleHelper
@@ -60,6 +62,25 @@ class ScheduleHelper private constructor()
 
 	fun formatCourses(courses: Array<Course>): ArrayList<Course>
 	{
-		return ArrayList()
+		val tempArray = Array(5, { Array(7, { Course() }) })
+		courses.forEach {
+			val indexArray = it.time.split('-')
+			val startIndex = (indexArray[0].toInt() - 1) / 2
+			val endIndex = (indexArray[1].toInt()) / 2
+			for (index in startIndex until endIndex)
+			{
+				if (tempArray[index][it.day.toInt() - 1].name == "")
+					tempArray[index][it.day.toInt() - 1] = it
+				else
+					tempArray[index][it.day.toInt() - 1].with(it)
+			}
+		}
+		val list = ArrayList<Course>()
+		tempArray.forEach {
+			it.forEach {
+				list.add(it)
+			}
+		}
+		return list
 	}
 }

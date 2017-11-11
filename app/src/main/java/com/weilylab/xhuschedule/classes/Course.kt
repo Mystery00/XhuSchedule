@@ -5,9 +5,15 @@ import java.io.Serializable
 /**
  * Created by myste.
  */
-data class Course(var week: String, var teacher: String, var name: String, var location: String,
-				  var time: String, var type: String, var day: String):Serializable
+class Course : Serializable
 {
+	var week: String = ""
+	var teacher: String = ""
+	var name: String = ""
+	var location: String = ""
+	var time: String = ""
+	var type: String = ""
+	var day: String = ""
 	var other: Course? = null
 
 	fun with(course: Course)

@@ -22,4 +22,18 @@
     <string name="error_field_required">This field is required</string>
 
     <string name="success_login">登陆成功，欢迎%1$s使用%2$s！</string>
+
+    <string name="table_header1">周一</string>
+    <string name="table_header2">周二</string>
+    <string name="table_header3">周三</string>
+    <string name="table_header4">周四</string>
+    <string name="table_header5">周五</string>
+    <string name="table_header6">周六</string>
+    <string name="table_header7">周日</string>
+
+    <string name="table_nav1">1–2</string>
+    <string name="table_nav2">3–4</string>
+    <string name="table_nav3">5–6</string>
+    <string name="table_nav4">7–8</string>
+    <string name="table_nav5">9–10</string>
 </resources>

@@ -83,7 +83,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
 	private fun updateView()
 	{
-		val observer = object : Observer<HashMap<String, Array<Course>>>
+		val observer = object : Observer<HashMap<String, ArrayList<Course>>>
 		{
 			override fun onSubscribe(d: Disposable)
 			{
@@ -114,7 +114,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 				loadingDialog.dismiss()
 			}
 
-			override fun onNext(map: HashMap<String, Array<Course>>)
+			override fun onNext(map: HashMap<String, ArrayList<Course>>)
 			{
 				if (map.containsKey("today"))
 				{
@@ -127,8 +127,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 			}
 		}
 
-		val observable = Observable.create<HashMap<String, Array<Course>>> { subscriber ->
-			val map = HashMap<String, Array<Course>>()
+		val observable = Observable.create<HashMap<String, ArrayList<Course>>> { subscriber ->
+			val map = HashMap<String, ArrayList<Course>>()
 			val parentFile = File(cacheDir.absolutePath + File.separator + "caches/")
 			if (!parentFile.exists())
 				parentFile.mkdirs()
@@ -137,7 +137,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 			val studentName = sharedPreference.getString("studentName", "0")
 			if (studentNumber == "0" || studentName == "0")
 			{
-				map.put("all", emptyArray())
+				map.put("all", ArrayList())
 				subscriber.onNext(map)
 				subscriber.onComplete()
 				return@create
@@ -149,7 +149,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 			val cacheResult = parentFile.listFiles().filter { it.name == base64Name }.size == 1
 			if (!cacheResult)
 			{
-				map.put("all", emptyArray())
+				map.put("all", ArrayList())
 				subscriber.onNext(map)
 				subscriber.onComplete()
 				return@create
@@ -157,14 +157,15 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 			val oldFile = File(parentFile, base64Name)
 			if (!oldFile.exists())
 			{
-				map.put("all", emptyArray())
+				map.put("all", ArrayList())
 				subscriber.onNext(map)
 				subscriber.onComplete()
 				return@create
 			}
 			val gson = Gson()
 			val rt = gson.fromJson(InputStreamReader(FileInputStream(oldFile)), ContentRT::class.java)
-			map.put("all", rt.courses)
+			val array = ScheduleHelper.getInstance().formatCourses(rt.courses)
+			map.put("all", array)
 			subscriber.onNext(map)
 			subscriber.onComplete()
 		}

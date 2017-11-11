@@ -24,7 +24,7 @@ class TableAdapter(private val context: Context,
 
 	override fun onBindViewHolder(holder: ViewHolder, position: Int)
 	{
-		Logs.i(TAG, "onBindViewHolder: ")
+		holder.linearLayout.removeAllViews()
 		val layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, 1F)
 		var course = list[position]
 		val view = LayoutInflater.from(context).inflate(R.layout.item_course, null)
@@ -53,7 +53,6 @@ class TableAdapter(private val context: Context,
 
 	override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ViewHolder
 	{
-		Logs.i(TAG, "onCreateViewHolder: " + list.size)
 		return ViewHolder(LayoutInflater.from(context).inflate(R.layout.item_linear_layout, parent, false))
 	}
 
