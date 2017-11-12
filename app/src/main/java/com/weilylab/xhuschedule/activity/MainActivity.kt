@@ -318,7 +318,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 		// as you specify a parent activity in AndroidManifest.xml.
 		when (item.itemId)
 		{
-			R.id.action_settings -> return true
+			R.id.action_settings ->
+			{
+				startActivity(Intent(this@MainActivity, LoginActivity::class.java))
+				finish()
+				return true
+			}
 			else -> return super.onOptionsItemSelected(item)
 		}
 	}
