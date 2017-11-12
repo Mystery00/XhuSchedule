@@ -72,8 +72,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 		val viewPagerAdapter = ViewPagerAdapter(supportFragmentManager)
 		viewPagerAdapter.addFragment(todayFragment, "Today")
 		viewPagerAdapter.addFragment(tableFragment, "ALL")
-		viewpager.adapter = viewPagerAdapter
-		tabLayout.setupWithViewPager(viewpager)
+//		viewpager.adapter = viewPagerAdapter
+//		tabLayout.setupWithViewPager(viewpager)
 	}
 
 	private fun updateView()
