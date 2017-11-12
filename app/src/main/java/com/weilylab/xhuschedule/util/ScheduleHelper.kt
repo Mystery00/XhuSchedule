@@ -120,17 +120,17 @@ class ScheduleHelper private constructor()
 				false
 			}
 		}.forEach {
-					val timeArray = it.time.split('-')
-					val startTime = (timeArray[0].toInt() - 1) / 2
-					val endTime = (timeArray[1].toInt()) / 2
-					for (index in startTime until endTime)
-					{
-						if (tempArray[index][it.day.toInt() - 1] == null)
-							tempArray[index][it.day.toInt() - 1] = it
-						else
-							tempArray[index][it.day.toInt() - 1]?.with(it)
-					}
-				}
+			val timeArray = it.time.split('-')
+			val startTime = (timeArray[0].toInt() - 1) / 2
+			val endTime = (timeArray[1].toInt()) / 2
+			for (index in startTime until endTime)
+			{
+				if (tempArray[index][it.day.toInt() - 1] == null)
+					tempArray[index][it.day.toInt() - 1] = it
+				else
+					tempArray[index][it.day.toInt() - 1]?.with(it)
+			}
+		}
 		val list = ArrayList<Course?>()
 		tempArray.forEach {
 			it.forEach {
@@ -150,20 +150,27 @@ class ScheduleHelper private constructor()
 		val weekIndex = calendarUtil.getWeekIndex()
 		val list = ArrayList<Course>()
 		courses.filter {
-			val weekArray = it.week.split('-')
-			val startWeek = weekArray[0].toInt()
-			val endWeek = weekArray[1].toInt()
-			var other = false
-			when (it.type)
+			try
 			{
-				"0" -> other = true
-				"1" -> if (currentWeek % 2 == 1)
-					other = true
-				"2" -> if (currentWeek % 2 == 0)
-					other = true
-				else -> other = false
+				val weekArray = it.week.split('-')
+				val startWeek = weekArray[0].toInt()
+				val endWeek = weekArray[1].toInt()
+				var other = false
+				when (it.type)
+				{
+					"0" -> other = true
+					"1" -> if (currentWeek % 2 == 1)
+						other = true
+					"2" -> if (currentWeek % 2 == 0)
+						other = true
+					else -> other = false
+				}
+				currentWeek in startWeek..endWeek && other && (it.day.toInt()) == weekIndex
 			}
-			currentWeek in startWeek..endWeek && other && (it.day.toInt()) == weekIndex
+			catch (e: Exception)
+			{
+				false
+			}
 		}
 				.forEach {
 					list.add(it)
