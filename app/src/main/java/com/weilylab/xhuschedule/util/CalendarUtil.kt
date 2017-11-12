@@ -37,9 +37,10 @@ class CalendarUtil private constructor()
 
 	fun getWeekIndex(): Int
 	{
-		val tempCalendar = Calendar.getInstance()
-		tempCalendar.timeInMillis = calendar.timeInMillis - startCalendar.timeInMillis
-		//当前星期几
-		return tempCalendar.get(Calendar.DAY_OF_WEEK)
+		return when (calendar.get(Calendar.DAY_OF_WEEK))
+		{
+			Calendar.SUNDAY -> 7
+			else -> calendar.get(Calendar.DAY_OF_WEEK) - 1
+		}
 	}
 }

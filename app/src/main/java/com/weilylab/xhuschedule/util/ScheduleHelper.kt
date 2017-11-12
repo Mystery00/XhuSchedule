@@ -119,8 +119,7 @@ class ScheduleHelper private constructor()
 			{
 				false
 			}
-		}
-				.forEach {
+		}.forEach {
 					val timeArray = it.time.split('-')
 					val startTime = (timeArray[0].toInt() - 1) / 2
 					val endTime = (timeArray[1].toInt()) / 2
@@ -149,7 +148,6 @@ class ScheduleHelper private constructor()
 		//获取当前第几周
 		val currentWeek = calendarUtil.getWeek()
 		val weekIndex = calendarUtil.getWeekIndex()
-		Logs.i(TAG, "getTodayCourses: " + weekIndex)
 		val list = ArrayList<Course>()
 		courses.filter {
 			val weekArray = it.week.split('-')
