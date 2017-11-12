@@ -6,9 +6,7 @@ import com.weilylab.xhuschedule.classes.RT
 import okhttp3.ResponseBody
 
 import retrofit2.Call
-import retrofit2.http.POST
-import retrofit2.http.Query
-import retrofit2.http.Streaming
+import retrofit2.http.*
 
 /**
  * Created by myste.
@@ -17,12 +15,14 @@ import retrofit2.http.Streaming
 interface RTResponse
 {
 	@Streaming
-	@POST("/course/Course/getVCode")
+	@GET("/course/Course/getVCode")
 	fun getVCodeCall(@Query("type") type: Int): Call<ResponseBody>
 
+	@FormUrlEncoded
 	@POST("/course/Course/login")
-	fun loginCall(@Query("username") username: String, @Query("password") password: String, @Query("vcode") vcode: String): Call<LoginRT>
+	fun loginCall(@Field("username") username: String, @Field("password") password: String, @Field("vcode") vcode: String): Call<LoginRT>
 
-	@POST("/course/Course/getContent")
+	@FormUrlEncoded
+	@GET("/course/Course/getContent")
 	fun getContentCall(): Call<ContentRT>
 }

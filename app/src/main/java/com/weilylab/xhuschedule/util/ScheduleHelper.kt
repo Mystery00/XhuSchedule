@@ -92,30 +92,33 @@ class ScheduleHelper private constructor()
 
 	fun getWeekCourses(courses: Array<Course>): ArrayList<Course?>
 	{
-		val startCalendar = Calendar.getInstance()
+		val calendarUtil = CalendarUtil.getInstance()
 		//开学时间
-		startCalendar.set(2017, 8, 4, 0, 0, 0)//月数减一
-		val currentCalendar = Calendar.getInstance()
-		startCalendar.firstDayOfWeek = Calendar.MONDAY
-		currentCalendar.firstDayOfWeek = Calendar.MONDAY
-		//获取当前第几周---加一获取正确周数
-		val currentWeek = currentCalendar.get(Calendar.WEEK_OF_YEAR) - startCalendar.get(Calendar.WEEK_OF_YEAR) + 1
+		calendarUtil.startCalendar.set(2017, 8, 4, 0, 0, 0)//月数减一
+		val currentWeek = calendarUtil.getWeek()
 		val tempArray = Array(5, { Array<Course?>(7, { null }) })
 		courses.filter {
-			val weekArray = it.week.split('-')
-			val startWeek = weekArray[0].toInt()
-			val endWeek = weekArray[1].toInt()
-			var other = false
-			when (it.type)
+			try
 			{
-				"0" -> other = true
-				"1" -> if (currentWeek % 2 == 1)
-					other = true
-				"2" -> if (currentWeek % 2 == 0)
-					other = true
-				else -> other = false
+				val weekArray = it.week.split('-')
+				val startWeek = weekArray[0].toInt()
+				val endWeek = weekArray[1].toInt()
+				var other = false
+				when (it.type)
+				{
+					"0" -> other = true
+					"1" -> if (currentWeek % 2 == 1)
+						other = true
+					"2" -> if (currentWeek % 2 == 0)
+						other = true
+					else -> other = false
+				}
+				currentWeek in startWeek..endWeek && other
 			}
-			currentWeek in startWeek..endWeek && other
+			catch (e: Exception)
+			{
+				false
+			}
 		}
 				.forEach {
 					val timeArray = it.time.split('-')
@@ -140,17 +143,13 @@ class ScheduleHelper private constructor()
 
 	fun getTodayCourses(courses: Array<Course>): ArrayList<Course>
 	{
-		val startCalendar = Calendar.getInstance()
+		val calendarUtil = CalendarUtil.getInstance()
 		//开学时间
-		startCalendar.set(2017, 8, 4, 0, 0, 0)
-		val currentCalendar = Calendar.getInstance()
-		startCalendar.firstDayOfWeek = Calendar.MONDAY
-		currentCalendar.firstDayOfWeek = Calendar.MONDAY
-		//当前星期几
-		val weekIndex = currentCalendar.get(Calendar.DAY_OF_WEEK) - 1
-		Logs.i(TAG, "getTodayCourses: " + weekIndex)
+		calendarUtil.startCalendar.set(2017, 8, 4, 0, 0, 0)//月数减一
 		//获取当前第几周
-		val currentWeek = currentCalendar.get(Calendar.WEEK_OF_YEAR) - startCalendar.get(Calendar.WEEK_OF_YEAR) + 1
+		val currentWeek = calendarUtil.getWeek()
+		val weekIndex = calendarUtil.getWeekIndex()
+		Logs.i(TAG, "getTodayCourses: " + weekIndex)
 		val list = ArrayList<Course>()
 		courses.filter {
 			val weekArray = it.week.split('-')
