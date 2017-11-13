@@ -71,7 +71,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 	{
 		loadingDialog = ZLoadingDialog(this)
 				.setLoadingBuilder(Z_TYPE.DOUBLE_CIRCLE)
-				.setHintText("loading......")
+				.setHintText(getString(R.string.hint_dialog_update_cache))
 				.setHintTextSize(16F)
 
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
@@ -110,6 +110,15 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 				bottomNavigationView.menu.getItem(position).isChecked = true
 			}
 		})
+
+		swipeRefreshLayout.setColorSchemeResources(
+				android.R.color.holo_blue_light,
+				android.R.color.holo_green_light,
+				android.R.color.holo_orange_light,
+				android.R.color.holo_red_light)
+		swipeRefreshLayout.setOnRefreshListener {
+			updateData()
+		}
 	}
 
 	private fun updateView()
@@ -123,6 +132,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
 			override fun onComplete()
 			{
+				loadingDialog.dismiss()
 				Logs.i(TAG, "onComplete: ")
 				if (isRefresh && !ScheduleHelper.getInstance().isLogin)
 				{
@@ -146,10 +156,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 				todayFragment.refreshData()
 				weekFragment.refreshData()
 				allFragment.refreshData()
-				loadingDialog.dismiss()
-				Logs.i(TAG, "onComplete: " + isRefresh)
-				if (!isRefresh)
-					updateData()
 			}
 
 			override fun onError(e: Throwable)
@@ -252,7 +258,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 			override fun onSubscribe(d: Disposable)
 			{
 				Logs.i(TAG, "onSubscribe: ")
-				loadingDialog.show()
 			}
 
 			override fun onNext(t: Boolean)
@@ -264,13 +269,13 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 			override fun onError(e: Throwable)
 			{
 				e.printStackTrace()
+				swipeRefreshLayout.isRefreshing = false
 				isCookieAvailable = false
-				loadingDialog.dismiss()
 			}
 
 			override fun onComplete()
 			{
-				loadingDialog.dismiss()
+				swipeRefreshLayout.isRefreshing = false
 				isRefresh = true
 				ScheduleHelper.getInstance().isCookieAvailable = isCookieAvailable
 				if (!isCookieAvailable)

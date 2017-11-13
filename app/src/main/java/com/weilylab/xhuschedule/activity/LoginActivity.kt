@@ -53,7 +53,7 @@ class LoginActivity : AppCompatActivity()
 	{
 		vcodeDialog = ZLoadingDialog(this)
 				.setLoadingBuilder(Z_TYPE.SNAKE_CIRCLE)
-				.setHintText(getString(R.string.hint_dialog_update))
+				.setHintText(getString(R.string.hint_dialog_update_vcode))
 				.setHintTextSize(16F)
 
 		loginDialog = ZLoadingDialog(this)

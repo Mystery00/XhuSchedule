@@ -14,8 +14,9 @@
     <string name="prompt_password">密码</string>
     <string name="prompt_vcode">验证码</string>
 
-    <string name="hint_dialog_update">获取验证码中……</string>
+    <string name="hint_dialog_update_vcode">获取验证码中……</string>
     <string name="hint_dialog_login">登录中……</string>
+    <string name="hint_dialog_update_cache">更新缓存中……</string>
     <string name="hint_invalid_cookie">登陆信息已过期，是否重新登陆？</string>
 
     <string name="error_invalid_username">用户名无效</string>
