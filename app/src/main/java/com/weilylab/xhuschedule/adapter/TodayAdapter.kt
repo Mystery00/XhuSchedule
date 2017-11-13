@@ -1,5 +1,6 @@
 package com.weilylab.xhuschedule.adapter
 
+import android.graphics.Color
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -7,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.classes.Course
+import com.weilylab.xhuschedule.util.ScheduleHelper
 import de.hdodenhof.circleimageview.CircleImageView
 
 /**
@@ -23,6 +25,10 @@ class TodayAdapter(
 	override fun onBindViewHolder(holder: ViewHolder, position: Int)
 	{
 		val course = list[position]
+		if (course.color != "")
+			holder.img.setColorFilter(Color.parseColor(course.color))
+		else
+			holder.img.setColorFilter(Color.parseColor('#' + ScheduleHelper.getInstance().getRandomColor()))
 		holder.courseTimeTextView.text = course.time
 		val temp = course.name + " - " + course.teacher
 		holder.courseNameAndTeacherTextView.text = temp

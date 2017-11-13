@@ -2,6 +2,7 @@ package com.weilylab.xhuschedule.activity
 
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.support.design.widget.NavigationView
 import android.support.design.widget.Snackbar
@@ -72,6 +73,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 				.setLoadingBuilder(Z_TYPE.DOUBLE_CIRCLE)
 				.setHintText("loading......")
 				.setHintTextSize(16F)
+
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+		{
+			loadingDialog.setLoadingColor(resources.getColor(R.color.colorAccent, null))
+			loadingDialog.setHintTextColor(resources.getColor(R.color.colorAccent, null))
+		}
 		val viewPagerAdapter = ViewPagerAdapter(supportFragmentManager)
 		viewPagerAdapter.addFragment(todayFragment)
 		viewPagerAdapter.addFragment(weekFragment)
@@ -184,20 +191,29 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 			}
 			ScheduleHelper.getInstance().isCookieAvailable = true
 			val allArray = ScheduleHelper.getInstance().formatCourses(courses)
+			allList.clear()
 			allList.addAll(allArray)
 			val colorSharedPreference = getSharedPreferences("course_color", Context.MODE_PRIVATE)
 			courses.forEach {
 				val md5 = ScheduleHelper.getInstance().getMD5(it.name)
-				val savedColor = colorSharedPreference.getInt(md5, -1)
-				val color: Int
-				if (savedColor == -1)
+				var savedColor = colorSharedPreference.getString(md5, "")
+				var savedTransparencyColor = colorSharedPreference.getString(md5 + "_trans", "")
+				if (savedColor == "")
 				{
-					color = ScheduleHelper.getInstance().getRandomColor()
-					colorSharedPreference.edit().putInt(md5, color).apply()
+					savedColor = '#' + ScheduleHelper.getInstance().getRandomColor()
+					colorSharedPreference.edit().putString(md5, savedColor).apply()
+					it.color = savedColor
 				}
 				else
-					color = savedColor
-				it.color = color
+					it.color = savedColor
+				if (savedTransparencyColor == "")
+				{
+					savedTransparencyColor = "#33" + savedColor.substring(1, savedColor.length)
+					colorSharedPreference.edit().putString(md5 + "_trans", savedTransparencyColor).apply()
+					it.transparencyColor = savedTransparencyColor
+				}
+				else
+					it.transparencyColor = savedTransparencyColor
 			}
 			val weekArray = ScheduleHelper.getInstance().getWeekCourses(courses)
 			weekList.clear()
@@ -222,6 +238,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 			override fun onSubscribe(d: Disposable)
 			{
 				Logs.i(TAG, "onSubscribe: ")
+				loadingDialog.show()
 			}
 
 			override fun onNext(t: Boolean)
@@ -234,16 +251,18 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 			{
 				e.printStackTrace()
 				isCookieAvailable = false
+				loadingDialog.dismiss()
 			}
 
 			override fun onComplete()
 			{
+				loadingDialog.dismiss()
 				isRefresh = true
 				ScheduleHelper.getInstance().isCookieAvailable = isCookieAvailable
 				if (!isCookieAvailable)
 				{
 					Logs.i(TAG, "onComplete: cookie无效")
-					Snackbar.make(coordinatorLayout, R.string.hint_invalid_cookie, Snackbar.LENGTH_SHORT)
+					Snackbar.make(coordinatorLayout, R.string.hint_invalid_cookie, Snackbar.LENGTH_LONG)
 							.setAction(android.R.string.ok) {
 								ScheduleHelper.getInstance().isLogin = false
 								startActivity(Intent(this@MainActivity, LoginActivity::class.java))

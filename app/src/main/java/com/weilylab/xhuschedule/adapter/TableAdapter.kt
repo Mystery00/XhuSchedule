@@ -1,6 +1,7 @@
 package com.weilylab.xhuschedule.adapter
 
 import android.content.Context
+import android.graphics.Color
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -35,11 +36,11 @@ class TableAdapter(private val context: Context,
 		textViewName.text = course!!.name
 		textViewTeacher.text = course.teacher
 		textViewLocation.text = course.location
-		if (course.color == -1)
+		if (course.transparencyColor == "")
 		{
-			course.color = ScheduleHelper.getInstance().getRandomColor()
+			course.transparencyColor = "#33" + ScheduleHelper.getInstance().getRandomColor()
 		}
-		view.setBackgroundColor(course.color)
+		view.setBackgroundColor(Color.parseColor(course.transparencyColor))
 		view.layoutParams = layoutParams
 		holder.linearLayout.addView(view)
 		while (course!!.other != null)

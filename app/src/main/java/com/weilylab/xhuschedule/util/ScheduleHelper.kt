@@ -178,7 +178,7 @@ class ScheduleHelper private constructor()
 		return list
 	}
 
-	fun getRandomColor(): Int
+	fun getRandomColor(): String
 	{
 		val random = Random()
 		//生成红色颜色代码
@@ -194,7 +194,7 @@ class ScheduleHelper private constructor()
 		//判断蓝色代码的位数
 		blue = if (blue.length == 1) "0" + blue else blue
 		//生成十六进制颜色值
-		return Color.parseColor("#33" + red + green + blue)
+		return red + green + blue
 	}
 
 	fun getMD5(message: String): String
