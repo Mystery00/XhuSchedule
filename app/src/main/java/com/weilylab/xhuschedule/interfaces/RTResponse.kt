@@ -22,7 +22,6 @@ interface RTResponse
 	@POST("/course/Course/login")
 	fun loginCall(@Field("username") username: String, @Field("password") password: String, @Field("vcode") vcode: String): Call<LoginRT>
 
-	@FormUrlEncoded
 	@GET("/course/Course/getContent")
 	fun getContentCall(): Call<ContentRT>
 }

@@ -6,10 +6,10 @@ import android.os.Bundle
 import android.support.design.widget.NavigationView
 import android.support.design.widget.Snackbar
 import android.support.v4.view.GravityCompat
+import android.support.v4.view.ViewPager
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
 import android.util.Base64
-import android.view.Menu
 import android.view.MenuItem
 import android.widget.TextView
 import com.weilylab.xhuschedule.R
@@ -29,6 +29,7 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
+import kotlinx.android.synthetic.main.content_main.*
 import vip.mystery0.tools.logs.Logs
 import java.io.File
 
@@ -41,10 +42,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
 	private val retrofit = ScheduleHelper.getInstance().getRetrofit()
 	private lateinit var loadingDialog: ZLoadingDialog
-	private var list = ArrayList<Course?>()
+	private var weekList = ArrayList<Course?>()
+	private var allList = ArrayList<Course?>()
 	private val todayList = ArrayList<Course>()
 	private val todayFragment = TodayFragment.newInstance(todayList)
-	private var tableFragment = TableFragment.newInstance(list)
+	private val weekFragment = TableFragment.newInstance(weekList)
+	private val allFragment = TableFragment.newInstance(allList)
 	private var isRefresh = false
 
 	override fun onCreate(savedInstanceState: Bundle?)
@@ -70,10 +73,31 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 				.setHintText("loading......")
 				.setHintTextSize(16F)
 		val viewPagerAdapter = ViewPagerAdapter(supportFragmentManager)
-		viewPagerAdapter.addFragment(todayFragment, "Today")
-		viewPagerAdapter.addFragment(tableFragment, "ALL")
-//		viewpager.adapter = viewPagerAdapter
-//		tabLayout.setupWithViewPager(viewpager)
+		viewPagerAdapter.addFragment(todayFragment)
+		viewPagerAdapter.addFragment(weekFragment)
+		viewPagerAdapter.addFragment(allFragment)
+		viewpager.adapter = viewPagerAdapter
+
+		bottomNavigationView.setOnNavigationItemSelectedListener { item ->
+			viewpager.currentItem = item.order
+			true
+		}
+		viewpager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener
+		{
+			override fun onPageScrollStateChanged(state: Int)
+			{
+			}
+
+			override fun onPageScrolled(position: Int, positionOffset: Float,
+										positionOffsetPixels: Int)
+			{
+			}
+
+			override fun onPageSelected(position: Int)
+			{
+				bottomNavigationView.menu.getItem(position).isChecked = true
+			}
+		})
 	}
 
 	private fun updateView()
@@ -99,7 +123,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 				studentNameTextView.text = ScheduleHelper.getInstance().studentName
 				studentNumberTextView.text = ScheduleHelper.getInstance().studentNumber
 				todayFragment.refreshData()
-				tableFragment.refreshData()
+				weekFragment.refreshData()
+				allFragment.refreshData()
 				loadingDialog.dismiss()
 				Logs.i(TAG, "onComplete: " + isRefresh)
 				if (!isRefresh)
@@ -158,8 +183,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 				return@create
 			}
 			ScheduleHelper.getInstance().isCookieAvailable = true
-//			val allArray = ScheduleHelper.getInstance().formatCourses(rt.courses)
-//			list.addAll(allArray)
+			val allArray = ScheduleHelper.getInstance().formatCourses(courses)
+			allList.addAll(allArray)
 			val colorSharedPreference = getSharedPreferences("course_color", Context.MODE_PRIVATE)
 			courses.forEach {
 				val md5 = ScheduleHelper.getInstance().getMD5(it.name)
@@ -175,8 +200,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 				it.color = color
 			}
 			val weekArray = ScheduleHelper.getInstance().getWeekCourses(courses)
-			list.clear()
-			list.addAll(weekArray)
+			weekList.clear()
+			weekList.addAll(weekArray)
 			val todayArray = ScheduleHelper.getInstance().getTodayCourses(courses)
 			todayList.clear()
 			todayList.addAll(todayArray)

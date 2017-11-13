@@ -12,14 +12,12 @@ class ViewPagerAdapter(fragmentManager: FragmentManager) : FragmentPagerAdapter(
 {
 
 	private val fragmentList = ArrayList<Fragment>()
-	private val titleList = ArrayList<String>()
 
-	fun addFragment(fragment: Fragment, title: String)
+	fun addFragment(fragment: Fragment)
 	{
 //		if (fragmentList.contains(fragment))
 //			return
 		fragmentList.add(fragment)
-		titleList.add(title)
 	}
 
 	override fun getItem(position: Int): Fragment
@@ -30,10 +28,5 @@ class ViewPagerAdapter(fragmentManager: FragmentManager) : FragmentPagerAdapter(
 	override fun getCount(): Int
 	{
 		return fragmentList.size
-	}
-
-	override fun getPageTitle(position: Int): CharSequence
-	{
-		return titleList[position]
 	}
 }
