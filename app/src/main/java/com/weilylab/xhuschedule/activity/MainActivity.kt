@@ -79,10 +79,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 			loadingDialog.setLoadingColor(resources.getColor(R.color.colorAccent, null))
 			loadingDialog.setHintTextColor(resources.getColor(R.color.colorAccent, null))
 		}
+		loadingDialog.show()
 		val viewPagerAdapter = ViewPagerAdapter(supportFragmentManager)
 		viewPagerAdapter.addFragment(todayFragment)
 		viewPagerAdapter.addFragment(weekFragment)
 		viewPagerAdapter.addFragment(allFragment)
+		viewpager.offscreenPageLimit = 2
 		viewpager.adapter = viewPagerAdapter
 
 		bottomNavigationView.setOnNavigationItemSelectedListener { item ->
@@ -134,28 +136,33 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 			{
 				loadingDialog.dismiss()
 				Logs.i(TAG, "onComplete: ")
-				if (isRefresh && !ScheduleHelper.getInstance().isLogin)
+				if (!ScheduleHelper.getInstance().isLogin)
 				{
 					startActivity(Intent(this@MainActivity, LoginActivity::class.java))
 					finish()
 					return
 				}
-				val studentNameTextView: TextView = nav_view.getHeaderView(0).findViewById(R.id.studentName)
-				val studentNumberTextView: TextView = nav_view.getHeaderView(0).findViewById(R.id.studentNumber)
-				studentNameTextView.text = ScheduleHelper.getInstance().studentName
-				studentNumberTextView.text = ScheduleHelper.getInstance().studentNumber
-				when (todayList.size)
+				if (ScheduleHelper.getInstance().isCookieAvailable)
 				{
-					0 -> bottomNavigationView.menu.findItem(R.id.bottom_nav_today).setIcon(R.drawable.ic_sentiment_very_satisfied)
-					1 -> bottomNavigationView.menu.findItem(R.id.bottom_nav_today).setIcon(R.drawable.ic_sentiment_very_satisfied)
-					2 -> bottomNavigationView.menu.findItem(R.id.bottom_nav_today).setIcon(R.drawable.ic_sentiment_satisfied)
-					3 -> bottomNavigationView.menu.findItem(R.id.bottom_nav_today).setIcon(R.drawable.ic_sentiment_neutral)
-					4 -> bottomNavigationView.menu.findItem(R.id.bottom_nav_today).setIcon(R.drawable.ic_sentiment_dissatisfied)
-					else -> bottomNavigationView.menu.findItem(R.id.bottom_nav_today).setIcon(R.drawable.ic_sentiment_very_dissatisfied)
+					val studentNameTextView: TextView = nav_view.getHeaderView(0).findViewById(R.id.studentName)
+					val studentNumberTextView: TextView = nav_view.getHeaderView(0).findViewById(R.id.studentNumber)
+					studentNameTextView.text = ScheduleHelper.getInstance().studentName
+					studentNumberTextView.text = ScheduleHelper.getInstance().studentNumber
+					when (todayList.size)
+					{
+						0 -> bottomNavigationView.menu.findItem(R.id.bottom_nav_today).setIcon(R.drawable.ic_sentiment_very_satisfied)
+						1 -> bottomNavigationView.menu.findItem(R.id.bottom_nav_today).setIcon(R.drawable.ic_sentiment_very_satisfied)
+						2 -> bottomNavigationView.menu.findItem(R.id.bottom_nav_today).setIcon(R.drawable.ic_sentiment_satisfied)
+						3 -> bottomNavigationView.menu.findItem(R.id.bottom_nav_today).setIcon(R.drawable.ic_sentiment_neutral)
+						4 -> bottomNavigationView.menu.findItem(R.id.bottom_nav_today).setIcon(R.drawable.ic_sentiment_dissatisfied)
+						else -> bottomNavigationView.menu.findItem(R.id.bottom_nav_today).setIcon(R.drawable.ic_sentiment_very_dissatisfied)
+					}
+					todayFragment.refreshData()
+					weekFragment.refreshData()
+					allFragment.refreshData()
 				}
-				todayFragment.refreshData()
-				weekFragment.refreshData()
-				allFragment.refreshData()
+				else
+					updateData()
 			}
 
 			override fun onError(e: Throwable)
@@ -258,6 +265,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 			override fun onSubscribe(d: Disposable)
 			{
 				Logs.i(TAG, "onSubscribe: ")
+				swipeRefreshLayout.isRefreshing = true
 			}
 
 			override fun onNext(t: Boolean)
@@ -350,7 +358,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 			subscriber.onComplete()
 		}
 
-		observable.subscribeOn(Schedulers.io())
+		observable.subscribeOn(Schedulers.newThread())
 				.observeOn(AndroidSchedulers.mainThread())
 				.subscribe(observer)
 	}

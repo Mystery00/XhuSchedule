@@ -39,6 +39,7 @@ class TodayFragment : Fragment()
 	private lateinit var list: ArrayList<Course>
 	private lateinit var adapter: TodayAdapter
 	private var isReady = false
+	private var rootView: View? = null
 
 	override fun onCreate(savedInstanceState: Bundle?)
 	{
@@ -52,13 +53,16 @@ class TodayFragment : Fragment()
 	override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
 							  savedInstanceState: Bundle?): View?
 	{
-		Logs.i(TAG, "onCreateView: ")
-		val view = inflater.inflate(R.layout.fragment_today, container, false)
-		val recyclerView: RecyclerView = view.findViewById(R.id.recycler_view)
-		recyclerView.layoutManager = LinearLayoutManager(activity)
-		recyclerView.adapter = adapter
-		isReady = true
-		return view
+		if (rootView == null)
+		{
+			Logs.i(TAG, "onCreateView: ")
+			rootView = inflater.inflate(R.layout.fragment_today, container, false)
+			val recyclerView: RecyclerView = rootView!!.findViewById(R.id.recycler_view)
+			recyclerView.layoutManager = LinearLayoutManager(activity)
+			recyclerView.adapter = adapter
+			isReady = true
+		}
+		return rootView
 	}
 
 	fun refreshData()
@@ -95,5 +99,12 @@ class TodayFragment : Fragment()
 		observable.subscribeOn(Schedulers.io())
 				.observeOn(AndroidSchedulers.mainThread())
 				.subscribe(observer)
+	}
+
+	override fun onDestroyView()
+	{
+		super.onDestroyView()
+		if (rootView != null)
+			(rootView!!.parent as ViewGroup).removeView(rootView)
 	}
 }

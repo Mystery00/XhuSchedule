@@ -40,7 +40,8 @@ class TableFragment : Fragment()
 
 	private lateinit var list: ArrayList<Course?>
 	private lateinit var adapter: TableAdapter
-	private var isReady=false
+	private var isReady = false
+	private var rootView: View? = null
 
 	override fun onCreate(savedInstanceState: Bundle?)
 	{
@@ -53,21 +54,25 @@ class TableFragment : Fragment()
 	override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
 							  savedInstanceState: Bundle?): View?
 	{
-		val view = inflater.inflate(R.layout.fragment_table, container, false)
-		val recyclerView: RecyclerView = view.findViewById(R.id.recycler_view)
-		val linearLayout: LinearLayout = view.findViewById(R.id.table_nav)
-		recyclerView.layoutManager = GridLayoutManager(activity, 7, StaggeredGridLayoutManager.VERTICAL, false)
-		recyclerView.adapter = adapter
-		recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener()
+		if (rootView == null)
 		{
-			override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int)
+			Logs.i(TAG, "onCreateView: ")
+			rootView = inflater.inflate(R.layout.fragment_table, container, false)
+			val recyclerView: RecyclerView = rootView!!.findViewById(R.id.recycler_view)
+			val linearLayout: LinearLayout = rootView!!.findViewById(R.id.table_nav)
+			recyclerView.layoutManager = GridLayoutManager(activity, 7, StaggeredGridLayoutManager.VERTICAL, false)
+			recyclerView.adapter = adapter
+			recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener()
 			{
-				super.onScrolled(recyclerView, dx, dy)
-				linearLayout.scrollBy(dx, dy)
-			}
-		})
-		isReady=true
-		return view
+				override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int)
+				{
+					super.onScrolled(recyclerView, dx, dy)
+					linearLayout.scrollBy(dx, dy)
+				}
+			})
+			isReady = true
+		}
+		return rootView
 	}
 
 	fun refreshData()
@@ -104,5 +109,12 @@ class TableFragment : Fragment()
 		observable.subscribeOn(Schedulers.io())
 				.observeOn(AndroidSchedulers.mainThread())
 				.subscribe(observer)
+	}
+
+	override fun onDestroyView()
+	{
+		super.onDestroyView()
+		if (rootView != null)
+			(rootView!!.parent as ViewGroup).removeView(rootView)
 	}
 }

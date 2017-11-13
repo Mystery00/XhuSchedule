@@ -25,13 +25,13 @@ class TodayAdapter(
 	override fun onBindViewHolder(holder: ViewHolder, position: Int)
 	{
 		val course = list[position]
-		if (course.color == "")
-			course.color = '#' + ScheduleHelper.getInstance().getRandomColor()
-		holder.img.setImageBitmap(drawImg(course))
 		holder.courseTimeTextView.text = course.time
 		val temp = course.name + " - " + course.teacher
 		holder.courseNameAndTeacherTextView.text = temp
 		holder.courseLocationTextView.text = course.location
+		if (course.color == "")
+			course.color = '#' + ScheduleHelper.getInstance().getRandomColor()
+		holder.img.setImageBitmap(drawImg(course))
 	}
 
 	override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder
