@@ -1,5 +1,7 @@
 package com.weilylab.xhuschedule.activity
 
+import android.animation.ArgbEvaluator
+import android.animation.ObjectAnimator
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
@@ -24,6 +26,8 @@ import kotlinx.android.synthetic.main.activity_login.*
 
 import kotlinx.android.synthetic.main.content_login.*
 import vip.mystery0.tools.logs.Logs
+import android.animation.ValueAnimator
+
 
 class LoginActivity : AppCompatActivity()
 {
@@ -35,6 +39,7 @@ class LoginActivity : AppCompatActivity()
 	private val retrofit = ScheduleHelper.getInstance().getRetrofit()
 	private lateinit var vcodeDialog: ZLoadingDialog
 	private lateinit var loginDialog: ZLoadingDialog
+	private var name = "0"
 
 	override fun onCreate(savedInstanceState: Bundle?)
 	{
@@ -68,6 +73,13 @@ class LoginActivity : AppCompatActivity()
 			loginDialog.setLoadingColor(resources.getColor(R.color.colorAccent, null))
 			loginDialog.setHintTextColor(resources.getColor(R.color.colorAccent, null))
 		}
+
+		val colorAnim = ObjectAnimator.ofInt(login_form, "backgroundColor", -0x7f80, -0x7f7f01)
+		colorAnim.duration = 3000
+		colorAnim.setEvaluator(ArgbEvaluator())
+		colorAnim.repeatCount = ValueAnimator.INFINITE
+		colorAnim.repeatMode = ValueAnimator.REVERSE
+		colorAnim.start()
 	}
 
 	private fun loadVcode()
@@ -198,7 +210,7 @@ class LoginActivity : AppCompatActivity()
 					1 ->
 					{
 						ScheduleHelper.getInstance().isLogin = true
-						Toast.makeText(this@LoginActivity, getString(R.string.success_login, ScheduleHelper.getInstance().studentName, getString(R.string.app_name)), Toast.LENGTH_SHORT)
+						Toast.makeText(this@LoginActivity, getString(R.string.success_login, name, getString(R.string.app_name)), Toast.LENGTH_SHORT)
 								.show()
 						startActivity(Intent(this@LoginActivity, MainActivity::class.java))
 						finish()
@@ -260,6 +272,7 @@ class LoginActivity : AppCompatActivity()
 				val editor = sharedPreference.edit()
 				editor.putString("studentNumber", usernameStr)
 				editor.putString("studentName", response.body()?.name)
+				name = response.body()?.name!!
 				editor.apply()
 			}
 			subscriber.onComplete()

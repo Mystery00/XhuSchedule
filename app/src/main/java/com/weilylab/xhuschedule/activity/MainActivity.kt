@@ -377,32 +377,21 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
 	override fun onNavigationItemSelected(item: MenuItem): Boolean
 	{
-		// Handle navigation view item clicks here.
 		when (item.itemId)
 		{
-			R.id.nav_camera ->
-			{
-				// Handle the camera action
-			}
-			R.id.nav_gallery ->
+			R.id.nav_settings ->
 			{
 
 			}
-			R.id.nav_slideshow ->
+			R.id.nav_logout ->
 			{
-
-			}
-			R.id.nav_manage ->
-			{
-
-			}
-			R.id.nav_share ->
-			{
-
-			}
-			R.id.nav_send ->
-			{
-
+				val sharedPreference=getSharedPreferences("cache", Context.MODE_PRIVATE)
+				val editor=sharedPreference.edit()
+				editor.remove("studentName")
+				editor.remove("studentNumber")
+				editor.apply()
+				startActivity(Intent(this@MainActivity, LoginActivity::class.java))
+				finish()
 			}
 		}
 		drawer_layout.closeDrawer(GravityCompat.START)
