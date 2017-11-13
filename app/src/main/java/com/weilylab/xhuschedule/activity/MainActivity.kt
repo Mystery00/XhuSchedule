@@ -86,7 +86,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 		viewpager.adapter = viewPagerAdapter
 
 		bottomNavigationView.setOnNavigationItemSelectedListener { item ->
-			viewpager.currentItem = item.order
+			when (item.itemId)
+			{
+				R.id.bottom_nav_today -> viewpager.currentItem = 0
+				R.id.bottom_nav_week -> viewpager.currentItem = 1
+				R.id.bottom_nav_all -> viewpager.currentItem = 2
+			}
 			true
 		}
 		viewpager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener
@@ -129,6 +134,15 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 				val studentNumberTextView: TextView = nav_view.getHeaderView(0).findViewById(R.id.studentNumber)
 				studentNameTextView.text = ScheduleHelper.getInstance().studentName
 				studentNumberTextView.text = ScheduleHelper.getInstance().studentNumber
+				when (todayList.size)
+				{
+					0 -> bottomNavigationView.menu.findItem(R.id.bottom_nav_today).setIcon(R.drawable.ic_sentiment_very_satisfied)
+					1 -> bottomNavigationView.menu.findItem(R.id.bottom_nav_today).setIcon(R.drawable.ic_sentiment_very_satisfied)
+					2 -> bottomNavigationView.menu.findItem(R.id.bottom_nav_today).setIcon(R.drawable.ic_sentiment_satisfied)
+					3 -> bottomNavigationView.menu.findItem(R.id.bottom_nav_today).setIcon(R.drawable.ic_sentiment_neutral)
+					4 -> bottomNavigationView.menu.findItem(R.id.bottom_nav_today).setIcon(R.drawable.ic_sentiment_dissatisfied)
+					else -> bottomNavigationView.menu.findItem(R.id.bottom_nav_today).setIcon(R.drawable.ic_sentiment_very_dissatisfied)
+				}
 				todayFragment.refreshData()
 				weekFragment.refreshData()
 				allFragment.refreshData()
