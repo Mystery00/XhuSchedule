@@ -53,6 +53,11 @@ class TableAdapter(private val context: Context,
 			tempTextViewName.text = course.name
 			tempTextViewTeacher.text = course.teacher
 			tempTextViewLocation.text = course.location
+			if (course.transparencyColor == "")
+			{
+				course.transparencyColor = "#33" + ScheduleHelper.getInstance().getRandomColor()
+			}
+			tempView.setBackgroundColor(Color.parseColor(course.transparencyColor))
 			tempView.layoutParams = layoutParams
 			holder.linearLayout.addView(tempView)
 		}

@@ -32,7 +32,7 @@ class CalendarUtil private constructor()
 		val tempCalendar = Calendar.getInstance()
 		tempCalendar.timeInMillis = calendar.timeInMillis - startCalendar.timeInMillis
 		//获取当前第几周---加一获取正确周数
-		return tempCalendar.get(Calendar.WEEK_OF_YEAR) - 1
+		return tempCalendar.get(Calendar.WEEK_OF_YEAR)
 	}
 
 	fun getWeekIndex(): Int

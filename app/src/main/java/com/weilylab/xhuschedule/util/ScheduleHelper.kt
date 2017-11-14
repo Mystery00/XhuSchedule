@@ -1,6 +1,5 @@
 package com.weilylab.xhuschedule.util
 
-import android.graphics.Color
 import com.weilylab.xhuschedule.APP
 import com.weilylab.xhuschedule.classes.Course
 import com.weilylab.xhuschedule.util.cookie.CookieManger
@@ -147,6 +146,7 @@ class ScheduleHelper private constructor()
 		calendarUtil.startCalendar.set(2017, 8, 4, 0, 0, 0)//月数减一
 		//获取当前第几周
 		val currentWeek = calendarUtil.getWeek()
+		Logs.i(TAG, "getTodayCourses: " + currentWeek)
 		val weekIndex = calendarUtil.getWeekIndex()
 		val list = ArrayList<Course>()
 		courses.filter {
