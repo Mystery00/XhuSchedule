@@ -54,11 +54,6 @@ class ScheduleHelper private constructor()
 					.writeTimeout(10, TimeUnit.SECONDS)
 					.cookieJar(CookieManger(APP.getContext()))
 					.build()
-			updateRetrofit = Retrofit.Builder()
-					.client(client!!)
-					.baseUrl("http://tomcat.weilylab.com:9783")
-					.addConverterFactory(GsonConverterFactory.create())
-					.build()
 		}
 		return client!!
 	}
@@ -74,6 +69,19 @@ class ScheduleHelper private constructor()
 					.build()
 		}
 		return retrofit!!
+	}
+
+	fun getUpdateRetrofit(): Retrofit
+	{
+		if (updateRetrofit == null)
+		{
+			updateRetrofit = Retrofit.Builder()
+					.client(getClient())
+					.baseUrl("http://tomcat.weilylab.com:9783")
+					.addConverterFactory(GsonConverterFactory.create())
+					.build()
+		}
+		return updateRetrofit!!
 	}
 
 	fun formatCourses(courses: Array<Course>): ArrayList<Course?>
