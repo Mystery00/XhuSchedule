@@ -24,7 +24,11 @@ android {
         setProperty("archivesBaseName", "Xhu Schedule-$versionName")
     }
     buildTypes {
+        debug {
+            resValue "string", "app_version_code", autoVersion.code + ''
+        }
         release {
+            resValue "string", "app_version_code", autoVersion.code + ''
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }

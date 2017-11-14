@@ -3,6 +3,8 @@ package com.weilylab.xhuschedule.service
 import android.app.Service
 import android.content.Intent
 import android.os.IBinder
+import com.weilylab.xhuschedule.R
+import com.weilylab.xhuschedule.interfaces.UpdateResponse
 import com.weilylab.xhuschedule.util.ScheduleHelper
 import io.reactivex.Observable
 import io.reactivex.Observer
@@ -17,6 +19,8 @@ class UpdateService : Service()
 	{
 		private val TAG = "UpdateService"
 	}
+
+	private val retrofit = ScheduleHelper.getInstance().getUpdateRetrofit()
 
 	override fun onCreate()
 	{
@@ -44,7 +48,13 @@ class UpdateService : Service()
 		}
 
 		val observable = Observable.create<Int> { subscriber ->
+			val service = retrofit.create(UpdateResponse::class.java)
+			val call = service.checkUpdateCall(getString(R.string.app_version_code).toInt())
+			val response=call.execute()
+			if (!response.isSuccessful)
+			{
 
+			}
 		}
 		observable.subscribeOn(Schedulers.newThread())
 				.observeOn(AndroidSchedulers.mainThread())
@@ -53,8 +63,7 @@ class UpdateService : Service()
 
 	override fun onBind(intent: Intent): IBinder?
 	{
-		// TODO: Return the communication channel to the service.
-		throw UnsupportedOperationException("Not yet implemented")
+		return null
 	}
 
 	override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int
