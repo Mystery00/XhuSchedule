@@ -386,7 +386,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 		{
 			R.id.nav_settings ->
 			{
-
+				startActivity(Intent(this, SettingsActivity::class.java))
 			}
 			R.id.nav_logout ->
 			{
