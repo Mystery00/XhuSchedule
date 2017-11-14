@@ -46,4 +46,8 @@
     <string name="table_nav3">5\n\n6</string>
     <string name="table_nav4">7\n\n8</string>
     <string name="table_nav5">9\n\n10</string>
+
+    <string name="update_notification_title">新版本更新 %1$s => %2$s</string>
+    <string name="update_notification_content">本次更新包大小为%1$s,增量更新包大小为%2$s</string>
+    <string name="update_notification_big_text">更新日志：\n %1$s</string>
 </resources>
