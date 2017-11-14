@@ -55,6 +55,17 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 	{
 		super.onCreate(savedInstanceState)
 		setContentView(R.layout.activity_main)
+		loadingDialog = ZLoadingDialog(this)
+				.setLoadingBuilder(Z_TYPE.DOUBLE_CIRCLE)
+				.setHintText(getString(R.string.hint_dialog_update_cache))
+				.setHintTextSize(16F)
+
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+		{
+			loadingDialog.setLoadingColor(resources.getColor(R.color.colorAccent, null))
+			loadingDialog.setHintTextColor(resources.getColor(R.color.colorAccent, null))
+		}
+		loadingDialog.show()
 
 		val toggle = ActionBarDrawerToggle(
 				this, drawer_layout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
@@ -69,17 +80,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
 	private fun initView()
 	{
-		loadingDialog = ZLoadingDialog(this)
-				.setLoadingBuilder(Z_TYPE.DOUBLE_CIRCLE)
-				.setHintText(getString(R.string.hint_dialog_update_cache))
-				.setHintTextSize(16F)
-
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
-		{
-			loadingDialog.setLoadingColor(resources.getColor(R.color.colorAccent, null))
-			loadingDialog.setHintTextColor(resources.getColor(R.color.colorAccent, null))
-		}
-		loadingDialog.show()
 		val viewPagerAdapter = ViewPagerAdapter(supportFragmentManager)
 		viewPagerAdapter.addFragment(todayFragment)
 		viewPagerAdapter.addFragment(weekFragment)
