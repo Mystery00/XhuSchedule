@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="key_first_day">key_first_day</string>
+    <string name="title_first_day">设置第一周周一时间</string>
+</resources>
