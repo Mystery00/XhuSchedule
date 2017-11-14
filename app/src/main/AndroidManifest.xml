@@ -31,6 +31,12 @@
             android:name=".activity.EditActivity"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
+
+        <service
+            android:name=".service.UpdateService"
+            android:enabled="true"
+            android:exported="true">
+        </service>
     </application>
 
 </manifest>

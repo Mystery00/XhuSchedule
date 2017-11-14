@@ -3,6 +3,11 @@ package com.weilylab.xhuschedule.util
 import com.weilylab.xhuschedule.APP
 import com.weilylab.xhuschedule.classes.Course
 import com.weilylab.xhuschedule.util.cookie.CookieManger
+import io.reactivex.Observable
+import io.reactivex.Observer
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
+import io.reactivex.schedulers.Schedulers
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -35,6 +40,7 @@ class ScheduleHelper private constructor()
 	var isCookieAvailable = false
 	private var client: OkHttpClient? = null
 	private var retrofit: Retrofit? = null
+	private var updateRetrofit: Retrofit? = null
 	var studentName = "0"
 	var studentNumber = "0"
 
@@ -47,6 +53,11 @@ class ScheduleHelper private constructor()
 					.readTimeout(10, TimeUnit.SECONDS)
 					.writeTimeout(10, TimeUnit.SECONDS)
 					.cookieJar(CookieManger(APP.getContext()))
+					.build()
+			updateRetrofit = Retrofit.Builder()
+					.client(client!!)
+					.baseUrl("http://tomcat.weilylab.com:9783")
+					.addConverterFactory(GsonConverterFactory.create())
 					.build()
 		}
 		return client!!
