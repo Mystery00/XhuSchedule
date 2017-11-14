@@ -19,6 +19,7 @@ import com.weilylab.xhuschedule.classes.Course
 import com.weilylab.xhuschedule.fragment.TableFragment
 import com.weilylab.xhuschedule.fragment.TodayFragment
 import com.weilylab.xhuschedule.interfaces.RTResponse
+import com.weilylab.xhuschedule.service.UpdateService
 import com.weilylab.xhuschedule.util.FileUtil
 import com.weilylab.xhuschedule.util.ScheduleHelper
 import com.zyao89.view.zloading.ZLoadingDialog
@@ -80,6 +81,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
 	private fun initView()
 	{
+		startService(Intent(this, UpdateService::class.java))
+
 		val viewPagerAdapter = ViewPagerAdapter(supportFragmentManager)
 		viewPagerAdapter.addFragment(todayFragment)
 		viewPagerAdapter.addFragment(weekFragment)
@@ -385,8 +388,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 			}
 			R.id.nav_logout ->
 			{
-				val sharedPreference=getSharedPreferences("cache", Context.MODE_PRIVATE)
-				val editor=sharedPreference.edit()
+				val sharedPreference = getSharedPreferences("cache", Context.MODE_PRIVATE)
+				val editor = sharedPreference.edit()
 				editor.remove("studentName")
 				editor.remove("studentNumber")
 				editor.apply()
