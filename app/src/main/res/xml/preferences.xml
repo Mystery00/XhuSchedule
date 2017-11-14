@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <Preference
+        android:key="@string/key_first_day"
+        android:title="@string/title_first_day"/>
+    <Preference
+        android:key="@string/key_first_day"
+        android:title="@string/title_first_day"/>
+</PreferenceScreen>
