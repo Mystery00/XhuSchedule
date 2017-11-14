@@ -3,8 +3,10 @@
       xmlns:tools="http://schemas.android.com/tools"
       tools:showIn="navigation_view">
 
-    <group android:id="@+id/nav_group">
-    </group>
+    <item android:id="@+id/nav_group"
+          android:title="@string/action_users">
+        <menu/>
+    </item>
 
     <item android:title="@string/action_tools">
         <menu>

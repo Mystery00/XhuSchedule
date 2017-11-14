@@ -139,12 +139,14 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 			{
 				loadingDialog.dismiss()
 				Logs.i(TAG, "onComplete: ")
+
 				if (!ScheduleHelper.getInstance().isLogin)
 				{
 					startActivity(Intent(this@MainActivity, LoginActivity::class.java))
 					finish()
 					return
 				}
+				nav_view.menu.findItem(R.id.nav_group).subMenu.add(ScheduleHelper.getInstance().studentName + "(" + ScheduleHelper.getInstance().studentNumber + ")")
 				if (ScheduleHelper.getInstance().isCookieAvailable)
 				{
 					val studentNameTextView: TextView = nav_view.getHeaderView(0).findViewById(R.id.studentName)

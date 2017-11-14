@@ -3,11 +3,6 @@ package com.weilylab.xhuschedule.util
 import com.weilylab.xhuschedule.APP
 import com.weilylab.xhuschedule.classes.Course
 import com.weilylab.xhuschedule.util.cookie.CookieManger
-import io.reactivex.Observable
-import io.reactivex.Observer
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.Disposable
-import io.reactivex.schedulers.Schedulers
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
