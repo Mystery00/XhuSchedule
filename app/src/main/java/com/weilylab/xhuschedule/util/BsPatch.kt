@@ -8,7 +8,7 @@ object BsPatch
 {
 	init
 	{
-		System.loadLibrary("bsdiff")
+		System.loadLibrary("bspatch")
 	}
 
 	external fun patch(oldApk: String, newApk: String, patch: String): Int

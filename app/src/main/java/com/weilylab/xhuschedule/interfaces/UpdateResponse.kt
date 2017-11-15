@@ -1,10 +1,10 @@
 package com.weilylab.xhuschedule.interfaces
 
 import com.weilylab.xhuschedule.classes.Update
+import io.reactivex.Observable
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.http.*
-import rx.Observable
 
 /**
  * Created by myste.
