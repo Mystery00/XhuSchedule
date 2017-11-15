@@ -4,11 +4,9 @@ import android.app.DatePickerDialog
 import android.os.Bundle
 import android.preference.Preference
 import android.preference.PreferenceFragment
-import android.support.v7.app.AlertDialog
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.DatePicker
 import com.weilylab.xhuschedule.R
 import vip.mystery0.tools.logs.Logs
 import java.util.*
@@ -48,11 +46,16 @@ class SettingsPreferenceFragment : PreferenceFragment()
 	{
 		firstDayPreference.setOnPreferenceClickListener {
 			val calendar = Calendar.getInstance(Locale.CHINA)
-			DatePickerDialog(activity, R.style.AppTheme,
+			DatePickerDialog(activity,
 					DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
 						Logs.i(TAG, "monitor: " + year)
 						Logs.i(TAG, "monitor: " + month)
 						Logs.i(TAG, "monitor: " + dayOfMonth)
+						calendar.set(year, month, dayOfMonth, 0, 0, 0)
+						if (calendar.get(Calendar.DAY_OF_WEEK) != Calendar.MONDAY)
+						{
+							Logs.i(TAG, "monitor: 选择的时间不是周一")
+						}
 					}, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH))
 					.show()
 			true
