@@ -3,7 +3,6 @@ package com.weilylab.xhuschedule.service
 import android.app.Service
 import android.content.Intent
 import android.os.IBinder
-import android.support.v7.app.AlertDialog
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.classes.Version
 import com.weilylab.xhuschedule.interfaces.UpdateResponse
@@ -60,7 +59,7 @@ class UpdateService : Service()
 
 		val observable = Observable.create<Int> { subscriber ->
 			val service = retrofit.create(UpdateResponse::class.java)
-			val call = service.checkUpdateCall(0)
+			val call = service.checkUpdateCall(getString(R.string.app_version_code).toInt())
 			val response = call.execute()
 			if (!response.isSuccessful)
 			{
