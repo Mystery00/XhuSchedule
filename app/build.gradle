@@ -22,6 +22,9 @@ android {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
         setProperty("archivesBaseName", "Xhu Schedule-$versionName-$versionCode")
+        ndk {
+            moduleName = 'bspatch'
+        }
     }
     buildTypes {
         debug {
@@ -37,7 +40,7 @@ android {
     }
     externalNativeBuild {
         cmake {
-            path 'CMakeLists.txt'
+            path 'src/main/jni/CMakeLists.txt'
         }
     }
 }

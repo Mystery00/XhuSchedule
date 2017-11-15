@@ -1,31 +1,34 @@
 package com.weilylab.xhuschedule.service
 
-import android.app.Service
+import android.app.IntentService
+import android.content.Context
 import android.content.Intent
-import android.os.IBinder
 import com.weilylab.xhuschedule.interfaces.UpdateResponse
 import com.weilylab.xhuschedule.listener.DownloadProgressListener
+import com.weilylab.xhuschedule.util.DownloadNotification
 import com.weilylab.xhuschedule.util.FileUtil
 import com.weilylab.xhuschedule.util.download.Download
 import com.weilylab.xhuschedule.util.download.DownloadProgressInterceptor
+import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
+import io.reactivex.schedulers.Schedulers
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory
-import rx.Subscriber
 import vip.mystery0.tools.logs.Logs
 import java.io.File
 import java.io.IOException
 import java.io.InputStream
 import java.util.concurrent.TimeUnit
-import rx.schedulers.Schedulers
 
 
 /**
  * Created by myste.
  */
-class DownloadService : Service()
+class DownloadService : IntentService(TAG)
 {
+
 	companion object
 	{
 		private val TAG = "DownloadService"
@@ -35,7 +38,28 @@ class DownloadService : Service()
 
 	private lateinit var retrofit: Retrofit
 
-	override fun onBind(intent: Intent): IBinder? = null
+	override fun onHandleIntent(intent: Intent?)
+	{
+		Logs.i(TAG, "onHandleIntent: ")
+		val type = when (intent?.getIntExtra("type", 0))
+		{
+			1 -> "apk"
+			2 -> "patch"
+			else ->
+			{
+				Logs.i(TAG, "onStartCommand: intent参数为空")
+				return
+			}
+		}
+		val fileName = intent.getStringExtra("fileName")
+		val file = File(cacheDir.absolutePath + File.separator + type)
+		if (!file.exists())
+			file.mkdirs()
+		Logs.i(TAG, "onStartCommand: type: " + type)
+		Logs.i(TAG, "onStartCommand: fileName: " + fileName)
+		Logs.i(TAG, "onStartCommand: " + file.absolutePath)
+		download(this, type, fileName, file)
+	}
 
 	override fun onCreate()
 	{
@@ -49,6 +73,7 @@ class DownloadService : Service()
 				download.totalFileSize = contentLength
 				download.currentFileSize = bytesRead
 				download.progress = (bytesRead * 100 - contentLength).toInt()
+				DownloadNotification.updateProgress(applicationContext, download)
 			}
 		}
 		val client = OkHttpClient.Builder()
@@ -63,30 +88,7 @@ class DownloadService : Service()
 				.build()
 	}
 
-	override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int
-	{
-		Logs.i(TAG, "onStartCommand: ")
-		val type = when (intent?.getIntExtra("type", 0))
-		{
-			1 -> "apk"
-			2 -> "patch"
-			else ->
-			{
-				Logs.i(TAG, "onStartCommand: intent参数为空")
-				return super.onStartCommand(intent, flags, startId)
-			}
-		}
-		val fileName = intent.getStringExtra("fileName")
-		val file = File(cacheDir.absolutePath + File.separator + type)
-		if (!file.exists())
-			file.mkdirs()
-		Logs.i(TAG, "onStartCommand: type: " + type)
-		Logs.i(TAG, "onStartCommand: fileName: " + fileName)
-		Logs.i(TAG, "onStartCommand: " + file.absolutePath)
-		return super.onStartCommand(intent, flags, startId)
-	}
-
-	private fun download(type: String, fileName: String, file: File)
+	private fun download(context: Context, type: String, fileName: String, file: File)
 	{
 		retrofit.create(UpdateResponse::class.java)
 				.download(type, fileName)
@@ -105,19 +107,32 @@ class DownloadService : Service()
 					}
 				}
 				.observeOn(AndroidSchedulers.mainThread())
-				.subscribe(object : Subscriber<InputStream>()
+				.subscribe(object : Observer<InputStream>
 				{
-					override fun onCompleted()
+					override fun onSubscribe(d: Disposable)
+					{
+						DownloadNotification.notify(context)
+					}
+
+					override fun onComplete()
+					{
+						DownloadNotification.downloadDone(context)
+					}
+
+					override fun onNext(t: InputStream)
 					{
 					}
 
-					override fun onError(e: Throwable?)
+					override fun onError(e: Throwable)
 					{
-					}
-
-					override fun onNext(t: InputStream?)
-					{
+						DownloadNotification.downloadDone(context)
+						e.printStackTrace()
 					}
 				})
+	}
+
+	override fun onTaskRemoved(rootIntent: Intent?)
+	{
+		DownloadNotification.cancel(this)
 	}
 }
