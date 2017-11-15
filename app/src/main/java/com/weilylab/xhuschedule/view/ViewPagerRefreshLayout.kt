@@ -1,4 +1,4 @@
-package com.weilylab.xhuschedule.util
+package com.weilylab.xhuschedule.view
 
 import android.content.Context
 import android.view.MotionEvent

@@ -21,10 +21,7 @@ class CookieManger(context: Context) : CookieJar
 				cookieStore!!.add(url, item)
 	}
 
-	override fun loadForRequest(url: HttpUrl): List<Cookie>
-	{
-		return cookieStore!![url]
-	}
+	override fun loadForRequest(url: HttpUrl): List<Cookie> = cookieStore!![url]
 
 	companion object
 	{
