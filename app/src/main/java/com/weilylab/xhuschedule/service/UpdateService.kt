@@ -25,10 +25,11 @@ class UpdateService : Service()
 	private val retrofit = ScheduleHelper.getInstance().getUpdateRetrofit()
 	private var version: Version? = null
 
-	override fun onCreate()
+	override fun onBind(intent: Intent): IBinder? = null
+
+	override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int
 	{
-		Logs.i(TAG, "onCreate: ")
-		super.onCreate()
+		Logs.i(TAG, "onStartCommand: ")
 		val observer = object : Observer<Int>
 		{
 			private var code = -233
@@ -48,6 +49,7 @@ class UpdateService : Service()
 				Logs.i(TAG, "onComplete: ")
 				if (code == 1)
 					UpdateNotification.notify(applicationContext, version!!)
+				stopSelf()
 			}
 
 			override fun onNext(result: Int)
@@ -58,8 +60,7 @@ class UpdateService : Service()
 		}
 
 		val observable = Observable.create<Int> { subscriber ->
-			val service = retrofit.create(UpdateResponse::class.java)
-			val call = service.checkUpdateCall(getString(R.string.app_version_code).toInt())
+			val call = retrofit.create(UpdateResponse::class.java).checkUpdateCall(getString(R.string.app_version_code).toInt())
 			val response = call.execute()
 			if (!response.isSuccessful)
 			{
@@ -77,17 +78,6 @@ class UpdateService : Service()
 		observable.subscribeOn(Schedulers.newThread())
 				.observeOn(AndroidSchedulers.mainThread())
 				.subscribe(observer)
-	}
-
-	override fun onBind(intent: Intent): IBinder?
-	{
-		Logs.i(TAG, "onBind: ")
-		return null
-	}
-
-	override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int
-	{
-		Logs.i(TAG, "onStartCommand: ")
 		return super.onStartCommand(intent, flags, startId)
 	}
 }

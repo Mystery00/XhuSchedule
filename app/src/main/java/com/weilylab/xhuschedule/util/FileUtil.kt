@@ -34,10 +34,7 @@ class FileUtil private constructor()
 		return matcher.replaceAll("").trim()
 	}
 
-	fun saveFile(data: String, file: File): Boolean
-	{
-		return saveFile(data.byteInputStream(), file)
-	}
+	fun saveFile(data: String, file: File): Boolean = saveFile(data.byteInputStream(), file)
 
 	fun saveFile(inputStream: InputStream?, file: File): Boolean
 	{
