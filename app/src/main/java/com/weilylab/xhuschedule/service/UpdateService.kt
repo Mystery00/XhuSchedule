@@ -60,7 +60,7 @@ class UpdateService : Service()
 		}
 
 		val observable = Observable.create<Int> { subscriber ->
-			val call = retrofit.create(UpdateResponse::class.java).checkUpdateCall(getString(R.string.app_version_code).toInt() - 1)
+			val call = retrofit.create(UpdateResponse::class.java).checkUpdateCall(getString(R.string.app_version_code).toInt() - 999)
 			val response = call.execute()
 			if (!response.isSuccessful)
 			{
