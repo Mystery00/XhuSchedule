@@ -11,13 +11,11 @@
         android:layout_height="wrap_content"
         android:padding="@dimen/card_view_margin">
 
-        <de.hdodenhof.circleimageview.CircleImageView
+        <ImageView
             android:id="@+id/img"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:src="#FFFFFF"
-            app:civ_border_color="#FFFFFF"
-            app:civ_border_width="0.1dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"/>

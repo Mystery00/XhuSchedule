@@ -6,12 +6,12 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.classes.Course
 import com.weilylab.xhuschedule.util.ScheduleHelper
 import com.weilylab.xhuschedule.util.ViewUtil
-import de.hdodenhof.circleimageview.CircleImageView
 
 /**
  * Created by myste.
@@ -44,7 +44,7 @@ class TodayAdapter(private val context: Context,
 
 	class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
 	{
-		var img: CircleImageView = itemView.findViewById(R.id.img)
+		var img: ImageView = itemView.findViewById(R.id.img)
 		var courseTimeTextView: TextView = itemView.findViewById(R.id.courseTimeTextView)
 		var courseNameAndTeacherTextView: TextView = itemView.findViewById(R.id.courseNameAndTeacherTextView)
 		var courseLocationTextView: TextView = itemView.findViewById(R.id.courseLocationTextView)
@@ -55,10 +55,9 @@ class TodayAdapter(private val context: Context,
 		val bitmap = Bitmap.createBitmap(200, 200, Bitmap.Config.ARGB_8888)
 		val canvas = Canvas(bitmap)
 		val targetRect = Rect(0, 0, 200, 200)
-		canvas.drawColor(Color.parseColor(course.color))
 		val paint = Paint()
 		paint.color = Color.parseColor(course.color)
-		canvas.drawRect(targetRect, paint)
+		canvas.drawCircle(100F,100F,100F, paint)
 		paint.color = Color.WHITE
 		paint.textSize = 120F
 		val fontMetrics = paint.fontMetrics

@@ -1,76 +1,95 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
+<android.support.design.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:padding="@dimen/course_padding"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior">
+    android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/edit_name_layout"
-        android:layout_width="0dp"
-        android:layout_height="96dp"
-        android:gravity="center"
-        android:textSize="32sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/edit_teacher_tag"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="任课教师"
-        android:textColor="@color/colorAccent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edit_name_layout"/>
+        <TextView
+            android:id="@+id/titleTextView"
+            android:layout_width="match_parent"
+            android:layout_height="192dp"
+            android:gravity="center"
+            android:textSize="48sp"
+            android:textStyle="bold"/>
 
-    <TextView
-        android:id="@+id/edit_teacher_layout"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edit_teacher_tag"/>
+    </android.support.design.widget.AppBarLayout>
 
-    <TextView
-        android:id="@+id/edit_time_tag"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="上课时间"
-        android:textColor="@color/colorAccent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edit_teacher_layout"/>
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="android.support.design.widget.AppBarLayout$ScrollingViewBehavior">
 
-    <LinearLayout
-        android:id="@+id/edit_time_layout"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edit_time_tag"/>
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-    <TextView
-        android:id="@+id/edit_color_tag"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="选择颜色"
-        android:textColor="@color/colorAccent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edit_time_layout"/>
+            <TextView
+                android:id="@+id/edit_teacher_tag"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/course_padding"
+                android:text="任课教师"
+                android:textColor="@color/colorAccent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"/>
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/color_chooser"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/edit_color_tag"/>
+            <TextView
+                android:id="@+id/edit_teacher_layout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/course_padding"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/edit_teacher_tag"/>
 
-</android.support.constraint.ConstraintLayout>
+            <TextView
+                android:id="@+id/edit_time_tag"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/course_padding"
+                android:text="上课时间"
+                android:textColor="@color/colorAccent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/edit_teacher_layout"/>
+
+            <LinearLayout
+                android:id="@+id/edit_time_layout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="@dimen/course_padding"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/edit_time_tag"/>
+
+            <TextView
+                android:id="@+id/edit_color_tag"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/course_padding"
+                android:text="选择颜色"
+                android:textColor="@color/colorAccent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/edit_time_layout"/>
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/color_chooser"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/course_padding"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/edit_color_tag"/>
+
+        </android.support.constraint.ConstraintLayout>
+    </android.support.v4.widget.NestedScrollView>
+</android.support.design.widget.CoordinatorLayout>
