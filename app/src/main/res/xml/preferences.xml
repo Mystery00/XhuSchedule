@@ -3,7 +3,4 @@
     <Preference
         android:key="@string/key_first_day"
         android:title="@string/title_first_day"/>
-    <Preference
-        android:key="@string/key_first_day"
-        android:title="@string/title_first_day"/>
 </PreferenceScreen>
