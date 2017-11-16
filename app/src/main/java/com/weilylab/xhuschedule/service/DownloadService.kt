@@ -134,7 +134,6 @@ class DownloadService : IntentService(TAG)
 					override fun onComplete()
 					{
 						Logs.i(TAG, "onComplete: ")
-						DownloadNotification.downloadDone(context)
 
 						val installIntent = Intent(Intent.ACTION_VIEW)
 						installIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
@@ -146,6 +145,7 @@ class DownloadService : IntentService(TAG)
 						Logs.i(TAG, "patchAPK: " + uri)
 						installIntent.setDataAndType(uri, context.contentResolver.getType(uri))
 						startActivity(installIntent)
+						DownloadNotification.cancel(context)
 					}
 
 					override fun onNext(t: InputStream)

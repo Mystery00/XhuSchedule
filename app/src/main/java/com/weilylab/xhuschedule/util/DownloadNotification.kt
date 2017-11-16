@@ -8,8 +8,6 @@ import android.support.v4.app.NotificationCompat
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.util.download.Download
 import vip.mystery0.tools.fileUtil.FileUtil
-import java.util.*
-
 
 object DownloadNotification
 {
@@ -36,21 +34,6 @@ object DownloadNotification
 		notificationBuilder.setProgress(100, download.progress, false)
 		notificationBuilder.setContentText(FileUtil.FormatFileSize(download.currentFileSize) + "/" + FileUtil.FormatFileSize(download.totalFileSize))
 		notify(context, notificationBuilder.build())
-	}
-
-	fun downloadDone(context: Context)
-	{
-		notificationBuilder.setProgress(0, 0, false)
-				.setContentTitle("下载完成")
-				.setContentText("点击安装")
-				.setOngoing(false)
-		Timer().schedule(object : TimerTask()
-		{
-			override fun run()
-			{
-				notify(context, notificationBuilder.build())
-			}
-		}, 500)
 	}
 
 	fun downloadError(context: Context)
