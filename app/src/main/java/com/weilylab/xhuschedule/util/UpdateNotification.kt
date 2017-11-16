@@ -42,7 +42,7 @@ object UpdateNotification
 		val res = context.resources
 		val title = res.getString(R.string.update_notification_title, context.getString(R.string.app_version_name), version.versionName)
 		val content = res.getString(R.string.update_notification_content, FileUtil.FormatFileSize(version.apkSize), FileUtil.FormatFileSize(version.patchSize))
-		val bigText = res.getString(R.string.update_notification_big_text, version.updateLog)
+		val bigText = content + "\n" + res.getString(R.string.update_notification_big_text, version.updateLog)
 
 		val downloadAPKIntent = Intent(context, DownloadService::class.java)
 		downloadAPKIntent.putExtra("type", "apk")

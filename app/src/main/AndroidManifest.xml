@@ -30,8 +30,7 @@
             android:windowSoftInputMode="stateVisible|adjustResize"/>
         <activity
             android:name=".activity.EditActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar"/>
 
         <service
             android:name=".service.UpdateService"
@@ -46,11 +45,11 @@
             android:name=".activity.SettingsActivity"
             android:label="@string/title_activity_settings"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.Preference">
-        </activity>
+            android:theme="@style/AppTheme.Preference"/>
+
         <provider
-            android:authorities="com.weilylab.xhuschedule"
             android:name="android.support.v4.content.FileProvider"
+            android:authorities="com.weilylab.xhuschedule"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data

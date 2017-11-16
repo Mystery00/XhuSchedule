@@ -13,12 +13,14 @@ import java.util.*
 
 object DownloadNotification
 {
+	private val TAG = "DownloadNotification"
 	private val NOTIFICATION_TAG = "Download"
 	private val NOTIFICATION_ID = 1
 	private lateinit var notificationBuilder: NotificationCompat.Builder
 
 	fun notify(context: Context)
 	{
+		UpdateNotification.cancel(context)
 		notificationBuilder = NotificationCompat.Builder(context, "Xhu Schedule")
 				.setDefaults(Notification.DEFAULT_ALL)
 				.setSmallIcon(R.drawable.ic_stat_update)
@@ -38,10 +40,9 @@ object DownloadNotification
 
 	fun downloadDone(context: Context)
 	{
-		val download = Download()
-		download.progress = 100
 		notificationBuilder.setProgress(0, 0, false)
-				.setContentText("File Downloaded")
+				.setContentTitle("下载完成")
+				.setContentText("点击安装")
 				.setOngoing(false)
 		Timer().schedule(object : TimerTask()
 		{
@@ -49,7 +50,16 @@ object DownloadNotification
 			{
 				notify(context, notificationBuilder.build())
 			}
-		}, 200)
+		}, 500)
+	}
+
+	fun downloadError(context: Context)
+	{
+		notificationBuilder.setProgress(0, 0, false)
+				.setContentTitle("下载失败")
+				.setContentText(" ")
+				.setOngoing(false)
+		notify(context, notificationBuilder.build())
 	}
 
 	private fun notify(context: Context, notification: Notification)
