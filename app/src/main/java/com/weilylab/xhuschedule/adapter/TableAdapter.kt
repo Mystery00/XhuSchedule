@@ -28,29 +28,39 @@ class TableAdapter(private val context: Context,
 	override fun onBindViewHolder(holder: ViewHolder, position: Int)
 	{
 		holder.linearLayout.removeAllViews()
-		var course: Course? = list[position] ?: return
-		while (course != null)
+		val course: Course? = list[position] ?: return
+		addView(holder, course!!)
+		var temp = course.other
+		while (temp != null)
 		{
-			val layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, 1F)
-			val view = LayoutInflater.from(context).inflate(R.layout.item_course, null)
-			val textViewName: TextView = view.findViewById(R.id.textView_name)
-			val textViewTeacher: TextView = view.findViewById(R.id.textView_teacher)
-			val textViewLocation: TextView = view.findViewById(R.id.textView_location)
-			textViewName.text = course.name
-			textViewTeacher.text = course.teacher
-			textViewLocation.text = course.location
-			if (course.transparencyColor == "")
-			{
-				course.transparencyColor = "#33" + ScheduleHelper.getInstance().getRandomColor()
-			}
-			view.setBackgroundColor(Color.parseColor(course.transparencyColor))
-			view.layoutParams = layoutParams
-			view.setOnClickListener {
-				ViewUtil.showAlertDialog(context, course!!.clone())
-			}
-			holder.linearLayout.addView(view)
-			course = course.other
+			addView(holder, course.other!!)
+			if (temp.other != null)
+				temp = temp.other
+			else
+				break
 		}
+	}
+
+	private fun addView(holder: ViewHolder, course: Course)
+	{
+		val layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, 1F)
+		val view = LayoutInflater.from(context).inflate(R.layout.item_course, null)
+		val textViewName: TextView = view.findViewById(R.id.textView_name)
+		val textViewTeacher: TextView = view.findViewById(R.id.textView_teacher)
+		val textViewLocation: TextView = view.findViewById(R.id.textView_location)
+		textViewName.text = course.name
+		textViewTeacher.text = course.teacher
+		textViewLocation.text = course.location
+		if (course.transparencyColor == "")
+		{
+			course.transparencyColor = "#33" + ScheduleHelper.getInstance().getRandomColor()
+		}
+		view.setBackgroundColor(Color.parseColor(course.transparencyColor))
+		view.layoutParams = layoutParams
+		view.setOnClickListener {
+			ViewUtil.showAlertDialog(context, course)
+		}
+		holder.linearLayout.addView(view)
 	}
 
 	override fun onCreateViewHolder(parent: ViewGroup?,
