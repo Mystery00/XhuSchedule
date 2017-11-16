@@ -114,9 +114,6 @@ class ScheduleHelper private constructor()
 		courses.filter {
 			try
 			{
-				val weekArray = it.week.split('-')
-				val startWeek = weekArray[0].toInt()
-				val endWeek = weekArray[1].toInt()
 				var other = false
 				when (it.type)
 				{
@@ -127,6 +124,9 @@ class ScheduleHelper private constructor()
 						other = true
 					else -> other = false
 				}
+				val weekArray = it.week.split('-')
+				val startWeek = weekArray[0].toInt()
+				val endWeek = weekArray[1].toInt()
 				currentWeek in startWeek..endWeek && other
 			}
 			catch (e: Exception)
