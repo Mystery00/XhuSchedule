@@ -19,9 +19,11 @@ object DownloadNotification
 	fun notify(context: Context)
 	{
 		notificationBuilder = NotificationCompat.Builder(context, "Xhu Schedule")
+				.setDefaults(Notification.DEFAULT_ALL)
 				.setSmallIcon(R.drawable.ic_stat_update)
 				.setContentTitle("正在下载")
 				.setContentText("下载中")
+				.setOngoing(true)
 				.setAutoCancel(true)
 		notify(context, notificationBuilder.build())
 	}
@@ -38,7 +40,8 @@ object DownloadNotification
 		val download = Download()
 		download.progress = 100
 		notificationBuilder.setProgress(0, 0, false)
-		notificationBuilder.setContentText("File Downloaded")
+				.setContentText("File Downloaded")
+				.setOngoing(false)
 		notify(context, notificationBuilder.build())
 	}
 

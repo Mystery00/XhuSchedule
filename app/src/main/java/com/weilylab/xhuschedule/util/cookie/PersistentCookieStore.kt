@@ -50,10 +50,7 @@ open class PersistentCookieStore(context: Context)
 		}
 	}
 
-	private fun getCookieToken(cookie: Cookie): String
-	{
-		return cookie.name() + "@" + cookie.domain()
-	}
+	private fun getCookieToken(cookie: Cookie): String = cookie.name() + "@" + cookie.domain()
 
 	fun add(url: HttpUrl, cookie: Cookie)
 	{

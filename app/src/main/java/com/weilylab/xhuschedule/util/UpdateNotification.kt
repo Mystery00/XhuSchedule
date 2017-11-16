@@ -64,7 +64,6 @@ object UpdateNotification
 				.addAction(NotificationCompat.Action.Builder(R.drawable.ic_stat_update, "下载apk", pendingDownloadAPKIntent).build())
 				.addAction(NotificationCompat.Action.Builder(R.drawable.ic_stat_update, "下载patch", pendingDownloadPatchIntent).build())
 				.setAutoCancel(true)
-
 		notify(context, builder.build())
 	}
 
