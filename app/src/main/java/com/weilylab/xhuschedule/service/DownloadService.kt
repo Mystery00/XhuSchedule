@@ -3,6 +3,7 @@ package com.weilylab.xhuschedule.service
 import android.app.IntentService
 import android.content.Context
 import android.content.Intent
+import android.os.Environment
 import com.weilylab.xhuschedule.interfaces.UpdateResponse
 import com.weilylab.xhuschedule.listener.DownloadProgressListener
 import com.weilylab.xhuschedule.util.DownloadNotification
@@ -43,7 +44,7 @@ class DownloadService : IntentService(TAG)
 		Logs.i(TAG, "onHandleIntent: ")
 		val type = intent?.getStringExtra("type")
 		val fileName = intent?.getStringExtra("fileName")
-		val file = File(cacheDir.absolutePath + File.separator + type + File.separator + fileName)
+		val file = File(getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS).absolutePath + File.separator + type + File.separator + fileName)
 		if (!file.parentFile.exists())
 			file.parentFile.mkdirs()
 		if (type == null || type == "" || fileName == null || fileName == "")

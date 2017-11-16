@@ -8,6 +8,7 @@ import android.support.v4.app.NotificationCompat
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.util.download.Download
 import vip.mystery0.tools.fileUtil.FileUtil
+import java.util.*
 
 
 object DownloadNotification
@@ -42,7 +43,13 @@ object DownloadNotification
 		notificationBuilder.setProgress(0, 0, false)
 				.setContentText("File Downloaded")
 				.setOngoing(false)
-		notify(context, notificationBuilder.build())
+		Timer().schedule(object : TimerTask()
+		{
+			override fun run()
+			{
+				notify(context, notificationBuilder.build())
+			}
+		}, 200)
 	}
 
 	private fun notify(context: Context, notification: Notification)
