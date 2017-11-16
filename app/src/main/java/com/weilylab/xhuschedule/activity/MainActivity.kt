@@ -20,6 +20,7 @@ import com.weilylab.xhuschedule.fragment.TableFragment
 import com.weilylab.xhuschedule.fragment.TodayFragment
 import com.weilylab.xhuschedule.interfaces.RTResponse
 import com.weilylab.xhuschedule.service.UpdateService
+import com.weilylab.xhuschedule.util.CourseUtil
 import com.weilylab.xhuschedule.util.FileUtil
 import com.weilylab.xhuschedule.util.ScheduleHelper
 import com.zyao89.view.zloading.ZLoadingDialog
@@ -222,7 +223,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 				return@create
 			}
 			ScheduleHelper.getInstance().isCookieAvailable = true
-			val allArray = ScheduleHelper.getInstance().formatCourses(courses)
+			val allArray = CourseUtil.formatCourses(courses)
 			allList.clear()
 			allList.addAll(allArray)
 			val colorSharedPreference = getSharedPreferences("course_color", Context.MODE_PRIVATE)
@@ -247,10 +248,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 				else
 					it.transparencyColor = savedTransparencyColor
 			}
-			val weekArray = ScheduleHelper.getInstance().getWeekCourses(courses)
+			val weekArray = CourseUtil.getWeekCourses(courses)
 			weekList.clear()
 			weekList.addAll(weekArray)
-			val todayArray = ScheduleHelper.getInstance().getTodayCourses(courses)
+			val todayArray = CourseUtil.getTodayCourses(courses)
 			todayList.clear()
 			todayList.addAll(todayArray)
 			subscriber.onComplete()
