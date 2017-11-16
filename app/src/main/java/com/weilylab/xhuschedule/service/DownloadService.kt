@@ -3,6 +3,8 @@ package com.weilylab.xhuschedule.service
 import android.app.IntentService
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
+import android.os.Build
 import android.os.Environment
 import android.support.v4.content.FileProvider
 import com.weilylab.xhuschedule.interfaces.UpdateResponse
@@ -65,13 +67,17 @@ class DownloadService : IntentService(TAG)
 
 		val listener = object : DownloadProgressListener
 		{
+			private var temp = 0
+
 			override fun update(bytesRead: Long, contentLength: Long, done: Boolean)
 			{
 				val download = Download()
 				download.totalFileSize = contentLength
 				download.currentFileSize = bytesRead
 				download.progress = (bytesRead * 100 / contentLength).toInt()
-				DownloadNotification.updateProgress(applicationContext, download)
+				if (temp % 3 == 0)
+					DownloadNotification.updateProgress(applicationContext, download)
+				temp++
 			}
 		}
 		val client = OkHttpClient.Builder()
@@ -98,6 +104,18 @@ class DownloadService : IntentService(TAG)
 					try
 					{
 						FileUtil.getInstance().saveFile(inputStream, file)
+						if (type == "patch")
+						{
+							val applicationInfo = applicationContext.applicationInfo
+							Logs.i(TAG, "patchAPK: " + applicationInfo.sourceDir)
+							val newApkPath = getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS).absolutePath + File.separator + "apk" + File.separator + fileName + ".apk"
+							val newAPK = File(newApkPath)
+							if (!newAPK.parentFile.exists())
+								newAPK.parentFile.mkdirs()
+							BsPatch.patch(applicationInfo.sourceDir,
+									newApkPath,
+									file.absolutePath)
+						}
 					}
 					catch (e: IOException)
 					{
@@ -117,8 +135,17 @@ class DownloadService : IntentService(TAG)
 					{
 						Logs.i(TAG, "onComplete: ")
 						DownloadNotification.downloadDone(context)
-						if (type == "patch")
-							patchAPK(file.absolutePath, fileName)
+
+						val installIntent = Intent(Intent.ACTION_VIEW)
+						installIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+						installIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
+						val uri = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
+							FileProvider.getUriForFile(context, "com.weilylab.xhuschedule", file)
+						else
+							Uri.fromFile(file)
+						Logs.i(TAG, "patchAPK: " + uri)
+						installIntent.setDataAndType(uri, context.contentResolver.getType(uri))
+						startActivity(installIntent)
 					}
 
 					override fun onNext(t: InputStream)
@@ -127,29 +154,10 @@ class DownloadService : IntentService(TAG)
 
 					override fun onError(e: Throwable)
 					{
-						DownloadNotification.downloadDone(context)
+						DownloadNotification.downloadError(context)
 						e.printStackTrace()
 					}
 				})
-	}
-
-	fun patchAPK(patch: String, newAPKName: String)
-	{
-		val applicationInfo = applicationContext.applicationInfo
-		Logs.i(TAG, "patchAPK: " + applicationInfo.sourceDir)
-		val newApkPath = getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS).absolutePath + File.separator + "apk" + File.separator + newAPKName + ".apk"
-		val newAPK = File(newApkPath)
-		if (!newAPK.parentFile.exists())
-			newAPK.parentFile.mkdirs()
-		BsPatch.patch(applicationInfo.sourceDir,
-				newApkPath,
-				patch)
-		val intent = Intent(Intent.ACTION_VIEW)
-		intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-		val uri = FileProvider.getUriForFile(this, "com.weilylab.xhuschedule", newAPK)
-		Logs.i(TAG, "patchAPK: " + uri)
-		intent.setDataAndType(uri, "application/vnd.android.package-archive")
-		startActivity(intent)
 	}
 
 	override fun onTaskRemoved(rootIntent: Intent?)
