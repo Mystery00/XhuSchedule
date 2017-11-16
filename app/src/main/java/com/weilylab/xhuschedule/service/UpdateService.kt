@@ -30,36 +30,7 @@ class UpdateService : Service()
 	override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int
 	{
 		Logs.i(TAG, "onStartCommand: ")
-		val observer = object : Observer<Int>
-		{
-			private var code = -233
-
-			override fun onSubscribe(d: Disposable)
-			{
-				Logs.i(TAG, "onSubscribe: ")
-			}
-
-			override fun onError(e: Throwable)
-			{
-				e.printStackTrace()
-			}
-
-			override fun onComplete()
-			{
-				Logs.i(TAG, "onComplete: ")
-				if (code == 1)
-					UpdateNotification.notify(applicationContext, version!!)
-				stopSelf()
-			}
-
-			override fun onNext(result: Int)
-			{
-				Logs.i(TAG, "onNext: ")
-				code = result
-			}
-		}
-
-		val observable = Observable.create<Int> { subscriber ->
+		Observable.create<Int> { subscriber ->
 			val call = retrofit.create(UpdateResponse::class.java).checkUpdateCall(getString(R.string.app_version_code).toInt() - 999)
 			val response = call.execute()
 			if (!response.isSuccessful)
@@ -75,9 +46,36 @@ class UpdateService : Service()
 			subscriber.onNext(update?.code!!)
 			subscriber.onComplete()
 		}
-		observable.subscribeOn(Schedulers.newThread())
+				.subscribeOn(Schedulers.newThread())
 				.observeOn(AndroidSchedulers.mainThread())
-				.subscribe(observer)
+				.subscribe(object : Observer<Int>
+				{
+					private var code = -233
+
+					override fun onSubscribe(d: Disposable)
+					{
+						Logs.i(TAG, "onSubscribe: ")
+					}
+
+					override fun onError(e: Throwable)
+					{
+						e.printStackTrace()
+					}
+
+					override fun onComplete()
+					{
+						Logs.i(TAG, "onComplete: ")
+						if (code == 1)
+							UpdateNotification.notify(applicationContext, version!!)
+						stopSelf()
+					}
+
+					override fun onNext(result: Int)
+					{
+						Logs.i(TAG, "onNext: ")
+						code = result
+					}
+				})
 		return super.onStartCommand(intent, flags, startId)
 	}
 }

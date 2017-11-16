@@ -6,6 +6,7 @@ import android.content.Intent
 import android.os.Environment
 import com.weilylab.xhuschedule.interfaces.UpdateResponse
 import com.weilylab.xhuschedule.listener.DownloadProgressListener
+import com.weilylab.xhuschedule.util.BsPatch
 import com.weilylab.xhuschedule.util.DownloadNotification
 import com.weilylab.xhuschedule.util.FileUtil
 import com.weilylab.xhuschedule.util.download.Download
@@ -33,8 +34,6 @@ class DownloadService : IntentService(TAG)
 	companion object
 	{
 		private val TAG = "DownloadService"
-		val APK = 1
-		val PATCH = 2
 	}
 
 	private lateinit var retrofit: Retrofit
@@ -117,6 +116,8 @@ class DownloadService : IntentService(TAG)
 					{
 						Logs.i(TAG, "onComplete: ")
 						DownloadNotification.downloadDone(context)
+						if (type == "patch")
+							patchAPK(file.absolutePath, fileName)
 					}
 
 					override fun onNext(t: InputStream)
@@ -129,6 +130,15 @@ class DownloadService : IntentService(TAG)
 						e.printStackTrace()
 					}
 				})
+	}
+
+	fun patchAPK(patch: String, newAPKName: String)
+	{
+		val applicationInfo = applicationContext.applicationInfo
+		Logs.i(TAG, "patchAPK: " + applicationInfo.sourceDir)
+		BsPatch.patch(applicationInfo.sourceDir,
+				getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS).absolutePath + File.separator + "apk" + File.separator + newAPKName + ".apk",
+				patch)
 	}
 
 	override fun onTaskRemoved(rootIntent: Intent?)
