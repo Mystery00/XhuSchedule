@@ -8,5 +8,7 @@
     <dimen name="card_view_margin">16dp</dimen>
     <dimen name="content_login_card_radius">16dp</dimen>
     <dimen name="course_padding">16dp</dimen>
+    <dimen name="time_padding">8dp</dimen>
+    <dimen name="course_info_text_size">18sp</dimen>
     <dimen name="table_item_height">160dp</dimen>
 </resources>

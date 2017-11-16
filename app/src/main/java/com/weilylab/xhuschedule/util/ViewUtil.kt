@@ -2,9 +2,11 @@ package com.weilylab.xhuschedule.util
 
 import android.content.Context
 import android.graphics.Color
+import android.support.constraint.ConstraintLayout
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.view.LayoutInflater
 import android.view.View
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -26,8 +28,8 @@ object ViewUtil
 		val view = View.inflate(context, R.layout.dialog_edit, null)
 		val textView: TextView = view.findViewById(R.id.titleTextView)
 		val editTeacherLayout: TextView = view.findViewById(R.id.edit_teacher_layout)
-		val editTimeLayout: LinearLayout = view.findViewById(R.id.edit_time_layout)
-		val editColorTag: TextView = view.findViewById(R.id.edit_color_tag)
+		val editTimeLayout: TextView = view.findViewById(R.id.edit_time_layout)
+		val editLocationLayout: LinearLayout = view.findViewById(R.id.edit_location_layout)
 		val colorChooser: RecyclerView = view.findViewById(R.id.color_chooser)
 		colorChooser.layoutManager = GridLayoutManager(context, 6)
 		val adapter = ColorPickerAdapter(course.color, context)
@@ -36,26 +38,24 @@ object ViewUtil
 			override fun onColorChanged(color: String)
 			{
 				textView.setBackgroundColor(Color.parseColor(color))
-				changeTextColor(Color.parseColor(color), textView)
 			}
 		}
 		colorChooser.adapter = adapter
 		textView.text = course.name
 		textView.setBackgroundColor(Color.parseColor(course.color))
-		changeTextColor(Color.parseColor(course.color), textView)
 		editTeacherLayout.text = course.teacher
+		editTimeLayout.text = course.time
+		CourseUtil.splitInfo(course).forEach {
+			val child = LayoutInflater.from(context).inflate(R.layout.item_course_time, ConstraintLayout(context), false)
+			val timeWeek: TextView = child.findViewById(R.id.time_week)
+			val timeLocation: TextView = child.findViewById(R.id.time_location)
+			timeWeek.text = it.week
+			timeLocation.text = it.location
+			editLocationLayout.addView(child)
+		}
 		val dialog = AlertDialog.Builder(context)
 				.setView(view)
 				.create()
 		dialog.show()
-	}
-
-	private fun changeTextColor(color: Int, textView: TextView)
-	{
-		val darkness = 1 - (0.299 * Color.red(color) + 0.587 * Color.green(color) + 0.114 * Color.blue(color)) / 255F
-		if (darkness < 0.5)
-			textView.setTextColor(Color.BLACK)
-		else
-			textView.setTextColor(Color.WHITE)
 	}
 }
