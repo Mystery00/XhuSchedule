@@ -4,6 +4,7 @@ import android.app.IntentService
 import android.content.Context
 import android.content.Intent
 import android.os.Environment
+import android.support.v4.content.FileProvider
 import com.weilylab.xhuschedule.interfaces.UpdateResponse
 import com.weilylab.xhuschedule.listener.DownloadProgressListener
 import com.weilylab.xhuschedule.util.BsPatch
@@ -136,9 +137,19 @@ class DownloadService : IntentService(TAG)
 	{
 		val applicationInfo = applicationContext.applicationInfo
 		Logs.i(TAG, "patchAPK: " + applicationInfo.sourceDir)
+		val newApkPath = getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS).absolutePath + File.separator + "apk" + File.separator + newAPKName + ".apk"
+		val newAPK = File(newApkPath)
+		if (!newAPK.parentFile.exists())
+			newAPK.parentFile.mkdirs()
 		BsPatch.patch(applicationInfo.sourceDir,
-				getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS).absolutePath + File.separator + "apk" + File.separator + newAPKName + ".apk",
+				newApkPath,
 				patch)
+		val intent = Intent(Intent.ACTION_VIEW)
+		intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+		val uri = FileProvider.getUriForFile(this, "com.weilylab.xhuschedule", newAPK)
+		Logs.i(TAG, "patchAPK: " + uri)
+		intent.setDataAndType(uri, "application/vnd.android.package-archive")
+		startActivity(intent)
 	}
 
 	override fun onTaskRemoved(rootIntent: Intent?)
