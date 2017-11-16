@@ -146,6 +146,7 @@ class DownloadService : IntentService(TAG)
 						installIntent.setDataAndType(uri, context.contentResolver.getType(uri))
 						startActivity(installIntent)
 						DownloadNotification.cancel(context)
+						stopSelf()
 					}
 
 					override fun onNext(t: InputStream)

@@ -11,6 +11,7 @@ import android.widget.TextView
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.classes.Course
 import com.weilylab.xhuschedule.util.ScheduleHelper
+import com.weilylab.xhuschedule.util.ViewUtil
 import vip.mystery0.tools.logs.Logs
 
 /**
@@ -42,6 +43,9 @@ class TableAdapter(private val context: Context,
 		}
 		view.setBackgroundColor(Color.parseColor(course.transparencyColor))
 		view.layoutParams = layoutParams
+		view.setOnClickListener {
+			ViewUtil.showAlertDialog(context, course!!)
+		}
 		holder.linearLayout.addView(view)
 		while (course!!.other != null)
 		{
@@ -59,19 +63,17 @@ class TableAdapter(private val context: Context,
 			}
 			tempView.setBackgroundColor(Color.parseColor(course.transparencyColor))
 			tempView.layoutParams = layoutParams
+			tempView.setOnClickListener {
+				ViewUtil.showAlertDialog(context, course!!)
+			}
 			holder.linearLayout.addView(tempView)
 		}
 	}
 
-	override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ViewHolder
-	{
-		return ViewHolder(LayoutInflater.from(context).inflate(R.layout.item_linear_layout, parent, false))
-	}
+	override fun onCreateViewHolder(parent: ViewGroup?,
+									viewType: Int): ViewHolder = ViewHolder(LayoutInflater.from(context).inflate(R.layout.item_linear_layout, parent, false))
 
-	override fun getItemCount(): Int
-	{
-		return list.size
-	}
+	override fun getItemCount(): Int = list.size
 
 	class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
 	{

@@ -24,6 +24,8 @@
         <item name="navigationIcon">?attr/homeAsUpIndicator</item>
     </style>
 
+    <style name="AppTheme.NoActionBar.FullScreen"/>
+
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>

@@ -9,19 +9,4 @@
         <item>周六</item>
         <item>周日</item>
     </string-array>
-
-    <string-array name="color_array">
-        <item>#33039BDA</item>
-        <item>#33F5703C</item>
-        <item>#33CEB28B</item>
-        <item>#330BDBB9</item>
-        <item>#335A7AD9</item>
-        <item>#33F0DE12</item>
-        <item>#33F15056</item>
-        <item>#33373E4D</item>
-        <item>#3326D36E</item>
-        <item>#33A40035</item>
-        <item>#3332B16C</item>
-        <item>#330000FF</item>
-    </string-array>
 </resources>
