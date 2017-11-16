@@ -28,4 +28,20 @@ class Course : Serializable
 		if (other == null)
 			other = course
 	}
+
+	fun clone(): Course
+	{
+		val course = Course()
+		course.week = week
+		course.teacher = teacher
+		course.name = name
+		course.location = location
+		course.time = time
+		course.type = type
+		course.day = day
+		course.other = other
+		course.color = color
+		course.transparencyColor = transparencyColor
+		return course
+	}
 }

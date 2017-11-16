@@ -29,44 +29,27 @@ class TableAdapter(private val context: Context,
 	{
 		holder.linearLayout.removeAllViews()
 		var course: Course? = list[position] ?: return
-		val layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, 1F)
-		val view = LayoutInflater.from(context).inflate(R.layout.item_course, null)
-		val textViewName: TextView = view.findViewById(R.id.textView_name)
-		val textViewTeacher: TextView = view.findViewById(R.id.textView_teacher)
-		val textViewLocation: TextView = view.findViewById(R.id.textView_location)
-		textViewName.text = course!!.name
-		textViewTeacher.text = course.teacher
-		textViewLocation.text = course.location
-		if (course.transparencyColor == "")
+		while (course != null)
 		{
-			course.transparencyColor = "#33" + ScheduleHelper.getInstance().getRandomColor()
-		}
-		view.setBackgroundColor(Color.parseColor(course.transparencyColor))
-		view.layoutParams = layoutParams
-		view.setOnClickListener {
-			ViewUtil.showAlertDialog(context, course!!)
-		}
-		holder.linearLayout.addView(view)
-		while (course!!.other != null)
-		{
-			course = course.other!!
-			val tempView = LayoutInflater.from(context).inflate(R.layout.item_course, null)
-			val tempTextViewName: TextView = tempView.findViewById(R.id.textView_name)
-			val tempTextViewTeacher: TextView = tempView.findViewById(R.id.textView_teacher)
-			val tempTextViewLocation: TextView = tempView.findViewById(R.id.textView_location)
-			tempTextViewName.text = course.name
-			tempTextViewTeacher.text = course.teacher
-			tempTextViewLocation.text = course.location
+			val layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, 1F)
+			val view = LayoutInflater.from(context).inflate(R.layout.item_course, null)
+			val textViewName: TextView = view.findViewById(R.id.textView_name)
+			val textViewTeacher: TextView = view.findViewById(R.id.textView_teacher)
+			val textViewLocation: TextView = view.findViewById(R.id.textView_location)
+			textViewName.text = course.name
+			textViewTeacher.text = course.teacher
+			textViewLocation.text = course.location
 			if (course.transparencyColor == "")
 			{
 				course.transparencyColor = "#33" + ScheduleHelper.getInstance().getRandomColor()
 			}
-			tempView.setBackgroundColor(Color.parseColor(course.transparencyColor))
-			tempView.layoutParams = layoutParams
-			tempView.setOnClickListener {
-				ViewUtil.showAlertDialog(context, course!!)
+			view.setBackgroundColor(Color.parseColor(course.transparencyColor))
+			view.layoutParams = layoutParams
+			view.setOnClickListener {
+				ViewUtil.showAlertDialog(context, course!!.clone())
 			}
-			holder.linearLayout.addView(tempView)
+			holder.linearLayout.addView(view)
+			course = course.other
 		}
 	}
 
