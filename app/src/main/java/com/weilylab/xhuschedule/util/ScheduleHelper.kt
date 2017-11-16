@@ -38,6 +38,7 @@ class ScheduleHelper private constructor()
 	private var updateRetrofit: Retrofit? = null
 	var studentName = "0"
 	var studentNumber = "0"
+	var isUpdateChecked = false
 
 	private fun getClient(): OkHttpClient
 	{

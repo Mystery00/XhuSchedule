@@ -1,5 +1,6 @@
 package com.weilylab.xhuschedule.adapter
 
+import android.content.Context
 import android.graphics.*
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -9,18 +10,16 @@ import android.widget.TextView
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.classes.Course
 import com.weilylab.xhuschedule.util.ScheduleHelper
+import com.weilylab.xhuschedule.util.ViewUtil
 import de.hdodenhof.circleimageview.CircleImageView
 
 /**
  * Created by myste.
  */
-class TodayAdapter(
-		private val list: ArrayList<Course>) : RecyclerView.Adapter<TodayAdapter.ViewHolder>()
+class TodayAdapter(private val context: Context,
+				   private val list: ArrayList<Course>) : RecyclerView.Adapter<TodayAdapter.ViewHolder>()
 {
-	override fun getItemCount(): Int
-	{
-		return list.size
-	}
+	override fun getItemCount(): Int = list.size
 
 	override fun onBindViewHolder(holder: ViewHolder, position: Int)
 	{
@@ -32,6 +31,9 @@ class TodayAdapter(
 		if (course.color == "")
 			course.color = '#' + ScheduleHelper.getInstance().getRandomColor()
 		holder.img.setImageBitmap(drawImg(course))
+		holder.itemView.setOnClickListener {
+			ViewUtil.showAlertDialog(context, course)
+		}
 	}
 
 	override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder

@@ -1,6 +1,5 @@
 package com.weilylab.xhuschedule.fragment
 
-import android.app.DatePickerDialog
 import android.os.Bundle
 import android.preference.Preference
 import android.preference.PreferenceFragment
@@ -50,36 +49,32 @@ class SettingsPreferenceFragment : PreferenceFragment()
 			val calendar = Calendar.getInstance(Locale.CHINA)
 			val datePickerLayout = View.inflate(activity, R.layout.layout_date_picker, null)
 			val datePicker: DatePicker = datePickerLayout.findViewById(R.id.datePicker)
-			datePicker.init(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH), { _, year, month, dayOfMonth ->
-				Logs.i(TAG, "monitor: " + year)
-				Logs.i(TAG, "monitor: " + month)
-				Logs.i(TAG, "monitor: " + dayOfMonth)
-				calendar.set(year, month, dayOfMonth, 0, 0, 0)
-				if (calendar.get(Calendar.DAY_OF_WEEK) != Calendar.MONDAY)
-				{
-					Logs.i(TAG, "monitor: 选择的时间不是周一")
-				}
-			})
-			AlertDialog.Builder(activity)
+			datePicker.init(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH), null)
+			val dialog = AlertDialog.Builder(activity)
 					.setTitle("请选择时间")
 					.setView(datePickerLayout)
-					.setPositiveButton(android.R.string.ok, { _, _ ->
-
-					})
+					.setPositiveButton(android.R.string.ok, null)
 					.setNegativeButton(android.R.string.cancel, null)
-					.show()
-//			DatePickerDialog(activity,
-//					DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
-//						Logs.i(TAG, "monitor: " + year)
-//						Logs.i(TAG, "monitor: " + month)
-//						Logs.i(TAG, "monitor: " + dayOfMonth)
-//						calendar.set(year, month, dayOfMonth, 0, 0, 0)
-//						if (calendar.get(Calendar.DAY_OF_WEEK) != Calendar.MONDAY)
-//						{
-//							Logs.i(TAG, "monitor: 选择的时间不是周一")
-//						}
-//					}, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH))
-//					.show()
+					.create()
+			dialog.show()
+			if (dialog.getButton(AlertDialog.BUTTON_POSITIVE) != null)
+			{
+				dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
+					val year = datePicker.year
+					val month = datePicker.month + 1
+					val dayOfMonth = datePicker.dayOfMonth
+					Logs.i(TAG, "monitor: " + year)
+					Logs.i(TAG, "monitor: " + month)
+					Logs.i(TAG, "monitor: " + dayOfMonth)
+					calendar.set(year, month, dayOfMonth, 0, 0, 0)
+					if (calendar.get(Calendar.DAY_OF_WEEK) != Calendar.MONDAY)
+					{
+						Logs.i(TAG, "monitor: 选择的时间不是周一")
+					}
+					else
+						dialog.dismiss()
+				}
+			}
 			true
 		}
 	}

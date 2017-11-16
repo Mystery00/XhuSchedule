@@ -1,8 +1,7 @@
 package com.weilylab.xhuschedule.service
 
-import android.app.Service
+import android.app.IntentService
 import android.content.Intent
-import android.os.IBinder
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.classes.Version
 import com.weilylab.xhuschedule.interfaces.UpdateResponse
@@ -15,7 +14,7 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import vip.mystery0.tools.logs.Logs
 
-class UpdateService : Service()
+class UpdateService : IntentService(TAG)
 {
 	companion object
 	{
@@ -25,11 +24,12 @@ class UpdateService : Service()
 	private val retrofit = ScheduleHelper.getInstance().getUpdateRetrofit()
 	private var version: Version? = null
 
-	override fun onBind(intent: Intent): IBinder? = null
-
-	override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int
+	override fun onHandleIntent(intent: Intent?)
 	{
 		Logs.i(TAG, "onStartCommand: ")
+		if (ScheduleHelper.getInstance().isUpdateChecked)
+			return
+		ScheduleHelper.getInstance().isUpdateChecked = true
 		Observable.create<Int> { subscriber ->
 			val call = retrofit.create(UpdateResponse::class.java).checkUpdateCall(getString(R.string.app_version_code).toInt())
 			val response = call.execute()
@@ -76,6 +76,5 @@ class UpdateService : Service()
 						code = result
 					}
 				})
-		return super.onStartCommand(intent, flags, startId)
 	}
 }

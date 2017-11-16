@@ -28,9 +28,6 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar.FullScreen"
             android:windowSoftInputMode="stateVisible|adjustResize"/>
-        <activity
-            android:name=".activity.EditActivity"
-            android:theme="@style/AppTheme.NoActionBar"/>
 
         <service
             android:name=".service.UpdateService"
