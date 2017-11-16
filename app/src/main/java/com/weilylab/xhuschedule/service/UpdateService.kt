@@ -31,7 +31,7 @@ class UpdateService : Service()
 	{
 		Logs.i(TAG, "onStartCommand: ")
 		Observable.create<Int> { subscriber ->
-			val call = retrofit.create(UpdateResponse::class.java).checkUpdateCall(getString(R.string.app_version_code).toInt() - 999)
+			val call = retrofit.create(UpdateResponse::class.java).checkUpdateCall(getString(R.string.app_version_code).toInt())
 			val response = call.execute()
 			if (!response.isSuccessful)
 			{
