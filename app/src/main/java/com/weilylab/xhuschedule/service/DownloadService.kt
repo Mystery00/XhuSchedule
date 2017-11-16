@@ -15,7 +15,7 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
-import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import vip.mystery0.tools.logs.Logs
 import java.io.File
 import java.io.IOException
@@ -41,20 +41,16 @@ class DownloadService : IntentService(TAG)
 	override fun onHandleIntent(intent: Intent?)
 	{
 		Logs.i(TAG, "onHandleIntent: ")
-		val type = when (intent?.getIntExtra("type", 0))
+		val type = intent?.getStringExtra("type")
+		val fileName = intent?.getStringExtra("fileName")
+		val file = File(cacheDir.absolutePath + File.separator + type + File.separator + fileName)
+		if (!file.parentFile.exists())
+			file.parentFile.mkdirs()
+		if (type == null || type == "" || fileName == null || fileName == "")
 		{
-			1 -> "apk"
-			2 -> "patch"
-			else ->
-			{
-				Logs.i(TAG, "onStartCommand: intent参数为空")
-				return
-			}
+			Logs.i(TAG, "onHandleIntent: 格式错误")
+			return
 		}
-		val fileName = intent.getStringExtra("fileName")
-		val file = File(cacheDir.absolutePath + File.separator + type)
-		if (!file.exists())
-			file.mkdirs()
 		Logs.i(TAG, "onStartCommand: type: " + type)
 		Logs.i(TAG, "onStartCommand: fileName: " + fileName)
 		Logs.i(TAG, "onStartCommand: " + file.absolutePath)
@@ -65,6 +61,7 @@ class DownloadService : IntentService(TAG)
 	{
 		Logs.i(TAG, "onCreate: ")
 		super.onCreate()
+
 		val listener = object : DownloadProgressListener
 		{
 			override fun update(bytesRead: Long, contentLength: Long, done: Boolean)
@@ -72,7 +69,7 @@ class DownloadService : IntentService(TAG)
 				val download = Download()
 				download.totalFileSize = contentLength
 				download.currentFileSize = bytesRead
-				download.progress = (bytesRead * 100 - contentLength).toInt()
+				download.progress = (bytesRead * 100 / contentLength).toInt()
 				DownloadNotification.updateProgress(applicationContext, download)
 			}
 		}
@@ -84,7 +81,7 @@ class DownloadService : IntentService(TAG)
 		retrofit = Retrofit.Builder()
 				.baseUrl("http://tomcat.weilylab.com:9783")
 				.client(client)
-				.addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+				.addCallAdapterFactory(RxJava2CallAdapterFactory.create())
 				.build()
 	}
 
@@ -111,11 +108,13 @@ class DownloadService : IntentService(TAG)
 				{
 					override fun onSubscribe(d: Disposable)
 					{
+						Logs.i(TAG, "onSubscribe: ")
 						DownloadNotification.notify(context)
 					}
 
 					override fun onComplete()
 					{
+						Logs.i(TAG, "onComplete: ")
 						DownloadNotification.downloadDone(context)
 					}
 

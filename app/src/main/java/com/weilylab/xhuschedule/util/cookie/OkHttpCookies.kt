@@ -12,10 +12,7 @@ class OkHttpCookies(@field:Transient private val cookies: Cookie) : Serializable
 {
 	@Transient private var clientCookies: Cookie? = null
 
-	fun getCookies(): Cookie
-	{
-		return clientCookies ?: cookies
-	}
+	fun getCookies(): Cookie = clientCookies ?: cookies
 
 	@Throws(IOException::class)
 	private fun writeObject(objectOutputStream: ObjectOutputStream)
