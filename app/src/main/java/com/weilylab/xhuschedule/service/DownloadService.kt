@@ -74,7 +74,7 @@ class DownloadService : IntentService(TAG)
 				val download = Download()
 				download.totalFileSize = contentLength
 				download.currentFileSize = bytesRead
-				download.progress = (bytesRead * 100 / contentLength).toInt()
+				download.progress = (bytesRead * 100 / contentLength).toFloat()
 				if (temp % 3 == 0)
 					DownloadNotification.updateProgress(applicationContext, download)
 				temp++
@@ -128,7 +128,7 @@ class DownloadService : IntentService(TAG)
 					override fun onSubscribe(d: Disposable)
 					{
 						Logs.i(TAG, "onSubscribe: ")
-						DownloadNotification.notify(context)
+						DownloadNotification.notify(context, fileName)
 					}
 
 					override fun onComplete()

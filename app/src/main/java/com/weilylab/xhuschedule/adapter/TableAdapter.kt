@@ -46,7 +46,7 @@ class TableAdapter(private val context: Context,
 	private fun addView(holder: ViewHolder, course: Course)
 	{
 		val layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, 1F)
-		val view = LayoutInflater.from(context).inflate(R.layout.item_course, null)
+		val view = View.inflate(context, R.layout.item_course, null)
 		val textViewName: TextView = view.findViewById(R.id.textView_name)
 		val textViewTeacher: TextView = view.findViewById(R.id.textView_teacher)
 		val textViewLocation: TextView = view.findViewById(R.id.textView_location)

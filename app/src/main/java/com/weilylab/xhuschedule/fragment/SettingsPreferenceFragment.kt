@@ -8,7 +8,6 @@ import android.support.v7.app.AlertDialog
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.view.CustomDatePicker
 import vip.mystery0.tools.logs.Logs
@@ -52,7 +51,7 @@ class SettingsPreferenceFragment : PreferenceFragment()
 			val datePicker = CustomDatePicker(activity)
 			datePicker.init(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH), null)
 			val dialog = AlertDialog.Builder(activity)
-					.setTitle("请选择时间")
+					.setTitle(R.string.title_dialog_time)
 					.setView(datePicker)
 					.setPositiveButton(android.R.string.ok, null)
 					.setNegativeButton(android.R.string.cancel, null)
@@ -68,7 +67,7 @@ class SettingsPreferenceFragment : PreferenceFragment()
 					if (calendar.get(Calendar.DAY_OF_WEEK) != Calendar.MONDAY)
 					{
 						Logs.i(TAG, "monitor: 选择的时间不是周一")
-						Snackbar.make(datePicker, "选择的时间不是周一", Snackbar.LENGTH_SHORT)
+						Snackbar.make(datePicker, R.string.error_time_format, Snackbar.LENGTH_SHORT)
 								.show()
 					}
 					else
