@@ -7,8 +7,9 @@ import android.support.v7.app.AlertDialog
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.DatePicker
+import android.widget.*
 import com.weilylab.xhuschedule.R
+import com.weilylab.xhuschedule.view.CustomDatePicker
 import vip.mystery0.tools.logs.Logs
 import java.util.*
 
@@ -47,12 +48,11 @@ class SettingsPreferenceFragment : PreferenceFragment()
 	{
 		firstDayPreference.setOnPreferenceClickListener {
 			val calendar = Calendar.getInstance(Locale.CHINA)
-			val datePickerLayout = View.inflate(activity, R.layout.layout_date_picker, null)
-			val datePicker: DatePicker = datePickerLayout.findViewById(R.id.datePicker)
+			val datePicker = CustomDatePicker(activity)
 			datePicker.init(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH), null)
 			val dialog = AlertDialog.Builder(activity)
 					.setTitle("请选择时间")
-					.setView(datePickerLayout)
+					.setView(datePicker)
 					.setPositiveButton(android.R.string.ok, null)
 					.setNegativeButton(android.R.string.cancel, null)
 					.create()
