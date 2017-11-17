@@ -3,6 +3,7 @@ package com.weilylab.xhuschedule.fragment
 import android.os.Bundle
 import android.preference.Preference
 import android.preference.PreferenceFragment
+import android.support.design.widget.Snackbar
 import android.support.v7.app.AlertDialog
 import android.view.LayoutInflater
 import android.view.View
@@ -63,13 +64,12 @@ class SettingsPreferenceFragment : PreferenceFragment()
 					val year = datePicker.year
 					val month = datePicker.month + 1
 					val dayOfMonth = datePicker.dayOfMonth
-					Logs.i(TAG, "monitor: " + year)
-					Logs.i(TAG, "monitor: " + month)
-					Logs.i(TAG, "monitor: " + dayOfMonth)
 					calendar.set(year, month, dayOfMonth, 0, 0, 0)
 					if (calendar.get(Calendar.DAY_OF_WEEK) != Calendar.MONDAY)
 					{
 						Logs.i(TAG, "monitor: 选择的时间不是周一")
+						Snackbar.make(datePicker, "选择的时间不是周一", Snackbar.LENGTH_SHORT)
+								.show()
 					}
 					else
 						dialog.dismiss()

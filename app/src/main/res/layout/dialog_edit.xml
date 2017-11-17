@@ -14,10 +14,10 @@
         <TextView
             android:id="@+id/titleTextView"
             android:layout_width="match_parent"
-            android:layout_height="192dp"
+            android:layout_height="@dimen/dialog_edit_header_height"
             android:gravity="center"
             android:textColor="#FFFFFF"
-            android:textSize="48sp"
+            android:textSize="@dimen/dialog_edit_header_text_size"
             android:textStyle="bold"/>
 
         <TextView
@@ -28,7 +28,7 @@
             android:paddingEnd="@dimen/course_padding"
             android:paddingStart="@dimen/course_padding"
             android:paddingTop="@dimen/time_padding"
-            android:text="任课教师"
+            android:text="@string/dialog_edit_teacher"
             android:textColor="@color/colorAccent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -55,7 +55,7 @@
             android:paddingEnd="@dimen/course_padding"
             android:paddingStart="@dimen/course_padding"
             android:paddingTop="@dimen/time_padding"
-            android:text="上课时间"
+            android:text="@string/dialog_edit_time"
             android:textColor="@color/colorAccent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -81,7 +81,7 @@
             android:paddingEnd="@dimen/course_padding"
             android:paddingStart="@dimen/course_padding"
             android:paddingTop="@dimen/time_padding"
-            android:text="上课地点"
+            android:text="@string/dialog_edit_location"
             android:textColor="@color/colorAccent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -108,7 +108,7 @@
             android:paddingEnd="@dimen/course_padding"
             android:paddingStart="@dimen/course_padding"
             android:paddingTop="@dimen/time_padding"
-            android:text="选择颜色"
+            android:text="@string/dialog_edit_color_picker"
             android:textColor="@color/colorAccent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
