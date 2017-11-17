@@ -9,7 +9,9 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
 import com.weilylab.xhuschedule.R
+import com.weilylab.xhuschedule.activity.MainActivity
 import com.weilylab.xhuschedule.classes.Course
+import com.weilylab.xhuschedule.listener.InfoChangeListener
 import com.weilylab.xhuschedule.util.ScheduleHelper
 import com.weilylab.xhuschedule.util.ViewUtil
 import vip.mystery0.tools.logs.Logs
@@ -58,7 +60,16 @@ class TableAdapter(private val context: Context,
 		view.setBackgroundColor(Color.parseColor(course.transparencyColor))
 		view.layoutParams = layoutParams
 		view.setOnClickListener {
-			ViewUtil.showAlertDialog(context, course)
+			ViewUtil.showAlertDialog(context, course, object : InfoChangeListener
+			{
+				override fun onChange()
+				{
+					(context as MainActivity).updateView()
+//					val colorSharedPreference = context.getSharedPreferences("course_color", Context.MODE_PRIVATE)
+//					val md5 = ScheduleHelper.getInstance().getMD5(course.name)
+//					view.setBackgroundColor(Color.parseColor("#33" + colorSharedPreference.getString(md5, ScheduleHelper.getInstance().getRandomColor()).substring(1)))
+				}
+			})
 		}
 		holder.linearLayout.addView(view)
 	}

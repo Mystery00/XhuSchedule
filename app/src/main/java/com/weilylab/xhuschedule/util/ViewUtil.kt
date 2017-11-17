@@ -3,6 +3,7 @@ package com.weilylab.xhuschedule.util
 import android.content.Context
 import android.graphics.Color
 import android.support.constraint.ConstraintLayout
+import android.support.design.widget.FloatingActionButton
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -12,8 +13,11 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.adapter.ColorPickerAdapter
+import com.weilylab.xhuschedule.adapter.TableAdapter
 import com.weilylab.xhuschedule.classes.Course
 import com.weilylab.xhuschedule.listener.ColorPickerChangeListener
+import com.weilylab.xhuschedule.listener.InfoChangeListener
+import java.text.FieldPosition
 
 /**
  * Created by myste.
@@ -23,7 +27,7 @@ object ViewUtil
 	private val TAG = "ViewUtil"
 
 	@JvmStatic
-	fun showAlertDialog(context: Context, course: Course)
+	fun showAlertDialog(context: Context, course: Course,infoChangeListener: InfoChangeListener)
 	{
 		val view = View.inflate(context, R.layout.dialog_edit, null)
 		val textView: TextView = view.findViewById(R.id.titleTextView)
@@ -31,6 +35,7 @@ object ViewUtil
 		val editTimeLayout: TextView = view.findViewById(R.id.edit_time_layout)
 		val editLocationLayout: LinearLayout = view.findViewById(R.id.edit_location_layout)
 		val colorChooser: RecyclerView = view.findViewById(R.id.color_chooser)
+		val floatingActionButton: FloatingActionButton = view.findViewById(R.id.floatingActionButton)
 		colorChooser.layoutManager = GridLayoutManager(context, 6)
 		val adapter = ColorPickerAdapter(course.color, context)
 		adapter.colorPickerChangeListener = object : ColorPickerChangeListener
@@ -56,6 +61,14 @@ object ViewUtil
 		val dialog = AlertDialog.Builder(context)
 				.setView(view)
 				.create()
+		floatingActionButton.setOnClickListener {
+			val colorSharedPreference = context.getSharedPreferences("course_color", Context.MODE_PRIVATE)
+			val md5 = ScheduleHelper.getInstance().getMD5(course.name)
+			colorSharedPreference.edit().putString(md5, adapter.color).apply()
+			colorSharedPreference.edit().putString(md5 + "_trans", "#33" + adapter.color.substring(1)).apply()
+			infoChangeListener.onChange()
+			dialog.dismiss()
+		}
 		dialog.show()
 	}
 }

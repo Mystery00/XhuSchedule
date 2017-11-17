@@ -9,9 +9,12 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import com.weilylab.xhuschedule.R
+import com.weilylab.xhuschedule.activity.MainActivity
 import com.weilylab.xhuschedule.classes.Course
+import com.weilylab.xhuschedule.listener.InfoChangeListener
 import com.weilylab.xhuschedule.util.ScheduleHelper
 import com.weilylab.xhuschedule.util.ViewUtil
+import vip.mystery0.tools.logs.Logs
 
 /**
  * Created by myste.
@@ -19,6 +22,11 @@ import com.weilylab.xhuschedule.util.ViewUtil
 class TodayAdapter(private val context: Context,
 				   private val list: ArrayList<Course>) : RecyclerView.Adapter<TodayAdapter.ViewHolder>()
 {
+	companion object
+	{
+		private val TAG = "TodayAdapter"
+	}
+
 	override fun getItemCount(): Int = list.size
 
 	override fun onBindViewHolder(holder: ViewHolder, position: Int)
@@ -32,7 +40,17 @@ class TodayAdapter(private val context: Context,
 			course.color = '#' + ScheduleHelper.getInstance().getRandomColor()
 		holder.img.setImageBitmap(drawImg(course))
 		holder.itemView.setOnClickListener {
-			ViewUtil.showAlertDialog(context, course)
+			ViewUtil.showAlertDialog(context, course, object : InfoChangeListener
+			{
+				override fun onChange()
+				{
+					(context as MainActivity).updateView()
+//					val colorSharedPreference = context.getSharedPreferences("course_color", Context.MODE_PRIVATE)
+//					val md5 = ScheduleHelper.getInstance().getMD5(course.name)
+//					course.color = colorSharedPreference.getString(md5, ScheduleHelper.getInstance().getRandomColor())
+//					holder.img.setImageBitmap(drawImg(course))
+				}
+			})
 		}
 	}
 
@@ -57,7 +75,7 @@ class TodayAdapter(private val context: Context,
 		val targetRect = Rect(0, 0, 200, 200)
 		val paint = Paint()
 		paint.color = Color.parseColor(course.color)
-		canvas.drawCircle(100F,100F,100F, paint)
+		canvas.drawCircle(100F, 100F, 100F, paint)
 		paint.color = Color.WHITE
 		paint.textSize = 120F
 		val fontMetrics = paint.fontMetrics

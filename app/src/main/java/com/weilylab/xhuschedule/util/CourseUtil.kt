@@ -2,6 +2,7 @@ package com.weilylab.xhuschedule.util
 
 import com.weilylab.xhuschedule.classes.Course
 import com.weilylab.xhuschedule.classes.CourseTimeInfo
+import vip.mystery0.tools.logs.Logs
 
 /**
  * Created by myste.
@@ -94,7 +95,8 @@ object CourseUtil
 		calendarUtil.startCalendar.set(2017, 8, 4, 0, 0, 0)//月数减一
 		//获取当前第几周
 		val currentWeek = calendarUtil.getWeek()
-		val weekIndex = calendarUtil.getWeekIndex()
+//		val weekIndex = calendarUtil.getWeekIndex()
+		val weekIndex=2
 		val list = ArrayList<Course>()
 		courses.filter {
 			try
@@ -132,6 +134,7 @@ object CourseUtil
 		return if (array.size > 1)
 		{
 			Array(array.size, { i ->
+				Logs.i(TAG, "splitInfo: " + array[i])
 				val info = array[i].replace('(', ' ').replace(')', ' ').split(' ')
 				CourseTimeInfo(info[1], info[0])
 			})
