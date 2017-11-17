@@ -13,11 +13,9 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.adapter.ColorPickerAdapter
-import com.weilylab.xhuschedule.adapter.TableAdapter
 import com.weilylab.xhuschedule.classes.Course
 import com.weilylab.xhuschedule.listener.ColorPickerChangeListener
 import com.weilylab.xhuschedule.listener.InfoChangeListener
-import java.text.FieldPosition
 
 /**
  * Created by myste.
@@ -27,7 +25,7 @@ object ViewUtil
 	private val TAG = "ViewUtil"
 
 	@JvmStatic
-	fun showAlertDialog(context: Context, course: Course,infoChangeListener: InfoChangeListener)
+	fun showAlertDialog(context: Context, course: Course, infoChangeListener: InfoChangeListener)
 	{
 		val view = View.inflate(context, R.layout.dialog_edit, null)
 		val textView: TextView = view.findViewById(R.id.titleTextView)
@@ -64,8 +62,10 @@ object ViewUtil
 		floatingActionButton.setOnClickListener {
 			val colorSharedPreference = context.getSharedPreferences("course_color", Context.MODE_PRIVATE)
 			val md5 = ScheduleHelper.getInstance().getMD5(course.name)
-			colorSharedPreference.edit().putString(md5, adapter.color).apply()
-			colorSharedPreference.edit().putString(md5 + "_trans", "#33" + adapter.color.substring(1)).apply()
+			colorSharedPreference.edit()
+					.putString(md5, adapter.color)
+					.putString(md5 + "_trans", "#33" + adapter.color.substring(1))
+					.apply()
 			infoChangeListener.onChange()
 			dialog.dismiss()
 		}

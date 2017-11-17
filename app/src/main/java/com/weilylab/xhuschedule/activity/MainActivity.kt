@@ -392,10 +392,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 			R.id.nav_logout ->
 			{
 				val sharedPreference = getSharedPreferences("cache", Context.MODE_PRIVATE)
-				val editor = sharedPreference.edit()
-				editor.remove("studentName")
-				editor.remove("studentNumber")
-				editor.apply()
+				sharedPreference.edit()
+						.remove("studentName")
+						.remove("studentNumber")
+						.apply()
 				startActivity(Intent(this@MainActivity, LoginActivity::class.java))
 				finish()
 			}

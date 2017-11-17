@@ -30,17 +30,15 @@ class CalendarUtil private constructor()
 	fun getWeek(): Int
 	{
 		val tempCalendar = Calendar.getInstance()
+		tempCalendar.firstDayOfWeek = Calendar.MONDAY
 		tempCalendar.timeInMillis = calendar.timeInMillis - startCalendar.timeInMillis
 		//获取当前第几周---加一获取正确周数
-		return tempCalendar.get(Calendar.WEEK_OF_YEAR)
+		return tempCalendar.get(Calendar.WEEK_OF_YEAR) - 1
 	}
 
-	fun getWeekIndex(): Int
+	fun getWeekIndex(): Int = when (calendar.get(Calendar.DAY_OF_WEEK))
 	{
-		return when (calendar.get(Calendar.DAY_OF_WEEK))
-		{
-			Calendar.SUNDAY -> 7
-			else -> calendar.get(Calendar.DAY_OF_WEEK) - 1
-		}
+		Calendar.SUNDAY -> 7
+		else -> calendar.get(Calendar.DAY_OF_WEEK) - 1
 	}
 }
