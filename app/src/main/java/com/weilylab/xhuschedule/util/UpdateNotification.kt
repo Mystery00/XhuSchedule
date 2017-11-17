@@ -24,14 +24,14 @@ object UpdateNotification
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
 		{
 			val mNotificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-			val id = "Xhu Schedule"
-			val name = "WeiLy Studio"
-			val description = "微力实验室"
+			val id = context.getString(R.string.notification_channel_id)
+			val name = context.getString(R.string.notification_channel_name)
+			val description = context.getString(R.string.notification_channel_description)
 			val importance = NotificationManager.IMPORTANCE_HIGH
 			val mChannel = NotificationChannel(id, name, importance)
 			mChannel.description = description
 			mChannel.enableLights(true)
-			mChannel.lightColor = Color.RED
+			mChannel.lightColor = Color.BLUE
 			mNotificationManager.createNotificationChannel(mChannel)
 		}
 	}
@@ -61,8 +61,8 @@ object UpdateNotification
 				.setPriority(NotificationCompat.PRIORITY_DEFAULT)
 				.setStyle(NotificationCompat.BigTextStyle()
 						.bigText(bigText))
-				.addAction(NotificationCompat.Action.Builder(R.drawable.ic_stat_update, "下载apk", pendingDownloadAPKIntent).build())
-				.addAction(NotificationCompat.Action.Builder(R.drawable.ic_stat_update, "下载patch", pendingDownloadPatchIntent).build())
+				.addAction(NotificationCompat.Action.Builder(R.drawable.ic_stat_update, context.getString(R.string.action_download_apk), pendingDownloadAPKIntent).build())
+				.addAction(NotificationCompat.Action.Builder(R.drawable.ic_stat_update, context.getString(R.string.action_download_patch), pendingDownloadPatchIntent).build())
 				.setAutoCancel(true)
 		notify(context, builder.build())
 	}

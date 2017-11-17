@@ -16,14 +16,13 @@ object DownloadNotification
 	private val NOTIFICATION_ID = 1
 	private lateinit var notificationBuilder: NotificationCompat.Builder
 
-	fun notify(context: Context)
+	fun notify(context: Context, fileName: String)
 	{
 		UpdateNotification.cancel(context)
 		notificationBuilder = NotificationCompat.Builder(context, "Xhu Schedule")
 				.setDefaults(Notification.DEFAULT_ALL)
 				.setSmallIcon(R.drawable.ic_stat_update)
-				.setContentTitle("正在下载")
-				.setContentText("下载中")
+				.setContentTitle(context.getString(R.string.download_notification_title, fileName))
 				.setOngoing(true)
 				.setAutoCancel(true)
 		notify(context, notificationBuilder.build())
@@ -31,15 +30,15 @@ object DownloadNotification
 
 	fun updateProgress(context: Context, download: Download)
 	{
-		notificationBuilder.setProgress(100, download.progress, false)
-		notificationBuilder.setContentText(FileUtil.FormatFileSize(download.currentFileSize) + "/" + FileUtil.FormatFileSize(download.totalFileSize))
+		notificationBuilder.setProgress(100, download.progress.toInt(), false)
+		notificationBuilder.setContentText(context.getString(R.string.download_notification_text, FileUtil.FormatFileSize(download.currentFileSize), FileUtil.FormatFileSize(download.totalFileSize), download.progress))
 		notify(context, notificationBuilder.build())
 	}
 
 	fun downloadError(context: Context)
 	{
 		notificationBuilder.setProgress(0, 0, false)
-				.setContentTitle("下载失败")
+				.setContentTitle(context.getString(R.string.error_download))
 				.setContentText(" ")
 				.setOngoing(false)
 		notify(context, notificationBuilder.build())

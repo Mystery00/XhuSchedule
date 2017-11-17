@@ -4,14 +4,12 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
-    <string name="url_vcode">http://tomcat.weilylab.com:7823/course/Course/getVCode?type=1</string>
-    <string name="url_login">http://tomcat.weilylab.com:7823/course/Course/login</string>
-    <string name="url_get_content">http://tomcat.weilylab.com:7823/course/Course/getContent</string>
-
     <string name="action_users">当前登陆用户</string>
     <string name="action_tools">工具</string>
     <string name="action_settings">设置</string>
     <string name="action_logout">注销</string>
+    <string name="action_download_apk">下载APK</string>
+    <string name="action_download_patch">下载增量包</string>
 
     <string name="prompt_username">用户名</string>
     <string name="prompt_password">密码</string>
@@ -26,7 +24,10 @@
     <string name="error_invalid_password">密码无效</string>
     <string name="error_invalid_vcode">验证码错误</string>
     <string name="error_field_required">参数不可为空</string>
+    <string name="error_timeout">请求超时</string>
     <string name="error_other">其他错误</string>
+    <string name="error_time_format">选择的时间不是周一，选择无效</string>
+    <string name="error_download">下载失败</string>
 
     <string name="success_login">登陆成功，欢迎%1$s使用%2$s！</string>
 
@@ -51,94 +52,21 @@
     <string name="update_notification_title">新版本更新 %1$s => %2$s</string>
     <string name="update_notification_content">本次更新包大小为%1$s,增量更新包大小为%2$s</string>
     <string name="update_notification_big_text">更新日志：\n %1$s</string>
-    <string name="title_activity_settings">Settings</string>
 
-    <!-- Strings related to Settings -->
+    <string name="download_notification_title">正在下载：%1$s</string>
+    <string name="download_notification_text">%1$s/%2$s 已下载%3$f\%</string>
 
-    <!-- Example General settings -->
-    <string name="pref_header_general">General</string>
+    <string name="notification_channel_id">Xhu Schedule</string>
+    <string name="notification_channel_name">WeiLy Studio</string>
+    <string name="notification_channel_description">微力实验室</string>
 
-    <string name="pref_title_social_recommendations">Enable social recommendations</string>
-    <string name="pref_description_social_recommendations">Recommendations for people to contact
-        based on your message history
-    </string>
-
-    <string name="pref_title_display_name">Display name</string>
-    <string name="pref_default_display_name">John Smith</string>
-
-    <string name="pref_title_add_friends_to_messages">Add friends to messages</string>
-    <string-array name="pref_example_list_titles">
-        <item>Always</item>
-        <item>When possible</item>
-        <item>Never</item>
-    </string-array>
-    <string-array name="pref_example_list_values">
-        <item>1</item>
-        <item>0</item>
-        <item>-1</item>
-    </string-array>
-
-    <!-- Example settings for Data & Sync -->
-    <string name="pref_header_data_sync">Data &amp; sync</string>
-
-    <string name="pref_title_sync_frequency">Sync frequency</string>
-    <string-array name="pref_sync_frequency_titles">
-        <item>15 minutes</item>
-        <item>30 minutes</item>
-        <item>1 hour</item>
-        <item>3 hours</item>
-        <item>6 hours</item>
-        <item>Never</item>
-    </string-array>
-    <string-array name="pref_sync_frequency_values">
-        <item>15</item>
-        <item>30</item>
-        <item>60</item>
-        <item>180</item>
-        <item>360</item>
-        <item>-1</item>
-    </string-array>
-
-    <string-array name="list_preference_entries">
-        <item>Entry 1</item>
-        <item>Entry 2</item>
-        <item>Entry 3</item>
-    </string-array>
-
-    <string-array name="list_preference_entry_values">
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
-    </string-array>
-
-    <string-array name="multi_select_list_preference_default_value"/>
-
-    <string name="pref_title_system_sync_settings">System sync settings</string>
-
-    <!-- Example settings for Notifications -->
-    <string name="pref_header_notifications">Notifications</string>
-
-    <string name="pref_title_new_message_notifications">New message notifications</string>
-
-    <string name="pref_title_ringtone">Ringtone</string>
-    <string name="pref_ringtone_silent">Silent</string>
-
-    <string name="pref_title_vibrate">Vibrate</string>
-
-    <string name="download_notification_title_template">Download: %1$s</string>
-
-    <!-- TODO: remove this placeholder text -->
-    <string name="download_notification_placeholder_text_template">You said %1$s and lorem ipsum
-        dolor sit amet, consectetur adipiscing elit. Etiam non enim magna. Morbi dictum, velit vel
-        semper venenatis, magna odio volutpat velit, at ullamcorper nulla lacus sed turpis.
-        Pellentesque vitae metus elit, nec tincidunt tellus. Integer sed nisl sem, ullamcorper
-        ornare lacus. Duis ac mauris sed massa congue volutpat. Donec sed erat sit amet turpis
-        viverra rhoncus sit amet nec magna. Donec lacinia ligula at libero volutpat volutpat nec nec
-        tortor.
-    </string>
     <string name="dialog_edit_teacher">任课教师</string>
     <string name="dialog_edit_time">上课时间</string>
     <string name="dialog_edit_location">上课地点</string>
     <string name="dialog_edit_color_picker">选择颜色</string>
     <string name="dialog_edit_item_location">地点</string>
+
+    <string name="title_dialog_time">请选择第一周周一时间</string>
+
+    <string name="title_activity_settings">设置</string>
 </resources>

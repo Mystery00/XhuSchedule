@@ -33,7 +33,7 @@ class CalendarUtil private constructor()
 		val tempCalendar = Calendar.getInstance()
 		tempCalendar.firstDayOfWeek = Calendar.MONDAY
 		tempCalendar.timeInMillis = calendar.timeInMillis - startCalendar.timeInMillis
-		//获取当前第几周---加一获取正确周数
+		//获取当前第几周---减一获取正确周数
 		return tempCalendar.get(Calendar.WEEK_OF_YEAR) - 1
 	}
 

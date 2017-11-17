@@ -207,6 +207,12 @@ class LoginActivity : AppCompatActivity()
 				loginDialog.dismiss()
 				when (result)
 				{
+					0 ->
+					{
+						ScheduleHelper.getInstance().isLogin = false
+						Toast.makeText(this@LoginActivity, R.string.error_timeout, Toast.LENGTH_SHORT)
+								.show()
+					}
 					1 ->
 					{
 						ScheduleHelper.getInstance().isLogin = true
