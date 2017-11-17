@@ -2,7 +2,6 @@ package com.weilylab.xhuschedule.service
 
 import android.app.IntentService
 import android.content.Intent
-import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.classes.Version
 import com.weilylab.xhuschedule.interfaces.UpdateResponse
 import com.weilylab.xhuschedule.util.ScheduleHelper
@@ -21,17 +20,18 @@ class UpdateService : IntentService(TAG)
 		private val TAG = "UpdateService"
 	}
 
-	private val retrofit = ScheduleHelper.getInstance().getUpdateRetrofit()
+	private val retrofit = ScheduleHelper.getUpdateRetrofit()
 	private var version: Version? = null
 
 	override fun onHandleIntent(intent: Intent?)
 	{
 		Logs.i(TAG, "onStartCommand: ")
-		if (ScheduleHelper.getInstance().isUpdateChecked)
+		if (ScheduleHelper.isUpdateChecked)
 			return
-		ScheduleHelper.getInstance().isUpdateChecked = true
+		ScheduleHelper.isUpdateChecked = true
 		Observable.create<Int> { subscriber ->
-			val call = retrofit.create(UpdateResponse::class.java).checkUpdateCall(getString(R.string.app_version_code).toInt())
+			//			val call = retrofit.create(UpdateResponse::class.java).checkUpdateCall(getString(R.string.app_version_code).toInt())
+			val call = retrofit.create(UpdateResponse::class.java).checkUpdateCall(0)
 			val response = call.execute()
 			if (!response.isSuccessful)
 			{

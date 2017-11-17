@@ -36,7 +36,7 @@ class LoginActivity : AppCompatActivity()
 		private val TAG = "LoginActivity"
 	}
 
-	private val retrofit = ScheduleHelper.getInstance().getRetrofit()
+	private val retrofit = ScheduleHelper.getRetrofit()
 	private lateinit var vcodeDialog: ZLoadingDialog
 	private lateinit var loginDialog: ZLoadingDialog
 	private var name = "0"
@@ -209,13 +209,13 @@ class LoginActivity : AppCompatActivity()
 				{
 					0 ->
 					{
-						ScheduleHelper.getInstance().isLogin = false
+						ScheduleHelper.isLogin = false
 						Toast.makeText(this@LoginActivity, R.string.error_timeout, Toast.LENGTH_SHORT)
 								.show()
 					}
 					1 ->
 					{
-						ScheduleHelper.getInstance().isLogin = true
+						ScheduleHelper.isLogin = true
 						Toast.makeText(this@LoginActivity, getString(R.string.success_login, name, getString(R.string.app_name)), Toast.LENGTH_SHORT)
 								.show()
 						startActivity(Intent(this@LoginActivity, MainActivity::class.java))
@@ -224,25 +224,25 @@ class LoginActivity : AppCompatActivity()
 					}
 					2 ->
 					{
-						ScheduleHelper.getInstance().isLogin = false
+						ScheduleHelper.isLogin = false
 						username.error = getString(R.string.error_invalid_username)
 						username.requestFocus()
 					}
 					3 ->
 					{
-						ScheduleHelper.getInstance().isLogin = false
+						ScheduleHelper.isLogin = false
 						password.error = getString(R.string.error_invalid_password)
 						password.requestFocus()
 					}
 					4 ->
 					{
-						ScheduleHelper.getInstance().isLogin = false
+						ScheduleHelper.isLogin = false
 						vcode.error = getString(R.string.error_invalid_vcode)
 						vcode.requestFocus()
 					}
 					else ->
 					{
-						ScheduleHelper.getInstance().isLogin = false
+						ScheduleHelper.isLogin = false
 						Toast.makeText(this@LoginActivity, R.string.error_other, Toast.LENGTH_SHORT)
 								.show()
 					}

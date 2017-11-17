@@ -103,7 +103,7 @@ class DownloadService : IntentService(TAG)
 				.doOnNext { inputStream ->
 					try
 					{
-						FileUtil.getInstance().saveFile(inputStream, file)
+						FileUtil.saveFile(inputStream, file)
 						if (type == "patch")
 						{
 							val applicationInfo = applicationContext.applicationInfo
