@@ -1,16 +1,19 @@
 package com.weilylab.xhuschedule.util
 
-import android.content.SharedPreferences
+import android.content.Context
+import com.weilylab.xhuschedule.APP
 
 /**
  * Created by myste.
  */
 object Settings
 {
-	init
-	{
+	private val sharedPreference = APP.getContext().getSharedPreferences("settings", Context.MODE_PRIVATE)
 
-	}
-
-	private lateinit var sharedPreference: SharedPreferences
+	var firstWeekOfTerm: String
+		set(value)
+		{
+			sharedPreference.edit().putString("firstWeekOfTerm", value).apply()
+		}
+		get() = sharedPreference.getString("firstWeekOfTerm", "2017-8-4")
 }

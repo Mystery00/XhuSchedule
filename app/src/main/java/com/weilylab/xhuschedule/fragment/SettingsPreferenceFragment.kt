@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.weilylab.xhuschedule.R
+import com.weilylab.xhuschedule.util.Settings
 import com.weilylab.xhuschedule.view.CustomDatePicker
 import vip.mystery0.tools.logs.Logs
 import java.util.*
@@ -42,12 +43,18 @@ class SettingsPreferenceFragment : PreferenceFragment()
 	private fun initialization()
 	{
 		firstDayPreference = findPreference(getString(R.string.key_first_day))
+
+		val date = Settings.firstWeekOfTerm.split('-')
+		firstDayPreference.summary = date[0] + '-' + (date[1].toInt() + 1) + '-' + date[2]
 	}
 
 	private fun monitor()
 	{
 		firstDayPreference.setOnPreferenceClickListener {
 			val calendar = Calendar.getInstance(Locale.CHINA)
+			val firstWeekOfTerm = Settings.firstWeekOfTerm
+			val date = firstWeekOfTerm.split('-')
+			calendar.set(date[0].toInt(), date[1].toInt(), date[2].toInt(), 0, 0, 0)
 			val datePicker = CustomDatePicker(activity)
 			datePicker.init(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH), null)
 			val dialog = AlertDialog.Builder(activity)
@@ -60,9 +67,6 @@ class SettingsPreferenceFragment : PreferenceFragment()
 			if (dialog.getButton(AlertDialog.BUTTON_POSITIVE) != null)
 			{
 				dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
-					val year = datePicker.year
-					val month = datePicker.month + 1
-					val dayOfMonth = datePicker.dayOfMonth
 					calendar.set(datePicker.year, datePicker.month, datePicker.dayOfMonth, 0, 0, 0)
 					if (calendar.get(Calendar.DAY_OF_WEEK) != Calendar.MONDAY)
 					{
@@ -70,7 +74,11 @@ class SettingsPreferenceFragment : PreferenceFragment()
 								.show()
 					}
 					else
+					{
+						Settings.firstWeekOfTerm = datePicker.year.toString() + '-' + datePicker.month.toString() + '-' + datePicker.dayOfMonth.toString()
+						firstDayPreference.summary = datePicker.year.toString() + '-' + (datePicker.month + 1).toString() + '-' + datePicker.dayOfMonth.toString()
 						dialog.dismiss()
+					}
 				}
 			}
 			true
