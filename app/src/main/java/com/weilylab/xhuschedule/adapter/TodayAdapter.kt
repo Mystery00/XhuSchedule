@@ -20,41 +20,60 @@ import vip.mystery0.tools.logs.Logs
  * Created by myste.
  */
 class TodayAdapter(private val context: Context,
-				   private val list: ArrayList<Course>) : RecyclerView.Adapter<TodayAdapter.ViewHolder>()
+				   private val list: ArrayList<Course>) : RecyclerView.Adapter<RecyclerView.ViewHolder>()
 {
 	companion object
 	{
 		private val TAG = "TodayAdapter"
 	}
 
-	override fun getItemCount(): Int = if (list.size == 0) list.size else 1
+	override fun getItemCount(): Int = if (list.size != 0) list.size else 1
 
-	override fun onBindViewHolder(holder: ViewHolder, position: Int)
+	override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int)
 	{
-		val course = list[position]
-		holder.courseTimeTextView.text = course.time
-		val temp = course.name + " - " + course.teacher
-		holder.courseNameAndTeacherTextView.text = temp
-		holder.courseLocationTextView.text = course.location
-		if (course.color == "")
-			course.color = '#' + ScheduleHelper.getRandomColor()
-		holder.img.setImageBitmap(drawImg(course))
-		holder.itemView.setOnClickListener {
-			ViewUtil.showAlertDialog(context, course, object : InfoChangeListener
+		when (holder)
+		{
+			is EmptyViewHolder ->
 			{
-				override fun onChange()
-				{
-					(context as MainActivity).updateView()
+				val textView = holder.itemView as TextView
+				textView.textSize = 24F
+				textView.paint.isFakeBoldText = true
+				textView.text = context.getString(R.string.hint_course_empty)
+			}
+			is ViewHolder ->
+			{
+				val course = list[position]
+				holder.courseTimeTextView.text = course.time
+				val temp = course.name + " - " + course.teacher
+				holder.courseNameAndTeacherTextView.text = temp
+				holder.courseLocationTextView.text = course.location
+				if (course.color == "")
+					course.color = '#' + ScheduleHelper.getRandomColor()
+				holder.img.setImageBitmap(drawImg(course))
+				holder.itemView.setOnClickListener {
+					ViewUtil.showAlertDialog(context, course, object : InfoChangeListener
+					{
+						override fun onChange()
+						{
+							(context as MainActivity).updateView()
+						}
+					})
 				}
-			})
+			}
 		}
 	}
 
-	override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder
+	override fun getItemViewType(position: Int): Int = list.size
+
+	override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder
 	{
+		if (viewType == 0)
+			return EmptyViewHolder(TextView(context))
 		val view = LayoutInflater.from(parent.context).inflate(R.layout.item_course_today, parent, false)
 		return ViewHolder(view)
 	}
+
+	class EmptyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
 
 	class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
 	{
