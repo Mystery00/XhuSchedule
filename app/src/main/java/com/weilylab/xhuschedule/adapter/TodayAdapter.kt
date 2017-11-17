@@ -27,7 +27,7 @@ class TodayAdapter(private val context: Context,
 		private val TAG = "TodayAdapter"
 	}
 
-	override fun getItemCount(): Int = list.size
+	override fun getItemCount(): Int = if (list.size == 0) list.size else 1
 
 	override fun onBindViewHolder(holder: ViewHolder, position: Int)
 	{

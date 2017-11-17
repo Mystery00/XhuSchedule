@@ -20,19 +20,10 @@ class ViewPagerAdapter(fragmentManager: FragmentManager) : FragmentPagerAdapter(
 
 	fun addFragment(fragment: Fragment)
 	{
-		Logs.i(TAG, "addFragment: ")
-//		if (fragmentList.contains(fragment))
-//			return
 		fragmentList.add(fragment)
 	}
 
-	override fun getItem(position: Int): Fragment
-	{
-		return fragmentList[position]
-	}
+	override fun getItem(position: Int) = fragmentList[position]
 
-	override fun getCount(): Int
-	{
-		return fragmentList.size
-	}
+	override fun getCount(): Int = fragmentList.size
 }
