@@ -19,7 +19,7 @@ class CalendarUtil private constructor()
 		}
 	}
 
-	private val calendar = Calendar.getInstance()
+	private var calendar = Calendar.getInstance()
 	var startCalendar = Calendar.getInstance()
 
 	init
@@ -29,6 +29,7 @@ class CalendarUtil private constructor()
 
 	fun getWeek(): Int
 	{
+		calendar = Calendar.getInstance()
 		val tempCalendar = Calendar.getInstance()
 		tempCalendar.firstDayOfWeek = Calendar.MONDAY
 		tempCalendar.timeInMillis = calendar.timeInMillis - startCalendar.timeInMillis
@@ -36,9 +37,13 @@ class CalendarUtil private constructor()
 		return tempCalendar.get(Calendar.WEEK_OF_YEAR) - 1
 	}
 
-	fun getWeekIndex(): Int = when (calendar.get(Calendar.DAY_OF_WEEK))
+	fun getWeekIndex(): Int
 	{
-		Calendar.SUNDAY -> 7
-		else -> calendar.get(Calendar.DAY_OF_WEEK) - 1
+		calendar = Calendar.getInstance()
+		return when (calendar.get(Calendar.DAY_OF_WEEK))
+		{
+			Calendar.SUNDAY -> 7
+			else -> calendar.get(Calendar.DAY_OF_WEEK) - 1
+		}
 	}
 }
