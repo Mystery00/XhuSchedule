@@ -2,6 +2,7 @@ package com.weilylab.xhuschedule.service
 
 import android.app.IntentService
 import android.content.Intent
+import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.classes.Version
 import com.weilylab.xhuschedule.interfaces.UpdateResponse
 import com.weilylab.xhuschedule.util.ScheduleHelper
@@ -30,8 +31,7 @@ class UpdateService : IntentService(TAG)
 			return
 		ScheduleHelper.isUpdateChecked = true
 		Observable.create<Int> { subscriber ->
-			//			val call = retrofit.create(UpdateResponse::class.java).checkUpdateCall(getString(R.string.app_version_code).toInt())
-			val call = retrofit.create(UpdateResponse::class.java).checkUpdateCall(0)
+			val call = retrofit.create(UpdateResponse::class.java).checkUpdateCall(getString(R.string.app_version_code).toInt())
 			val response = call.execute()
 			if (!response.isSuccessful)
 			{
