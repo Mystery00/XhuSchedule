@@ -62,8 +62,9 @@ object UpdateNotification
 				.setStyle(NotificationCompat.BigTextStyle()
 						.bigText(bigText))
 				.addAction(NotificationCompat.Action.Builder(R.drawable.ic_stat_update, context.getString(R.string.action_download_apk), pendingDownloadAPKIntent).build())
-				.addAction(NotificationCompat.Action.Builder(R.drawable.ic_stat_update, context.getString(R.string.action_download_patch), pendingDownloadPatchIntent).build())
 				.setAutoCancel(true)
+		if (version.lastVersion == context.getString(R.string.app_version_code).toInt())
+			builder.addAction(NotificationCompat.Action.Builder(R.drawable.ic_stat_update, context.getString(R.string.action_download_patch), pendingDownloadPatchIntent).build())
 		notify(context, builder.build())
 	}
 
