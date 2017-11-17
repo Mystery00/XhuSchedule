@@ -53,10 +53,10 @@ class ColorPickerAdapter(var color: String,
 
 					override fun onColorSelected(dialogId: Int, color: Int)
 					{
-						this@ColorPickerAdapter.color = '#' + Integer.toHexString(color)
+						this@ColorPickerAdapter.color = '#' + Integer.toHexString(color).toUpperCase().substring(2)
 						notifyDataSetChanged()
 						if (colorPickerChangeListener != null)
-							colorPickerChangeListener!!.onColorChanged('#' + Integer.toHexString(color))
+							colorPickerChangeListener!!.onColorChanged('#' + Integer.toHexString(color).toUpperCase().substring(2))
 					}
 				})
 				colorPickerDialog.show((context as Activity).fragmentManager, "color-picker-dialog")

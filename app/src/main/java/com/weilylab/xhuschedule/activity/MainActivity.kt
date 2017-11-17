@@ -127,7 +127,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 		}
 	}
 
-	private fun updateView()
+	fun updateView()
 	{
 		val observer = object : Observer<HashMap<String, ArrayList<Course?>>>
 		{
