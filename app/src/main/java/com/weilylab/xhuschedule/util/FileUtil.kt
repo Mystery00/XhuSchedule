@@ -11,20 +11,9 @@ import java.util.regex.Pattern
 /**
  * Created by myste.
  */
-class FileUtil private constructor()
+object FileUtil
 {
-	companion object
-	{
-		private val TAG = "FileUtil"
-		private var fileUtil: FileUtil? = null
-
-		fun getInstance(): FileUtil
-		{
-			if (fileUtil == null)
-				fileUtil = FileUtil()
-			return fileUtil!!
-		}
-	}
+	private val TAG = "FileUtil"
 
 	fun filterString(name: String): String
 	{

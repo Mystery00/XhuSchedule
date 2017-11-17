@@ -43,7 +43,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 		private val TAG = "MainActivity"
 	}
 
-	private val retrofit = ScheduleHelper.getInstance().getRetrofit()
+	private val retrofit = ScheduleHelper.getRetrofit()
 	private lateinit var loadingDialog: ZLoadingDialog
 	private var weekList = ArrayList<Course?>()
 	private var allList = ArrayList<Course?>()
@@ -141,19 +141,19 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 				loadingDialog.dismiss()
 				Logs.i(TAG, "onComplete: ")
 
-				if (!ScheduleHelper.getInstance().isLogin)
+				if (!ScheduleHelper.isLogin)
 				{
 					startActivity(Intent(this@MainActivity, LoginActivity::class.java))
 					finish()
 					return
 				}
-				nav_view.menu.findItem(R.id.nav_group).subMenu.add(ScheduleHelper.getInstance().studentName + "(" + ScheduleHelper.getInstance().studentNumber + ")")
-				if (ScheduleHelper.getInstance().isCookieAvailable)
+				nav_view.menu.findItem(R.id.nav_group).subMenu.add(ScheduleHelper.studentName + "(" + ScheduleHelper.studentNumber + ")")
+				if (ScheduleHelper.isCookieAvailable)
 				{
 					val studentNameTextView: TextView = nav_view.getHeaderView(0).findViewById(R.id.studentName)
 					val studentNumberTextView: TextView = nav_view.getHeaderView(0).findViewById(R.id.studentNumber)
-					studentNameTextView.text = ScheduleHelper.getInstance().studentName
-					studentNumberTextView.text = ScheduleHelper.getInstance().studentNumber
+					studentNameTextView.text = ScheduleHelper.studentName
+					studentNumberTextView.text = ScheduleHelper.studentNumber
 					when (todayList.size)
 					{
 						0 -> bottomNavigationView.menu.findItem(R.id.bottom_nav_today).setIcon(R.drawable.ic_sentiment_very_satisfied)
@@ -192,48 +192,48 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 			val studentName = sharedPreference.getString("studentName", "0")
 			if (studentNumber == "0" || studentName == "0")
 			{
-				ScheduleHelper.getInstance().isLogin = false
+				ScheduleHelper.isLogin = false
 				subscriber.onComplete()
 				return@create
 			}
-			ScheduleHelper.getInstance().isLogin = true
-			ScheduleHelper.getInstance().studentName = studentName
-			ScheduleHelper.getInstance().studentNumber = studentNumber
-			val base64Name = FileUtil.getInstance().filterString(Base64.encodeToString(studentNumber.toByteArray(), Base64.DEFAULT))
+			ScheduleHelper.isLogin = true
+			ScheduleHelper.studentName = studentName
+			ScheduleHelper.studentNumber = studentNumber
+			val base64Name = FileUtil.filterString(Base64.encodeToString(studentNumber.toByteArray(), Base64.DEFAULT))
 			//判断是否有缓存
 			val cacheResult = parentFile.listFiles().filter { it.name == base64Name }.size == 1
 			if (!cacheResult)
 			{
-				ScheduleHelper.getInstance().isCookieAvailable = false
+				ScheduleHelper.isCookieAvailable = false
 				subscriber.onComplete()
 				return@create
 			}
 			val oldFile = File(parentFile, base64Name)
 			if (!oldFile.exists())
 			{
-				ScheduleHelper.getInstance().isCookieAvailable = false
+				ScheduleHelper.isCookieAvailable = false
 				subscriber.onComplete()
 				return@create
 			}
-			val courses = FileUtil.getInstance().getCoursesFromFile(oldFile)
+			val courses = FileUtil.getCoursesFromFile(oldFile)
 			if (courses.isEmpty())
 			{
-				ScheduleHelper.getInstance().isCookieAvailable = false
+				ScheduleHelper.isCookieAvailable = false
 				subscriber.onComplete()
 				return@create
 			}
-			ScheduleHelper.getInstance().isCookieAvailable = true
+			ScheduleHelper.isCookieAvailable = true
 			val allArray = CourseUtil.formatCourses(courses)
 			allList.clear()
 			allList.addAll(allArray)
 			val colorSharedPreference = getSharedPreferences("course_color", Context.MODE_PRIVATE)
 			courses.forEach {
-				val md5 = ScheduleHelper.getInstance().getMD5(it.name)
+				val md5 = ScheduleHelper.getMD5(it.name)
 				var savedColor = colorSharedPreference.getString(md5, "")
 				var savedTransparencyColor = colorSharedPreference.getString(md5 + "_trans", "")
 				if (savedColor == "")
 				{
-					savedColor = '#' + ScheduleHelper.getInstance().getRandomColor()
+					savedColor = '#' + ScheduleHelper.getRandomColor()
 					colorSharedPreference.edit().putString(md5, savedColor).apply()
 					it.color = savedColor
 				}
@@ -291,13 +291,13 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 			{
 				swipeRefreshLayout.isRefreshing = false
 				isRefresh = true
-				ScheduleHelper.getInstance().isCookieAvailable = isCookieAvailable
+				ScheduleHelper.isCookieAvailable = isCookieAvailable
 				if (!isCookieAvailable)
 				{
 					Logs.i(TAG, "onComplete: cookie无效")
 					Snackbar.make(coordinatorLayout, R.string.hint_invalid_cookie, Snackbar.LENGTH_LONG)
 							.setAction(android.R.string.ok) {
-								ScheduleHelper.getInstance().isLogin = false
+								ScheduleHelper.isLogin = false
 								startActivity(Intent(this@MainActivity, LoginActivity::class.java))
 								finish()
 							}
@@ -317,12 +317,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 			if (studentNumber == "0")
 			{
 				Logs.i(TAG, "updateData: 学号错误")
-				ScheduleHelper.getInstance().isLogin = false
+				ScheduleHelper.isLogin = false
 				startActivity(Intent(this@MainActivity, LoginActivity::class.java))
 				finish()
 				return@create
 			}
-			val base64Name = FileUtil.getInstance().filterString(Base64.encodeToString(studentNumber.toByteArray(), Base64.DEFAULT))
+			val base64Name = FileUtil.filterString(Base64.encodeToString(studentNumber.toByteArray(), Base64.DEFAULT))
 			val service = retrofit.create(RTResponse::class.java)
 			val call = service.getContentCall()
 			val response = call.execute()
@@ -342,13 +342,13 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 			}
 			val newFile = File(parentFile, base64Name + ".temp")
 			newFile.createNewFile()
-			val createResult = FileUtil.getInstance().saveObjectToFile(response.body()?.courses!!, newFile)
+			val createResult = FileUtil.saveObjectToFile(response.body()?.courses!!, newFile)
 			subscriber.onNext(createResult)
-			val newMD5 = FileUtil.getInstance().getMD5(newFile)
+			val newMD5 = FileUtil.getMD5(newFile)
 			val oldFile = File(parentFile, base64Name)
 			var oldMD5 = ""
 			if (oldFile.exists())
-				oldMD5 = FileUtil.getInstance().getMD5(oldFile)!!
+				oldMD5 = FileUtil.getMD5(oldFile)!!
 			if (newMD5 != oldMD5)
 			{
 				oldFile.delete()

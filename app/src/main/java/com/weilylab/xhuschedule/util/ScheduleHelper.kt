@@ -1,36 +1,20 @@
 package com.weilylab.xhuschedule.util
 
 import com.weilylab.xhuschedule.APP
-import com.weilylab.xhuschedule.classes.Course
 import com.weilylab.xhuschedule.util.cookie.CookieManger
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import vip.mystery0.tools.logs.Logs
 import java.math.BigInteger
 import java.security.MessageDigest
 import java.util.*
 import java.util.concurrent.TimeUnit
-import kotlin.collections.ArrayList
 
 /**
  * Created by myste.
  */
-class ScheduleHelper private constructor()
+object ScheduleHelper
 {
-	companion object
-	{
-		private val TAG = "ScheduleHelper"
-		private var scheduleHelper: ScheduleHelper? = null
-
-		fun getInstance(): ScheduleHelper
-		{
-			if (scheduleHelper == null)
-				scheduleHelper = ScheduleHelper()
-			return scheduleHelper!!
-		}
-	}
-
 	var isLogin = false
 	var isCookieAvailable = false
 	private var client: OkHttpClient? = null

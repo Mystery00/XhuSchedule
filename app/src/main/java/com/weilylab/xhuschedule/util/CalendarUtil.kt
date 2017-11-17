@@ -5,20 +5,8 @@ import java.util.*
 /**
  * Created by myste.
  */
-class CalendarUtil private constructor()
+object CalendarUtil
 {
-	companion object
-	{
-		private var calendarUtil: CalendarUtil? = null
-
-		fun getInstance(): CalendarUtil
-		{
-			if (calendarUtil == null)
-				calendarUtil = CalendarUtil()
-			return calendarUtil!!
-		}
-	}
-
 	private var calendar = Calendar.getInstance()
 	var startCalendar = Calendar.getInstance()
 
