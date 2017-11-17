@@ -39,8 +39,9 @@ object CourseUtil
 	@JvmStatic
 	fun getWeekCourses(courses: Array<Course>): ArrayList<Course?>
 	{
-		//开学时间
-		CalendarUtil.startCalendar.set(2017, 8, 4, 0, 0, 0)//月数减一
+		val firstWeekOfTerm = Settings.firstWeekOfTerm
+		val date = firstWeekOfTerm.split('-')
+		CalendarUtil.startCalendar.set(date[0].toInt(), date[1].toInt(), date[2].toInt(), 0, 0, 0)
 		val currentWeek = CalendarUtil.getWeek()
 		val tempArray = Array(5, { Array<Course?>(7, { null }) })
 		courses.filter {
@@ -89,8 +90,9 @@ object CourseUtil
 	@JvmStatic
 	fun getTodayCourses(courses: Array<Course>): ArrayList<Course>
 	{
-		//开学时间
-		CalendarUtil.startCalendar.set(2017, 8, 4, 0, 0, 0)//月数减一
+		val firstWeekOfTerm = Settings.firstWeekOfTerm
+		val date = firstWeekOfTerm.split('-')
+		CalendarUtil.startCalendar.set(date[0].toInt(), date[1].toInt(), date[2].toInt(), 0, 0, 0)
 		//获取当前第几周
 		val currentWeek = CalendarUtil.getWeek()
 		val weekIndex = CalendarUtil.getWeekIndex()

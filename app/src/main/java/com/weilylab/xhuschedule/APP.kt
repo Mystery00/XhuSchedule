@@ -14,10 +14,7 @@ class APP : Application()
 	{
 		private var app: APP? = null
 
-		fun getContext(): Context
-		{
-			return app!!
-		}
+		fun getContext(): Context = app!!
 	}
 
 	init
@@ -28,7 +25,6 @@ class APP : Application()
 	override fun onCreate()
 	{
 		super.onCreate()
-//		app = this
 		Logs.setLevel(Logs.LogLevel.Debug)
 		CrashHandler.getInstance(this)
 				.init()
