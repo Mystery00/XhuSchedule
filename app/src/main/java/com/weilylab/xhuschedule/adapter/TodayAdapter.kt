@@ -45,10 +45,6 @@ class TodayAdapter(private val context: Context,
 				override fun onChange()
 				{
 					(context as MainActivity).updateView()
-//					val colorSharedPreference = context.getSharedPreferences("course_color", Context.MODE_PRIVATE)
-//					val md5 = ScheduleHelper.getInstance().getMD5(course.name)
-//					course.color = colorSharedPreference.getString(md5, ScheduleHelper.getInstance().getRandomColor())
-//					holder.img.setImageBitmap(drawImg(course))
 				}
 			})
 		}

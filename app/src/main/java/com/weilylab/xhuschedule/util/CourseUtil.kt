@@ -95,8 +95,7 @@ object CourseUtil
 		calendarUtil.startCalendar.set(2017, 8, 4, 0, 0, 0)//月数减一
 		//获取当前第几周
 		val currentWeek = calendarUtil.getWeek()
-//		val weekIndex = calendarUtil.getWeekIndex()
-		val weekIndex=2
+		val weekIndex = calendarUtil.getWeekIndex()
 		val list = ArrayList<Course>()
 		courses.filter {
 			try

@@ -65,9 +65,6 @@ class TableAdapter(private val context: Context,
 				override fun onChange()
 				{
 					(context as MainActivity).updateView()
-//					val colorSharedPreference = context.getSharedPreferences("course_color", Context.MODE_PRIVATE)
-//					val md5 = ScheduleHelper.getInstance().getMD5(course.name)
-//					view.setBackgroundColor(Color.parseColor("#33" + colorSharedPreference.getString(md5, ScheduleHelper.getInstance().getRandomColor()).substring(1)))
 				}
 			})
 		}
