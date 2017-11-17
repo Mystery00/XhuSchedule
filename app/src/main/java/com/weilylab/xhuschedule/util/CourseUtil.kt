@@ -131,12 +131,13 @@ object CourseUtil
 		return if (array.size > 1)
 		{
 			Array(array.size, { i ->
-				Logs.i(TAG, "splitInfo: " + array[i])
-				val info = array[i].replace('(', ' ').replace(')', ' ').split(' ')
-				CourseTimeInfo(info[1], info[0])
+				val info = array[i]
+				val location = info.substring(0, info.indexOfFirst { it == '(' })
+				val week = info.substring(info.indexOfFirst { it == '(' } + 1, info.indexOfLast { it == ')' }) + '周'
+				CourseTimeInfo(week, location)
 			})
 		}
 		else
-			arrayOf(CourseTimeInfo(course.week, course.location))
+			arrayOf(CourseTimeInfo(course.week + '周', course.location))
 	}
 }

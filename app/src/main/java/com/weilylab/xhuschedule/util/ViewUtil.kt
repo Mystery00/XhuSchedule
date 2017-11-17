@@ -44,13 +44,14 @@ object ViewUtil
 		textView.text = course.name
 		textView.setBackgroundColor(Color.parseColor(course.color))
 		editTeacherLayout.text = course.teacher
-		editTimeLayout.text = course.time
+		val startTime = context.resources.getStringArray(R.array.start_time)
+		val endTime = context.resources.getStringArray(R.array.end_time)
+		val time = course.time.trim().split("-")
+		editTimeLayout.text = context.getString(R.string.course_time_format, startTime[time[0].toInt() - 1], endTime[time[1].toInt() - 1])
 		CourseUtil.splitInfo(course).forEach {
-			val child = LayoutInflater.from(context).inflate(R.layout.item_course_time, ConstraintLayout(context), false)
-			val timeWeek: TextView = child.findViewById(R.id.time_week)
-			val timeLocation: TextView = child.findViewById(R.id.time_location)
-			timeWeek.text = it.week
-			timeLocation.text = it.location
+			val child = TextView(context)
+			child.text = context.getString(R.string.course_location_format, it.week, it.location)
+			child.paint.isFakeBoldText = true
 			editLocationLayout.addView(child)
 		}
 		val dialog = AlertDialog.Builder(context)

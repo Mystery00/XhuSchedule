@@ -64,6 +64,7 @@ class SettingsPreferenceFragment : PreferenceFragment()
 					val month = datePicker.month + 1
 					val dayOfMonth = datePicker.dayOfMonth
 					calendar.set(year, month, dayOfMonth, 0, 0, 0)
+					Logs.i(TAG, "monitor: " + calendar.get(Calendar.DAY_OF_WEEK))
 					if (calendar.get(Calendar.DAY_OF_WEEK) != Calendar.MONDAY)
 					{
 						Logs.i(TAG, "monitor: 选择的时间不是周一")
