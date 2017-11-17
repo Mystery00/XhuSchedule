@@ -22,9 +22,6 @@ import com.weilylab.xhuschedule.listener.InfoChangeListener
  */
 object ViewUtil
 {
-	private val TAG = "ViewUtil"
-
-	@JvmStatic
 	fun showAlertDialog(context: Context, course: Course, infoChangeListener: InfoChangeListener)
 	{
 		val view = View.inflate(context, R.layout.dialog_edit, null)
@@ -61,7 +58,7 @@ object ViewUtil
 				.create()
 		floatingActionButton.setOnClickListener {
 			val colorSharedPreference = context.getSharedPreferences("course_color", Context.MODE_PRIVATE)
-			val md5 = ScheduleHelper.getInstance().getMD5(course.name)
+			val md5 = ScheduleHelper.getMD5(course.name)
 			colorSharedPreference.edit()
 					.putString(md5, adapter.color)
 					.putString(md5 + "_trans", "#33" + adapter.color.substring(1))

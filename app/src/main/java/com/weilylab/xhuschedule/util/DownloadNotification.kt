@@ -11,7 +11,6 @@ import vip.mystery0.tools.fileUtil.FileUtil
 
 object DownloadNotification
 {
-	private val TAG = "DownloadNotification"
 	private val NOTIFICATION_TAG = "Download"
 	private val NOTIFICATION_ID = 1
 	private lateinit var notificationBuilder: NotificationCompat.Builder
@@ -30,8 +29,9 @@ object DownloadNotification
 
 	fun updateProgress(context: Context, download: Download)
 	{
-		notificationBuilder.setProgress(100, download.progress.toInt(), false)
-		notificationBuilder.setContentText(context.getString(R.string.download_notification_text, FileUtil.FormatFileSize(download.currentFileSize), FileUtil.FormatFileSize(download.totalFileSize), download.progress))
+		notificationBuilder.setProgress(100, download.progress, false)
+				.setContentText(context.getString(R.string.download_notification_title_download, FileUtil.FormatFileSize(download.currentFileSize), FileUtil.FormatFileSize(download.totalFileSize)))
+				.setSubText(context.getString(R.string.download_notification_text, download.progress))
 		notify(context, notificationBuilder.build())
 	}
 

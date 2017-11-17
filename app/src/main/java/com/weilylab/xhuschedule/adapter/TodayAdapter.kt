@@ -37,7 +37,7 @@ class TodayAdapter(private val context: Context,
 		holder.courseNameAndTeacherTextView.text = temp
 		holder.courseLocationTextView.text = course.location
 		if (course.color == "")
-			course.color = '#' + ScheduleHelper.getInstance().getRandomColor()
+			course.color = '#' + ScheduleHelper.getRandomColor()
 		holder.img.setImageBitmap(drawImg(course))
 		holder.itemView.setOnClickListener {
 			ViewUtil.showAlertDialog(context, course, object : InfoChangeListener

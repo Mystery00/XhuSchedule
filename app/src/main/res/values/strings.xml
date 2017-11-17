@@ -54,7 +54,8 @@
     <string name="update_notification_big_text">更新日志：\n %1$s</string>
 
     <string name="download_notification_title">正在下载：%1$s</string>
-    <string name="download_notification_text">%1$s/%2$s 已下载%3$f\%</string>
+    <string name="download_notification_title_download">%1$s/%2$s</string>
+    <string name="download_notification_text">已下载%1$d%%</string>
 
     <string name="notification_channel_id">Xhu Schedule</string>
     <string name="notification_channel_name">WeiLy Studio</string>

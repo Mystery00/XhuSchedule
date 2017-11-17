@@ -46,6 +46,7 @@ object FileUtil
 		}
 		catch (e: Exception)
 		{
+			e.printStackTrace()
 			return false
 		}
 	}
