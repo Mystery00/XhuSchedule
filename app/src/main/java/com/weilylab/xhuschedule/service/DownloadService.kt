@@ -74,7 +74,7 @@ class DownloadService : IntentService(TAG)
 				val download = Download()
 				download.totalFileSize = contentLength
 				download.currentFileSize = bytesRead
-				download.progress = (bytesRead * 100 / contentLength).toFloat()
+				download.progress = (bytesRead * 100 / contentLength).toInt()
 				if (temp % 3 == 0)
 					DownloadNotification.updateProgress(applicationContext, download)
 				temp++
@@ -94,6 +94,7 @@ class DownloadService : IntentService(TAG)
 
 	private fun download(context: Context, type: String, fileName: String, file: File)
 	{
+		Logs.i(TAG, "download: " + fileName)
 		retrofit.create(UpdateResponse::class.java)
 				.download(type, fileName)
 				.subscribeOn(Schedulers.io())
@@ -133,8 +134,6 @@ class DownloadService : IntentService(TAG)
 
 					override fun onComplete()
 					{
-						Logs.i(TAG, "onComplete: ")
-
 						val installIntent = Intent(Intent.ACTION_VIEW)
 						installIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
 						installIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
@@ -142,7 +141,8 @@ class DownloadService : IntentService(TAG)
 							FileProvider.getUriForFile(context, "com.weilylab.xhuschedule", file)
 						else
 							Uri.fromFile(file)
-						Logs.i(TAG, "patchAPK: " + uri)
+						Logs.i(TAG, "onComplete: " + file.absolutePath)
+						Logs.i(TAG, "onComplete: " + uri)
 						installIntent.setDataAndType(uri, context.contentResolver.getType(uri))
 						startActivity(installIntent)
 						DownloadNotification.cancel(context)
