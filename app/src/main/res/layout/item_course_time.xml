@@ -24,7 +24,7 @@
         android:paddingEnd="@dimen/course_padding"
         android:paddingStart="@dimen/course_padding"
         android:paddingTop="@dimen/time_padding"
-        android:text="地点"
+        android:text="@string/dialog_edit_item_location"
         android:textColor="@color/colorAccent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

@@ -2,6 +2,7 @@
 <ImageView
     android:id="@+id/colorPicker"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="40dp"
-    android:layout_height="40dp"
-    android:layout_margin="10dp"/>
+    android:layout_width="@dimen/color_picker_size"
+    android:layout_height="@dimen/color_picker_size"
+    android:layout_margin="@dimen/color_picker_margin"
+    android:contentDescription="@string/app_name"/>

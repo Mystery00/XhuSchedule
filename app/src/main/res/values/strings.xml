@@ -136,4 +136,9 @@
         viverra rhoncus sit amet nec magna. Donec lacinia ligula at libero volutpat volutpat nec nec
         tortor.
     </string>
+    <string name="dialog_edit_teacher">任课教师</string>
+    <string name="dialog_edit_time">上课时间</string>
+    <string name="dialog_edit_location">上课地点</string>
+    <string name="dialog_edit_color_picker">选择颜色</string>
+    <string name="dialog_edit_item_location">地点</string>
 </resources>
