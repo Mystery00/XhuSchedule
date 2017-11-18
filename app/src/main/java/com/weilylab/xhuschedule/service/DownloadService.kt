@@ -137,11 +137,15 @@ class DownloadService : IntentService(TAG)
 						val installIntent = Intent(Intent.ACTION_VIEW)
 						installIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
 						installIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
-						val uri = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
-							FileProvider.getUriForFile(context, "com.weilylab.xhuschedule", file)
+						val installFile = if (type == "patch")
+							File(file.absolutePath + ".apk")
 						else
-							Uri.fromFile(file)
-						Logs.i(TAG, "onComplete: " + file.absolutePath)
+							file
+						val uri = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
+							FileProvider.getUriForFile(context, "com.weilylab.xhuschedule", installFile)
+						else
+							Uri.fromFile(installFile)
+						Logs.i(TAG, "onComplete: " + installFile.absolutePath)
 						Logs.i(TAG, "onComplete: " + uri)
 						installIntent.setDataAndType(uri, context.contentResolver.getType(uri))
 						startActivity(installIntent)
