@@ -27,6 +27,7 @@ import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.android.synthetic.main.content_login.*
 import vip.mystery0.tools.logs.Logs
 import android.animation.ValueAnimator
+import android.graphics.Color
 
 
 class LoginActivity : AppCompatActivity()
@@ -72,6 +73,13 @@ class LoginActivity : AppCompatActivity()
 			vcodeDialog.setHintTextColor(resources.getColor(R.color.colorAccent, null))
 			loginDialog.setLoadingColor(resources.getColor(R.color.colorAccent, null))
 			loginDialog.setHintTextColor(resources.getColor(R.color.colorAccent, null))
+		}
+		else
+		{
+			vcodeDialog.setLoadingColor(Color.parseColor("#ff4081"))
+			vcodeDialog.setHintTextColor(Color.parseColor("#ff4081"))
+			loginDialog.setLoadingColor(Color.parseColor("#ff4081"))
+			loginDialog.setHintTextColor(Color.parseColor("#ff4081"))
 		}
 
 		val colorAnim = ObjectAnimator.ofInt(login_form, "backgroundColor", -0x7f80, -0x7f7f01)

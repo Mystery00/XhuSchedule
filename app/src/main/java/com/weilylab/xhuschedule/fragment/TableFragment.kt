@@ -1,5 +1,6 @@
 package com.weilylab.xhuschedule.fragment
 
+import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.support.constraint.ConstraintLayout
@@ -129,6 +130,11 @@ class TableFragment : Fragment()
 		{
 			loadingDialog.setLoadingColor(resources.getColor(R.color.colorAccent, null))
 			loadingDialog.setHintTextColor(resources.getColor(R.color.colorAccent, null))
+		}
+		else
+		{
+			loadingDialog.setLoadingColor(Color.parseColor("#ff4081"))
+			loadingDialog.setHintTextColor(Color.parseColor("#ff4081"))
 		}
 		Observable.create<Array<Course?>> { subscriber ->
 			val parentFile = File(activity.cacheDir.absolutePath + File.separator + "caches/")
