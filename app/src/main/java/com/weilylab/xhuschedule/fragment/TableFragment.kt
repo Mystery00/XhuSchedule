@@ -1,5 +1,6 @@
 package com.weilylab.xhuschedule.fragment
 
+import android.os.Build
 import android.os.Bundle
 import android.support.constraint.ConstraintLayout
 import android.support.v4.app.Fragment
@@ -9,15 +10,15 @@ import android.util.Base64
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.TextView
+import android.widget.*
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.adapter.TableAdapter
 import com.weilylab.xhuschedule.classes.Course
 import com.weilylab.xhuschedule.util.CourseUtil
 import com.weilylab.xhuschedule.util.FileUtil
 import com.weilylab.xhuschedule.util.ScheduleHelper
+import com.zyao89.view.zloading.ZLoadingDialog
+import com.zyao89.view.zloading.Z_TYPE
 import io.reactivex.Observable
 import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -75,19 +76,32 @@ class TableFragment : Fragment()
 				arrowLayout.visibility = View.GONE
 			val arrowBack: ImageView = rootView!!.findViewById(R.id.imageView_back)
 			val arrowForward: ImageView = rootView!!.findViewById(R.id.imageView_forward)
-			val weekIndexTextView: TextView = rootView!!.findViewById(R.id.weekIndexTextView)
-			weekIndexTextView.text = getString(R.string.course_week_index, ScheduleHelper.weekIndex)
-			when (ScheduleHelper.weekIndex)
+			val weekIndexSpinner: Spinner = rootView!!.findViewById(R.id.weekIndexSpinner)
+			val weekArray = Array<String>(20, { i -> getString(R.string.course_week_index, i + 1) })
+			val spinnerAdapter = ArrayAdapter(activity, android.R.layout.simple_spinner_item, weekArray)
+			spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+			weekIndexSpinner.adapter = spinnerAdapter
+			weekIndexSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener
 			{
-				1 -> arrowBack.visibility = View.GONE
+				override fun onNothingSelected(parent: AdapterView<*>?)
+				{
+				}
+
+				override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int,
+											id: Long)
+				{
+					ScheduleHelper.weekIndex = position + 1
+					updateData(weekIndexSpinner)
+				}
 			}
+			weekIndexSpinner.setSelection(ScheduleHelper.weekIndex - 1, true)
 			arrowBack.setOnClickListener {
 				ScheduleHelper.weekIndex--
-				updateData(weekIndexTextView)
+				updateData(weekIndexSpinner)
 			}
 			arrowForward.setOnClickListener {
 				ScheduleHelper.weekIndex++
-				updateData(weekIndexTextView)
+				updateData(weekIndexSpinner)
 			}
 			recyclerView.layoutManager = GridLayoutManager(activity, 7, GridLayoutManager.VERTICAL, false)
 			recyclerView.adapter = adapter
@@ -104,8 +118,18 @@ class TableFragment : Fragment()
 		return rootView
 	}
 
-	private fun updateData(weekIndexTextView: TextView)
+	private fun updateData(weekIndexSpinner: Spinner)
 	{
+		val loadingDialog = ZLoadingDialog(activity)
+				.setLoadingBuilder(Z_TYPE.DOUBLE_CIRCLE)
+				.setHintText(getString(R.string.hint_dialog_update_cache))
+				.setHintTextSize(16F)
+
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+		{
+			loadingDialog.setLoadingColor(resources.getColor(R.color.colorAccent, null))
+			loadingDialog.setHintTextColor(resources.getColor(R.color.colorAccent, null))
+		}
 		Observable.create<Array<Course?>> { subscriber ->
 			val parentFile = File(activity.cacheDir.absolutePath + File.separator + "caches/")
 			val base64Name = FileUtil.filterString(Base64.encodeToString(ScheduleHelper.studentNumber.toByteArray(), Base64.DEFAULT))
@@ -119,6 +143,7 @@ class TableFragment : Fragment()
 				{
 					override fun onSubscribe(d: Disposable)
 					{
+						loadingDialog.show()
 					}
 
 					override fun onNext(t: Array<Course?>)
@@ -127,12 +152,33 @@ class TableFragment : Fragment()
 
 					override fun onError(e: Throwable)
 					{
+						e.printStackTrace()
+						loadingDialog.dismiss()
 					}
 
 					override fun onComplete()
 					{
-						weekIndexTextView.text = getString(R.string.course_week_index, ScheduleHelper.weekIndex)
+						when (ScheduleHelper.weekIndex)
+						{
+							1 ->
+							{
+								rootView!!.findViewById<ImageView>(R.id.imageView_back).visibility = View.GONE
+								rootView!!.findViewById<ImageView>(R.id.imageView_forward).visibility = View.VISIBLE
+							}
+							20 ->
+							{
+								rootView!!.findViewById<ImageView>(R.id.imageView_back).visibility = View.VISIBLE
+								rootView!!.findViewById<ImageView>(R.id.imageView_forward).visibility = View.GONE
+							}
+							else ->
+							{
+								rootView!!.findViewById<ImageView>(R.id.imageView_back).visibility = View.VISIBLE
+								rootView!!.findViewById<ImageView>(R.id.imageView_forward).visibility = View.VISIBLE
+							}
+						}
+						weekIndexSpinner.setSelection(ScheduleHelper.weekIndex - 1, true)
 						adapter.notifyDataSetChanged()
+						loadingDialog.dismiss()
 					}
 				})
 	}
@@ -154,6 +200,7 @@ class TableFragment : Fragment()
 				{
 					override fun onComplete()
 					{
+						rootView!!.findViewById<Spinner>(R.id.weekIndexSpinner).setSelection(ScheduleHelper.weekIndex, true)
 						adapter.notifyDataSetChanged()
 					}
 
