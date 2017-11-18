@@ -89,33 +89,40 @@ class SettingsPreferenceFragment : PreferenceFragment()
 			val firstWeekOfTerm = Settings.firstWeekOfTerm
 			val date = firstWeekOfTerm.split('-')
 			calendar.set(date[0].toInt(), date[1].toInt(), date[2].toInt(), 0, 0, 0)
-			val datePicker = CustomDatePicker(activity)
-			datePicker.init(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH), null)
-			val dialog = AlertDialog.Builder(activity)
-					.setTitle(R.string.title_dialog_time)
-					.setView(datePicker)
-					.setPositiveButton(android.R.string.ok, null)
-					.setNegativeButton(android.R.string.cancel, null)
-					.create()
-			dialog.show()
-			if (dialog.getButton(AlertDialog.BUTTON_POSITIVE) != null)
+			try
 			{
-				dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
-					calendar.set(datePicker.year, datePicker.month, datePicker.dayOfMonth, 0, 0, 0)
-					when
-					{
-						calendar.get(Calendar.DAY_OF_WEEK) != Calendar.MONDAY -> Snackbar.make(datePicker, R.string.error_time_format, Snackbar.LENGTH_SHORT)
-								.show()
-						calendar.after(Calendar.getInstance()) -> Snackbar.make(datePicker, R.string.error_time_after, Snackbar.LENGTH_SHORT)
-								.show()
-						else ->
+				val datePicker = CustomDatePicker(activity)
+				datePicker.init(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH), null)
+				val dialog = AlertDialog.Builder(activity)
+						.setTitle(R.string.title_dialog_time)
+						.setView(datePicker)
+						.setPositiveButton(android.R.string.ok, null)
+						.setNegativeButton(android.R.string.cancel, null)
+						.create()
+				dialog.show()
+				if (dialog.getButton(AlertDialog.BUTTON_POSITIVE) != null)
+				{
+					dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
+						calendar.set(datePicker.year, datePicker.month, datePicker.dayOfMonth, 0, 0, 0)
+						when
 						{
-							Settings.firstWeekOfTerm = datePicker.year.toString() + '-' + datePicker.month.toString() + '-' + datePicker.dayOfMonth.toString()
-							firstDayPreference.summary = datePicker.year.toString() + '-' + (datePicker.month + 1).toString() + '-' + datePicker.dayOfMonth.toString()
-							dialog.dismiss()
+							calendar.get(Calendar.DAY_OF_WEEK) != Calendar.MONDAY -> Snackbar.make(datePicker, R.string.error_time_format, Snackbar.LENGTH_SHORT)
+									.show()
+							calendar.after(Calendar.getInstance()) -> Snackbar.make(datePicker, R.string.error_time_after, Snackbar.LENGTH_SHORT)
+									.show()
+							else ->
+							{
+								Settings.firstWeekOfTerm = datePicker.year.toString() + '-' + datePicker.month.toString() + '-' + datePicker.dayOfMonth.toString()
+								firstDayPreference.summary = datePicker.year.toString() + '-' + (datePicker.month + 1).toString() + '-' + datePicker.dayOfMonth.toString()
+								dialog.dismiss()
+							}
 						}
 					}
 				}
+			}
+			catch (e: Exception)
+			{
+
 			}
 			true
 		}

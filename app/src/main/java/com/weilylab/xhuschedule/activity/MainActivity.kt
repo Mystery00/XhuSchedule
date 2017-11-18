@@ -2,6 +2,7 @@ package com.weilylab.xhuschedule.activity
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.support.design.widget.NavigationView
@@ -67,6 +68,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 		{
 			loadingDialog.setLoadingColor(resources.getColor(R.color.colorAccent, null))
 			loadingDialog.setHintTextColor(resources.getColor(R.color.colorAccent, null))
+		}
+		else
+		{
+			loadingDialog.setLoadingColor(Color.parseColor("#ff4081"))
+			loadingDialog.setHintTextColor(Color.parseColor("#ff4081"))
 		}
 
 		val toggle = ActionBarDrawerToggle(
