@@ -21,7 +21,6 @@ object DownloadNotification
 		notificationBuilder = NotificationCompat.Builder(context, "Xhu Schedule")
 				.setSound(null)
 				.setVibrate(null)
-				.setDefaults(Notification.DEFAULT_ALL)
 				.setSmallIcon(R.drawable.ic_stat_update)
 				.setContentTitle(context.getString(R.string.download_notification_title, fileName))
 				.setOngoing(true)
