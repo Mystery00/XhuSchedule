@@ -12,7 +12,6 @@ import android.support.v7.app.AlertDialog
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.activity.SettingsActivity
 import com.weilylab.xhuschedule.classes.Update
@@ -31,7 +30,6 @@ import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_settings.*
 import vip.mystery0.tools.logs.Logs
 import java.util.*
-import java.util.regex.Pattern
 
 /**
  * Created by myste.
@@ -158,11 +156,11 @@ class SettingsPreferenceFragment : PreferenceFragment()
 						override fun onComplete()
 						{
 							Logs.i(TAG, "onComplete: ")
+							loadingDialog.dismiss()
 							if (code == 1)
 								UpdateNotification.notify(activity, update!!.version)
 							else
 							{
-								loadingDialog.dismiss()
 								Snackbar.make(coordinatorLayout, update!!.message, Snackbar.LENGTH_SHORT)
 										.show()
 							}
