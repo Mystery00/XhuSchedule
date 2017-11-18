@@ -12,7 +12,7 @@
         android:contentDescription="@string/app_name"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_arrow_back"/>
+        app:srcCompat="@drawable/ic_keyboard_arrow_left"/>
 
     <ImageView
         android:id="@+id/imageView_forward"
@@ -21,15 +21,15 @@
         android:contentDescription="@string/app_name"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_arrow_forward"/>
+        app:srcCompat="@drawable/ic_keyboard_arrow_right"/>
 
     <Spinner
         android:id="@+id/weekIndexSpinner"
-        android:layout_width="120dp"
+        android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:layout_marginEnd="@dimen/layout_header_arrow_size"
         android:layout_marginStart="@dimen/layout_header_arrow_size"
-        android:dropDownWidth="120dp"
+        android:dropDownWidth="144dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
