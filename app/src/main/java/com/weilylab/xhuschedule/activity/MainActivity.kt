@@ -189,12 +189,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 				{
 					override fun onSubscribe(d: Disposable)
 					{
-						loadingDialog.show()
+						swipeRefreshLayout.isRefreshing = true
 					}
 
 					override fun onComplete()
 					{
-						loadingDialog.dismiss()
+						swipeRefreshLayout.isRefreshing = false
 						Logs.i(TAG, "onComplete: ")
 
 						if (!ScheduleHelper.isLogin)
@@ -232,7 +232,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 					override fun onError(e: Throwable)
 					{
 						e.printStackTrace()
-						loadingDialog.dismiss()
+						swipeRefreshLayout.isRefreshing = false
 					}
 
 					override fun onNext(map: HashMap<String, ArrayList<Course?>>)
@@ -306,7 +306,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 					override fun onSubscribe(d: Disposable)
 					{
 						Logs.i(TAG, "onSubscribe: ")
-						swipeRefreshLayout.isRefreshing = true
+						loadingDialog.show()
 					}
 
 					override fun onNext(t: Boolean)
@@ -318,13 +318,13 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 					override fun onError(e: Throwable)
 					{
 						e.printStackTrace()
-						swipeRefreshLayout.isRefreshing = false
+						loadingDialog.dismiss()
 						isCookieAvailable = false
 					}
 
 					override fun onComplete()
 					{
-						swipeRefreshLayout.isRefreshing = false
+						loadingDialog.dismiss()
 						isRefresh = true
 						ScheduleHelper.isCookieAvailable = isCookieAvailable
 						if (!isCookieAvailable)
