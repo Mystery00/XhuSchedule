@@ -22,6 +22,7 @@
     <string name="hint_dialog_check_update">检查更新中……</string>
     <string name="hint_invalid_cookie">登陆信息已过期，是否重新登陆？</string>
     <string name="hint_course_empty">今天没课哦~</string>
+    <string name="hint_unsupported_date_picker">由于控件显示出错，请在此处手动输入第一周时间，按照“YYYY-MM-DD”的格式输入！</string>
 
     <string name="error_invalid_username">用户名无效</string>
     <string name="error_invalid_password">密码无效</string>
@@ -29,7 +30,8 @@
     <string name="error_field_required">参数不可为空</string>
     <string name="error_timeout">请求超时</string>
     <string name="error_other">其他错误</string>
-    <string name="error_time_format">选择的时间不是周一，选择无效</string>
+    <string name="error_time_not_monday">选择的时间不是周一，选择无效</string>
+    <string name="error_time_format">时间格式错误，请输入格式为“YYYY-MM-DD”的数据</string>
     <string name="error_time_after">选择的时间不能在当前时间之后</string>
     <string name="error_download">下载失败</string>
 
