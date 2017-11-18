@@ -84,36 +84,7 @@ class LoginActivity : AppCompatActivity()
 
 	private fun loadVcode()
 	{
-		val observer = object : Observer<Bitmap>
-		{
-			lateinit var bitmap: Bitmap
-
-			override fun onSubscribe(d: Disposable)
-			{
-				vcodeDialog.show()
-			}
-
-			override fun onError(e: Throwable)
-			{
-				e.printStackTrace()
-				vcodeDialog.dismiss()
-				Toast.makeText(this@LoginActivity, e.message, Toast.LENGTH_SHORT)
-						.show()
-			}
-
-			override fun onComplete()
-			{
-				vcodeDialog.dismiss()
-				vcode_image_view.setImageBitmap(bitmap)
-			}
-
-			override fun onNext(bitmap: Bitmap)
-			{
-				this.bitmap = bitmap
-			}
-		}
-
-		val observable = Observable.create<Bitmap> { subscriber ->
+		Observable.create<Bitmap> { subscriber ->
 			val service = retrofit.create(RTResponse::class.java)
 			val call = service.getVCodeCall(1)
 			val response = call.execute()
@@ -128,10 +99,36 @@ class LoginActivity : AppCompatActivity()
 						.show()
 			}
 		}
-
-		observable.subscribeOn(Schedulers.newThread())
+				.subscribeOn(Schedulers.newThread())
 				.observeOn(AndroidSchedulers.mainThread())
-				.subscribe(observer)
+				.subscribe(object : Observer<Bitmap>
+				{
+					lateinit var bitmap: Bitmap
+
+					override fun onSubscribe(d: Disposable)
+					{
+						vcodeDialog.show()
+					}
+
+					override fun onError(e: Throwable)
+					{
+						e.printStackTrace()
+						vcodeDialog.dismiss()
+						Toast.makeText(this@LoginActivity, e.message, Toast.LENGTH_SHORT)
+								.show()
+					}
+
+					override fun onComplete()
+					{
+						vcodeDialog.dismiss()
+						vcode_image_view.setImageBitmap(bitmap)
+					}
+
+					override fun onNext(bitmap: Bitmap)
+					{
+						this.bitmap = bitmap
+					}
+				})
 	}
 
 	private fun attemptLogin()
@@ -185,79 +182,7 @@ class LoginActivity : AppCompatActivity()
 		val passwordStr = password.text.toString()
 		val vcodeStr = vcode.text.toString()
 
-		val observer = object : Observer<Int>
-		{
-			private var result = -1
-
-			override fun onSubscribe(d: Disposable)
-			{
-				loginDialog.show()
-			}
-
-			override fun onError(e: Throwable)
-			{
-				e.printStackTrace()
-				loginDialog.dismiss()
-				Toast.makeText(this@LoginActivity, e.message, Toast.LENGTH_SHORT)
-						.show()
-			}
-
-			override fun onComplete()
-			{
-				loginDialog.dismiss()
-				when (result)
-				{
-					0 ->
-					{
-						ScheduleHelper.isLogin = false
-						Toast.makeText(this@LoginActivity, R.string.error_timeout, Toast.LENGTH_SHORT)
-								.show()
-					}
-					1 ->
-					{
-						ScheduleHelper.isLogin = true
-						Toast.makeText(this@LoginActivity, getString(R.string.success_login, name, getString(R.string.app_name)), Toast.LENGTH_SHORT)
-								.show()
-						startActivity(Intent(this@LoginActivity, MainActivity::class.java))
-						finish()
-						return
-					}
-					2 ->
-					{
-						ScheduleHelper.isLogin = false
-						username.error = getString(R.string.error_invalid_username)
-						username.requestFocus()
-					}
-					3 ->
-					{
-						ScheduleHelper.isLogin = false
-						password.error = getString(R.string.error_invalid_password)
-						password.requestFocus()
-					}
-					4 ->
-					{
-						ScheduleHelper.isLogin = false
-						vcode.error = getString(R.string.error_invalid_vcode)
-						vcode.requestFocus()
-					}
-					else ->
-					{
-						ScheduleHelper.isLogin = false
-						Toast.makeText(this@LoginActivity, R.string.error_other, Toast.LENGTH_SHORT)
-								.show()
-					}
-				}
-				loadVcode()
-			}
-
-			override fun onNext(result: Int)
-			{
-				Logs.i(TAG, "onNext: ")
-				this.result = result
-			}
-		}
-
-		val observable = Observable.create<Int> { subscriber ->
+		Observable.create<Int> { subscriber ->
 			val params = HashMap<String, String>()
 			params.put("username", usernameStr)
 			params.put("password", passwordStr)
@@ -283,8 +208,78 @@ class LoginActivity : AppCompatActivity()
 			}
 			subscriber.onComplete()
 		}
-		observable.subscribeOn(Schedulers.newThread())
+				.subscribeOn(Schedulers.newThread())
 				.observeOn(AndroidSchedulers.mainThread())
-				.subscribe(observer)
+				.subscribe(object : Observer<Int>
+				{
+					private var result = -1
+
+					override fun onSubscribe(d: Disposable)
+					{
+						loginDialog.show()
+					}
+
+					override fun onError(e: Throwable)
+					{
+						e.printStackTrace()
+						loginDialog.dismiss()
+						Toast.makeText(this@LoginActivity, e.message, Toast.LENGTH_SHORT)
+								.show()
+					}
+
+					override fun onComplete()
+					{
+						loginDialog.dismiss()
+						when (result)
+						{
+							0 ->
+							{
+								ScheduleHelper.isLogin = false
+								Toast.makeText(this@LoginActivity, R.string.error_timeout, Toast.LENGTH_SHORT)
+										.show()
+							}
+							1 ->
+							{
+								ScheduleHelper.isLogin = true
+								Toast.makeText(this@LoginActivity, getString(R.string.success_login, name, getString(R.string.app_name)), Toast.LENGTH_SHORT)
+										.show()
+								startActivity(Intent(this@LoginActivity, MainActivity::class.java))
+								finish()
+								return
+							}
+							2 ->
+							{
+								ScheduleHelper.isLogin = false
+								username.error = getString(R.string.error_invalid_username)
+								username.requestFocus()
+							}
+							3 ->
+							{
+								ScheduleHelper.isLogin = false
+								password.error = getString(R.string.error_invalid_password)
+								password.requestFocus()
+							}
+							4 ->
+							{
+								ScheduleHelper.isLogin = false
+								vcode.error = getString(R.string.error_invalid_vcode)
+								vcode.requestFocus()
+							}
+							else ->
+							{
+								ScheduleHelper.isLogin = false
+								Toast.makeText(this@LoginActivity, R.string.error_other, Toast.LENGTH_SHORT)
+										.show()
+							}
+						}
+						loadVcode()
+					}
+
+					override fun onNext(result: Int)
+					{
+						Logs.i(TAG, "onNext: ")
+						this.result = result
+					}
+				})
 	}
 }

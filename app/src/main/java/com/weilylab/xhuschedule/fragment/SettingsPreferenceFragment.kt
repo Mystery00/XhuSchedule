@@ -68,16 +68,18 @@ class SettingsPreferenceFragment : PreferenceFragment()
 			{
 				dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
 					calendar.set(datePicker.year, datePicker.month, datePicker.dayOfMonth, 0, 0, 0)
-					if (calendar.get(Calendar.DAY_OF_WEEK) != Calendar.MONDAY)
+					when
 					{
-						Snackbar.make(datePicker, R.string.error_time_format, Snackbar.LENGTH_SHORT)
+						calendar.get(Calendar.DAY_OF_WEEK) != Calendar.MONDAY -> Snackbar.make(datePicker, R.string.error_time_format, Snackbar.LENGTH_SHORT)
 								.show()
-					}
-					else
-					{
-						Settings.firstWeekOfTerm = datePicker.year.toString() + '-' + datePicker.month.toString() + '-' + datePicker.dayOfMonth.toString()
-						firstDayPreference.summary = datePicker.year.toString() + '-' + (datePicker.month + 1).toString() + '-' + datePicker.dayOfMonth.toString()
-						dialog.dismiss()
+						calendar.after(Calendar.getInstance()) -> Snackbar.make(datePicker, R.string.error_time_after, Snackbar.LENGTH_SHORT)
+								.show()
+						else ->
+						{
+							Settings.firstWeekOfTerm = datePicker.year.toString() + '-' + datePicker.month.toString() + '-' + datePicker.dayOfMonth.toString()
+							firstDayPreference.summary = datePicker.year.toString() + '-' + (datePicker.month + 1).toString() + '-' + datePicker.dayOfMonth.toString()
+							dialog.dismiss()
+						}
 					}
 				}
 			}

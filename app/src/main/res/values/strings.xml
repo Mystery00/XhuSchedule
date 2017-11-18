@@ -28,11 +28,13 @@
     <string name="error_timeout">请求超时</string>
     <string name="error_other">其他错误</string>
     <string name="error_time_format">选择的时间不是周一，选择无效</string>
+    <string name="error_time_after">选择的时间不能在当前时间之后</string>
     <string name="error_download">下载失败</string>
 
     <string name="success_login">登陆成功，欢迎%1$s使用%2$s！</string>
     <string name="course_time_format">%1$s - %2$s</string>
     <string name="course_location_format">%1$s  %2$s</string>
+    <string name="course_week_index">第%1$d周</string>
 
     <string name="nav_today">Today</string>
     <string name="nav_week">Week</string>

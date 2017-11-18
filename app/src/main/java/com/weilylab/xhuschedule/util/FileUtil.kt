@@ -1,7 +1,7 @@
 package com.weilylab.xhuschedule.util
 
+import android.content.Context
 import com.weilylab.xhuschedule.classes.Course
-import vip.mystery0.tools.logs.Logs
 import java.io.*
 import java.math.BigInteger
 import java.nio.channels.FileChannel
@@ -13,8 +13,6 @@ import java.util.regex.Pattern
  */
 object FileUtil
 {
-	private val TAG = "FileUtil"
-
 	fun filterString(name: String): String
 	{
 		val regEx = "[^a-zA-Z0-9]"
@@ -53,7 +51,6 @@ object FileUtil
 
 	fun saveObjectToFile(obj: Any, file: File): Boolean
 	{
-		Logs.i(TAG, "saveObjectToFile: ")
 		return try
 		{
 			if (file.exists())
@@ -70,16 +67,38 @@ object FileUtil
 		}
 	}
 
-	fun getCoursesFromFile(file: File): Array<Course>
+	fun getCoursesFromFile(context: Context, file: File): Array<Course>
 	{
-		Logs.i(TAG, "getCoursesFromFile: ")
 		try
 		{
 			if (!file.exists())
 				return emptyArray()
 			val objectInputStream = ObjectInputStream(BufferedInputStream(FileInputStream(file)))
 			@Suppress("UNCHECKED_CAST")
-			return objectInputStream.readObject() as Array<Course>
+			val courses = objectInputStream.readObject() as Array<Course>
+			val colorSharedPreference = context.getSharedPreferences("course_color", Context.MODE_PRIVATE)
+			courses.forEach {
+				val md5 = ScheduleHelper.getMD5(it.name)
+				var savedColor = colorSharedPreference.getString(md5, "")
+				var savedTransparencyColor = colorSharedPreference.getString(md5 + "_trans", "")
+				if (savedColor == "")
+				{
+					savedColor = '#' + ScheduleHelper.getRandomColor()
+					colorSharedPreference.edit().putString(md5, savedColor).apply()
+					it.color = savedColor
+				}
+				else
+					it.color = savedColor
+				if (savedTransparencyColor == "")
+				{
+					savedTransparencyColor = "#33" + savedColor.substring(1, savedColor.length)
+					colorSharedPreference.edit().putString(md5 + "_trans", savedTransparencyColor).apply()
+					it.transparencyColor = savedTransparencyColor
+				}
+				else
+					it.transparencyColor = savedTransparencyColor
+			}
+			return courses
 		}
 		catch (e: Exception)
 		{

@@ -18,11 +18,18 @@ object CalendarUtil
 	fun getWeek(): Int
 	{
 		calendar = Calendar.getInstance()
-		val tempCalendar = Calendar.getInstance()
-		tempCalendar.firstDayOfWeek = Calendar.MONDAY
-		tempCalendar.timeInMillis = calendar.timeInMillis - startCalendar.timeInMillis
-		//获取当前第几周---减一获取正确周数
-		return tempCalendar.get(Calendar.WEEK_OF_YEAR) - 1
+		var days = calendar.get(Calendar.DAY_OF_YEAR) - startCalendar.get(Calendar.DAY_OF_YEAR)
+		val nowYear = calendar.get(Calendar.YEAR)
+		val tempCalendar = startCalendar.clone() as Calendar
+		if (tempCalendar.get(Calendar.YEAR) != nowYear)
+			do
+			{
+				days += tempCalendar.getActualMaximum(Calendar.DAY_OF_YEAR)
+				tempCalendar.add(Calendar.YEAR, 1)
+			}
+			while (tempCalendar.get(Calendar.YEAR) != nowYear)
+		//获取当前第几周
+		return days / 7 + 1
 	}
 
 	fun getWeekIndex(): Int
