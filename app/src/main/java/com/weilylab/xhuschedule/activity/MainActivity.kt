@@ -68,7 +68,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 			loadingDialog.setLoadingColor(resources.getColor(R.color.colorAccent, null))
 			loadingDialog.setHintTextColor(resources.getColor(R.color.colorAccent, null))
 		}
-		loadingDialog.show()
 
 		val toggle = ActionBarDrawerToggle(
 				this, drawer_layout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
@@ -208,6 +207,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 						group.add(ScheduleHelper.studentName + "(" + ScheduleHelper.studentNumber + ")")
 						if (ScheduleHelper.isCookieAvailable)
 						{
+							Logs.i(TAG, "onComplete: isCookieAvailable")
 							val studentNameTextView: TextView = nav_view.getHeaderView(0).findViewById(R.id.studentName)
 							val studentNumberTextView: TextView = nav_view.getHeaderView(0).findViewById(R.id.studentNumber)
 							studentNameTextView.text = ScheduleHelper.studentName
