@@ -36,8 +36,6 @@ class TodayAdapter(private val context: Context,
 			is EmptyViewHolder ->
 			{
 				val textView = holder.itemView as TextView
-				textView.textSize = 24F
-				textView.paint.isFakeBoldText = true
 				textView.text = context.getString(R.string.hint_course_empty)
 			}
 			is ViewHolder ->
@@ -68,7 +66,10 @@ class TodayAdapter(private val context: Context,
 	override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder
 	{
 		if (viewType == 0)
-			return EmptyViewHolder(TextView(context))
+		{
+			val view = LayoutInflater.from(parent.context).inflate(R.layout.item_course_empty, parent, false).findViewById<TextView>(R.id.textView)
+			return EmptyViewHolder(view)
+		}
 		val view = LayoutInflater.from(parent.context).inflate(R.layout.item_course_today, parent, false)
 		return ViewHolder(view)
 	}
