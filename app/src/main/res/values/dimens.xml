@@ -9,14 +9,14 @@
     <dimen name="content_login_card_radius">16dp</dimen>
     <dimen name="course_padding">16dp</dimen>
     <dimen name="time_padding">8dp</dimen>
-    <dimen name="course_info_text_size">16sp</dimen>
+    <dimen name="course_info_text_size">12sp</dimen>
     <dimen name="table_item_height">160dp</dimen>
     <dimen name="color_picker_size">40dp</dimen>
     <dimen name="color_picker_margin">10dp</dimen>
     <dimen name="dialog_edit_header_height">192dp</dimen>
     <dimen name="dialog_edit_header_text_size">36sp</dimen>
-    <dimen name="item_course_name_text_size">12sp</dimen>
-    <dimen name="item_course_text_size">10sp</dimen>
+    <dimen name="item_course_name_text_size">9sp</dimen>
+    <dimen name="item_course_text_size">8sp</dimen>
     <dimen name="item_course_today_img_size">50dp</dimen>
     <dimen name="item_course_today_time_margin_top">8dp</dimen>
     <dimen name="item_course_today_location_margin_bottom">8dp</dimen>
