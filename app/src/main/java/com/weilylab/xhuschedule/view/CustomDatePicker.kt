@@ -25,14 +25,21 @@ class CustomDatePicker : DatePicker
 	override fun init(year: Int, monthOfYear: Int, dayOfMonth: Int,
 					  onDateChangedListener: OnDateChangedListener?)
 	{
-		val datePickerContainer = getChildAt(0) as LinearLayout
-		val scrollViewContainer = datePickerContainer.getChildAt(1) as ScrollView
-		val datePickerDayPicker = (scrollViewContainer.getChildAt(0) as ViewGroup).getChildAt(0)
-		val frameLayoutParams = FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.WRAP_CONTENT)
-		val linearLayoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
-		datePickerContainer.layoutParams = frameLayoutParams
-		scrollViewContainer.layoutParams = linearLayoutParams
-		datePickerDayPicker.layoutParams = frameLayoutParams
+		try
+		{
+			val datePickerContainer = getChildAt(0) as LinearLayout
+			val scrollViewContainer = datePickerContainer.getChildAt(1) as ScrollView
+			val datePickerDayPicker = (scrollViewContainer.getChildAt(0) as ViewGroup).getChildAt(0)
+			val frameLayoutParams = FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.WRAP_CONTENT)
+			val linearLayoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+			datePickerContainer.layoutParams = frameLayoutParams
+			scrollViewContainer.layoutParams = linearLayoutParams
+			datePickerDayPicker.layoutParams = frameLayoutParams
+		}
+		catch (e: Exception)
+		{
+			e.printStackTrace()
+		}
 		super.init(year, monthOfYear, dayOfMonth, onDateChangedListener)
 	}
 }
