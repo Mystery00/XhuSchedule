@@ -26,10 +26,7 @@ class UpdateService : IntentService(TAG)
 
 	override fun onHandleIntent(intent: Intent?)
 	{
-		Logs.i(TAG, "onStartCommand: ")
-		if (ScheduleHelper.isUpdateChecked)
-			return
-		ScheduleHelper.isUpdateChecked = true
+		Logs.i(TAG, "onHandleIntent: ")
 		Observable.create<Int> { subscriber ->
 			val call = retrofit.create(UpdateResponse::class.java).checkUpdateCall(getString(R.string.app_version_code).toInt())
 			val response = call.execute()

@@ -11,6 +11,7 @@ import android.support.v4.view.ViewPager
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
 import android.util.Base64
+import android.view.Menu
 import android.view.MenuItem
 import android.widget.TextView
 import com.weilylab.xhuschedule.R
@@ -70,7 +71,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 		loadingDialog.show()
 
 		val toggle = ActionBarDrawerToggle(
-				this, drawer_layout, titleTextView, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
+				this, drawer_layout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
 		drawer_layout.addDrawerListener(toggle)
 		toggle.syncState()
 
@@ -114,8 +115,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 			override fun onPageSelected(position: Int)
 			{
 				bottomNavigationView.menu.getItem(position).isChecked = true
+				toolbar.title = resources.getStringArray(R.array.title_array)[position]
 			}
 		})
+		toolbar.title = resources.getStringArray(R.array.title_array)[0]
 
 		swipeRefreshLayout.setColorSchemeResources(
 				android.R.color.holo_blue_light,
@@ -123,7 +126,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 				android.R.color.holo_orange_light,
 				android.R.color.holo_red_light)
 		swipeRefreshLayout.setOnRefreshListener {
-			updateData()
+			updateView()
 		}
 	}
 
@@ -200,7 +203,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 							finish()
 							return
 						}
-						nav_view.menu.findItem(R.id.nav_group).subMenu.add(ScheduleHelper.studentName + "(" + ScheduleHelper.studentNumber + ")")
+						val group = nav_view.menu.findItem(R.id.nav_group).subMenu
+						group.clear()
+						group.add(ScheduleHelper.studentName + "(" + ScheduleHelper.studentNumber + ")")
 						if (ScheduleHelper.isCookieAvailable)
 						{
 							val studentNameTextView: TextView = nav_view.getHeaderView(0).findViewById(R.id.studentName)
@@ -374,5 +379,24 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 		}
 		drawer_layout.closeDrawer(GravityCompat.START)
 		return true
+	}
+
+	override fun onCreateOptionsMenu(menu: Menu?): Boolean
+	{
+		menuInflater.inflate(R.menu.menu_activity_main, menu)
+		return true
+	}
+
+	override fun onOptionsItemSelected(item: MenuItem?): Boolean
+	{
+		when (item?.itemId)
+		{
+			R.id.action_sync ->
+			{
+				updateData()
+				return true
+			}
+			else -> return super.onOptionsItemSelected(item)
+		}
 	}
 }
