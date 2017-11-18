@@ -8,11 +8,11 @@
     <string name="title_icon">图标</string>
     <string name="summary_icon">\@爱吃饭的越越</string>
     <string name="title_back">数据提供</string>
-    <string name="summary_back">\@make tea</string>
+    <string name="summary_back">\@pan</string>
     <string name="title_ui">界面设计</string>
-    <string name="summary_ui">\@jhnnoy zen</string>
+    <string name="summary_ui">\@Johnny Zen</string>
     <string name="title_developer">开发者</string>
-    <string name="summary_developer">Mystery0</string>
+    <string name="summary_developer">\@Mystery0</string>
 
     <string name="category_about">关于</string>
     <string name="key_source_code">key_source_code</string>
@@ -21,6 +21,8 @@
     <string name="key_weily_product">key_weily_product</string>
     <string name="title_weily_product">微力实验室出品</string>
     <string name="summary_weily_product">点击进入实验室官网</string>
+    <string name="title_feedback">意见反馈</string>
+    <string name="summary_feedback">请发送邮件到mystery0dyl520@gmail.com并注明APP名称</string>
     <string name="key_check_update">key_check_update</string>
     <string name="title_check_update">检查更新</string>
     <string name="key_version_name">key_version_name</string>

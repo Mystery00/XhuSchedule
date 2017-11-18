@@ -25,8 +25,11 @@
 
     <Spinner
         android:id="@+id/weekIndexSpinner"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="120dp"
+        android:layout_height="0dp"
+        android:layout_marginEnd="@dimen/layout_header_arrow_size"
+        android:layout_marginStart="@dimen/layout_header_arrow_size"
+        android:dropDownWidth="120dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

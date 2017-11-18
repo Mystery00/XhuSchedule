@@ -395,15 +395,18 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 	}
 
 	override fun onOptionsItemSelected(item: MenuItem?): Boolean
+			= when (item?.itemId)
 	{
-		when (item?.itemId)
+		android.R.id.home ->
 		{
-			R.id.action_sync ->
-			{
-				updateData()
-				return true
-			}
-			else -> return super.onOptionsItemSelected(item)
+			drawer_layout.openDrawer(GravityCompat.START)
+			true
 		}
+		R.id.action_sync ->
+		{
+			updateData()
+			true
+		}
+		else -> super.onOptionsItemSelected(item)
 	}
 }
