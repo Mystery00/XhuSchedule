@@ -127,6 +127,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 		swipeRefreshLayout.setOnRefreshListener {
 			updateView()
 		}
+		setSupportActionBar(toolbar)
 	}
 
 	fun updateView()
