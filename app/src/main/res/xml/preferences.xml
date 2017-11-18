@@ -31,6 +31,10 @@
             android:title="@string/title_weily_product"/>
 
         <Preference
+            android:title="@string/title_feedback"
+            android:summary="@string/summary_feedback"/>
+
+        <Preference
             android:key="@string/key_check_update"
             android:title="@string/title_check_update"/>
 

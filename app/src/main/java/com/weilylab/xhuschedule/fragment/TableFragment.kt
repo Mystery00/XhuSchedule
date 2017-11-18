@@ -80,7 +80,7 @@ class TableFragment : Fragment()
 			val weekIndexSpinner: Spinner = rootView!!.findViewById(R.id.weekIndexSpinner)
 			val weekArray = Array<String>(20, { i -> getString(R.string.course_week_index, i + 1) })
 			val spinnerAdapter = ArrayAdapter(activity, android.R.layout.simple_spinner_item, weekArray)
-			spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+			spinnerAdapter.setDropDownViewResource(R.layout.item_spinner_dropdown)
 			weekIndexSpinner.adapter = spinnerAdapter
 			weekIndexSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener
 			{
