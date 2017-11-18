@@ -12,9 +12,10 @@ import android.support.v4.view.ViewPager
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
 import android.util.Base64
-import android.view.Menu
 import android.view.MenuItem
 import android.widget.TextView
+import com.getkeepsafe.taptargetview.TapTarget
+import com.getkeepsafe.taptargetview.TapTargetSequence
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.adapter.ViewPagerAdapter
 import com.weilylab.xhuschedule.classes.Course
@@ -25,6 +26,7 @@ import com.weilylab.xhuschedule.service.UpdateService
 import com.weilylab.xhuschedule.util.CourseUtil
 import com.weilylab.xhuschedule.util.FileUtil
 import com.weilylab.xhuschedule.util.ScheduleHelper
+import com.weilylab.xhuschedule.util.Settings
 import com.zyao89.view.zloading.ZLoadingDialog
 import com.zyao89.view.zloading.Z_TYPE
 import io.reactivex.Observable
@@ -84,6 +86,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
 		initView()
 		updateView()
+		if (Settings.isFirstRun)
+			showcase()
 	}
 
 	private fun initView()
@@ -133,7 +137,24 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 		swipeRefreshLayout.setOnRefreshListener {
 			updateView()
 		}
-		setSupportActionBar(toolbar)
+
+		toolbar.inflateMenu(R.menu.menu_activity_main)
+		toolbar.setOnMenuItemClickListener { item ->
+			when (item.itemId)
+			{
+				android.R.id.home ->
+				{
+					drawer_layout.openDrawer(GravityCompat.START)
+					true
+				}
+				R.id.action_sync ->
+				{
+					updateData()
+					true
+				}
+				else -> super.onOptionsItemSelected(item)
+			}
+		}
 	}
 
 	fun updateView()
@@ -251,7 +272,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
 	private fun updateData()
 	{
-		Observable.create<Boolean> { subscriber ->
+		Observable.create<HashMap<String, Boolean>> { subscriber ->
 			val parentFile = File(cacheDir.absolutePath + File.separator + "caches/")
 			val sharedPreference = getSharedPreferences("cache", Context.MODE_PRIVATE)
 			val studentNumber = sharedPreference.getString("studentNumber", "0")
@@ -270,45 +291,54 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 			if (!response.isSuccessful)
 			{
 				Logs.i(TAG, "updateData: 请求失败")
-				subscriber.onNext(false)
+				val map = HashMap<String, Boolean>()
+				map.put("isCookieAvailable", false)
+				subscriber.onNext(map)
 				subscriber.onComplete()
 				return@create
 			}
 			if (response.body()?.rt == "0")
 			{
 				Logs.i(TAG, "updateData: Cookie过期")
-				subscriber.onNext(false)
+				val map = HashMap<String, Boolean>()
+				map.put("isCookieAvailable", false)
+				subscriber.onNext(map)
 				subscriber.onComplete()
 				return@create
 			}
 			val newFile = File(parentFile, base64Name + ".temp")
 			newFile.createNewFile()
-			val createResult = FileUtil.saveObjectToFile(response.body()?.courses!!, newFile)
-			subscriber.onNext(createResult)
+			FileUtil.saveObjectToFile(response.body()?.courses!!, newFile)
 			val newMD5 = FileUtil.getMD5(newFile)
 			val oldFile = File(parentFile, base64Name)
 			var oldMD5 = ""
 			if (oldFile.exists())
 				oldMD5 = FileUtil.getMD5(oldFile)!!
+			val map = HashMap<String, Boolean>()
 			if (newMD5 != oldMD5)
 			{
 				oldFile.delete()
 				newFile.renameTo(oldFile)
+				map.put("isCookieAvailable", true)
+				map.put("isUpdateData", true)
 				Logs.i(TAG, "updateData: 数据更新")
 			}
 			else
 			{
-				Logs.i(TAG, "updateData: 数据未变")
 				newFile.delete()
+				map.put("isCookieAvailable", true)
+				map.put("isUpdateData", false)
+				Logs.i(TAG, "updateData: 数据未变")
 			}
-			subscriber.onNext(true)
+			subscriber.onNext(map)
 			subscriber.onComplete()
 		}
 				.subscribeOn(Schedulers.newThread())
 				.observeOn(AndroidSchedulers.mainThread())
-				.subscribe(object : Observer<Boolean>
+				.subscribe(object : Observer<HashMap<String, Boolean>>
 				{
 					private var isCookieAvailable = false
+					private var isUpdateData = false
 
 					override fun onSubscribe(d: Disposable)
 					{
@@ -316,10 +346,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 						loadingDialog.show()
 					}
 
-					override fun onNext(t: Boolean)
+					override fun onNext(t: HashMap<String, Boolean>)
 					{
-						Logs.i(TAG, "onNext: " + t)
-						isCookieAvailable = t
+						if (t["isCookieAvailable"] != null)
+							isCookieAvailable = t["isCookieAvailable"]!!
+						if (t["isUpdateData"] != null)
+							isUpdateData = t["isUpdateData"]!!
 					}
 
 					override fun onError(e: Throwable)
@@ -347,6 +379,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 						}
 						else
 						{
+							if (isUpdateData)
+								Snackbar.make(coordinatorLayout, R.string.hint_update_data_new, Snackbar.LENGTH_SHORT).show()
+							else
+								Snackbar.make(coordinatorLayout, R.string.hint_update_data, Snackbar.LENGTH_SHORT).show()
 							updateView()
 						}
 					}
@@ -388,25 +424,31 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 		return true
 	}
 
-	override fun onCreateOptionsMenu(menu: Menu?): Boolean
+	private fun showcase()
 	{
-		menuInflater.inflate(R.menu.menu_activity_main, menu)
-		return true
-	}
+		TapTargetSequence(this)
+				.targets(
+						TapTarget.forView(bottomNavigationView.findViewById(R.id.bottom_nav_today), getString(R.string.showcase_today)),
+						TapTarget.forView(bottomNavigationView.findViewById(R.id.bottom_nav_week), getString(R.string.showcase_week)),
+						TapTarget.forView(bottomNavigationView.findViewById(R.id.bottom_nav_all), getString(R.string.showcase_all)),
+						TapTarget.forToolbarMenuItem(toolbar, R.id.action_sync, getString(R.string.showcase_sync)))
+				.continueOnCancel(true)
+				.listener(object : TapTargetSequence.Listener
+				{
+					override fun onSequenceCanceled(lastTarget: TapTarget?)
+					{
+					}
 
-	override fun onOptionsItemSelected(item: MenuItem?): Boolean
-			= when (item?.itemId)
-	{
-		android.R.id.home ->
-		{
-			drawer_layout.openDrawer(GravityCompat.START)
-			true
-		}
-		R.id.action_sync ->
-		{
-			updateData()
-			true
-		}
-		else -> super.onOptionsItemSelected(item)
+					override fun onSequenceFinish()
+					{
+						Logs.i(TAG, "onSequenceFinish: ")
+						Settings.isFirstRun = false
+					}
+
+					override fun onSequenceStep(lastTarget: TapTarget?, targetClicked: Boolean)
+					{
+					}
+				})
+				.start()
 	}
 }
