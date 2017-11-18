@@ -2,12 +2,10 @@ package com.weilylab.xhuschedule.util
 
 import android.content.Context
 import android.graphics.Color
-import android.support.constraint.ConstraintLayout
 import android.support.design.widget.FloatingActionButton
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.view.LayoutInflater
 import android.view.View
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -25,7 +23,7 @@ object ViewUtil
 	fun showAlertDialog(context: Context, course: Course, infoChangeListener: InfoChangeListener)
 	{
 		val view = View.inflate(context, R.layout.dialog_edit, null)
-		val textView: TextView = view.findViewById(R.id.titleTextView)
+		val textView: TextView = view.findViewById(R.id.toolbar)
 		val editTeacherLayout: TextView = view.findViewById(R.id.edit_teacher_layout)
 		val editTimeLayout: TextView = view.findViewById(R.id.edit_time_layout)
 		val editLocationLayout: LinearLayout = view.findViewById(R.id.edit_location_layout)

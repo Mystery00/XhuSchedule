@@ -3,4 +3,47 @@
     <Preference
         android:key="@string/key_first_day"
         android:title="@string/title_first_day"/>
+
+    <PreferenceCategory
+        android:key="@string/key_thanks"
+        android:title="@string/category_thanks">
+
+        <Preference
+            android:summary="@string/summary_icon"
+            android:title="@string/title_icon"/>
+
+        <Preference
+            android:summary="@string/summary_back"
+            android:title="@string/title_back"/>
+
+        <Preference
+            android:summary="@string/summary_ui"
+            android:title="@string/title_ui"/>
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="@string/category_about">
+
+        <Preference
+            android:key="@string/key_weily_product"
+            android:summary="@string/summary_weily_product"
+            android:title="@string/title_weily_product"/>
+
+        <Preference
+            android:key="@string/key_check_update"
+            android:title="@string/title_check_update"/>
+
+        <Preference
+            android:key="@string/key_version_name"
+            android:summary="@string/summary_version_name"
+            android:title="@string/title_version_name"/>
+
+        <Preference
+            android:key="@string/key_version_code"
+            android:summary="@string/summary_version_code"
+            android:title="@string/title_version_code"/>
+
+    </PreferenceCategory>
+
 </PreferenceScreen>

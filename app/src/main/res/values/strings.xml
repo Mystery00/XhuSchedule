@@ -8,6 +8,7 @@
     <string name="action_tools">工具</string>
     <string name="action_settings">设置</string>
     <string name="action_logout">注销</string>
+    <string name="action_sync">数据同步</string>
     <string name="action_download_apk">下载APK</string>
     <string name="action_download_patch">下载增量包</string>
 
@@ -18,6 +19,7 @@
     <string name="hint_dialog_update_vcode">获取验证码中……</string>
     <string name="hint_dialog_login">登录中……</string>
     <string name="hint_dialog_update_cache">更新缓存中……</string>
+    <string name="hint_dialog_check_update">检查更新中……</string>
     <string name="hint_invalid_cookie">登陆信息已过期，是否重新登陆？</string>
     <string name="hint_course_empty">今天没课哦~</string>
 

@@ -1,16 +1,33 @@
 package com.weilylab.xhuschedule.fragment
 
+import android.content.Intent
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.preference.Preference
 import android.preference.PreferenceFragment
+import android.support.design.widget.CoordinatorLayout
 import android.support.design.widget.Snackbar
 import android.support.v7.app.AlertDialog
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.weilylab.xhuschedule.R
+import com.weilylab.xhuschedule.activity.SettingsActivity
+import com.weilylab.xhuschedule.classes.Update
+import com.weilylab.xhuschedule.interfaces.UpdateResponse
+import com.weilylab.xhuschedule.util.ScheduleHelper
 import com.weilylab.xhuschedule.util.Settings
+import com.weilylab.xhuschedule.util.UpdateNotification
 import com.weilylab.xhuschedule.view.CustomDatePicker
+import com.zyao89.view.zloading.ZLoadingDialog
+import com.zyao89.view.zloading.Z_TYPE
+import io.reactivex.Observable
+import io.reactivex.Observer
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
+import io.reactivex.schedulers.Schedulers
+import kotlinx.android.synthetic.main.activity_settings.*
 import vip.mystery0.tools.logs.Logs
 import java.util.*
 
@@ -24,12 +41,17 @@ class SettingsPreferenceFragment : PreferenceFragment()
 		private val TAG = "SettingsPreferenceFragment"
 	}
 
+	private lateinit var coordinatorLayout: CoordinatorLayout
+	private lateinit var loadingDialog: ZLoadingDialog
 	private lateinit var firstDayPreference: Preference
+	private lateinit var checkUpdatePreference: Preference
+	private lateinit var weilyProductPreference: Preference
 
 	override fun onCreate(savedInstanceState: Bundle?)
 	{
 		super.onCreate(savedInstanceState)
 		addPreferencesFromResource(R.xml.preferences)
+		coordinatorLayout = (activity as SettingsActivity).coordinatorLayout
 	}
 
 	override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
@@ -42,7 +64,19 @@ class SettingsPreferenceFragment : PreferenceFragment()
 
 	private fun initialization()
 	{
+		loadingDialog = ZLoadingDialog(activity)
+				.setLoadingBuilder(Z_TYPE.SEARCH_PATH)
+				.setHintText(getString(R.string.hint_dialog_check_update))
+				.setHintTextSize(16F)
+
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+		{
+			loadingDialog.setLoadingColor(resources.getColor(R.color.colorAccent, null))
+			loadingDialog.setHintTextColor(resources.getColor(R.color.colorAccent, null))
+		}
 		firstDayPreference = findPreference(getString(R.string.key_first_day))
+		checkUpdatePreference = findPreference(getString(R.string.key_check_update))
+		weilyProductPreference = findPreference(getString(R.string.key_weily_product))
 
 		val date = Settings.firstWeekOfTerm.split('-')
 		firstDayPreference.summary = date[0] + '-' + (date[1].toInt() + 1) + '-' + date[2]
@@ -83,6 +117,65 @@ class SettingsPreferenceFragment : PreferenceFragment()
 					}
 				}
 			}
+			true
+		}
+		checkUpdatePreference.setOnPreferenceClickListener {
+			var update: Update? = null
+			Observable.create<Int> { subscriber ->
+				val call = ScheduleHelper.getUpdateRetrofit().create(UpdateResponse::class.java).checkUpdateCall(getString(R.string.app_version_code).toInt())
+				val response = call.execute()
+				if (!response.isSuccessful)
+				{
+					subscriber.onNext(-1)
+					subscriber.onComplete()
+					return@create
+				}
+				update = response.body()
+				Logs.i(TAG, "onCreate: " + update?.message)
+				subscriber.onNext(update?.code!!)
+				subscriber.onComplete()
+			}
+					.subscribeOn(Schedulers.newThread())
+					.observeOn(AndroidSchedulers.mainThread())
+					.subscribe(object : Observer<Int>
+					{
+						private var code = -233
+
+						override fun onSubscribe(d: Disposable)
+						{
+							Logs.i(TAG, "onSubscribe: ")
+							loadingDialog.show()
+						}
+
+						override fun onError(e: Throwable)
+						{
+							e.printStackTrace()
+							loadingDialog.dismiss()
+						}
+
+						override fun onComplete()
+						{
+							Logs.i(TAG, "onComplete: ")
+							if (code == 1)
+								UpdateNotification.notify(activity, update!!.version)
+							else
+							{
+								loadingDialog.dismiss()
+								Snackbar.make(coordinatorLayout, update!!.message, Snackbar.LENGTH_SHORT)
+										.show()
+							}
+						}
+
+						override fun onNext(result: Int)
+						{
+							Logs.i(TAG, "onNext: ")
+							code = result
+						}
+					})
+			true
+		}
+		weilyProductPreference.setOnPreferenceClickListener {
+			activity.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://weilylab.com")))
 			true
 		}
 	}

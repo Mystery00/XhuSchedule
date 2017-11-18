@@ -12,7 +12,7 @@
         android:layout_height="wrap_content">
 
         <TextView
-            android:id="@+id/titleTextView"
+            android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="@dimen/dialog_edit_header_height"
             android:gravity="center"
@@ -32,7 +32,7 @@
             android:textColor="@color/colorAccent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/titleTextView"/>
+            app:layout_constraintTop_toBottomOf="@+id/toolbar"/>
 
         <TextView
             android:id="@+id/edit_teacher_layout"
@@ -136,7 +136,7 @@
             android:focusable="true"
             app:layout_constraintBottom_toTopOf="@+id/edit_teacher_tag"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/titleTextView"
+            app:layout_constraintTop_toBottomOf="@+id/toolbar"
             app:srcCompat="@drawable/ic_done"/>
 
     </android.support.constraint.ConstraintLayout>

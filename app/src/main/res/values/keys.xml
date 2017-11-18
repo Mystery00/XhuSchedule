@@ -2,4 +2,31 @@
 <resources>
     <string name="key_first_day">key_first_day</string>
     <string name="title_first_day">设置第一周周一时间</string>
+
+    <string name="key_thanks">key_thanks</string>
+    <string name="category_thanks">鸣谢</string>
+    <string name="title_icon">图标</string>
+    <string name="summary_icon">\@爱吃饭的越越</string>
+    <string name="title_back">数据提供</string>
+    <string name="summary_back">\@make tea</string>
+    <string name="title_ui">界面设计</string>
+    <string name="summary_ui">\@jhnnoy zen</string>
+    <string name="title_developer">开发者</string>
+    <string name="summary_developer">Mystery0</string>
+
+    <string name="category_about">关于</string>
+    <string name="key_source_code">key_source_code</string>
+    <string name="title_source_code">开源地址</string>
+    <string name="summary_source_code">aHR0cHM6Ly9naXRodWIuY29tL015c3RlcnkwMC9YaHVTY2hlZHVsZQ==</string>
+    <string name="key_weily_product">key_weily_product</string>
+    <string name="title_weily_product">微力实验室出品</string>
+    <string name="summary_weily_product">点击进入实验室官网</string>
+    <string name="key_check_update">key_check_update</string>
+    <string name="title_check_update">检查更新</string>
+    <string name="key_version_name">key_version_name</string>
+    <string name="title_version_name">版本名称</string>
+    <string name="summary_version_name">@string/app_version_name</string>
+    <string name="key_version_code">key_version_code</string>
+    <string name="title_version_code">版本号</string>
+    <string name="summary_version_code">@string/app_version_code</string>
 </resources>

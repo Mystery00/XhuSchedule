@@ -21,7 +21,7 @@ class SettingsActivity : AppCompatActivity()
 		super.onCreate(savedInstanceState)
 		setContentView(R.layout.activity_settings)
 		fragmentManager.beginTransaction().replace(R.id.content_wrapper, SettingsPreferenceFragment()).commit()
-		titleTextView.title = title
-		titleTextView.setNavigationOnClickListener { finish() }
+		toolbar.title = title
+		toolbar.setNavigationOnClickListener { finish() }
 	}
 }

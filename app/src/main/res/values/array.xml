@@ -10,6 +10,12 @@
         <item>周日</item>
     </string-array>
 
+    <string-array name="title_array">
+        <item>今日课表</item>
+        <item>本周课表</item>
+        <item>本学期课表</item>
+    </string-array>
+
     <string-array name="color_array">
         <item>#039BDA</item>
         <item>#F5703C</item>
