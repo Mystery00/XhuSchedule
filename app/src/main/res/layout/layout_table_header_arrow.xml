@@ -10,8 +10,6 @@
         android:layout_width="@dimen/layout_header_arrow_size"
         android:layout_height="@dimen/layout_header_arrow_size"
         android:contentDescription="@string/app_name"
-        app:layout_constraintEnd_toStartOf="@id/imageView_forward"
-        app:layout_constraintHorizontal_chainStyle="spread_inside"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_arrow_back"/>
@@ -22,16 +20,13 @@
         android:layout_height="@dimen/layout_header_arrow_size"
         android:contentDescription="@string/app_name"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/imageView_back"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_arrow_forward"/>
 
-    <TextView
-        android:id="@+id/weekIndexTextView"
+    <Spinner
+        android:id="@+id/weekIndexSpinner"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:maxLines="1"
-        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

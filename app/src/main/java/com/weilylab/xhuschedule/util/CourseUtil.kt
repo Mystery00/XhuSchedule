@@ -38,6 +38,7 @@ object CourseUtil
 		val date = firstWeekOfTerm.split('-')
 		CalendarUtil.startCalendar.set(date[0].toInt(), date[1].toInt(), date[2].toInt(), 0, 0, 0)
 		val currentWeek = CalendarUtil.getWeek()
+		ScheduleHelper.weekIndex=currentWeek
 		return getWeekCourses(courses, currentWeek)
 	}
 
