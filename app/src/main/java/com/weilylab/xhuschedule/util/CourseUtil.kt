@@ -2,16 +2,12 @@ package com.weilylab.xhuschedule.util
 
 import com.weilylab.xhuschedule.classes.Course
 import com.weilylab.xhuschedule.classes.CourseTimeInfo
-import vip.mystery0.tools.logs.Logs
 
 /**
  * Created by myste.
  */
 object CourseUtil
 {
-	private val TAG = "CourseUtil"
-
-	@JvmStatic
 	fun formatCourses(courses: Array<Course>): ArrayList<Course?>
 	{
 		val tempArray = Array(5, { Array<Course?>(7, { null }) })
@@ -36,13 +32,18 @@ object CourseUtil
 		return list
 	}
 
-	@JvmStatic
 	fun getWeekCourses(courses: Array<Course>): ArrayList<Course?>
 	{
 		val firstWeekOfTerm = Settings.firstWeekOfTerm
 		val date = firstWeekOfTerm.split('-')
 		CalendarUtil.startCalendar.set(date[0].toInt(), date[1].toInt(), date[2].toInt(), 0, 0, 0)
 		val currentWeek = CalendarUtil.getWeek()
+		return getWeekCourses(courses, currentWeek)
+	}
+
+	fun getWeekCourses(courses: Array<Course>, weekIndex: Int): ArrayList<Course?>
+	{
+		ScheduleHelper.weekIndex = weekIndex
 		val tempArray = Array(5, { Array<Course?>(7, { null }) })
 		courses.filter {
 			try
@@ -51,16 +52,16 @@ object CourseUtil
 				when (it.type)
 				{
 					"0" -> other = true
-					"1" -> if (currentWeek % 2 == 1)
+					"1" -> if (weekIndex % 2 == 1)
 						other = true
-					"2" -> if (currentWeek % 2 == 0)
+					"2" -> if (weekIndex % 2 == 0)
 						other = true
 					else -> other = false
 				}
 				val weekArray = it.week.split('-')
 				val startWeek = weekArray[0].toInt()
 				val endWeek = weekArray[1].toInt()
-				currentWeek in startWeek..endWeek && other
+				weekIndex in startWeek..endWeek && other
 			}
 			catch (e: Exception)
 			{
@@ -87,7 +88,6 @@ object CourseUtil
 		return list
 	}
 
-	@JvmStatic
 	fun getTodayCourses(courses: Array<Course>): ArrayList<Course>
 	{
 		val firstWeekOfTerm = Settings.firstWeekOfTerm
@@ -126,7 +126,6 @@ object CourseUtil
 		return list
 	}
 
-	@JvmStatic
 	fun splitInfo(course: Course): Array<CourseTimeInfo>
 	{
 		val array = course.location.split('\n')

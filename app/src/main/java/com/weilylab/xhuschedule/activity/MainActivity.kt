@@ -49,8 +49,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 	private var allList = ArrayList<Course?>()
 	private val todayList = ArrayList<Course>()
 	private val todayFragment = TodayFragment.newInstance(todayList)
-	private val weekFragment = TableFragment.newInstance(weekList)
-	private val allFragment = TableFragment.newInstance(allList)
+	private val weekFragment = TableFragment.newInstance(weekList, true)
+	private val allFragment = TableFragment.newInstance(allList, false)
 	private var isRefresh = false
 
 	override fun onCreate(savedInstanceState: Bundle?)
@@ -129,61 +129,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
 	fun updateView()
 	{
-		val observer = object : Observer<HashMap<String, ArrayList<Course?>>>
-		{
-			override fun onSubscribe(d: Disposable)
-			{
-				loadingDialog.show()
-			}
-
-			override fun onComplete()
-			{
-				loadingDialog.dismiss()
-				Logs.i(TAG, "onComplete: ")
-
-				if (!ScheduleHelper.isLogin)
-				{
-					startActivity(Intent(this@MainActivity, LoginActivity::class.java))
-					finish()
-					return
-				}
-				nav_view.menu.findItem(R.id.nav_group).subMenu.add(ScheduleHelper.studentName + "(" + ScheduleHelper.studentNumber + ")")
-				if (ScheduleHelper.isCookieAvailable)
-				{
-					val studentNameTextView: TextView = nav_view.getHeaderView(0).findViewById(R.id.studentName)
-					val studentNumberTextView: TextView = nav_view.getHeaderView(0).findViewById(R.id.studentNumber)
-					studentNameTextView.text = ScheduleHelper.studentName
-					studentNumberTextView.text = ScheduleHelper.studentNumber
-					when (todayList.size)
-					{
-						0 -> bottomNavigationView.menu.findItem(R.id.bottom_nav_today).setIcon(R.drawable.ic_sentiment_very_satisfied)
-						1 -> bottomNavigationView.menu.findItem(R.id.bottom_nav_today).setIcon(R.drawable.ic_sentiment_very_satisfied)
-						2 -> bottomNavigationView.menu.findItem(R.id.bottom_nav_today).setIcon(R.drawable.ic_sentiment_satisfied)
-						3 -> bottomNavigationView.menu.findItem(R.id.bottom_nav_today).setIcon(R.drawable.ic_sentiment_neutral)
-						4 -> bottomNavigationView.menu.findItem(R.id.bottom_nav_today).setIcon(R.drawable.ic_sentiment_dissatisfied)
-						else -> bottomNavigationView.menu.findItem(R.id.bottom_nav_today).setIcon(R.drawable.ic_sentiment_very_dissatisfied)
-					}
-					todayFragment.refreshData()
-					weekFragment.refreshData()
-					allFragment.refreshData()
-				}
-				else
-					updateData()
-			}
-
-			override fun onError(e: Throwable)
-			{
-				e.printStackTrace()
-				loadingDialog.dismiss()
-			}
-
-			override fun onNext(map: HashMap<String, ArrayList<Course?>>)
-			{
-				Logs.i(TAG, "onNext: ")
-			}
-		}
-
-		val observable = Observable.create<HashMap<String, ArrayList<Course?>>> { subscriber ->
+		Observable.create<HashMap<String, ArrayList<Course?>>> { subscriber ->
 			val parentFile = File(cacheDir.absolutePath + File.separator + "caches/")
 			if (!parentFile.exists())
 				parentFile.mkdirs()
@@ -215,7 +161,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 				subscriber.onComplete()
 				return@create
 			}
-			val courses = FileUtil.getCoursesFromFile(oldFile)
+			val courses = FileUtil.getCoursesFromFile(this@MainActivity, oldFile)
 			if (courses.isEmpty())
 			{
 				ScheduleHelper.isCookieAvailable = false
@@ -226,91 +172,74 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 			val allArray = CourseUtil.formatCourses(courses)
 			allList.clear()
 			allList.addAll(allArray)
-			val colorSharedPreference = getSharedPreferences("course_color", Context.MODE_PRIVATE)
-			courses.forEach {
-				val md5 = ScheduleHelper.getMD5(it.name)
-				var savedColor = colorSharedPreference.getString(md5, "")
-				var savedTransparencyColor = colorSharedPreference.getString(md5 + "_trans", "")
-				if (savedColor == "")
-				{
-					savedColor = '#' + ScheduleHelper.getRandomColor()
-					colorSharedPreference.edit().putString(md5, savedColor).apply()
-					it.color = savedColor
-				}
-				else
-					it.color = savedColor
-				if (savedTransparencyColor == "")
-				{
-					savedTransparencyColor = "#33" + savedColor.substring(1, savedColor.length)
-					colorSharedPreference.edit().putString(md5 + "_trans", savedTransparencyColor).apply()
-					it.transparencyColor = savedTransparencyColor
-				}
-				else
-					it.transparencyColor = savedTransparencyColor
-			}
-			val weekArray = CourseUtil.getWeekCourses(courses)
+			val weekArray = CourseUtil.getWeekCourses(FileUtil.getCoursesFromFile(this@MainActivity, oldFile))
 			weekList.clear()
 			weekList.addAll(weekArray)
-			val todayArray = CourseUtil.getTodayCourses(courses)
+			val todayArray = CourseUtil.getTodayCourses(FileUtil.getCoursesFromFile(this@MainActivity, oldFile))
 			todayList.clear()
 			todayList.addAll(todayArray)
 			subscriber.onComplete()
 		}
-
-		observable.subscribeOn(Schedulers.io())
+				.subscribeOn(Schedulers.io())
 				.observeOn(AndroidSchedulers.mainThread())
-				.subscribe(observer)
+				.subscribe(object : Observer<HashMap<String, ArrayList<Course?>>>
+				{
+					override fun onSubscribe(d: Disposable)
+					{
+						loadingDialog.show()
+					}
+
+					override fun onComplete()
+					{
+						loadingDialog.dismiss()
+						Logs.i(TAG, "onComplete: ")
+
+						if (!ScheduleHelper.isLogin)
+						{
+							startActivity(Intent(this@MainActivity, LoginActivity::class.java))
+							finish()
+							return
+						}
+						nav_view.menu.findItem(R.id.nav_group).subMenu.add(ScheduleHelper.studentName + "(" + ScheduleHelper.studentNumber + ")")
+						if (ScheduleHelper.isCookieAvailable)
+						{
+							val studentNameTextView: TextView = nav_view.getHeaderView(0).findViewById(R.id.studentName)
+							val studentNumberTextView: TextView = nav_view.getHeaderView(0).findViewById(R.id.studentNumber)
+							studentNameTextView.text = ScheduleHelper.studentName
+							studentNumberTextView.text = ScheduleHelper.studentNumber
+							when (todayList.size)
+							{
+								0 -> bottomNavigationView.menu.findItem(R.id.bottom_nav_today).setIcon(R.drawable.ic_sentiment_very_satisfied)
+								1 -> bottomNavigationView.menu.findItem(R.id.bottom_nav_today).setIcon(R.drawable.ic_sentiment_very_satisfied)
+								2 -> bottomNavigationView.menu.findItem(R.id.bottom_nav_today).setIcon(R.drawable.ic_sentiment_satisfied)
+								3 -> bottomNavigationView.menu.findItem(R.id.bottom_nav_today).setIcon(R.drawable.ic_sentiment_neutral)
+								4 -> bottomNavigationView.menu.findItem(R.id.bottom_nav_today).setIcon(R.drawable.ic_sentiment_dissatisfied)
+								else -> bottomNavigationView.menu.findItem(R.id.bottom_nav_today).setIcon(R.drawable.ic_sentiment_very_dissatisfied)
+							}
+							todayFragment.refreshData()
+							weekFragment.refreshData()
+							allFragment.refreshData()
+						}
+						else
+							updateData()
+					}
+
+					override fun onError(e: Throwable)
+					{
+						e.printStackTrace()
+						loadingDialog.dismiss()
+					}
+
+					override fun onNext(map: HashMap<String, ArrayList<Course?>>)
+					{
+						Logs.i(TAG, "onNext: ")
+					}
+				})
 	}
 
 	private fun updateData()
 	{
-		val observer = object : Observer<Boolean>
-		{
-			private var isCookieAvailable = false
-
-			override fun onSubscribe(d: Disposable)
-			{
-				Logs.i(TAG, "onSubscribe: ")
-				swipeRefreshLayout.isRefreshing = true
-			}
-
-			override fun onNext(t: Boolean)
-			{
-				Logs.i(TAG, "onNext: " + t)
-				isCookieAvailable = t
-			}
-
-			override fun onError(e: Throwable)
-			{
-				e.printStackTrace()
-				swipeRefreshLayout.isRefreshing = false
-				isCookieAvailable = false
-			}
-
-			override fun onComplete()
-			{
-				swipeRefreshLayout.isRefreshing = false
-				isRefresh = true
-				ScheduleHelper.isCookieAvailable = isCookieAvailable
-				if (!isCookieAvailable)
-				{
-					Logs.i(TAG, "onComplete: cookie无效")
-					Snackbar.make(coordinatorLayout, R.string.hint_invalid_cookie, Snackbar.LENGTH_LONG)
-							.setAction(android.R.string.ok) {
-								ScheduleHelper.isLogin = false
-								startActivity(Intent(this@MainActivity, LoginActivity::class.java))
-								finish()
-							}
-							.show()
-				}
-				else
-				{
-					updateView()
-				}
-			}
-		}
-
-		val observable = Observable.create<Boolean> { subscriber ->
+		Observable.create<Boolean> { subscriber ->
 			val parentFile = File(cacheDir.absolutePath + File.separator + "caches/")
 			val sharedPreference = getSharedPreferences("cache", Context.MODE_PRIVATE)
 			val studentNumber = sharedPreference.getString("studentNumber", "0")
@@ -363,10 +292,53 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 			subscriber.onNext(true)
 			subscriber.onComplete()
 		}
-
-		observable.subscribeOn(Schedulers.newThread())
+				.subscribeOn(Schedulers.newThread())
 				.observeOn(AndroidSchedulers.mainThread())
-				.subscribe(observer)
+				.subscribe(object : Observer<Boolean>
+				{
+					private var isCookieAvailable = false
+
+					override fun onSubscribe(d: Disposable)
+					{
+						Logs.i(TAG, "onSubscribe: ")
+						swipeRefreshLayout.isRefreshing = true
+					}
+
+					override fun onNext(t: Boolean)
+					{
+						Logs.i(TAG, "onNext: " + t)
+						isCookieAvailable = t
+					}
+
+					override fun onError(e: Throwable)
+					{
+						e.printStackTrace()
+						swipeRefreshLayout.isRefreshing = false
+						isCookieAvailable = false
+					}
+
+					override fun onComplete()
+					{
+						swipeRefreshLayout.isRefreshing = false
+						isRefresh = true
+						ScheduleHelper.isCookieAvailable = isCookieAvailable
+						if (!isCookieAvailable)
+						{
+							Logs.i(TAG, "onComplete: cookie无效")
+							Snackbar.make(coordinatorLayout, R.string.hint_invalid_cookie, Snackbar.LENGTH_LONG)
+									.setAction(android.R.string.ok) {
+										ScheduleHelper.isLogin = false
+										startActivity(Intent(this@MainActivity, LoginActivity::class.java))
+										finish()
+									}
+									.show()
+						}
+						else
+						{
+							updateView()
+						}
+					}
+				})
 	}
 
 	override fun onBackPressed()

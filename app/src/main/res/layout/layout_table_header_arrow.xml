@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/layout_header_arrow_size">
+
+    <ImageView
+        android:id="@+id/imageView_back"
+        android:layout_width="@dimen/layout_header_arrow_size"
+        android:layout_height="@dimen/layout_header_arrow_size"
+        android:contentDescription="@string/app_name"
+        app:layout_constraintEnd_toStartOf="@id/imageView_forward"
+        app:layout_constraintHorizontal_chainStyle="spread_inside"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_arrow_back"/>
+
+    <ImageView
+        android:id="@+id/imageView_forward"
+        android:layout_width="@dimen/layout_header_arrow_size"
+        android:layout_height="@dimen/layout_header_arrow_size"
+        android:contentDescription="@string/app_name"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/imageView_back"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_arrow_forward"/>
+
+    <TextView
+        android:id="@+id/weekIndexTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:maxLines="1"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+</android.support.constraint.ConstraintLayout>

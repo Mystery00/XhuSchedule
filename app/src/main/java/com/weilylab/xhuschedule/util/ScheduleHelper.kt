@@ -1,10 +1,12 @@
 package com.weilylab.xhuschedule.util
 
 import com.weilylab.xhuschedule.APP
+import com.weilylab.xhuschedule.classes.Course
 import com.weilylab.xhuschedule.util.cookie.CookieManger
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.io.File
 import java.math.BigInteger
 import java.security.MessageDigest
 import java.util.*
@@ -22,6 +24,7 @@ object ScheduleHelper
 	private var updateRetrofit: Retrofit? = null
 	var studentName = "0"
 	var studentNumber = "0"
+	var weekIndex = 0
 	var isUpdateChecked = false
 
 	private fun getClient(): OkHttpClient
