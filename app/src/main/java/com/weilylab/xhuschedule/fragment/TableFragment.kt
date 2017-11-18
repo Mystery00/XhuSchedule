@@ -200,7 +200,7 @@ class TableFragment : Fragment()
 				{
 					override fun onComplete()
 					{
-						rootView!!.findViewById<Spinner>(R.id.weekIndexSpinner).setSelection(ScheduleHelper.weekIndex, true)
+						rootView!!.findViewById<Spinner>(R.id.weekIndexSpinner).setSelection(ScheduleHelper.weekIndex - 1, true)
 						adapter.notifyDataSetChanged()
 					}
 
