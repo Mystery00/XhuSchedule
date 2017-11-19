@@ -25,7 +25,6 @@ object ScheduleHelper
 	var studentName = "0"
 	var studentNumber = "0"
 	var weekIndex = 0
-	var isUpdateChecked = false
 
 	private fun getClient(): OkHttpClient
 	{

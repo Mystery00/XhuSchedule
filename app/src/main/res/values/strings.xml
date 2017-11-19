@@ -81,6 +81,7 @@
     <string name="showcase_week">在这里，您可以查看本周的课程</string>
     <string name="showcase_all">在这里，您可以查看本学期的课程</string>
     <string name="showcase_sync">点击这里，可以从教务系统重新同步数据</string>
+    <string name="showcase_swipe_refresh">您可以通过下拉来随时刷新缓存</string>
 
     <string name="title_dialog_time">请选择本学期开始时间</string>
     <string name="title_activity_settings">设置</string>
