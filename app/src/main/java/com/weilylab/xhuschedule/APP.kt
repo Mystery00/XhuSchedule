@@ -4,6 +4,7 @@ import android.app.Application
 import android.content.Context
 import vip.mystery0.tools.crashHandler.CrashHandler
 import vip.mystery0.tools.logs.Logs
+import java.io.File
 
 /**
  * Created by myste.
@@ -27,6 +28,7 @@ class APP : Application()
 		super.onCreate()
 		Logs.setLevel(Logs.LogLevel.Debug)
 		CrashHandler.getInstance(this)
+				.setDirectory(cacheDir.absolutePath + File.separator + "log" + File.separator)
 				.init()
 	}
 }

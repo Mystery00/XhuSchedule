@@ -3,6 +3,8 @@ package com.weilylab.xhuschedule.activity
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
+import android.graphics.Point
+import android.graphics.Rect
 import android.os.Build
 import android.os.Bundle
 import android.support.design.widget.NavigationView
@@ -87,8 +89,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
 		initView()
 		updateView()
-		if (Settings.isFirstRun)
-			showcase()
+//		if (Settings.isFirstRun)
+		showcase()
 	}
 
 	override fun onResume()
@@ -144,6 +146,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 				android.R.color.holo_green_light,
 				android.R.color.holo_orange_light,
 				android.R.color.holo_red_light)
+		swipeRefreshLayout.setProgressViewEndTarget(true, 200)
+		swipeRefreshLayout.setDistanceToTriggerSync(100)
 		swipeRefreshLayout.setOnRefreshListener {
 			updateView()
 		}
@@ -436,12 +440,20 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
 	private fun showcase()
 	{
+		val size = Point()
+		windowManager.defaultDisplay.getSize(size)
 		TapTargetSequence(this)
 				.targets(
 						TapTarget.forView(bottomNavigationView.findViewById(R.id.bottom_nav_today), getString(R.string.showcase_today)),
 						TapTarget.forView(bottomNavigationView.findViewById(R.id.bottom_nav_week), getString(R.string.showcase_week)),
 						TapTarget.forView(bottomNavigationView.findViewById(R.id.bottom_nav_all), getString(R.string.showcase_all)),
-						TapTarget.forToolbarMenuItem(toolbar, R.id.action_sync, getString(R.string.showcase_sync)))
+						TapTarget.forToolbarMenuItem(toolbar, R.id.action_sync, getString(R.string.showcase_sync)),
+						TapTarget.forBounds(Rect(
+								(size.x / 2) - 100,
+								200 + resources.getDimensionPixelSize(resources.getIdentifier("status_bar_height", "dimen", "android")),
+								(size.x / 2) + 100,
+								400 + resources.getDimensionPixelSize(resources.getIdentifier("status_bar_height", "dimen", "android"))
+						), getString(R.string.showcase_swipe_refresh)).transparentTarget(true))
 				.continueOnCancel(true)
 				.listener(object : TapTargetSequence.Listener
 				{
@@ -452,11 +464,14 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 					override fun onSequenceFinish()
 					{
 						Logs.i(TAG, "onSequenceFinish: ")
+						swipeRefreshLayout.isRefreshing = false
 						Settings.isFirstRun = false
 					}
 
 					override fun onSequenceStep(lastTarget: TapTarget?, targetClicked: Boolean)
 					{
+						Logs.i(TAG, "onSequenceStep: ")
+						swipeRefreshLayout.isRefreshing = true
 					}
 				})
 				.start()
