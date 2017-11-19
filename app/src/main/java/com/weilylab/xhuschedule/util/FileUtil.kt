@@ -25,9 +25,10 @@ object FileUtil
 	{
 		try
 		{
+			if (!file.parentFile.exists())
+				file.parentFile.mkdirs()
 			if (file.exists())
 				file.delete()
-			file.createNewFile()
 			val dataInputStream = DataInputStream(BufferedInputStream(inputStream))
 			val dataOutputStream = DataOutputStream(BufferedOutputStream(FileOutputStream(file)))
 			val bytes = ByteArray(1024 * 1024)
