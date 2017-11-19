@@ -1,8 +1,8 @@
 <resources>
     <string name="app_name">Xhu Schedule</string>
 
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="navigation_drawer_open" translatable="false">Open navigation drawer</string>
+    <string name="navigation_drawer_close" translatable="false">Close navigation drawer</string>
 
     <string name="action_users">当前登陆用户</string>
     <string name="action_tools">工具</string>
@@ -24,7 +24,6 @@
     <string name="hint_update_data">信息同步成功！</string>
     <string name="hint_update_data_new">信息同步成功！和之前相比，数据有更新。</string>
     <string name="hint_course_empty">今天没课哦~</string>
-    <string name="hint_unsupported_date_picker">由于控件显示出错，请在此处手动输入第一周时间，按照“YYYY-MM-DD”的格式输入！</string>
 
     <string name="error_invalid_username">用户名无效</string>
     <string name="error_invalid_password">密码无效</string>
@@ -33,7 +32,6 @@
     <string name="error_timeout">请求超时</string>
     <string name="error_other">其他错误</string>
     <string name="error_time_not_monday">选择的时间不是周一，选择无效</string>
-    <string name="error_time_format">时间格式错误，请输入格式为“YYYY-MM-DD”的数据</string>
     <string name="error_time_after">选择的时间不能在当前时间之后</string>
     <string name="error_download">下载失败</string>
 
@@ -42,9 +40,9 @@
     <string name="course_location_format">%1$s  %2$s</string>
     <string name="course_week_index">第%1$d周</string>
 
-    <string name="nav_today">Today</string>
-    <string name="nav_week">Week</string>
-    <string name="nav_all">All</string>
+    <string name="nav_today">今日</string>
+    <string name="nav_week">本周</string>
+    <string name="nav_all">本学期</string>
 
     <string name="table_header1">周一</string>
     <string name="table_header2">周二</string>
@@ -54,11 +52,11 @@
     <string name="table_header6">周六</string>
     <string name="table_header7">周日</string>
 
-    <string name="table_nav1">1\n\n2</string>
-    <string name="table_nav2">3\n\n4</string>
-    <string name="table_nav3">5\n\n6</string>
-    <string name="table_nav4">7\n\n8</string>
-    <string name="table_nav5">9\n\n10</string>
+    <string name="table_nav1" translatable="false">1\n\n2</string>
+    <string name="table_nav2" translatable="false">3\n\n4</string>
+    <string name="table_nav3" translatable="false">5\n\n6</string>
+    <string name="table_nav4" translatable="false">7\n\n8</string>
+    <string name="table_nav5" translatable="false">9\n\n10</string>
 
     <string name="update_notification_title">新版本更新 %1$s => %2$s</string>
     <string name="update_notification_content">本次更新包大小为%1$s,增量更新包大小为%2$s</string>
@@ -68,9 +66,9 @@
     <string name="download_notification_title_download">%1$s/%2$s</string>
     <string name="download_notification_text">已下载%1$d%%</string>
 
-    <string name="notification_channel_id">Xhu Schedule</string>
-    <string name="notification_channel_name">WeiLy Studio</string>
-    <string name="notification_channel_description">微力实验室</string>
+    <string name="notification_channel_id" translatable="false">Xhu Schedule</string>
+    <string name="notification_channel_name" translatable="false">WeiLy Studio</string>
+    <string name="notification_channel_description" translatable="false">微力实验室</string>
 
     <string name="dialog_edit_teacher">任课教师</string>
     <string name="dialog_edit_time">上课时间</string>
@@ -83,6 +81,6 @@
     <string name="showcase_all">在这里，您可以查看本学期的课程</string>
     <string name="showcase_sync">点击这里，可以从教务系统重新同步数据</string>
 
-    <string name="title_dialog_time">请选择第一周周一时间</string>
+    <string name="title_dialog_time">请选择本学期开始时间</string>
     <string name="title_activity_settings">设置</string>
 </resources>
