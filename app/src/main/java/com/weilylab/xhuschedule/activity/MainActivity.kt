@@ -17,6 +17,8 @@ import android.util.Base64
 import android.view.MenuItem
 import android.widget.TextView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.request.RequestOptions
 import com.getkeepsafe.taptargetview.TapTarget
 import com.getkeepsafe.taptargetview.TapTargetSequence
 import com.weilylab.xhuschedule.R
@@ -96,10 +98,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 	override fun onResume()
 	{
 		super.onResume()
+		val options = RequestOptions().diskCacheStrategy(DiskCacheStrategy.NONE)
 		if (Settings.customBackgroundImg != "")
-			Glide.with(this).load(Settings.customBackgroundImg).into(background)
+			Glide.with(this).load(Settings.customBackgroundImg).apply(options).into(background)
 		if (Settings.customHeaderImg != "")
-			Glide.with(this).load(Settings.customHeaderImg).into(nav_view.getHeaderView(0).findViewById(R.id.background))
+			Glide.with(this).load(Settings.customHeaderImg).apply(options).into(nav_view.getHeaderView(0).findViewById(R.id.background))
 	}
 
 	private fun initView()
