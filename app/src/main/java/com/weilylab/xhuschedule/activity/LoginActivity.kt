@@ -61,11 +61,13 @@ class LoginActivity : AppCompatActivity()
 				.setLoadingBuilder(Z_TYPE.SNAKE_CIRCLE)
 				.setHintText(getString(R.string.hint_dialog_update_vcode))
 				.setHintTextSize(16F)
+				.setCancelable(false)
 
 		loginDialog = ZLoadingDialog(this)
 				.setLoadingBuilder(Z_TYPE.STAR_LOADING)
 				.setHintText(getString(R.string.hint_dialog_login))
 				.setHintTextSize(16F)
+				.setCancelable(false)
 
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
 		{

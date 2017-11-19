@@ -70,6 +70,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 				.setLoadingBuilder(Z_TYPE.DOUBLE_CIRCLE)
 				.setHintText(getString(R.string.hint_dialog_update_cache))
 				.setHintTextSize(16F)
+				.setCancelable(false)
 
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
 		{
