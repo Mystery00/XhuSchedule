@@ -122,14 +122,18 @@ class SettingsPreferenceFragment : PreferenceFragment()
 					calendar.set(datePicker.year, datePicker.month, datePicker.dayOfMonth, 0, 0, 0)
 					when
 					{
-						calendar.get(Calendar.DAY_OF_WEEK) != Calendar.MONDAY -> Snackbar.make(datePicker, R.string.error_time_not_monday, Snackbar.LENGTH_SHORT)
-								.show()
 						calendar.after(Calendar.getInstance()) -> Snackbar.make(datePicker, R.string.error_time_after, Snackbar.LENGTH_SHORT)
 								.show()
 						else ->
 						{
-							Settings.firstWeekOfTerm = datePicker.year.toString() + '-' + datePicker.month.toString() + '-' + datePicker.dayOfMonth.toString()
-							firstDayPreference.summary = datePicker.year.toString() + '-' + (datePicker.month + 1).toString() + '-' + datePicker.dayOfMonth.toString()
+							val dayWeek = calendar.get(Calendar.DAY_OF_WEEK)
+							if (dayWeek == Calendar.SUNDAY)
+								calendar.add(Calendar.DAY_OF_MONTH, -1)
+							calendar.firstDayOfWeek = Calendar.MONDAY
+							val day = calendar.get(Calendar.DAY_OF_WEEK)
+							calendar.add(Calendar.DATE, calendar.firstDayOfWeek - day)
+							Settings.firstWeekOfTerm = calendar.get(Calendar.YEAR).toString() + '-' + calendar.get(Calendar.MONTH).toString() + '-' + calendar.get(Calendar.DAY_OF_MONTH).toString()
+							firstDayPreference.summary = calendar.get(Calendar.YEAR).toString() + '-' + (calendar.get(Calendar.MONTH) + 1).toString() + '-' + calendar.get(Calendar.DAY_OF_MONTH).toString()
 							dialog.dismiss()
 						}
 					}

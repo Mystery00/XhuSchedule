@@ -15,6 +15,11 @@ object CalendarUtil
 		Locale.setDefault(Locale.CHINA)
 	}
 
+	fun getMonday()
+	{
+
+	}
+
 	fun getWeek(): Int
 	{
 		calendar = Calendar.getInstance()
