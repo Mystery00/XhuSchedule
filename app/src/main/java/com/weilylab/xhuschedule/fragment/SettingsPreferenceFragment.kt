@@ -208,9 +208,9 @@ class SettingsPreferenceFragment : PreferenceFragment()
 		}
 	}
 
-	override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent)
+	override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?)
 	{
-		if (resultCode == Activity.RESULT_OK)
+		if (resultCode == Activity.RESULT_OK && data != null)
 			when (requestCode)
 			{
 				BACKGROUND_REQUEST_CODE ->
@@ -267,6 +267,11 @@ class SettingsPreferenceFragment : PreferenceFragment()
 			else
 			{
 				Logs.i(TAG, "onRequestPermissionsResult: 权限拒绝")
+				Snackbar.make((activity as SettingsActivity).coordinatorLayout, R.string.hint_permission, Snackbar.LENGTH_LONG)
+						.setAction(android.R.string.ok, {
+							requestPermission()
+						})
+						.show()
 			}
 	}
 
