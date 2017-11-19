@@ -26,7 +26,7 @@ class APP : Application()
 	override fun onCreate()
 	{
 		super.onCreate()
-		Logs.setLevel(Logs.LogLevel.Debug)
+		Logs.setLevel(Logs.LogLevel.Release)
 		CrashHandler.getInstance(this)
 				.setDirectory(cacheDir.absolutePath + File.separator + "log" + File.separator)
 				.init()
