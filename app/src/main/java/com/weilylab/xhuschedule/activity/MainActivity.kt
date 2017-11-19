@@ -89,8 +89,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
 		initView()
 		updateView()
-//		if (Settings.isFirstRun)
-		showcase()
+		if (Settings.isFirstRun)
+			showcase()
 	}
 
 	override fun onResume()
