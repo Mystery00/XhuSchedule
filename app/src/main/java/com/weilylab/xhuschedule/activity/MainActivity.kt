@@ -14,6 +14,7 @@ import android.support.v7.app.AppCompatActivity
 import android.util.Base64
 import android.view.MenuItem
 import android.widget.TextView
+import com.bumptech.glide.Glide
 import com.getkeepsafe.taptargetview.TapTarget
 import com.getkeepsafe.taptargetview.TapTargetSequence
 import com.weilylab.xhuschedule.R
@@ -88,6 +89,15 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 		updateView()
 		if (Settings.isFirstRun)
 			showcase()
+	}
+
+	override fun onResume()
+	{
+		super.onResume()
+		if (Settings.customBackgroundImg != "")
+			Glide.with(this).load(Settings.customBackgroundImg).into(background)
+		if (Settings.customHeaderImg != "")
+			Glide.with(this).load(Settings.customHeaderImg).into(nav_view.getHeaderView(0).findViewById(R.id.background))
 	}
 
 	private fun initView()

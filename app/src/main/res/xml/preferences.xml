@@ -5,6 +5,19 @@
         android:title="@string/title_first_day"/>
 
     <PreferenceCategory
+        android:title="@string/category_ui">
+
+        <Preference
+            android:key="@string/key_header_img"
+            android:title="@string/title_header_img"/>
+
+        <Preference
+            android:key="@string/key_background_img"
+            android:title="@string/title_background_img"/>
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
         android:key="@string/key_thanks"
         android:title="@string/category_thanks">
 
@@ -31,8 +44,8 @@
             android:title="@string/title_weily_product"/>
 
         <Preference
-            android:title="@string/title_feedback"
-            android:summary="@string/summary_feedback"/>
+            android:summary="@string/summary_feedback"
+            android:title="@string/title_feedback"/>
 
         <Preference
             android:key="@string/key_check_update"

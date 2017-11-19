@@ -3,6 +3,12 @@
     <string name="key_first_day">key_first_day</string>
     <string name="title_first_day">设置本学期开始时间</string>
 
+    <string name="category_ui">界面</string>
+    <string name="title_header_img">自定义侧滑页顶部背景</string>
+    <string name="key_header_img">key_header_img</string>
+    <string name="title_background_img">自定义背景</string>
+    <string name="key_background_img">key_background_img</string>
+
     <string name="key_thanks">key_thanks</string>
     <string name="category_thanks">鸣谢</string>
     <string name="title_icon">图标</string>

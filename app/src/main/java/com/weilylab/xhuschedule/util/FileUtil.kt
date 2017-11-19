@@ -21,8 +21,6 @@ object FileUtil
 		return matcher.replaceAll("").trim()
 	}
 
-	fun saveFile(data: String, file: File): Boolean = saveFile(data.byteInputStream(), file)
-
 	fun saveFile(inputStream: InputStream?, file: File): Boolean
 	{
 		try
