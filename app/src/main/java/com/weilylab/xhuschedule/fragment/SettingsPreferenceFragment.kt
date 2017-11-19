@@ -84,6 +84,7 @@ class SettingsPreferenceFragment : PreferenceFragment()
 				.setLoadingBuilder(Z_TYPE.SEARCH_PATH)
 				.setHintText(getString(R.string.hint_dialog_check_update))
 				.setHintTextSize(16F)
+				.setCancelable(false)
 
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
 		{
