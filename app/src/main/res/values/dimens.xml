@@ -10,7 +10,7 @@
     <dimen name="course_padding">16dp</dimen>
     <dimen name="time_padding">8dp</dimen>
     <dimen name="course_info_text_size">12sp</dimen>
-    <dimen name="table_item_height">160dp</dimen>
+    <dimen name="table_item_height">120dp</dimen>
     <dimen name="color_picker_size">40dp</dimen>
     <dimen name="color_picker_margin">10dp</dimen>
     <dimen name="dialog_edit_header_height">192dp</dimen>
