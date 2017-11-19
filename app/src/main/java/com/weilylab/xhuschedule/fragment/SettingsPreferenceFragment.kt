@@ -1,13 +1,19 @@
 package com.weilylab.xhuschedule.fragment
 
+import android.Manifest
+import android.app.Activity
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.graphics.Point
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.preference.Preference
 import android.preference.PreferenceFragment
+import android.provider.MediaStore
 import android.support.design.widget.CoordinatorLayout
 import android.support.design.widget.Snackbar
+import android.support.v4.content.ContextCompat
 import android.support.v7.app.AlertDialog
 import android.view.LayoutInflater
 import android.view.View
@@ -16,6 +22,7 @@ import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.activity.SettingsActivity
 import com.weilylab.xhuschedule.classes.Update
 import com.weilylab.xhuschedule.interfaces.UpdateResponse
+import com.weilylab.xhuschedule.util.FileUtil
 import com.weilylab.xhuschedule.util.ScheduleHelper
 import com.weilylab.xhuschedule.util.Settings
 import com.weilylab.xhuschedule.util.UpdateNotification
@@ -29,6 +36,7 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_settings.*
 import vip.mystery0.tools.logs.Logs
+import java.io.File
 import java.util.*
 
 /**
@@ -39,11 +47,19 @@ class SettingsPreferenceFragment : PreferenceFragment()
 	companion object
 	{
 		private val TAG = "SettingsPreferenceFragment"
+		private val PERMISSION_REQUEST_CODE = 1
+		private val HEADER_REQUEST_CODE = 2
+		private val BACKGROUND_REQUEST_CODE = 3
+		private val HEADER_CROP_REQUEST_CODE = 4
+		private val BACKGROUND_CROP_REQUEST_CODE = 5
 	}
 
+	private var requestType = 0
 	private lateinit var coordinatorLayout: CoordinatorLayout
 	private lateinit var loadingDialog: ZLoadingDialog
 	private lateinit var firstDayPreference: Preference
+	private lateinit var headerImgPreference: Preference
+	private lateinit var backgroundImgPreference: Preference
 	private lateinit var checkUpdatePreference: Preference
 	private lateinit var weilyProductPreference: Preference
 
@@ -75,6 +91,8 @@ class SettingsPreferenceFragment : PreferenceFragment()
 			loadingDialog.setHintTextColor(resources.getColor(R.color.colorAccent, null))
 		}
 		firstDayPreference = findPreference(getString(R.string.key_first_day))
+		headerImgPreference = findPreference(getString(R.string.key_header_img))
+		backgroundImgPreference = findPreference(getString(R.string.key_background_img))
 		checkUpdatePreference = findPreference(getString(R.string.key_check_update))
 		weilyProductPreference = findPreference(getString(R.string.key_weily_product))
 
@@ -117,6 +135,16 @@ class SettingsPreferenceFragment : PreferenceFragment()
 					}
 				}
 			}
+			true
+		}
+		headerImgPreference.setOnPreferenceClickListener {
+			requestType = HEADER_REQUEST_CODE
+			requestPermission()
+			true
+		}
+		backgroundImgPreference.setOnPreferenceClickListener {
+			requestType = BACKGROUND_REQUEST_CODE
+			requestPermission()
 			true
 		}
 		checkUpdatePreference.setOnPreferenceClickListener {
@@ -178,5 +206,87 @@ class SettingsPreferenceFragment : PreferenceFragment()
 			activity.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://weilylab.com")))
 			true
 		}
+	}
+
+	override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent)
+	{
+		if (resultCode == Activity.RESULT_OK)
+			when (requestCode)
+			{
+				BACKGROUND_REQUEST_CODE ->
+				{
+					val size = Point()
+					activity.windowManager.defaultDisplay.getSize(size)
+					cropImg(data.data, BACKGROUND_CROP_REQUEST_CODE, size.x, size.y)
+				}
+				HEADER_REQUEST_CODE ->
+				{
+					cropImg(data.data, HEADER_CROP_REQUEST_CODE, 255, 176)
+				}
+				HEADER_CROP_REQUEST_CODE ->
+				{
+					val saveFile = File(File(activity.filesDir, "CropImg"), "header")
+					FileUtil.saveFile(activity.contentResolver.openInputStream(data.data), saveFile)
+					Settings.customHeaderImg = saveFile.absolutePath
+				}
+				BACKGROUND_CROP_REQUEST_CODE ->
+				{
+					val saveFile = File(File(activity.filesDir, "CropImg"), "background")
+					FileUtil.saveFile(activity.contentResolver.openInputStream(data.data), saveFile)
+					Settings.customBackgroundImg = saveFile.absolutePath
+				}
+			}
+		super.onActivityResult(requestCode, resultCode, data)
+	}
+
+	private fun requestPermission()
+	{
+		if (ContextCompat.checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+				!= PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(activity, Manifest.permission.READ_EXTERNAL_STORAGE)
+				!= PackageManager.PERMISSION_GRANTED)
+		{
+			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+				requestPermissions(arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE),
+						PERMISSION_REQUEST_CODE)
+		}
+		else
+		{
+			chooseImg()
+		}
+	}
+
+	override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>?,
+											grantResults: IntArray)
+	{
+		super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+		if (requestCode == PERMISSION_REQUEST_CODE)
+			if (grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED)
+			{
+				chooseImg()
+			}
+			else
+			{
+				Logs.i(TAG, "onRequestPermissionsResult: 权限拒绝")
+			}
+	}
+
+	private fun chooseImg()
+	{
+		startActivityForResult(Intent(Intent.ACTION_PICK)
+				.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*"),
+				requestType)
+	}
+
+	private fun cropImg(uri: Uri, cropCode: Int, width: Int, height: Int)
+	{
+		startActivityForResult(Intent("com.android.camera.action.CROP")
+				.setDataAndType(uri, "image/*")
+				.putExtra("crop", true)
+				.putExtra("scale", true)
+				.putExtra("aspectX", width)
+				.putExtra("aspectY", height)
+				.putExtra("outputX", width * 2)
+				.putExtra("outputY", height * 2),
+				cropCode)
 	}
 }

@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <paths>
-    <external-files-path name="download" path="Download" />
+    <external-files-path
+        name="download"
+        path="Download"/>
+    <files-path
+        name="crop"
+        path="CropImg"/>
 </paths>

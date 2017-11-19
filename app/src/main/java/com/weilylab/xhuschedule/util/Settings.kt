@@ -16,4 +16,10 @@ object Settings
 	var isFirstRun: Boolean
 		set(value) = sharedPreference.edit().putBoolean("isFirstRun", value).apply()
 		get() = sharedPreference.getBoolean("isFirstRun", true)
+	var customHeaderImg: String
+		set(value) = sharedPreference.edit().putString("customHeaderImg", value).apply()
+		get() = sharedPreference.getString("customHeaderImg", "")
+	var customBackgroundImg: String
+		set(value) = sharedPreference.edit().putString("customBackgroundImg", value).apply()
+		get() = sharedPreference.getString("customBackgroundImg", "")
 }
