@@ -14,7 +14,6 @@ import com.weilylab.xhuschedule.classes.Course
 import com.weilylab.xhuschedule.listener.InfoChangeListener
 import com.weilylab.xhuschedule.util.ScheduleHelper
 import com.weilylab.xhuschedule.util.ViewUtil
-import vip.mystery0.tools.logs.Logs
 
 /**
  * Created by myste.
@@ -22,10 +21,6 @@ import vip.mystery0.tools.logs.Logs
 class TableAdapter(private val context: Context,
 				   private val list: ArrayList<Course?>) : RecyclerView.Adapter<TableAdapter.ViewHolder>()
 {
-	companion object
-	{
-		private val TAG = "TableAdapter"
-	}
 
 	override fun onBindViewHolder(holder: ViewHolder, position: Int)
 	{
@@ -55,7 +50,7 @@ class TableAdapter(private val context: Context,
 		textViewLocation.text = course.location
 		if (course.transparencyColor == "")
 		{
-			course.transparencyColor = "#33" + ScheduleHelper.getRandomColor()
+			course.transparencyColor = "#66" + ScheduleHelper.getRandomColor()
 		}
 		view.setBackgroundColor(Color.parseColor(course.transparencyColor))
 		view.layoutParams = layoutParams

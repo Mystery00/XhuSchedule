@@ -91,7 +91,7 @@ object FileUtil
 					it.color = savedColor
 				if (savedTransparencyColor == "")
 				{
-					savedTransparencyColor = "#33" + savedColor.substring(1, savedColor.length)
+					savedTransparencyColor = "#66" + savedColor.substring(1, savedColor.length)
 					colorSharedPreference.edit().putString(md5 + "_trans", savedTransparencyColor).apply()
 					it.transparencyColor = savedTransparencyColor
 				}
