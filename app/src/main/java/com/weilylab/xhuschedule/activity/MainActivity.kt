@@ -28,10 +28,7 @@ import com.weilylab.xhuschedule.fragment.TableFragment
 import com.weilylab.xhuschedule.fragment.TodayFragment
 import com.weilylab.xhuschedule.interfaces.RTResponse
 import com.weilylab.xhuschedule.service.UpdateService
-import com.weilylab.xhuschedule.util.CourseUtil
-import com.weilylab.xhuschedule.util.FileUtil
-import com.weilylab.xhuschedule.util.ScheduleHelper
-import com.weilylab.xhuschedule.util.Settings
+import com.weilylab.xhuschedule.util.*
 import com.zyao89.view.zloading.ZLoadingDialog
 import com.zyao89.view.zloading.Z_TYPE
 import io.reactivex.Observable
@@ -111,6 +108,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
 	private fun initView()
 	{
+		ScheduleHelper.itemCourseWidth = (resources.displayMetrics.widthPixels - DensityUtil.dip2px(this, 32F)) / 7F
 		startService(Intent(this, UpdateService::class.java))
 
 		val viewPagerAdapter = ViewPagerAdapter(supportFragmentManager)

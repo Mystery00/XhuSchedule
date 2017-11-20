@@ -23,6 +23,10 @@ object ScheduleHelper
 	var studentName = "0"
 	var studentNumber = "0"
 	var weekIndex = 0
+	var itemCourseWidth = 0F//课程宽度
+	var itemCourseNameSize = 0F
+	var itemCourseTeacherSize = 0F
+	var itemCourseLocationSize = 0F
 
 	private fun getClient(): OkHttpClient
 	{

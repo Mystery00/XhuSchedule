@@ -117,6 +117,7 @@ class TableFragment : Fragment()
 					linearLayout.scrollBy(dx, dy)
 				}
 			})
+			Logs.i(TAG, "onCreateView: "+recyclerView.layoutParams.width)
 			isReady = true
 		}
 		return rootView
