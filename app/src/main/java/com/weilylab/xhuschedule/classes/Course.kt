@@ -16,7 +16,6 @@ class Course : Serializable
 	var day: String = ""
 	var other: Course? = null
 	var color = ""
-	var transparencyColor = ""
 
 	fun with(course: Course)
 	{
