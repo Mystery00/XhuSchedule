@@ -69,6 +69,7 @@ dependencies {
     compile 'de.hdodenhof:circleimageview:2.2.0'
     compile 'com.jrummyapps:colorpicker:2.1.6'
     compile 'com.getkeepsafe.taptargetview:taptargetview:1.10.0'
+    compile 'com.github.yalantis:ucrop:2.2.1'
 }
 repositories {
     mavenCentral()

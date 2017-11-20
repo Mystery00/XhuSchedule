@@ -14,6 +14,7 @@ import android.provider.MediaStore
 import android.support.design.widget.CoordinatorLayout
 import android.support.design.widget.Snackbar
 import android.support.v4.content.ContextCompat
+import android.support.v4.content.FileProvider
 import android.support.v7.app.AlertDialog
 import android.view.LayoutInflater
 import android.view.View
@@ -22,11 +23,11 @@ import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.activity.SettingsActivity
 import com.weilylab.xhuschedule.classes.Update
 import com.weilylab.xhuschedule.interfaces.UpdateResponse
-import com.weilylab.xhuschedule.util.FileUtil
 import com.weilylab.xhuschedule.util.ScheduleHelper
 import com.weilylab.xhuschedule.util.Settings
 import com.weilylab.xhuschedule.util.UpdateNotification
 import com.weilylab.xhuschedule.view.CustomDatePicker
+import com.yalantis.ucrop.UCrop
 import com.zyao89.view.zloading.ZLoadingDialog
 import com.zyao89.view.zloading.Z_TYPE
 import io.reactivex.Observable
@@ -230,16 +231,18 @@ class SettingsPreferenceFragment : PreferenceFragment()
 				}
 				HEADER_CROP_REQUEST_CODE ->
 				{
+					Logs.i(TAG, "onActivityResult: HEADER_CROP_REQUEST_CODE")
 					val saveFile = File(File(activity.filesDir, "CropImg"), "header")
-					FileUtil.saveFile(activity.contentResolver.openInputStream(data.data), saveFile)
 					Settings.customHeaderImg = saveFile.absolutePath
 				}
 				BACKGROUND_CROP_REQUEST_CODE ->
 				{
+					Logs.i(TAG, "onActivityResult: BACKGROUND_CROP_REQUEST_CODE")
 					val saveFile = File(File(activity.filesDir, "CropImg"), "background")
-					FileUtil.saveFile(activity.contentResolver.openInputStream(data.data), saveFile)
 					Settings.customBackgroundImg = saveFile.absolutePath
 				}
+				UCrop.REQUEST_CROP -> Logs.i(TAG, "onActivityResult: " + UCrop.getOutput(data))
+				UCrop.RESULT_ERROR -> Logs.i(TAG, "onActivityResult: " + UCrop.getError(data))
 			}
 		super.onActivityResult(requestCode, resultCode, data)
 	}
@@ -289,14 +292,16 @@ class SettingsPreferenceFragment : PreferenceFragment()
 
 	private fun cropImg(uri: Uri, cropCode: Int, width: Int, height: Int)
 	{
-		startActivityForResult(Intent("com.android.camera.action.CROP")
-				.setDataAndType(uri, "image/*")
-				.putExtra("crop", true)
-				.putExtra("scale", true)
-				.putExtra("aspectX", width)
-				.putExtra("aspectY", height)
-				.putExtra("outputX", width * 2)
-				.putExtra("outputY", height * 2),
-				cropCode)
+		val savedFile = File(File(activity.filesDir, "CropImg"), if (cropCode == HEADER_CROP_REQUEST_CODE) "header" else "background")
+		if (!savedFile.parentFile.exists())
+			savedFile.parentFile.mkdirs()
+		val destinationUri = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
+			FileProvider.getUriForFile(context, "com.weilylab.xhuschedule", savedFile)
+		else
+			Uri.fromFile(savedFile)
+		UCrop.of(uri, destinationUri)
+				.withAspectRatio(width.toFloat(), height.toFloat())
+				.withMaxResultSize(width * 10, height * 10)
+				.start(activity, this, cropCode)
 	}
 }
