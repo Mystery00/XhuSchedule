@@ -80,7 +80,6 @@ object FileUtil
 			courses.forEach {
 				val md5 = ScheduleHelper.getMD5(it.name)
 				var savedColor = colorSharedPreference.getString(md5, "")
-				var savedTransparencyColor = colorSharedPreference.getString(md5 + "_trans", "")
 				if (savedColor == "")
 				{
 					savedColor = '#' + ScheduleHelper.getRandomColor()
@@ -89,14 +88,6 @@ object FileUtil
 				}
 				else
 					it.color = savedColor
-				if (savedTransparencyColor == "")
-				{
-					savedTransparencyColor = '#'+Integer.toHexString(Settings.customTransparency) + savedColor.substring(1, savedColor.length)
-					colorSharedPreference.edit().putString(md5 + "_trans", savedTransparencyColor).apply()
-					it.transparencyColor = savedTransparencyColor
-				}
-				else
-					it.transparencyColor = savedTransparencyColor
 			}
 			return courses
 		}

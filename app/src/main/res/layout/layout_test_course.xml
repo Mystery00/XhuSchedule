@@ -9,8 +9,9 @@
 
     <TextView
         android:id="@+id/textView_name"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="@string/test_course_name"
         android:textSize="@dimen/item_course_text_size"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
@@ -19,8 +20,9 @@
 
     <TextView
         android:id="@+id/textView_teacher"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="@string/test_course_teacher"
         android:textSize="@dimen/item_course_text_size"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -28,8 +30,9 @@
 
     <TextView
         android:id="@+id/textView_location"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="@string/test_course_location"
         android:textSize="@dimen/item_course_text_size"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

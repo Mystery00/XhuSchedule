@@ -87,4 +87,7 @@
 
     <string name="title_dialog_time">请选择本学期开始时间</string>
     <string name="title_activity_settings">设置</string>
+    <string name="test_course_name">课程名称</string>
+    <string name="test_course_teacher">任课老师</string>
+    <string name="test_course_location">上课地点</string>
 </resources>

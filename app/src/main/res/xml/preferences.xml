@@ -15,6 +15,10 @@
             android:key="@string/key_background_img"
             android:title="@string/title_background_img"/>
 
+        <Preference
+            android:key="@string/key_custom_trans"
+            android:title="@string/title_custom_trans"/>
+
     </PreferenceCategory>
 
     <PreferenceCategory

@@ -60,6 +60,7 @@ class SettingsPreferenceFragment : PreferenceFragment()
 	private lateinit var firstDayPreference: Preference
 	private lateinit var headerImgPreference: Preference
 	private lateinit var backgroundImgPreference: Preference
+	private lateinit var customTransPreference: Preference
 	private lateinit var checkUpdatePreference: Preference
 	private lateinit var weilyProductPreference: Preference
 
@@ -94,6 +95,7 @@ class SettingsPreferenceFragment : PreferenceFragment()
 		firstDayPreference = findPreference(getString(R.string.key_first_day))
 		headerImgPreference = findPreference(getString(R.string.key_header_img))
 		backgroundImgPreference = findPreference(getString(R.string.key_background_img))
+		customTransPreference = findPreference(getString(R.string.key_custom_trans))
 		checkUpdatePreference = findPreference(getString(R.string.key_check_update))
 		weilyProductPreference = findPreference(getString(R.string.key_weily_product))
 
@@ -150,6 +152,13 @@ class SettingsPreferenceFragment : PreferenceFragment()
 		backgroundImgPreference.setOnPreferenceClickListener {
 			requestType = BACKGROUND_REQUEST_CODE
 			requestPermission()
+			true
+		}
+		customTransPreference.setOnPreferenceClickListener {
+			val view = LayoutInflater.from(activity).inflate(R.layout.dialog_custom_trans, null)
+			AlertDialog.Builder(activity)
+					.setView(view)
+					.show()
 			true
 		}
 		checkUpdatePreference.setOnPreferenceClickListener {

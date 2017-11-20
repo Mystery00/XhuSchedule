@@ -2,7 +2,6 @@ package com.weilylab.xhuschedule.adapter
 
 import android.content.Context
 import android.graphics.Color
-import android.support.v4.widget.TextViewCompat
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -58,16 +57,13 @@ class TableAdapter(private val context: Context,
 		textViewName.text = course.name
 		textViewTeacher.text = course.teacher
 		textViewLocation.text = course.location
-		TextViewCompat.setAutoSizeTextTypeWithDefaults(textViewName, TextViewCompat.AUTO_SIZE_TEXT_TYPE_UNIFORM)
-		TextViewCompat.setAutoSizeTextTypeWithDefaults(textViewTeacher, TextViewCompat.AUTO_SIZE_TEXT_TYPE_UNIFORM)
-		TextViewCompat.setAutoSizeTextTypeWithDefaults(textViewLocation, TextViewCompat.AUTO_SIZE_TEXT_TYPE_UNIFORM)
 //		Logs.i(TAG, "addView: " + textViewName.textSize)
 
-		if (course.transparencyColor == "")
+		if (course.color == "")
 		{
-			course.transparencyColor = '#' + Integer.toHexString(Settings.customTransparency) + ScheduleHelper.getRandomColor()
+			course.color = '#' + ScheduleHelper.getRandomColor()
 		}
-		view.setBackgroundColor(Color.parseColor(course.transparencyColor))
+		view.setBackgroundColor(Color.parseColor('#' + Integer.toHexString(Settings.customTransparency) + course.color.substring(1)))
 		view.layoutParams = layoutParams
 		view.setOnClickListener {
 			ViewUtil.showAlertDialog(context, course, object : InfoChangeListener
