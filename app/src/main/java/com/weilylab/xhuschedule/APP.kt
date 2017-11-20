@@ -28,7 +28,7 @@ class APP : Application()
 		super.onCreate()
 		Logs.setLevel(Logs.LogLevel.Release)
 		CrashHandler.getInstance(this)
-				.setDirectory(cacheDir.absolutePath + File.separator + "log" + File.separator)
+				.setDirectory(cacheDir.absolutePath + File.separator)
 				.init()
 	}
 }
