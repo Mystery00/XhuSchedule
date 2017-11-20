@@ -78,10 +78,10 @@ class LoginActivity : AppCompatActivity()
 		}
 		else
 		{
-			vcodeDialog.setLoadingColor(Color.parseColor("#ff4081"))
-			vcodeDialog.setHintTextColor(Color.parseColor("#ff4081"))
-			loginDialog.setLoadingColor(Color.parseColor("#ff4081"))
-			loginDialog.setHintTextColor(Color.parseColor("#ff4081"))
+			vcodeDialog.setLoadingColor(Color.parseColor("#4053ff"))
+			vcodeDialog.setHintTextColor(Color.parseColor("#4053ff"))
+			loginDialog.setLoadingColor(Color.parseColor("#4053ff"))
+			loginDialog.setHintTextColor(Color.parseColor("#4053ff"))
 		}
 
 		val colorAnim = ObjectAnimator.ofInt(login_form, "backgroundColor", -0x7f80, -0x7f7f01)

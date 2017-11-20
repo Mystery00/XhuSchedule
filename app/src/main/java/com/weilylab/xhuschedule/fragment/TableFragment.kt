@@ -75,34 +75,37 @@ class TableFragment : Fragment()
 			val arrowLayout: ConstraintLayout = rootView!!.findViewById(R.id.table_arrow)
 			if (!isShowArrow)
 				arrowLayout.visibility = View.GONE
-			val arrowBack: ImageView = rootView!!.findViewById(R.id.imageView_back)
-			val arrowForward: ImageView = rootView!!.findViewById(R.id.imageView_forward)
-			val weekIndexSpinner: Spinner = rootView!!.findViewById(R.id.weekIndexSpinner)
-			val weekArray = Array<String>(20, { i -> getString(R.string.course_week_index, i + 1) })
-			val spinnerAdapter = ArrayAdapter(activity, android.R.layout.simple_spinner_item, weekArray)
-			spinnerAdapter.setDropDownViewResource(R.layout.item_spinner_dropdown)
-			weekIndexSpinner.adapter = spinnerAdapter
-			weekIndexSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener
+			else
 			{
-				override fun onNothingSelected(parent: AdapterView<*>?)
+				val arrowBack: ImageView = rootView!!.findViewById(R.id.imageView_back)
+				val arrowForward: ImageView = rootView!!.findViewById(R.id.imageView_forward)
+				val weekIndexSpinner: Spinner = rootView!!.findViewById(R.id.weekIndexSpinner)
+				val weekArray = Array<String>(20, { i -> getString(R.string.course_week_index, i + 1) })
+				val spinnerAdapter = ArrayAdapter(activity, android.R.layout.simple_spinner_item, weekArray)
+				spinnerAdapter.setDropDownViewResource(R.layout.item_spinner_dropdown)
+				weekIndexSpinner.adapter = spinnerAdapter
+				weekIndexSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener
 				{
-				}
+					override fun onNothingSelected(parent: AdapterView<*>?)
+					{
+					}
 
-				override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int,
-											id: Long)
-				{
-					ScheduleHelper.weekIndex = position + 1
+					override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int,
+												id: Long)
+					{
+						ScheduleHelper.weekIndex = position + 1
+						updateData(weekIndexSpinner)
+					}
+				}
+				weekIndexSpinner.setSelection(ScheduleHelper.weekIndex - 1, true)
+				arrowBack.setOnClickListener {
+					ScheduleHelper.weekIndex--
 					updateData(weekIndexSpinner)
 				}
-			}
-			weekIndexSpinner.setSelection(ScheduleHelper.weekIndex - 1, true)
-			arrowBack.setOnClickListener {
-				ScheduleHelper.weekIndex--
-				updateData(weekIndexSpinner)
-			}
-			arrowForward.setOnClickListener {
-				ScheduleHelper.weekIndex++
-				updateData(weekIndexSpinner)
+				arrowForward.setOnClickListener {
+					ScheduleHelper.weekIndex++
+					updateData(weekIndexSpinner)
+				}
 			}
 			recyclerView.layoutManager = GridLayoutManager(activity, 7, GridLayoutManager.VERTICAL, false)
 			recyclerView.adapter = adapter
@@ -206,7 +209,8 @@ class TableFragment : Fragment()
 				{
 					override fun onComplete()
 					{
-						rootView!!.findViewById<Spinner>(R.id.weekIndexSpinner).setSelection(ScheduleHelper.weekIndex - 1, true)
+						if (isShowArrow)
+							rootView!!.findViewById<Spinner>(R.id.weekIndexSpinner).setSelection(ScheduleHelper.weekIndex - 1, true)
 						adapter.notifyDataSetChanged()
 					}
 

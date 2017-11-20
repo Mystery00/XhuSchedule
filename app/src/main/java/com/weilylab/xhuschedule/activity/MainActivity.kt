@@ -19,10 +19,8 @@ import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
-import com.bumptech.glide.signature.MediaStoreSignature
 import com.getkeepsafe.taptargetview.TapTarget
 import com.getkeepsafe.taptargetview.TapTargetSequence
-import com.weilylab.xhuschedule.APP
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.adapter.ViewPagerAdapter
 import com.weilylab.xhuschedule.classes.Course
@@ -81,8 +79,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 		}
 		else
 		{
-			loadingDialog.setLoadingColor(Color.parseColor("#ff4081"))
-			loadingDialog.setHintTextColor(Color.parseColor("#ff4081"))
+			loadingDialog.setLoadingColor(Color.parseColor("#4053ff"))
+			loadingDialog.setHintTextColor(Color.parseColor("#4053ff"))
 		}
 
 		val toggle = ActionBarDrawerToggle(
@@ -222,7 +220,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 				return@create
 			}
 			ScheduleHelper.isCookieAvailable = true
-			val allArray = CourseUtil.formatCourses(courses)
+			val allArray = CourseUtil.formatCourses(FileUtil.getCoursesFromFile(this@MainActivity, oldFile))
 			allList.clear()
 			allList.addAll(allArray)
 			val weekArray = CourseUtil.getWeekCourses(FileUtil.getCoursesFromFile(this@MainActivity, oldFile))
@@ -272,9 +270,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 								4 -> bottomNavigationView.menu.findItem(R.id.bottom_nav_today).setIcon(R.drawable.ic_sentiment_dissatisfied)
 								else -> bottomNavigationView.menu.findItem(R.id.bottom_nav_today).setIcon(R.drawable.ic_sentiment_very_dissatisfied)
 							}
-							todayFragment.refreshData()
 							weekFragment.refreshData()
 							allFragment.refreshData()
+							todayFragment.refreshData()
 						}
 						else
 							updateData()
