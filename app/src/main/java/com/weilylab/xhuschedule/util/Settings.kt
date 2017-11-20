@@ -22,4 +22,7 @@ object Settings
 	var customBackgroundImg: String
 		set(value) = sharedPreference.edit().putString("customBackgroundImg", value).apply()
 		get() = sharedPreference.getString("customBackgroundImg", "")
+	var customTransparency: Int
+		set(value) = sharedPreference.edit().putInt("customTransparency", value).apply()
+		get() = sharedPreference.getInt("customTransparency", 102)
 }
