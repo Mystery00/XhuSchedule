@@ -19,8 +19,10 @@ import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
+import com.bumptech.glide.signature.MediaStoreSignature
 import com.getkeepsafe.taptargetview.TapTarget
 import com.getkeepsafe.taptargetview.TapTargetSequence
+import com.weilylab.xhuschedule.APP
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.adapter.ViewPagerAdapter
 import com.weilylab.xhuschedule.classes.Course
@@ -99,7 +101,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 	override fun onResume()
 	{
 		super.onResume()
-		val options = RequestOptions().diskCacheStrategy(DiskCacheStrategy.NONE)
+		Logs.i(TAG, "onResume: ")
+		val options = RequestOptions()
+				.diskCacheStrategy(DiskCacheStrategy.NONE)
+				.skipMemoryCache(true)
 		if (Settings.customBackgroundImg != "")
 			Glide.with(this).load(Settings.customBackgroundImg).apply(options).into(background)
 		if (Settings.customHeaderImg != "")

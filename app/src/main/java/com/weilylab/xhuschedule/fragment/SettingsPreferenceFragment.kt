@@ -14,7 +14,6 @@ import android.provider.MediaStore
 import android.support.design.widget.CoordinatorLayout
 import android.support.design.widget.Snackbar
 import android.support.v4.content.ContextCompat
-import android.support.v4.content.FileProvider
 import android.support.v7.app.AlertDialog
 import android.view.LayoutInflater
 import android.view.View
@@ -234,15 +233,19 @@ class SettingsPreferenceFragment : PreferenceFragment()
 					Logs.i(TAG, "onActivityResult: HEADER_CROP_REQUEST_CODE")
 					val saveFile = File(File(activity.filesDir, "CropImg"), "header")
 					Settings.customHeaderImg = saveFile.absolutePath
+					Snackbar.make(coordinatorLayout, R.string.hint_custom_img, Snackbar.LENGTH_SHORT)
+							.show()
 				}
 				BACKGROUND_CROP_REQUEST_CODE ->
 				{
 					Logs.i(TAG, "onActivityResult: BACKGROUND_CROP_REQUEST_CODE")
 					val saveFile = File(File(activity.filesDir, "CropImg"), "background")
 					Settings.customBackgroundImg = saveFile.absolutePath
+					Snackbar.make(coordinatorLayout, R.string.hint_custom_img, Snackbar.LENGTH_SHORT)
+							.show()
 				}
-				UCrop.REQUEST_CROP -> Logs.i(TAG, "onActivityResult: " + UCrop.getOutput(data))
-				UCrop.RESULT_ERROR -> Logs.i(TAG, "onActivityResult: " + UCrop.getError(data))
+				UCrop.RESULT_ERROR -> Snackbar.make(coordinatorLayout, R.string.error_custom_img, Snackbar.LENGTH_SHORT)
+						.show()
 			}
 		super.onActivityResult(requestCode, resultCode, data)
 	}

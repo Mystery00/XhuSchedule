@@ -25,6 +25,7 @@
     <string name="hint_update_data_new">信息同步成功！和之前相比，数据有更新。</string>
     <string name="hint_course_empty">今天没课哦~</string>
     <string name="hint_permission">读取SD卡文件为必要权限，请授予~</string>
+    <string name="hint_custom_img">自定义图片设置成功！</string>
 
     <string name="error_invalid_username">用户名无效</string>
     <string name="error_invalid_password">密码无效</string>
@@ -35,6 +36,7 @@
     <string name="error_time_not_monday">选择的时间不是周一，选择无效</string>
     <string name="error_time_after">选择的时间不能在当前时间之后</string>
     <string name="error_download">下载失败</string>
+    <string name="error_custom_img">自定义图片设置失败！</string>
 
     <string name="success_login">登陆成功，欢迎%1$s使用%2$s！</string>
     <string name="course_time_format">%1$s - %2$s</string>
