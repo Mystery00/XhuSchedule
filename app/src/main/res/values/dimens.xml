@@ -17,7 +17,9 @@
     <dimen name="dialog_edit_header_height">192dp</dimen>
     <dimen name="dialog_edit_header_text_size">36sp</dimen>
     <dimen name="item_course_name_text_size_max">16sp</dimen>
+    <dimen name="item_course_name_text_size_min">8sp</dimen>
     <dimen name="item_course_text_size_max">14sp</dimen>
+    <dimen name="item_course_text_size_min">7sp</dimen>
     <dimen name="item_course_today_img_size">50dp</dimen>
     <dimen name="item_course_today_time_margin_top">8dp</dimen>
     <dimen name="item_course_today_location_margin_bottom">8dp</dimen>

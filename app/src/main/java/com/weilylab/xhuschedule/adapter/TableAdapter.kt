@@ -2,7 +2,9 @@ package com.weilylab.xhuschedule.adapter
 
 import android.content.Context
 import android.graphics.Color
+import android.support.v4.widget.TextViewCompat
 import android.support.v7.widget.RecyclerView
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,6 +16,7 @@ import com.weilylab.xhuschedule.classes.Course
 import com.weilylab.xhuschedule.listener.InfoChangeListener
 import com.weilylab.xhuschedule.util.ScheduleHelper
 import com.weilylab.xhuschedule.util.ViewUtil
+import vip.mystery0.tools.logs.Logs
 
 /**
  * Created by myste.
@@ -21,6 +24,10 @@ import com.weilylab.xhuschedule.util.ViewUtil
 class TableAdapter(private val context: Context,
 				   private val list: ArrayList<Course?>) : RecyclerView.Adapter<TableAdapter.ViewHolder>()
 {
+	companion object
+	{
+		private val TAG = "TableAdapter"
+	}
 
 	override fun onBindViewHolder(holder: ViewHolder, position: Int)
 	{
@@ -48,6 +55,10 @@ class TableAdapter(private val context: Context,
 		textViewName.text = course.name
 		textViewTeacher.text = course.teacher
 		textViewLocation.text = course.location
+		TextViewCompat.setAutoSizeTextTypeWithDefaults(textViewName, TextViewCompat.AUTO_SIZE_TEXT_TYPE_UNIFORM)
+		TextViewCompat.setAutoSizeTextTypeWithDefaults(textViewTeacher, TextViewCompat.AUTO_SIZE_TEXT_TYPE_UNIFORM)
+		TextViewCompat.setAutoSizeTextTypeWithDefaults(textViewLocation, TextViewCompat.AUTO_SIZE_TEXT_TYPE_UNIFORM)
+
 		if (course.transparencyColor == "")
 		{
 			course.transparencyColor = "#66" + ScheduleHelper.getRandomColor()

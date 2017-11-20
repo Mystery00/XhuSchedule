@@ -5,15 +5,13 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
-    android:padding="4dp">
+    android:padding="2dp">
 
     <TextView
         android:id="@+id/textView_name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:textStyle="bold"
-        app:autoSizeMaxTextSize="@dimen/item_course_name_text_size_max"
-        app:autoSizeTextType="uniform"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
@@ -22,8 +20,6 @@
         android:id="@+id/textView_teacher"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:autoSizeMaxTextSize="@dimen/item_course_text_size_max"
-        app:autoSizeTextType="uniform"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView_name"/>
@@ -32,8 +28,6 @@
         android:id="@+id/textView_location"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:autoSizeMaxTextSize="@dimen/item_course_text_size_max"
-        app:autoSizeTextType="uniform"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView_teacher"/>
