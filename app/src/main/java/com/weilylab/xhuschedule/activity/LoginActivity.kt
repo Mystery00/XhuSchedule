@@ -30,265 +30,226 @@ import android.animation.ValueAnimator
 import android.graphics.Color
 
 
-class LoginActivity : AppCompatActivity()
-{
-	companion object
-	{
-		private val TAG = "LoginActivity"
-	}
+class LoginActivity : AppCompatActivity() {
+    companion object {
+        private val TAG = "LoginActivity"
+    }
 
-	private val retrofit = ScheduleHelper.getRetrofit()
-	private lateinit var vcodeDialog: ZLoadingDialog
-	private lateinit var loginDialog: ZLoadingDialog
-	private var name = "0"
+    private val retrofit = ScheduleHelper.getRetrofit()
+    private lateinit var vcodeDialog: ZLoadingDialog
+    private lateinit var loginDialog: ZLoadingDialog
+    private var name = "0"
 
-	override fun onCreate(savedInstanceState: Bundle?)
-	{
-		super.onCreate(savedInstanceState)
-		setContentView(R.layout.activity_login)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_login)
 
-		initView()
+        initView()
 
-		loadVcode()
+        loadVcode()
 
-		vcode_image_view.setOnClickListener { loadVcode() }
-		login_button.setOnClickListener { attemptLogin() }
-	}
+        vcode_image_view.setOnClickListener { loadVcode() }
+        login_button.setOnClickListener { attemptLogin() }
+    }
 
-	private fun initView()
-	{
-		vcodeDialog = ZLoadingDialog(this)
-				.setLoadingBuilder(Z_TYPE.SNAKE_CIRCLE)
-				.setHintText(getString(R.string.hint_dialog_update_vcode))
-				.setHintTextSize(16F)
-				.setCancelable(false)
+    private fun initView() {
+        vcodeDialog = ZLoadingDialog(this)
+                .setLoadingBuilder(Z_TYPE.SNAKE_CIRCLE)
+                .setHintText(getString(R.string.hint_dialog_update_vcode))
+                .setHintTextSize(16F)
+                .setCancelable(false)
 
-		loginDialog = ZLoadingDialog(this)
-				.setLoadingBuilder(Z_TYPE.STAR_LOADING)
-				.setHintText(getString(R.string.hint_dialog_login))
-				.setHintTextSize(16F)
-				.setCancelable(false)
+        loginDialog = ZLoadingDialog(this)
+                .setLoadingBuilder(Z_TYPE.STAR_LOADING)
+                .setHintText(getString(R.string.hint_dialog_login))
+                .setHintTextSize(16F)
+                .setCancelable(false)
 
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
-		{
-			vcodeDialog.setLoadingColor(resources.getColor(R.color.colorAccent, null))
-			vcodeDialog.setHintTextColor(resources.getColor(R.color.colorAccent, null))
-			loginDialog.setLoadingColor(resources.getColor(R.color.colorAccent, null))
-			loginDialog.setHintTextColor(resources.getColor(R.color.colorAccent, null))
-		}
-		else
-		{
-			vcodeDialog.setLoadingColor(Color.parseColor("#4053ff"))
-			vcodeDialog.setHintTextColor(Color.parseColor("#4053ff"))
-			loginDialog.setLoadingColor(Color.parseColor("#4053ff"))
-			loginDialog.setHintTextColor(Color.parseColor("#4053ff"))
-		}
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            vcodeDialog.setLoadingColor(resources.getColor(R.color.colorAccent, null))
+            vcodeDialog.setHintTextColor(resources.getColor(R.color.colorAccent, null))
+            loginDialog.setLoadingColor(resources.getColor(R.color.colorAccent, null))
+            loginDialog.setHintTextColor(resources.getColor(R.color.colorAccent, null))
+        } else {
+            vcodeDialog.setLoadingColor(Color.parseColor("#4053ff"))
+            vcodeDialog.setHintTextColor(Color.parseColor("#4053ff"))
+            loginDialog.setLoadingColor(Color.parseColor("#4053ff"))
+            loginDialog.setHintTextColor(Color.parseColor("#4053ff"))
+        }
 
-		val colorAnim = ObjectAnimator.ofInt(login_form, "backgroundColor", -0x7f80, -0x7f7f01)
-		colorAnim.duration = 3000
-		colorAnim.setEvaluator(ArgbEvaluator())
-		colorAnim.repeatCount = ValueAnimator.INFINITE
-		colorAnim.repeatMode = ValueAnimator.REVERSE
-		colorAnim.start()
-	}
+        val colorAnim = ObjectAnimator.ofInt(login_form, "backgroundColor", -0x7f80, -0x7f7f01)
+        colorAnim.duration = 3000
+        colorAnim.setEvaluator(ArgbEvaluator())
+        colorAnim.repeatCount = ValueAnimator.INFINITE
+        colorAnim.repeatMode = ValueAnimator.REVERSE
+        colorAnim.start()
+    }
 
-	private fun loadVcode()
-	{
-		Observable.create<Bitmap> { subscriber ->
-			val service = retrofit.create(RTResponse::class.java)
-			val call = service.getVCodeCall(1)
-			val response = call.execute()
-			if (response.isSuccessful)
-			{
-				subscriber.onNext(BitmapFactory.decodeStream(response.body()?.byteStream()))
-				subscriber.onComplete()
-			}
-			else
-			{
-				subscriber.onError(Exception(response.errorBody().toString()))
-			}
-		}
-				.subscribeOn(Schedulers.newThread())
-				.observeOn(AndroidSchedulers.mainThread())
-				.subscribe(object : Observer<Bitmap>
-				{
-					lateinit var bitmap: Bitmap
+    private fun loadVcode() {
+        Observable.create<Bitmap> { subscriber ->
+            val service = retrofit.create(RTResponse::class.java)
+            val call = service.getVCodeCall(1)
+            val response = call.execute()
+            if (response.isSuccessful) {
+                subscriber.onNext(BitmapFactory.decodeStream(response.body()?.byteStream()))
+                subscriber.onComplete()
+            } else {
+                subscriber.onError(Exception(response.errorBody().toString()))
+            }
+        }
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(object : Observer<Bitmap> {
+                    lateinit var bitmap: Bitmap
 
-					override fun onSubscribe(d: Disposable)
-					{
-						vcodeDialog.show()
-					}
+                    override fun onSubscribe(d: Disposable) {
+                        vcodeDialog.show()
+                    }
 
-					override fun onError(e: Throwable)
-					{
-						e.printStackTrace()
-						vcodeDialog.dismiss()
-						Toast.makeText(this@LoginActivity, e.message, Toast.LENGTH_SHORT)
-								.show()
-					}
+                    override fun onError(e: Throwable) {
+                        e.printStackTrace()
+                        vcodeDialog.dismiss()
+                        Toast.makeText(this@LoginActivity, e.message, Toast.LENGTH_SHORT)
+                                .show()
+                    }
 
-					override fun onComplete()
-					{
-						vcodeDialog.dismiss()
-						vcode_image_view.setImageBitmap(bitmap)
-					}
+                    override fun onComplete() {
+                        vcodeDialog.dismiss()
+                        vcode_image_view.setImageBitmap(bitmap)
+                    }
 
-					override fun onNext(bitmap: Bitmap)
-					{
-						this.bitmap = bitmap
-					}
-				})
-	}
+                    override fun onNext(bitmap: Bitmap) {
+                        this.bitmap = bitmap
+                    }
+                })
+    }
 
-	private fun attemptLogin()
-	{
-		username.error = null
-		password.error = null
-		vcode.error = null
+    private fun attemptLogin() {
+        username.error = null
+        password.error = null
+        vcode.error = null
 
-		val usernameStr = username.text.toString()
-		val passwordStr = password.text.toString()
-		val vcodeStr = vcode.text.toString()
+        val usernameStr = username.text.toString()
+        val passwordStr = password.text.toString()
+        val vcodeStr = vcode.text.toString()
 
-		var cancel = false
-		var focusView: View? = null
+        var cancel = false
+        var focusView: View? = null
 
-		when
-		{
-			TextUtils.isEmpty(usernameStr) ->
-			{
-				username.error = getString(R.string.error_field_required)
-				focusView = username
-				cancel = true
-			}
-			TextUtils.isEmpty(passwordStr) ->
-			{
-				password.error = getString(R.string.error_field_required)
-				focusView = password
-				cancel = true
-			}
-			TextUtils.isEmpty(vcodeStr) ->
-			{
-				vcode.error = getString(R.string.error_field_required)
-				focusView = vcode
-				cancel = true
-			}
-		}
+        when {
+            TextUtils.isEmpty(usernameStr) -> {
+                username.error = getString(R.string.error_field_required)
+                focusView = username
+                cancel = true
+            }
+            TextUtils.isEmpty(passwordStr) -> {
+                password.error = getString(R.string.error_field_required)
+                focusView = password
+                cancel = true
+            }
+            TextUtils.isEmpty(vcodeStr) -> {
+                vcode.error = getString(R.string.error_field_required)
+                focusView = vcode
+                cancel = true
+            }
+        }
 
-		if (cancel)
-		{
-			focusView?.requestFocus()
-		}
-		else
-		{
-			login()
-		}
-	}
+        if (cancel) {
+            focusView?.requestFocus()
+        } else {
+            login()
+        }
+    }
 
-	private fun login()
-	{
-		val usernameStr = username.text.toString()
-		val passwordStr = password.text.toString()
-		val vcodeStr = vcode.text.toString()
+    private fun login() {
+        val usernameStr = username.text.toString()
+        val passwordStr = password.text.toString()
+        val vcodeStr = vcode.text.toString()
 
-		Observable.create<Int> { subscriber ->
-			val params = HashMap<String, String>()
-			params.put("username", usernameStr)
-			params.put("password", passwordStr)
-			params.put("vcode", vcodeStr)
-			val service = retrofit.create(RTResponse::class.java)
-			val call = service.loginCall(usernameStr, passwordStr, vcodeStr)
-			val response = call.execute()
-			if (!response.isSuccessful)
-			{
-				Logs.i(TAG, "login: 请求失败")
-				subscriber.onComplete()
-				return@create
-			}
-			subscriber.onNext(response.body()!!.rt.toInt())
-			if (response.body()?.rt == "1")
-			{
-				val sharedPreference = getSharedPreferences("cache", Context.MODE_PRIVATE)
-				val editor = sharedPreference.edit()
-				editor.putString("studentNumber", usernameStr)
-				editor.putString("studentName", response.body()?.name)
-				name = response.body()?.name!!
-				editor.apply()
-			}
-			subscriber.onComplete()
-		}
-				.subscribeOn(Schedulers.newThread())
-				.observeOn(AndroidSchedulers.mainThread())
-				.subscribe(object : Observer<Int>
-				{
-					private var result = -1
+        Observable.create<Int> { subscriber ->
+            val params = HashMap<String, String>()
+            params.put("username", usernameStr)
+            params.put("password", passwordStr)
+            params.put("vcode", vcodeStr)
+            val service = retrofit.create(RTResponse::class.java)
+            val call = service.loginCall(usernameStr, passwordStr, vcodeStr)
+            val response = call.execute()
+            if (!response.isSuccessful) {
+                Logs.i(TAG, "login: 请求失败")
+                subscriber.onComplete()
+                return@create
+            }
+            subscriber.onNext(response.body()!!.rt.toInt())
+            if (response.body()?.rt == "1") {
+                val sharedPreference = getSharedPreferences("cache", Context.MODE_PRIVATE)
+                val editor = sharedPreference.edit()
+                editor.putString("studentNumber", usernameStr)
+                editor.putString("studentName", response.body()?.name)
+                name = response.body()?.name!!
+                editor.apply()
+            }
+            subscriber.onComplete()
+        }
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(object : Observer<Int> {
+                    private var result = -1
 
-					override fun onSubscribe(d: Disposable)
-					{
-						loginDialog.show()
-					}
+                    override fun onSubscribe(d: Disposable) {
+                        loginDialog.show()
+                    }
 
-					override fun onError(e: Throwable)
-					{
-						e.printStackTrace()
-						loginDialog.dismiss()
-						Toast.makeText(this@LoginActivity, e.message, Toast.LENGTH_SHORT)
-								.show()
-					}
+                    override fun onError(e: Throwable) {
+                        e.printStackTrace()
+                        loginDialog.dismiss()
+                        Toast.makeText(this@LoginActivity, e.message, Toast.LENGTH_SHORT)
+                                .show()
+                    }
 
-					override fun onComplete()
-					{
-						loginDialog.dismiss()
-						when (result)
-						{
-							0 ->
-							{
-								ScheduleHelper.isLogin = false
-								Toast.makeText(this@LoginActivity, R.string.error_timeout, Toast.LENGTH_SHORT)
-										.show()
-							}
-							1 ->
-							{
-								ScheduleHelper.isLogin = true
-								Toast.makeText(this@LoginActivity, getString(R.string.success_login, name, getString(R.string.app_name)), Toast.LENGTH_SHORT)
-										.show()
-								startActivity(Intent(this@LoginActivity, MainActivity::class.java))
-								finish()
-								return
-							}
-							2 ->
-							{
-								ScheduleHelper.isLogin = false
-								username.error = getString(R.string.error_invalid_username)
-								username.requestFocus()
-							}
-							3 ->
-							{
-								ScheduleHelper.isLogin = false
-								password.error = getString(R.string.error_invalid_password)
-								password.requestFocus()
-							}
-							4 ->
-							{
-								ScheduleHelper.isLogin = false
-								vcode.error = getString(R.string.error_invalid_vcode)
-								vcode.requestFocus()
-							}
-							else ->
-							{
-								ScheduleHelper.isLogin = false
-								Toast.makeText(this@LoginActivity, R.string.error_other, Toast.LENGTH_SHORT)
-										.show()
-							}
-						}
-						loadVcode()
-					}
+                    override fun onComplete() {
+                        loginDialog.dismiss()
+                        when (result) {
+                            0 -> {
+                                ScheduleHelper.isLogin = false
+                                Toast.makeText(this@LoginActivity, R.string.error_timeout, Toast.LENGTH_SHORT)
+                                        .show()
+                            }
+                            1 -> {
+                                ScheduleHelper.isLogin = true
+                                Toast.makeText(this@LoginActivity, getString(R.string.success_login, name, getString(R.string.app_name)), Toast.LENGTH_SHORT)
+                                        .show()
+                                startActivity(Intent(this@LoginActivity, MainActivity::class.java))
+                                finish()
+                                return
+                            }
+                            2 -> {
+                                ScheduleHelper.isLogin = false
+                                username.error = getString(R.string.error_invalid_username)
+                                username.requestFocus()
+                            }
+                            3 -> {
+                                ScheduleHelper.isLogin = false
+                                password.error = getString(R.string.error_invalid_password)
+                                password.requestFocus()
+                            }
+                            4 -> {
+                                ScheduleHelper.isLogin = false
+                                vcode.error = getString(R.string.error_invalid_vcode)
+                                vcode.requestFocus()
+                            }
+                            else -> {
+                                ScheduleHelper.isLogin = false
+                                Toast.makeText(this@LoginActivity, R.string.error_other, Toast.LENGTH_SHORT)
+                                        .show()
+                            }
+                        }
+                        loadVcode()
+                    }
 
-					override fun onNext(result: Int)
-					{
-						Logs.i(TAG, "onNext: ")
-						this.result = result
-					}
-				})
-	}
+                    override fun onNext(result: Int) {
+                        Logs.i(TAG, "onNext: ")
+                        this.result = result
+                    }
+                })
+    }
 }

@@ -31,142 +31,124 @@ import java.util.concurrent.TimeUnit
 /**
  * Created by myste.
  */
-class DownloadService : IntentService(TAG)
-{
+class DownloadService : IntentService(TAG) {
 
-	companion object
-	{
-		private val TAG = "DownloadService"
-	}
+    companion object {
+        private val TAG = "DownloadService"
+    }
 
-	private lateinit var retrofit: Retrofit
+    private lateinit var retrofit: Retrofit
 
-	override fun onHandleIntent(intent: Intent?)
-	{
-		Logs.i(TAG, "onHandleIntent: ")
-		val type = intent?.getStringExtra("type")
-		val fileName = intent?.getStringExtra("fileName")
-		val file = File(getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS).absolutePath + File.separator + type + File.separator + fileName)
-		if (!file.parentFile.exists())
-			file.parentFile.mkdirs()
-		if (type == null || type == "" || fileName == null || fileName == "")
-		{
-			Logs.i(TAG, "onHandleIntent: 格式错误")
-			return
-		}
-		Logs.i(TAG, "onStartCommand: type: " + type)
-		Logs.i(TAG, "onStartCommand: fileName: " + fileName)
-		Logs.i(TAG, "onStartCommand: " + file.absolutePath)
-		download(this, type, fileName, file)
-	}
+    override fun onHandleIntent(intent: Intent?) {
+        Logs.i(TAG, "onHandleIntent: ")
+        val type = intent?.getStringExtra("type")
+        val fileName = intent?.getStringExtra("fileName")
+        val file = File(getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS).absolutePath + File.separator + type + File.separator + fileName)
+        if (!file.parentFile.exists())
+            file.parentFile.mkdirs()
+        if (type == null || type == "" || fileName == null || fileName == "") {
+            Logs.i(TAG, "onHandleIntent: 格式错误")
+            return
+        }
+        Logs.i(TAG, "onStartCommand: type: " + type)
+        Logs.i(TAG, "onStartCommand: fileName: " + fileName)
+        Logs.i(TAG, "onStartCommand: " + file.absolutePath)
+        download(this, type, fileName, file)
+    }
 
-	override fun onCreate()
-	{
-		Logs.i(TAG, "onCreate: ")
-		super.onCreate()
+    override fun onCreate() {
+        Logs.i(TAG, "onCreate: ")
+        super.onCreate()
 
-		val listener = object : DownloadProgressListener
-		{
-			private var temp = 0
+        val listener = object : DownloadProgressListener {
+            private var temp = 0
 
-			override fun update(bytesRead: Long, contentLength: Long, done: Boolean)
-			{
-				val download = Download()
-				download.totalFileSize = contentLength
-				download.currentFileSize = bytesRead
-				download.progress = (bytesRead * 100 / contentLength).toInt()
-				if (temp % 3 == 0)
-					DownloadNotification.updateProgress(applicationContext, download)
-				temp++
-			}
-		}
-		val client = OkHttpClient.Builder()
-				.addInterceptor(DownloadProgressInterceptor(listener))
-				.retryOnConnectionFailure(true)
-				.connectTimeout(15, TimeUnit.SECONDS)
-				.build()
-		retrofit = Retrofit.Builder()
-				.baseUrl("http://tomcat.weilylab.com:9783")
-				.client(client)
-				.addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-				.build()
-	}
+            override fun update(bytesRead: Long, contentLength: Long, done: Boolean) {
+                val download = Download()
+                download.totalFileSize = contentLength
+                download.currentFileSize = bytesRead
+                download.progress = (bytesRead * 100 / contentLength).toInt()
+                if (temp % 3 == 0)
+                    DownloadNotification.updateProgress(applicationContext, download)
+                temp++
+            }
+        }
+        val client = OkHttpClient.Builder()
+                .addInterceptor(DownloadProgressInterceptor(listener))
+                .retryOnConnectionFailure(true)
+                .connectTimeout(15, TimeUnit.SECONDS)
+                .build()
+        retrofit = Retrofit.Builder()
+                .baseUrl("http://tomcat.weilylab.com:9783")
+                .client(client)
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                .build()
+    }
 
-	private fun download(context: Context, type: String, fileName: String, file: File)
-	{
-		Logs.i(TAG, "download: " + fileName)
-		retrofit.create(UpdateResponse::class.java)
-				.download(type, fileName)
-				.subscribeOn(Schedulers.io())
-				.unsubscribeOn(Schedulers.io())
-				.map({ responseBody -> responseBody.byteStream() })
-				.observeOn(Schedulers.computation())
-				.doOnNext { inputStream ->
-					try
-					{
-						FileUtil.saveFile(inputStream, file)
-						if (type == "patch")
-						{
-							val applicationInfo = applicationContext.applicationInfo
-							Logs.i(TAG, "patchAPK: " + applicationInfo.sourceDir)
-							val newApkPath = getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS).absolutePath + File.separator + "apk" + File.separator + fileName + ".apk"
-							val newAPK = File(newApkPath)
-							if (!newAPK.parentFile.exists())
-								newAPK.parentFile.mkdirs()
-							BsPatch.patch(applicationInfo.sourceDir,
-									newApkPath,
-									file.absolutePath)
-						}
-					}
-					catch (e: IOException)
-					{
-						e.printStackTrace()
-					}
-				}
-				.observeOn(AndroidSchedulers.mainThread())
-				.subscribe(object : Observer<InputStream>
-				{
-					override fun onSubscribe(d: Disposable)
-					{
-						Logs.i(TAG, "onSubscribe: ")
-						DownloadNotification.notify(context, fileName)
-					}
+    private fun download(context: Context, type: String, fileName: String, file: File) {
+        Logs.i(TAG, "download: " + fileName)
+        retrofit.create(UpdateResponse::class.java)
+                .download(type, fileName)
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .map({ responseBody -> responseBody.byteStream() })
+                .observeOn(Schedulers.computation())
+                .doOnNext { inputStream ->
+                    try {
+                        FileUtil.saveFile(inputStream, file)
+                        if (type == "patch") {
+                            val applicationInfo = applicationContext.applicationInfo
+                            Logs.i(TAG, "patchAPK: " + applicationInfo.sourceDir)
+                            val newApkPath = getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS).absolutePath + File.separator + "apk" + File.separator + fileName + ".apk"
+                            val newAPK = File(newApkPath)
+                            if (!newAPK.parentFile.exists())
+                                newAPK.parentFile.mkdirs()
+                            BsPatch.patch(applicationInfo.sourceDir,
+                                    newApkPath,
+                                    file.absolutePath)
+                        }
+                    } catch (e: IOException) {
+                        e.printStackTrace()
+                    }
+                }
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(object : Observer<InputStream> {
+                    override fun onSubscribe(d: Disposable) {
+                        Logs.i(TAG, "onSubscribe: ")
+                        DownloadNotification.notify(context, fileName)
+                    }
 
-					override fun onComplete()
-					{
-						val installIntent = Intent(Intent.ACTION_VIEW)
-						installIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-						installIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
-						val installFile = if (type == "patch")
-							File(file.absolutePath + ".apk")
-						else
-							file
-						val uri = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
-							FileProvider.getUriForFile(context, "com.weilylab.xhuschedule", installFile)
-						else
-							Uri.fromFile(installFile)
-						Logs.i(TAG, "onComplete: " + installFile.absolutePath)
-						Logs.i(TAG, "onComplete: " + uri)
-						installIntent.setDataAndType(uri, context.contentResolver.getType(uri))
-						startActivity(installIntent)
-						DownloadNotification.cancel(context)
-						stopSelf()
-					}
+                    override fun onComplete() {
+                        val installIntent = Intent(Intent.ACTION_VIEW)
+                        installIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                        installIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
+                        val installFile = if (type == "patch")
+                            File(file.absolutePath + ".apk")
+                        else
+                            file
+                        val uri = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
+                            FileProvider.getUriForFile(context, "com.weilylab.xhuschedule", installFile)
+                        else
+                            Uri.fromFile(installFile)
+                        Logs.i(TAG, "onComplete: " + installFile.absolutePath)
+                        Logs.i(TAG, "onComplete: " + uri)
+                        installIntent.setDataAndType(uri, context.contentResolver.getType(uri))
+                        startActivity(installIntent)
+                        DownloadNotification.cancel(context)
+                        stopSelf()
+                    }
 
-					override fun onNext(t: InputStream)
-					{
-					}
+                    override fun onNext(t: InputStream) {
+                    }
 
-					override fun onError(e: Throwable)
-					{
-						DownloadNotification.downloadError(context)
-						e.printStackTrace()
-					}
-				})
-	}
+                    override fun onError(e: Throwable) {
+                        DownloadNotification.downloadError(context)
+                        e.printStackTrace()
+                    }
+                })
+    }
 
-	override fun onTaskRemoved(rootIntent: Intent?)
-	{
-		DownloadNotification.cancel(this)
-	}
+    override fun onTaskRemoved(rootIntent: Intent?) {
+        DownloadNotification.cancel(this)
+    }
 }
