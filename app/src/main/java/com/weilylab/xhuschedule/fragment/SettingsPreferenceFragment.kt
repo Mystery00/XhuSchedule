@@ -44,6 +44,7 @@ import kotlinx.android.synthetic.main.activity_settings.*
 import vip.mystery0.tools.logs.Logs
 import java.io.File
 import java.io.InputStreamReader
+import java.net.UnknownHostException
 import java.util.*
 
 /**
@@ -183,6 +184,7 @@ class SettingsPreferenceFragment : PreferenceFragment() {
                 }
             })
             AlertDialog.Builder(activity)
+                    .setTitle(" ")
                     .setView(view)
                     .setPositiveButton(android.R.string.ok, { _, _ ->
                         if (currentProgress != Settings.customTransparency)
@@ -203,9 +205,7 @@ class SettingsPreferenceFragment : PreferenceFragment() {
             val textViewLocation: TextView = view.findViewById(R.id.textView_location)
             val seekBar: SeekBar = view.findViewById(R.id.seekBar)
             val textView: TextView = view.findViewById(R.id.textView)
-            val size = Point()
-            activity.windowManager.defaultDisplay.getSize(size)
-            val width = (size.x - DensityUtil.dip2px(activity, 32F)) / 7
+            val width = (resources.displayMetrics.widthPixels - DensityUtil.dip2px(activity, 32F)) / 7
             val layoutParams = testCourseLayout.layoutParams
             layoutParams.width = width
             layoutParams.height = DensityUtil.dip2px(activity, 144F)
@@ -232,6 +232,7 @@ class SettingsPreferenceFragment : PreferenceFragment() {
                 }
             })
             AlertDialog.Builder(activity)
+                    .setTitle(" ")
                     .setView(view)
                     .setPositiveButton(android.R.string.ok, { _, _ ->
                         if (currentProgress + 4 != Settings.customTextSize)
@@ -260,6 +261,12 @@ class SettingsPreferenceFragment : PreferenceFragment() {
                         override fun onError(e: Throwable) {
                             loadingDialog.dismiss()
                             e.printStackTrace()
+                            if (e is UnknownHostException)
+                                Snackbar.make(coordinatorLayout, R.string.error_network, Snackbar.LENGTH_SHORT)
+                                        .show()
+                            else
+                                Snackbar.make(coordinatorLayout, "请求出错：" + e.message, Snackbar.LENGTH_SHORT)
+                                        .show()
                         }
 
                         override fun onComplete() {

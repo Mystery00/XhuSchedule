@@ -44,6 +44,7 @@ import kotlinx.android.synthetic.main.content_main.*
 import vip.mystery0.tools.logs.Logs
 import java.io.File
 import java.io.InputStreamReader
+import java.net.UnknownHostException
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
     companion object {
@@ -103,8 +104,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     private fun initView() {
-        ScheduleHelper.itemCourseWidth = (resources.displayMetrics.widthPixels - DensityUtil.dip2px(this, 32F)) / 7F
-
         val viewPagerAdapter = ViewPagerAdapter(supportFragmentManager)
         viewPagerAdapter.addFragment(todayFragment)
         viewPagerAdapter.addFragment(weekFragment)
@@ -311,8 +310,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     override fun onError(e: Throwable) {
                         loadingDialog.dismiss()
                         e.printStackTrace()
-                        Snackbar.make(coordinatorLayout, "请求出错：" + e.message, Snackbar.LENGTH_SHORT)
-                                .show()
+                        if (e is UnknownHostException)
+                            Snackbar.make(coordinatorLayout, R.string.error_network, Snackbar.LENGTH_SHORT)
+                                    .show()
+                        else
+                            Snackbar.make(coordinatorLayout, "请求出错：" + e.message, Snackbar.LENGTH_SHORT)
+                                    .show()
                     }
 
                     override fun onComplete() {

@@ -1,5 +1,7 @@
 package com.weilylab.xhuschedule.util
 
+import com.weilylab.xhuschedule.APP
+import com.weilylab.xhuschedule.util.cookie.CookieManger
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
@@ -19,13 +21,13 @@ object ScheduleHelper {
     var studentNumber = "0"
     var studentPassword = "0"
     var weekIndex = 0
-    var itemCourseWidth = 0F//课程宽度
 
     private val client = OkHttpClient.Builder()
             .retryOnConnectionFailure(true)
             .connectTimeout(20, TimeUnit.SECONDS)
             .readTimeout(20, TimeUnit.SECONDS)
             .writeTimeout(20, TimeUnit.SECONDS)
+            .cookieJar(CookieManger(APP.getContext()))
             .build()
 
     val tomcatRetrofit = Retrofit.Builder()
