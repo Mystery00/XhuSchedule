@@ -105,8 +105,7 @@ class LoginActivity : AppCompatActivity()
 			}
 			else
 			{
-				Toast.makeText(this@LoginActivity, response.errorBody().toString(), Toast.LENGTH_SHORT)
-						.show()
+				subscriber.onError(Exception(response.errorBody().toString()))
 			}
 		}
 				.subscribeOn(Schedulers.newThread())
