@@ -32,6 +32,7 @@
     <string name="error_invalid_vcode">验证码错误</string>
     <string name="error_field_required">参数不可为空</string>
     <string name="error_timeout">请求超时</string>
+    <string name="error_network">网络似乎有点问题哦~</string>
     <string name="error_other">其他错误</string>
     <string name="error_time_not_monday">选择的时间不是周一，选择无效</string>
     <string name="error_time_after">选择的时间不能在当前时间之后</string>
