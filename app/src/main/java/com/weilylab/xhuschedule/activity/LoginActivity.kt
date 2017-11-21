@@ -162,8 +162,8 @@ class LoginActivity : AppCompatActivity() {
                                         .apply()
                                 Toast.makeText(this@LoginActivity, getString(R.string.success_login, contentRT?.name, getString(R.string.app_name)), Toast.LENGTH_SHORT)
                                         .show()
-//                                startActivity(Intent(this@LoginActivity, MainActivity::class.java))
-//                                finish()
+                                startActivity(Intent(this@LoginActivity, MainActivity::class.java))
+                                finish()
                                 return
                             }
                             "2" -> {
