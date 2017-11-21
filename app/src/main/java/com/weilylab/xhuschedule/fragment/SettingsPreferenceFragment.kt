@@ -179,6 +179,10 @@ class SettingsPreferenceFragment : PreferenceFragment() {
             })
             AlertDialog.Builder(activity)
                     .setView(view)
+                    .setPositiveButton(android.R.string.ok, { _, _ ->
+                        Settings.customTransparency = currentProgress
+                    })
+                    .setNegativeButton(android.R.string.cancel, null)
                     .show()
             true
         }
