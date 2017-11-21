@@ -38,6 +38,7 @@
             android:id="@+id/username_text_input_layout"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/card_view_margin"
             android:hint="@string/prompt_username"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -50,7 +51,7 @@
                 android:imeOptions="actionNext"
                 android:inputType="number"
                 android:maxLines="1"
-                android:singleLine="true"/>
+                android:singleLine="true" />
 
         </android.support.design.widget.TextInputLayout>
 
@@ -58,6 +59,7 @@
             android:id="@+id/password_text_input_layout"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/card_view_margin"
             android:hint="@string/prompt_password"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -70,7 +72,7 @@
                 android:imeOptions="actionNext"
                 android:inputType="textPassword"
                 android:maxLines="1"
-                android:singleLine="true"/>
+                android:singleLine="true" />
 
         </android.support.design.widget.TextInputLayout>
 
