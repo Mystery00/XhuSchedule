@@ -111,6 +111,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         viewpager.adapter = viewPagerAdapter
         val userIMG: CircleImageView = nav_view.getHeaderView(0).findViewById(R.id.userIMG)
         val nickName: TextView = nav_view.getHeaderView(0).findViewById(R.id.nickName)
+        userIMG.setImageResource(R.mipmap.ic_launcher)
 
         bottomNavigationView.setOnNavigationItemSelectedListener { item ->
             when (item.itemId) {

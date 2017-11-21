@@ -4,6 +4,7 @@ import android.Manifest
 import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Color
 import android.graphics.Point
 import android.net.Uri
 import android.os.Build
@@ -11,6 +12,7 @@ import android.os.Bundle
 import android.preference.Preference
 import android.preference.PreferenceFragment
 import android.provider.MediaStore
+import android.support.constraint.ConstraintLayout
 import android.support.design.widget.CoordinatorLayout
 import android.support.design.widget.Snackbar
 import android.support.v4.content.ContextCompat
@@ -18,6 +20,8 @@ import android.support.v7.app.AlertDialog
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.SeekBar
+import android.widget.TextView
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.activity.SettingsActivity
 import com.weilylab.xhuschedule.classes.Update
@@ -145,7 +149,34 @@ class SettingsPreferenceFragment : PreferenceFragment() {
             true
         }
         customTransPreference.setOnPreferenceClickListener {
+            var color = ScheduleHelper.getRandomColor()
+            var currentProgress = Settings.customTransparency
             val view = LayoutInflater.from(activity).inflate(R.layout.dialog_custom_trans, null)
+            val testCourseLayout: ConstraintLayout = view.findViewById(R.id.test_course_layout)
+            val seekBar: SeekBar = view.findViewById(R.id.seekBar)
+            val textView: TextView = view.findViewById(R.id.textView)
+            testCourseLayout.setBackgroundColor(Color.parseColor('#' + color))
+            testCourseLayout.setOnClickListener {
+                val trans = (if (currentProgress < 16) "0" else "") + Integer.toHexString(currentProgress)
+                color = ScheduleHelper.getRandomColor()
+                testCourseLayout.setBackgroundColor(Color.parseColor('#' + trans + color))
+            }
+            seekBar.progress = currentProgress
+            textView.text = getString(R.string.test_course_current_progress, currentProgress * 100 / 255F)
+            seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+                override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                    currentProgress = progress
+                    val trans = (if (progress < 16) "0" else "") + Integer.toHexString(progress)
+                    textView.text = getString(R.string.test_course_current_progress, currentProgress * 100 / 255F)
+                    testCourseLayout.setBackgroundColor(Color.parseColor('#' + trans + color))
+                }
+
+                override fun onStartTrackingTouch(seekBar: SeekBar?) {
+                }
+
+                override fun onStopTrackingTouch(seekBar: SeekBar?) {
+                }
+            })
             AlertDialog.Builder(activity)
                     .setView(view)
                     .show()

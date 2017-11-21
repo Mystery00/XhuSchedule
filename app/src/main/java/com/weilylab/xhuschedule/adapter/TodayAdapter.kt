@@ -13,6 +13,7 @@ import com.weilylab.xhuschedule.activity.MainActivity
 import com.weilylab.xhuschedule.classes.Course
 import com.weilylab.xhuschedule.listener.InfoChangeListener
 import com.weilylab.xhuschedule.util.ScheduleHelper
+import com.weilylab.xhuschedule.util.Settings
 import com.weilylab.xhuschedule.util.ViewUtil
 import vip.mystery0.tools.logs.Logs
 
@@ -49,6 +50,7 @@ class TodayAdapter(private val context: Context,
                         }
                     })
                 }
+                holder.itemView.background.alpha = Settings.customTransparency
             }
         }
     }

@@ -1,10 +1,8 @@
 package com.weilylab.xhuschedule.interfaces
 
-import com.weilylab.xhuschedule.classes.ContentRT
 import io.reactivex.Observable
 import okhttp3.ResponseBody
 
-import retrofit2.Call
 import retrofit2.http.*
 
 /**
@@ -12,9 +10,6 @@ import retrofit2.http.*
  */
 
 interface RTResponse {
-
-    @GET("/course/Course/getContent")
-    fun getContentCall(): Call<ContentRT>
 
     @FormUrlEncoded
     @POST("/course/Course/getCourses")
