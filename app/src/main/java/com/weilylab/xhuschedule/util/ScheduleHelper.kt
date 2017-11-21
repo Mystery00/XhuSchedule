@@ -3,7 +3,6 @@ package com.weilylab.xhuschedule.util
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
-import retrofit2.converter.gson.GsonConverterFactory
 import java.math.BigInteger
 import java.security.MessageDigest
 import java.util.*
@@ -16,7 +15,6 @@ object ScheduleHelper {
     var isLogin = false
     var isCookieAvailable = false
     var isUIChange = false
-    private var updateRetrofit: Retrofit? = null
     var studentName = "0"
     var studentNumber = "0"
     var studentPassword = "0"
@@ -25,7 +23,9 @@ object ScheduleHelper {
 
     private val client = OkHttpClient.Builder()
             .retryOnConnectionFailure(true)
-            .connectTimeout(15, TimeUnit.SECONDS)
+            .connectTimeout(20, TimeUnit.SECONDS)
+            .readTimeout(20, TimeUnit.SECONDS)
+            .writeTimeout(20, TimeUnit.SECONDS)
             .build()
 
     val tomcatRetrofit = Retrofit.Builder()
@@ -39,17 +39,6 @@ object ScheduleHelper {
             .client(client)
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .build()
-
-    fun getUpdateRetrofit(): Retrofit {
-        if (updateRetrofit == null) {
-            updateRetrofit = Retrofit.Builder()
-                    .client(client)
-                    .baseUrl("http://tomcat.weilylab.com:9783")
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .build()
-        }
-        return updateRetrofit!!
-    }
 
     fun getRandomColor(): String {
         val random = Random()
