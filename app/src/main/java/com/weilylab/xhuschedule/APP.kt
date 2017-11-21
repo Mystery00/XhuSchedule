@@ -2,6 +2,8 @@ package com.weilylab.xhuschedule
 
 import android.app.Application
 import android.content.Context
+import android.content.Intent
+import com.weilylab.xhuschedule.service.UpdateService
 import vip.mystery0.tools.crashHandler.CrashHandler
 import vip.mystery0.tools.logs.Logs
 import java.io.File
@@ -26,5 +28,6 @@ class APP : Application() {
         CrashHandler.getInstance(this)
                 .setDirectory(cacheDir.absolutePath + File.separator)
                 .init()
+        startService(Intent(this, UpdateService::class.java))
     }
 }
