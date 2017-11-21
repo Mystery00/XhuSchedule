@@ -94,5 +94,6 @@
     <string name="test_course_location">上课地点</string>
     <string name="test_course_click">点击刷新颜色</string>
     <string name="test_course_drag">拖动以查看效果</string>
-    <string name="test_course_current_progress">当前不透明度为%1$f%%</string>
+    <string name="test_course_current_progress_trans">当前不透明度为%1$f%%</string>
+    <string name="test_course_current_progress_text_size">当前文字大小为%1$dsp</string>
 </resources>

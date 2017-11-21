@@ -90,7 +90,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     override fun onResume() {
         super.onResume()
-        Logs.i(TAG, "onResume: ")
         val options = RequestOptions()
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .skipMemoryCache(true)
@@ -98,6 +97,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             Glide.with(this).load(Settings.customBackgroundImg).apply(options).into(background)
         if (Settings.customHeaderImg != "")
             Glide.with(this).load(Settings.customHeaderImg).apply(options).into(nav_view.getHeaderView(0).findViewById(R.id.background))
+        if (ScheduleHelper.isUIChange)
+            updateView()
+        ScheduleHelper.isUIChange = false
     }
 
     private fun initView() {
