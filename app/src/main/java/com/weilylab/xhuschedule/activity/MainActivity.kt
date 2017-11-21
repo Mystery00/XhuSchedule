@@ -21,8 +21,10 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import com.getkeepsafe.taptargetview.TapTarget
 import com.getkeepsafe.taptargetview.TapTargetSequence
+import com.google.gson.Gson
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.adapter.ViewPagerAdapter
+import com.weilylab.xhuschedule.classes.ContentRT
 import com.weilylab.xhuschedule.classes.Course
 import com.weilylab.xhuschedule.fragment.TableFragment
 import com.weilylab.xhuschedule.fragment.TodayFragment
@@ -41,13 +43,14 @@ import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlinx.android.synthetic.main.content_main.*
 import vip.mystery0.tools.logs.Logs
 import java.io.File
+import java.io.InputStreamReader
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
     companion object {
         private val TAG = "MainActivity"
     }
 
-    private val retrofit = ScheduleHelper.getRetrofit()
+    //    private val retrofit = ScheduleHelper.getRetrofit()
     private lateinit var loadingDialog: ZLoadingDialog
     private var weekList = ArrayList<Course?>()
     private var allList = ArrayList<Course?>()
@@ -260,107 +263,160 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     private fun updateData() {
-        Observable.create<HashMap<String, Boolean>> { subscriber ->
-            val parentFile = File(cacheDir.absolutePath + File.separator + "caches/")
-            val sharedPreference = getSharedPreferences("cache", Context.MODE_PRIVATE)
-            val studentNumber = sharedPreference.getString("studentNumber", "0")
-            if (studentNumber == "0") {
-                Logs.i(TAG, "updateData: 学号错误")
-                ScheduleHelper.isLogin = false
-                startActivity(Intent(this@MainActivity, LoginActivity::class.java))
-                finish()
-                return@create
-            }
-            val base64Name = FileUtil.filterString(Base64.encodeToString(studentNumber.toByteArray(), Base64.DEFAULT))
-            val service = retrofit.create(RTResponse::class.java)
-            val call = service.getContentCall()
-            val response = call.execute()
-            if (!response.isSuccessful) {
-                Logs.i(TAG, "updateData: 请求失败")
-                val map = HashMap<String, Boolean>()
-                map.put("isCookieAvailable", false)
-                subscriber.onNext(map)
-                subscriber.onComplete()
-                return@create
-            }
-            if (response.body()?.rt == "0") {
-                Logs.i(TAG, "updateData: Cookie过期")
-                val map = HashMap<String, Boolean>()
-                map.put("isCookieAvailable", false)
-                subscriber.onNext(map)
-                subscriber.onComplete()
-                return@create
-            }
-            val newFile = File(parentFile, base64Name + ".temp")
-            newFile.createNewFile()
-            FileUtil.saveObjectToFile(response.body()?.courses!!, newFile)
-            val newMD5 = FileUtil.getMD5(newFile)
-            val oldFile = File(parentFile, base64Name)
-            var oldMD5 = ""
-            if (oldFile.exists())
-                oldMD5 = FileUtil.getMD5(oldFile)!!
-            val map = HashMap<String, Boolean>()
-            if (newMD5 != oldMD5) {
-                oldFile.delete()
-                newFile.renameTo(oldFile)
-                map.put("isCookieAvailable", true)
-                map.put("isUpdateData", true)
-                Logs.i(TAG, "updateData: 数据更新")
-            } else {
-                newFile.delete()
-                map.put("isCookieAvailable", true)
-                map.put("isUpdateData", false)
-                Logs.i(TAG, "updateData: 数据未变")
-            }
-            subscriber.onNext(map)
-            subscriber.onComplete()
+        val sharedPreference = getSharedPreferences("cache", Context.MODE_PRIVATE)
+        val username = sharedPreference.getString("username", "")
+        val password = sharedPreference.getString("password", "")
+        if (username == "" || password == "") {
+            Logs.i(TAG, "updateData: 用户名和密码无效")
         }
+        val parentFile = File(cacheDir.absolutePath + File.separator + "caches/")
+        val base64Name = FileUtil.filterString(Base64.encodeToString(username.toByteArray(), Base64.DEFAULT))
+        var isDataNew = false
+        ScheduleHelper.tomcatRetrofit
+                .create(RTResponse::class.java)
+                .getCourses(username, password)
                 .subscribeOn(Schedulers.newThread())
+                .unsubscribeOn(Schedulers.newThread())
+                .map({ responseBody -> Gson().fromJson(InputStreamReader(responseBody.byteStream()), ContentRT::class.java) })
+                .subscribeOn(Schedulers.io())
+                .doOnNext { contentRT ->
+                    if (contentRT.rt == "1") {
+                        val newFile = File(parentFile, base64Name + ".temp")
+                        newFile.createNewFile()
+                        FileUtil.saveObjectToFile(contentRT.courses, newFile)
+                        val newMD5 = FileUtil.getMD5(newFile)
+                        val oldFile = File(parentFile, base64Name)
+                        var oldMD5 = ""
+                        if (oldFile.exists())
+                            oldMD5 = FileUtil.getMD5(oldFile)!!
+                        isDataNew = if (newMD5 != oldMD5) {
+                            oldFile.delete()
+                            newFile.renameTo(oldFile)
+                            Logs.i(TAG, "updateData: 数据更新")
+                            true
+                        } else {
+                            newFile.delete()
+                            Logs.i(TAG, "updateData: 数据未变")
+                            false
+                        }
+                    }
+                }
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(object : Observer<HashMap<String, Boolean>> {
-                    private var isCookieAvailable = false
-                    private var isUpdateData = false
-
-                    override fun onSubscribe(d: Disposable) {
-                        Logs.i(TAG, "onSubscribe: ")
-                        loadingDialog.show()
-                    }
-
-                    override fun onNext(t: HashMap<String, Boolean>) {
-                        if (t["isCookieAvailable"] != null)
-                            isCookieAvailable = t["isCookieAvailable"]!!
-                        if (t["isUpdateData"] != null)
-                            isUpdateData = t["isUpdateData"]!!
-                    }
-
+                .subscribe(object : Observer<ContentRT> {
                     override fun onError(e: Throwable) {
-                        e.printStackTrace()
-                        loadingDialog.dismiss()
-                        isCookieAvailable = false
                     }
 
                     override fun onComplete() {
-                        loadingDialog.dismiss()
-                        isRefresh = true
-                        ScheduleHelper.isCookieAvailable = isCookieAvailable
-                        if (!isCookieAvailable) {
-                            Logs.i(TAG, "onComplete: cookie无效")
-                            Snackbar.make(coordinatorLayout, R.string.hint_invalid_cookie, Snackbar.LENGTH_LONG)
-                                    .setAction(android.R.string.ok) {
-                                        ScheduleHelper.isLogin = false
-                                        startActivity(Intent(this@MainActivity, LoginActivity::class.java))
-                                        finish()
-                                    }
-                                    .show()
-                        } else {
-                            if (isUpdateData)
-                                Snackbar.make(coordinatorLayout, R.string.hint_update_data_new, Snackbar.LENGTH_SHORT).show()
-                            else
-                                Snackbar.make(coordinatorLayout, R.string.hint_update_data, Snackbar.LENGTH_SHORT).show()
-                            updateView()
-                        }
+                    }
+
+                    override fun onSubscribe(d: Disposable) {
+                    }
+
+                    override fun onNext(t: ContentRT) {
                     }
                 })
+
+//        Observable.create<HashMap<String, Boolean>> { subscriber ->
+//            val parentFile = File(cacheDir.absolutePath + File.separator + "caches/")
+//            val sharedPreference = getSharedPreferences("cache", Context.MODE_PRIVATE)
+//            val studentNumber = sharedPreference.getString("studentNumber", "0")
+//            if (studentNumber == "0") {
+//                Logs.i(TAG, "updateData: 学号错误")
+//                ScheduleHelper.isLogin = false
+//                startActivity(Intent(this@MainActivity, LoginActivity::class.java))
+//                finish()
+//                return@create
+//            }
+//            val base64Name = FileUtil.filterString(Base64.encodeToString(studentNumber.toByteArray(), Base64.DEFAULT))
+//            val service = retrofit.create(RTResponse::class.java)
+//            val call = service.getContentCall()
+//            val response = call.execute()
+//            if (!response.isSuccessful) {
+//                Logs.i(TAG, "updateData: 请求失败")
+//                val map = HashMap<String, Boolean>()
+//                map.put("isCookieAvailable", false)
+//                subscriber.onNext(map)
+//                subscriber.onComplete()
+//                return@create
+//            }
+//            if (response.body()?.rt == "0") {
+//                Logs.i(TAG, "updateData: Cookie过期")
+//                val map = HashMap<String, Boolean>()
+//                map.put("isCookieAvailable", false)
+//                subscriber.onNext(map)
+//                subscriber.onComplete()
+//                return@create
+//            }
+//            val newFile = File(parentFile, base64Name + ".temp")
+//            newFile.createNewFile()
+//            FileUtil.saveObjectToFile(response.body()?.courses!!, newFile)
+//            val newMD5 = FileUtil.getMD5(newFile)
+//            val oldFile = File(parentFile, base64Name)
+//            var oldMD5 = ""
+//            if (oldFile.exists())
+//                oldMD5 = FileUtil.getMD5(oldFile)!!
+//            val map = HashMap<String, Boolean>()
+//            if (newMD5 != oldMD5) {
+//                oldFile.delete()
+//                newFile.renameTo(oldFile)
+//                map.put("isCookieAvailable", true)
+//                map.put("isUpdateData", true)
+//                Logs.i(TAG, "updateData: 数据更新")
+//            } else {
+//                newFile.delete()
+//                map.put("isCookieAvailable", true)
+//                map.put("isUpdateData", false)
+//                Logs.i(TAG, "updateData: 数据未变")
+//            }
+//            subscriber.onNext(map)
+//            subscriber.onComplete()
+//        }
+//                .subscribeOn(Schedulers.newThread())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe(object : Observer<HashMap<String, Boolean>> {
+//                    private var isCookieAvailable = false
+//                    private var isUpdateData = false
+//
+//                    override fun onSubscribe(d: Disposable) {
+//                        Logs.i(TAG, "onSubscribe: ")
+//                        loadingDialog.show()
+//                    }
+//
+//                    override fun onNext(t: HashMap<String, Boolean>) {
+//                        if (t["isCookieAvailable"] != null)
+//                            isCookieAvailable = t["isCookieAvailable"]!!
+//                        if (t["isUpdateData"] != null)
+//                            isUpdateData = t["isUpdateData"]!!
+//                    }
+//
+//                    override fun onError(e: Throwable) {
+//                        e.printStackTrace()
+//                        loadingDialog.dismiss()
+//                        isCookieAvailable = false
+//                    }
+//
+//                    override fun onComplete() {
+//                        loadingDialog.dismiss()
+//                        isRefresh = true
+//                        ScheduleHelper.isCookieAvailable = isCookieAvailable
+//                        if (!isCookieAvailable) {
+//                            Logs.i(TAG, "onComplete: cookie无效")
+//                            Snackbar.make(coordinatorLayout, R.string.hint_invalid_cookie, Snackbar.LENGTH_LONG)
+//                                    .setAction(android.R.string.ok) {
+//                                        ScheduleHelper.isLogin = false
+//                                        startActivity(Intent(this@MainActivity, LoginActivity::class.java))
+//                                        finish()
+//                                    }
+//                                    .show()
+//                        } else {
+//                            if (isUpdateData)
+//                                Snackbar.make(coordinatorLayout, R.string.hint_update_data_new, Snackbar.LENGTH_SHORT).show()
+//                            else
+//                                Snackbar.make(coordinatorLayout, R.string.hint_update_data, Snackbar.LENGTH_SHORT).show()
+//                            updateView()
+//                        }
+//                    }
+//                })
     }
 
     override fun onBackPressed() {
