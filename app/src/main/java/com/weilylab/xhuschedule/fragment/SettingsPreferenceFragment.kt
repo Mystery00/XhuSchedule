@@ -23,6 +23,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.SeekBar
 import android.widget.TextView
+import com.google.gson.Gson
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.activity.SettingsActivity
 import com.weilylab.xhuschedule.classes.Update
@@ -35,7 +36,6 @@ import com.weilylab.xhuschedule.view.CustomDatePicker
 import com.yalantis.ucrop.UCrop
 import com.zyao89.view.zloading.ZLoadingDialog
 import com.zyao89.view.zloading.Z_TYPE
-import io.reactivex.Observable
 import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
@@ -43,6 +43,7 @@ import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_settings.*
 import vip.mystery0.tools.logs.Logs
 import java.io.File
+import java.io.InputStreamReader
 import java.util.*
 
 /**
@@ -242,49 +243,36 @@ class SettingsPreferenceFragment : PreferenceFragment() {
             true
         }
         checkUpdatePreference.setOnPreferenceClickListener {
-            var update: Update? = null
-            Observable.create<Int> { subscriber ->
-                val call = ScheduleHelper.getUpdateRetrofit().create(UpdateResponse::class.java).checkUpdateCall(getString(R.string.app_version_code).toInt())
-                val response = call.execute()
-                if (!response.isSuccessful) {
-                    subscriber.onNext(-1)
-                    subscriber.onComplete()
-                    return@create
-                }
-                update = response.body()
-                Logs.i(TAG, "onCreate: " + update?.message)
-                subscriber.onNext(update?.code!!)
-                subscriber.onComplete()
-            }
+            loadingDialog.show()
+            ScheduleHelper.phpRetrofit
+                    .create(UpdateResponse::class.java)
+                    .checkUpdateCall(getString(R.string.app_version_code).toInt())
                     .subscribeOn(Schedulers.newThread())
+                    .unsubscribeOn(Schedulers.newThread())
+                    .map { responseBody -> Gson().fromJson(InputStreamReader(responseBody.byteStream()), Update::class.java) }
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(object : Observer<Int> {
-                        private var code = -233
+                    .subscribe(object : Observer<Update> {
+                        private lateinit var update: Update
 
                         override fun onSubscribe(d: Disposable) {
-                            Logs.i(TAG, "onSubscribe: ")
-                            loadingDialog.show()
                         }
 
                         override fun onError(e: Throwable) {
-                            e.printStackTrace()
                             loadingDialog.dismiss()
+                            e.printStackTrace()
                         }
 
                         override fun onComplete() {
-                            Logs.i(TAG, "onComplete: ")
                             loadingDialog.dismiss()
-                            if (code == 1)
-                                UpdateNotification.notify(activity, update!!.version)
-                            else {
-                                Snackbar.make(coordinatorLayout, update!!.message, Snackbar.LENGTH_SHORT)
+                            if (update.code == 1)
+                                UpdateNotification.notify(activity, update.version)
+                            else
+                                Snackbar.make(coordinatorLayout, update.message, Snackbar.LENGTH_SHORT)
                                         .show()
-                            }
                         }
 
-                        override fun onNext(result: Int) {
-                            Logs.i(TAG, "onNext: ")
-                            code = result
+                        override fun onNext(update: Update) {
+                            this.update = update
                         }
                     })
             true
