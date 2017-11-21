@@ -4,6 +4,7 @@ import com.weilylab.xhuschedule.APP
 import com.weilylab.xhuschedule.util.cookie.CookieManger
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import java.math.BigInteger
 import java.security.MessageDigest
@@ -16,35 +17,54 @@ import java.util.concurrent.TimeUnit
 object ScheduleHelper {
     var isLogin = false
     var isCookieAvailable = false
-    private var client: OkHttpClient? = null
+    //    private var client: OkHttpClient? = null
     private var retrofit: Retrofit? = null
     private var updateRetrofit: Retrofit? = null
     var studentName = "0"
     var studentNumber = "0"
+    var studentPassword = "0"
     var weekIndex = 0
     var itemCourseWidth = 0F//课程宽度
     var itemCourseNameSize = 0F
     var itemCourseTeacherSize = 0F
     var itemCourseLocationSize = 0F
 
-    private fun getClient(): OkHttpClient {
-        if (client == null) {
-            client = OkHttpClient.Builder()
-                    .connectTimeout(20, TimeUnit.SECONDS)
-                    .readTimeout(20, TimeUnit.SECONDS)
-                    .writeTimeout(20, TimeUnit.SECONDS)
-                    .cookieJar(CookieManger(APP.getContext()))
-                    .build()
-        }
-        return client!!
-    }
+    private val client = OkHttpClient.Builder()
+            .retryOnConnectionFailure(true)
+            .connectTimeout(15, TimeUnit.SECONDS)
+            .build()
+
+    val tomcatRetrofit = Retrofit.Builder()
+            .baseUrl("http://tomcat.weilylab.com:7823")
+            .client(client)
+            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+            .build()
+
+    val phpRetrofit = Retrofit.Builder()
+            .baseUrl("http://tomcat.weilylab.com:9783")
+            .client(client)
+            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+            .build()
+
+//    private fun getClient(): OkHttpClient {
+//        if (client == null) {
+//            client = OkHttpClient.Builder()
+//                    .connectTimeout(20, TimeUnit.SECONDS)
+//                    .readTimeout(20, TimeUnit.SECONDS)
+//                    .writeTimeout(20, TimeUnit.SECONDS)
+//                    .cookieJar(CookieManger(APP.getContext()))
+//                    .build()
+//        }
+//        return client!!
+//    }
 
     fun getRetrofit(): Retrofit {
         if (retrofit == null) {
             retrofit = Retrofit.Builder()
-                    .client(getClient())
+                    .client(client)
                     .baseUrl("http://tomcat.weilylab.com:7823")
-                    .addConverterFactory(GsonConverterFactory.create())
+//                    .addConverterFactory(GsonConverterFactory.create())
+                    .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                     .build()
         }
         return retrofit!!
@@ -53,7 +73,7 @@ object ScheduleHelper {
     fun getUpdateRetrofit(): Retrofit {
         if (updateRetrofit == null) {
             updateRetrofit = Retrofit.Builder()
-                    .client(getClient())
+                    .client(client)
                     .baseUrl("http://tomcat.weilylab.com:9783")
                     .addConverterFactory(GsonConverterFactory.create())
                     .build()

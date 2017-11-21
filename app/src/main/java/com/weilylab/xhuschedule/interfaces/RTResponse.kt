@@ -1,7 +1,7 @@
 package com.weilylab.xhuschedule.interfaces
 
 import com.weilylab.xhuschedule.classes.ContentRT
-import com.weilylab.xhuschedule.classes.LoginRT
+import io.reactivex.Observable
 import okhttp3.ResponseBody
 
 import retrofit2.Call
@@ -12,14 +12,11 @@ import retrofit2.http.*
  */
 
 interface RTResponse {
-    @Streaming
-    @GET("/course/Course/getVCode")
-    fun getVCodeCall(@Query("type") type: Int): Call<ResponseBody>
-
-    @FormUrlEncoded
-    @POST("/course/Course/login")
-    fun loginCall(@Field("username") username: String, @Field("password") password: String, @Field("vcode") vcode: String): Call<LoginRT>
 
     @GET("/course/Course/getContent")
     fun getContentCall(): Call<ContentRT>
+
+    @FormUrlEncoded
+    @POST("/course/Course/getCourses")
+    fun getCourses(@Field("username")username: String,@Field("password")password: String):Observable<ResponseBody>
 }
