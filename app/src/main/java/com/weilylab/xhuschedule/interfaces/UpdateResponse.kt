@@ -9,13 +9,12 @@ import retrofit2.http.*
 /**
  * Created by myste.
  */
-interface UpdateResponse
-{
-	@FormUrlEncoded
-	@POST("/XhuSchedule/interface/checkUpdate.php")
-	fun checkUpdateCall(@Field("currentVersion") currentVersion: Int): Call<Update>
+interface UpdateResponse {
+    @FormUrlEncoded
+    @POST("/XhuSchedule/interface/checkUpdate.php")
+    fun checkUpdateCall(@Field("currentVersion") currentVersion: Int): Call<Update>
 
-	@Streaming
-	@GET("/XhuSchedule/{type}/{fileName}")
-	fun download(@Path("type") type: String, @Path("fileName") fileName: String): Observable<ResponseBody>
+    @Streaming
+    @GET("/XhuSchedule/{type}/{fileName}")
+    fun download(@Path("type") type: String, @Path("fileName") fileName: String): Observable<ResponseBody>
 }

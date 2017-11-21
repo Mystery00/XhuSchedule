@@ -9,21 +9,18 @@ import vip.mystery0.tools.logs.Logs
 /**
  * Created by myste.
  */
-class ViewPagerAdapter(fragmentManager: FragmentManager) : FragmentPagerAdapter(fragmentManager)
-{
-	companion object
-	{
-		private val TAG = "ViewPagerAdapter"
-	}
+class ViewPagerAdapter(fragmentManager: FragmentManager) : FragmentPagerAdapter(fragmentManager) {
+    companion object {
+        private val TAG = "ViewPagerAdapter"
+    }
 
-	private val fragmentList = ArrayList<Fragment>()
+    private val fragmentList = ArrayList<Fragment>()
 
-	fun addFragment(fragment: Fragment)
-	{
-		fragmentList.add(fragment)
-	}
+    fun addFragment(fragment: Fragment) {
+        fragmentList.add(fragment)
+    }
 
-	override fun getItem(position: Int) = fragmentList[position]
+    override fun getItem(position: Int) = fragmentList[position]
 
-	override fun getCount(): Int = fragmentList.size
+    override fun getCount(): Int = fragmentList.size
 }

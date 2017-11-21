@@ -22,68 +22,59 @@ import vip.mystery0.tools.logs.Logs
  * Created by myste.
  */
 class TableAdapter(private val context: Context,
-				   private val list: ArrayList<Course?>) : RecyclerView.Adapter<TableAdapter.ViewHolder>()
-{
-	companion object
-	{
-		private val TAG = "TableAdapter"
-	}
+                   private val list: ArrayList<Course?>) : RecyclerView.Adapter<TableAdapter.ViewHolder>() {
+    companion object {
+        private val TAG = "TableAdapter"
+    }
 
-	override fun onBindViewHolder(holder: ViewHolder, position: Int)
-	{
-		holder.linearLayout.removeAllViews()
-		val layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, DensityUtil.dip2px(context, 144F))
-		holder.linearLayout.layoutParams = layoutParams
-		val course: Course? = list[position] ?: return
-		addView(holder, course!!)
-		var temp = course.other
-		while (temp != null)
-		{
-			addView(holder, course.other!!)
-			if (temp.other != null)
-				temp = temp.other
-			else
-				break
-		}
-	}
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        holder.linearLayout.removeAllViews()
+        val layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, DensityUtil.dip2px(context, 144F))
+        holder.linearLayout.layoutParams = layoutParams
+        val course: Course? = list[position] ?: return
+        addView(holder, course!!)
+        var temp = course.other
+        while (temp != null) {
+            addView(holder, course.other!!)
+            if (temp.other != null)
+                temp = temp.other
+            else
+                break
+        }
+    }
 
-	private fun addView(holder: ViewHolder, course: Course)
-	{
-		val layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, 1F)
-		val view = View.inflate(context, R.layout.item_course, null)
-		val textViewName: TextView = view.findViewById(R.id.textView_name)
-		val textViewTeacher: TextView = view.findViewById(R.id.textView_teacher)
-		val textViewLocation: TextView = view.findViewById(R.id.textView_location)
-		textViewName.text = course.name
-		textViewTeacher.text = course.teacher
-		textViewLocation.text = course.location
+    private fun addView(holder: ViewHolder, course: Course) {
+        val layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, 1F)
+        val view = View.inflate(context, R.layout.item_course, null)
+        val textViewName: TextView = view.findViewById(R.id.textView_name)
+        val textViewTeacher: TextView = view.findViewById(R.id.textView_teacher)
+        val textViewLocation: TextView = view.findViewById(R.id.textView_location)
+        textViewName.text = course.name
+        textViewTeacher.text = course.teacher
+        textViewLocation.text = course.location
 //		Logs.i(TAG, "addView: " + textViewName.textSize)
 
-		if (course.color == "")
-		{
-			course.color = '#' + ScheduleHelper.getRandomColor()
-		}
-		view.setBackgroundColor(Color.parseColor('#' + Integer.toHexString(Settings.customTransparency) + course.color.substring(1)))
-		view.layoutParams = layoutParams
-		view.setOnClickListener {
-			ViewUtil.showAlertDialog(context, course, object : InfoChangeListener
-			{
-				override fun onChange()
-				{
-					(context as MainActivity).updateView()
-				}
-			})
-		}
-		holder.linearLayout.addView(view)
-	}
+        if (course.color == "") {
+            course.color = '#' + ScheduleHelper.getRandomColor()
+        }
+        view.setBackgroundColor(Color.parseColor('#' + Integer.toHexString(Settings.customTransparency) + course.color.substring(1)))
+        view.layoutParams = layoutParams
+        view.setOnClickListener {
+            ViewUtil.showAlertDialog(context, course, object : InfoChangeListener {
+                override fun onChange() {
+                    (context as MainActivity).updateView()
+                }
+            })
+        }
+        holder.linearLayout.addView(view)
+    }
 
-	override fun onCreateViewHolder(parent: ViewGroup?,
-									viewType: Int): ViewHolder = ViewHolder(LayoutInflater.from(context).inflate(R.layout.item_linear_layout, parent, false))
+    override fun onCreateViewHolder(parent: ViewGroup?,
+                                    viewType: Int): ViewHolder = ViewHolder(LayoutInflater.from(context).inflate(R.layout.item_linear_layout, parent, false))
 
-	override fun getItemCount(): Int = list.size
+    override fun getItemCount(): Int = list.size
 
-	class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
-	{
-		var linearLayout: LinearLayout = itemView.findViewById(R.id.linearLayout)
-	}
+    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        var linearLayout: LinearLayout = itemView.findViewById(R.id.linearLayout)
+    }
 }

@@ -9,26 +9,22 @@ import java.io.File
 /**
  * Created by myste.
  */
-class APP : Application()
-{
-	companion object
-	{
-		private var app: APP? = null
+class APP : Application() {
+    companion object {
+        private var app: APP? = null
 
-		fun getContext(): Context = app!!
-	}
+        fun getContext(): Context = app!!
+    }
 
-	init
-	{
-		app = this
-	}
+    init {
+        app = this
+    }
 
-	override fun onCreate()
-	{
-		super.onCreate()
-		Logs.setLevel(Logs.LogLevel.Debug)
-		CrashHandler.getInstance(this)
-				.setDirectory(cacheDir.absolutePath + File.separator)
-				.init()
-	}
+    override fun onCreate() {
+        super.onCreate()
+        Logs.setLevel(Logs.LogLevel.Debug)
+        CrashHandler.getInstance(this)
+                .setDirectory(cacheDir.absolutePath + File.separator)
+                .init()
+    }
 }

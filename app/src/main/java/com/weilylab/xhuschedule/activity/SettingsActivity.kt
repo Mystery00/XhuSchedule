@@ -8,20 +8,17 @@ import com.weilylab.xhuschedule.fragment.SettingsPreferenceFragment
 import kotlinx.android.synthetic.main.activity_settings.*
 import vip.mystery0.tools.logs.Logs
 
-class SettingsActivity : AppCompatActivity()
-{
-	companion object
-	{
-		private val TAG = "SettingsActivity"
-	}
+class SettingsActivity : AppCompatActivity() {
+    companion object {
+        private val TAG = "SettingsActivity"
+    }
 
-	override fun onCreate(savedInstanceState: Bundle?)
-	{
-		Logs.i(TAG, "onCreate: ")
-		super.onCreate(savedInstanceState)
-		setContentView(R.layout.activity_settings)
-		fragmentManager.beginTransaction().replace(R.id.content_wrapper, SettingsPreferenceFragment()).commit()
-		toolbar.title = title
-		toolbar.setNavigationOnClickListener { finish() }
-	}
+    override fun onCreate(savedInstanceState: Bundle?) {
+        Logs.i(TAG, "onCreate: ")
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_settings)
+        fragmentManager.beginTransaction().replace(R.id.content_wrapper, SettingsPreferenceFragment()).commit()
+        toolbar.title = title
+        toolbar.setNavigationOnClickListener { finish() }
+    }
 }
