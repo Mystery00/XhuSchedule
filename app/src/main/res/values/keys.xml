@@ -10,6 +10,8 @@
     <string name="key_background_img">key_background_img</string>
     <string name="key_custom_trans">key_custom_trans</string>
     <string name="title_custom_trans">自定义透明度</string>
+    <string name="key_custom_text_size">key_custom_text_size</string>
+    <string name="title_custom_text_size">自定义文本大小</string>
 
     <string name="key_thanks">key_thanks</string>
     <string name="category_thanks">鸣谢</string>

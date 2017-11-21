@@ -24,4 +24,7 @@ object Settings {
     var customTransparency: Int
         set(value) = sharedPreference.edit().putInt("customTransparency", value).apply()
         get() = sharedPreference.getInt("customTransparency", 154)
+    var customTextSize: Int
+        set(value) = sharedPreference.edit().putInt("customTextSize", value).apply()
+        get() = sharedPreference.getInt("customTextSize", 12)
 }

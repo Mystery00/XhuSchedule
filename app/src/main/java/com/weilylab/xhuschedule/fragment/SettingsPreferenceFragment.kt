@@ -17,6 +17,7 @@ import android.support.design.widget.CoordinatorLayout
 import android.support.design.widget.Snackbar
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AlertDialog
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -26,6 +27,7 @@ import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.activity.SettingsActivity
 import com.weilylab.xhuschedule.classes.Update
 import com.weilylab.xhuschedule.interfaces.UpdateResponse
+import com.weilylab.xhuschedule.util.DensityUtil
 import com.weilylab.xhuschedule.util.ScheduleHelper
 import com.weilylab.xhuschedule.util.Settings
 import com.weilylab.xhuschedule.util.UpdateNotification
@@ -63,6 +65,7 @@ class SettingsPreferenceFragment : PreferenceFragment() {
     private lateinit var headerImgPreference: Preference
     private lateinit var backgroundImgPreference: Preference
     private lateinit var customTransPreference: Preference
+    private lateinit var customTextSizePreference: Preference
     private lateinit var checkUpdatePreference: Preference
     private lateinit var weilyProductPreference: Preference
 
@@ -94,6 +97,7 @@ class SettingsPreferenceFragment : PreferenceFragment() {
         headerImgPreference = findPreference(getString(R.string.key_header_img))
         backgroundImgPreference = findPreference(getString(R.string.key_background_img))
         customTransPreference = findPreference(getString(R.string.key_custom_trans))
+        customTextSizePreference = findPreference(getString(R.string.key_custom_text_size))
         checkUpdatePreference = findPreference(getString(R.string.key_check_update))
         weilyProductPreference = findPreference(getString(R.string.key_weily_product))
 
@@ -107,7 +111,7 @@ class SettingsPreferenceFragment : PreferenceFragment() {
             val firstWeekOfTerm = Settings.firstWeekOfTerm
             val date = firstWeekOfTerm.split('-')
             calendar.set(date[0].toInt(), date[1].toInt(), date[2].toInt(), 0, 0, 0)
-            val view = LayoutInflater.from(activity).inflate(R.layout.dialog_date_picker, null)
+            val view = View.inflate(activity, R.layout.dialog_date_picker, null)
             val datePicker: CustomDatePicker = view.findViewById(R.id.datePicker)
             datePicker.init(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH), null)
             val dialog = AlertDialog.Builder(activity)
@@ -151,23 +155,23 @@ class SettingsPreferenceFragment : PreferenceFragment() {
         customTransPreference.setOnPreferenceClickListener {
             var color = ScheduleHelper.getRandomColor()
             var currentProgress = Settings.customTransparency
-            val view = LayoutInflater.from(activity).inflate(R.layout.dialog_custom_trans, null)
+            val view = View.inflate(activity, R.layout.dialog_custom_trans, null)
             val testCourseLayout: ConstraintLayout = view.findViewById(R.id.test_course_layout)
             val seekBar: SeekBar = view.findViewById(R.id.seekBar)
             val textView: TextView = view.findViewById(R.id.textView)
-            testCourseLayout.setBackgroundColor(Color.parseColor('#' + color))
             testCourseLayout.setOnClickListener {
                 val trans = (if (currentProgress < 16) "0" else "") + Integer.toHexString(currentProgress)
                 color = ScheduleHelper.getRandomColor()
                 testCourseLayout.setBackgroundColor(Color.parseColor('#' + trans + color))
             }
+            testCourseLayout.setBackgroundColor(Color.parseColor('#' + (if (currentProgress < 16) "0" else "") + Integer.toHexString(currentProgress) + color))
             seekBar.progress = currentProgress
-            textView.text = getString(R.string.test_course_current_progress, currentProgress * 100 / 255F)
+            textView.text = getString(R.string.test_course_current_progress_trans, currentProgress * 100 / 255F)
             seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
                 override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                     currentProgress = progress
                     val trans = (if (progress < 16) "0" else "") + Integer.toHexString(progress)
-                    textView.text = getString(R.string.test_course_current_progress, currentProgress * 100 / 255F)
+                    textView.text = getString(R.string.test_course_current_progress_trans, currentProgress * 100 / 255F)
                     testCourseLayout.setBackgroundColor(Color.parseColor('#' + trans + color))
                 }
 
@@ -180,7 +184,58 @@ class SettingsPreferenceFragment : PreferenceFragment() {
             AlertDialog.Builder(activity)
                     .setView(view)
                     .setPositiveButton(android.R.string.ok, { _, _ ->
+                        if (currentProgress != Settings.customTransparency)
+                            ScheduleHelper.isUIChange = true
                         Settings.customTransparency = currentProgress
+                    })
+                    .setNegativeButton(android.R.string.cancel, null)
+                    .show()
+            true
+        }
+        customTextSizePreference.setOnPreferenceClickListener {
+            val color = ScheduleHelper.getRandomColor()
+            var currentProgress = Settings.customTextSize - 4
+            val view = View.inflate(activity, R.layout.dialog_custom_text_size, null)
+            val testCourseLayout: ConstraintLayout = view.findViewById(R.id.test_course_layout)
+            val textViewName: TextView = view.findViewById(R.id.textView_name)
+            val textViewTeacher: TextView = view.findViewById(R.id.textView_teacher)
+            val textViewLocation: TextView = view.findViewById(R.id.textView_location)
+            val seekBar: SeekBar = view.findViewById(R.id.seekBar)
+            val textView: TextView = view.findViewById(R.id.textView)
+            val size = Point()
+            activity.windowManager.defaultDisplay.getSize(size)
+            val width = (size.x - DensityUtil.dip2px(activity, 32F)) / 7
+            val layoutParams = testCourseLayout.layoutParams
+            layoutParams.width = width
+            layoutParams.height = DensityUtil.dip2px(activity, 144F)
+            testCourseLayout.layoutParams = layoutParams
+            testCourseLayout.setBackgroundColor(Color.parseColor('#' + color))
+            seekBar.progress = currentProgress
+            textViewName.setTextSize(TypedValue.COMPLEX_UNIT_SP, (currentProgress + 4).toFloat())
+            textViewTeacher.setTextSize(TypedValue.COMPLEX_UNIT_SP, (currentProgress + 4).toFloat())
+            textViewLocation.setTextSize(TypedValue.COMPLEX_UNIT_SP, (currentProgress + 4).toFloat())
+            textView.text = getString(R.string.test_course_current_progress_text_size, currentProgress + 4)
+            seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+                override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                    currentProgress = progress
+                    textViewName.setTextSize(TypedValue.COMPLEX_UNIT_SP, (currentProgress + 4).toFloat())
+                    textViewTeacher.setTextSize(TypedValue.COMPLEX_UNIT_SP, (currentProgress + 4).toFloat())
+                    textViewLocation.setTextSize(TypedValue.COMPLEX_UNIT_SP, (currentProgress + 4).toFloat())
+                    textView.text = getString(R.string.test_course_current_progress_text_size, progress + 4)
+                }
+
+                override fun onStartTrackingTouch(seekBar: SeekBar?) {
+                }
+
+                override fun onStopTrackingTouch(seekBar: SeekBar?) {
+                }
+            })
+            AlertDialog.Builder(activity)
+                    .setView(view)
+                    .setPositiveButton(android.R.string.ok, { _, _ ->
+                        if (currentProgress + 4 != Settings.customTextSize)
+                            ScheduleHelper.isUIChange = true
+                        Settings.customTextSize = currentProgress + 4
                     })
                     .setNegativeButton(android.R.string.cancel, null)
                     .show()

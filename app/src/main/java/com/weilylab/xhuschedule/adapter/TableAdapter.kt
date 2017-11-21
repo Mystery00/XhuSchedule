@@ -3,6 +3,7 @@ package com.weilylab.xhuschedule.adapter
 import android.content.Context
 import android.graphics.Color
 import android.support.v7.widget.RecyclerView
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,16 +17,12 @@ import com.weilylab.xhuschedule.util.DensityUtil
 import com.weilylab.xhuschedule.util.ScheduleHelper
 import com.weilylab.xhuschedule.util.Settings
 import com.weilylab.xhuschedule.util.ViewUtil
-import vip.mystery0.tools.logs.Logs
 
 /**
  * Created by myste.
  */
 class TableAdapter(private val context: Context,
                    private val list: ArrayList<Course?>) : RecyclerView.Adapter<TableAdapter.ViewHolder>() {
-    companion object {
-        private val TAG = "TableAdapter"
-    }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.linearLayout.removeAllViews()
@@ -49,10 +46,13 @@ class TableAdapter(private val context: Context,
         val textViewName: TextView = view.findViewById(R.id.textView_name)
         val textViewTeacher: TextView = view.findViewById(R.id.textView_teacher)
         val textViewLocation: TextView = view.findViewById(R.id.textView_location)
+        val textSize = Settings.customTextSize
+        textViewName.setTextSize(TypedValue.COMPLEX_UNIT_SP, textSize.toFloat())
+        textViewTeacher.setTextSize(TypedValue.COMPLEX_UNIT_SP, textSize.toFloat())
+        textViewLocation.setTextSize(TypedValue.COMPLEX_UNIT_SP, textSize.toFloat())
         textViewName.text = course.name
         textViewTeacher.text = course.teacher
         textViewLocation.text = course.location
-//		Logs.i(TAG, "addView: " + textViewName.textSize)
 
         if (course.color == "") {
             course.color = '#' + ScheduleHelper.getRandomColor()

@@ -1,7 +1,5 @@
 package com.weilylab.xhuschedule.util
 
-import com.weilylab.xhuschedule.APP
-import com.weilylab.xhuschedule.util.cookie.CookieManger
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
@@ -17,17 +15,13 @@ import java.util.concurrent.TimeUnit
 object ScheduleHelper {
     var isLogin = false
     var isCookieAvailable = false
-    //    private var client: OkHttpClient? = null
-    private var retrofit: Retrofit? = null
+    var isUIChange = false
     private var updateRetrofit: Retrofit? = null
     var studentName = "0"
     var studentNumber = "0"
     var studentPassword = "0"
     var weekIndex = 0
     var itemCourseWidth = 0F//课程宽度
-    var itemCourseNameSize = 0F
-    var itemCourseTeacherSize = 0F
-    var itemCourseLocationSize = 0F
 
     private val client = OkHttpClient.Builder()
             .retryOnConnectionFailure(true)
@@ -45,30 +39,6 @@ object ScheduleHelper {
             .client(client)
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .build()
-
-//    private fun getClient(): OkHttpClient {
-//        if (client == null) {
-//            client = OkHttpClient.Builder()
-//                    .connectTimeout(20, TimeUnit.SECONDS)
-//                    .readTimeout(20, TimeUnit.SECONDS)
-//                    .writeTimeout(20, TimeUnit.SECONDS)
-//                    .cookieJar(CookieManger(APP.getContext()))
-//                    .build()
-//        }
-//        return client!!
-//    }
-
-    fun getRetrofit(): Retrofit {
-        if (retrofit == null) {
-            retrofit = Retrofit.Builder()
-                    .client(client)
-                    .baseUrl("http://tomcat.weilylab.com:7823")
-//                    .addConverterFactory(GsonConverterFactory.create())
-                    .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                    .build()
-        }
-        return retrofit!!
-    }
 
     fun getUpdateRetrofit(): Retrofit {
         if (updateRetrofit == null) {
