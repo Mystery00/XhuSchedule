@@ -8,6 +8,7 @@
     <dimen name="nav_header_img_size">50dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="card_view_margin">16dp</dimen>
+    <dimen name="card_view_corner_radius">4dp</dimen>
     <dimen name="content_login_card_radius">16dp</dimen>
     <dimen name="course_padding">16dp</dimen>
     <dimen name="time_padding">8dp</dimen>

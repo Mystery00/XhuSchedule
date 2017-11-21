@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="@dimen/card_view_margin">
+    android:layout_margin="@dimen/card_view_margin"
+    app:cardCornerRadius="@dimen/card_view_corner_radius">
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
@@ -18,7 +18,7 @@
             android:contentDescription="@string/app_name"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/courseTimeTextView"
@@ -28,13 +28,11 @@
             android:paddingEnd="@dimen/course_padding"
             android:paddingStart="@dimen/course_padding"
             android:textStyle="bold"
-            app:autoSizeMaxTextSize="@dimen/item_course_today_time_text_size_max"
-            app:autoSizeTextType="uniform"
             app:layout_constraintBottom_toTopOf="@id/courseNameAndTeacherTextView"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_chainStyle="packed"
             app:layout_constraintStart_toEndOf="@+id/img"
-            app:layout_constraintTop_toTopOf="parent"/>
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/courseNameAndTeacherTextView"
@@ -43,12 +41,10 @@
             android:paddingEnd="@dimen/course_padding"
             android:paddingStart="@dimen/course_padding"
             android:textStyle="bold"
-            app:autoSizeMaxTextSize="@dimen/item_course_today_time_text_size_max"
-            app:autoSizeTextType="uniform"
             app:layout_constraintBottom_toTopOf="@id/courseLocationTextView"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/img"
-            app:layout_constraintTop_toBottomOf="@+id/courseTimeTextView"/>
+            app:layout_constraintTop_toBottomOf="@+id/courseTimeTextView" />
 
         <TextView
             android:id="@+id/courseLocationTextView"
@@ -58,12 +54,10 @@
             android:paddingEnd="@dimen/course_padding"
             android:paddingStart="@dimen/course_padding"
             android:textStyle="bold"
-            app:autoSizeMaxTextSize="@dimen/item_course_today_location_text_size_max"
-            app:autoSizeTextType="uniform"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/img"
-            app:layout_constraintTop_toBottomOf="@+id/courseNameAndTeacherTextView"/>
+            app:layout_constraintTop_toBottomOf="@+id/courseNameAndTeacherTextView" />
 
     </android.support.constraint.ConstraintLayout>
 
