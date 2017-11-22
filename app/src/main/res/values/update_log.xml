@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="title_update_log">%1$s版的更新日志</string>
+    <string-array name="update_list">
+        <item>新增：使用新的接口，从此之后再也不用输入验证码了</item>
+        <item>新增：自定义颜色不透明度设置</item>
+        <item>新增：文本大小自定义</item>
+        <item>新增：当天课表卡片添加透明</item>
+        <item>新增：更新日志显示</item>
+        <item>修复：部分机型自定义背景会导致闪退</item>
+        <item>修复：每一次启动时本学期课表显示错误</item>
+        <item></item>
+    </string-array>
+</resources>

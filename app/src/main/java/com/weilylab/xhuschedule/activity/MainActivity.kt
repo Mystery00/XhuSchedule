@@ -12,6 +12,7 @@ import android.support.design.widget.Snackbar
 import android.support.v4.view.GravityCompat
 import android.support.v4.view.ViewPager
 import android.support.v7.app.ActionBarDrawerToggle
+import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.util.Base64
 import android.view.MenuItem
@@ -87,6 +88,24 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         updateView()
         if (Settings.isFirstRun)
             showcase()
+        showUpdateLog()
+    }
+
+    private fun showUpdateLog() {
+        val sharedPreference = getSharedPreferences("update", Context.MODE_PRIVATE)
+        if (sharedPreference.getInt("updateVersion", 0) < getString(R.string.app_version_code).toInt()) {
+            var message = ""
+            resources.getStringArray(R.array.update_list)
+                    .forEach { message += it + '\n' }
+            AlertDialog.Builder(this)
+                    .setTitle(getString(R.string.title_update_log, getString(R.string.app_version_name) + '-' + getString(R.string.app_version_code)))
+                    .setMessage(message)
+                    .setPositiveButton(android.R.string.ok, null)
+                    .setOnDismissListener {
+                        sharedPreference.edit().putInt("updateVersion", getString(R.string.app_version_code).toInt()).apply()
+                    }
+                    .show()
+        }
     }
 
     override fun onResume() {
