@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-      xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/bottom_nav_today"
         android:enabled="true"
         android:icon="@drawable/ic_sentiment_neutral"
         android:title="@string/nav_today"
-        app:showAsAction="ifRoom"/>
+        app:showAsAction="ifRoom" />
     <item
         android:id="@+id/bottom_nav_week"
         android:enabled="true"
         android:icon="@drawable/ic_week"
         android:title="@string/nav_week"
-        app:showAsAction="ifRoom"/>
+        app:showAsAction="ifRoom" />
     <item
         android:id="@+id/bottom_nav_all"
         android:enabled="true"
         android:icon="@drawable/ic_all"
         android:title="@string/nav_all"
-        app:showAsAction="ifRoom"/>
+        app:showAsAction="ifRoom" />
 </menu>

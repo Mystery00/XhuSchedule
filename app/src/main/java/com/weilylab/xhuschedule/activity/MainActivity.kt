@@ -255,7 +255,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                         group.clear()
                         group.add(ScheduleHelper.studentName + "(" + ScheduleHelper.studentNumber + ")")
                         if (ScheduleHelper.isCookieAvailable) {
-                            Logs.i(TAG, "onComplete: isCookieAvailable")
                             when (todayList.size) {
                                 0 -> bottomNavigationView.menu.findItem(R.id.bottom_nav_today).setIcon(R.drawable.ic_sentiment_very_satisfied)
                                 1 -> bottomNavigationView.menu.findItem(R.id.bottom_nav_today).setIcon(R.drawable.ic_sentiment_very_satisfied)
