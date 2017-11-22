@@ -2,6 +2,7 @@ package com.weilylab.xhuschedule.util
 
 import android.content.Context
 import com.weilylab.xhuschedule.classes.Course
+import com.weilylab.xhuschedule.classes.Student
 import java.io.*
 import java.math.BigInteger
 import java.nio.channels.FileChannel
@@ -75,6 +76,19 @@ object FileUtil {
                     it.color = savedColor
             }
             return courses
+        } catch (e: Exception) {
+            e.printStackTrace()
+            return emptyArray()
+        }
+    }
+
+    fun getStudentsFromFile(file: File): Array<Student> {
+        try {
+            if (!file.exists())
+                return emptyArray()
+            val objectInputStream = ObjectInputStream(BufferedInputStream(FileInputStream(file)))
+            @Suppress("UNCHECKED_CAST")
+            return objectInputStream.readObject() as Array<Student>
         } catch (e: Exception) {
             e.printStackTrace()
             return emptyArray()
