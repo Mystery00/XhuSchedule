@@ -24,11 +24,8 @@ import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.android.synthetic.main.content_login.*
 import android.animation.ValueAnimator
 import android.graphics.Color
-import android.util.Base64
 import com.google.gson.Gson
-import com.weilylab.xhuschedule.classes.ContentRT
-import com.weilylab.xhuschedule.util.FileUtil
-import java.io.File
+import com.weilylab.xhuschedule.classes.LoginRT
 import java.io.InputStreamReader
 import java.net.UnknownHostException
 
@@ -106,27 +103,17 @@ class LoginActivity : AppCompatActivity() {
 
         ScheduleHelper.tomcatRetrofit
                 .create(RTResponse::class.java)
-                .getCourses(usernameStr, passwordStr)
+                .autoLogin(usernameStr, passwordStr)
                 .subscribeOn(Schedulers.newThread())
                 .unsubscribeOn(Schedulers.newThread())
-                .map({ responseBody -> Gson().fromJson(InputStreamReader(responseBody.byteStream()), ContentRT::class.java) })
-                .subscribeOn(Schedulers.io())
-                .doOnNext { contentRT ->
-                    if (contentRT.rt == "1") {
-                        val parentFile = File(filesDir.absolutePath + File.separator + "caches/")
-                        val base64Name = FileUtil.filterString(Base64.encodeToString(usernameStr.toByteArray(), Base64.DEFAULT))
-                        val newFile = File(parentFile, base64Name)
-                        newFile.createNewFile()
-                        FileUtil.saveObjectToFile(contentRT.courses, newFile)
-                    }
-                }
+                .map({ responseBody -> Gson().fromJson(InputStreamReader(responseBody.byteStream()), LoginRT::class.java) })
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(object : Observer<ContentRT> {
+                .subscribe(object : Observer<LoginRT> {
 
-                    private var contentRT: ContentRT? = null
+                    private var loginRT: LoginRT? = null
 
-                    override fun onNext(t: ContentRT) {
-                        contentRT = t
+                    override fun onNext(t: LoginRT) {
+                        loginRT = t
                     }
 
                     override fun onError(e: Throwable) {
@@ -146,7 +133,7 @@ class LoginActivity : AppCompatActivity() {
 
                     override fun onComplete() {
                         loginDialog.dismiss()
-                        when (contentRT?.rt) {
+                        when (loginRT?.rt) {
                             "0" -> {
                                 ScheduleHelper.isLogin = false
                                 Toast.makeText(this@LoginActivity, R.string.error_timeout, Toast.LENGTH_SHORT)
@@ -158,9 +145,9 @@ class LoginActivity : AppCompatActivity() {
                                 sharedPreference.edit()
                                         .putString("username", usernameStr)
                                         .putString("password", passwordStr)
-                                        .putString("studentName", contentRT?.name)
+                                        .putString("studentName", loginRT?.name)
                                         .apply()
-                                Toast.makeText(this@LoginActivity, getString(R.string.success_login, contentRT?.name, getString(R.string.app_name)), Toast.LENGTH_SHORT)
+                                Toast.makeText(this@LoginActivity, getString(R.string.success_login, loginRT?.name, getString(R.string.app_name)), Toast.LENGTH_SHORT)
                                         .show()
                                 startActivity(Intent(this@LoginActivity, MainActivity::class.java))
                                 finish()

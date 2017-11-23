@@ -46,22 +46,22 @@ open class PersistentCookieStore(context: Context) {
 
     private fun getCookieToken(cookie: Cookie): String = cookie.name() + "@" + cookie.domain()
 
-    fun add(url: HttpUrl, cookie: Cookie) {
+    fun add(username:String, cookie: Cookie) {
         val name = getCookieToken(cookie)
 
         //将cookies缓存到内存中 如果缓存过期 就重置此cookie
         if (!cookie.persistent()) {
-            if (!cookies.containsKey(url.host()))
-                cookies.put(url.host(), ConcurrentHashMap())
-            cookies[url.host()]?.put(name, cookie)
+            if (!cookies.containsKey(username))
+                cookies.put(username, ConcurrentHashMap())
+            cookies[username]?.put(name, cookie)
         } else {
-            if (cookies.containsKey(url.host()))
-                cookies[url.host()]?.remove(name)
+            if (cookies.containsKey(username))
+                cookies[username]?.remove(name)
         }
 
         //讲cookies持久化到本地
         val prefsWriter = cookiePreferences.edit()
-        prefsWriter.putString(url.host(), TextUtils.join(",", cookies[url.host()]?.keys))
+        prefsWriter.putString(username, TextUtils.join(",", cookies[username]?.keys))
         prefsWriter.putString(name, encodeCookie(OkHttpCookies(cookie)))
         prefsWriter.apply()
     }
