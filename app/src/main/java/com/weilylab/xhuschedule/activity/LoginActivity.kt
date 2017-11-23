@@ -11,23 +11,19 @@ import android.text.TextUtils
 import android.view.View
 import android.widget.Toast
 import com.weilylab.xhuschedule.R
-import com.weilylab.xhuschedule.interfaces.RTResponse
 import com.weilylab.xhuschedule.util.ScheduleHelper
 import com.zyao89.view.zloading.ZLoadingDialog
 import com.zyao89.view.zloading.Z_TYPE
 import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
-import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_login.*
 
 import kotlinx.android.synthetic.main.content_login.*
 import android.animation.ValueAnimator
 import android.graphics.Color
-import com.google.gson.Gson
 import com.weilylab.xhuschedule.classes.LoginRT
 import com.weilylab.xhuschedule.classes.Student
-import java.io.InputStreamReader
 import java.net.UnknownHostException
 
 

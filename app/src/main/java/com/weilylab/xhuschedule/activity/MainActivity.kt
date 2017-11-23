@@ -191,21 +191,19 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     fun updateView() {
+        val sharedPreference = getSharedPreferences("cache", Context.MODE_PRIVATE)
+        val studentNumber = sharedPreference.getString("username", "0")
+        val studentName = sharedPreference.getString("studentName", "0")
         Observable.create<HashMap<String, ArrayList<Course?>>> { subscriber ->
             val parentFile = File(filesDir.absolutePath + File.separator + "caches/")
             if (!parentFile.exists())
                 parentFile.mkdirs()
-            val sharedPreference = getSharedPreferences("cache", Context.MODE_PRIVATE)
-            val studentNumber = sharedPreference.getString("username", "0")
-            val studentName = sharedPreference.getString("studentName", "0")
             if (studentNumber == "0" || studentName == "0") {
                 ScheduleHelper.isLogin = false
                 subscriber.onComplete()
                 return@create
             }
             ScheduleHelper.isLogin = true
-            ScheduleHelper.studentName = studentName
-            ScheduleHelper.studentNumber = studentNumber
             val base64Name = FileUtil.filterString(Base64.encodeToString(studentNumber.toByteArray(), Base64.DEFAULT))
             //判断是否有缓存
             val cacheResult = parentFile.listFiles().filter { it.name == base64Name }.size == 1
@@ -247,7 +245,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
                     override fun onComplete() {
                         swipeRefreshLayout.isRefreshing = false
-                        Logs.i(TAG, "onComplete: ")
 
                         if (!ScheduleHelper.isLogin) {
                             startActivity(Intent(this@MainActivity, LoginActivity::class.java))
@@ -256,7 +253,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                         }
                         val group = nav_view.menu.findItem(R.id.nav_group).subMenu
                         group.clear()
-                        group.add(ScheduleHelper.studentName + "(" + ScheduleHelper.studentNumber + ")")
+                        group.add("$studentName($studentNumber)")
                         if (ScheduleHelper.isCookieAvailable) {
                             when (todayList.size) {
                                 0 -> bottomNavigationView.menu.findItem(R.id.bottom_nav_today).setIcon(R.drawable.ic_sentiment_very_satisfied)
