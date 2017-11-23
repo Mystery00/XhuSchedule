@@ -17,7 +17,6 @@ import java.util.concurrent.ConcurrentHashMap
 import okhttp3.Cookie
 import okhttp3.HttpUrl
 import vip.mystery0.tools.logs.Logs
-import kotlin.experimental.and
 
 open class PersistentCookieStore(context: Context) {
     private val cookies = HashMap<String, ConcurrentHashMap<String, Cookie>>()
@@ -46,7 +45,7 @@ open class PersistentCookieStore(context: Context) {
 
     private fun getCookieToken(cookie: Cookie): String = cookie.name() + "@" + cookie.domain()
 
-    fun add(username:String, cookie: Cookie) {
+    fun add(username: String, cookie: Cookie) {
         val name = getCookieToken(cookie)
 
         //将cookies缓存到内存中 如果缓存过期 就重置此cookie
@@ -66,19 +65,11 @@ open class PersistentCookieStore(context: Context) {
         prefsWriter.apply()
     }
 
-    operator fun get(url: HttpUrl): List<Cookie> {
+    operator fun get(username: String): List<Cookie> {
         val arrayList = ArrayList<Cookie>()
-        if (cookies.containsKey(url.host()))
-            arrayList.addAll(cookies[url.host()]!!.values)
+        if (cookies.containsKey(username))
+            arrayList.addAll(cookies[username]!!.values)
         return arrayList
-    }
-
-    fun removeAll(): Boolean {
-        val prefsWriter = cookiePreferences.edit()
-        prefsWriter.clear()
-        prefsWriter.apply()
-        cookies.clear()
-        return true
     }
 
     fun remove(url: HttpUrl, cookie: Cookie): Boolean {
@@ -94,13 +85,6 @@ open class PersistentCookieStore(context: Context) {
             return true
         }
         return false
-    }
-
-    fun getCookies(): List<Cookie> {
-        val arrayList = ArrayList<Cookie>()
-        for (key in cookies.keys)
-            arrayList.addAll(cookies[key]!!.values)
-        return arrayList
     }
 
     /**

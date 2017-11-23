@@ -26,6 +26,7 @@ import android.animation.ValueAnimator
 import android.graphics.Color
 import com.google.gson.Gson
 import com.weilylab.xhuschedule.classes.LoginRT
+import com.weilylab.xhuschedule.classes.Student
 import java.io.InputStreamReader
 import java.net.UnknownHostException
 
@@ -101,12 +102,10 @@ class LoginActivity : AppCompatActivity() {
         val usernameStr = username.text.toString()
         val passwordStr = password.text.toString()
 
-        ScheduleHelper.tomcatRetrofit
-                .create(RTResponse::class.java)
-                .autoLogin(usernameStr, passwordStr)
-                .subscribeOn(Schedulers.newThread())
-                .unsubscribeOn(Schedulers.newThread())
-                .map({ responseBody -> Gson().fromJson(InputStreamReader(responseBody.byteStream()), LoginRT::class.java) })
+        val student = Student()
+        student.username = usernameStr
+        student.password = passwordStr
+        student.login()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(object : Observer<LoginRT> {
 
@@ -141,6 +140,7 @@ class LoginActivity : AppCompatActivity() {
                             }
                             "1" -> {
                                 ScheduleHelper.isLogin = true
+                                ScheduleHelper.isFromLogin = true
                                 val sharedPreference = getSharedPreferences("cache", Context.MODE_PRIVATE)
                                 sharedPreference.edit()
                                         .putString("username", usernameStr)
