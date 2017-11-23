@@ -1,5 +1,6 @@
 package com.weilylab.xhuschedule.fragment
 
+import android.content.Context
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
@@ -125,8 +126,10 @@ class TableFragment : Fragment() {
             loadingDialog.setHintTextColor(Color.parseColor("#ff4081"))
         }
         Observable.create<Array<Course?>> { subscriber ->
-            val parentFile = File(activity.cacheDir.absolutePath + File.separator + "caches/")
-            val base64Name = FileUtil.filterString(Base64.encodeToString(ScheduleHelper.studentNumber.toByteArray(), Base64.DEFAULT))
+            val sharedPreference = activity.getSharedPreferences("cache", Context.MODE_PRIVATE)
+            val studentNumber = sharedPreference.getString("username", "0")
+            val parentFile = File(activity.filesDir.absolutePath + File.separator + "caches/")
+            val base64Name = FileUtil.filterString(Base64.encodeToString(studentNumber.toByteArray(), Base64.DEFAULT))
             list.clear()
             list.addAll(CourseUtil.getWeekCourses(FileUtil.getCoursesFromFile(activity, File(parentFile, base64Name)), ScheduleHelper.weekIndex))
             subscriber.onComplete()
