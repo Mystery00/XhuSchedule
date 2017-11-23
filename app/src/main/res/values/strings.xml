@@ -20,7 +20,8 @@
     <string name="hint_dialog_login">登录中……</string>
     <string name="hint_dialog_update_cache">更新缓存中……</string>
     <string name="hint_dialog_check_update">检查更新中……</string>
-    <string name="hint_invalid_cookie">登陆信息已过期，是否重新登陆？</string>
+    <string name="hint_invalid_cookie">登陆信息已过期，是否重新登录？</string>
+    <string name="hint_try_refresh_data_error">%1$s，是否重新登录？</string>
     <string name="hint_update_data">信息同步成功！</string>
     <string name="hint_update_data_new">信息同步成功！和之前相比，数据有更新。</string>
     <string name="hint_course_empty">今天没课哦~</string>

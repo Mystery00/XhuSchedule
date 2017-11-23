@@ -108,9 +108,7 @@ class LoginActivity : AppCompatActivity() {
         student.login()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(object : Observer<LoginRT> {
-
                     private var loginRT: LoginRT? = null
-
                     override fun onNext(t: LoginRT) {
                         loginRT = t
                     }
