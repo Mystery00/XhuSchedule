@@ -113,7 +113,7 @@ class LoginActivity : AppCompatActivity() {
                 .subscribeOn(Schedulers.io())
                 .doOnNext { contentRT ->
                     if (contentRT.rt == "1") {
-                        val parentFile = File(cacheDir.absolutePath + File.separator + "caches/")
+                        val parentFile = File(filesDir.absolutePath + File.separator + "caches/")
                         val base64Name = FileUtil.filterString(Base64.encodeToString(usernameStr.toByteArray(), Base64.DEFAULT))
                         val newFile = File(parentFile, base64Name)
                         newFile.createNewFile()

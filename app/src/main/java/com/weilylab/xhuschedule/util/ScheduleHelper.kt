@@ -27,6 +27,7 @@ object ScheduleHelper {
             .connectTimeout(20, TimeUnit.SECONDS)
             .readTimeout(20, TimeUnit.SECONDS)
             .writeTimeout(20, TimeUnit.SECONDS)
+            .cookieJar(CookieManger(APP.getContext()))
             .build()
 
     val tomcatRetrofit = Retrofit.Builder()
