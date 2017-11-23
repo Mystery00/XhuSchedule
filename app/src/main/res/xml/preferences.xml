@@ -1,27 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
     <Preference
         android:key="@string/key_first_day"
-        android:title="@string/title_first_day"/>
+        android:title="@string/title_first_day" />
 
-    <PreferenceCategory
-        android:title="@string/category_ui">
+    <PreferenceCategory android:title="@string/category_custom">
 
-        <Preference
-            android:key="@string/key_header_img"
-            android:title="@string/title_header_img"/>
+        <PreferenceScreen android:title="@string/category_ui">
 
-        <Preference
-            android:key="@string/key_background_img"
-            android:title="@string/title_background_img"/>
+            <Preference
+                android:key="@string/key_header_img"
+                android:title="@string/title_header_img" />
 
-        <Preference
-            android:key="@string/key_custom_trans"
-            android:title="@string/title_custom_trans"/>
+            <Preference
+                android:key="@string/key_background_img"
+                android:title="@string/title_background_img" />
 
-        <Preference
-            android:key="@string/key_custom_text_size"
-            android:title="@string/title_custom_text_size"/>
+            <Preference
+                android:key="@string/key_custom_today_trans"
+                android:title="@string/title_custom_today_trans" />
+
+            <Preference
+                android:key="@string/key_custom_table_trans"
+                android:title="@string/title_custom_table_trans" />
+
+            <Preference
+                android:key="@string/key_custom_today_text_color"
+                android:title="@string/title_custom_today_text_color" />
+
+            <Preference
+                android:key="@string/key_custom_table_text_color"
+                android:title="@string/title_custom_table_text_color" />
+
+            <Preference
+                android:key="@string/key_custom_text_size"
+                android:title="@string/title_custom_text_size" />
+
+        </PreferenceScreen>
 
     </PreferenceCategory>
 
@@ -31,43 +47,46 @@
 
         <Preference
             android:summary="@string/summary_icon"
-            android:title="@string/title_icon"/>
+            android:title="@string/title_icon" />
 
         <Preference
             android:summary="@string/summary_back"
-            android:title="@string/title_back"/>
+            android:title="@string/title_back" />
 
         <Preference
             android:summary="@string/summary_ui"
-            android:title="@string/title_ui"/>
+            android:title="@string/title_ui" />
+
+        <Preference
+            android:summary="@string/summary_developer"
+            android:title="@string/title_developer" />
 
     </PreferenceCategory>
 
-    <PreferenceCategory
-        android:title="@string/category_about">
+    <PreferenceCategory android:title="@string/category_about">
 
         <Preference
             android:key="@string/key_weily_product"
             android:summary="@string/summary_weily_product"
-            android:title="@string/title_weily_product"/>
+            android:title="@string/title_weily_product" />
 
         <Preference
             android:summary="@string/summary_feedback"
-            android:title="@string/title_feedback"/>
+            android:title="@string/title_feedback" />
 
         <Preference
             android:key="@string/key_check_update"
-            android:title="@string/title_check_update"/>
+            android:title="@string/title_check_update" />
 
         <Preference
             android:key="@string/key_version_name"
             android:summary="@string/summary_version_name"
-            android:title="@string/title_version_name"/>
+            android:title="@string/title_version_name" />
 
         <Preference
             android:key="@string/key_version_code"
             android:summary="@string/summary_version_code"
-            android:title="@string/title_version_code"/>
+            android:title="@string/title_version_code" />
 
     </PreferenceCategory>
 
