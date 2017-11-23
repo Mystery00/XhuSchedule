@@ -98,7 +98,7 @@ class SettingsPreferenceFragment : PreferenceFragment() {
         firstDayPreference = findPreference(getString(R.string.key_first_day))
         headerImgPreference = findPreference(getString(R.string.key_header_img))
         backgroundImgPreference = findPreference(getString(R.string.key_background_img))
-        customTransPreference = findPreference(getString(R.string.key_custom_trans))
+        customTransPreference = findPreference(getString(R.string.key_custom_table_trans))
         customTextSizePreference = findPreference(getString(R.string.key_custom_text_size))
         checkUpdatePreference = findPreference(getString(R.string.key_check_update))
         weilyProductPreference = findPreference(getString(R.string.key_weily_product))
