@@ -26,7 +26,6 @@ import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
-import vip.mystery0.tools.logs.Logs
 import java.io.File
 
 /**
@@ -34,8 +33,6 @@ import java.io.File
  */
 class TableFragment : Fragment() {
     companion object {
-        private val TAG = "TableFragment"
-
         fun newInstance(list: ArrayList<Course?>, isShowArrow: Boolean): TableFragment {
             val bundle = Bundle()
             bundle.putSerializable("list", list)
@@ -63,7 +60,6 @@ class TableFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         if (rootView == null) {
-            Logs.i(TAG, "onCreateView: ")
             rootView = inflater.inflate(R.layout.fragment_table, container, false)
             val recyclerView: RecyclerView = rootView!!.findViewById(R.id.recycler_view)
             val linearLayout: LinearLayout = rootView!!.findViewById(R.id.table_nav)
@@ -106,7 +102,6 @@ class TableFragment : Fragment() {
                     linearLayout.scrollBy(dx, dy)
                 }
             })
-            Logs.i(TAG, "onCreateView: " + recyclerView.layoutParams.width)
             isReady = true
         }
         return rootView
