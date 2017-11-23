@@ -494,18 +494,17 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                                 400 + resources.getDimensionPixelSize(resources.getIdentifier("status_bar_height", "dimen", "android"))
                         ), getString(R.string.showcase_swipe_refresh)).transparentTarget(true))
                 .continueOnCancel(true)
+                .considerOuterCircleCanceled(true)
                 .listener(object : TapTargetSequence.Listener {
                     override fun onSequenceCanceled(lastTarget: TapTarget?) {
                     }
 
                     override fun onSequenceFinish() {
-                        Logs.i(TAG, "onSequenceFinish: ")
                         swipeRefreshLayout.isRefreshing = false
                         Settings.isFirstRun = false
                     }
 
                     override fun onSequenceStep(lastTarget: TapTarget?, targetClicked: Boolean) {
-                        Logs.i(TAG, "onSequenceStep: ")
                         swipeRefreshLayout.isRefreshing = true
                     }
                 })
