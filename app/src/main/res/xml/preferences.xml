@@ -5,9 +5,21 @@
         android:key="@string/key_first_day"
         android:title="@string/title_first_day" />
 
+    <PreferenceScreen android:title="@string/screen_category_account">
+
+        <PreferenceCategory
+            android:key="@string/key_current_account"
+            android:title="@string/title_current_account" />
+
+        <Preference
+            android:key="@string/key_add_account"
+            android:title="@string/title_add_account" />
+
+    </PreferenceScreen>
+
     <PreferenceCategory android:title="@string/category_custom">
 
-        <PreferenceScreen android:title="@string/category_ui">
+        <PreferenceScreen android:title="@string/screen_category_ui">
 
             <Preference
                 android:key="@string/key_header_img"

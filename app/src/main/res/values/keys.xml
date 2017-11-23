@@ -3,8 +3,14 @@
     <string name="key_first_day">key_first_day</string>
     <string name="title_first_day">设置本学期开始时间</string>
 
+    <string name="screen_category_account">账号管理</string>
+    <string name="title_current_account">当前已登录账号</string>
+    <string name="key_current_account">key_current_account</string>
+    <string name="title_add_account">添加账号</string>
+    <string name="key_add_account">key_add_account</string>
+
     <string name="category_custom">自定义项</string>
-    <string name="category_ui">界面设置</string>
+    <string name="screen_category_ui">界面设置</string>
     <string name="title_header_img">自定义侧滑页顶部背景</string>
     <string name="key_header_img">key_header_img</string>
     <string name="title_background_img">自定义背景</string>
