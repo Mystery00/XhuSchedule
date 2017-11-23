@@ -17,6 +17,7 @@ object ScheduleHelper {
     var isLogin = false
     var isCookieAvailable = false
     var isUIChange = false
+    var isFromLogin = false
     var studentName = "0"
     var studentNumber = "0"
     var studentPassword = "0"

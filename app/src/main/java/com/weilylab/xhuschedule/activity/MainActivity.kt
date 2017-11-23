@@ -9,7 +9,6 @@ import android.os.Build
 import android.os.Bundle
 import android.support.design.widget.NavigationView
 import android.support.design.widget.Snackbar
-import android.support.v4.view.GestureDetectorCompat
 import android.support.v4.view.GravityCompat
 import android.support.v4.view.ViewPager
 import android.support.v7.app.ActionBarDrawerToggle
@@ -60,7 +59,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private val todayFragment = TodayFragment.newInstance(todayList)
     private val weekFragment = TableFragment.newInstance(weekList, true)
     private val allFragment = TableFragment.newInstance(allList, false)
-    private lateinit var gestureDetector: GestureDetectorCompat
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -87,7 +85,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         nav_view.setNavigationItemSelectedListener(this)
 
         initView()
-        updateView()
+        if (ScheduleHelper.isFromLogin)
+            updateData()
+        else
+            updateView()
         if (Settings.isFirstRun)
             showcase()
         showUpdateLog()
@@ -295,7 +296,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         var isDataNew = false
         ScheduleHelper.tomcatRetrofit
                 .create(RTResponse::class.java)
-                .getCourses(username, password)
+                .getCourses(username)
                 .subscribeOn(Schedulers.newThread())
                 .unsubscribeOn(Schedulers.newThread())
                 .map({ responseBody -> Gson().fromJson(InputStreamReader(responseBody.byteStream()), ContentRT::class.java) })
