@@ -18,9 +18,6 @@ object ScheduleHelper {
     var isCookieAvailable = false
     var isUIChange = false
     var isFromLogin = false
-    var studentName = "0"
-    var studentNumber = "0"
-    var studentPassword = "0"
     var weekIndex = 0
 
     private val client = OkHttpClient.Builder()
