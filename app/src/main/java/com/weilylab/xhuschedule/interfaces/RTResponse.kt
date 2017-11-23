@@ -13,5 +13,8 @@ interface RTResponse {
 
     @FormUrlEncoded
     @POST("/course/Course/getCourses")
-    fun getCourses(@Field("username")username: String,@Field("password")password: String):Observable<ResponseBody>
+    fun getCourses(@Field("username") username: String, @Field("password") password: String): Observable<ResponseBody>
+
+    @GET("/course/Course/autoLogin")
+    fun autoLogin(@Query("username") username: String, @Query("password") password: String): Observable<ResponseBody>
 }

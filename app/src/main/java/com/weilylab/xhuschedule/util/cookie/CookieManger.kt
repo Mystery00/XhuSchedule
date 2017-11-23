@@ -5,6 +5,7 @@ import android.content.Context
 import okhttp3.Cookie
 import okhttp3.CookieJar
 import okhttp3.HttpUrl
+import vip.mystery0.tools.logs.Logs
 
 class CookieManger(context: Context) : CookieJar {
     init {
@@ -13,12 +14,18 @@ class CookieManger(context: Context) : CookieJar {
     }
 
     override fun saveFromResponse(url: HttpUrl, cookies: List<Cookie>) {
-        if (cookies.isNotEmpty())
+        val username = url.queryParameter("username")
+        if (cookies.isNotEmpty() && username != null) {
             for (item in cookies)
-                cookieStore!!.add(url, item)
+                cookieStore!!.add(username, item)
+        }
+
     }
 
-    override fun loadForRequest(url: HttpUrl): List<Cookie> = cookieStore!![url]
+    override fun loadForRequest(url: HttpUrl): List<Cookie> {
+        val username = url.queryParameter("username")
+        return cookieStore!![url]
+    }
 
     companion object {
         private var cookieStore: PersistentCookieStore? = null
