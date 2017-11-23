@@ -56,7 +56,6 @@ object ViewUtil {
             val md5 = ScheduleHelper.getMD5(course.name)
             colorSharedPreference.edit()
                     .putString(md5, adapter.color)
-                    .putString(md5 + "_trans", "#33" + adapter.color.substring(1))
                     .apply()
             infoChangeListener.onChange()
             dialog.dismiss()
