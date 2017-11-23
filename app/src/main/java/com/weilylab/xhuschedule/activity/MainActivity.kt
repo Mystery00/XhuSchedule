@@ -17,6 +17,7 @@ import android.support.v7.app.AppCompatActivity
 import android.util.Base64
 import android.view.MenuItem
 import android.widget.TextView
+import android.widget.Toast
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
@@ -27,6 +28,8 @@ import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.adapter.ViewPagerAdapter
 import com.weilylab.xhuschedule.classes.ContentRT
 import com.weilylab.xhuschedule.classes.Course
+import com.weilylab.xhuschedule.classes.LoginRT
+import com.weilylab.xhuschedule.classes.Student
 import com.weilylab.xhuschedule.fragment.TableFragment
 import com.weilylab.xhuschedule.fragment.TodayFragment
 import com.weilylab.xhuschedule.interfaces.RTResponse
@@ -53,6 +56,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     private lateinit var loadingDialog: ZLoadingDialog
+    private var isTryRefreshData = false
     private var weekList = ArrayList<Course?>()
     private var allList = ArrayList<Course?>()
     private val todayList = ArrayList<Course>()
@@ -285,7 +289,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         val username = sharedPreference.getString("username", "0")
         val password = sharedPreference.getString("password", "0")
         if (username == "0" || password == "0") {
-            Logs.i(TAG, "updateData: 用户名和密码无效")
             ScheduleHelper.isLogin = false
             startActivity(Intent(this, LoginActivity::class.java))
             finish()
@@ -325,12 +328,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 }
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(object : Observer<ContentRT> {
-
                     private var contentRT: ContentRT? = null
-
                     override fun onError(e: Throwable) {
                         loadingDialog.dismiss()
-                        e.printStackTrace()
                         if (e is UnknownHostException)
                             Snackbar.make(coordinatorLayout, R.string.error_network, Snackbar.LENGTH_SHORT)
                                     .show()
@@ -341,6 +341,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
                     override fun onComplete() {
                         loadingDialog.dismiss()
+                        if (isTryRefreshData && contentRT?.rt == "6") {
+                            ScheduleHelper.isLogin = false
+                            login(username, password)
+                            return
+                        }
                         if (contentRT?.rt != "1") {
                             Snackbar.make(coordinatorLayout, R.string.hint_invalid_cookie, Snackbar.LENGTH_LONG)
                                     .setAction(android.R.string.ok) {
@@ -364,6 +369,86 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
                     override fun onNext(t: ContentRT) {
                         contentRT = t
+                    }
+                })
+    }
+
+    private fun login(username: String, password: String) {
+        isTryRefreshData = true
+        val student = Student()
+        student.username = username
+        student.password = password
+        student.login()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(object : Observer<LoginRT> {
+                    private var loginRT: LoginRT? = null
+                    override fun onError(e: Throwable) {
+                        loadingDialog.dismiss()
+                        e.printStackTrace()
+                        if (e is UnknownHostException)
+                            Toast.makeText(this@MainActivity, R.string.error_network, Toast.LENGTH_SHORT)
+                                    .show()
+                        else
+                            Toast.makeText(this@MainActivity, e.message, Toast.LENGTH_SHORT)
+                                    .show()
+                    }
+
+                    override fun onSubscribe(d: Disposable) {
+                        loadingDialog.show()
+                    }
+
+                    override fun onComplete() {
+                        loadingDialog.dismiss()
+                        when (loginRT?.rt) {
+                            "0" -> {
+                                ScheduleHelper.isLogin = false
+                                Snackbar.make(coordinatorLayout, getString(R.string.hint_try_refresh_data_error, getString(R.string.error_timeout)), Snackbar.LENGTH_LONG)
+                                        .setAction(android.R.string.ok) {
+                                            ScheduleHelper.isLogin = false
+                                            startActivity(Intent(this@MainActivity, LoginActivity::class.java))
+                                            finish()
+                                        }
+                                        .show()
+                            }
+                            "1" -> {
+                                ScheduleHelper.isLogin = true
+                                updateData()
+                            }
+                            "2" -> {
+                                ScheduleHelper.isLogin = false
+                                Snackbar.make(coordinatorLayout, getString(R.string.hint_try_refresh_data_error, getString(R.string.error_invalid_username)), Snackbar.LENGTH_LONG)
+                                        .setAction(android.R.string.ok) {
+                                            ScheduleHelper.isLogin = false
+                                            startActivity(Intent(this@MainActivity, LoginActivity::class.java))
+                                            finish()
+                                        }
+                                        .show()
+                            }
+                            "3" -> {
+                                ScheduleHelper.isLogin = false
+                                Snackbar.make(coordinatorLayout, getString(R.string.hint_try_refresh_data_error, getString(R.string.error_invalid_password)), Snackbar.LENGTH_LONG)
+                                        .setAction(android.R.string.ok) {
+                                            ScheduleHelper.isLogin = false
+                                            startActivity(Intent(this@MainActivity, LoginActivity::class.java))
+                                            finish()
+                                        }
+                                        .show()
+                            }
+                            else -> {
+                                ScheduleHelper.isLogin = false
+                                Snackbar.make(coordinatorLayout, getString(R.string.hint_try_refresh_data_error, getString(R.string.error_other)), Snackbar.LENGTH_LONG)
+                                        .setAction(android.R.string.ok) {
+                                            ScheduleHelper.isLogin = false
+                                            startActivity(Intent(this@MainActivity, LoginActivity::class.java))
+                                            finish()
+                                        }
+                                        .show()
+                            }
+                        }
+                    }
+
+                    override fun onNext(t: LoginRT) {
+                        loginRT = t
                     }
                 })
     }
