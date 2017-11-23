@@ -16,9 +16,7 @@ import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.util.Base64
-import android.view.GestureDetector
 import android.view.MenuItem
-import android.view.MotionEvent
 import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
@@ -189,7 +187,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     fun updateView() {
         Observable.create<HashMap<String, ArrayList<Course?>>> { subscriber ->
-            val parentFile = File(cacheDir.absolutePath + File.separator + "caches/")
+            val parentFile = File(filesDir.absolutePath + File.separator + "caches/")
             if (!parentFile.exists())
                 parentFile.mkdirs()
             val sharedPreference = getSharedPreferences("cache", Context.MODE_PRIVATE)
@@ -292,7 +290,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             finish()
             return
         }
-        val parentFile = File(cacheDir.absolutePath + File.separator + "caches/")
+        val parentFile = File(filesDir.absolutePath + File.separator + "caches/")
         val base64Name = FileUtil.filterString(Base64.encodeToString(username.toByteArray(), Base64.DEFAULT))
         var isDataNew = false
         ScheduleHelper.tomcatRetrofit
