@@ -9,6 +9,6 @@
         <item>新增：更新日志显示</item>
         <item>修复：部分机型自定义背景会导致闪退</item>
         <item>修复：每一次启动时本学期课表显示错误</item>
-        <item></item>
+        <item>修复：过一段时间后课表数据丢失</item>
     </string-array>
 </resources>
