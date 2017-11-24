@@ -15,6 +15,7 @@ import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.util.Base64
 import android.view.MenuItem
+import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
 import com.bumptech.glide.Glide
@@ -48,6 +49,7 @@ import vip.mystery0.tools.logs.Logs
 import java.io.File
 import java.io.InputStreamReader
 import java.net.UnknownHostException
+import java.util.*
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
     companion object {
@@ -56,6 +58,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     private lateinit var loadingDialog: ZLoadingDialog
     private var isTryRefreshData = false
+    private var isWeekShow = false
+    private var isAnimShow = false
     private var weekList = ArrayList<Course?>()
     private var allList = ArrayList<Course?>()
     private val todayList = ArrayList<Course>()
@@ -172,6 +176,42 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         action_sync.setOnClickListener {
             updateData()
         }
+        titleTextView.setOnClickListener {
+            if (isAnimShow)
+                return@setOnClickListener
+            val height = view_test.layoutParams.height
+            val layoutParams = view_test.layoutParams as ViewGroup.MarginLayoutParams
+            Observable.create<Int> { subscriber ->
+                val showDistanceArray = Array(11, { i -> (height / 10F) * i })
+                if (isWeekShow)
+                    showDistanceArray.reverse()
+                showDistanceArray.forEach {
+                    subscriber.onNext(it.toInt())
+                    Thread.sleep(20)
+                }
+                subscriber.onComplete()
+            }
+                    .subscribeOn(Schedulers.newThread())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(object : Observer<Int> {
+                        override fun onSubscribe(d: Disposable) {
+                            isAnimShow = true
+                        }
+
+                        override fun onComplete() {
+                            isWeekShow = !isWeekShow
+                            isAnimShow = false
+                        }
+
+                        override fun onError(e: Throwable) {
+                        }
+
+                        override fun onNext(t: Int) {
+                            layoutParams.topMargin = t
+                            view_test.layoutParams = layoutParams
+                        }
+                    })
+        }
     }
 
     fun updateView() {
@@ -230,7 +270,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     override fun onComplete() {
                         swipeRefreshLayout.isRefreshing = false
 
-                        titleTextView.text = getString(R.string.course_week_index,ScheduleHelper.weekIndex)
+                        titleTextView.text = getString(R.string.course_week_index, ScheduleHelper.weekIndex)
 
                         if (!ScheduleHelper.isLogin) {
                             startActivity(Intent(this@MainActivity, LoginActivity::class.java))
