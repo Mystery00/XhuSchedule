@@ -4,6 +4,7 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#4053ff</color>
     <!--在代码中同样更改这个值（LoginActivity和MainActivity）-->
+    <color name="colorWhite">#FFFFFF</color>
 
     <color name="color1">#039BDA</color>
     <color name="color2">#F5703C</color>

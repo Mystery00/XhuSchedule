@@ -11,7 +11,6 @@ import android.support.design.widget.NavigationView
 import android.support.design.widget.Snackbar
 import android.support.v4.view.GravityCompat
 import android.support.v4.view.ViewPager
-import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.util.Base64
@@ -80,11 +79,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             loadingDialog.setLoadingColor(Color.parseColor("#4053ff"))
             loadingDialog.setHintTextColor(Color.parseColor("#4053ff"))
         }
-
-        val toggle = ActionBarDrawerToggle(
-                this, drawer_layout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
-        drawer_layout.addDrawerListener(toggle)
-        toggle.syncState()
 
         nav_view.setNavigationItemSelectedListener(this)
 
@@ -158,10 +152,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
             override fun onPageSelected(position: Int) {
                 bottomNavigationView.menu.getItem(position).isChecked = true
-                toolbar.title = resources.getStringArray(R.array.title_array)[position]
             }
         })
-        toolbar.title = resources.getStringArray(R.array.title_array)[0]
 
         swipeRefreshLayout.setColorSchemeResources(
                 android.R.color.holo_blue_light,
@@ -174,19 +166,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             updateView()
         }
 
-        toolbar.inflateMenu(R.menu.menu_activity_main)
-        toolbar.setOnMenuItemClickListener { item ->
-            when (item.itemId) {
-                android.R.id.home -> {
-                    drawer_layout.openDrawer(GravityCompat.START)
-                    true
-                }
-                R.id.action_sync -> {
-                    updateData()
-                    true
-                }
-                else -> super.onOptionsItemSelected(item)
-            }
+        action_home.setOnClickListener {
+            drawer_layout.openDrawer(GravityCompat.START)
+        }
+        action_sync.setOnClickListener {
+            updateData()
         }
     }
 
@@ -245,6 +229,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
                     override fun onComplete() {
                         swipeRefreshLayout.isRefreshing = false
+
+                        titleTextView.text = getString(R.string.course_week_index,ScheduleHelper.weekIndex)
 
                         if (!ScheduleHelper.isLogin) {
                             startActivity(Intent(this@MainActivity, LoginActivity::class.java))
@@ -486,7 +472,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                         TapTarget.forView(bottomNavigationView.findViewById(R.id.bottom_nav_today), getString(R.string.showcase_today)),
                         TapTarget.forView(bottomNavigationView.findViewById(R.id.bottom_nav_week), getString(R.string.showcase_week)),
                         TapTarget.forView(bottomNavigationView.findViewById(R.id.bottom_nav_all), getString(R.string.showcase_all)),
-                        TapTarget.forToolbarMenuItem(toolbar, R.id.action_sync, getString(R.string.showcase_sync)),
+//                        TapTarget.forToolbarMenuItem(toolbar, R.id.action_sync, getString(R.string.showcase_sync)),
                         TapTarget.forBounds(Rect(
                                 (size.x / 2) - 100,
                                 200 + resources.getDimensionPixelSize(resources.getIdentifier("status_bar_height", "dimen", "android")),
