@@ -13,9 +13,9 @@ import android.support.v4.view.GravityCompat
 import android.support.v4.view.ViewPager
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.LinearLayoutManager
 import android.util.Base64
 import android.view.MenuItem
-import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
 import com.bumptech.glide.Glide
@@ -26,6 +26,7 @@ import com.getkeepsafe.taptargetview.TapTargetSequence
 import com.google.gson.Gson
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.adapter.ViewPagerAdapter
+import com.weilylab.xhuschedule.adapter.WeekAdapter
 import com.weilylab.xhuschedule.classes.ContentRT
 import com.weilylab.xhuschedule.classes.Course
 import com.weilylab.xhuschedule.classes.LoginRT
@@ -33,6 +34,7 @@ import com.weilylab.xhuschedule.classes.Student
 import com.weilylab.xhuschedule.fragment.TableFragment
 import com.weilylab.xhuschedule.fragment.TodayFragment
 import com.weilylab.xhuschedule.interfaces.RTResponse
+import com.weilylab.xhuschedule.listener.WeekChangeListener
 import com.weilylab.xhuschedule.util.*
 import com.zyao89.view.zloading.ZLoadingDialog
 import com.zyao89.view.zloading.Z_TYPE
@@ -57,6 +59,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     private lateinit var loadingDialog: ZLoadingDialog
+    private lateinit var weekAdapter: WeekAdapter
     private var isTryRefreshData = false
     private var isWeekShow = false
     private var isAnimShow = false
@@ -64,8 +67,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private var allList = ArrayList<Course?>()
     private val todayList = ArrayList<Course>()
     private val todayFragment = TodayFragment.newInstance(todayList)
-    private val weekFragment = TableFragment.newInstance(weekList, true)
-    private val allFragment = TableFragment.newInstance(allList, false)
+    private val weekFragment = TableFragment.newInstance(weekList)
+    private val allFragment = TableFragment.newInstance(allList)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -134,6 +137,19 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         viewPagerAdapter.addFragment(allFragment)
         viewpager.offscreenPageLimit = 2
         viewpager.adapter = viewPagerAdapter
+
+        weekAdapter = WeekAdapter(this, 1)
+        weekAdapter.setWeekChangeListener(object : WeekChangeListener {
+            override fun onChange(week: Int) {
+                ScheduleHelper.weekIndex = week + 1
+                weekAdapter.setWeekIndex(ScheduleHelper.weekIndex)
+                weekFragment.updateData()
+            }
+        })
+        layout_week_recycler_view.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+        layout_week_recycler_view.adapter = weekAdapter
+        layout_week_recycler_view.scrollToPosition(0)
+
         val userIMG: CircleImageView = nav_view.getHeaderView(0).findViewById(R.id.userIMG)
         val nickName: TextView = nav_view.getHeaderView(0).findViewById(R.id.nickName)
         userIMG.setImageResource(R.mipmap.ic_launcher)
@@ -179,38 +195,49 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         titleTextView.setOnClickListener {
             if (isAnimShow)
                 return@setOnClickListener
-            val height = view_test.layoutParams.height
-            val layoutParams = view_test.layoutParams as ViewGroup.MarginLayoutParams
-            Observable.create<Int> { subscriber ->
-                val showDistanceArray = Array(11, { i -> (height / 10F) * i })
-                if (isWeekShow)
-                    showDistanceArray.reverse()
-                showDistanceArray.forEach {
-                    subscriber.onNext(it.toInt())
-                    Thread.sleep(20)
+            val trueHeight = DensityUtil.dip2px(this, 60F)
+            layout_week_recycler_view.post {
+                val height = layout_week_recycler_view.measuredHeight
+                val barLayoutParams = appBar.layoutParams
+                Observable.create<Int> { subscriber ->
+                    val showDistanceArray = Array(11, { i -> (height / 10F) * i })
+                    if (isWeekShow)
+                        showDistanceArray.reverse()
+                    showDistanceArray.forEach {
+                        subscriber.onNext(it.toInt())
+                        Thread.sleep(20)
+                    }
+                    subscriber.onComplete()
                 }
-                subscriber.onComplete()
+                        .subscribeOn(Schedulers.newThread())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(object : Observer<Int> {
+                            override fun onSubscribe(d: Disposable) {
+                                isAnimShow = true
+                            }
+
+                            override fun onComplete() {
+                                isWeekShow = !isWeekShow
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                                    val drawable = if (isWeekShow)
+                                        resources.getDrawable(R.drawable.ic_expand_less, null)
+                                    else
+                                        resources.getDrawable(R.drawable.ic_expand_more, null)
+                                    drawable.setBounds(0, 0, drawable.minimumWidth, drawable.minimumHeight)
+                                    titleTextView.setCompoundDrawables(null, null, drawable, null)
+                                }
+                                isAnimShow = false
+                            }
+
+                            override fun onError(e: Throwable) {
+                            }
+
+                            override fun onNext(t: Int) {
+                                barLayoutParams.height = trueHeight + t
+                                appBar.layoutParams = barLayoutParams
+                            }
+                        })
             }
-                    .subscribeOn(Schedulers.newThread())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(object : Observer<Int> {
-                        override fun onSubscribe(d: Disposable) {
-                            isAnimShow = true
-                        }
-
-                        override fun onComplete() {
-                            isWeekShow = !isWeekShow
-                            isAnimShow = false
-                        }
-
-                        override fun onError(e: Throwable) {
-                        }
-
-                        override fun onNext(t: Int) {
-                            layoutParams.topMargin = t
-                            view_test.layoutParams = layoutParams
-                        }
-                    })
         }
     }
 
@@ -271,6 +298,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                         swipeRefreshLayout.isRefreshing = false
 
                         titleTextView.text = getString(R.string.course_week_index, ScheduleHelper.weekIndex)
+                        weekAdapter.setWeekIndex(ScheduleHelper.weekIndex)
+                        layout_week_recycler_view.scrollToPosition(ScheduleHelper.weekIndex - 1)
 
                         if (!ScheduleHelper.isLogin) {
                             startActivity(Intent(this@MainActivity, LoginActivity::class.java))

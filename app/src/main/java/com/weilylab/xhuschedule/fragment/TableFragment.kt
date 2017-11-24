@@ -4,7 +4,6 @@ import android.content.Context
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
-import android.support.constraint.ConstraintLayout
 import android.support.v4.app.Fragment
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -33,10 +32,9 @@ import java.io.File
  */
 class TableFragment : Fragment() {
     companion object {
-        fun newInstance(list: ArrayList<Course?>, isShowArrow: Boolean): TableFragment {
+        fun newInstance(list: ArrayList<Course?>): TableFragment {
             val bundle = Bundle()
             bundle.putSerializable("list", list)
-            bundle.putBoolean("isShowArrow", isShowArrow)
             val fragment = TableFragment()
             fragment.arguments = bundle
             return fragment
@@ -44,7 +42,6 @@ class TableFragment : Fragment() {
     }
 
     private lateinit var list: ArrayList<Course?>
-    private var isShowArrow = false
     private lateinit var adapter: TableAdapter
     private var isReady = false
     private var rootView: View? = null
@@ -53,7 +50,6 @@ class TableFragment : Fragment() {
         super.onCreate(savedInstanceState)
         @Suppress("UNCHECKED_CAST")
         list = arguments.getSerializable("list") as ArrayList<Course?>
-        isShowArrow = arguments.getBoolean("isShowArrow")
         adapter = TableAdapter(activity, list)
     }
 
@@ -63,37 +59,6 @@ class TableFragment : Fragment() {
             rootView = inflater.inflate(R.layout.fragment_table, container, false)
             val recyclerView: RecyclerView = rootView!!.findViewById(R.id.recycler_view)
             val linearLayout: LinearLayout = rootView!!.findViewById(R.id.table_nav)
-            val arrowLayout: ConstraintLayout = rootView!!.findViewById(R.id.table_arrow)
-            if (!isShowArrow)
-                arrowLayout.visibility = View.GONE
-            else {
-                val arrowBack: ImageView = rootView!!.findViewById(R.id.imageView_back)
-                val arrowForward: ImageView = rootView!!.findViewById(R.id.imageView_forward)
-                val weekIndexSpinner: Spinner = rootView!!.findViewById(R.id.weekIndexSpinner)
-                val weekArray = Array<String>(20, { i -> getString(R.string.course_week_index, i + 1) })
-                val spinnerAdapter = ArrayAdapter(activity, android.R.layout.simple_spinner_item, weekArray)
-                spinnerAdapter.setDropDownViewResource(R.layout.item_spinner_dropdown)
-                weekIndexSpinner.adapter = spinnerAdapter
-                weekIndexSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-                    override fun onNothingSelected(parent: AdapterView<*>?) {
-                    }
-
-                    override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int,
-                                                id: Long) {
-                        ScheduleHelper.weekIndex = position + 1
-                        updateData(weekIndexSpinner)
-                    }
-                }
-                weekIndexSpinner.setSelection(ScheduleHelper.weekIndex - 1, true)
-                arrowBack.setOnClickListener {
-                    ScheduleHelper.weekIndex--
-                    updateData(weekIndexSpinner)
-                }
-                arrowForward.setOnClickListener {
-                    ScheduleHelper.weekIndex++
-                    updateData(weekIndexSpinner)
-                }
-            }
             recyclerView.layoutManager = GridLayoutManager(activity, 7, GridLayoutManager.VERTICAL, false)
             recyclerView.adapter = adapter
             recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
@@ -107,7 +72,7 @@ class TableFragment : Fragment() {
         return rootView
     }
 
-    private fun updateData(weekIndexSpinner: Spinner) {
+    fun updateData() {
         val loadingDialog = ZLoadingDialog(activity)
                 .setLoadingBuilder(Z_TYPE.DOUBLE_CIRCLE)
                 .setHintText(getString(R.string.hint_dialog_update_cache))
@@ -145,21 +110,6 @@ class TableFragment : Fragment() {
                     }
 
                     override fun onComplete() {
-                        when (ScheduleHelper.weekIndex) {
-                            1 -> {
-                                rootView!!.findViewById<ImageView>(R.id.imageView_back).visibility = View.GONE
-                                rootView!!.findViewById<ImageView>(R.id.imageView_forward).visibility = View.VISIBLE
-                            }
-                            20 -> {
-                                rootView!!.findViewById<ImageView>(R.id.imageView_back).visibility = View.VISIBLE
-                                rootView!!.findViewById<ImageView>(R.id.imageView_forward).visibility = View.GONE
-                            }
-                            else -> {
-                                rootView!!.findViewById<ImageView>(R.id.imageView_back).visibility = View.VISIBLE
-                                rootView!!.findViewById<ImageView>(R.id.imageView_forward).visibility = View.VISIBLE
-                            }
-                        }
-                        weekIndexSpinner.setSelection(ScheduleHelper.weekIndex - 1, true)
                         adapter.notifyDataSetChanged()
                         loadingDialog.dismiss()
                     }
@@ -179,8 +129,6 @@ class TableFragment : Fragment() {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(object : Observer<Boolean> {
                     override fun onComplete() {
-                        if (isShowArrow)
-                            rootView!!.findViewById<Spinner>(R.id.weekIndexSpinner).setSelection(ScheduleHelper.weekIndex - 1, true)
                         adapter.notifyDataSetChanged()
                     }
 
