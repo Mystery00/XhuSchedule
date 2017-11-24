@@ -338,7 +338,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
                     override fun onComplete() {
                         loadingDialog.dismiss()
-                        if (isTryRefreshData && contentRT?.rt == "6") {
+                        if (!isTryRefreshData && contentRT?.rt == "6") {
                             ScheduleHelper.isLogin = false
                             login(username, password)
                             return
