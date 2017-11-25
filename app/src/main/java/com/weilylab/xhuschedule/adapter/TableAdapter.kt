@@ -58,7 +58,7 @@ class TableAdapter(private val context: Context,
         if (course.color == "") {
             course.color = '#' + ScheduleHelper.getRandomColor()
         }
-        courseBackground.setBackgroundColor(Color.parseColor('#' + Integer.toHexString(Settings.customTransparency) + course.color.substring(1)))
+        courseBackground.setBackgroundColor(Color.parseColor('#' + Integer.toHexString(Settings.customTableOpacity) + course.color.substring(1)))
         view.layoutParams = layoutParams
         view.setOnClickListener {
             ViewUtil.showAlertDialog(context, course, object : InfoChangeListener {

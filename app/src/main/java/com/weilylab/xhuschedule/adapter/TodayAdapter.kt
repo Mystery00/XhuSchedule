@@ -15,7 +15,6 @@ import com.weilylab.xhuschedule.listener.InfoChangeListener
 import com.weilylab.xhuschedule.util.ScheduleHelper
 import com.weilylab.xhuschedule.util.Settings
 import com.weilylab.xhuschedule.util.ViewUtil
-import vip.mystery0.tools.logs.Logs
 
 /**
  * Created by myste.
@@ -50,7 +49,7 @@ class TodayAdapter(private val context: Context,
                         }
                     })
                 }
-                holder.itemView.background.alpha = Settings.customTransparency
+                holder.itemView.background.alpha = Settings.customTableOpacity
             }
         }
     }

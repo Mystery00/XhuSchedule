@@ -2,6 +2,8 @@ package com.weilylab.xhuschedule.adapter
 
 import android.content.Context
 import android.graphics.Color
+import android.graphics.drawable.GradientDrawable
+import android.support.v4.content.ContextCompat
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.view.ViewGroup
@@ -23,10 +25,11 @@ class WeekAdapter(private val context: Context,
         holder.itemView.setOnClickListener {
             weekChangeListener?.onChange(position)
         }
+        val gradientDrawable=holder.itemView.background as GradientDrawable
         if (position + 1 == index)
-            holder.itemView.setBackgroundColor(Color.GREEN)
+            gradientDrawable.setColor(ContextCompat.getColor(context, R.color.colorWeekAccent))
         else
-            holder.itemView.setBackgroundColor(Color.WHITE)
+            gradientDrawable.setColor(ContextCompat.getColor(context, R.color.colorWeekPrimary))
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder = ViewHolder(View.inflate(context, R.layout.item_week, null))
