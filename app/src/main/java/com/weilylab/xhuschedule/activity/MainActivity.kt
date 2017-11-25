@@ -135,6 +135,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             loadingDialog.show()
             updateView()
         }
+        ScheduleHelper.isImageChange = false
         ScheduleHelper.isUIChange = false
     }
 
@@ -158,6 +159,20 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         layout_week_recycler_view.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         layout_week_recycler_view.adapter = weekAdapter
         layout_week_recycler_view.scrollToPosition(0)
+
+        val options = RequestOptions()
+                .signature(MediaStoreSignature("image/*", Calendar.getInstance().timeInMillis, 0))
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+        if (Settings.customBackgroundImg != "")
+            Glide.with(this)
+                    .load(Settings.customBackgroundImg)
+                    .apply(options)
+                    .into(background)
+        if (Settings.customHeaderImg != "")
+            Glide.with(this)
+                    .load(Settings.customHeaderImg)
+                    .apply(options)
+                    .into(nav_view.getHeaderView(0).findViewById(R.id.background))
 
         val userIMG: CircleImageView = nav_view.getHeaderView(0).findViewById(R.id.userIMG)
         val nickName: TextView = nav_view.getHeaderView(0).findViewById(R.id.nickName)

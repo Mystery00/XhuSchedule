@@ -10,12 +10,12 @@
         android:title="@string/title_background_img" />
 
     <Preference
-        android:key="@string/key_custom_today_trans"
-        android:title="@string/title_custom_today_trans" />
+        android:key="@string/key_custom_today_opacity"
+        android:title="@string/title_custom_today_opacity" />
 
     <Preference
-        android:key="@string/key_custom_table_trans"
-        android:title="@string/title_custom_table_trans" />
+        android:key="@string/key_custom_table_opacity"
+        android:title="@string/title_custom_table_opacity" />
 
     <Preference
         android:key="@string/key_custom_today_text_color"
