@@ -24,9 +24,12 @@
     <PreferenceCategory android:title="@string/screen_category_about">
 
         <Preference
-            android:key="@string/key_weily_product"
             android:summary="@string/summary_weily_product"
-            android:title="@string/title_weily_product" />
+            android:title="@string/title_weily_product">
+            <intent
+                android:action="android.intent.action.VIEW"
+                android:data="https://weilylab.com" />
+        </Preference>
 
         <Preference
             android:summary="@string/summary_feedback"
