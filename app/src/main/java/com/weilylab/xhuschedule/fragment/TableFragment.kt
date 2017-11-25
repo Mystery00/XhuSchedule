@@ -5,6 +5,7 @@ import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v4.content.ContextCompat
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.util.Base64
@@ -15,6 +16,7 @@ import android.widget.*
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.adapter.TableAdapter
 import com.weilylab.xhuschedule.classes.Course
+import com.weilylab.xhuschedule.util.CalendarUtil
 import com.weilylab.xhuschedule.util.CourseUtil
 import com.weilylab.xhuschedule.util.XhuFileUtil
 import com.weilylab.xhuschedule.util.ScheduleHelper
@@ -57,6 +59,8 @@ class TableFragment : Fragment() {
                               savedInstanceState: Bundle?): View? {
         if (rootView == null) {
             rootView = inflater.inflate(R.layout.fragment_table, container, false)
+            val tableHeader: LinearLayout = rootView!!.findViewById(R.id.table_header)
+            tableHeader.getChildAt(CalendarUtil.getWeekIndex() - 1).setBackgroundColor(ContextCompat.getColor(activity, R.color.colorWeekPrimary))
             val recyclerView: RecyclerView = rootView!!.findViewById(R.id.recycler_view)
             val linearLayout: LinearLayout = rootView!!.findViewById(R.id.table_nav)
             recyclerView.layoutManager = GridLayoutManager(activity, 7, GridLayoutManager.VERTICAL, false)
@@ -129,6 +133,15 @@ class TableFragment : Fragment() {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(object : Observer<Boolean> {
                     override fun onComplete() {
+                        if (rootView != null) {
+                            val tableHeader: LinearLayout = rootView!!.findViewById(R.id.table_header)
+                            for (i in 0 until tableHeader.childCount) {
+                                if (CalendarUtil.getWeekIndex() - 1 == i)
+                                    tableHeader.getChildAt(i).setBackgroundColor(ContextCompat.getColor(activity, R.color.colorWeekPrimary))
+                                else
+                                    tableHeader.getChildAt(i).setBackgroundColor(Color.parseColor("#00000000"))
+                            }
+                        }
                         adapter.notifyDataSetChanged()
                     }
 
