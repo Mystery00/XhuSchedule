@@ -41,7 +41,7 @@ class TodayAdapter(private val context: Context,
                 holder.courseLocationTextView.text = course.location
                 if (course.color == "")
                     course.color = '#' + ScheduleHelper.getRandomColor()
-                holder.img.setImageBitmap(drawImg(course))
+                holder.img.setImageBitmap(ViewUtil.drawImg(course))
                 holder.itemView.setOnClickListener {
                     ViewUtil.showAlertDialog(context, course, object : InfoChangeListener {
                         override fun onChange() {
@@ -72,21 +72,5 @@ class TodayAdapter(private val context: Context,
         var courseTimeTextView: TextView = itemView.findViewById(R.id.courseTimeTextView)
         var courseNameAndTeacherTextView: TextView = itemView.findViewById(R.id.courseNameAndTeacherTextView)
         var courseLocationTextView: TextView = itemView.findViewById(R.id.courseLocationTextView)
-    }
-
-    private fun drawImg(course: Course): Bitmap {
-        val bitmap = Bitmap.createBitmap(200, 200, Bitmap.Config.ARGB_8888)
-        val canvas = Canvas(bitmap)
-        val targetRect = Rect(0, 0, 200, 200)
-        val paint = Paint()
-        paint.color = Color.parseColor(course.color)
-        canvas.drawCircle(100F, 100F, 100F, paint)
-        paint.color = Color.WHITE
-        paint.textSize = 120F
-        val fontMetrics = paint.fontMetrics
-        val baseline = (targetRect.bottom + targetRect.top - fontMetrics.bottom - fontMetrics.top) / 2
-        paint.textAlign = Paint.Align.CENTER
-        canvas.drawText(course.name.substring(0, 1), targetRect.centerX().toFloat(), baseline, paint)
-        return bitmap
     }
 }

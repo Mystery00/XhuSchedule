@@ -15,17 +15,21 @@ import android.provider.MediaStore
 import android.support.constraint.ConstraintLayout
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AlertDialog
+import android.support.v7.widget.CardView
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.SeekBar
 import android.widget.TextView
 import android.widget.Toast
 import com.weilylab.xhuschedule.R
+import com.weilylab.xhuschedule.classes.Course
 import com.weilylab.xhuschedule.util.DensityUtil
 import com.weilylab.xhuschedule.util.ScheduleHelper
 import com.weilylab.xhuschedule.util.Settings
+import com.weilylab.xhuschedule.util.ViewUtil
 import com.yalantis.ucrop.UCrop
 import vip.mystery0.tools.logs.Logs
 import java.io.File
@@ -46,7 +50,8 @@ class UISettingsFragment : PreferenceFragment() {
     private var requestType = 0
     private lateinit var headerImgPreference: Preference
     private lateinit var backgroundImgPreference: Preference
-    private lateinit var customTransPreference: Preference
+    private lateinit var customTodayOpacityPreference: Preference
+    private lateinit var customTableOpacityPreference: Preference
     private lateinit var customTextSizePreference: Preference
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -57,7 +62,8 @@ class UISettingsFragment : PreferenceFragment() {
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View {
         headerImgPreference = findPreference(getString(R.string.key_header_img))
         backgroundImgPreference = findPreference(getString(R.string.key_background_img))
-        customTransPreference = findPreference(getString(R.string.key_custom_table_trans))
+        customTodayOpacityPreference = findPreference(getString(R.string.key_custom_today_opacity))
+        customTableOpacityPreference = findPreference(getString(R.string.key_custom_table_opacity))
         customTextSizePreference = findPreference(getString(R.string.key_custom_text_size))
         headerImgPreference.setOnPreferenceClickListener {
             requestType = HEADER_REQUEST_CODE
@@ -69,27 +75,38 @@ class UISettingsFragment : PreferenceFragment() {
             requestPermission()
             true
         }
-        customTransPreference.setOnPreferenceClickListener {
-            var color = ScheduleHelper.getRandomColor()
+        customTodayOpacityPreference.setOnPreferenceClickListener {
+            val color = '#' + ScheduleHelper.getRandomColor()
             var currentProgress = Settings.customTableOpacity
-            val view = View.inflate(activity, R.layout.dialog_custom_trans, null)
-            val testCourseLayout: ConstraintLayout = view.findViewById(R.id.test_course_layout)
+            val view = View.inflate(activity, R.layout.dialog_custom_today_opacity, null)
+            val cardCourseLayout: CardView = view.findViewById(R.id.cardView)
+            val img: ImageView = view.findViewById(R.id.img)
+            val courseTimeTextView: TextView = view.findViewById(R.id.courseTimeTextView)
+            val courseNameAndTeacherTextView: TextView = view.findViewById(R.id.courseNameAndTeacherTextView)
+            val courseLocationTextView: TextView = view.findViewById(R.id.courseLocationTextView)
             val seekBar: SeekBar = view.findViewById(R.id.seekBar)
             val textView: TextView = view.findViewById(R.id.textView)
-            testCourseLayout.setOnClickListener {
-                val trans = (if (currentProgress < 16) "0" else "") + Integer.toHexString(currentProgress)
-                color = ScheduleHelper.getRandomColor()
-                testCourseLayout.setBackgroundColor(Color.parseColor('#' + trans + color))
-            }
-            testCourseLayout.setBackgroundColor(Color.parseColor('#' + (if (currentProgress < 16) "0" else "") + Integer.toHexString(currentProgress) + color))
+            val course = Course()
+            course.name = "测试课程"
+            course.teacher = "测试教师"
+            course.time = "测试时间"
+            course.location = "测试地点"
+            course.color = color
+            img.setImageBitmap(ViewUtil.drawImg(course))
+            courseTimeTextView.text = course.time
+            val temp = course.name + " - " + course.teacher
+            courseNameAndTeacherTextView.text = temp
+            courseLocationTextView.text = course.location
+            textView.text = getString(R.string.test_course_current_progress_trans, currentProgress * 100 / 255F)
+            cardCourseLayout.setBackgroundColor(Color.parseColor('#' + (if (currentProgress < 16) "0" else "") + Integer.toHexString(currentProgress) + "FFFFFF"))
             seekBar.progress = currentProgress
             textView.text = getString(R.string.test_course_current_progress_trans, currentProgress * 100 / 255F)
             seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
                 override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                     currentProgress = progress
-                    val trans = (if (progress < 16) "0" else "") + Integer.toHexString(progress)
+                    val opacity = (if (progress < 16) "0" else "") + Integer.toHexString(progress)
                     textView.text = getString(R.string.test_course_current_progress_trans, currentProgress * 100 / 255F)
-                    testCourseLayout.setBackgroundColor(Color.parseColor('#' + trans + color))
+                    cardCourseLayout.setBackgroundColor(Color.parseColor('#' + opacity + "FFFFFF"))
                 }
 
                 override fun onStartTrackingTouch(seekBar: SeekBar?) {
@@ -105,6 +122,47 @@ class UISettingsFragment : PreferenceFragment() {
                         if (currentProgress != Settings.customTableOpacity)
                             ScheduleHelper.isUIChange = true
                         Settings.customTableOpacity = currentProgress
+                    })
+                    .setNegativeButton(android.R.string.cancel, null)
+                    .show()
+            true
+        }
+        customTableOpacityPreference.setOnPreferenceClickListener {
+            var color = ScheduleHelper.getRandomColor()
+            var currentProgress = Settings.customTodayOpacity
+            val view = View.inflate(activity, R.layout.dialog_custom_table_opacity, null)
+            val testCourseLayout: ConstraintLayout = view.findViewById(R.id.test_course_layout)
+            val seekBar: SeekBar = view.findViewById(R.id.seekBar)
+            val textView: TextView = view.findViewById(R.id.textView)
+            testCourseLayout.setOnClickListener {
+                val opacity = (if (currentProgress < 16) "0" else "") + Integer.toHexString(currentProgress)
+                color = ScheduleHelper.getRandomColor()
+                testCourseLayout.setBackgroundColor(Color.parseColor('#' + opacity + color))
+            }
+            testCourseLayout.setBackgroundColor(Color.parseColor('#' + (if (currentProgress < 16) "0" else "") + Integer.toHexString(currentProgress) + color))
+            seekBar.progress = currentProgress
+            textView.text = getString(R.string.test_course_current_progress_trans, currentProgress * 100 / 255F)
+            seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+                override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                    currentProgress = progress
+                    val opacity = (if (progress < 16) "0" else "") + Integer.toHexString(progress)
+                    textView.text = getString(R.string.test_course_current_progress_trans, currentProgress * 100 / 255F)
+                    testCourseLayout.setBackgroundColor(Color.parseColor('#' + opacity + color))
+                }
+
+                override fun onStartTrackingTouch(seekBar: SeekBar?) {
+                }
+
+                override fun onStopTrackingTouch(seekBar: SeekBar?) {
+                }
+            })
+            AlertDialog.Builder(activity)
+                    .setTitle(" ")
+                    .setView(view)
+                    .setPositiveButton(android.R.string.ok, { _, _ ->
+                        if (currentProgress != Settings.customTodayOpacity)
+                            ScheduleHelper.isUIChange = true
+                        Settings.customTodayOpacity = currentProgress
                     })
                     .setNegativeButton(android.R.string.cancel, null)
                     .show()

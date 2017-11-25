@@ -16,10 +16,10 @@
     <string name="key_header_img">key_header_img</string>
     <string name="title_background_img">自定义背景</string>
     <string name="key_background_img">key_background_img</string>
-    <string name="key_custom_today_trans">key_custom_table_trans</string>
-    <string name="title_custom_today_trans">自定义今日课表透明度</string>
-    <string name="key_custom_table_trans">key_custom_table_trans</string>
-    <string name="title_custom_table_trans">自定义表格透明度</string>
+    <string name="key_custom_today_opacity">key_custom_today_opacity</string>
+    <string name="title_custom_today_opacity">自定义今日课表透明度</string>
+    <string name="key_custom_table_opacity">key_custom_table_opacity</string>
+    <string name="title_custom_table_opacity">自定义表格透明度</string>
     <string name="key_custom_today_text_color">key_custom_table_text_color</string>
     <string name="title_custom_today_text_color">自定义今日课表文字颜色</string>
     <string name="key_custom_table_text_color">key_custom_table_text_color</string>
