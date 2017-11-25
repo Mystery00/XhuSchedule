@@ -21,20 +21,23 @@ class WeekAdapter(private val context: Context,
     override fun getItemCount(): Int = 20
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        (holder.itemView as TextView).text = context.getString(R.string.course_week_index, position + 1)
-        holder.itemView.setOnClickListener {
+        holder.textView.text = context.getString(R.string.course_week_index, position + 1)
+        holder.textView.setOnClickListener {
             weekChangeListener?.onChange(position)
         }
-        val gradientDrawable=holder.itemView.background as GradientDrawable
+        val gradientDrawable = holder.textView.background as GradientDrawable
         if (position + 1 == index)
-            gradientDrawable.setColor(ContextCompat.getColor(context, R.color.colorWeekAccent))
-        else
             gradientDrawable.setColor(ContextCompat.getColor(context, R.color.colorWeekPrimary))
+        else
+            gradientDrawable.setColor(ContextCompat.getColor(context, R.color.colorWeekAccent))
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder = ViewHolder(View.inflate(context, R.layout.item_week, null))
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
+    {
+        var textView:TextView=itemView.findViewById(R.id.weekTextView)
+    }
 
     fun setWeekIndex(weekIndex: Int) {
         this.index = weekIndex
