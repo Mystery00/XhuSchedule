@@ -2,6 +2,7 @@ package com.weilylab.xhuschedule.adapter
 
 import android.content.Context
 import android.graphics.Color
+import android.graphics.drawable.GradientDrawable
 import android.support.v7.widget.RecyclerView
 import android.util.TypedValue
 import android.view.LayoutInflater
@@ -43,7 +44,7 @@ class TableAdapter(private val context: Context,
     private fun addView(holder: ViewHolder, course: Course) {
         val layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, 1F)
         val view = View.inflate(context, R.layout.item_course, null)
-        val courseBackground:View=view.findViewById(R.id.courseBackground)
+        val courseBackground: View = view.findViewById(R.id.courseBackground)
         val textViewName: TextView = view.findViewById(R.id.textView_name)
         val textViewTeacher: TextView = view.findViewById(R.id.textView_teacher)
         val textViewLocation: TextView = view.findViewById(R.id.textView_location)
@@ -58,7 +59,8 @@ class TableAdapter(private val context: Context,
         if (course.color == "") {
             course.color = '#' + ScheduleHelper.getRandomColor()
         }
-        courseBackground.setBackgroundColor(Color.parseColor('#' + Integer.toHexString(Settings.customTableOpacity) + course.color.substring(1)))
+        val gradientDrawable = courseBackground.background as GradientDrawable
+        gradientDrawable.setColor(Color.parseColor('#' + Integer.toHexString(Settings.customTableOpacity) + course.color.substring(1)))
         view.layoutParams = layoutParams
         view.setOnClickListener {
             ViewUtil.showAlertDialog(context, course, object : InfoChangeListener {

@@ -1,10 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
-    android:layout_height="match_parent"
-    android:background="@drawable/drawable_corner"
-    android:gravity="center"
-    android:padding="@dimen/course_padding"
-    android:textColor="@color/colorWhite"
-    android:textSize="16sp"
-    android:textStyle="bold" />
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/weekTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_margin="4dp"
+        android:background="@drawable/drawable_corner"
+        android:gravity="center"
+        android:padding="@dimen/course_padding"
+        android:textColor="@color/colorWhite"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+
+</LinearLayout>
