@@ -16,6 +16,7 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Base64
 import android.view.MenuItem
+import android.view.View
 import android.widget.TextView
 import android.widget.Toast
 import com.bumptech.glide.Glide
@@ -60,7 +61,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     private lateinit var loadingDialog: ZLoadingDialog
     private lateinit var weekAdapter: WeekAdapter
-    private var isTryRefreshData = false
+    private var isRefreshData = false
     private var isWeekShow = false
     private var isAnimShow = false
     private var weekList = ArrayList<Course?>()
@@ -78,6 +79,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 .setHintText(getString(R.string.hint_dialog_update_cache))
                 .setHintTextSize(16F)
                 .setCancelable(false)
+                .setCanceledOnTouchOutside(false)
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             loadingDialog.setLoadingColor(resources.getColor(R.color.colorAccent, null))
@@ -143,6 +145,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             override fun onChange(week: Int) {
                 ScheduleHelper.weekIndex = week + 1
                 weekAdapter.setWeekIndex(ScheduleHelper.weekIndex)
+                titleTextView.text = getString(R.string.course_week_index, ScheduleHelper.weekIndex)
                 weekFragment.updateData()
             }
         })
@@ -172,6 +175,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
             override fun onPageSelected(position: Int) {
                 bottomNavigationView.menu.getItem(position).isChecked = true
+                if (bottomNavigationView.menu.getItem(position).itemId != R.id.bottom_nav_week) {
+                    if (isWeekShow)
+                        showWeekAnim(false)
+                    titleTextView.visibility = View.GONE
+                } else
+                    titleTextView.visibility = View.VISIBLE
             }
         })
 
@@ -190,54 +199,13 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             drawer_layout.openDrawer(GravityCompat.START)
         }
         action_sync.setOnClickListener {
+            if (isRefreshData)
+                return@setOnClickListener
+            isRefreshData = true
             updateData()
         }
         titleTextView.setOnClickListener {
-            if (isAnimShow)
-                return@setOnClickListener
-            val trueHeight = DensityUtil.dip2px(this, 60F)
-            layout_week_recycler_view.post {
-                val height = layout_week_recycler_view.measuredHeight
-                val barLayoutParams = appBar.layoutParams
-                Observable.create<Int> { subscriber ->
-                    val showDistanceArray = Array(11, { i -> (height / 10F) * i })
-                    if (isWeekShow)
-                        showDistanceArray.reverse()
-                    showDistanceArray.forEach {
-                        subscriber.onNext(it.toInt())
-                        Thread.sleep(20)
-                    }
-                    subscriber.onComplete()
-                }
-                        .subscribeOn(Schedulers.newThread())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(object : Observer<Int> {
-                            override fun onSubscribe(d: Disposable) {
-                                isAnimShow = true
-                            }
-
-                            override fun onComplete() {
-                                isWeekShow = !isWeekShow
-                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                                    val drawable = if (isWeekShow)
-                                        resources.getDrawable(R.drawable.ic_expand_less, null)
-                                    else
-                                        resources.getDrawable(R.drawable.ic_expand_more, null)
-                                    drawable.setBounds(0, 0, drawable.minimumWidth, drawable.minimumHeight)
-                                    titleTextView.setCompoundDrawables(null, null, drawable, null)
-                                }
-                                isAnimShow = false
-                            }
-
-                            override fun onError(e: Throwable) {
-                            }
-
-                            override fun onNext(t: Int) {
-                                barLayoutParams.height = trueHeight + t
-                                appBar.layoutParams = barLayoutParams
-                            }
-                        })
-            }
+            showWeekAnim(!isWeekShow)
         }
     }
 
@@ -297,6 +265,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     override fun onComplete() {
                         swipeRefreshLayout.isRefreshing = false
 
+                        titleTextView.visibility = View.GONE
                         titleTextView.text = getString(R.string.course_week_index, ScheduleHelper.weekIndex)
                         weekAdapter.setWeekIndex(ScheduleHelper.weekIndex)
                         layout_week_recycler_view.scrollToPosition(ScheduleHelper.weekIndex - 1)
@@ -323,15 +292,16 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                             todayFragment.refreshData()
                         } else
                             updateData()
+                        isRefreshData = false
                     }
 
                     override fun onError(e: Throwable) {
                         e.printStackTrace()
                         swipeRefreshLayout.isRefreshing = false
+                        isRefreshData = false
                     }
 
                     override fun onNext(map: HashMap<String, ArrayList<Course?>>) {
-                        Logs.i(TAG, "onNext: ")
                     }
                 })
     }
@@ -383,17 +353,19 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     private var contentRT: ContentRT? = null
                     override fun onError(e: Throwable) {
                         loadingDialog.dismiss()
+                        isRefreshData = false
+                        e.printStackTrace()
                         if (e is UnknownHostException)
                             Snackbar.make(coordinatorLayout, R.string.error_network, Snackbar.LENGTH_SHORT)
                                     .show()
                         else
-                            Snackbar.make(coordinatorLayout, "请求出错：" + e.message, Snackbar.LENGTH_SHORT)
+                            Snackbar.make(coordinatorLayout, "请求出错：" + e.message + "，请重试", Snackbar.LENGTH_SHORT)
                                     .show()
                     }
 
                     override fun onComplete() {
                         loadingDialog.dismiss()
-                        if (!isTryRefreshData && contentRT?.rt == "6") {
+                        if (contentRT?.rt == "6") {
                             ScheduleHelper.isLogin = false
                             login(username, password)
                             return
@@ -426,7 +398,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     private fun login(username: String, password: String) {
-        isTryRefreshData = true
         val student = Student()
         student.username = username
         student.password = password
@@ -436,6 +407,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     private var loginRT: LoginRT? = null
                     override fun onError(e: Throwable) {
                         loadingDialog.dismiss()
+                        isRefreshData = false
                         e.printStackTrace()
                         if (e is UnknownHostException)
                             Toast.makeText(this@MainActivity, R.string.error_network, Toast.LENGTH_SHORT)
@@ -564,5 +536,53 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     }
                 })
                 .start()
+    }
+
+    private fun showWeekAnim(isShow: Boolean) {
+        if (isAnimShow)
+            return
+        val trueHeight = DensityUtil.dip2px(this, 60F)
+        layout_week_recycler_view.post {
+            val height = layout_week_recycler_view.measuredHeight
+            val barLayoutParams = appBar.layoutParams
+            Observable.create<Int> { subscriber ->
+                val showDistanceArray = Array(11, { i -> (height / 10F) * i })
+                if (!isShow)
+                    showDistanceArray.reverse()
+                showDistanceArray.forEach {
+                    subscriber.onNext(it.toInt())
+                    Thread.sleep(20)
+                }
+                subscriber.onComplete()
+            }
+                    .subscribeOn(Schedulers.newThread())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(object : Observer<Int> {
+                        override fun onSubscribe(d: Disposable) {
+                            isAnimShow = true
+                        }
+
+                        override fun onComplete() {
+                            isWeekShow = isShow
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                                val drawable = if (isWeekShow)
+                                    resources.getDrawable(R.drawable.ic_expand_less, null)
+                                else
+                                    resources.getDrawable(R.drawable.ic_expand_more, null)
+                                drawable.setBounds(0, 0, drawable.minimumWidth, drawable.minimumHeight)
+                                titleTextView.setCompoundDrawables(null, null, drawable, null)
+                            }
+                            isAnimShow = false
+                        }
+
+                        override fun onError(e: Throwable) {
+                        }
+
+                        override fun onNext(t: Int) {
+                            barLayoutParams.height = trueHeight + t
+                            appBar.layoutParams = barLayoutParams
+                        }
+                    })
+        }
     }
 }

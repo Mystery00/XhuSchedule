@@ -90,6 +90,7 @@ class SettingsPreferenceFragment : PreferenceFragment() {
                 .setHintText(getString(R.string.hint_dialog_check_update))
                 .setHintTextSize(16F)
                 .setCancelable(false)
+                .setCanceledOnTouchOutside(false)
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             loadingDialog.setLoadingColor(resources.getColor(R.color.colorAccent, null))
