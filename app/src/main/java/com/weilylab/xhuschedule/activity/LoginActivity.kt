@@ -47,6 +47,7 @@ class LoginActivity : AppCompatActivity() {
                 .setHintText(getString(R.string.hint_dialog_login))
                 .setHintTextSize(16F)
                 .setCancelable(false)
+                .setCanceledOnTouchOutside(false)
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             loginDialog.setLoadingColor(resources.getColor(R.color.colorAccent, null))
@@ -116,7 +117,7 @@ class LoginActivity : AppCompatActivity() {
                             Toast.makeText(this@LoginActivity, R.string.error_network, Toast.LENGTH_SHORT)
                                     .show()
                         else
-                            Toast.makeText(this@LoginActivity, e.message, Toast.LENGTH_SHORT)
+                            Toast.makeText(this@LoginActivity, e.message + "，请重试", Toast.LENGTH_SHORT)
                                     .show()
                     }
 
