@@ -16,6 +16,7 @@ import java.util.concurrent.TimeUnit
 object ScheduleHelper {
     var isLogin = false
     var isCookieAvailable = false
+    var isImageChange = false
     var isUIChange = false
     var isFromLogin = false
     var weekIndex = 0

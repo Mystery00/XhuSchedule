@@ -2,7 +2,6 @@ package com.weilylab.xhuschedule.activity
 
 import android.content.Context
 import android.content.Intent
-import android.content.pm.Signature
 import android.graphics.Point
 import android.os.Build
 import android.os.Bundle
@@ -117,21 +116,21 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     override fun onResume() {
         super.onResume()
-        Logs.i(TAG, "onResume: " + Settings.customBackgroundImg)
-        Logs.i(TAG, "onResume: " + Settings.customHeaderImg)
-        val options = RequestOptions()
-                .signature(MediaStoreSignature("image/*", Calendar.getInstance().timeInMillis, 0))
-                .diskCacheStrategy(DiskCacheStrategy.NONE)
-        if (Settings.customBackgroundImg != "")
-            Glide.with(this)
-                    .load(Settings.customBackgroundImg)
-                    .apply(options)
-                    .into(background)
-        if (Settings.customHeaderImg != "")
-            Glide.with(this)
-                    .load(Settings.customHeaderImg)
-                    .apply(options)
-                    .into(nav_view.getHeaderView(0).findViewById(R.id.background))
+        if (ScheduleHelper.isImageChange) {
+            val options = RequestOptions()
+                    .signature(MediaStoreSignature("image/*", Calendar.getInstance().timeInMillis, 0))
+                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+            if (Settings.customBackgroundImg != "")
+                Glide.with(this)
+                        .load(Settings.customBackgroundImg)
+                        .apply(options)
+                        .into(background)
+            if (Settings.customHeaderImg != "")
+                Glide.with(this)
+                        .load(Settings.customHeaderImg)
+                        .apply(options)
+                        .into(nav_view.getHeaderView(0).findViewById(R.id.background))
+        }
         if (ScheduleHelper.isUIChange) {
             loadingDialog.show()
             updateView()

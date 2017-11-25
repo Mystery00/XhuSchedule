@@ -5,9 +5,10 @@ import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
+import android.graphics.Point
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.os.Environment
 import android.preference.Preference
 import android.preference.PreferenceFragment
 import android.provider.MediaStore
@@ -23,9 +24,9 @@ import android.widget.TextView
 import android.widget.Toast
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.util.DensityUtil
-import com.weilylab.xhuschedule.util.XhuFileUtil
 import com.weilylab.xhuschedule.util.ScheduleHelper
 import com.weilylab.xhuschedule.util.Settings
+import com.yalantis.ucrop.UCrop
 import vip.mystery0.tools.logs.Logs
 import java.io.File
 
@@ -38,6 +39,8 @@ class UISettingsFragment : PreferenceFragment() {
         private val PERMISSION_REQUEST_CODE = 1
         private val HEADER_REQUEST_CODE = 2
         private val BACKGROUND_REQUEST_CODE = 3
+        private val HEADER_CROP_REQUEST_CODE = 4
+        private val BACKGROUND_CROP_REQUEST_CODE = 5
     }
 
     private var requestType = 0
@@ -162,29 +165,32 @@ class UISettingsFragment : PreferenceFragment() {
         if (resultCode == Activity.RESULT_OK && data != null)
             when (requestCode) {
                 BACKGROUND_REQUEST_CODE -> {
-                    val saveFile = File(File(activity.getExternalFilesDir(Environment.DIRECTORY_PICTURES), "CropImg"), "background")
-                    val result = XhuFileUtil.saveFile(activity.contentResolver.openInputStream(data.data), saveFile)
-                    if (result) {
-                        Settings.customBackgroundImg = saveFile.absolutePath
-                        ScheduleHelper.isUIChange = true
-                        Toast.makeText(activity, R.string.hint_custom_img, Toast.LENGTH_SHORT)
-                                .show()
-                    } else
-                        Toast.makeText(activity, R.string.error_custom_img, Toast.LENGTH_SHORT)
-                                .show()
+                    val size = Point()
+                    activity.windowManager.defaultDisplay.getSize(size)
+                    cropImg(data.data, BACKGROUND_CROP_REQUEST_CODE, size.x, size.y)
                 }
                 HEADER_REQUEST_CODE -> {
-                    val saveFile = File(File(activity.getExternalFilesDir(Environment.DIRECTORY_PICTURES), "CropImg"), "header")
-                    val result = XhuFileUtil.saveFile(activity.contentResolver.openInputStream(data.data), saveFile)
-                    if (result) {
-                        Settings.customHeaderImg = saveFile.absolutePath
-                        ScheduleHelper.isUIChange = true
-                        Toast.makeText(activity, R.string.hint_custom_img, Toast.LENGTH_SHORT)
-                                .show()
-                    } else
-                        Toast.makeText(activity, R.string.error_custom_img, Toast.LENGTH_SHORT)
-                                .show()
+                    cropImg(data.data, HEADER_CROP_REQUEST_CODE, 320, 176)
                 }
+                BACKGROUND_CROP_REQUEST_CODE -> {
+                    Logs.i(TAG, "onActivityResult: BACKGROUND_CROP_REQUEST_CODE")
+                    val saveFile = File(File(activity.filesDir, "CropImg"), "background")
+                    Settings.customBackgroundImg = saveFile.absolutePath
+                    ScheduleHelper.isImageChange = true
+                    Toast.makeText(activity, R.string.hint_custom_img, Toast.LENGTH_SHORT)
+                            .show()
+                }
+                HEADER_CROP_REQUEST_CODE -> {
+                    Logs.i(TAG, "onActivityResult: HEADER_CROP_REQUEST_CODE")
+                    val saveFile = File(File(activity.filesDir, "CropImg"), "header")
+                    Settings.customHeaderImg = saveFile.absolutePath
+                    ScheduleHelper.isImageChange = true
+                    Toast.makeText(activity, R.string.hint_custom_img, Toast.LENGTH_SHORT)
+                            .show()
+                }
+                UCrop.RESULT_ERROR ->
+                    Toast.makeText(activity, R.string.error_custom_img, Toast.LENGTH_SHORT)
+                            .show()
             }
         super.onActivityResult(requestCode, resultCode, data)
     }
@@ -218,5 +224,16 @@ class UISettingsFragment : PreferenceFragment() {
         startActivityForResult(Intent(Intent.ACTION_PICK)
                 .setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*"),
                 requestType)
+    }
+
+    private fun cropImg(uri: Uri, cropCode: Int, width: Int, height: Int) {
+        val savedFile = File(File(activity.filesDir, "CropImg"), if (cropCode == HEADER_CROP_REQUEST_CODE) "header" else "background")
+        if (!savedFile.parentFile.exists())
+            savedFile.parentFile.mkdirs()
+        val destinationUri = Uri.fromFile(savedFile)
+        UCrop.of(uri, destinationUri)
+                .withAspectRatio(width.toFloat(), height.toFloat())
+                .withMaxResultSize(width * 10, height * 10)
+                .start(activity, this, cropCode)
     }
 }
