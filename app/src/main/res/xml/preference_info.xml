@@ -5,7 +5,7 @@
 
         <Preference
             android:summary="@string/summary_icon"
-            android:title="@string/title_icon" />
+            android:title="@string/title_icon_ui" />
 
         <Preference
             android:summary="@string/summary_back"

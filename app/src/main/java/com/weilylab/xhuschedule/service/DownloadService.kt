@@ -11,7 +11,7 @@ import com.weilylab.xhuschedule.interfaces.UpdateResponse
 import com.weilylab.xhuschedule.listener.DownloadProgressListener
 import com.weilylab.xhuschedule.util.BsPatch
 import com.weilylab.xhuschedule.util.DownloadNotification
-import com.weilylab.xhuschedule.util.FileUtil
+import com.weilylab.xhuschedule.util.XhuFileUtil
 import com.weilylab.xhuschedule.util.download.Download
 import com.weilylab.xhuschedule.util.download.DownloadProgressInterceptor
 import io.reactivex.Observer
@@ -95,7 +95,7 @@ class DownloadService : IntentService(TAG) {
                 .observeOn(Schedulers.computation())
                 .doOnNext { inputStream ->
                     try {
-                        FileUtil.saveFile(inputStream, file)
+                        XhuFileUtil.saveFile(inputStream, file)
                         if (type == "patch") {
                             val applicationInfo = applicationContext.applicationInfo
                             Logs.i(TAG, "patchAPK: " + applicationInfo.sourceDir)

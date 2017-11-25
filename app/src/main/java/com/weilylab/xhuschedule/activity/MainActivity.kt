@@ -2,6 +2,7 @@ package com.weilylab.xhuschedule.activity
 
 import android.content.Context
 import android.content.Intent
+import android.content.pm.Signature
 import android.graphics.Point
 import android.os.Build
 import android.os.Bundle
@@ -21,6 +22,7 @@ import android.widget.Toast
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
+import com.bumptech.glide.signature.MediaStoreSignature
 import com.getkeepsafe.taptargetview.TapTarget
 import com.getkeepsafe.taptargetview.TapTargetSequence
 import com.google.gson.Gson
@@ -115,13 +117,21 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     override fun onResume() {
         super.onResume()
+        Logs.i(TAG, "onResume: " + Settings.customBackgroundImg)
+        Logs.i(TAG, "onResume: " + Settings.customHeaderImg)
         val options = RequestOptions()
+                .signature(MediaStoreSignature("image/*", Calendar.getInstance().timeInMillis, 0))
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
-                .skipMemoryCache(true)
         if (Settings.customBackgroundImg != "")
-            Glide.with(this).load(Settings.customBackgroundImg).apply(options).into(background)
+            Glide.with(this)
+                    .load(Settings.customBackgroundImg)
+                    .apply(options)
+                    .into(background)
         if (Settings.customHeaderImg != "")
-            Glide.with(this).load(Settings.customHeaderImg).apply(options).into(nav_view.getHeaderView(0).findViewById(R.id.background))
+            Glide.with(this)
+                    .load(Settings.customHeaderImg)
+                    .apply(options)
+                    .into(nav_view.getHeaderView(0).findViewById(R.id.background))
         if (ScheduleHelper.isUIChange) {
             loadingDialog.show()
             updateView()
@@ -211,7 +221,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 return@create
             }
             ScheduleHelper.isLogin = true
-            val base64Name = FileUtil.filterString(Base64.encodeToString(studentNumber.toByteArray(), Base64.DEFAULT))
+            val base64Name = XhuFileUtil.filterString(Base64.encodeToString(studentNumber.toByteArray(), Base64.DEFAULT))
             //判断是否有缓存
             val cacheResult = parentFile.listFiles().filter { it.name == base64Name }.size == 1
             if (!cacheResult) {
@@ -225,20 +235,20 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 subscriber.onComplete()
                 return@create
             }
-            val courses = FileUtil.getCoursesFromFile(this@MainActivity, oldFile)
+            val courses = XhuFileUtil.getCoursesFromFile(this@MainActivity, oldFile)
             if (courses.isEmpty()) {
                 ScheduleHelper.isCookieAvailable = false
                 subscriber.onComplete()
                 return@create
             }
             ScheduleHelper.isCookieAvailable = true
-            val allArray = CourseUtil.formatCourses(FileUtil.getCoursesFromFile(this@MainActivity, oldFile))
+            val allArray = CourseUtil.formatCourses(XhuFileUtil.getCoursesFromFile(this@MainActivity, oldFile))
             allList.clear()
             allList.addAll(allArray)
-            val weekArray = CourseUtil.getWeekCourses(FileUtil.getCoursesFromFile(this@MainActivity, oldFile))
+            val weekArray = CourseUtil.getWeekCourses(XhuFileUtil.getCoursesFromFile(this@MainActivity, oldFile))
             weekList.clear()
             weekList.addAll(weekArray)
-            val todayArray = CourseUtil.getTodayCourses(FileUtil.getCoursesFromFile(this@MainActivity, oldFile))
+            val todayArray = CourseUtil.getTodayCourses(XhuFileUtil.getCoursesFromFile(this@MainActivity, oldFile))
             todayList.clear()
             todayList.addAll(todayArray)
             subscriber.onComplete()
@@ -306,7 +316,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             return
         }
         val parentFile = File(filesDir.absolutePath + File.separator + "caches/")
-        val base64Name = FileUtil.filterString(Base64.encodeToString(username.toByteArray(), Base64.DEFAULT))
+        val base64Name = XhuFileUtil.filterString(Base64.encodeToString(username.toByteArray(), Base64.DEFAULT))
         var isDataNew = false
         ScheduleHelper.tomcatRetrofit
                 .create(RTResponse::class.java)
@@ -319,12 +329,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     if (contentRT.rt == "1") {
                         val newFile = File(parentFile, base64Name + ".temp")
                         newFile.createNewFile()
-                        FileUtil.saveObjectToFile(contentRT.courses, newFile)
-                        val newMD5 = FileUtil.getMD5(newFile)
+                        XhuFileUtil.saveObjectToFile(contentRT.courses, newFile)
+                        val newMD5 = XhuFileUtil.getMD5(newFile)
                         val oldFile = File(parentFile, base64Name)
                         var oldMD5 = ""
                         if (oldFile.exists())
-                            oldMD5 = FileUtil.getMD5(oldFile)!!
+                            oldMD5 = XhuFileUtil.getMD5(oldFile)!!
                         isDataNew = if (newMD5 != oldMD5) {
                             oldFile.delete()
                             newFile.renameTo(oldFile)
