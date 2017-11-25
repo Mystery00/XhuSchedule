@@ -31,7 +31,6 @@ import java.net.UnknownHostException
 class InfoSettingsFragment : PreferenceFragment() {
     private lateinit var loadingDialog: ZLoadingDialog
     private lateinit var checkUpdatePreference: Preference
-    private lateinit var weilyProductPreference: Preference
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,7 +47,6 @@ class InfoSettingsFragment : PreferenceFragment() {
                 .setLoadingColor(ContextCompat.getColor(activity, R.color.colorAccent))
                 .setHintTextColor(ContextCompat.getColor(activity, R.color.colorAccent))
         checkUpdatePreference = findPreference(getString(R.string.key_check_update))
-        weilyProductPreference = findPreference(getString(R.string.key_weily_product))
         checkUpdatePreference.setOnPreferenceClickListener {
             loadingDialog.show()
             ScheduleHelper.phpRetrofit
@@ -88,10 +86,6 @@ class InfoSettingsFragment : PreferenceFragment() {
                             this.update = update
                         }
                     })
-            true
-        }
-        weilyProductPreference.setOnPreferenceClickListener {
-            activity.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://weilylab.com")))
             true
         }
         return super.onCreateView(inflater, container, savedInstanceState)
