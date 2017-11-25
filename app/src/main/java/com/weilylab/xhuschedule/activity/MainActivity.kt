@@ -91,6 +91,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         nav_view.setNavigationItemSelectedListener(this)
 
         initView()
+        loadingDialog.show()
         if (ScheduleHelper.isFromLogin)
             updateData()
         else
@@ -126,8 +127,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             Glide.with(this).load(Settings.customBackgroundImg).apply(options).into(background)
         if (Settings.customHeaderImg != "")
             Glide.with(this).load(Settings.customHeaderImg).apply(options).into(nav_view.getHeaderView(0).findViewById(R.id.background))
-        if (ScheduleHelper.isUIChange)
+        if (ScheduleHelper.isUIChange) {
+            loadingDialog.show()
             updateView()
+        }
         ScheduleHelper.isUIChange = false
     }
 
@@ -190,6 +193,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         action_sync.setOnClickListener {
             if (isRefreshData)
                 return@setOnClickListener
+            loadingDialog.show()
             isRefreshData = true
             updateData()
         }
@@ -248,7 +252,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(object : Observer<HashMap<String, ArrayList<Course?>>> {
                     override fun onSubscribe(d: Disposable) {
-                        loadingDialog.show()
                     }
 
                     override fun onComplete() {
