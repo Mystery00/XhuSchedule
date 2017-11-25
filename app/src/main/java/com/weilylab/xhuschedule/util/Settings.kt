@@ -21,9 +21,12 @@ object Settings {
     var customBackgroundImg: String
         set(value) = sharedPreference.edit().putString("customBackgroundImg", value).apply()
         get() = sharedPreference.getString("customBackgroundImg", "")
-    var customTransparency: Int
-        set(value) = sharedPreference.edit().putInt("customTransparency", value).apply()
-        get() = sharedPreference.getInt("customTransparency", 154)
+    var customTableOpacity: Int
+        set(value) = sharedPreference.edit().putInt("customTableOpacity", value).apply()
+        get() = sharedPreference.getInt("customTableOpacity", 154)
+    var customTodayOpacity: Int
+        set(value) = sharedPreference.edit().putInt("customTodayOpacity", value).apply()
+        get() = sharedPreference.getInt("customTodayOpacity", 154)
     var customTextSize: Int
         set(value) = sharedPreference.edit().putInt("customTextSize", value).apply()
         get() = sharedPreference.getInt("customTextSize", 12)

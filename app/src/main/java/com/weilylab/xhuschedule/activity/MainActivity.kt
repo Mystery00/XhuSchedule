@@ -251,7 +251,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
                     override fun onComplete() {
                         loadingDialog.dismiss()
-                        titleTextView.visibility = View.GONE
+                        if (viewpager.currentItem != 1)
+                            titleTextView.visibility = View.GONE
+                        else
+                            titleTextView.visibility = View.VISIBLE
                         titleTextView.text = getString(R.string.course_week_index, ScheduleHelper.weekIndex)
                         weekAdapter.setWeekIndex(ScheduleHelper.weekIndex)
                         layout_week_recycler_view.scrollToPosition(ScheduleHelper.weekIndex - 1)
@@ -528,7 +531,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     showDistanceArray.reverse()
                 showDistanceArray.forEach {
                     subscriber.onNext(it.toInt())
-                    Thread.sleep(20)
+                    Thread.sleep(15)
                 }
                 subscriber.onComplete()
             }

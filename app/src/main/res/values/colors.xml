@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#4053ff</color>
-    <!--在代码中同样更改这个值（LoginActivity和MainActivity）-->
+    <color name="colorPrimary">#1E88E5</color>
+    <color name="colorPrimaryDark">#1976D2</color>
+    <color name="colorAccent">#2979FF</color>
+    <color name="colorWeekAccent">#1E88E5</color>
+    <color name="colorWeekPrimary">#1976D2</color>
     <color name="colorWhite">#FFFFFF</color>
+    <color name="colorOpacity">#4E1E88E5</color>
 
     <color name="color1">#039BDA</color>
     <color name="color2">#F5703C</color>

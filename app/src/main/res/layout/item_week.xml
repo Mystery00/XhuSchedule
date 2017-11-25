@@ -2,7 +2,9 @@
 <TextView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="match_parent"
+    android:background="@drawable/drawable_corner"
     android:gravity="center"
     android:padding="@dimen/course_padding"
+    android:textColor="@color/colorWhite"
     android:textSize="16sp"
     android:textStyle="bold" />

@@ -71,7 +71,7 @@ class UISettingsFragment : PreferenceFragment() {
         }
         customTransPreference.setOnPreferenceClickListener {
             var color = ScheduleHelper.getRandomColor()
-            var currentProgress = Settings.customTransparency
+            var currentProgress = Settings.customTableOpacity
             val view = View.inflate(activity, R.layout.dialog_custom_trans, null)
             val testCourseLayout: ConstraintLayout = view.findViewById(R.id.test_course_layout)
             val seekBar: SeekBar = view.findViewById(R.id.seekBar)
@@ -102,9 +102,9 @@ class UISettingsFragment : PreferenceFragment() {
                     .setTitle(" ")
                     .setView(view)
                     .setPositiveButton(android.R.string.ok, { _, _ ->
-                        if (currentProgress != Settings.customTransparency)
+                        if (currentProgress != Settings.customTableOpacity)
                             ScheduleHelper.isUIChange = true
-                        Settings.customTransparency = currentProgress
+                        Settings.customTableOpacity = currentProgress
                     })
                     .setNegativeButton(android.R.string.cancel, null)
                     .show()
