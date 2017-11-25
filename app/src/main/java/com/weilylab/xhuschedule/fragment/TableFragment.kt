@@ -16,7 +16,7 @@ import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.adapter.TableAdapter
 import com.weilylab.xhuschedule.classes.Course
 import com.weilylab.xhuschedule.util.CourseUtil
-import com.weilylab.xhuschedule.util.FileUtil
+import com.weilylab.xhuschedule.util.XhuFileUtil
 import com.weilylab.xhuschedule.util.ScheduleHelper
 import com.zyao89.view.zloading.ZLoadingDialog
 import com.zyao89.view.zloading.Z_TYPE
@@ -89,9 +89,9 @@ class TableFragment : Fragment() {
             val sharedPreference = activity.getSharedPreferences("cache", Context.MODE_PRIVATE)
             val studentNumber = sharedPreference.getString("username", "0")
             val parentFile = File(activity.filesDir.absolutePath + File.separator + "caches/")
-            val base64Name = FileUtil.filterString(Base64.encodeToString(studentNumber.toByteArray(), Base64.DEFAULT))
+            val base64Name = XhuFileUtil.filterString(Base64.encodeToString(studentNumber.toByteArray(), Base64.DEFAULT))
             list.clear()
-            list.addAll(CourseUtil.getWeekCourses(FileUtil.getCoursesFromFile(activity, File(parentFile, base64Name)), ScheduleHelper.weekIndex))
+            list.addAll(CourseUtil.getWeekCourses(XhuFileUtil.getCoursesFromFile(activity, File(parentFile, base64Name)), ScheduleHelper.weekIndex))
             subscriber.onComplete()
         }
                 .subscribeOn(Schedulers.newThread())

@@ -12,7 +12,7 @@ import java.util.regex.Pattern
 /**
  * Created by myste.
  */
-object FileUtil {
+object XhuFileUtil {
     fun filterString(name: String): String {
         val regEx = "[^a-zA-Z0-9]"
         val pattern = Pattern.compile(regEx)
@@ -118,5 +118,9 @@ object FileUtil {
             }
         }
         return value
+    }
+
+    fun copyFile(sourceFile: File, newFile: File) {
+
     }
 }

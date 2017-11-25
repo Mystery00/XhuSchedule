@@ -28,11 +28,11 @@
     <string name="title_custom_text_size">自定义文本大小</string>
 
     <string name="screen_category_thanks">鸣谢</string>
-    <string name="title_icon">图标</string>
+    <string name="title_icon_ui">图标以及界面设计</string>
     <string name="summary_icon">\@爱吃饭的越越</string>
     <string name="title_back">数据提供</string>
     <string name="summary_back">\@pan</string>
-    <string name="title_ui">界面设计</string>
+    <string name="title_ui">产品设计</string>
     <string name="summary_ui">\@Johnny Zen</string>
     <string name="title_developer">开发者</string>
     <string name="summary_developer">\@Mystery0</string>
