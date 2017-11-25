@@ -176,6 +176,7 @@ class UISettingsFragment : PreferenceFragment() {
                     Logs.i(TAG, "onActivityResult: HEADER_CROP_REQUEST_CODE")
                     val saveFile = File(File(activity.filesDir, "CropImg"), "header")
                     Settings.customHeaderImg = saveFile.absolutePath
+                    ScheduleHelper.isUIChange = true
                     Toast.makeText(activity, R.string.hint_custom_img, Toast.LENGTH_SHORT)
                             .show()
                 }
@@ -183,6 +184,7 @@ class UISettingsFragment : PreferenceFragment() {
                     Logs.i(TAG, "onActivityResult: BACKGROUND_CROP_REQUEST_CODE")
                     val saveFile = File(File(activity.filesDir, "CropImg"), "background")
                     Settings.customBackgroundImg = saveFile.absolutePath
+                    ScheduleHelper.isUIChange = true
                     Toast.makeText(activity, R.string.hint_custom_img, Toast.LENGTH_SHORT)
                             .show()
                 }
