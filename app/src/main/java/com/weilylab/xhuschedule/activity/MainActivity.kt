@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.Point
-import android.graphics.Rect
 import android.os.Build
 import android.os.Bundle
 import android.support.design.widget.NavigationView
@@ -184,16 +183,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
         })
 
-        swipeRefreshLayout.setColorSchemeResources(
-                android.R.color.holo_blue_light,
-                android.R.color.holo_green_light,
-                android.R.color.holo_orange_light,
-                android.R.color.holo_red_light)
-        swipeRefreshLayout.setProgressViewEndTarget(true, 200)
-        swipeRefreshLayout.setDistanceToTriggerSync(100)
-        swipeRefreshLayout.setOnRefreshListener {
-            updateView()
-        }
 
         action_home.setOnClickListener {
             drawer_layout.openDrawer(GravityCompat.START)
@@ -259,12 +248,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(object : Observer<HashMap<String, ArrayList<Course?>>> {
                     override fun onSubscribe(d: Disposable) {
-                        swipeRefreshLayout.isRefreshing = true
+                        loadingDialog.show()
                     }
 
                     override fun onComplete() {
-                        swipeRefreshLayout.isRefreshing = false
-
+                        loadingDialog.dismiss()
                         titleTextView.visibility = View.GONE
                         titleTextView.text = getString(R.string.course_week_index, ScheduleHelper.weekIndex)
                         weekAdapter.setWeekIndex(ScheduleHelper.weekIndex)
@@ -297,8 +285,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
                     override fun onError(e: Throwable) {
                         e.printStackTrace()
-                        swipeRefreshLayout.isRefreshing = false
                         isRefreshData = false
+                        loadingDialog.dismiss()
                     }
 
                     override fun onNext(map: HashMap<String, ArrayList<Course?>>) {
@@ -364,12 +352,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     }
 
                     override fun onComplete() {
-                        loadingDialog.dismiss()
                         if (contentRT?.rt == "6") {
                             ScheduleHelper.isLogin = false
                             login(username, password)
                             return
                         }
+                        loadingDialog.dismiss()
                         if (contentRT?.rt != "1") {
                             Snackbar.make(coordinatorLayout, R.string.hint_invalid_cookie, Snackbar.LENGTH_LONG)
                                     .setAction(android.R.string.ok) {
@@ -388,7 +376,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     }
 
                     override fun onSubscribe(d: Disposable) {
-                        loadingDialog.show()
                     }
 
                     override fun onNext(t: ContentRT) {
@@ -418,11 +405,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     }
 
                     override fun onSubscribe(d: Disposable) {
-                        loadingDialog.show()
                     }
 
                     override fun onComplete() {
-                        loadingDialog.dismiss()
+                        if (loginRT?.rt != "1")
+                            loadingDialog.dismiss()
                         when (loginRT?.rt) {
                             "0" -> {
                                 ScheduleHelper.isLogin = false
@@ -513,13 +500,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                         TapTarget.forView(bottomNavigationView.findViewById(R.id.bottom_nav_today), getString(R.string.showcase_today)),
                         TapTarget.forView(bottomNavigationView.findViewById(R.id.bottom_nav_week), getString(R.string.showcase_week)),
                         TapTarget.forView(bottomNavigationView.findViewById(R.id.bottom_nav_all), getString(R.string.showcase_all)),
-//                        TapTarget.forToolbarMenuItem(toolbar, R.id.action_sync, getString(R.string.showcase_sync)),
-                        TapTarget.forBounds(Rect(
-                                (size.x / 2) - 100,
-                                200 + resources.getDimensionPixelSize(resources.getIdentifier("status_bar_height", "dimen", "android")),
-                                (size.x / 2) + 100,
-                                400 + resources.getDimensionPixelSize(resources.getIdentifier("status_bar_height", "dimen", "android"))
-                        ), getString(R.string.showcase_swipe_refresh)).transparentTarget(true))
+                        TapTarget.forView(action_sync, getString(R.string.showcase_sync)))
                 .continueOnCancel(true)
                 .considerOuterCircleCanceled(true)
                 .listener(object : TapTargetSequence.Listener {
@@ -527,12 +508,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     }
 
                     override fun onSequenceFinish() {
-                        swipeRefreshLayout.isRefreshing = false
                         Settings.isFirstRun = false
                     }
 
                     override fun onSequenceStep(lastTarget: TapTarget?, targetClicked: Boolean) {
-                        swipeRefreshLayout.isRefreshing = true
                     }
                 })
                 .start()
