@@ -1,30 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <Preference
-        android:key="@string/key_first_day"
-        android:title="@string/title_first_day" />
-
-    <PreferenceScreen android:title="@string/screen_category_account">
-
-        <PreferenceCategory
-            android:key="@string/key_current_account"
-            android:title="@string/title_current_account" />
-
-        <Preference
-            android:key="@string/key_add_account"
-            android:title="@string/title_add_account" />
-
-    </PreferenceScreen>
-
-    <PreferenceCategory android:title="@string/category_custom">
-
-
-    </PreferenceCategory>
-
-    <PreferenceCategory
-        android:key="@string/key_thanks"
-        android:title="@string/category_thanks">
+    <PreferenceCategory android:title="@string/screen_category_thanks">
 
         <Preference
             android:summary="@string/summary_icon"
@@ -44,7 +21,7 @@
 
     </PreferenceCategory>
 
-    <PreferenceCategory android:title="@string/category_about">
+    <PreferenceCategory android:title="@string/screen_category_about">
 
         <Preference
             android:key="@string/key_weily_product"

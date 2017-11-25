@@ -90,9 +90,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             updateData()
         else
             updateView()
+        showUpdateLog()
         if (Settings.isFirstRun)
             showcase()
-        showUpdateLog()
     }
 
     private fun showUpdateLog() {
@@ -101,14 +101,15 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             var message = ""
             resources.getStringArray(R.array.update_list)
                     .forEach { message += it + '\n' }
-            AlertDialog.Builder(this)
+            val dialog = AlertDialog.Builder(this)
                     .setTitle(getString(R.string.title_update_log, getString(R.string.app_version_name) + '-' + getString(R.string.app_version_code)))
                     .setMessage(message)
                     .setPositiveButton(android.R.string.ok, null)
                     .setOnDismissListener {
                         sharedPreference.edit().putInt("updateVersion", getString(R.string.app_version_code).toInt()).apply()
                     }
-                    .show()
+            if (ScheduleHelper.isLogin)
+                dialog.show()
         }
     }
 

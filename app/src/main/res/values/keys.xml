@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="screen_category_class">课程设置</string>
     <string name="key_first_day">key_first_day</string>
     <string name="title_first_day">设置本学期开始时间</string>
 
@@ -26,8 +27,7 @@
     <string name="key_custom_text_size">key_custom_text_size</string>
     <string name="title_custom_text_size">自定义文本大小</string>
 
-    <string name="key_thanks">key_thanks</string>
-    <string name="category_thanks">鸣谢</string>
+    <string name="screen_category_thanks">鸣谢</string>
     <string name="title_icon">图标</string>
     <string name="summary_icon">\@爱吃饭的越越</string>
     <string name="title_back">数据提供</string>
@@ -37,7 +37,7 @@
     <string name="title_developer">开发者</string>
     <string name="summary_developer">\@Mystery0</string>
 
-    <string name="category_about">关于</string>
+    <string name="screen_category_about">关于</string>
     <string name="key_source_code">key_source_code</string>
     <string name="title_source_code">开源地址</string>
     <string name="summary_source_code">aHR0cHM6Ly9naXRodWIuY29tL015c3RlcnkwMC9YaHVTY2hlZHVsZQ==</string>

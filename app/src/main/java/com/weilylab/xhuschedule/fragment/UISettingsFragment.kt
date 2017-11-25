@@ -13,23 +13,20 @@ import android.preference.Preference
 import android.preference.PreferenceFragment
 import android.provider.MediaStore
 import android.support.constraint.ConstraintLayout
-import android.support.design.widget.Snackbar
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AlertDialog
 import android.util.TypedValue
 import android.view.LayoutInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.SeekBar
 import android.widget.TextView
+import android.widget.Toast
 import com.weilylab.xhuschedule.R
-import com.weilylab.xhuschedule.activity.SettingsActivity
 import com.weilylab.xhuschedule.util.DensityUtil
 import com.weilylab.xhuschedule.util.ScheduleHelper
 import com.weilylab.xhuschedule.util.Settings
 import com.yalantis.ucrop.UCrop
-import kotlinx.android.synthetic.main.activity_settings.*
 import vip.mystery0.tools.logs.Logs
 import java.io.File
 
@@ -45,6 +42,7 @@ class UISettingsFragment : PreferenceFragment() {
         private val HEADER_CROP_REQUEST_CODE = 4
         private val BACKGROUND_CROP_REQUEST_CODE = 5
     }
+
     private var requestType = 0
     private lateinit var headerImgPreference: Preference
     private lateinit var backgroundImgPreference: Preference
@@ -178,18 +176,19 @@ class UISettingsFragment : PreferenceFragment() {
                     Logs.i(TAG, "onActivityResult: HEADER_CROP_REQUEST_CODE")
                     val saveFile = File(File(activity.filesDir, "CropImg"), "header")
                     Settings.customHeaderImg = saveFile.absolutePath
-                    Snackbar.make(coordinatorLayout, R.string.hint_custom_img, Snackbar.LENGTH_SHORT)
+                    Toast.makeText(activity, R.string.hint_custom_img, Toast.LENGTH_SHORT)
                             .show()
                 }
                 BACKGROUND_CROP_REQUEST_CODE -> {
                     Logs.i(TAG, "onActivityResult: BACKGROUND_CROP_REQUEST_CODE")
                     val saveFile = File(File(activity.filesDir, "CropImg"), "background")
                     Settings.customBackgroundImg = saveFile.absolutePath
-                    Snackbar.make(coordinatorLayout, R.string.hint_custom_img, Snackbar.LENGTH_SHORT)
+                    Toast.makeText(activity, R.string.hint_custom_img, Toast.LENGTH_SHORT)
                             .show()
                 }
-                UCrop.RESULT_ERROR -> Snackbar.make(coordinatorLayout, R.string.error_custom_img, Snackbar.LENGTH_SHORT)
-                        .show()
+                UCrop.RESULT_ERROR ->
+                    Toast.makeText(activity, R.string.error_custom_img, Toast.LENGTH_SHORT)
+                            .show()
             }
         super.onActivityResult(requestCode, resultCode, data)
     }
@@ -214,10 +213,7 @@ class UISettingsFragment : PreferenceFragment() {
                 chooseImg()
             } else {
                 Logs.i(TAG, "onRequestPermissionsResult: 权限拒绝")
-                Snackbar.make((activity as SettingsActivity).coordinatorLayout, R.string.hint_permission, Snackbar.LENGTH_LONG)
-                        .setAction(android.R.string.ok, {
-                            requestPermission()
-                        })
+                Toast.makeText(activity, R.string.hint_permission, Toast.LENGTH_SHORT)
                         .show()
             }
     }

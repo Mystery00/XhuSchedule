@@ -1,8 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <preference-headers xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <header android:fragment="com.weilylab.xhuschedule.fragment.UISettingsFragment"
+    <header
+        android:fragment="com.weilylab.xhuschedule.fragment.ClassSettingsFragment"
+        android:icon="@drawable/ic_all"
+        android:title="@string/screen_category_class" />
+
+    <header
+        android:fragment="com.weilylab.xhuschedule.fragment.AccountSettingsFragment"
+        android:icon="@drawable/ic_account_circle"
+        android:title="@string/screen_category_account" />
+
+    <header
+        android:fragment="com.weilylab.xhuschedule.fragment.UISettingsFragment"
         android:icon="@drawable/ic_color_lens"
-        android:title="@string/screen_category_ui"/>
+        android:title="@string/screen_category_ui" />
+
+    <header
+        android:fragment="com.weilylab.xhuschedule.fragment.InfoSettingsFragment"
+        android:icon="@drawable/ic_info_outline"
+        android:title="@string/screen_category_about" />
 
 </preference-headers>
