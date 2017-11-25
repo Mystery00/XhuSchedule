@@ -22,6 +22,7 @@ import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.android.synthetic.main.content_login.*
 import android.animation.ValueAnimator
 import android.graphics.Color
+import android.support.v4.content.ContextCompat
 import com.weilylab.xhuschedule.classes.LoginRT
 import com.weilylab.xhuschedule.classes.Student
 import java.net.UnknownHostException
@@ -48,14 +49,8 @@ class LoginActivity : AppCompatActivity() {
                 .setHintTextSize(16F)
                 .setCancelable(false)
                 .setCanceledOnTouchOutside(false)
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            loginDialog.setLoadingColor(resources.getColor(R.color.colorAccent, null))
-            loginDialog.setHintTextColor(resources.getColor(R.color.colorAccent, null))
-        } else {
-            loginDialog.setLoadingColor(Color.parseColor("#4053ff"))
-            loginDialog.setHintTextColor(Color.parseColor("#4053ff"))
-        }
+                .setLoadingColor(ContextCompat.getColor(this, R.color.colorAccent))
+                .setHintTextColor(ContextCompat.getColor(this, R.color.colorAccent))
 
         val colorAnim = ObjectAnimator.ofInt(login_form, "backgroundColor", -0x7f80, -0x7f7f01)
         colorAnim.duration = 3000
