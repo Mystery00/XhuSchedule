@@ -48,7 +48,7 @@
             android:name=".activity.SettingsActivity"
             android:label="@string/title_activity_settings"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.Preference"/>
+            android:theme="@style/AppTheme"/>
 
         <provider
             android:name="android.support.v4.content.FileProvider"

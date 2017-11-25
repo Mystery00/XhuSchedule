@@ -43,11 +43,11 @@ object ScheduleHelper {
     fun getRandomColor(): String {
         val random = Random()
         //生成红色颜色代码
-        var red: String = Integer.toHexString(random.nextInt(256)).toUpperCase()
+        var red: String = Integer.toHexString(random.nextInt(95) + 160).toUpperCase()
         //生成绿色颜色代码
-        var green: String = Integer.toHexString(random.nextInt(256)).toUpperCase()
+        var green: String = Integer.toHexString(random.nextInt(88) + 150).toUpperCase()
         //生成蓝色颜色代码
-        var blue: String = Integer.toHexString(random.nextInt(256)).toUpperCase()
+        var blue: String = Integer.toHexString(random.nextInt(134) + 120).toUpperCase()
         //判断红色代码的位数
         red = if (red.length == 1) "0" + red else red
         //判断绿色代码的位数

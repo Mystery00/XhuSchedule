@@ -19,37 +19,6 @@
 
     <PreferenceCategory android:title="@string/category_custom">
 
-        <PreferenceScreen android:title="@string/screen_category_ui">
-
-            <Preference
-                android:key="@string/key_header_img"
-                android:title="@string/title_header_img" />
-
-            <Preference
-                android:key="@string/key_background_img"
-                android:title="@string/title_background_img" />
-
-            <Preference
-                android:key="@string/key_custom_today_trans"
-                android:title="@string/title_custom_today_trans" />
-
-            <Preference
-                android:key="@string/key_custom_table_trans"
-                android:title="@string/title_custom_table_trans" />
-
-            <Preference
-                android:key="@string/key_custom_today_text_color"
-                android:title="@string/title_custom_today_text_color" />
-
-            <Preference
-                android:key="@string/key_custom_table_text_color"
-                android:title="@string/title_custom_table_text_color" />
-
-            <Preference
-                android:key="@string/key_custom_text_size"
-                android:title="@string/title_custom_text_size" />
-
-        </PreferenceScreen>
 
     </PreferenceCategory>
 

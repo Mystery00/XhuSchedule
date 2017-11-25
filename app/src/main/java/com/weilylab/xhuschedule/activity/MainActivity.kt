@@ -2,12 +2,12 @@ package com.weilylab.xhuschedule.activity
 
 import android.content.Context
 import android.content.Intent
-import android.graphics.Color
 import android.graphics.Point
 import android.os.Build
 import android.os.Bundle
 import android.support.design.widget.NavigationView
 import android.support.design.widget.Snackbar
+import android.support.v4.content.ContextCompat
 import android.support.v4.view.GravityCompat
 import android.support.v4.view.ViewPager
 import android.support.v7.app.AlertDialog
@@ -79,14 +79,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 .setHintTextSize(16F)
                 .setCancelable(false)
                 .setCanceledOnTouchOutside(false)
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            loadingDialog.setLoadingColor(resources.getColor(R.color.colorAccent, null))
-            loadingDialog.setHintTextColor(resources.getColor(R.color.colorAccent, null))
-        } else {
-            loadingDialog.setLoadingColor(Color.parseColor("#4053ff"))
-            loadingDialog.setHintTextColor(Color.parseColor("#4053ff"))
-        }
+                .setLoadingColor(ContextCompat.getColor(this, R.color.colorAccent))
+                .setHintTextColor(ContextCompat.getColor(this, R.color.colorAccent))
 
         nav_view.setNavigationItemSelectedListener(this)
 
