@@ -7,6 +7,9 @@ import android.preference.PreferenceActivity
 import android.preference.PreferenceFragment
 import android.view.MenuItem
 import com.weilylab.xhuschedule.R
+import com.weilylab.xhuschedule.fragment.AccountSettingsFragment
+import com.weilylab.xhuschedule.fragment.ClassSettingsFragment
+import com.weilylab.xhuschedule.fragment.InfoSettingsFragment
 import com.weilylab.xhuschedule.fragment.UISettingsFragment
 
 /**
@@ -49,9 +52,13 @@ class SettingsActivity : AppCompatPreferenceActivity() {
      * This method stops fragment injection in malicious applications.
      * Make sure to deny any unknown fragments here.
      */
-    override fun isValidFragment(fragmentName: String): Boolean {
-        return PreferenceFragment::class.java.name == fragmentName
-                || UISettingsFragment::class.java.name == fragmentName
+    override fun isValidFragment(fragmentName: String): Boolean = when (fragmentName) {
+        PreferenceFragment::class.java.name -> true
+        ClassSettingsFragment::class.java.name -> true
+        AccountSettingsFragment::class.java.name -> true
+        UISettingsFragment::class.java.name -> true
+        InfoSettingsFragment::class.java.name -> true
+        else -> false
     }
 
     /**
