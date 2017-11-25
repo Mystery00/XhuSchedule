@@ -43,6 +43,7 @@ class TableAdapter(private val context: Context,
     private fun addView(holder: ViewHolder, course: Course) {
         val layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, 1F)
         val view = View.inflate(context, R.layout.item_course, null)
+        val courseBackground:View=view.findViewById(R.id.courseBackground)
         val textViewName: TextView = view.findViewById(R.id.textView_name)
         val textViewTeacher: TextView = view.findViewById(R.id.textView_teacher)
         val textViewLocation: TextView = view.findViewById(R.id.textView_location)
@@ -57,7 +58,7 @@ class TableAdapter(private val context: Context,
         if (course.color == "") {
             course.color = '#' + ScheduleHelper.getRandomColor()
         }
-        view.setBackgroundColor(Color.parseColor('#' + Integer.toHexString(Settings.customTransparency) + course.color.substring(1)))
+        courseBackground.setBackgroundColor(Color.parseColor('#' + Integer.toHexString(Settings.customTransparency) + course.color.substring(1)))
         view.layoutParams = layoutParams
         view.setOnClickListener {
             ViewUtil.showAlertDialog(context, course, object : InfoChangeListener {
