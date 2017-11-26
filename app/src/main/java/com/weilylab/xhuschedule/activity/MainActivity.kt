@@ -86,18 +86,17 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         nav_view.setNavigationItemSelectedListener(this)
 
         initView()
-        loadingDialog.show()
         if (ScheduleHelper.isFromLogin)
-            updateData()
+            updateAllData()
         else
-            updateView()
+            updateAllView()
         showUpdateLog()
         if (Settings.isFirstRun)
             showcase()
     }
 
     private fun showUpdateLog() {
-        val sharedPreference = getSharedPreferences("update", Context.MODE_PRIVATE)
+        val sharedPreference = getSharedPreferences("updateData", Context.MODE_PRIVATE)
         if (sharedPreference.getInt("updateVersion", 0) < getString(R.string.app_version_code).toInt()) {
             var message = ""
             resources.getStringArray(R.array.update_list)
@@ -130,11 +129,21 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                         .load(Settings.customHeaderImg)
                         .apply(options)
                         .into(nav_view.getHeaderView(0).findViewById(R.id.background))
+            if (Settings.userImg != "")
+                Glide.with(this)
+                        .load(Settings.userImg)
+                        .apply(options)
+                        .into(nav_view.getHeaderView(0).findViewById(R.id.userIMG))
         }
         if (ScheduleHelper.isUIChange) {
             loadingDialog.show()
-            updateView()
+            updateAllView()
         }
+        val nickName: TextView = nav_view.getHeaderView(0).findViewById(R.id.nickName)
+        val sharedPreference = getSharedPreferences("cache", Context.MODE_PRIVATE)
+        val studentName = sharedPreference.getString("studentName", "0")
+        val nickNameString = Settings.nickName
+        nickName.text = if (nickNameString != "") nickNameString else studentName
         ScheduleHelper.isImageChange = false
         ScheduleHelper.isUIChange = false
     }
@@ -175,8 +184,13 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     .into(nav_view.getHeaderView(0).findViewById(R.id.background))
 
         val userIMG: CircleImageView = nav_view.getHeaderView(0).findViewById(R.id.userIMG)
-        val nickName: TextView = nav_view.getHeaderView(0).findViewById(R.id.nickName)
-        userIMG.setImageResource(R.mipmap.ic_launcher)
+        if (Settings.userImg != "")
+            Glide.with(this)
+                    .load(Settings.userImg)
+                    .apply(options)
+                    .into(userIMG)
+        else
+            userIMG.setImageResource(R.mipmap.ic_launcher)
 
         bottomNavigationView.setOnNavigationItemSelectedListener { item ->
             when (item.itemId) {
@@ -214,28 +228,53 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 return@setOnClickListener
             loadingDialog.show()
             isRefreshData = true
-            updateData()
+            updateAllData()
         }
         titleTextView.setOnClickListener {
             showWeekAnim(!isWeekShow)
         }
     }
 
-    fun updateView() {
-        val sharedPreference = getSharedPreferences("cache", Context.MODE_PRIVATE)
-        val studentNumber = sharedPreference.getString("username", "0")
-        val studentName = sharedPreference.getString("studentName", "0")
+    fun updateAllView() {
+        /**
+         * =============================================
+         * 为了兼容旧版本，在这里将旧版本的数据做一次清理
+         */
+        if (Settings.isNeedClear) {
+            val colorSharedPreference = getSharedPreferences("course_color", MODE_PRIVATE)
+            colorSharedPreference.all.keys.forEach {
+                colorSharedPreference.edit().remove(it).apply()
+            }
+            Logs.i(TAG, "updateView: 清理完成")
+            Settings.isNeedClear = false
+        }
+        /**
+         * ==============================================
+         */
+        loadingDialog.show()
+        val userFile = File(filesDir.absolutePath + File.separator + "data" + File.separator + "user")
+        val list = XhuFileUtil.getStudentsFromFile(userFile)
+        if (list.size == 0) {
+            ScheduleHelper.isLogin = false
+            startActivity(Intent(this, LoginActivity::class.java))
+            finish()
+            return
+        }
+        ScheduleHelper.isLogin = true
+        val group = nav_view.menu.findItem(R.id.nav_group).subMenu
+        group.clear()
+        list.forEach {
+            group.add("${it.name}(${it.username})")
+            updateView(it)
+        }
+    }
+
+    private fun updateView(student: Student) {
         Observable.create<HashMap<String, ArrayList<Course?>>> { subscriber ->
             val parentFile = File(filesDir.absolutePath + File.separator + "caches/")
             if (!parentFile.exists())
                 parentFile.mkdirs()
-            if (studentNumber == "0" || studentName == "0") {
-                ScheduleHelper.isLogin = false
-                subscriber.onComplete()
-                return@create
-            }
-            ScheduleHelper.isLogin = true
-            val base64Name = XhuFileUtil.filterString(Base64.encodeToString(studentNumber.toByteArray(), Base64.DEFAULT))
+            val base64Name = XhuFileUtil.filterString(Base64.encodeToString(student.username.toByteArray(), Base64.DEFAULT))
             //判断是否有缓存
             val cacheResult = parentFile.listFiles().filter { it.name == base64Name }.size == 1
             if (!cacheResult) {
@@ -257,13 +296,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
             ScheduleHelper.isCookieAvailable = true
             val allArray = CourseUtil.formatCourses(XhuFileUtil.getCoursesFromFile(this@MainActivity, oldFile))
-            allList.clear()
             allList.addAll(allArray)
             val weekArray = CourseUtil.getWeekCourses(XhuFileUtil.getCoursesFromFile(this@MainActivity, oldFile))
-            weekList.clear()
             weekList.addAll(weekArray)
             val todayArray = CourseUtil.getTodayCourses(XhuFileUtil.getCoursesFromFile(this@MainActivity, oldFile))
-            todayList.clear()
             todayList.addAll(todayArray)
             subscriber.onComplete()
         }
@@ -282,15 +318,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                         titleTextView.text = getString(R.string.course_week_index, ScheduleHelper.weekIndex)
                         weekAdapter.setWeekIndex(ScheduleHelper.weekIndex)
                         layout_week_recycler_view.scrollToPosition(ScheduleHelper.weekIndex - 1)
-
-                        if (!ScheduleHelper.isLogin) {
-                            startActivity(Intent(this@MainActivity, LoginActivity::class.java))
-                            finish()
-                            return
-                        }
-                        val group = nav_view.menu.findItem(R.id.nav_group).subMenu
-                        group.clear()
-                        group.add("$studentName($studentNumber)")
                         if (ScheduleHelper.isCookieAvailable) {
                             when (todayList.size) {
                                 0 -> bottomNavigationView.menu.findItem(R.id.bottom_nav_today).setIcon(R.drawable.ic_sentiment_very_satisfied)
@@ -304,7 +331,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                             allFragment.refreshData()
                             todayFragment.refreshData()
                         } else
-                            updateData()
+                            updateData(student)
                         isRefreshData = false
                     }
 
@@ -319,22 +346,31 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 })
     }
 
-    private fun updateData() {
-        val sharedPreference = getSharedPreferences("cache", Context.MODE_PRIVATE)
-        val username = sharedPreference.getString("username", "0")
-        val password = sharedPreference.getString("password", "0")
-        if (username == "0" || password == "0") {
+    private fun updateAllData() {
+        loadingDialog.show()
+        val userFile = File(filesDir.absolutePath + File.separator + "data" + File.separator + "user")
+        val list = XhuFileUtil.getStudentsFromFile(userFile)
+        if (list.size == 0) {
             ScheduleHelper.isLogin = false
             startActivity(Intent(this, LoginActivity::class.java))
             finish()
             return
         }
+        todayList.clear()
+        weekList.clear()
+        allList.clear()
+        list.forEach {
+            updateData(it)
+        }
+    }
+
+    private fun updateData(student: Student) {
         val parentFile = File(filesDir.absolutePath + File.separator + "caches/")
-        val base64Name = XhuFileUtil.filterString(Base64.encodeToString(username.toByteArray(), Base64.DEFAULT))
+        val base64Name = XhuFileUtil.filterString(Base64.encodeToString(student.username.toByteArray(), Base64.DEFAULT))
         var isDataNew = false
         ScheduleHelper.tomcatRetrofit
                 .create(RTResponse::class.java)
-                .getCourses(username)
+                .getCourses(student.username)
                 .subscribeOn(Schedulers.newThread())
                 .unsubscribeOn(Schedulers.newThread())
                 .map({ responseBody -> Gson().fromJson(InputStreamReader(responseBody.byteStream()), ContentRT::class.java) })
@@ -379,7 +415,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     override fun onComplete() {
                         if (contentRT?.rt == "6") {
                             ScheduleHelper.isLogin = false
-                            login(username, password)
+                            login(student)
                             return
                         }
                         loadingDialog.dismiss()
@@ -397,7 +433,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                             Snackbar.make(coordinatorLayout, R.string.hint_update_data_new, Snackbar.LENGTH_SHORT).show()
                         else
                             Snackbar.make(coordinatorLayout, R.string.hint_update_data, Snackbar.LENGTH_SHORT).show()
-                        updateView()
+                        updateView(student)
                     }
 
                     override fun onSubscribe(d: Disposable) {
@@ -409,10 +445,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 })
     }
 
-    private fun login(username: String, password: String) {
-        val student = Student()
-        student.username = username
-        student.password = password
+    private fun login(student: Student) {
         student.login()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(object : Observer<LoginRT> {
@@ -448,7 +481,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                             }
                             "1" -> {
                                 ScheduleHelper.isLogin = true
-                                updateData()
+                                updateData(student)
                             }
                             "2" -> {
                                 ScheduleHelper.isLogin = false

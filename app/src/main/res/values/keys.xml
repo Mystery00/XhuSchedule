@@ -7,8 +7,13 @@
     <string name="screen_category_account">账号管理</string>
     <string name="title_current_account">当前已登录账号</string>
     <string name="key_current_account">key_current_account</string>
+    <string name="title_account_manager">账号管理</string>
     <string name="title_add_account">添加账号</string>
     <string name="key_add_account">key_add_account</string>
+    <string name="title_del_account">删除账号</string>
+    <string name="key_del_account">key_del_account</string>
+    <string name="title_show_account_manager">账号显示管理</string>
+    <string name="key_show_account_manager">key_show_account_manager</string>
 
     <string name="category_custom">自定义项</string>
     <string name="screen_category_ui">界面设置</string>

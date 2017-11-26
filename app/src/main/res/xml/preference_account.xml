@@ -5,8 +5,20 @@
         android:key="@string/key_current_account"
         android:title="@string/title_current_account" />
 
-    <Preference
-        android:key="@string/key_add_account"
-        android:title="@string/title_add_account" />
+    <PreferenceCategory android:title="@string/title_account_manager">
+
+        <Preference
+            android:key="@string/key_add_account"
+            android:title="@string/title_add_account" />
+
+        <MultiSelectListPreference
+            android:key="@string/key_del_account"
+            android:title="@string/title_del_account" />
+
+        <MultiSelectListPreference
+            android:key="@string/key_show_account_manager"
+            android:title="@string/title_show_account_manager" />
+
+    </PreferenceCategory>
 
 </PreferenceScreen>
