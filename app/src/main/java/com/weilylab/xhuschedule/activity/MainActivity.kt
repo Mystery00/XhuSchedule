@@ -68,8 +68,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private var isAnimShow = false
     private var isDataNew = false
     private var studentList = ArrayList<Student>()
-    private var weekList = ArrayList<Course?>()
-    private var allList = ArrayList<Course?>()
+    private var weekList = ArrayList<LinkedList<Course>>()
+    private var allList = ArrayList<LinkedList<Course>>()
     private val todayList = ArrayList<Course>()
     private val todayFragment = TodayFragment.newInstance(todayList)
     private val weekFragment = TableFragment.newInstance(weekList)
@@ -141,6 +141,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
         if (ScheduleHelper.isUIChange) {
             loadingDialog.show()
+            studentList.clear()
+            studentList.addAll(XhuFileUtil.getStudentsFromFile(File(filesDir.absolutePath + File.separator + "data" + File.separator + "user")))
+            titleTextView.setTextColor(Settings.customTableTextColor)
             updateAllView()
         }
         val nickName: TextView = nav_view.getHeaderView(0).findViewById(R.id.nickName)
@@ -166,7 +169,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         viewpager.adapter = viewPagerAdapter
 
         studentList.clear()
-        studentList = XhuFileUtil.getStudentsFromFile(File(filesDir.absolutePath + File.separator + "data" + File.separator + "user"))
+        studentList.addAll(XhuFileUtil.getStudentsFromFile(File(filesDir.absolutePath + File.separator + "data" + File.separator + "user")))
 
         weekAdapter = WeekAdapter(this, 1)
         weekAdapter.setWeekChangeListener(object : WeekChangeListener {

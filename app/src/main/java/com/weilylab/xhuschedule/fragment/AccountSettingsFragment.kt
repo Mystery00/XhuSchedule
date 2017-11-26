@@ -12,6 +12,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.activity.LoginActivity
+import com.weilylab.xhuschedule.util.ScheduleHelper
 import com.weilylab.xhuschedule.util.XhuFileUtil
 import vip.mystery0.tools.logs.Logs
 import java.io.File
@@ -41,24 +42,39 @@ class AccountSettingsFragment : PreferenceFragment() {
         delAccountPreference = findPreference(getString(R.string.key_del_account)) as MultiSelectListPreference
         managerAccountPreference = findPreference(getString(R.string.key_show_account_manager)) as MultiSelectListPreference
         val userFile = File(activity.filesDir.absolutePath + File.separator + "data" + File.separator + "user")
-        XhuFileUtil.getStudentsFromFile(userFile)
-                .forEach {
-                    val preference = Preference(activity)
-                    preference.title = it.name
-                    preference.summary = it.username
-                    currentAccountCategory.addPreference(preference)
-                }
+        val showFile = File(activity.filesDir.absolutePath + File.separator + "data" + File.separator + "show_user")
+        val studentList = XhuFileUtil.getStudentsFromFile(userFile)
+        studentList.forEach {
+            val preference = Preference(activity)
+            preference.title = it.name
+            preference.summary = it.username
+            currentAccountCategory.addPreference(preference)
+        }
+        val showList = XhuFileUtil.getStudentsFromFile(showFile)
+        val usernameArray = Array(studentList.size, { i -> studentList[i].username })
+        val valueArray = Array(studentList.size, { i -> "${studentList[i].name}(${studentList[i].username})" })
         addAccountPreference.setOnPreferenceClickListener {
             startActivityForResult(Intent(activity, LoginActivity::class.java)
                     .putExtra("isAddAccount", true), ADD_ACCOUNT_CODE)
             true
         }
+        delAccountPreference.entries = valueArray
+        delAccountPreference.entryValues = usernameArray
+        delAccountPreference.setOnPreferenceChangeListener { _, newValue ->
+            Logs.i(TAG, "onCreateView: " + newValue)
+            Logs.i(TAG, "onCreateView: " + (newValue is Array<*>))
+            true
+        }
+        managerAccountPreference.entries = valueArray
+        managerAccountPreference.entryValues = usernameArray
+        managerAccountPreference.setDefaultValue(showList)
         return super.onCreateView(inflater, container, savedInstanceState)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == ADD_ACCOUNT_CODE && resultCode == Activity.RESULT_OK) {
+            ScheduleHelper.isUIChange = true
             val userFile = File(activity.filesDir.absolutePath + File.separator + "data" + File.separator + "user")
             currentAccountCategory.removeAll()
             XhuFileUtil.getStudentsFromFile(userFile)

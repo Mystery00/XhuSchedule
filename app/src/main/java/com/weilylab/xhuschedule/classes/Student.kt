@@ -4,10 +4,10 @@ import com.google.gson.Gson
 import com.weilylab.xhuschedule.interfaces.RTResponse
 import com.weilylab.xhuschedule.util.ScheduleHelper
 import io.reactivex.Observable
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import java.io.InputStreamReader
 import java.io.Serializable
+import java.util.*
 
 /**
  * Created by myste.
@@ -17,8 +17,8 @@ class Student : Serializable {
     lateinit var password: String
     lateinit var name: String
     var todayCourses = ArrayList<Course>()
-    var weekCourses = ArrayList<Course?>()
-    var allCourses = ArrayList<Course?>()
+    var weekCourses = ArrayList<LinkedList<Course>>()
+    var allCourses = ArrayList<LinkedList<Course>>()
     var isReady = false
 
     fun login(): Observable<LoginRT> {
