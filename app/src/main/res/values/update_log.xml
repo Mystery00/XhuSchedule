@@ -1,4 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Created by Mystery0 on 17-11-27 上午3:50.
+  ~ Copyright (c) 2017. All Rights reserved.
+  ~
+  ~ Last modified 17-11-27 上午3:30
+  -->
+
 <resources>
     <string name="title_update_log">%1$s版的更新日志</string>
     <string-array name="update_list">

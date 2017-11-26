@@ -1,3 +1,10 @@
+/*
+ * Created by Mystery0 on 17-11-27 上午3:50.
+ * Copyright (c) 2017. All Rights reserved.
+ *
+ * Last modified 17-10-31 下午6:50
+ */
+
 package com.weilylab.xhuschedule
 
 import android.support.test.InstrumentationRegistry

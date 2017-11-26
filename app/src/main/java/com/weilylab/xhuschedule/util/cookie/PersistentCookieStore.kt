@@ -1,3 +1,10 @@
+/*
+ * Created by Mystery0 on 17-11-27 上午3:50.
+ * Copyright (c) 2017. All Rights reserved.
+ *
+ * Last modified 17-11-26 下午1:38
+ */
+
 package com.weilylab.xhuschedule.util.cookie
 
 import android.content.Context
