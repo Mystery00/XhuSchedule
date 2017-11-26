@@ -17,7 +17,21 @@
 
         <Preference
             android:summary="@string/summary_developer"
-            android:title="@string/title_developer" />
+            android:title="@string/title_developer">
+
+            <intent
+                android:action="android.intent.action.VIEW"
+                android:data="@string/link_developer" />
+
+        </Preference>
+
+        <Preference
+            android:summary="@string/summary_local_img"
+            android:title="@string/title_local_img">
+            <intent
+                android:action="android.intent.action.VIEW"
+                android:data="@string/link_local_img" />
+        </Preference>
 
     </PreferenceCategory>
 
@@ -32,6 +46,15 @@
         </Preference>
 
         <Preference
+            android:summary="@string/summary_source_code"
+            android:title="@string/title_source_code">
+            <intent
+                android:action="android.intent.action.VIEW"
+                android:data="@string/summary_source_code" />
+        </Preference>
+
+        <Preference
+            android:key="@string/key_feedback"
             android:summary="@string/summary_feedback"
             android:title="@string/title_feedback" />
 
