@@ -50,7 +50,6 @@ class InfoSettingsFragment : PreferenceFragment() {
                 .setLoadingBuilder(Z_TYPE.SEARCH_PATH)
                 .setHintText(getString(R.string.hint_dialog_check_update))
                 .setHintTextSize(16F)
-                .setCancelable(false)
                 .setCanceledOnTouchOutside(false)
                 .setLoadingColor(ContextCompat.getColor(activity, R.color.colorAccent))
                 .setHintTextColor(ContextCompat.getColor(activity, R.color.colorAccent))
