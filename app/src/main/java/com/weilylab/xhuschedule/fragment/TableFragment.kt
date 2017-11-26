@@ -14,6 +14,7 @@ import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.adapter.TableAdapter
 import com.weilylab.xhuschedule.classes.Course
 import com.weilylab.xhuschedule.util.CalendarUtil
+import com.weilylab.xhuschedule.util.Settings
 import io.reactivex.Observable
 import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -82,12 +83,16 @@ class TableFragment : Fragment() {
                     override fun onComplete() {
                         if (rootView != null) {
                             val tableHeader: LinearLayout = rootView!!.findViewById(R.id.table_header)
+                            val tableNav: LinearLayout = rootView!!.findViewById(R.id.table_nav)
                             for (i in 0 until tableHeader.childCount) {
+                                (tableHeader.getChildAt(i) as TextView).setTextColor(Settings.customTableTextColor)
                                 if (CalendarUtil.getWeekIndex() - 1 == i)
                                     tableHeader.getChildAt(i).setBackgroundColor(ContextCompat.getColor(activity, R.color.colorWeekPrimary))
                                 else
                                     tableHeader.getChildAt(i).setBackgroundColor(Color.parseColor("#00000000"))
                             }
+                            for (i in 0 until tableNav.childCount)
+                                (tableNav.getChildAt(i) as TextView).setTextColor(Settings.customTableTextColor)
                         }
                         adapter.notifyDataSetChanged()
                     }

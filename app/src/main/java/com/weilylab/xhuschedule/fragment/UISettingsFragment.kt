@@ -24,6 +24,8 @@ import android.widget.ImageView
 import android.widget.SeekBar
 import android.widget.TextView
 import android.widget.Toast
+import com.jrummyapps.android.colorpicker.ColorPickerDialog
+import com.jrummyapps.android.colorpicker.ColorPreference
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.classes.Course
 import com.weilylab.xhuschedule.util.DensityUtil
@@ -52,6 +54,8 @@ class UISettingsFragment : PreferenceFragment() {
     private lateinit var backgroundImgPreference: Preference
     private lateinit var customTodayOpacityPreference: Preference
     private lateinit var customTableOpacityPreference: Preference
+    private lateinit var customTodayTextColorPreference: ColorPreference
+    private lateinit var customTableTextColorPreference: ColorPreference
     private lateinit var customTextSizePreference: Preference
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -64,6 +68,8 @@ class UISettingsFragment : PreferenceFragment() {
         backgroundImgPreference = findPreference(getString(R.string.key_background_img))
         customTodayOpacityPreference = findPreference(getString(R.string.key_custom_today_opacity))
         customTableOpacityPreference = findPreference(getString(R.string.key_custom_table_opacity))
+        customTodayTextColorPreference = findPreference(getString(R.string.key_custom_today_text_color)) as ColorPreference
+        customTableTextColorPreference = findPreference(getString(R.string.key_custom_table_text_color)) as ColorPreference
         customTextSizePreference = findPreference(getString(R.string.key_custom_text_size))
         headerImgPreference.setOnPreferenceClickListener {
             requestType = HEADER_REQUEST_CODE
@@ -166,6 +172,16 @@ class UISettingsFragment : PreferenceFragment() {
                     })
                     .setNegativeButton(android.R.string.cancel, null)
                     .show()
+            true
+        }
+        customTodayTextColorPreference.setOnPreferenceChangeListener { _, newValue ->
+            Settings.customTodayTextColor = newValue.toString().toInt()
+            ScheduleHelper.isUIChange = true
+            true
+        }
+        customTableTextColorPreference.setOnPreferenceChangeListener { _, newValue ->
+            Settings.customTableTextColor = newValue.toString().toInt()
+            ScheduleHelper.isUIChange = true
             true
         }
         customTextSizePreference.setOnPreferenceClickListener {

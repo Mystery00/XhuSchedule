@@ -143,7 +143,6 @@ object CourseUtil {
                 newList.add(bList[index])
             }
         }
-        Logs.i("TAG", "mergeCourses: "+newList.size)
         return newList
     }
 }
