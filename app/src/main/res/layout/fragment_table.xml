@@ -5,11 +5,14 @@
     android:layout_height="match_parent"
     android:gravity="center">
 
-    <View
+    <TextView
         android:id="@+id/view"
         android:layout_width="32dp"
         android:layout_height="0dp"
         android:background="@color/colorOpacity"
+        android:gravity="center"
+        android:textColor="@color/colorWhite"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@id/table_header"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

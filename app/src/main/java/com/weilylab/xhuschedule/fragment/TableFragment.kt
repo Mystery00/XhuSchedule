@@ -52,6 +52,7 @@ class TableFragment : Fragment() {
                               savedInstanceState: Bundle?): View? {
         if (rootView == null) {
             rootView = inflater.inflate(R.layout.fragment_table, container, false)
+            val monthView: TextView = rootView!!.findViewById(R.id.view)
             val tableHeader: LinearLayout = rootView!!.findViewById(R.id.table_header)
             tableHeader.getChildAt(CalendarUtil.getWeekIndex() - 1).setBackgroundColor(ContextCompat.getColor(activity, R.color.colorWeekPrimary))
             val calendar = Calendar.getInstance()
@@ -61,9 +62,14 @@ class TableFragment : Fragment() {
             calendar.firstDayOfWeek = Calendar.MONDAY
             val day = calendar.get(Calendar.DAY_OF_WEEK)
             calendar.add(Calendar.DATE, calendar.firstDayOfWeek - day)
+            val month = (calendar.get(Calendar.MONTH) + 1).toString() + "\n月"
+            monthView.text = month
             for (i in 0 until tableHeader.childCount) {
                 val textView = tableHeader.getChildAt(i) as TextView
-                val text = "${textView.text}\n${calendar.get(Calendar.DAY_OF_MONTH)}日"
+                val text = if (calendar.get(Calendar.DAY_OF_MONTH) == 1)
+                    "${textView.text}\n${calendar.get(Calendar.MONTH) + 1}月"
+                else
+                    "${textView.text}\n${calendar.get(Calendar.DAY_OF_MONTH)}日"
                 textView.text = text
                 calendar.add(Calendar.DAY_OF_MONTH, 1)
             }
