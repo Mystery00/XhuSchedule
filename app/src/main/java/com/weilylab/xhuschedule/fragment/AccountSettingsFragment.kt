@@ -3,15 +3,16 @@ package com.weilylab.xhuschedule.fragment
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.preference.MultiSelectListPreference
 import android.preference.Preference
 import android.preference.PreferenceCategory
 import android.preference.PreferenceFragment
+import android.support.v7.app.AlertDialog
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.activity.LoginActivity
+import com.weilylab.xhuschedule.classes.Student
 import com.weilylab.xhuschedule.util.ScheduleHelper
 import com.weilylab.xhuschedule.util.XhuFileUtil
 import vip.mystery0.tools.logs.Logs
@@ -28,8 +29,8 @@ class AccountSettingsFragment : PreferenceFragment() {
 
     private lateinit var currentAccountCategory: PreferenceCategory
     private lateinit var addAccountPreference: Preference
-    private lateinit var delAccountPreference: MultiSelectListPreference
-    private lateinit var managerAccountPreference: MultiSelectListPreference
+    private lateinit var delAccountPreference: Preference
+    private lateinit var managerAccountPreference: Preference
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,10 +40,9 @@ class AccountSettingsFragment : PreferenceFragment() {
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View {
         currentAccountCategory = findPreference(getString(R.string.key_current_account)) as PreferenceCategory
         addAccountPreference = findPreference(getString(R.string.key_add_account))
-        delAccountPreference = findPreference(getString(R.string.key_del_account)) as MultiSelectListPreference
-        managerAccountPreference = findPreference(getString(R.string.key_show_account_manager)) as MultiSelectListPreference
+        delAccountPreference = findPreference(getString(R.string.key_del_account))
+        managerAccountPreference = findPreference(getString(R.string.key_show_account_manager))
         val userFile = File(activity.filesDir.absolutePath + File.separator + "data" + File.separator + "user")
-        val showFile = File(activity.filesDir.absolutePath + File.separator + "data" + File.separator + "show_user")
         val studentList = XhuFileUtil.getStudentsFromFile(userFile)
         studentList.forEach {
             val preference = Preference(activity)
@@ -50,23 +50,95 @@ class AccountSettingsFragment : PreferenceFragment() {
             preference.summary = it.username
             currentAccountCategory.addPreference(preference)
         }
-        val showList = XhuFileUtil.getStudentsFromFile(showFile)
-        val usernameArray = Array(studentList.size, { i -> studentList[i].username })
-        val valueArray = Array(studentList.size, { i -> "${studentList[i].name}(${studentList[i].username})" })
         addAccountPreference.setOnPreferenceClickListener {
             startActivityForResult(Intent(activity, LoginActivity::class.java)
                     .putExtra("isAddAccount", true), ADD_ACCOUNT_CODE)
             true
         }
-        delAccountPreference.entries = valueArray
-        delAccountPreference.entryValues = usernameArray
-        delAccountPreference.setOnPreferenceChangeListener { _, newValue ->
-            Logs.i(TAG, "onCreateView: " + delAccountPreference.entryValues)
+        delAccountPreference.setOnPreferenceClickListener {
+            studentList.clear()
+            studentList.addAll(XhuFileUtil.getStudentsFromFile(userFile))
+            val valueArray = Array(studentList.size, { i -> "${studentList[i].name}(${studentList[i].username})" })
+            val checkedArray = BooleanArray(studentList.size, { false })
+            AlertDialog.Builder(activity)
+                    .setTitle(R.string.title_del_account)
+                    .setMultiChoiceItems(valueArray, checkedArray, { _, which, isChecked ->
+                        checkedArray[which] = isChecked
+                    })
+                    .setPositiveButton(android.R.string.ok, { _, _ ->
+                        val temp = ArrayList<Student>()
+                        checkedArray.forEachIndexed { index, b ->
+                            if (b)
+                                temp.add(studentList[index])
+                        }
+                        val showFile = File(activity.filesDir.absolutePath + File.separator + "data" + File.separator + "show_user")
+                        val showList = XhuFileUtil.getStudentsFromFile(showFile)
+                        val studentIterator = studentList.iterator()
+                        while (studentIterator.hasNext()) {
+                            val t = studentIterator.next()
+                            if (temp.contains(t))
+                                studentIterator.remove()
+                        }
+                        val showIterator = showList.iterator()
+                        while (showIterator.hasNext()) {
+                            val t = showIterator.next()
+                            var result = false
+                            temp.forEach {
+                                result = result || it.username == t.username
+                            }
+                            if (result)
+                                showIterator.remove()
+                        }
+                        XhuFileUtil.saveObjectToFile(studentList, userFile)
+                        XhuFileUtil.saveObjectToFile(showList, showFile)
+                        studentList.clear()
+                        studentList.addAll(XhuFileUtil.getStudentsFromFile(userFile))
+                        currentAccountCategory.removeAll()
+                        studentList.forEach {
+                            val preference = Preference(activity)
+                            preference.title = it.name
+                            preference.summary = it.username
+                            currentAccountCategory.addPreference(preference)
+                        }
+                        ScheduleHelper.isUIChange = true
+                    })
+                    .setNegativeButton(android.R.string.cancel, null)
+                    .show()
             true
         }
-        managerAccountPreference.entries = valueArray
-        managerAccountPreference.entryValues = usernameArray
-        managerAccountPreference.setDefaultValue(showList)
+        managerAccountPreference.setOnPreferenceClickListener {
+            studentList.clear()
+            studentList.addAll(XhuFileUtil.getStudentsFromFile(userFile))
+            val showFile = File(activity.filesDir.absolutePath + File.separator + "data" + File.separator + "show_user")
+            val showList = XhuFileUtil.getStudentsFromFile(showFile)
+            val valueArray = Array(studentList.size, { i -> "${studentList[i].name}(${studentList[i].username})" })
+            val checkedArray = BooleanArray(studentList.size, { i ->
+                var result = false
+                showList.forEach {
+                    result = result || it.username == studentList[i].username
+                }
+                result
+            })
+            AlertDialog.Builder(activity)
+                    .setTitle(R.string.title_account_manager)
+                    .setMultiChoiceItems(valueArray, checkedArray, { _, which, isChecked ->
+                        Logs.i(TAG, "onCreateView: " + which)
+                        Logs.i(TAG, "onCreateView: " + isChecked)
+                        checkedArray[which] = isChecked
+                    })
+                    .setPositiveButton(android.R.string.ok, { _, _ ->
+                        val temp = ArrayList<Student>()
+                        checkedArray.forEachIndexed { index, b ->
+                            if (b)
+                                temp.add(studentList[index])
+                        }
+                        XhuFileUtil.saveObjectToFile(temp, showFile)
+                        ScheduleHelper.isUIChange = true
+                    })
+                    .setNegativeButton(android.R.string.cancel, null)
+                    .show()
+            true
+        }
         return super.onCreateView(inflater, container, savedInstanceState)
     }
 

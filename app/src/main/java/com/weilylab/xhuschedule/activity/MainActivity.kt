@@ -283,7 +283,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         todayList.clear()
         ScheduleHelper.isLogin = true
         val array = ArrayList<Observable<HashMap<String, ArrayList<Course?>>>>()
-        studentList.forEach {
+        val showFile = File(filesDir.absolutePath + File.separator + "data" + File.separator + "show_user")
+        val showList = XhuFileUtil.getStudentsFromFile(showFile)
+        if (showList.size == 0)
+            showList.addAll(studentList)
+        showList.forEach {
             array.add(updateView(it, week))
         }
         Observable.merge(array)
@@ -303,7 +307,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                         weekAdapter.setWeekIndex(ScheduleHelper.weekIndex)
                         layout_week_recycler_view.scrollToPosition(ScheduleHelper.weekIndex - 1)
                         if (ScheduleHelper.isCookieAvailable) {
-                            if (studentList.size == 1)
+                            if (showList.size == 1)
                                 when (todayList.size) {
                                     0 -> bottomNavigationView.menu.findItem(R.id.bottom_nav_today).setIcon(R.drawable.ic_sentiment_very_satisfied)
                                     1 -> bottomNavigationView.menu.findItem(R.id.bottom_nav_today).setIcon(R.drawable.ic_sentiment_very_satisfied)
@@ -314,7 +318,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                                 }
                             else
                                 bottomNavigationView.menu.findItem(R.id.bottom_nav_today).setIcon(R.drawable.ic_sentiment_very_satisfied)
-                            studentList.forEach {
+                            showList.forEach {
                                 val tempAllList = CourseUtil.mergeCourses(allList, it.allCourses)
                                 allList.clear()
                                 allList.addAll(tempAllList)
@@ -398,7 +402,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         weekList.clear()
         todayList.clear()
         val array = ArrayList<Observable<ContentRT>>()
-        studentList.forEach {
+        val showFile = File(filesDir.absolutePath + File.separator + "data" + File.separator + "show_user")
+        val showList = XhuFileUtil.getStudentsFromFile(showFile)
+        if (showList.size == 0)
+            showList.addAll(studentList)
+        showList.forEach {
             array.add(updateData(it))
         }
         Observable.merge(array)
@@ -435,7 +443,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                             return
                         }
                         isRefreshData = false
-                        if (isDataNew && studentList.size == 1)
+                        if (isDataNew && showList.size == 1)
                             Snackbar.make(coordinatorLayout, R.string.hint_update_data_new, Snackbar.LENGTH_SHORT).show()
                         else
                             Snackbar.make(coordinatorLayout, R.string.hint_update_data, Snackbar.LENGTH_SHORT).show()
