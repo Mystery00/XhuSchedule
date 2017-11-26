@@ -1,14 +1,11 @@
 package com.weilylab.xhuschedule.fragment
 
-import android.content.Context
 import android.graphics.Color
-import android.os.Build
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.util.Base64
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,17 +14,11 @@ import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.adapter.TableAdapter
 import com.weilylab.xhuschedule.classes.Course
 import com.weilylab.xhuschedule.util.CalendarUtil
-import com.weilylab.xhuschedule.util.CourseUtil
-import com.weilylab.xhuschedule.util.XhuFileUtil
-import com.weilylab.xhuschedule.util.ScheduleHelper
-import com.zyao89.view.zloading.ZLoadingDialog
-import com.zyao89.view.zloading.Z_TYPE
 import io.reactivex.Observable
 import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
-import java.io.File
 
 /**
  * Created by myste.
@@ -74,50 +65,6 @@ class TableFragment : Fragment() {
             isReady = true
         }
         return rootView
-    }
-
-    fun updateData() {
-        val loadingDialog = ZLoadingDialog(activity)
-                .setLoadingBuilder(Z_TYPE.DOUBLE_CIRCLE)
-                .setHintText(getString(R.string.hint_dialog_update_cache))
-                .setHintTextSize(16F)
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            loadingDialog.setLoadingColor(resources.getColor(R.color.colorAccent, null))
-            loadingDialog.setHintTextColor(resources.getColor(R.color.colorAccent, null))
-        } else {
-            loadingDialog.setLoadingColor(Color.parseColor("#ff4081"))
-            loadingDialog.setHintTextColor(Color.parseColor("#ff4081"))
-        }
-        Observable.create<Array<Course?>> { subscriber ->
-            val sharedPreference = activity.getSharedPreferences("cache", Context.MODE_PRIVATE)
-            val studentNumber = sharedPreference.getString("username", "0")
-            val parentFile = File(activity.filesDir.absolutePath + File.separator + "caches/")
-            val base64Name = XhuFileUtil.filterString(Base64.encodeToString(studentNumber.toByteArray(), Base64.DEFAULT))
-            list.clear()
-            list.addAll(CourseUtil.getWeekCourses(XhuFileUtil.getCoursesFromFile(activity, File(parentFile, base64Name)), ScheduleHelper.weekIndex))
-            subscriber.onComplete()
-        }
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(object : Observer<Array<Course?>> {
-                    override fun onSubscribe(d: Disposable) {
-                        loadingDialog.show()
-                    }
-
-                    override fun onNext(t: Array<Course?>) {
-                    }
-
-                    override fun onError(e: Throwable) {
-                        e.printStackTrace()
-                        loadingDialog.dismiss()
-                    }
-
-                    override fun onComplete() {
-                        adapter.notifyDataSetChanged()
-                        loadingDialog.dismiss()
-                    }
-                })
     }
 
     fun refreshData() {

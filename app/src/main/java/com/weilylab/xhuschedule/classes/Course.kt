@@ -5,7 +5,7 @@ import java.io.Serializable
 /**
  * Created by myste.
  */
-class Course : Serializable {
+class Course : Serializable,Cloneable {
     var week: String = ""
     var teacher: String = ""
     var name: String = ""
@@ -23,5 +23,9 @@ class Course : Serializable {
         }
         if (other == null)
             other = course
+    }
+
+    override public fun clone(): Course {
+        return super.clone() as Course
     }
 }

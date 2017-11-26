@@ -16,6 +16,10 @@ class Student : Serializable {
     lateinit var username: String
     lateinit var password: String
     lateinit var name: String
+    var todayCourses = ArrayList<Course>()
+    var weekCourses = ArrayList<Course?>()
+    var allCourses = ArrayList<Course?>()
+    var isReady = false
 
     fun login(): Observable<LoginRT> {
         return ScheduleHelper.tomcatRetrofit

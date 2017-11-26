@@ -2,6 +2,7 @@ package com.weilylab.xhuschedule.util
 
 import com.weilylab.xhuschedule.classes.Course
 import com.weilylab.xhuschedule.classes.CourseTimeInfo
+import vip.mystery0.tools.logs.Logs
 
 /**
  * Created by myste.
@@ -123,5 +124,26 @@ object CourseUtil {
             })
         } else
             arrayOf(CourseTimeInfo(course.week + '周', course.location))
+    }
+
+    fun mergeCourses(aList: ArrayList<Course?>, bList: ArrayList<Course?>): ArrayList<Course?> {
+        if (aList.size == 0)
+            return bList
+        if (bList.size == 0)
+            return aList
+        val newList = ArrayList<Course?>()
+        aList.forEachIndexed { index, course ->
+            if (course != null) {
+                var temp = course
+                while (temp!!.other != null)
+                    temp = temp.other!!
+                temp.other = bList[index]
+                newList.add(course)
+            } else {
+                newList.add(bList[index])
+            }
+        }
+        Logs.i("TAG", "mergeCourses: "+newList.size)
+        return newList
     }
 }
