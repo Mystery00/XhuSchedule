@@ -3,8 +3,11 @@
     <string name="title_update_log">%1$s版的更新日志</string>
     <string-array name="update_list">
         <item>新增：使用新的接口，从此之后再也不用输入验证码了</item>
+        <item>新增：多账号登录与加载，专门为双学位同学打造，再也不用为了切换账号而烦恼了</item>
+        <item>新增：侧滑页自定义昵称</item>
         <item>新增：自定义颜色不透明度设置</item>
         <item>新增：文本大小自定义</item>
+        <item>新增：界面设置重置</item>
         <item>新增：当天课表卡片添加透明</item>
         <item>新增：更新日志显示</item>
         <item>新增：星期跟随时间变化</item>
@@ -12,8 +15,10 @@
         <item>修复：部分机型自定义背景会导致闪退</item>
         <item>修复：每一次启动时本学期课表显示错误</item>
         <item>修复：过一段时间后课表数据丢失</item>
+        <item>修复：数据丢失之后无法刷新的问题</item>
         <item> </item>
         <item>更新：全新的图标（感谢\@爱吃饭的越越）</item>
+        <item>更新：“Xhu Schedule”更名为“西瓜课表”</item>
         <item>更新：全新配色以及界面</item>
         <item>更新：课程的格子修改为圆角矩形，添加间距</item>
         <item>更新：修改颜色生成算法，生成的颜色看起来更加舒服</item>
