@@ -137,6 +137,16 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                         .load(Settings.customBackgroundImg)
                         .apply(options)
                         .into(background)
+            else {
+                val calendar = Calendar.getInstance()
+                val month = calendar.get(Calendar.MONTH) + 1
+                when (month) {
+                    3, 4, 5 -> background.setImageResource(R.mipmap.a)
+                    6, 7, 8 -> background.setImageResource(R.mipmap.b)
+                    9, 10, 11 -> background.setImageResource(R.mipmap.c)
+                    12, 1, 2 -> background.setImageResource(R.mipmap.d)
+                }
+            }
             if (Settings.customHeaderImg != "")
                 Glide.with(this)
                         .load(Settings.customHeaderImg)
@@ -199,6 +209,16 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     .load(Settings.customBackgroundImg)
                     .apply(options)
                     .into(background)
+        else {
+            val calendar = Calendar.getInstance()
+            val month = calendar.get(Calendar.MONTH) + 1
+            when (month) {
+                3, 4, 5 -> background.setImageResource(R.mipmap.a)
+                6, 7, 8 -> background.setImageResource(R.mipmap.b)
+                9, 10, 11 -> background.setImageResource(R.mipmap.c)
+                12, 1, 2 -> background.setImageResource(R.mipmap.d)
+            }
+        }
         if (Settings.customHeaderImg != "")
             Glide.with(this)
                     .load(Settings.customHeaderImg)
