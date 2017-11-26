@@ -55,6 +55,9 @@ class TableAdapter(private val context: Context,
         textViewName.text = course.name
         textViewTeacher.text = course.teacher
         textViewLocation.text = course.location
+        textViewName.setTextColor(Settings.customTableTextColor)
+        textViewTeacher.setTextColor(Settings.customTableTextColor)
+        textViewLocation.setTextColor(Settings.customTableTextColor)
 
         if (course.color == "") {
             course.color = '#' + ScheduleHelper.getRandomColor()

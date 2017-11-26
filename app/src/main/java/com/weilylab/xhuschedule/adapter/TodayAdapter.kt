@@ -1,7 +1,6 @@
 package com.weilylab.xhuschedule.adapter
 
 import android.content.Context
-import android.graphics.*
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -21,9 +20,6 @@ import com.weilylab.xhuschedule.util.ViewUtil
  */
 class TodayAdapter(private val context: Context,
                    private val list: ArrayList<Course>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-    companion object {
-        private val TAG = "TodayAdapter"
-    }
 
     override fun getItemCount(): Int = if (list.size != 0) list.size else 1
 
@@ -39,6 +35,9 @@ class TodayAdapter(private val context: Context,
                 val temp = course.name + " - " + course.teacher
                 holder.courseNameAndTeacherTextView.text = temp
                 holder.courseLocationTextView.text = course.location
+                holder.courseTimeTextView.setTextColor(Settings.customTodayTextColor)
+                holder.courseNameAndTeacherTextView.setTextColor(Settings.customTodayTextColor)
+                holder.courseLocationTextView.setTextColor(Settings.customTodayTextColor)
                 if (course.color == "")
                     course.color = '#' + ScheduleHelper.getRandomColor()
                 holder.img.setImageBitmap(ViewUtil.drawImg(course))

@@ -36,6 +36,12 @@ object Settings {
     var customTodayOpacity: Int
         set(value) = sharedPreference.edit().putInt("customTodayOpacity", value).apply()
         get() = sharedPreference.getInt("customTodayOpacity", 154)
+    var customTableTextColor: Int
+        set(value) = sharedPreference.edit().putInt("customTableTextColor", value).apply()
+        get() = sharedPreference.getInt("customTableTextColor", -1)
+    var customTodayTextColor: Int
+        set(value) = sharedPreference.edit().putInt("customTodayTextColor", value).apply()
+        get() = sharedPreference.getInt("customTodayTextColor", -11184811)
     var customTextSize: Int
         set(value) = sharedPreference.edit().putInt("customTextSize", value).apply()
         get() = sharedPreference.getInt("customTextSize", 12)
