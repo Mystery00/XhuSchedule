@@ -8,8 +8,9 @@
     <View
         android:id="@+id/view"
         android:layout_width="32dp"
-        android:layout_height="24dp"
+        android:layout_height="0dp"
         android:background="@color/colorOpacity"
+        app:layout_constraintBottom_toBottomOf="@id/table_header"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -17,8 +18,7 @@
         android:id="@+id/table_header"
         layout="@layout/layout_table_header"
         android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="@+id/view"
+        android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/view"
         app:layout_constraintTop_toTopOf="@+id/view" />

@@ -270,7 +270,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         /**
          * ==============================================
          */
-        loadingDialog.show()
+        studentList.clear()
+        studentList.addAll(XhuFileUtil.getStudentsFromFile(File(filesDir.absolutePath + File.separator + "data" + File.separator + "user")))
         if (studentList.size == 0) {
             ScheduleHelper.isLogin = false
             startActivity(Intent(this, LoginActivity::class.java))
@@ -385,7 +386,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     private fun updateAllData() {
-        loadingDialog.show()
+        studentList.clear()
+        studentList.addAll(XhuFileUtil.getStudentsFromFile(File(filesDir.absolutePath + File.separator + "data" + File.separator + "user")))
         if (studentList.size == 0) {
             ScheduleHelper.isLogin = false
             startActivity(Intent(this, LoginActivity::class.java))
