@@ -54,6 +54,19 @@ class TableFragment : Fragment() {
             rootView = inflater.inflate(R.layout.fragment_table, container, false)
             val tableHeader: LinearLayout = rootView!!.findViewById(R.id.table_header)
             tableHeader.getChildAt(CalendarUtil.getWeekIndex() - 1).setBackgroundColor(ContextCompat.getColor(activity, R.color.colorWeekPrimary))
+            val calendar = Calendar.getInstance()
+            val dayWeek = calendar.get(Calendar.DAY_OF_WEEK)
+            if (dayWeek == Calendar.SUNDAY)
+                calendar.add(Calendar.DAY_OF_MONTH, -1)
+            calendar.firstDayOfWeek = Calendar.MONDAY
+            val day = calendar.get(Calendar.DAY_OF_WEEK)
+            calendar.add(Calendar.DATE, calendar.firstDayOfWeek - day)
+            for (i in 0 until tableHeader.childCount) {
+                val textView = tableHeader.getChildAt(i) as TextView
+                val text = "${textView.text}\n${calendar.get(Calendar.DAY_OF_MONTH)}日"
+                textView.text = text
+                calendar.add(Calendar.DAY_OF_MONTH, 1)
+            }
             val recyclerView: RecyclerView = rootView!!.findViewById(R.id.recycler_view)
             val linearLayout: LinearLayout = rootView!!.findViewById(R.id.table_nav)
             recyclerView.layoutManager = GridLayoutManager(activity, 7, GridLayoutManager.VERTICAL, false)

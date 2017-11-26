@@ -61,8 +61,7 @@ class AccountSettingsFragment : PreferenceFragment() {
         delAccountPreference.entries = valueArray
         delAccountPreference.entryValues = usernameArray
         delAccountPreference.setOnPreferenceChangeListener { _, newValue ->
-            Logs.i(TAG, "onCreateView: " + newValue)
-            Logs.i(TAG, "onCreateView: " + (newValue is Array<*>))
+            Logs.i(TAG, "onCreateView: " + delAccountPreference.entryValues)
             true
         }
         managerAccountPreference.entries = valueArray
