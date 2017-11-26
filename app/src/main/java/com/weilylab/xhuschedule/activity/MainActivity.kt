@@ -698,12 +698,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 startActivity(Intent(this, SettingsActivity::class.java))
             }
             R.id.nav_logout -> {
-                val sharedPreference = getSharedPreferences("cache", Context.MODE_PRIVATE)
-                sharedPreference.edit()
-                        .remove("username")
-                        .remove("password")
-                        .remove("studentName")
-                        .apply()
+                val file = File(filesDir.absolutePath + File.separator + "data" + File.separator)
+                if (file.exists())
+                    file.listFiles()
+                            .forEach {
+                                it.delete()
+                            }
                 startActivity(Intent(this@MainActivity, LoginActivity::class.java))
                 finish()
             }
