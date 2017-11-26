@@ -2,6 +2,7 @@ package com.weilylab.xhuschedule.fragment
 
 import android.Manifest
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
@@ -57,6 +58,7 @@ class UISettingsFragment : PreferenceFragment() {
     private lateinit var customTodayTextColorPreference: ColorPreference
     private lateinit var customTableTextColorPreference: ColorPreference
     private lateinit var customTextSizePreference: Preference
+    private lateinit var resetPreference: Preference
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -71,6 +73,7 @@ class UISettingsFragment : PreferenceFragment() {
         customTodayTextColorPreference = findPreference(getString(R.string.key_custom_today_text_color)) as ColorPreference
         customTableTextColorPreference = findPreference(getString(R.string.key_custom_table_text_color)) as ColorPreference
         customTextSizePreference = findPreference(getString(R.string.key_custom_text_size))
+        resetPreference = findPreference(getString(R.string.key_reset))
         headerImgPreference.setOnPreferenceClickListener {
             requestType = HEADER_REQUEST_CODE
             requestPermission()
@@ -246,6 +249,23 @@ class UISettingsFragment : PreferenceFragment() {
                         Settings.customTextSize = currentProgress + 4
                     })
                     .setNegativeButton(android.R.string.cancel, null)
+                    .show()
+            true
+        }
+        resetPreference.setOnPreferenceClickListener {
+            val sharedPreference = activity.getSharedPreferences("settings", Context.MODE_PRIVATE)
+            sharedPreference.edit()
+                    .remove("customHeaderImg")
+                    .remove("customBackgroundImg")
+                    .remove("customTableOpacity")
+                    .remove("customTodayOpacity")
+                    .remove("customTableTextColor")
+                    .remove("customTodayTextColor")
+                    .remove("customTextSize")
+                    .apply()
+            ScheduleHelper.isImageChange = true
+            ScheduleHelper.isUIChange = true
+            Toast.makeText(activity, R.string.hint_reset, Toast.LENGTH_SHORT)
                     .show()
             true
         }

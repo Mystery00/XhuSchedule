@@ -31,6 +31,8 @@
     <string name="title_custom_table_text_color">自定义表格文字颜色</string>
     <string name="key_custom_text_size">key_custom_text_size</string>
     <string name="title_custom_text_size">自定义文本大小</string>
+    <string name="key_reset">key_reset</string>
+    <string name="title_reset">界面重置</string>
 
     <string name="screen_category_thanks">鸣谢</string>
     <string name="title_icon_ui">图标以及界面设计</string>

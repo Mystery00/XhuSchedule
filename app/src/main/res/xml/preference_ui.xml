@@ -34,4 +34,8 @@
         android:key="@string/key_custom_text_size"
         android:title="@string/title_custom_text_size" />
 
+    <Preference
+        android:key="@string/key_reset"
+        android:title="@string/title_reset" />
+
 </PreferenceScreen>
