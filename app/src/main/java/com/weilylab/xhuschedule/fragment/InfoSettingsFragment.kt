@@ -30,6 +30,7 @@ import java.net.UnknownHostException
  */
 class InfoSettingsFragment : PreferenceFragment() {
     private lateinit var loadingDialog: ZLoadingDialog
+    private lateinit var feedbackPreference: Preference
     private lateinit var checkUpdatePreference: Preference
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -46,7 +47,16 @@ class InfoSettingsFragment : PreferenceFragment() {
                 .setCanceledOnTouchOutside(false)
                 .setLoadingColor(ContextCompat.getColor(activity, R.color.colorAccent))
                 .setHintTextColor(ContextCompat.getColor(activity, R.color.colorAccent))
+        feedbackPreference = findPreference(getString(R.string.key_feedback))
         checkUpdatePreference = findPreference(getString(R.string.key_check_update))
+        feedbackPreference.setOnPreferenceClickListener {
+            val data = Intent(Intent.ACTION_SENDTO)
+            data.data = Uri.parse("mailto:mystery0dyl520@gmail.com")
+            data.putExtra(Intent.EXTRA_SUBJECT, "西瓜课表意见反馈")
+            data.putExtra(Intent.EXTRA_TEXT, "版本号：" + getString(R.string.app_version_name) + "-" + getString(R.string.app_version_code))
+            startActivity(data)
+            true
+        }
         checkUpdatePreference.setOnPreferenceClickListener {
             loadingDialog.show()
             ScheduleHelper.phpRetrofit

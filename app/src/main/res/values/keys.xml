@@ -43,13 +43,18 @@
     <string name="summary_ui">\@Johnny Zen</string>
     <string name="title_developer">开发者</string>
     <string name="summary_developer">\@Mystery0</string>
+    <string name="link_developer">https://mystery0.vip/</string>
+    <string name="title_local_img">预设图片提供者</string>
+    <string name="summary_local_img">\@BigDingDing</string>
+    <string name="link_local_img">http://www.coolapk.com/u/703237</string>
 
     <string name="screen_category_about">关于</string>
     <string name="key_source_code">key_source_code</string>
     <string name="title_source_code">开源地址</string>
-    <string name="summary_source_code">aHR0cHM6Ly9naXRodWIuY29tL015c3RlcnkwMC9YaHVTY2hlZHVsZQ==</string>
+    <string name="summary_source_code">https://github.com/Mystery00/XhuSchedule</string>
     <string name="title_weily_product">微力实验室出品</string>
     <string name="summary_weily_product">点击进入实验室官网</string>
+    <string name="key_feedback">key_feedback</string>
     <string name="title_feedback">意见反馈</string>
     <string name="summary_feedback">请发送邮件到mystery0dyl520@gmail.com并注明APP名称</string>
     <string name="key_check_update">key_check_update</string>
