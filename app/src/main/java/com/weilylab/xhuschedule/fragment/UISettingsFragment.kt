@@ -16,6 +16,8 @@ import android.support.constraint.ConstraintLayout
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.CardView
+import android.support.v7.widget.GridLayoutManager
+import android.support.v7.widget.RecyclerView
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
@@ -24,9 +26,9 @@ import android.widget.ImageView
 import android.widget.SeekBar
 import android.widget.TextView
 import android.widget.Toast
-import com.jrummyapps.android.colorpicker.ColorPickerDialog
 import com.jrummyapps.android.colorpicker.ColorPreference
 import com.weilylab.xhuschedule.R
+import com.weilylab.xhuschedule.adapter.BackgroundAdapter
 import com.weilylab.xhuschedule.classes.Course
 import com.weilylab.xhuschedule.util.DensityUtil
 import com.weilylab.xhuschedule.util.ScheduleHelper
@@ -77,8 +79,27 @@ class UISettingsFragment : PreferenceFragment() {
             true
         }
         backgroundImgPreference.setOnPreferenceClickListener {
-            requestType = BACKGROUND_REQUEST_CODE
-            requestPermission()
+            val view = View.inflate(activity, R.layout.layout_recycler_view, null)
+            val recyclerView: RecyclerView = view.findViewById(R.id.recycler_view)
+            recyclerView.layoutManager = GridLayoutManager(activity, 2)
+            val array = activity.resources.getStringArray(R.array.background_img)
+            val adapter = BackgroundAdapter(activity, array)
+            adapter.setCheckListener(object : BackgroundAdapter.CheckListener {
+                override fun onChecked(position: Int) {
+                    Logs.i(TAG, "onChecked: " + position)
+                }
+            })
+            recyclerView.adapter = adapter
+            AlertDialog.Builder(activity)
+                    .setTitle(getString(R.string.title_background_img))
+                    .setView(view)
+                    .setPositiveButton(android.R.string.cancel, null)
+                    .setNegativeButton("从相册选择", { _, _ ->
+                        requestType = BACKGROUND_REQUEST_CODE
+                        requestPermission()
+                    })
+                    .show()
+
             true
         }
         customTodayOpacityPreference.setOnPreferenceClickListener {

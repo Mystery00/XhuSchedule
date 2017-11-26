@@ -1,10 +1,14 @@
 package com.weilylab.xhuschedule.activity
 
+import android.Manifest
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Point
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.provider.MediaStore
 import android.support.design.widget.NavigationView
 import android.support.design.widget.Snackbar
 import android.support.v4.content.ContextCompat
@@ -16,6 +20,7 @@ import android.support.v7.widget.LinearLayoutManager
 import android.util.Base64
 import android.view.MenuItem
 import android.view.View
+import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import com.bumptech.glide.Glide
@@ -37,6 +42,7 @@ import com.weilylab.xhuschedule.fragment.TodayFragment
 import com.weilylab.xhuschedule.interfaces.RTResponse
 import com.weilylab.xhuschedule.listener.WeekChangeListener
 import com.weilylab.xhuschedule.util.*
+import com.yalantis.ucrop.UCrop
 import com.zyao89.view.zloading.ZLoadingDialog
 import com.zyao89.view.zloading.Z_TYPE
 import de.hdodenhof.circleimageview.CircleImageView
@@ -59,6 +65,9 @@ import kotlin.collections.ArrayList
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
     companion object {
         private val TAG = "MainActivity"
+        private val REQUEST_PERMISSION = 1
+        private val CHOOSE_IMG = 2
+        private val CROP_IMG = 3
     }
 
     private lateinit var loadingDialog: ZLoadingDialog
@@ -147,10 +156,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             updateAllView()
         }
         val nickName: TextView = nav_view.getHeaderView(0).findViewById(R.id.nickName)
-        val sharedPreference = getSharedPreferences("cache", Context.MODE_PRIVATE)
-        val studentName = sharedPreference.getString("studentName", "0")
         val nickNameString = Settings.nickName
-        nickName.text = if (nickNameString != "") nickNameString else studentName
+        nickName.text = if (nickNameString != "") nickNameString else studentList[0].name
         val group = nav_view.menu.findItem(R.id.nav_group).subMenu
         group.clear()
         studentList.forEach {
@@ -206,6 +213,31 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     .into(userIMG)
         else
             userIMG.setImageResource(R.mipmap.ic_launcher)
+        val nickName: TextView = nav_view.getHeaderView(0).findViewById(R.id.nickName)
+        nickName.setOnClickListener {
+            val editText = EditText(this)
+            editText.setText(nickName.text)
+            AlertDialog.Builder(this)
+                    .setTitle(R.string.hint_nick_name)
+                    .setView(editText)
+                    .setPositiveButton(android.R.string.ok, { _, _ ->
+                        Settings.nickName = editText.text.toString()
+                        nickName.text = editText.text.toString()
+                    })
+                    .show()
+        }
+        userIMG.setOnClickListener {
+
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
+                    != PackageManager.PERMISSION_GRANTED) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+                    requestPermissions(arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE),
+                            REQUEST_PERMISSION)
+            } else {
+                chooseImg()
+            }
+        }
 
         bottomNavigationView.setOnNavigationItemSelectedListener { item ->
             when (item.itemId) {
@@ -248,6 +280,23 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         titleTextView.setOnClickListener {
             showWeekAnim(!isWeekShow)
         }
+    }
+
+    private fun chooseImg() {
+        startActivityForResult(Intent(Intent.ACTION_PICK)
+                .setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*"),
+                CHOOSE_IMG)
+    }
+
+    private fun cropImg(uri: Uri, cropCode: Int, width: Int, height: Int) {
+        val savedFile = File(File(filesDir, "CropImg"), "user_img")
+        if (!savedFile.parentFile.exists())
+            savedFile.parentFile.mkdirs()
+        val destinationUri = Uri.fromFile(savedFile)
+        UCrop.of(uri, destinationUri)
+                .withAspectRatio(width.toFloat(), height.toFloat())
+                .withMaxResultSize(width, height)
+                .start(this, cropCode)
     }
 
     fun updateAllView() {
@@ -582,6 +631,45 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         } else {
             super.onBackPressed()
         }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (resultCode == RESULT_OK && data != null)
+            when (requestCode) {
+                CHOOSE_IMG -> {
+                    cropImg(data.data, CROP_IMG, 500, 500)
+                }
+                CROP_IMG -> {
+                    val saveFile = File(File(filesDir, "CropImg"), "user_img")
+                    Settings.userImg = saveFile.absolutePath
+                    val options = RequestOptions()
+                            .signature(MediaStoreSignature("image/*", Calendar.getInstance().timeInMillis, 0))
+                            .diskCacheStrategy(DiskCacheStrategy.NONE)
+                    val userIMG: CircleImageView = nav_view.getHeaderView(0).findViewById(R.id.userIMG)
+                    Glide.with(this)
+                            .load(Settings.userImg)
+                            .apply(options)
+                            .into(userIMG)
+                    Snackbar.make(coordinatorLayout, R.string.hint_custom_img, Snackbar.LENGTH_SHORT)
+                            .show()
+                }
+                UCrop.RESULT_ERROR ->
+                    Snackbar.make(coordinatorLayout, R.string.error_custom_img, Snackbar.LENGTH_SHORT)
+                            .show()
+            }
+        super.onActivityResult(requestCode, resultCode, data)
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == REQUEST_PERMISSION)
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
+                chooseImg()
+            } else {
+                Logs.i(TAG, "onRequestPermissionsResult: 权限拒绝")
+                Snackbar.make(coordinatorLayout, R.string.hint_permission, Snackbar.LENGTH_SHORT)
+                        .show()
+            }
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
