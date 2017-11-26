@@ -52,7 +52,6 @@ class LoginActivity : AppCompatActivity() {
                 .setLoadingBuilder(Z_TYPE.STAR_LOADING)
                 .setHintText(getString(R.string.hint_dialog_login))
                 .setHintTextSize(16F)
-                .setCancelable(false)
                 .setCanceledOnTouchOutside(false)
                 .setLoadingColor(ContextCompat.getColor(this, R.color.colorAccent))
                 .setHintTextColor(ContextCompat.getColor(this, R.color.colorAccent))

@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Created by Mystery0 on 17-11-27 上午3:50.
   ~ Copyright (c) 2017. All Rights reserved.
   ~
@@ -58,6 +57,14 @@
             <intent
                 android:action="android.intent.action.VIEW"
                 android:data="@string/summary_source_code" />
+        </Preference>
+
+        <Preference
+            android:summary="@string/summary_open_source_license"
+            android:title="@string/title_open_source_license">
+            <intent
+                android:action="android.intent.action.VIEW"
+                android:data="@string/link_open_source_license" />
         </Preference>
 
         <Preference

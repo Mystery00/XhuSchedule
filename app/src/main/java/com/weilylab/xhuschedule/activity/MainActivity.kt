@@ -98,7 +98,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 .setLoadingBuilder(Z_TYPE.DOUBLE_CIRCLE)
                 .setHintText(getString(R.string.hint_dialog_update_cache))
                 .setHintTextSize(16F)
-                .setCancelable(false)
                 .setCanceledOnTouchOutside(false)
                 .setLoadingColor(ContextCompat.getColor(this, R.color.colorAccent))
                 .setHintTextColor(ContextCompat.getColor(this, R.color.colorAccent))
