@@ -44,6 +44,7 @@ import io.reactivex.Observable
 import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
+import io.reactivex.observers.DisposableObserver
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
@@ -53,6 +54,7 @@ import java.io.File
 import java.io.InputStreamReader
 import java.net.UnknownHostException
 import java.util.*
+import kotlin.collections.ArrayList
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
     companion object {
@@ -64,6 +66,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private var isRefreshData = false
     private var isWeekShow = false
     private var isAnimShow = false
+    private var isDataNew = false
+    private var studentList = ArrayList<Student>()
     private var weekList = ArrayList<Course?>()
     private var allList = ArrayList<Course?>()
     private val todayList = ArrayList<Course>()
@@ -144,6 +148,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         val studentName = sharedPreference.getString("studentName", "0")
         val nickNameString = Settings.nickName
         nickName.text = if (nickNameString != "") nickNameString else studentName
+        val group = nav_view.menu.findItem(R.id.nav_group).subMenu
+        group.clear()
+        studentList.forEach {
+            group.add("${it.name}(${it.username})")
+        }
         ScheduleHelper.isImageChange = false
         ScheduleHelper.isUIChange = false
     }
@@ -156,13 +165,16 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         viewpager.offscreenPageLimit = 2
         viewpager.adapter = viewPagerAdapter
 
+        studentList.clear()
+        studentList = XhuFileUtil.getStudentsFromFile(File(filesDir.absolutePath + File.separator + "data" + File.separator + "user"))
+
         weekAdapter = WeekAdapter(this, 1)
         weekAdapter.setWeekChangeListener(object : WeekChangeListener {
             override fun onChange(week: Int) {
                 ScheduleHelper.weekIndex = week + 1
                 weekAdapter.setWeekIndex(ScheduleHelper.weekIndex)
                 titleTextView.text = getString(R.string.course_week_index, ScheduleHelper.weekIndex)
-                weekFragment.updateData()
+                updateAllView(ScheduleHelper.weekIndex)
             }
         })
         layout_week_recycler_view.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
@@ -236,6 +248,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     fun updateAllView() {
+        updateAllView(-1)
+    }
+
+    fun updateAllView(week: Int) {
         /**
          * =============================================
          * 为了兼容旧版本，在这里将旧版本的数据做一次清理
@@ -252,25 +268,78 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
          * ==============================================
          */
         loadingDialog.show()
-        val userFile = File(filesDir.absolutePath + File.separator + "data" + File.separator + "user")
-        val list = XhuFileUtil.getStudentsFromFile(userFile)
-        if (list.size == 0) {
+        if (studentList.size == 0) {
             ScheduleHelper.isLogin = false
             startActivity(Intent(this, LoginActivity::class.java))
             finish()
             return
         }
+        allList.clear()
+        weekList.clear()
+        todayList.clear()
         ScheduleHelper.isLogin = true
-        val group = nav_view.menu.findItem(R.id.nav_group).subMenu
-        group.clear()
-        list.forEach {
-            group.add("${it.name}(${it.username})")
-            updateView(it)
+        val array = ArrayList<Observable<HashMap<String, ArrayList<Course?>>>>()
+        studentList.forEach {
+            array.add(updateView(it, week))
         }
+        Observable.merge(array)
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(object : Observer<HashMap<String, ArrayList<Course?>>> {
+                    override fun onSubscribe(d: Disposable) {
+                    }
+
+                    override fun onComplete() {
+                        loadingDialog.dismiss()
+                        if (viewpager.currentItem != 1)
+                            titleTextView.visibility = View.GONE
+                        else
+                            titleTextView.visibility = View.VISIBLE
+                        titleTextView.text = getString(R.string.course_week_index, ScheduleHelper.weekIndex)
+                        weekAdapter.setWeekIndex(ScheduleHelper.weekIndex)
+                        layout_week_recycler_view.scrollToPosition(ScheduleHelper.weekIndex - 1)
+                        if (ScheduleHelper.isCookieAvailable) {
+                            if (studentList.size == 1)
+                                when (todayList.size) {
+                                    0 -> bottomNavigationView.menu.findItem(R.id.bottom_nav_today).setIcon(R.drawable.ic_sentiment_very_satisfied)
+                                    1 -> bottomNavigationView.menu.findItem(R.id.bottom_nav_today).setIcon(R.drawable.ic_sentiment_very_satisfied)
+                                    2 -> bottomNavigationView.menu.findItem(R.id.bottom_nav_today).setIcon(R.drawable.ic_sentiment_satisfied)
+                                    3 -> bottomNavigationView.menu.findItem(R.id.bottom_nav_today).setIcon(R.drawable.ic_sentiment_neutral)
+                                    4 -> bottomNavigationView.menu.findItem(R.id.bottom_nav_today).setIcon(R.drawable.ic_sentiment_dissatisfied)
+                                    else -> bottomNavigationView.menu.findItem(R.id.bottom_nav_today).setIcon(R.drawable.ic_sentiment_very_dissatisfied)
+                                }
+                            else
+                                bottomNavigationView.menu.findItem(R.id.bottom_nav_today).setIcon(R.drawable.ic_sentiment_very_satisfied)
+                            studentList.forEach {
+                                val tempAllList = CourseUtil.mergeCourses(allList, it.allCourses)
+                                allList.clear()
+                                allList.addAll(tempAllList)
+                                val tempWeekList = CourseUtil.mergeCourses(weekList, it.weekCourses)
+                                weekList.clear()
+                                weekList.addAll(tempWeekList)
+                                todayList.addAll(it.todayCourses)
+                            }
+                            weekFragment.refreshData()
+                            allFragment.refreshData()
+                            todayFragment.refreshData()
+                        } else
+                            updateAllData()
+                        isRefreshData = false
+                    }
+
+                    override fun onError(e: Throwable) {
+                        e.printStackTrace()
+                        isRefreshData = false
+                        loadingDialog.dismiss()
+                    }
+
+                    override fun onNext(map: HashMap<String, ArrayList<Course?>>) {
+                    }
+                })
     }
 
-    private fun updateView(student: Student) {
-        Observable.create<HashMap<String, ArrayList<Course?>>> { subscriber ->
+    private fun updateView(student: Student, week: Int): Observable<HashMap<String, ArrayList<Course?>>> {
+        return Observable.create<HashMap<String, ArrayList<Course?>>> { subscriber ->
             val parentFile = File(filesDir.absolutePath + File.separator + "caches/")
             if (!parentFile.exists())
                 parentFile.mkdirs()
@@ -296,109 +365,40 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
             ScheduleHelper.isCookieAvailable = true
             val allArray = CourseUtil.formatCourses(XhuFileUtil.getCoursesFromFile(this@MainActivity, oldFile))
-            allList.addAll(allArray)
-            val weekArray = CourseUtil.getWeekCourses(XhuFileUtil.getCoursesFromFile(this@MainActivity, oldFile))
-            weekList.addAll(weekArray)
+            student.allCourses.clear()
+            student.allCourses.addAll(allArray)
+            val weekArray = if (week != -1)
+                CourseUtil.getWeekCourses(XhuFileUtil.getCoursesFromFile(this@MainActivity, oldFile), week)
+            else
+                CourseUtil.getWeekCourses(XhuFileUtil.getCoursesFromFile(this@MainActivity, oldFile))
+            student.weekCourses.clear()
+            student.weekCourses.addAll(weekArray)
             val todayArray = CourseUtil.getTodayCourses(XhuFileUtil.getCoursesFromFile(this@MainActivity, oldFile))
-            todayList.addAll(todayArray)
+            student.todayCourses.clear()
+            student.todayCourses.addAll(todayArray)
+            student.isReady = true
             subscriber.onComplete()
         }
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(object : Observer<HashMap<String, ArrayList<Course?>>> {
-                    override fun onSubscribe(d: Disposable) {
-                    }
-
-                    override fun onComplete() {
-                        loadingDialog.dismiss()
-                        if (viewpager.currentItem != 1)
-                            titleTextView.visibility = View.GONE
-                        else
-                            titleTextView.visibility = View.VISIBLE
-                        titleTextView.text = getString(R.string.course_week_index, ScheduleHelper.weekIndex)
-                        weekAdapter.setWeekIndex(ScheduleHelper.weekIndex)
-                        layout_week_recycler_view.scrollToPosition(ScheduleHelper.weekIndex - 1)
-                        if (ScheduleHelper.isCookieAvailable) {
-                            when (todayList.size) {
-                                0 -> bottomNavigationView.menu.findItem(R.id.bottom_nav_today).setIcon(R.drawable.ic_sentiment_very_satisfied)
-                                1 -> bottomNavigationView.menu.findItem(R.id.bottom_nav_today).setIcon(R.drawable.ic_sentiment_very_satisfied)
-                                2 -> bottomNavigationView.menu.findItem(R.id.bottom_nav_today).setIcon(R.drawable.ic_sentiment_satisfied)
-                                3 -> bottomNavigationView.menu.findItem(R.id.bottom_nav_today).setIcon(R.drawable.ic_sentiment_neutral)
-                                4 -> bottomNavigationView.menu.findItem(R.id.bottom_nav_today).setIcon(R.drawable.ic_sentiment_dissatisfied)
-                                else -> bottomNavigationView.menu.findItem(R.id.bottom_nav_today).setIcon(R.drawable.ic_sentiment_very_dissatisfied)
-                            }
-                            weekFragment.refreshData()
-                            allFragment.refreshData()
-                            todayFragment.refreshData()
-                        } else
-                            updateData(student)
-                        isRefreshData = false
-                    }
-
-                    override fun onError(e: Throwable) {
-                        e.printStackTrace()
-                        isRefreshData = false
-                        loadingDialog.dismiss()
-                    }
-
-                    override fun onNext(map: HashMap<String, ArrayList<Course?>>) {
-                    }
-                })
     }
 
     private fun updateAllData() {
         loadingDialog.show()
-        val userFile = File(filesDir.absolutePath + File.separator + "data" + File.separator + "user")
-        val list = XhuFileUtil.getStudentsFromFile(userFile)
-        if (list.size == 0) {
+        if (studentList.size == 0) {
             ScheduleHelper.isLogin = false
             startActivity(Intent(this, LoginActivity::class.java))
             finish()
             return
         }
-        todayList.clear()
-        weekList.clear()
         allList.clear()
-        list.forEach {
-            updateData(it)
+        weekList.clear()
+        todayList.clear()
+        val array = ArrayList<Observable<ContentRT>>()
+        studentList.forEach {
+            array.add(updateData(it))
         }
-    }
-
-    private fun updateData(student: Student) {
-        val parentFile = File(filesDir.absolutePath + File.separator + "caches/")
-        val base64Name = XhuFileUtil.filterString(Base64.encodeToString(student.username.toByteArray(), Base64.DEFAULT))
-        var isDataNew = false
-        ScheduleHelper.tomcatRetrofit
-                .create(RTResponse::class.java)
-                .getCourses(student.username)
-                .subscribeOn(Schedulers.newThread())
-                .unsubscribeOn(Schedulers.newThread())
-                .map({ responseBody -> Gson().fromJson(InputStreamReader(responseBody.byteStream()), ContentRT::class.java) })
-                .subscribeOn(Schedulers.io())
-                .doOnNext { contentRT ->
-                    if (contentRT.rt == "1") {
-                        val newFile = File(parentFile, base64Name + ".temp")
-                        newFile.createNewFile()
-                        XhuFileUtil.saveObjectToFile(contentRT.courses, newFile)
-                        val newMD5 = XhuFileUtil.getMD5(newFile)
-                        val oldFile = File(parentFile, base64Name)
-                        var oldMD5 = ""
-                        if (oldFile.exists())
-                            oldMD5 = XhuFileUtil.getMD5(oldFile)!!
-                        isDataNew = if (newMD5 != oldMD5) {
-                            oldFile.delete()
-                            newFile.renameTo(oldFile)
-                            Logs.i(TAG, "updateData: 数据更新")
-                            true
-                        } else {
-                            newFile.delete()
-                            Logs.i(TAG, "updateData: 数据未变")
-                            false
-                        }
-                    }
-                }
+        Observable.merge(array)
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(object : Observer<ContentRT> {
+                .subscribeWith(object : DisposableObserver<ContentRT>() {
                     private var contentRT: ContentRT? = null
                     override fun onError(e: Throwable) {
                         loadingDialog.dismiss()
@@ -415,11 +415,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     override fun onComplete() {
                         if (contentRT?.rt == "6") {
                             ScheduleHelper.isLogin = false
-                            login(student)
                             return
                         }
                         loadingDialog.dismiss()
                         if (contentRT?.rt != "1") {
+                            isRefreshData = false
                             Snackbar.make(coordinatorLayout, R.string.hint_invalid_cookie, Snackbar.LENGTH_LONG)
                                     .setAction(android.R.string.ok) {
                                         ScheduleHelper.isLogin = false
@@ -429,20 +429,57 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                                     .show()
                             return
                         }
-                        if (isDataNew)
+                        isRefreshData = false
+                        if (isDataNew && studentList.size == 1)
                             Snackbar.make(coordinatorLayout, R.string.hint_update_data_new, Snackbar.LENGTH_SHORT).show()
                         else
                             Snackbar.make(coordinatorLayout, R.string.hint_update_data, Snackbar.LENGTH_SHORT).show()
-                        updateView(student)
-                    }
-
-                    override fun onSubscribe(d: Disposable) {
+                        updateAllView()
                     }
 
                     override fun onNext(t: ContentRT) {
                         contentRT = t
                     }
                 })
+    }
+
+    private fun updateData(student: Student): Observable<ContentRT> {
+        val parentFile = File(filesDir.absolutePath + File.separator + "caches/")
+        if (!parentFile.exists())
+            parentFile.mkdirs()
+        val base64Name = XhuFileUtil.filterString(Base64.encodeToString(student.username.toByteArray(), Base64.DEFAULT))
+        return ScheduleHelper.tomcatRetrofit
+                .create(RTResponse::class.java)
+                .getCourses(student.username)
+                .subscribeOn(Schedulers.newThread())
+                .unsubscribeOn(Schedulers.newThread())
+                .map({ responseBody -> Gson().fromJson(InputStreamReader(responseBody.byteStream()), ContentRT::class.java) })
+                .subscribeOn(Schedulers.io())
+                .doOnNext { contentRT ->
+                    when (contentRT.rt) {
+                        "1" -> {
+                            val newFile = File(parentFile, base64Name + ".temp")
+                            newFile.createNewFile()
+                            XhuFileUtil.saveObjectToFile(contentRT.courses, newFile)
+                            val newMD5 = XhuFileUtil.getMD5(newFile)
+                            val oldFile = File(parentFile, base64Name)
+                            var oldMD5 = ""
+                            if (oldFile.exists())
+                                oldMD5 = XhuFileUtil.getMD5(oldFile)!!
+                            isDataNew = if (newMD5 != oldMD5) {
+                                oldFile.delete()
+                                newFile.renameTo(oldFile)
+                                Logs.i(TAG, "updateData: 数据更新")
+                                true
+                            } else {
+                                newFile.delete()
+                                Logs.i(TAG, "updateData: 数据未变")
+                                false
+                            }
+                        }
+                        "6" -> login(student)
+                    }
+                }
     }
 
     private fun login(student: Student) {
@@ -470,6 +507,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                             loadingDialog.dismiss()
                         when (loginRT?.rt) {
                             "0" -> {
+                                isRefreshData = false
                                 ScheduleHelper.isLogin = false
                                 Snackbar.make(coordinatorLayout, getString(R.string.hint_try_refresh_data_error, getString(R.string.error_timeout)), Snackbar.LENGTH_LONG)
                                         .setAction(android.R.string.ok) {
@@ -484,6 +522,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                                 updateData(student)
                             }
                             "2" -> {
+                                isRefreshData = false
                                 ScheduleHelper.isLogin = false
                                 Snackbar.make(coordinatorLayout, getString(R.string.hint_try_refresh_data_error, getString(R.string.error_invalid_username)), Snackbar.LENGTH_LONG)
                                         .setAction(android.R.string.ok) {
@@ -494,6 +533,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                                         .show()
                             }
                             "3" -> {
+                                isRefreshData = false
                                 ScheduleHelper.isLogin = false
                                 Snackbar.make(coordinatorLayout, getString(R.string.hint_try_refresh_data_error, getString(R.string.error_invalid_password)), Snackbar.LENGTH_LONG)
                                         .setAction(android.R.string.ok) {
@@ -504,6 +544,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                                         .show()
                             }
                             else -> {
+                                isRefreshData = false
                                 ScheduleHelper.isLogin = false
                                 Snackbar.make(coordinatorLayout, getString(R.string.hint_try_refresh_data_error, getString(R.string.error_other)), Snackbar.LENGTH_LONG)
                                         .setAction(android.R.string.ok) {
