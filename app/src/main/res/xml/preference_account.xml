@@ -11,11 +11,11 @@
             android:key="@string/key_add_account"
             android:title="@string/title_add_account" />
 
-        <MultiSelectListPreference
+        <Preference
             android:key="@string/key_del_account"
             android:title="@string/title_del_account" />
 
-        <MultiSelectListPreference
+        <Preference
             android:key="@string/key_show_account_manager"
             android:title="@string/title_show_account_manager" />
 

@@ -121,8 +121,4 @@ object XhuFileUtil {
         }
         return value
     }
-
-    fun copyFile(sourceFile: File, newFile: File) {
-
-    }
 }
