@@ -2,26 +2,31 @@ package com.weilylab.xhuschedule.util
 
 import com.weilylab.xhuschedule.classes.Course
 import com.weilylab.xhuschedule.classes.CourseTimeInfo
-import vip.mystery0.tools.logs.Logs
+import java.util.*
+import kotlin.collections.ArrayList
 
 /**
  * Created by myste.
  */
 object CourseUtil {
-    fun formatCourses(courses: Array<Course>): ArrayList<Course?> {
-        val tempArray = Array(5, { Array<Course?>(7, { null }) })
+    fun formatCourses(courses: Array<Course>): ArrayList<LinkedList<Course>> {
+        val tempArray = Array(5, { Array<LinkedList<Course>>(7, { LinkedList() }) })
         courses.forEach {
             val timeArray = it.time.split('-')
             val startTime = (timeArray[0].toInt() - 1) / 2
             val endTime = (timeArray[1].toInt()) / 2
             for (index in startTime until endTime) {
-                if (tempArray[index][it.day.toInt() - 1] == null)
-                    tempArray[index][it.day.toInt() - 1] = it
-                else
-                    tempArray[index][it.day.toInt() - 1]?.with(it)
+                var flag = false
+                for (temp in tempArray[index][it.day.toInt() - 1]) {
+                    flag = temp.with(it)
+                    if (flag)
+                        break
+                }
+                if (!flag)
+                    tempArray[index][it.day.toInt() - 1].add(it)
             }
         }
-        val list = ArrayList<Course?>()
+        val list = ArrayList<LinkedList<Course>>()
         tempArray.forEach {
             it.forEach {
                 list.add(it)
@@ -30,7 +35,7 @@ object CourseUtil {
         return list
     }
 
-    fun getWeekCourses(courses: Array<Course>): ArrayList<Course?> {
+    fun getWeekCourses(courses: Array<Course>): ArrayList<LinkedList<Course>> {
         val firstWeekOfTerm = Settings.firstWeekOfTerm
         val date = firstWeekOfTerm.split('-')
         CalendarUtil.startCalendar.set(date[0].toInt(), date[1].toInt(), date[2].toInt(), 0, 0, 0)
@@ -39,9 +44,9 @@ object CourseUtil {
         return getWeekCourses(courses, currentWeek)
     }
 
-    fun getWeekCourses(courses: Array<Course>, weekIndex: Int): ArrayList<Course?> {
+    fun getWeekCourses(courses: Array<Course>, weekIndex: Int): ArrayList<LinkedList<Course>> {
         ScheduleHelper.weekIndex = weekIndex
-        val tempArray = Array(5, { Array<Course?>(7, { null }) })
+        val tempArray = Array(5, { Array<LinkedList<Course>>(7, { LinkedList() }) })
         courses.filter {
             try {
                 var other = false
@@ -65,13 +70,17 @@ object CourseUtil {
             val startTime = (timeArray[0].toInt() - 1) / 2
             val endTime = (timeArray[1].toInt()) / 2
             for (index in startTime until endTime) {
-                if (tempArray[index][it.day.toInt() - 1] == null)
-                    tempArray[index][it.day.toInt() - 1] = it
-                else
-                    tempArray[index][it.day.toInt() - 1]?.with(it)
+                var flag = false
+                for (temp in tempArray[index][it.day.toInt() - 1]) {
+                    flag = temp.with(it)
+                    if (flag)
+                        break
+                }
+                if (!flag)
+                    tempArray[index][it.day.toInt() - 1].add(it)
             }
         }
-        val list = ArrayList<Course?>()
+        val list = ArrayList<LinkedList<Course>>()
         tempArray.forEach {
             it.forEach {
                 list.add(it)
@@ -126,23 +135,17 @@ object CourseUtil {
             arrayOf(CourseTimeInfo(course.week + '周', course.location))
     }
 
-    fun mergeCourses(aList: ArrayList<Course?>, bList: ArrayList<Course?>): ArrayList<Course?> {
+    fun mergeCourses(aList: ArrayList<LinkedList<Course>>, bList: ArrayList<LinkedList<Course>>): ArrayList<LinkedList<Course>> {
         if (aList.size == 0)
             return bList
         if (bList.size == 0)
             return aList
-        val newList = ArrayList<Course?>()
-        aList.forEachIndexed { index, course ->
-            if (course != null) {
-                var temp = course
-                while (temp!!.other != null)
-                    temp = temp.other!!
-                temp.other = bList[index]
-                newList.add(course)
-            } else {
-                newList.add(bList[index])
-            }
+        val list = ArrayList<LinkedList<Course>>()
+        for (i in 0 until aList.size) {
+            list.add(LinkedList())
+            list[i].addAll(aList[i])
+            list[i].addAll(bList[i])
         }
-        return newList
+        return list
     }
 }

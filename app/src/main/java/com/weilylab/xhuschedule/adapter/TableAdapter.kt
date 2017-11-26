@@ -18,26 +18,21 @@ import com.weilylab.xhuschedule.util.DensityUtil
 import com.weilylab.xhuschedule.util.ScheduleHelper
 import com.weilylab.xhuschedule.util.Settings
 import com.weilylab.xhuschedule.util.ViewUtil
+import java.util.*
 
 /**
  * Created by myste.
  */
 class TableAdapter(private val context: Context,
-                   private val list: ArrayList<Course?>) : RecyclerView.Adapter<TableAdapter.ViewHolder>() {
+                   private val list: ArrayList<LinkedList<Course>>) : RecyclerView.Adapter<TableAdapter.ViewHolder>() {
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.linearLayout.removeAllViews()
         val layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, DensityUtil.dip2px(context, 144F))
         holder.linearLayout.layoutParams = layoutParams
-        val course: Course? = list[position] ?: return
-        addView(holder, course!!)
-        var temp = course.other
-        while (temp != null) {
-            addView(holder, course.other!!)
-            if (temp.other != null)
-                temp = temp.other
-            else
-                break
+        val linkedList=list[position]
+        linkedList.forEach {
+            addView(holder,it)
         }
     }
 

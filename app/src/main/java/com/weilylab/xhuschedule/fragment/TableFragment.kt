@@ -20,13 +20,14 @@ import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
+import java.util.*
 
 /**
  * Created by myste.
  */
 class TableFragment : Fragment() {
     companion object {
-        fun newInstance(list: ArrayList<Course?>): TableFragment {
+        fun newInstance(list: ArrayList<LinkedList<Course>>): TableFragment {
             val bundle = Bundle()
             bundle.putSerializable("list", list)
             val fragment = TableFragment()
@@ -35,7 +36,7 @@ class TableFragment : Fragment() {
         }
     }
 
-    private lateinit var list: ArrayList<Course?>
+    private lateinit var list: ArrayList<LinkedList<Course>>
     private lateinit var adapter: TableAdapter
     private var isReady = false
     private var rootView: View? = null
@@ -43,7 +44,7 @@ class TableFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         @Suppress("UNCHECKED_CAST")
-        list = arguments.getSerializable("list") as ArrayList<Course?>
+        list = arguments.getSerializable("list") as ArrayList<LinkedList<Course>>
         adapter = TableAdapter(activity, list)
     }
 
