@@ -2,6 +2,7 @@
 <resources>
     <string-array name="background_img">
         <item>https://gold-cdn.xitu.io/v3/static/img/android.fef4da1.png</item>
+        <item>https://gold-cdn.xitu.io/v3/static/img/android.fef4da1.png</item>
         <item>https://user-gold-cdn.xitu.io/2016/11/29/fe63106459eb471961d3c0ef2f5a9100?imageView2/0/w/1280/h/960/format/webp/ignore-error/1</item>
         <item>https://user-gold-cdn.xitu.io/2016/11/29/f75248fed5d72ca67ee5c47d9ae0306e?imageView2/0/w/1280/h/960/format/webp/ignore-error/1</item>
     </string-array>

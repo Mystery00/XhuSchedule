@@ -16,8 +16,6 @@ import android.support.constraint.ConstraintLayout
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.CardView
-import android.support.v7.widget.GridLayoutManager
-import android.support.v7.widget.RecyclerView
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
@@ -26,9 +24,9 @@ import android.widget.ImageView
 import android.widget.SeekBar
 import android.widget.TextView
 import android.widget.Toast
+import com.bumptech.glide.Glide
 import com.jrummyapps.android.colorpicker.ColorPreference
 import com.weilylab.xhuschedule.R
-import com.weilylab.xhuschedule.adapter.BackgroundAdapter
 import com.weilylab.xhuschedule.classes.Course
 import com.weilylab.xhuschedule.util.DensityUtil
 import com.weilylab.xhuschedule.util.ScheduleHelper
@@ -79,27 +77,25 @@ class UISettingsFragment : PreferenceFragment() {
             true
         }
         backgroundImgPreference.setOnPreferenceClickListener {
-            val view = View.inflate(activity, R.layout.layout_recycler_view, null)
-            val recyclerView: RecyclerView = view.findViewById(R.id.recycler_view)
-            recyclerView.layoutManager = GridLayoutManager(activity, 2)
-            val array = activity.resources.getStringArray(R.array.background_img)
-            val adapter = BackgroundAdapter(activity, array)
-            adapter.setCheckListener(object : BackgroundAdapter.CheckListener {
-                override fun onChecked(position: Int) {
-                    Logs.i(TAG, "onChecked: " + position)
-                }
-            })
-            recyclerView.adapter = adapter
-            AlertDialog.Builder(activity)
-                    .setTitle(getString(R.string.title_background_img))
-                    .setView(view)
-                    .setPositiveButton(android.R.string.cancel, null)
-                    .setNegativeButton("从相册选择", { _, _ ->
-                        requestType = BACKGROUND_REQUEST_CODE
-                        requestPermission()
-                    })
-                    .show()
-
+            //            val view = View.inflate(activity, R.layout.layout_choose_img, null)
+//            val image1: ImageView = view.findViewById(R.id.imageView1)
+//            val image2: ImageView = view.findViewById(R.id.imageView2)
+//            val image3: ImageView = view.findViewById(R.id.imageView3)
+//            val image4: ImageView = view.findViewById(R.id.imageView4)
+//            val list = activity.resources.getStringArray(R.array.background_img)
+//            Glide.with(activity).load(list[0]).into(image1)
+//            Glide.with(activity).load(list[1]).into(image2)
+//            Glide.with(activity).load(list[2]).into(image3)
+//            Glide.with(activity).load(list[3]).into(image4)
+//            AlertDialog.Builder(activity)
+//                    .setTitle(getString(R.string.title_background_img))
+//                    .setView(view)
+//                    .setPositiveButton(android.R.string.cancel, null)
+//                    .setNegativeButton("从相册选择", { _, _ ->
+            requestType = BACKGROUND_REQUEST_CODE
+            requestPermission()
+//                    })
+//                    .show()
             true
         }
         customTodayOpacityPreference.setOnPreferenceClickListener {
