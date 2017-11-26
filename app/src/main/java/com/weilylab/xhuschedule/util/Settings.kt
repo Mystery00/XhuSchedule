@@ -15,6 +15,15 @@ object Settings {
     var isFirstRun: Boolean
         set(value) = sharedPreference.edit().putBoolean("isFirstRun", value).apply()
         get() = sharedPreference.getBoolean("isFirstRun", true)
+    var isNeedClear: Boolean
+        set(value) = sharedPreference.edit().putBoolean("isNeedClear", value).apply()
+        get() = sharedPreference.getBoolean("isNeedClear", true)
+    var nickName: String
+        set(value) = sharedPreference.edit().putString("nickName", value).apply()
+        get() = sharedPreference.getString("nickName", "")
+    var userImg: String
+        set(value) = sharedPreference.edit().putString("userImg", value).apply()
+        get() = sharedPreference.getString("userImg", "")
     var customHeaderImg: String
         set(value) = sharedPreference.edit().putString("customHeaderImg", value).apply()
         get() = sharedPreference.getString("customHeaderImg", "")

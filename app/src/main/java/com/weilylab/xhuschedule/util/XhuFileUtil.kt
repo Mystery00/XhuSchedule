@@ -47,6 +47,8 @@ object XhuFileUtil {
         return try {
             if (file.exists())
                 file.delete()
+            if (!file.parentFile.exists())
+                file.parentFile.mkdirs()
             val objectOutputStream = ObjectOutputStream(BufferedOutputStream(FileOutputStream(file)))
             objectOutputStream.writeObject(obj)
             objectOutputStream.close()
@@ -82,16 +84,16 @@ object XhuFileUtil {
         }
     }
 
-    fun getStudentsFromFile(file: File): Array<Student> {
+    fun getStudentsFromFile(file: File): ArrayList<Student> {
         try {
             if (!file.exists())
-                return emptyArray()
+                return ArrayList()
             val objectInputStream = ObjectInputStream(BufferedInputStream(FileInputStream(file)))
             @Suppress("UNCHECKED_CAST")
-            return objectInputStream.readObject() as Array<Student>
+            return objectInputStream.readObject() as ArrayList<Student>
         } catch (e: Exception) {
             e.printStackTrace()
-            return emptyArray()
+            return ArrayList()
         }
     }
 

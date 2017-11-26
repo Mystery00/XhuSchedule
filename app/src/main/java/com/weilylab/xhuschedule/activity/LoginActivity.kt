@@ -25,6 +25,8 @@ import android.graphics.Color
 import android.support.v4.content.ContextCompat
 import com.weilylab.xhuschedule.classes.LoginRT
 import com.weilylab.xhuschedule.classes.Student
+import com.weilylab.xhuschedule.util.XhuFileUtil
+import java.io.File
 import java.net.UnknownHostException
 
 
@@ -131,12 +133,11 @@ class LoginActivity : AppCompatActivity() {
                             "1" -> {
                                 ScheduleHelper.isLogin = true
                                 ScheduleHelper.isFromLogin = true
-                                val sharedPreference = getSharedPreferences("cache", Context.MODE_PRIVATE)
-                                sharedPreference.edit()
-                                        .putString("username", usernameStr)
-                                        .putString("password", passwordStr)
-                                        .putString("studentName", loginRT?.name)
-                                        .apply()
+                                val userFile = File(filesDir.absolutePath + File.separator + "data" + File.separator + "user")
+                                student.name = loginRT?.name!!
+                                val userList = ArrayList<Student>()
+                                userList.add(student)
+                                XhuFileUtil.saveObjectToFile(userList,userFile)
                                 Toast.makeText(this@LoginActivity, getString(R.string.success_login, loginRT?.name, getString(R.string.app_name)), Toast.LENGTH_SHORT)
                                         .show()
                                 startActivity(Intent(this@LoginActivity, MainActivity::class.java))

@@ -5,16 +5,16 @@ import com.weilylab.xhuschedule.classes.CourseTimeInfo
 
 /**
  * Created by myste.
-                        */
-                    object CourseUtil {
-                        fun formatCourses(courses: Array<Course>): ArrayList<Course?> {
-                            val tempArray = Array(5, { Array<Course?>(7, { null }) })
-                            courses.forEach {
-                                val timeArray = it.time.split('-')
-                                val startTime = (timeArray[0].toInt() - 1) / 2
-                                val endTime = (timeArray[1].toInt()) / 2
-                                for (index in startTime until endTime) {
-                                    if (tempArray[index][it.day.toInt() - 1] == null)
+ */
+object CourseUtil {
+    fun formatCourses(courses: Array<Course>): ArrayList<Course?> {
+        val tempArray = Array(5, { Array<Course?>(7, { null }) })
+        courses.forEach {
+            val timeArray = it.time.split('-')
+            val startTime = (timeArray[0].toInt() - 1) / 2
+            val endTime = (timeArray[1].toInt()) / 2
+            for (index in startTime until endTime) {
+                if (tempArray[index][it.day.toInt() - 1] == null)
                     tempArray[index][it.day.toInt() - 1] = it
                 else
                     tempArray[index][it.day.toInt() - 1]?.with(it)

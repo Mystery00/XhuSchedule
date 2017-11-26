@@ -45,7 +45,7 @@ class TodayAdapter(private val context: Context,
                 holder.itemView.setOnClickListener {
                     ViewUtil.showAlertDialog(context, course, object : InfoChangeListener {
                         override fun onChange() {
-                            (context as MainActivity).updateView()
+                            (context as MainActivity).updateAllView()
                         }
                     })
                 }
