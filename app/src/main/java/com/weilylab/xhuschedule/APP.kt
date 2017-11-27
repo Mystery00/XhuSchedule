@@ -36,13 +36,14 @@ class APP : Application() {
     override fun onCreate() {
         super.onCreate()
         Logs.setLevel(Logs.LogLevel.Debug)
-        val file = File(cacheDir.absolutePath + File.separator)
+        val file = File(externalCacheDir.absolutePath + File.separator)
         if (!file.exists())
             file.mkdirs()
         CrashHandler.getInstance(this)
                 .setDirectory(file)
                 .sendException(object : CatchExceptionListener {
                     override fun onException(date: String, file: File, appVersionName: String, appVersionCode: Int, AndroidVersion: String, sdk: Int, vendor: String, model: String, ex: Throwable) {
+                        Logs.i("TAG", "onException: ")
                         val error = Error(date, appVersionName, appVersionCode, AndroidVersion, sdk, vendor, model, ex)
                         val bundle = Bundle()
                         bundle.putSerializable("file", file)
