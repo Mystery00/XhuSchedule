@@ -79,6 +79,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     private lateinit var loadingDialog: ZLoadingDialog
     private lateinit var weekAdapter: WeekAdapter
+    private var isTryLogin = false
     private var isRefreshData = false
     private var isWeekShow = false
     private var isAnimShow = false
@@ -299,7 +300,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         action_sync.setOnClickListener {
             if (isRefreshData)
                 return@setOnClickListener
-            loadingDialog.show()
             isRefreshData = true
             updateAllData()
         }
@@ -355,6 +355,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(object : Observer<HashMap<String, ArrayList<Course?>>> {
                     override fun onSubscribe(d: Disposable) {
+                        loadingDialog.show()
                     }
 
                     override fun onComplete() {
@@ -450,6 +451,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     private fun updateAllData() {
+        loadingDialog.show()
         studentList.clear()
         studentList.addAll(XhuFileUtil.getStudentsFromFile(File(filesDir.absolutePath + File.separator + "data" + File.separator + "user")))
         if (studentList.size == 0) {
@@ -491,7 +493,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                             return
                         }
                         loadingDialog.dismiss()
-                        if (contentRT?.rt != "1") {
+                        if (contentRT?.rt != "1" && contentRT?.rt != "5") {
                             isRefreshData = false
                             Snackbar.make(coordinatorLayout, R.string.hint_invalid_cookie, Snackbar.LENGTH_LONG)
                                     .setAction(android.R.string.ok) {
@@ -503,10 +505,14 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                             return
                         }
                         isRefreshData = false
-                        if (isDataNew && showList.size == 1)
-                            Snackbar.make(coordinatorLayout, R.string.hint_update_data_new, Snackbar.LENGTH_SHORT).show()
-                        else
-                            Snackbar.make(coordinatorLayout, R.string.hint_update_data, Snackbar.LENGTH_SHORT).show()
+                        if (contentRT?.rt == "5")
+                            Snackbar.make(coordinatorLayout, R.string.hint_update_data_error, Snackbar.LENGTH_LONG).show()
+                        else {
+                            if (isDataNew && showList.size == 1)
+                                Snackbar.make(coordinatorLayout, R.string.hint_update_data_new, Snackbar.LENGTH_SHORT).show()
+                            else
+                                Snackbar.make(coordinatorLayout, R.string.hint_update_data, Snackbar.LENGTH_SHORT).show()
+                        }
                         updateAllView()
                     }
 
@@ -530,7 +536,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 .subscribeOn(Schedulers.io())
                 .doOnNext { contentRT ->
                     when (contentRT.rt) {
-                        "1" -> {
+                        "1", "5" -> {
                             val newFile = File(parentFile, base64Name + ".temp")
                             newFile.createNewFile()
                             XhuFileUtil.saveObjectToFile(contentRT.courses, newFile)
@@ -549,8 +555,36 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                                 Logs.i(TAG, "updateData: 数据未变")
                                 false
                             }
+                            loadingDialog.dismiss()
                         }
-                        else -> login(student)
+                        "2" -> {
+                            loadingDialog.dismiss()
+                            isRefreshData = false
+                            ScheduleHelper.isLogin = false
+                            Snackbar.make(coordinatorLayout, getString(R.string.hint_try_refresh_data_error, getString(R.string.error_invalid_username)), Snackbar.LENGTH_LONG)
+                                    .setAction(android.R.string.ok) {
+                                        ScheduleHelper.isLogin = false
+                                        startActivity(Intent(this@MainActivity, LoginActivity::class.java))
+                                        finish()
+                                    }
+                                    .show()
+                        }
+                        "3" -> {
+                            loadingDialog.dismiss()
+                            isRefreshData = false
+                            ScheduleHelper.isLogin = false
+                            Snackbar.make(coordinatorLayout, getString(R.string.hint_try_refresh_data_error, getString(R.string.error_invalid_password)), Snackbar.LENGTH_LONG)
+                                    .setAction(android.R.string.ok) {
+                                        ScheduleHelper.isLogin = false
+                                        startActivity(Intent(this@MainActivity, LoginActivity::class.java))
+                                        finish()
+                                    }
+                                    .show()
+                        }
+                        else -> {
+                            isTryLogin = false
+                            login(student)
+                        }
                     }
                 }
     }
@@ -580,15 +614,19 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                             loadingDialog.dismiss()
                         when (loginRT?.rt) {
                             "0" -> {
-                                isRefreshData = false
-                                ScheduleHelper.isLogin = false
-                                Snackbar.make(coordinatorLayout, getString(R.string.hint_try_refresh_data_error, getString(R.string.error_timeout)), Snackbar.LENGTH_LONG)
-                                        .setAction(android.R.string.ok) {
-                                            ScheduleHelper.isLogin = false
-                                            startActivity(Intent(this@MainActivity, LoginActivity::class.java))
-                                            finish()
-                                        }
-                                        .show()
+                                if (!isTryLogin)
+                                    login(student)
+                                else {
+                                    isRefreshData = false
+                                    ScheduleHelper.isLogin = false
+                                    Snackbar.make(coordinatorLayout, getString(R.string.hint_try_refresh_data_error, getString(R.string.error_timeout)), Snackbar.LENGTH_LONG)
+                                            .setAction(android.R.string.ok) {
+                                                ScheduleHelper.isLogin = false
+                                                startActivity(Intent(this@MainActivity, LoginActivity::class.java))
+                                                finish()
+                                            }
+                                            .show()
+                                }
                             }
                             "1" -> {
                                 ScheduleHelper.isLogin = true
