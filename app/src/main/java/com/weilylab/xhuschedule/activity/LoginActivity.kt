@@ -137,7 +137,11 @@ class LoginActivity : AppCompatActivity() {
                                 val userFile = File(filesDir.absolutePath + File.separator + "data" + File.separator + "user")
                                 student.name = loginRT?.name!!
                                 val userList = XhuFileUtil.getStudentsFromFile(userFile)
-                                if (!userList.contains(student))
+                                var result = false
+                                userList.forEach {
+                                    result = result || it.username == student.username
+                                }
+                                if (!result)
                                     userList.add(student)
                                 XhuFileUtil.saveObjectToFile(userList, userFile)
                                 Toast.makeText(this@LoginActivity, getString(R.string.success_login, loginRT?.name, getString(R.string.app_name)), Toast.LENGTH_SHORT)
