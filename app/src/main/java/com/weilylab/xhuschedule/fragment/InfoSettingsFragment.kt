@@ -9,6 +9,7 @@ package com.weilylab.xhuschedule.fragment
 
 import android.content.Intent
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.preference.Preference
 import android.preference.PreferenceFragment
@@ -56,10 +57,18 @@ class InfoSettingsFragment : PreferenceFragment() {
         feedbackPreference = findPreference(getString(R.string.key_feedback))
         checkUpdatePreference = findPreference(getString(R.string.key_check_update))
         feedbackPreference.setOnPreferenceClickListener {
+            val stringBuilder = StringBuilder()
+            stringBuilder.appendln("App Version: " + getString(R.string.app_version_name) + "-" + getString(R.string.app_version_code))
+            stringBuilder.appendln("OS Version: " + Build.VERSION.RELEASE + "-" + Build.VERSION.SDK_INT)
+            stringBuilder.appendln("Vendor: " + Build.MANUFACTURER)
+            stringBuilder.appendln("Model: " + Build.MODEL)
+            stringBuilder.appendln("Manufacture: " + Build.MANUFACTURER)
+            stringBuilder.appendln("Brand: " + Build.BRAND)
+            stringBuilder.appendln("Display: " + Build.DISPLAY)
             val data = Intent(Intent.ACTION_SENDTO)
             data.data = Uri.parse("mailto:mystery0dyl520@gmail.com")
             data.putExtra(Intent.EXTRA_SUBJECT, "西瓜课表意见反馈")
-            data.putExtra(Intent.EXTRA_TEXT, "版本号：" + getString(R.string.app_version_name) + "-" + getString(R.string.app_version_code))
+            data.putExtra(Intent.EXTRA_TEXT, stringBuilder.toString())
             startActivity(data)
             true
         }

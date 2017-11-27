@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Created by Mystery0 on 17-11-27 上午3:50.
   ~ Copyright (c) 2017. All Rights reserved.
   ~
@@ -9,27 +8,12 @@
 <resources>
     <string name="title_update_log">%1$s版的更新日志</string>
     <string-array name="update_list">
-        <item>新增：使用新的接口，从此之后再也不用输入验证码了</item>
-        <item>新增：多账号登录与加载，专门为双学位同学打造，再也不用为了切换账号而烦恼了</item>
-        <item>新增：侧滑页自定义昵称</item>
-        <item>新增：自定义颜色不透明度设置</item>
-        <item>新增：文本大小自定义</item>
-        <item>新增：界面设置重置</item>
-        <item>新增：当天课表卡片添加透明</item>
-        <item>新增：更新日志显示</item>
-        <item>新增：星期跟随时间变化</item>
+        <item>说明：该版本为紧急修复版本，修复上一版本一些问题</item>
+        <item>说明：查考试、查成绩、桌面小部件都会有的</item>
         <item> </item>
-        <item>修复：部分机型自定义背景会导致闪退</item>
-        <item>修复：每一次启动时本学期课表显示错误</item>
-        <item>修复：过一段时间后课表数据丢失</item>
-        <item>修复：数据丢失之后无法刷新的问题</item>
-        <item> </item>
-        <item>更新：全新的图标（感谢\@爱吃饭的越越）</item>
-        <item>更新：“Xhu Schedule”更名为“西瓜课表”</item>
-        <item>更新：全新配色以及界面</item>
-        <item>更新：课程的格子修改为圆角矩形，添加间距</item>
-        <item>更新：修改颜色生成算法，生成的颜色看起来更加舒服</item>
-        <item>更新：更改设置界面为官方规范样式</item>
-        <item>更新：修改部分关于信息</item>
+        <item>修复：部分用户数据解析错误导致不显示</item>
+        <item>修复：可以添加同一个账号的bug</item>
+        <item>修复：Android 5.0以下部分用户闪退</item>
+        <item>修复：同步课程数据时错误导致信息提示错误</item>
     </string-array>
 </resources>
