@@ -15,5 +15,6 @@
         <item>修复：可以添加同一个账号的bug</item>
         <item>修复：Android 5.0以下部分用户闪退</item>
         <item>修复：同步课程数据时错误导致信息提示错误</item>
+        <item>修复：Android O上更新后安装问题</item>
     </string-array>
 </resources>

@@ -130,7 +130,7 @@ class DownloadService : IntentService(TAG) {
                         installIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
                         installIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
                         val installFile = if (type == "patch")
-                            File(file.absolutePath + ".apk")
+                            File(getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS).absolutePath + File.separator + "apk" + File.separator + fileName + ".apk")
                         else
                             file
                         val uri = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
