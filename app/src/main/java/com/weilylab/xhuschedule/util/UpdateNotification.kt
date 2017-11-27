@@ -64,6 +64,7 @@ object UpdateNotification {
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setStyle(NotificationCompat.BigTextStyle()
                         .bigText(bigText))
+                .setContentIntent(pendingDownloadAPKIntent)
                 .addAction(NotificationCompat.Action.Builder(R.drawable.ic_stat_update, context.getString(R.string.action_download_apk), pendingDownloadAPKIntent).build())
                 .setAutoCancel(true)
         if (version.lastVersion == context.getString(R.string.app_version_code).toInt())

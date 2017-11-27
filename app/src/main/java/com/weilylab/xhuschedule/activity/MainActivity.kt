@@ -330,21 +330,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     fun updateAllView(week: Int) {
-        /**
-         * =============================================
-         * 为了兼容旧版本，在这里将旧版本的数据做一次清理
-         */
-        if (Settings.isNeedClear) {
-            val colorSharedPreference = getSharedPreferences("course_color", MODE_PRIVATE)
-            colorSharedPreference.all.keys.forEach {
-                colorSharedPreference.edit().remove(it).apply()
-            }
-            Logs.i(TAG, "updateView: 清理完成")
-            Settings.isNeedClear = false
-        }
-        /**
-         * ==============================================
-         */
         studentList.clear()
         studentList.addAll(XhuFileUtil.getStudentsFromFile(File(filesDir.absolutePath + File.separator + "data" + File.separator + "user")))
         if (studentList.size == 0) {
@@ -565,7 +550,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                                 false
                             }
                         }
-                        "6" -> login(student)
+                        else -> login(student)
                     }
                 }
     }
