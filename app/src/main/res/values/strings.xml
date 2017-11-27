@@ -11,6 +11,13 @@
     <string name="navigation_drawer_open" translatable="false">Open navigation drawer</string>
     <string name="navigation_drawer_close" translatable="false">Close navigation drawer</string>
 
+    <string name="exception_time">崩溃时间：%1$s</string>
+    <string name="exception_version">崩溃版本：%1$s_%2$d</string>
+    <string name="exception_sdk">SDK：%1$s_%2$d</string>
+    <string name="exception_vendor">Vendor：%1$s</string>
+    <string name="exception_model">Model：%1$s</string>
+    <string name="exception_message">崩溃详情：\n%1$s</string>
+
     <string name="action_users">当前登陆用户</string>
     <string name="action_tools">工具</string>
     <string name="action_settings">设置</string>
@@ -18,6 +25,7 @@
     <string name="action_sync">数据同步</string>
     <string name="action_download_apk">下载APK</string>
     <string name="action_download_patch">下载增量包</string>
+    <string name="action_feedback">反馈该信息</string>
 
     <string name="prompt_username">用户名</string>
     <string name="prompt_password">密码</string>

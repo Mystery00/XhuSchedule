@@ -10,7 +10,11 @@ package com.weilylab.xhuschedule
 import android.app.Application
 import android.content.Context
 import android.content.Intent
+import android.os.Bundle
+import com.weilylab.xhuschedule.activity.ErrorActivity
+import com.weilylab.xhuschedule.classes.Error
 import com.weilylab.xhuschedule.service.UpdateService
+import vip.mystery0.tools.crashHandler.CatchExceptionListener
 import vip.mystery0.tools.crashHandler.CrashHandler
 import vip.mystery0.tools.logs.Logs
 import java.io.File
@@ -37,6 +41,18 @@ class APP : Application() {
             file.mkdirs()
         CrashHandler.getInstance(this)
                 .setDirectory(file)
+                .sendException(object : CatchExceptionListener {
+                    override fun onException(date: String, file: File, appVersionName: String, appVersionCode: Int, AndroidVersion: String, sdk: Int, vendor: String, model: String, ex: Throwable) {
+                        val error = Error(date, appVersionName, appVersionCode, AndroidVersion, sdk, vendor, model, ex)
+                        val bundle = Bundle()
+                        bundle.putSerializable("file", file)
+                        bundle.putSerializable("error", error)
+                        val intent = Intent(applicationContext, ErrorActivity::class.java)
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                        intent.putExtra("error", bundle)
+                        startActivity(intent)
+                    }
+                })
                 .init()
         startService(Intent(this, UpdateService::class.java))
     }
