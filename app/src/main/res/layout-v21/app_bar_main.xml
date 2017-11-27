@@ -71,6 +71,7 @@
                         android:id="@+id/titleTextView"
                         android:layout_width="wrap_content"
                         android:layout_height="0dp"
+                        android:drawableEnd="@drawable/ic_expand_more"
                         android:gravity="center_vertical"
                         android:padding="@dimen/course_padding"
                         android:textColor="@color/colorWhite"
