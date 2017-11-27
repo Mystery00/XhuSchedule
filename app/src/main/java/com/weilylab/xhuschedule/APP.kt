@@ -32,8 +32,11 @@ class APP : Application() {
     override fun onCreate() {
         super.onCreate()
         Logs.setLevel(Logs.LogLevel.Debug)
+        val file = File(cacheDir.absolutePath + File.separator)
+        if (!file.exists())
+            file.mkdirs()
         CrashHandler.getInstance(this)
-                .setDirectory(cacheDir.absolutePath + File.separator)
+                .setDirectory(file)
                 .init()
         startService(Intent(this, UpdateService::class.java))
     }

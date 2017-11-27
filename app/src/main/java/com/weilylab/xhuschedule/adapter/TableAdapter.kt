@@ -37,9 +37,9 @@ class TableAdapter(private val context: Context,
         holder.linearLayout.removeAllViews()
         val layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, DensityUtil.dip2px(context, 144F))
         holder.linearLayout.layoutParams = layoutParams
-        val linkedList=list[position]
+        val linkedList = list[position]
         linkedList.forEach {
-            addView(holder,it)
+            addView(holder, it)
         }
     }
 
@@ -65,7 +65,10 @@ class TableAdapter(private val context: Context,
             course.color = '#' + ScheduleHelper.getRandomColor()
         }
         val gradientDrawable = courseBackground.background as GradientDrawable
-        gradientDrawable.setColor(Color.parseColor('#' + Integer.toHexString(Settings.customTableOpacity) + course.color.substring(1)))
+        if (course.type == "-1")
+            gradientDrawable.setColor(Color.RED)
+        else
+            gradientDrawable.setColor(Color.parseColor('#' + Integer.toHexString(Settings.customTableOpacity) + course.color.substring(1)))
         view.layoutParams = layoutParams
         view.setOnClickListener {
             ViewUtil.showAlertDialog(context, course, object : InfoChangeListener {
