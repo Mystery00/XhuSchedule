@@ -42,7 +42,8 @@ object ViewUtil {
             }
         }
         colorChooser.adapter = adapter
-        textView.text = course.name
+        val text = course.name + if (course.type == "not") "(非本周)" else ""
+        textView.text =text
         textView.setBackgroundColor(Color.parseColor(course.color))
         editTeacherLayout.text = course.teacher
         val startTime = context.resources.getStringArray(R.array.start_time)

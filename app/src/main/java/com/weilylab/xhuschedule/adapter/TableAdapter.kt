@@ -65,10 +65,11 @@ class TableAdapter(private val context: Context,
             course.color = '#' + ScheduleHelper.getRandomColor()
         }
         val gradientDrawable = courseBackground.background as GradientDrawable
-        if (course.type == "-1")
-            gradientDrawable.setColor(Color.RED)
-        else
-            gradientDrawable.setColor(Color.parseColor('#' + Integer.toHexString(Settings.customTableOpacity) + course.color.substring(1)))
+        when (course.type) {
+            "-1" -> gradientDrawable.setColor(Color.RED)
+            "not"->gradientDrawable.setColor(Color.parseColor("#9ABDBDBD"))
+            else -> gradientDrawable.setColor(Color.parseColor('#' + Integer.toHexString(Settings.customTableOpacity) + course.color.substring(1)))
+        }
         view.layoutParams = layoutParams
         view.setOnClickListener {
             ViewUtil.showAlertDialog(context, course, object : InfoChangeListener {

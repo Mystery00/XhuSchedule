@@ -16,9 +16,37 @@ import kotlin.collections.ArrayList
  * Created by myste.
  */
 object CourseUtil {
+
     fun formatCourses(courses: Array<Course>): ArrayList<LinkedList<Course>> {
+        val firstWeekOfTerm = Settings.firstWeekOfTerm
+        val date = firstWeekOfTerm.split('-')
+        CalendarUtil.startCalendar.set(date[0].toInt(), date[1].toInt(), date[2].toInt(), 0, 0, 0)
+        val currentWeek = CalendarUtil.getWeek()
+        ScheduleHelper.weekIndex = currentWeek
+        return formatCourses(courses, currentWeek)
+    }
+
+    fun formatCourses(courses: Array<Course>, weekIndex: Int): ArrayList<LinkedList<Course>> {
         val tempArray = Array(5, { Array<LinkedList<Course>>(7, { LinkedList() }) })
         courses.forEach {
+            try {
+                var other = false
+                when (it.type) {
+                    "0" -> other = true
+                    "1" -> if (weekIndex % 2 == 1)
+                        other = true
+                    "2" -> if (weekIndex % 2 == 0)
+                        other = true
+                    else -> other = false
+                }
+                val weekArray = it.week.split('-')
+                val startWeek = weekArray[0].toInt()
+                val endWeek = weekArray[1].toInt()
+                if (weekIndex !in startWeek..endWeek || !other)
+                    it.type = "not"
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
             val timeArray = it.time.split('-')
             val startTime = (timeArray[0].toInt() - 1) / 2
             val endTime = (timeArray[1].toInt()) / 2
