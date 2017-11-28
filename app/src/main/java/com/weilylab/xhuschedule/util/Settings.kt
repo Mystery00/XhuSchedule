@@ -52,4 +52,7 @@ object Settings {
     var customTextSize: Int
         set(value) = sharedPreference.edit().putInt("customTextSize", value).apply()
         get() = sharedPreference.getInt("customTextSize", 12)
+    var customTextHeight: Int
+        set(value) = sharedPreference.edit().putInt("customHeightSize", value).apply()
+        get() = sharedPreference.getInt("customHeightSize", 144)
 }

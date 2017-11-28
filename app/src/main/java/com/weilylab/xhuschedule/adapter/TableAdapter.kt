@@ -36,6 +36,7 @@ class TableAdapter(private val context: Context,
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.linearLayout.removeAllViews()
         val layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, DensityUtil.dip2px(context, 144F))
+        layoutParams.height = DensityUtil.dip2px(context, Settings.customTextHeight.toFloat())
         holder.linearLayout.layoutParams = layoutParams
         val linkedList = list[position]
         linkedList.forEach {
@@ -67,7 +68,7 @@ class TableAdapter(private val context: Context,
         val gradientDrawable = courseBackground.background as GradientDrawable
         when (course.type) {
             "-1" -> gradientDrawable.setColor(Color.RED)
-            "not"->gradientDrawable.setColor(Color.parseColor("#9ABDBDBD"))
+            "not" -> gradientDrawable.setColor(Color.parseColor("#9ABDBDBD"))
             else -> gradientDrawable.setColor(Color.parseColor('#' + Integer.toHexString(Settings.customTableOpacity) + course.color.substring(1)))
         }
         view.layoutParams = layoutParams

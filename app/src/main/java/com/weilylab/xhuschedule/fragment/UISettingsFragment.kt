@@ -32,7 +32,6 @@ import android.widget.ImageView
 import android.widget.SeekBar
 import android.widget.TextView
 import android.widget.Toast
-import com.bumptech.glide.Glide
 import com.jrummyapps.android.colorpicker.ColorPreference
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.classes.Course
@@ -65,6 +64,7 @@ class UISettingsFragment : PreferenceFragment() {
     private lateinit var customTodayTextColorPreference: ColorPreference
     private lateinit var customTableTextColorPreference: ColorPreference
     private lateinit var customTextSizePreference: Preference
+    private lateinit var customTextHeightPreference: Preference
     private lateinit var resetPreference: Preference
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -80,6 +80,7 @@ class UISettingsFragment : PreferenceFragment() {
         customTodayTextColorPreference = findPreference(getString(R.string.key_custom_today_text_color)) as ColorPreference
         customTableTextColorPreference = findPreference(getString(R.string.key_custom_table_text_color)) as ColorPreference
         customTextSizePreference = findPreference(getString(R.string.key_custom_text_size))
+        customTextHeightPreference = findPreference(getString(R.string.key_custom_text_height))
         resetPreference = findPreference(getString(R.string.key_reset))
         headerImgPreference.setOnPreferenceClickListener {
             requestType = HEADER_REQUEST_CODE
@@ -254,6 +255,54 @@ class UISettingsFragment : PreferenceFragment() {
                         if (currentProgress + 4 != Settings.customTextSize)
                             ScheduleHelper.isUIChange = true
                         Settings.customTextSize = currentProgress + 4
+                    })
+                    .setNegativeButton(android.R.string.cancel, null)
+                    .show()
+            true
+        }
+        customTextHeightPreference.setOnPreferenceClickListener {
+            val color = ScheduleHelper.getRandomColor()
+            var currentProgress = Settings.customTextHeight
+            val view = View.inflate(activity, R.layout.dialog_custom_text_height, null)
+            val testCourseLayout: ConstraintLayout = view.findViewById(R.id.test_course_layout)
+            val textViewName: TextView = view.findViewById(R.id.textView_name)
+            val textViewTeacher: TextView = view.findViewById(R.id.textView_teacher)
+            val textViewLocation: TextView = view.findViewById(R.id.textView_location)
+            val seekBar: SeekBar = view.findViewById(R.id.seekBar)
+            val textView: TextView = view.findViewById(R.id.textView)
+            val width = (resources.displayMetrics.widthPixels - DensityUtil.dip2px(activity, 32F)) / 7
+            val layoutParams = testCourseLayout.layoutParams
+            layoutParams.width = width
+            layoutParams.height = DensityUtil.dip2px(activity, currentProgress.toFloat())
+            testCourseLayout.layoutParams = layoutParams
+            testCourseLayout.setBackgroundColor(Color.parseColor('#' + color))
+            seekBar.progress = currentProgress
+            val textSize = Settings.customTextSize
+            textViewName.setTextSize(TypedValue.COMPLEX_UNIT_SP, (textSize + 4).toFloat())
+            textViewTeacher.setTextSize(TypedValue.COMPLEX_UNIT_SP, (textSize + 4).toFloat())
+            textViewLocation.setTextSize(TypedValue.COMPLEX_UNIT_SP, (textSize + 4).toFloat())
+            textView.text = getString(R.string.test_course_current_progress_text_size, currentProgress)
+            seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+                override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                    currentProgress = progress
+                    layoutParams.height = DensityUtil.dip2px(activity, progress.toFloat())
+                    testCourseLayout.layoutParams = layoutParams
+                    textView.text = getString(R.string.test_course_current_progress_text_height, progress)
+                }
+
+                override fun onStartTrackingTouch(seekBar: SeekBar?) {
+                }
+
+                override fun onStopTrackingTouch(seekBar: SeekBar?) {
+                }
+            })
+            AlertDialog.Builder(activity)
+                    .setTitle(" ")
+                    .setView(view)
+                    .setPositiveButton(android.R.string.ok, { _, _ ->
+                        if (currentProgress != Settings.customTextHeight)
+                            ScheduleHelper.isUIChange = true
+                        Settings.customTextHeight = currentProgress
                     })
                     .setNegativeButton(android.R.string.cancel, null)
                     .show()
