@@ -42,6 +42,10 @@
         android:title="@string/title_custom_text_size" />
 
     <Preference
+        android:key="@string/key_custom_text_height"
+        android:title="@string/title_custom_text_height" />
+
+    <Preference
         android:key="@string/key_reset"
         android:title="@string/title_reset" />
 

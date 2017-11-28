@@ -302,7 +302,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             if (isRefreshData)
                 return@setOnClickListener
             isTryRefreshData = false
-            isRefreshData = true
             updateAllData()
         }
         titleTextView.setOnClickListener {
@@ -470,6 +469,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         val showList = XhuFileUtil.getStudentsFromFile(showFile)
         if (showList.size == 0)
             showList.addAll(studentList)
+        isRefreshData = true
         showList.forEach {
             array.add(updateData(it))
         }
@@ -781,12 +781,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             val height = layout_week_recycler_view.measuredHeight
             val barLayoutParams = appBar.layoutParams
             Observable.create<Int> { subscriber ->
-                val showDistanceArray = Array(11, { i -> (height / 10F) * i })
+                val showDistanceArray = Array(31, { i -> (height / 30F) * i })
                 if (!isShow)
                     showDistanceArray.reverse()
                 showDistanceArray.forEach {
                     subscriber.onNext(it.toInt())
-                    Thread.sleep(15)
+                    Thread.sleep(8)
                 }
                 subscriber.onComplete()
             }

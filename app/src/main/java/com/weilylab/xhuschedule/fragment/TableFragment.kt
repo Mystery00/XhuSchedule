@@ -21,6 +21,7 @@ import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.adapter.TableAdapter
 import com.weilylab.xhuschedule.classes.Course
 import com.weilylab.xhuschedule.util.CalendarUtil
+import com.weilylab.xhuschedule.util.DensityUtil
 import com.weilylab.xhuschedule.util.Settings
 import io.reactivex.Observable
 import io.reactivex.Observer
@@ -82,6 +83,12 @@ class TableFragment : Fragment() {
             }
             val recyclerView: RecyclerView = rootView!!.findViewById(R.id.recycler_view)
             val linearLayout: LinearLayout = rootView!!.findViewById(R.id.table_nav)
+            for (i in 0 until linearLayout.childCount)
+            {
+                val layoutParams = linearLayout.getChildAt(i).layoutParams
+                layoutParams.height = DensityUtil.dip2px(activity, Settings.customTextHeight.toFloat())
+                linearLayout.getChildAt(i).layoutParams = layoutParams
+            }
             recyclerView.layoutManager = GridLayoutManager(activity, 7, GridLayoutManager.VERTICAL, false)
             recyclerView.adapter = adapter
             recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
@@ -118,8 +125,12 @@ class TableFragment : Fragment() {
                                 else
                                     tableHeader.getChildAt(i).setBackgroundColor(Color.parseColor("#00000000"))
                             }
-                            for (i in 0 until tableNav.childCount)
+                            for (i in 0 until tableNav.childCount) {
+                                val layoutParams = tableNav.getChildAt(i).layoutParams
+                                layoutParams.height = DensityUtil.dip2px(activity, Settings.customTextHeight.toFloat())
+                                tableNav.getChildAt(i).layoutParams = layoutParams
                                 (tableNav.getChildAt(i) as TextView).setTextColor(Settings.customTableTextColor)
+                            }
                         }
                         adapter.notifyDataSetChanged()
                     }
