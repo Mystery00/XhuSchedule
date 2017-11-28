@@ -40,10 +40,8 @@ import com.google.gson.Gson
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.adapter.ViewPagerAdapter
 import com.weilylab.xhuschedule.adapter.WeekAdapter
-import com.weilylab.xhuschedule.classes.ContentRT
-import com.weilylab.xhuschedule.classes.Course
-import com.weilylab.xhuschedule.classes.LoginRT
-import com.weilylab.xhuschedule.classes.Student
+import com.weilylab.xhuschedule.classes.*
+import com.weilylab.xhuschedule.fragment.ProfileFragment
 import com.weilylab.xhuschedule.fragment.TableFragment
 import com.weilylab.xhuschedule.fragment.TodayFragment
 import com.weilylab.xhuschedule.interfaces.RTResponse
@@ -79,6 +77,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     private lateinit var loadingDialog: ZLoadingDialog
     private lateinit var weekAdapter: WeekAdapter
+    private var isTryRefreshData = false
     private var isTryLogin = false
     private var isRefreshData = false
     private var isWeekShow = false
@@ -91,6 +90,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private val todayFragment = TodayFragment.newInstance(todayList)
     private val weekFragment = TableFragment.newInstance(weekList)
     private val allFragment = TableFragment.newInstance(allList)
+    private val profileFragment = ProfileFragment.newInstance(Profile())
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -188,7 +188,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         val viewPagerAdapter = ViewPagerAdapter(supportFragmentManager)
         viewPagerAdapter.addFragment(todayFragment)
         viewPagerAdapter.addFragment(weekFragment)
-        viewPagerAdapter.addFragment(allFragment)
+//        viewPagerAdapter.addFragment(allFragment)
+        viewPagerAdapter.addFragment(profileFragment)
         viewpager.offscreenPageLimit = 2
         viewpager.adapter = viewPagerAdapter
 
@@ -300,6 +301,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         action_sync.setOnClickListener {
             if (isRefreshData)
                 return@setOnClickListener
+            isTryRefreshData = false
             isRefreshData = true
             updateAllData()
         }
@@ -490,6 +492,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     override fun onComplete() {
                         if (contentRT?.rt == "6") {
                             ScheduleHelper.isLogin = false
+                            return
+                        }
+                        if (!isTryRefreshData && contentRT?.rt == "0") {
+                            isTryRefreshData = true
+                            updateAllData()
                             return
                         }
                         loadingDialog.dismiss()
