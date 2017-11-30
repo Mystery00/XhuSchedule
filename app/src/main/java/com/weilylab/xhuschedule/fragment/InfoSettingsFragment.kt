@@ -23,7 +23,7 @@ import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.classes.Update
 import com.weilylab.xhuschedule.interfaces.UpdateResponse
 import com.weilylab.xhuschedule.util.ScheduleHelper
-import com.weilylab.xhuschedule.util.UpdateNotification
+import com.weilylab.xhuschedule.util.notification.UpdateNotification
 import com.zyao89.view.zloading.ZLoadingDialog
 import com.zyao89.view.zloading.Z_TYPE
 import io.reactivex.Observer

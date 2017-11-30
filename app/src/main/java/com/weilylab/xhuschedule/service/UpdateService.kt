@@ -14,7 +14,7 @@ import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.classes.Update
 import com.weilylab.xhuschedule.interfaces.UpdateResponse
 import com.weilylab.xhuschedule.util.ScheduleHelper
-import com.weilylab.xhuschedule.util.UpdateNotification
+import com.weilylab.xhuschedule.util.notification.UpdateNotification
 import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
