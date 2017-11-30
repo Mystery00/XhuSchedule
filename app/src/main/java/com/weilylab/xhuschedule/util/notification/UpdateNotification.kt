@@ -1,11 +1,11 @@
 /*
- * Created by Mystery0 on 17-11-27 上午3:50.
+ * Created by Mystery0 on 17-11-30 上午11:17.
  * Copyright (c) 2017. All Rights reserved.
  *
- * Last modified 17-11-21 下午2:26
+ * Last modified 17-11-28 上午12:24
  */
 
-package com.weilylab.xhuschedule.util
+package com.weilylab.xhuschedule.util.notification
 
 import android.app.Notification
 import android.app.NotificationManager

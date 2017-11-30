@@ -9,6 +9,8 @@ package com.weilylab.xhuschedule.util
 
 import com.weilylab.xhuschedule.APP
 import com.weilylab.xhuschedule.util.cookie.CookieManger
+import com.weilylab.xhuschedule.util.cookie.LoadCookiesInterceptor
+import com.weilylab.xhuschedule.util.cookie.SaveCookiesInterceptor
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
@@ -33,7 +35,8 @@ object ScheduleHelper {
             .connectTimeout(20, TimeUnit.SECONDS)
             .readTimeout(20, TimeUnit.SECONDS)
             .writeTimeout(20, TimeUnit.SECONDS)
-            .cookieJar(CookieManger(APP.getContext()))
+            .addInterceptor(LoadCookiesInterceptor())
+            .addInterceptor(SaveCookiesInterceptor())
             .build()
 
     val tomcatRetrofit = Retrofit.Builder()

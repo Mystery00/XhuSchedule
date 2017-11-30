@@ -8,37 +8,24 @@
 package com.weilylab.xhuschedule.util.cookie
 
 import android.content.Context
+import com.weilylab.xhuschedule.APP
 
-import okhttp3.Cookie
-import okhttp3.CookieJar
-import okhttp3.HttpUrl
-import vip.mystery0.tools.logs.Logs
+object CookieManger {
+    private val COOKIE_PREFS = "cookies"
+    private val cookiePreferences = APP.getContext().getSharedPreferences(COOKIE_PREFS, Context.MODE_PRIVATE)
 
-class CookieManger(context: Context) : CookieJar {
-    init {
-        if (cookieStore == null)
-            cookieStore = PersistentCookieStore(context)
+    fun putCookie(username: String, host: String, cookie: String?) {
+        val name = getCookieToken(username, host)
+        cookiePreferences.edit()
+                .putString(name, cookie)
+                .apply()
     }
 
-    override fun saveFromResponse(url: HttpUrl, cookies: List<Cookie>) {
-        val username = url.queryParameter("username")
-        if (cookies.isNotEmpty() && username != null) {
-            for (item in cookies)
-                cookieStore!!.add(username, item)
-        }
+    fun getCookie(username: String, host: String): String? {
+        val name = getCookieToken(username, host)
 
+        return cookiePreferences.getString(name, null)
     }
 
-    override fun loadForRequest(url: HttpUrl): List<Cookie> {
-        val username = url.queryParameter("username")
-        return if (username != null)
-            cookieStore!![username]
-        else
-            ArrayList()
-    }
-
-    companion object {
-        private var cookieStore: PersistentCookieStore? = null
-    }
-
+    private fun getCookieToken(username: String, host: String): String = username + '@' + host
 }
