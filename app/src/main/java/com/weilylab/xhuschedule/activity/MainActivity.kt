@@ -41,7 +41,6 @@ import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.adapter.ViewPagerAdapter
 import com.weilylab.xhuschedule.adapter.WeekAdapter
 import com.weilylab.xhuschedule.classes.*
-import com.weilylab.xhuschedule.fragment.ProfileFragment
 import com.weilylab.xhuschedule.fragment.TableFragment
 import com.weilylab.xhuschedule.fragment.TodayFragment
 import com.weilylab.xhuschedule.interfaces.CourseService
@@ -85,12 +84,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private var isDataNew = false
     private var studentList = ArrayList<Student>()
     private var weekList = ArrayList<LinkedList<Course>>()
-    private var allList = ArrayList<LinkedList<Course>>()
+//    private var allList = ArrayList<LinkedList<Course>>()
     private val todayList = ArrayList<Course>()
     private val todayFragment = TodayFragment.newInstance(todayList)
     private val weekFragment = TableFragment.newInstance(weekList)
-    private val allFragment = TableFragment.newInstance(allList)
-    private val profileFragment = ProfileFragment()
+//    private val allFragment = TableFragment.newInstance(allList)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -189,15 +187,14 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         viewPagerAdapter.addFragment(todayFragment)
         viewPagerAdapter.addFragment(weekFragment)
 //        viewPagerAdapter.addFragment(allFragment)
-        viewPagerAdapter.addFragment(profileFragment)
-        viewpager.offscreenPageLimit = 2
+//        viewpager.offscreenPageLimit = 2
         viewpager.adapter = viewPagerAdapter
 
         studentList.clear()
         studentList.addAll(XhuFileUtil.getStudentsFromFile(File(filesDir.absolutePath + File.separator + "data" + File.separator + "user")))
 
         val profile = XhuFileUtil.getProfileFromFile(File(filesDir.absolutePath + File.separator + "data" + File.separator + "profile"))
-        profileFragment.setProfile(profile)
+        setProfile(profile)
 
         weekAdapter = WeekAdapter(this, 1)
         weekAdapter.setWeekChangeListener(object : WeekChangeListener {
@@ -274,7 +271,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             when (item.itemId) {
                 R.id.bottom_nav_today -> viewpager.currentItem = 0
                 R.id.bottom_nav_week -> viewpager.currentItem = 1
-                R.id.bottom_nav_all -> viewpager.currentItem = 2
+//                R.id.bottom_nav_all -> viewpager.currentItem = 2
             }
             true
         }
@@ -312,6 +309,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
     }
 
+    private fun setProfile(profile: Profile) {
+
+    }
+
     private fun chooseImg() {
         startActivityForResult(Intent(Intent.ACTION_PICK)
                 .setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*"),
@@ -342,7 +343,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             finish()
             return
         }
-        allList.clear()
+//        allList.clear()
         weekList.clear()
         todayList.clear()
         ScheduleHelper.isLogin = true
@@ -384,16 +385,16 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                             else
                                 bottomNavigationView.menu.findItem(R.id.bottom_nav_today).setIcon(R.drawable.ic_sentiment_very_satisfied)
                             showList.forEach {
-                                val tempAllList = CourseUtil.mergeCourses(allList, it.allCourses)
-                                allList.clear()
-                                allList.addAll(tempAllList)
+//                                val tempAllList = CourseUtil.mergeCourses(allList, it.allCourses)
+//                                allList.clear()
+//                                allList.addAll(tempAllList)
                                 val tempWeekList = CourseUtil.mergeCourses(weekList, it.weekCourses)
                                 weekList.clear()
                                 weekList.addAll(tempWeekList)
                                 todayList.addAll(it.todayCourses)
                             }
                             weekFragment.refreshData()
-                            allFragment.refreshData()
+//                            allFragment.refreshData()
                             todayFragment.refreshData()
                         } else
                             updateAllData()
@@ -437,13 +438,15 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 return@create
             }
             ScheduleHelper.isCookieAvailable = true
-            val allArray = CourseUtil.formatCourses(XhuFileUtil.getCoursesFromFile(this@MainActivity, oldFile))
-            student.allCourses.clear()
-            student.allCourses.addAll(allArray)
+//            val allArray = CourseUtil.formatCourses(XhuFileUtil.getCoursesFromFile(this@MainActivity, oldFile))
+//            student.allCourses.clear()
+//            student.allCourses.addAll(allArray)
             val weekArray = if (week != -1)
-                CourseUtil.getWeekCourses(XhuFileUtil.getCoursesFromFile(this@MainActivity, oldFile), week)
+//                CourseUtil.getWeekCourses(XhuFileUtil.getCoursesFromFile(this@MainActivity, oldFile), week)
+                CourseUtil.formatCourses(XhuFileUtil.getCoursesFromFile(this@MainActivity, oldFile), week)
             else
-                CourseUtil.getWeekCourses(XhuFileUtil.getCoursesFromFile(this@MainActivity, oldFile))
+//                CourseUtil.getWeekCourses(XhuFileUtil.getCoursesFromFile(this@MainActivity, oldFile))
+                CourseUtil.formatCourses(XhuFileUtil.getCoursesFromFile(this@MainActivity, oldFile))
             student.weekCourses.clear()
             student.weekCourses.addAll(weekArray)
             val todayArray = CourseUtil.getTodayCourses(XhuFileUtil.getCoursesFromFile(this@MainActivity, oldFile))
@@ -465,7 +468,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             return
         }
         getProfile(studentList[0])
-        allList.clear()
+//        allList.clear()
         weekList.clear()
         todayList.clear()
         val array = ArrayList<Observable<ContentRT>>()
@@ -539,7 +542,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 .subscribe(object : Observer<StudentInfoRT> {
                     private var profile = Profile()
                     override fun onComplete() {
-                        profileFragment.setProfile(profile)
+//                        profileFragment.setProfile(profile)
                     }
 
                     override fun onError(e: Throwable) {
@@ -782,7 +785,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 .targets(
                         TapTarget.forView(bottomNavigationView.findViewById(R.id.bottom_nav_today), getString(R.string.showcase_today)),
                         TapTarget.forView(bottomNavigationView.findViewById(R.id.bottom_nav_week), getString(R.string.showcase_week)),
-                        TapTarget.forView(bottomNavigationView.findViewById(R.id.bottom_nav_all), getString(R.string.showcase_all)),
+//                        TapTarget.forView(bottomNavigationView.findViewById(R.id.bottom_nav_all), getString(R.string.showcase_all)),
                         TapTarget.forView(action_sync, getString(R.string.showcase_sync)))
                 .continueOnCancel(true)
                 .considerOuterCircleCanceled(true)
