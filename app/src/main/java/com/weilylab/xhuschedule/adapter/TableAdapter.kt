@@ -68,7 +68,12 @@ class TableAdapter(private val context: Context,
         val gradientDrawable = courseBackground.background as GradientDrawable
         when (course.type) {
             "-1" -> gradientDrawable.setColor(Color.RED)
-            "not" -> gradientDrawable.setColor(Color.parseColor("#9ABDBDBD"))
+            "not" -> {
+                textViewName.setTextColor(Color.GRAY)
+                textViewTeacher.setTextColor(Color.GRAY)
+                textViewLocation.setTextColor(Color.GRAY)
+                gradientDrawable.setColor(Color.parseColor("#9AEEEEEE"))
+            }
             else -> gradientDrawable.setColor(Color.parseColor('#' + Integer.toHexString(Settings.customTableOpacity) + course.color.substring(1)))
         }
         view.layoutParams = layoutParams

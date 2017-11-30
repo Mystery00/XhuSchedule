@@ -20,10 +20,10 @@
         android:icon="@drawable/ic_week"
         android:title="@string/nav_week"
         app:showAsAction="ifRoom" />
-    <item
-        android:id="@+id/bottom_nav_all"
-        android:enabled="true"
-        android:icon="@drawable/ic_all"
-        android:title="@string/nav_all"
-        app:showAsAction="ifRoom" />
+    <!--<item-->
+        <!--android:id="@+id/bottom_nav_all"-->
+        <!--android:enabled="true"-->
+        <!--android:icon="@drawable/ic_all"-->
+        <!--android:title="@string/nav_all"-->
+        <!--app:showAsAction="ifRoom" />-->
 </menu>
