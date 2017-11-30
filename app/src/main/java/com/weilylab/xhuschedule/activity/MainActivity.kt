@@ -44,7 +44,7 @@ import com.weilylab.xhuschedule.classes.*
 import com.weilylab.xhuschedule.fragment.ProfileFragment
 import com.weilylab.xhuschedule.fragment.TableFragment
 import com.weilylab.xhuschedule.fragment.TodayFragment
-import com.weilylab.xhuschedule.interfaces.RTResponse
+import com.weilylab.xhuschedule.interfaces.CourseService
 import com.weilylab.xhuschedule.listener.WeekChangeListener
 import com.weilylab.xhuschedule.util.*
 import com.yalantis.ucrop.UCrop
@@ -90,7 +90,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private val todayFragment = TodayFragment.newInstance(todayList)
     private val weekFragment = TableFragment.newInstance(weekList)
     private val allFragment = TableFragment.newInstance(allList)
-    private val profileFragment = ProfileFragment.newInstance(Profile())
+    private val profileFragment = ProfileFragment()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -195,6 +195,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         studentList.clear()
         studentList.addAll(XhuFileUtil.getStudentsFromFile(File(filesDir.absolutePath + File.separator + "data" + File.separator + "user")))
+
+        val profile = XhuFileUtil.getProfileFromFile(File(filesDir.absolutePath + File.separator + "data" + File.separator + "profile"))
+        profileFragment.setProfile(profile)
 
         weekAdapter = WeekAdapter(this, 1)
         weekAdapter.setWeekChangeListener(object : WeekChangeListener {
@@ -461,6 +464,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             finish()
             return
         }
+        getProfile(studentList[0])
         allList.clear()
         weekList.clear()
         todayList.clear()
@@ -529,13 +533,36 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 })
     }
 
+    private fun getProfile(student: Student) {
+        student.getInfo()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(object : Observer<StudentInfoRT> {
+                    private var profile = Profile()
+                    override fun onComplete() {
+                        profileFragment.setProfile(profile)
+                    }
+
+                    override fun onError(e: Throwable) {
+                        e.printStackTrace()
+                    }
+
+                    override fun onNext(t: StudentInfoRT) {
+                        profile.map(t)
+                    }
+
+                    override fun onSubscribe(d: Disposable) {
+                        Logs.i(TAG, "onSubscribe: ")
+                    }
+                })
+    }
+
     private fun updateData(student: Student): Observable<ContentRT> {
         val parentFile = File(filesDir.absolutePath + File.separator + "caches/")
         if (!parentFile.exists())
             parentFile.mkdirs()
         val base64Name = XhuFileUtil.filterString(Base64.encodeToString(student.username.toByteArray(), Base64.DEFAULT))
         return ScheduleHelper.tomcatRetrofit
-                .create(RTResponse::class.java)
+                .create(CourseService::class.java)
                 .getCourses(student.username)
                 .subscribeOn(Schedulers.newThread())
                 .unsubscribeOn(Schedulers.newThread())

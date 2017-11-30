@@ -10,11 +10,23 @@ package com.weilylab.xhuschedule.classes
 import java.io.Serializable
 
 class Profile : Serializable {
-    lateinit var number: String
-    lateinit var name: String
-    lateinit var college: String
-    lateinit var professional: String
-    lateinit var `class`: String
-    lateinit var grade: String
-    lateinit var direction: String
+    var profession = ""
+    var no = ""
+    var classname = ""
+    var sex = ""
+    var grade = ""
+    var name = ""
+    var institute = ""
+    var direction = ""
+
+    fun map(studentInfoRT: StudentInfoRT) {
+        profession = studentInfoRT.profession
+        no = studentInfoRT.no
+        classname = studentInfoRT.classname
+        sex = studentInfoRT.sex
+        grade = studentInfoRT.grade
+        name = studentInfoRT.name
+        institute = studentInfoRT.institute
+        direction = studentInfoRT.direction
+    }
 }

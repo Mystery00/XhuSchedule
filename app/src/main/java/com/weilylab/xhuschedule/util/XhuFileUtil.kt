@@ -9,7 +9,9 @@ package com.weilylab.xhuschedule.util
 
 import android.content.Context
 import com.weilylab.xhuschedule.classes.Course
+import com.weilylab.xhuschedule.classes.Profile
 import com.weilylab.xhuschedule.classes.Student
+import com.weilylab.xhuschedule.classes.StudentInfoRT
 import java.io.*
 import java.math.BigInteger
 import java.nio.channels.FileChannel
@@ -101,6 +103,19 @@ object XhuFileUtil {
         } catch (e: Exception) {
             e.printStackTrace()
             return ArrayList()
+        }
+    }
+
+    fun getProfileFromFile(file: File): Profile {
+        try {
+            if (!file.exists())
+                return Profile()
+            val objectInputStream = ObjectInputStream(BufferedInputStream(FileInputStream(file)))
+            @Suppress("UNCHECKED_CAST")
+            return objectInputStream.readObject() as Profile
+        } catch (e: Exception) {
+            e.printStackTrace()
+            return Profile()
         }
     }
 

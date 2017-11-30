@@ -16,13 +16,9 @@ import retrofit2.http.*
  * Created by myste.
  */
 
-interface RTResponse {
+interface CourseService {
 
     @FormUrlEncoded
     @POST("/course/Course/getCourses")
     fun getCourses(@Field("username") username: String): Observable<ResponseBody>
-
-    @FormUrlEncoded
-    @POST("/course/Course/autoLogin")
-    fun autoLogin(@Field("username") username: String, @Field("password") password: String): Observable<ResponseBody>
 }
