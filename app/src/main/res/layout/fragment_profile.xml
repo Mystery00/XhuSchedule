@@ -60,7 +60,7 @@
             app:layout_constraintTop_toBottomOf="@+id/textView_student_name" />
 
         <TextView
-            android:id="@+id/textView_student_college"
+            android:id="@+id/textView_student_institute"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/profile_text_margin_top"
@@ -81,10 +81,10 @@
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView_student_college" />
+            app:layout_constraintTop_toBottomOf="@+id/textView_student_institute" />
 
         <TextView
-            android:id="@+id/textView_student_class"
+            android:id="@+id/textView_student_classname"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/profile_text_margin_top"
@@ -105,7 +105,7 @@
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView_student_class" />
+            app:layout_constraintTop_toBottomOf="@+id/textView_student_classname" />
 
         <TextView
             android:id="@+id/textView_student_direction"

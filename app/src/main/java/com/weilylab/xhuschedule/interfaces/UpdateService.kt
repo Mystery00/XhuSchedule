@@ -14,7 +14,7 @@ import retrofit2.http.*
 /**
  * Created by myste.
  */
-interface UpdateResponse {
+interface UpdateService {
     @Streaming
     @FormUrlEncoded
     @POST("/XhuSchedule/interface/checkUpdate.php")

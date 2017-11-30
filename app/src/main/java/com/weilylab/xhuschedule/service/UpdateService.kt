@@ -12,7 +12,7 @@ import android.content.Intent
 import com.google.gson.Gson
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.classes.Update
-import com.weilylab.xhuschedule.interfaces.UpdateResponse
+import com.weilylab.xhuschedule.interfaces.UpdateService
 import com.weilylab.xhuschedule.util.ScheduleHelper
 import com.weilylab.xhuschedule.util.notification.UpdateNotification
 import io.reactivex.Observer
@@ -24,7 +24,7 @@ import java.io.InputStreamReader
 class UpdateService : IntentService("UpdateService") {
     override fun onHandleIntent(intent: Intent?) {
         ScheduleHelper.phpRetrofit
-                .create(UpdateResponse::class.java)
+                .create(UpdateService::class.java)
                 .checkUpdateCall(getString(R.string.app_version_code).toInt())
                 .subscribeOn(Schedulers.newThread())
                 .unsubscribeOn(Schedulers.newThread())
