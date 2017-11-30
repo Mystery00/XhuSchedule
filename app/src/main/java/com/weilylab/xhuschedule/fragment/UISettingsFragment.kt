@@ -318,6 +318,7 @@ class UISettingsFragment : PreferenceFragment() {
                     .remove("customTableTextColor")
                     .remove("customTodayTextColor")
                     .remove("customTextSize")
+                    .remove("customTextHeight")
                     .apply()
             ScheduleHelper.isImageChange = true
             ScheduleHelper.isUIChange = true
