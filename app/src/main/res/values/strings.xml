@@ -65,7 +65,7 @@
 
     <string name="nav_today">今日</string>
     <string name="nav_week">本周</string>
-    <string name="nav_all">本学期</string>
+    <string name="nav_profile">个人</string>
 
     <string name="table_header1">周一</string>
     <string name="table_header2">周二</string>
@@ -101,7 +101,6 @@
 
     <string name="showcase_today">在这里，您可以查看当天的课程</string>
     <string name="showcase_week">在这里，您可以查看本周的课程</string>
-    <string name="showcase_all">在这里，您可以查看本学期的课程</string>
     <string name="showcase_sync">点击这里，可以从教务系统重新同步数据</string>
     <string name="showcase_swipe_refresh">您可以通过下拉来随时刷新缓存</string>
 
