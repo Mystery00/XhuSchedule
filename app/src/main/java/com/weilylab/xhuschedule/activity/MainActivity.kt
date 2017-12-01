@@ -167,7 +167,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         if (ScheduleHelper.isUIChange) {
             loadingDialog.show()
             studentList.clear()
-//            studentList.addAll(XhuFileUtil.getStudentsFromFile(File(filesDir.absolutePath + File.separator + "data" + File.separator + "user")))
             studentList.addAll(XhuFileUtil.getArrayFromFile(File(filesDir.absolutePath + File.separator + "data" + File.separator + "user"), Student::class.java))
             titleTextView.setTextColor(Settings.customTableTextColor)
             updateAllView()
@@ -194,7 +193,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         studentList.clear()
         profileList.clear()
-//        studentList.addAll(XhuFileUtil.getStudentsFromFile(File(filesDir.absolutePath + File.separator + "data" + File.separator + "user")))
         studentList.addAll(XhuFileUtil.getArrayFromFile(File(filesDir.absolutePath + File.separator + "data" + File.separator + "user"), Student::class.java))
         studentList.forEach {
             if (it.profile != null)
@@ -338,7 +336,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     fun updateAllView(week: Int) {
         studentList.clear()
-//        studentList.addAll(XhuFileUtil.getStudentsFromFile(File(filesDir.absolutePath + File.separator + "data" + File.separator + "user")))
         studentList.addAll(XhuFileUtil.getArrayFromFile(File(filesDir.absolutePath + File.separator + "data" + File.separator + "user"), Student::class.java))
         if (studentList.size == 0) {
             ScheduleHelper.isLogin = false
@@ -351,7 +348,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         ScheduleHelper.isLogin = true
         val array = ArrayList<Observable<Boolean>>()
         val showFile = File(filesDir.absolutePath + File.separator + "data" + File.separator + "show_user")
-//        val showList = XhuFileUtil.getStudentsFromFile(showFile)
         val showList = XhuFileUtil.getArrayListFromFile(showFile, Student::class.java)
         if (showList.size == 0)
             showList.addAll(studentList)
@@ -456,7 +452,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private fun updateAllData() {
         loadingDialog.show()
         studentList.clear()
-//        studentList.addAll(XhuFileUtil.getStudentsFromFile(File(filesDir.absolutePath + File.separator + "data" + File.separator + "user")))
         studentList.addAll(XhuFileUtil.getArrayFromFile(File(filesDir.absolutePath + File.separator + "data" + File.separator + "user"), Student::class.java))
         if (studentList.size == 0) {
             ScheduleHelper.isLogin = false
@@ -469,7 +464,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         todayList.clear()
         val array = ArrayList<Observable<ContentRT>>()
         val showFile = File(filesDir.absolutePath + File.separator + "data" + File.separator + "show_user")
-//        val showList = XhuFileUtil.getStudentsFromFile(showFile)
         val showList = XhuFileUtil.getArrayListFromFile(showFile, Student::class.java)
         if (showList.size == 0)
             showList.addAll(studentList)
@@ -825,11 +819,19 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
                         override fun onComplete() {
                             isWeekShow = isShow
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                                val drawable = if (isWeekShow)
+                            val drawable = if (isWeekShow)
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                                     resources.getDrawable(R.drawable.ic_expand_less, null)
-                                else
+                                } else {
+                                    null
+                                }
+                            else
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                                     resources.getDrawable(R.drawable.ic_expand_more, null)
+                                } else {
+                                    null
+                                }
+                            if (drawable != null) {
                                 drawable.setBounds(0, 0, drawable.minimumWidth, drawable.minimumHeight)
                                 titleTextView.setCompoundDrawables(null, null, drawable, null)
                             }
