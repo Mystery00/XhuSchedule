@@ -14,6 +14,7 @@ import android.os.Bundle
 import android.preference.Preference
 import android.preference.PreferenceFragment
 import android.support.v4.content.ContextCompat
+import android.support.v7.app.AlertDialog
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -39,6 +40,7 @@ import java.net.UnknownHostException
 class InfoSettingsFragment : PreferenceFragment() {
     private lateinit var loadingDialog: ZLoadingDialog
     private lateinit var feedbackPreference: Preference
+    private lateinit var updateLogPreference: Preference
     private lateinit var checkUpdatePreference: Preference
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -55,6 +57,7 @@ class InfoSettingsFragment : PreferenceFragment() {
                 .setLoadingColor(ContextCompat.getColor(activity, R.color.colorAccent))
                 .setHintTextColor(ContextCompat.getColor(activity, R.color.colorAccent))
         feedbackPreference = findPreference(getString(R.string.key_feedback))
+        updateLogPreference = findPreference(getString(R.string.key_update_log))
         checkUpdatePreference = findPreference(getString(R.string.key_check_update))
         feedbackPreference.setOnPreferenceClickListener {
             val stringBuilder = StringBuilder()
@@ -70,6 +73,17 @@ class InfoSettingsFragment : PreferenceFragment() {
             data.putExtra(Intent.EXTRA_SUBJECT, "西瓜课表意见反馈")
             data.putExtra(Intent.EXTRA_TEXT, stringBuilder.toString())
             startActivity(data)
+            true
+        }
+        updateLogPreference.setOnPreferenceClickListener {
+            var message = ""
+            resources.getStringArray(R.array.update_list)
+                    .forEach { message += it + '\n' }
+            AlertDialog.Builder(activity)
+                    .setTitle(getString(R.string.dialog_title_update_log, getString(R.string.app_version_name) + '-' + getString(R.string.app_version_code)))
+                    .setMessage(message)
+                    .setPositiveButton(android.R.string.ok, null)
+                    .show()
             true
         }
         checkUpdatePreference.setOnPreferenceClickListener {
