@@ -136,7 +136,6 @@ class LoginActivity : AppCompatActivity() {
                                 ScheduleHelper.isFromLogin = true
                                 val userFile = File(filesDir.absolutePath + File.separator + "data" + File.separator + "user")
                                 student.name = loginRT?.name!!
-//                                val userList = XhuFileUtil.getStudentsFromFile(userFile)
                                 val userList = XhuFileUtil.getArrayListFromFile(userFile,Student::class.java)
                                 var result = false
                                 userList.forEach {
