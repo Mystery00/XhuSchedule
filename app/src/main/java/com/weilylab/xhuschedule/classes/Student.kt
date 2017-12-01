@@ -46,6 +46,9 @@ class Student : Serializable {
                 .subscribeOn(Schedulers.newThread())
                 .unsubscribeOn(Schedulers.newThread())
                 .map { responseBody -> Gson().fromJson(InputStreamReader(responseBody.byteStream()), StudentInfoRT::class.java) }
+                .doOnNext { studentInfoRT ->
+                    profile = Profile().map(studentInfoRT)
+                }
     }
 
 }
