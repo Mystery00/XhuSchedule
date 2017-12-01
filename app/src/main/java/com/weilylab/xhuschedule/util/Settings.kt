@@ -19,6 +19,9 @@ object Settings {
     var firstWeekOfTerm: String
         set(value) = sharedPreference.edit().putString("firstWeekOfTerm", value).apply()
         get() = sharedPreference.getString("firstWeekOfTerm", "2017-8-4")
+    var isShowNot: Boolean
+        set(value) = sharedPreference.edit().putBoolean("isShowNot", value).apply()
+        get() = sharedPreference.getBoolean("isShowNot", true)
     var isFirstRun: Boolean
         set(value) = sharedPreference.edit().putBoolean("isFirstRun", value).apply()
         get() = sharedPreference.getBoolean("isFirstRun", true)

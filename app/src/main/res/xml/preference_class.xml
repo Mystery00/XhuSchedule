@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Created by Mystery0 on 17-11-27 上午3:50.
   ~ Copyright (c) 2017. All Rights reserved.
   ~
@@ -11,5 +10,9 @@
     <Preference
         android:key="@string/key_first_day"
         android:title="@string/title_first_day" />
+
+    <SwitchPreference
+        android:key="@string/key_show_not"
+        android:title="@string/title_show_not" />
 
 </PreferenceScreen>

@@ -10,12 +10,14 @@ package com.weilylab.xhuschedule.fragment
 import android.os.Bundle
 import android.preference.Preference
 import android.preference.PreferenceFragment
+import android.preference.SwitchPreference
 import android.support.design.widget.Snackbar
 import android.support.v7.app.AlertDialog
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.weilylab.xhuschedule.R
+import com.weilylab.xhuschedule.util.ScheduleHelper
 import com.weilylab.xhuschedule.util.Settings
 import com.weilylab.xhuschedule.view.CustomDatePicker
 import java.util.*
@@ -25,6 +27,7 @@ import java.util.*
  */
 class ClassSettingsFragment : PreferenceFragment() {
     private lateinit var firstDayPreference: Preference
+    private lateinit var showNotPreference: SwitchPreference
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,8 +36,10 @@ class ClassSettingsFragment : PreferenceFragment() {
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View {
         firstDayPreference = findPreference(getString(R.string.key_first_day))
+        showNotPreference = findPreference(getString(R.string.key_show_not)) as SwitchPreference
         val date = Settings.firstWeekOfTerm.split('-')
         firstDayPreference.summary = date[0] + '-' + (date[1].toInt() + 1) + '-' + date[2]
+        showNotPreference.isChecked = Settings.isShowNot
         firstDayPreference.setOnPreferenceClickListener {
             val calendar = Calendar.getInstance(Locale.CHINA)
             calendar.set(date[0].toInt(), date[1].toInt(), date[2].toInt(), 0, 0, 0)
@@ -67,6 +72,11 @@ class ClassSettingsFragment : PreferenceFragment() {
                     }
                 }
             }
+            true
+        }
+        showNotPreference.setOnPreferenceChangeListener { _, _ ->
+            Settings.isShowNot = !Settings.isShowNot
+            ScheduleHelper.isUIChange = true
             true
         }
         return super.onCreateView(inflater, container, savedInstanceState)

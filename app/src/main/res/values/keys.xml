@@ -9,6 +9,8 @@
     <string name="screen_category_class">课程设置</string>
     <string name="key_first_day">key_first_day</string>
     <string name="title_first_day">设置本学期开始时间</string>
+    <string name="key_show_not">key_show_not</string>
+    <string name="title_show_not">显示非本周课程</string>
 
     <string name="screen_category_account">账号管理</string>
     <string name="title_current_account">当前已登录账号</string>
