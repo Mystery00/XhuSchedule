@@ -9,13 +9,11 @@ package com.weilylab.xhuschedule.fragment
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import com.weilylab.xhuschedule.R
-import com.weilylab.xhuschedule.adapter.ProfileAdapter
 import com.weilylab.xhuschedule.classes.Profile
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -27,39 +25,33 @@ import io.reactivex.schedulers.Schedulers
  */
 class ProfileFragment : Fragment() {
     companion object {
-        fun newInstance(list: ArrayList<Profile>): ProfileFragment {
+        fun newInstance(profile: Profile): ProfileFragment {
             val bundle = Bundle()
-            bundle.putSerializable("list", list)
+            bundle.putSerializable("profile", profile)
             val fragment = ProfileFragment()
             fragment.arguments = bundle
             return fragment
         }
     }
 
-    private lateinit var list: ArrayList<Profile>
-    private lateinit var adapter: ProfileAdapter
+    private var profile: Profile? = null
     private var isReady = false
     private var rootView: View? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        @Suppress("UNCHECKED_CAST")
-        list = arguments.getSerializable("list") as ArrayList<Profile>
-        adapter = ProfileAdapter(activity, list)
+        profile = arguments.getSerializable("profile") as Profile
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         if (rootView == null) {
             rootView = inflater.inflate(R.layout.fragment_profile, container, false)
-            val recyclerView: RecyclerView = rootView!!.findViewById(R.id.recycler_view)
-            recyclerView.layoutManager = LinearLayoutManager(context)
-            recyclerView.adapter = adapter
         }
         isReady = true
         return rootView
     }
 
-    fun refreshData() {
+    fun setProfile(profile: Profile) {
         Observable.create<Boolean> { subscriber ->
             while (true) {
                 if (isReady)
@@ -68,17 +60,20 @@ class ProfileFragment : Fragment() {
             }
             subscriber.onComplete()
         }
-                .subscribeOn(Schedulers.io())
+                .subscribeOn(Schedulers.newThread())
+                .unsubscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(object : DisposableObserver<Boolean>() {
                     override fun onComplete() {
-                        adapter.notifyDataSetChanged()
-                    }
-
-                    override fun onError(e: Throwable) {
+                        rootView?.findViewById<TextView>(R.id.textView_title)?.text = getString(R.string.profile_title, profile.no, profile.name)
+                        rootView?.findViewById<TextView>(R.id.textView_professional)?.text = getString(R.string.profile_professional, profile.profession)
+                        rootView?.findViewById<TextView>(R.id.textView_classname)?.text = getString(R.string.profile_classname, profile.classname)
                     }
 
                     override fun onNext(t: Boolean) {
+                    }
+
+                    override fun onError(e: Throwable) {
                     }
                 })
     }

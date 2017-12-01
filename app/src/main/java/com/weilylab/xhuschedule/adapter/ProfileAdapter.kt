@@ -48,12 +48,12 @@ class ProfileAdapter(private val context: Context,
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val profile = list[position]
         holder.header.text = context.getString(R.string.profile_title, profile.no, profile.name)
-        holder.sex.text = context.getString(R.string.profile_sex, profile.sex)
-        holder.institute.text = context.getString(R.string.profile_institute, profile.institute)
-        holder.professional.text = context.getString(R.string.profile_professional, profile.profession)
-        holder.classname.text = context.getString(R.string.profile_classname, profile.classname)
-        holder.grade.text = context.getString(R.string.profile_grade, profile.grade)
-        holder.direction.text = context.getString(R.string.profile_direction, profile.direction)
+//        holder.sex.text = context.getString(R.string.profile_sex, profile.sex)
+//        holder.institute.text = context.getString(R.string.profile_institute, profile.institute)
+//        holder.professional.text = context.getString(R.string.profile_professional, profile.profession)
+//        holder.classname.text = context.getString(R.string.profile_classname, profile.classname)
+//        holder.grade.text = context.getString(R.string.profile_grade, profile.grade)
+//        holder.direction.text = context.getString(R.string.profile_direction, profile.direction)
         holder.foldLayout.post {
             if (maxHeight == 0) {
                 maxHeight = holder.foldLayout.measuredHeight
@@ -105,8 +105,8 @@ class ProfileAdapter(private val context: Context,
         var header: TextView = itemView.findViewById(R.id.textView_student_header)
         var sex: TextView = itemView.findViewById(R.id.textView_student_sex)
         var institute: TextView = itemView.findViewById(R.id.textView_student_institute)
-        var professional: TextView = itemView.findViewById(R.id.textView_student_professional)
-        var classname: TextView = itemView.findViewById(R.id.textView_student_classname)
+        var professional: TextView = itemView.findViewById(R.id.textView_professional)
+        var classname: TextView = itemView.findViewById(R.id.textView_classname)
         var grade: TextView = itemView.findViewById(R.id.textView_student_grade)
         var direction: TextView = itemView.findViewById(R.id.textView_student_direction)
     }

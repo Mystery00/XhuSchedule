@@ -11,9 +11,6 @@ import android.content.Context
 import com.google.gson.Gson
 import com.google.gson.JsonParser
 import com.weilylab.xhuschedule.classes.Course
-import com.weilylab.xhuschedule.classes.Profile
-import com.weilylab.xhuschedule.classes.Student
-import com.weilylab.xhuschedule.classes.StudentInfoRT
 import java.io.*
 import java.math.BigInteger
 import java.nio.channels.FileChannel
@@ -127,32 +124,6 @@ object XhuFileUtil {
             return emptyArray()
         }
     }
-//
-//    fun getStudentsFromFile(file: File): ArrayList<Student> {
-//        try {
-//            if (!file.exists())
-//                return ArrayList()
-//            val objectInputStream = ObjectInputStream(BufferedInputStream(FileInputStream(file)))
-//            @Suppress("UNCHECKED_CAST")
-//            return objectInputStream.readObject() as ArrayList<Student>
-//        } catch (e: Exception) {
-//            e.printStackTrace()
-//            return ArrayList()
-//        }
-//    }
-//
-//    fun getProfileFromFile(file: File): Profile {
-//        try {
-//            if (!file.exists())
-//                return Profile()
-//            val objectInputStream = ObjectInputStream(BufferedInputStream(FileInputStream(file)))
-//            @Suppress("UNCHECKED_CAST")
-//            return objectInputStream.readObject() as Profile
-//        } catch (e: Exception) {
-//            e.printStackTrace()
-//            return Profile()
-//        }
-//    }
 
     fun getMD5(file: File): String? {
         var value: String? = null
