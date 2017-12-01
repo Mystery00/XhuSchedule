@@ -50,7 +50,8 @@ class AccountSettingsFragment : PreferenceFragment() {
         delAccountPreference = findPreference(getString(R.string.key_del_account))
         managerAccountPreference = findPreference(getString(R.string.key_show_account_manager))
         val userFile = File(activity.filesDir.absolutePath + File.separator + "data" + File.separator + "user")
-        val studentList = XhuFileUtil.getStudentsFromFile(userFile)
+//        val studentList = XhuFileUtil.getStudentsFromFile(userFile)
+        val studentList = XhuFileUtil.getArrayListFromFile(userFile, Student::class.java)
         studentList.forEach {
             val preference = Preference(activity)
             preference.title = it.name
@@ -64,7 +65,8 @@ class AccountSettingsFragment : PreferenceFragment() {
         }
         delAccountPreference.setOnPreferenceClickListener {
             studentList.clear()
-            studentList.addAll(XhuFileUtil.getStudentsFromFile(userFile))
+//            studentList.addAll(XhuFileUtil.getStudentsFromFile(userFile))
+            studentList.addAll(XhuFileUtil.getArrayListFromFile(userFile, Student::class.java))
             val valueArray = Array(studentList.size, { i -> "${studentList[i].name}(${studentList[i].username})" })
             val checkedArray = BooleanArray(studentList.size, { false })
             AlertDialog.Builder(activity)
@@ -79,7 +81,8 @@ class AccountSettingsFragment : PreferenceFragment() {
                                 temp.add(studentList[index])
                         }
                         val showFile = File(activity.filesDir.absolutePath + File.separator + "data" + File.separator + "show_user")
-                        val showList = XhuFileUtil.getStudentsFromFile(showFile)
+//                        val showList = XhuFileUtil.getStudentsFromFile(showFile)
+                        val showList = XhuFileUtil.getArrayListFromFile(showFile, Student::class.java)
                         val studentIterator = studentList.iterator()
                         while (studentIterator.hasNext()) {
                             val t = studentIterator.next()
@@ -99,7 +102,8 @@ class AccountSettingsFragment : PreferenceFragment() {
                         XhuFileUtil.saveObjectToFile(studentList, userFile)
                         XhuFileUtil.saveObjectToFile(showList, showFile)
                         studentList.clear()
-                        studentList.addAll(XhuFileUtil.getStudentsFromFile(userFile))
+//                        studentList.addAll(XhuFileUtil.getStudentsFromFile(userFile))
+                        studentList.addAll(XhuFileUtil.getArrayListFromFile(userFile, Student::class.java))
                         currentAccountCategory.removeAll()
                         studentList.forEach {
                             val preference = Preference(activity)
@@ -115,9 +119,11 @@ class AccountSettingsFragment : PreferenceFragment() {
         }
         managerAccountPreference.setOnPreferenceClickListener {
             studentList.clear()
-            studentList.addAll(XhuFileUtil.getStudentsFromFile(userFile))
+//                        studentList.addAll(XhuFileUtil.getStudentsFromFile(userFile))
+            studentList.addAll(XhuFileUtil.getArrayListFromFile(userFile, Student::class.java))
             val showFile = File(activity.filesDir.absolutePath + File.separator + "data" + File.separator + "show_user")
-            val showList = XhuFileUtil.getStudentsFromFile(showFile)
+//            val showList = XhuFileUtil.getStudentsFromFile(showFile)
+            val showList = XhuFileUtil.getArrayListFromFile(showFile, Student::class.java)
             val valueArray = Array(studentList.size, { i -> "${studentList[i].name}(${studentList[i].username})" })
             val checkedArray = BooleanArray(studentList.size, { i ->
                 var result = false
@@ -155,7 +161,8 @@ class AccountSettingsFragment : PreferenceFragment() {
             ScheduleHelper.isUIChange = true
             val userFile = File(activity.filesDir.absolutePath + File.separator + "data" + File.separator + "user")
             currentAccountCategory.removeAll()
-            XhuFileUtil.getStudentsFromFile(userFile)
+//            XhuFileUtil.getStudentsFromFile(userFile)
+            XhuFileUtil.getArrayListFromFile(userFile, Student::class.java)
                     .forEach {
                         val preference = Preference(activity)
                         preference.title = it.name
