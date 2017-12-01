@@ -31,7 +31,7 @@ import java.util.*
  * Created by myste.
  */
 class TableAdapter(private val context: Context,
-                   private val list: ArrayList<LinkedList<Course>>) : RecyclerView.Adapter<TableAdapter.ViewHolder>() {
+                   private val list: LinkedList<LinkedList<Course>>) : RecyclerView.Adapter<TableAdapter.ViewHolder>() {
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.linearLayout.removeAllViews()

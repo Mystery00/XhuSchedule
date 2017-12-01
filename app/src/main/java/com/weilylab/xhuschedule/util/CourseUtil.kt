@@ -170,12 +170,12 @@ object CourseUtil {
             arrayOf(CourseTimeInfo(course.week + '周', course.location))
     }
 
-    fun mergeCourses(aList: ArrayList<LinkedList<Course>>, bList: ArrayList<LinkedList<Course>>): ArrayList<LinkedList<Course>> {
+    fun mergeCourses(aList: LinkedList<LinkedList<Course>>, bList: LinkedList<LinkedList<Course>>): LinkedList<LinkedList<Course>> {
         if (aList.size == 0)
             return bList
         if (bList.size == 0)
             return aList
-        val list = ArrayList<LinkedList<Course>>()
+        val list = LinkedList<LinkedList<Course>>()
         for (i in 0 until aList.size) {
             list.add(LinkedList())
             list[i].addAll(aList[i])

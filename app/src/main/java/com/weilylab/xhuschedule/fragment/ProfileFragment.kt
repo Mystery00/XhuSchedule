@@ -9,11 +9,14 @@ package com.weilylab.xhuschedule.fragment
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v7.widget.GridLayoutManager
+import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import com.weilylab.xhuschedule.R
+import com.weilylab.xhuschedule.adapter.OperationAdapter
 import com.weilylab.xhuschedule.classes.Profile
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -46,6 +49,9 @@ class ProfileFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         if (rootView == null) {
             rootView = inflater.inflate(R.layout.fragment_profile, container, false)
+            val recyclerView = rootView!!.findViewById<RecyclerView>(R.id.recycler_view)
+            recyclerView.layoutManager = GridLayoutManager(activity, 3)
+            recyclerView.adapter = OperationAdapter(activity)
         }
         isReady = true
         return rootView

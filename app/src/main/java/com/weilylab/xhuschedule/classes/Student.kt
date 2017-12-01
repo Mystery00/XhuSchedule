@@ -27,7 +27,7 @@ class Student : Serializable {
     lateinit var name: String
     var profile: Profile? = null
     var todayCourses = ArrayList<Course>()
-    var weekCourses = ArrayList<LinkedList<Course>>()
+    var weekCourses = LinkedList<LinkedList<Course>>()
     var isReady = false
 
     fun login(): Observable<LoginRT> {

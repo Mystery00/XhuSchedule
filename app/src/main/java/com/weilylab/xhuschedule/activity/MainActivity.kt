@@ -84,7 +84,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private var isAnimShow = false
     private var isDataNew = false
     private var studentList = ArrayList<Student>()
-    private var weekList = ArrayList<LinkedList<Course>>()
+    private var weekList = LinkedList<LinkedList<Course>>()
     private val todayList = ArrayList<Course>()
     private val todayFragment = TodayFragment.newInstance(todayList)
     private val weekFragment = TableFragment.newInstance(weekList)
