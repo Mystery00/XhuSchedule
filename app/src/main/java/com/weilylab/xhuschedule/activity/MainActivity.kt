@@ -120,7 +120,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             resources.getStringArray(R.array.update_list)
                     .forEach { message += it + '\n' }
             val dialog = AlertDialog.Builder(this)
-                    .setTitle(getString(R.string.title_update_log, getString(R.string.app_version_name) + '-' + getString(R.string.app_version_code)))
+                    .setTitle(getString(R.string.dialog_title_update_log, getString(R.string.app_version_name) + '-' + getString(R.string.app_version_code)))
                     .setMessage(message)
                     .setPositiveButton(android.R.string.ok, null)
                     .setOnDismissListener {

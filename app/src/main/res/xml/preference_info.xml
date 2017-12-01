@@ -73,6 +73,10 @@
             android:title="@string/title_feedback" />
 
         <Preference
+            android:key="@string/key_update_log"
+            android:title="@string/title_update_log" />
+
+        <Preference
             android:key="@string/key_check_update"
             android:title="@string/title_check_update" />
 

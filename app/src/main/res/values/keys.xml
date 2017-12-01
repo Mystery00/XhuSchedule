@@ -75,6 +75,8 @@
     <string name="link_more_app_coolapk">http://www.coolapk.com/u/631231</string>
     <string name="summary_more_app_play">Google Play</string>
     <string name="link_more_app_play">https://play.google.com/store/apps/developer?id=Mystery0</string>
+    <string name="key_update_log">key_update_log</string>
+    <string name="title_update_log">更新日志</string>
     <string name="key_check_update">key_check_update</string>
     <string name="title_check_update">检查更新</string>
     <string name="key_version_name">key_version_name</string>

@@ -6,7 +6,7 @@
   -->
 
 <resources>
-    <string name="title_update_log">%1$s版的更新日志</string>
+    <string name="dialog_title_update_log">%1$s版的更新日志</string>
     <string-array name="update_list">
         <item>说明：该版本为紧急修复版本，修复上一版本一些问题</item>
         <item>说明：查考试、查成绩、桌面小部件都会有的</item>
