@@ -198,7 +198,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             if (it.profile != null)
                 profileList.add(it.profile!!)
         }
-//        profileFragment.refreshData()
+        profileFragment.refreshData()
 
         weekAdapter = WeekAdapter(this, 1)
         weekAdapter.setWeekChangeListener(object : WeekChangeListener {
@@ -601,6 +601,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
         profileList.clear()
         Observable.merge(profileArray)
+                .subscribeOn(Schedulers.io())
+                .doOnComplete {
+                    XhuFileUtil.saveObjectToFile(studentList, File(filesDir.absolutePath + File.separator + "data" + File.separator + "user"))
+                }
+                .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(object : DisposableObserver<StudentInfoRT>() {
                     override fun onNext(t: StudentInfoRT) {
@@ -608,7 +613,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     }
 
                     override fun onComplete() {
-//                        profileFragment.refreshData()
+                        profileFragment.refreshData()
                     }
 
                     override fun onError(e: Throwable) {
@@ -839,6 +844,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                         }
 
                         override fun onError(e: Throwable) {
+                            e.printStackTrace()
+                            isAnimShow = false
                         }
 
                         override fun onNext(t: Int) {
