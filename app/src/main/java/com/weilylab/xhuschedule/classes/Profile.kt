@@ -19,7 +19,7 @@ class Profile : Serializable {
     var institute = ""
     var direction = ""
 
-    fun map(studentInfoRT: StudentInfoRT) {
+    fun map(studentInfoRT: StudentInfoRT): Profile {
         profession = studentInfoRT.profession
         no = studentInfoRT.no
         classname = studentInfoRT.classname
@@ -28,5 +28,6 @@ class Profile : Serializable {
         name = studentInfoRT.name
         institute = studentInfoRT.institute
         direction = studentInfoRT.direction
+        return this
     }
 }

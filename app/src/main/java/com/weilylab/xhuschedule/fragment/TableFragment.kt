@@ -24,9 +24,8 @@ import com.weilylab.xhuschedule.util.CalendarUtil
 import com.weilylab.xhuschedule.util.DensityUtil
 import com.weilylab.xhuschedule.util.Settings
 import io.reactivex.Observable
-import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.Disposable
+import io.reactivex.observers.DisposableObserver
 import io.reactivex.schedulers.Schedulers
 import java.util.*
 
@@ -83,8 +82,7 @@ class TableFragment : Fragment() {
             }
             val recyclerView: RecyclerView = rootView!!.findViewById(R.id.recycler_view)
             val linearLayout: LinearLayout = rootView!!.findViewById(R.id.table_nav)
-            for (i in 0 until linearLayout.childCount)
-            {
+            for (i in 0 until linearLayout.childCount) {
                 val layoutParams = linearLayout.getChildAt(i).layoutParams
                 layoutParams.height = DensityUtil.dip2px(activity, Settings.customTextHeight.toFloat())
                 linearLayout.getChildAt(i).layoutParams = layoutParams
@@ -113,7 +111,7 @@ class TableFragment : Fragment() {
         }
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(object : Observer<Boolean> {
+                .subscribe(object : DisposableObserver<Boolean>() {
                     override fun onComplete() {
                         if (rootView != null) {
                             val tableHeader: LinearLayout = rootView!!.findViewById(R.id.table_header)
@@ -133,9 +131,6 @@ class TableFragment : Fragment() {
                             }
                         }
                         adapter.notifyDataSetChanged()
-                    }
-
-                    override fun onSubscribe(d: Disposable) {
                     }
 
                     override fun onError(e: Throwable) {

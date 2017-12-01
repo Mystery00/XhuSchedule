@@ -8,6 +8,8 @@
 package com.weilylab.xhuschedule.util
 
 import android.content.Context
+import com.google.gson.Gson
+import com.google.gson.JsonParser
 import com.weilylab.xhuschedule.classes.Course
 import com.weilylab.xhuschedule.classes.Profile
 import com.weilylab.xhuschedule.classes.Student
@@ -58,9 +60,10 @@ object XhuFileUtil {
                 file.delete()
             if (!file.parentFile.exists())
                 file.parentFile.mkdirs()
-            val objectOutputStream = ObjectOutputStream(BufferedOutputStream(FileOutputStream(file)))
-            objectOutputStream.writeObject(obj)
-            objectOutputStream.close()
+            val gson = Gson()
+            val fileOutputStream = FileOutputStream(file)
+            fileOutputStream.write(gson.toJson(obj).toByteArray())
+            fileOutputStream.close()
             true
         } catch (e: Exception) {
             e.printStackTrace()
@@ -68,13 +71,45 @@ object XhuFileUtil {
         }
     }
 
+    inline fun <reified T> getArrayFromFile(file: File, classOfT: Class<T>): Array<T> {
+        try {
+            if (!file.exists())
+                return emptyArray()
+            val parser = JsonParser()
+            val gson = Gson()
+            val fileInputStream = FileInputStream(file)
+            val jsonArray = parser.parse(InputStreamReader(fileInputStream)).asJsonArray
+            return Array(jsonArray.size(), { i -> gson.fromJson(jsonArray[i], classOfT) })
+        } catch (e: Exception) {
+            e.printStackTrace()
+            return emptyArray()
+        }
+    }
+
+    inline fun <reified T> getArrayListFromFile(file: File, classOfT: Class<T>): ArrayList<T> {
+        try {
+            if (!file.exists())
+                return ArrayList()
+            val parser = JsonParser()
+            val gson = Gson()
+            val fileInputStream = FileInputStream(file)
+            val jsonArray = parser.parse(InputStreamReader(fileInputStream)).asJsonArray
+            val list = ArrayList<T>()
+            jsonArray.forEach {
+                list.add(gson.fromJson(it, classOfT))
+            }
+            return list
+        } catch (e: Exception) {
+            e.printStackTrace()
+            return ArrayList()
+        }
+    }
+
     fun getCoursesFromFile(context: Context, file: File): Array<Course> {
         try {
             if (!file.exists())
                 return emptyArray()
-            val objectInputStream = ObjectInputStream(BufferedInputStream(FileInputStream(file)))
-            @Suppress("UNCHECKED_CAST")
-            val courses = objectInputStream.readObject() as Array<Course>
+            val courses = getArrayFromFile(file, Course::class.java)
             val colorSharedPreference = context.getSharedPreferences("course_color", Context.MODE_PRIVATE)
             courses.forEach {
                 val md5 = ScheduleHelper.getMD5(it.name)
@@ -92,32 +127,32 @@ object XhuFileUtil {
             return emptyArray()
         }
     }
-
-    fun getStudentsFromFile(file: File): ArrayList<Student> {
-        try {
-            if (!file.exists())
-                return ArrayList()
-            val objectInputStream = ObjectInputStream(BufferedInputStream(FileInputStream(file)))
-            @Suppress("UNCHECKED_CAST")
-            return objectInputStream.readObject() as ArrayList<Student>
-        } catch (e: Exception) {
-            e.printStackTrace()
-            return ArrayList()
-        }
-    }
-
-    fun getProfileFromFile(file: File): Profile {
-        try {
-            if (!file.exists())
-                return Profile()
-            val objectInputStream = ObjectInputStream(BufferedInputStream(FileInputStream(file)))
-            @Suppress("UNCHECKED_CAST")
-            return objectInputStream.readObject() as Profile
-        } catch (e: Exception) {
-            e.printStackTrace()
-            return Profile()
-        }
-    }
+//
+//    fun getStudentsFromFile(file: File): ArrayList<Student> {
+//        try {
+//            if (!file.exists())
+//                return ArrayList()
+//            val objectInputStream = ObjectInputStream(BufferedInputStream(FileInputStream(file)))
+//            @Suppress("UNCHECKED_CAST")
+//            return objectInputStream.readObject() as ArrayList<Student>
+//        } catch (e: Exception) {
+//            e.printStackTrace()
+//            return ArrayList()
+//        }
+//    }
+//
+//    fun getProfileFromFile(file: File): Profile {
+//        try {
+//            if (!file.exists())
+//                return Profile()
+//            val objectInputStream = ObjectInputStream(BufferedInputStream(FileInputStream(file)))
+//            @Suppress("UNCHECKED_CAST")
+//            return objectInputStream.readObject() as Profile
+//        } catch (e: Exception) {
+//            e.printStackTrace()
+//            return Profile()
+//        }
+//    }
 
     fun getMD5(file: File): String? {
         var value: String? = null

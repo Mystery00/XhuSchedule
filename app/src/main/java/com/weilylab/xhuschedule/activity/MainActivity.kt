@@ -86,9 +86,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private var studentList = ArrayList<Student>()
     private var weekList = ArrayList<LinkedList<Course>>()
     private val todayList = ArrayList<Course>()
+    private val profileList = ArrayList<Profile>()
     private val todayFragment = TodayFragment.newInstance(todayList)
     private val weekFragment = TableFragment.newInstance(weekList)
-    private val profileFragment = ProfileFragment()
+    private val profileFragment = ProfileFragment.newInstance(profileList)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -166,7 +167,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         if (ScheduleHelper.isUIChange) {
             loadingDialog.show()
             studentList.clear()
-            studentList.addAll(XhuFileUtil.getStudentsFromFile(File(filesDir.absolutePath + File.separator + "data" + File.separator + "user")))
+//            studentList.addAll(XhuFileUtil.getStudentsFromFile(File(filesDir.absolutePath + File.separator + "data" + File.separator + "user")))
+            studentList.addAll(XhuFileUtil.getArrayFromFile(File(filesDir.absolutePath + File.separator + "data" + File.separator + "user"), Student::class.java))
             titleTextView.setTextColor(Settings.customTableTextColor)
             updateAllView()
         }
@@ -191,10 +193,14 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         viewpager.adapter = viewPagerAdapter
 
         studentList.clear()
-        studentList.addAll(XhuFileUtil.getStudentsFromFile(File(filesDir.absolutePath + File.separator + "data" + File.separator + "user")))
-
-        val profile = XhuFileUtil.getProfileFromFile(File(filesDir.absolutePath + File.separator + "data" + File.separator + "profile"))
-        profileFragment.setProfile(profile)
+        profileList.clear()
+//        studentList.addAll(XhuFileUtil.getStudentsFromFile(File(filesDir.absolutePath + File.separator + "data" + File.separator + "user")))
+        studentList.addAll(XhuFileUtil.getArrayFromFile(File(filesDir.absolutePath + File.separator + "data" + File.separator + "user"), Student::class.java))
+        studentList.forEach {
+            if (it.profile != null)
+                profileList.add(it.profile!!)
+        }
+//        profileFragment.refreshData()
 
         weekAdapter = WeekAdapter(this, 1)
         weekAdapter.setWeekChangeListener(object : WeekChangeListener {
@@ -332,7 +338,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     fun updateAllView(week: Int) {
         studentList.clear()
-        studentList.addAll(XhuFileUtil.getStudentsFromFile(File(filesDir.absolutePath + File.separator + "data" + File.separator + "user")))
+//        studentList.addAll(XhuFileUtil.getStudentsFromFile(File(filesDir.absolutePath + File.separator + "data" + File.separator + "user")))
+        studentList.addAll(XhuFileUtil.getArrayFromFile(File(filesDir.absolutePath + File.separator + "data" + File.separator + "user"), Student::class.java))
         if (studentList.size == 0) {
             ScheduleHelper.isLogin = false
             startActivity(Intent(this, LoginActivity::class.java))
@@ -342,9 +349,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         weekList.clear()
         todayList.clear()
         ScheduleHelper.isLogin = true
-        val array = ArrayList<Observable<HashMap<String, ArrayList<Course?>>>>()
+        val array = ArrayList<Observable<Boolean>>()
         val showFile = File(filesDir.absolutePath + File.separator + "data" + File.separator + "show_user")
-        val showList = XhuFileUtil.getStudentsFromFile(showFile)
+//        val showList = XhuFileUtil.getStudentsFromFile(showFile)
+        val showList = XhuFileUtil.getArrayListFromFile(showFile, Student::class.java)
         if (showList.size == 0)
             showList.addAll(studentList)
         showList.forEach {
@@ -353,7 +361,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         Observable.merge(array)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(object : Observer<HashMap<String, ArrayList<Course?>>> {
+                .subscribe(object : Observer<Boolean> {
                     override fun onSubscribe(d: Disposable) {
                         loadingDialog.show()
                     }
@@ -398,13 +406,13 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                         loadingDialog.dismiss()
                     }
 
-                    override fun onNext(map: HashMap<String, ArrayList<Course?>>) {
+                    override fun onNext(map: Boolean) {
                     }
                 })
     }
 
-    private fun updateView(student: Student, week: Int): Observable<HashMap<String, ArrayList<Course?>>> {
-        return Observable.create<HashMap<String, ArrayList<Course?>>> { subscriber ->
+    private fun updateView(student: Student, week: Int): Observable<Boolean> {
+        return Observable.create<Boolean> { subscriber ->
             val parentFile = File(filesDir.absolutePath + File.separator + "caches/")
             if (!parentFile.exists())
                 parentFile.mkdirs()
@@ -448,19 +456,21 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private fun updateAllData() {
         loadingDialog.show()
         studentList.clear()
-        studentList.addAll(XhuFileUtil.getStudentsFromFile(File(filesDir.absolutePath + File.separator + "data" + File.separator + "user")))
+//        studentList.addAll(XhuFileUtil.getStudentsFromFile(File(filesDir.absolutePath + File.separator + "data" + File.separator + "user")))
+        studentList.addAll(XhuFileUtil.getArrayFromFile(File(filesDir.absolutePath + File.separator + "data" + File.separator + "user"), Student::class.java))
         if (studentList.size == 0) {
             ScheduleHelper.isLogin = false
             startActivity(Intent(this, LoginActivity::class.java))
             finish()
             return
         }
-        getProfile(studentList[0])
+        updateProfile()
         weekList.clear()
         todayList.clear()
         val array = ArrayList<Observable<ContentRT>>()
         val showFile = File(filesDir.absolutePath + File.separator + "data" + File.separator + "show_user")
-        val showList = XhuFileUtil.getStudentsFromFile(showFile)
+//        val showList = XhuFileUtil.getStudentsFromFile(showFile)
+        val showList = XhuFileUtil.getArrayListFromFile(showFile, Student::class.java)
         if (showList.size == 0)
             showList.addAll(studentList)
         isRefreshData = true
@@ -519,30 +529,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
                     override fun onNext(t: ContentRT) {
                         contentRT = t
-                    }
-                })
-    }
-
-    private fun getProfile(student: Student) {
-        student.getInfo()
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(object : Observer<StudentInfoRT> {
-                    private var profile = Profile()
-                    override fun onComplete() {
-                        Logs.i(TAG, "onComplete: ")
-                        profileFragment.setProfile(profile)
-                    }
-
-                    override fun onError(e: Throwable) {
-                        e.printStackTrace()
-                    }
-
-                    override fun onNext(t: StudentInfoRT) {
-                        profile.map(t)
-                    }
-
-                    override fun onSubscribe(d: Disposable) {
-                        Logs.i(TAG, "onSubscribe: ")
                     }
                 })
     }
@@ -612,6 +598,29 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                         }
                     }
                 }
+    }
+
+    private fun updateProfile() {
+        val profileArray = ArrayList<Observable<StudentInfoRT>>()
+        studentList.forEach {
+            profileArray.add(it.getInfo())
+        }
+        profileList.clear()
+        Observable.merge(profileArray)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeWith(object : DisposableObserver<StudentInfoRT>() {
+                    override fun onNext(t: StudentInfoRT) {
+                        profileList.add(Profile().map(t))
+                    }
+
+                    override fun onComplete() {
+//                        profileFragment.refreshData()
+                    }
+
+                    override fun onError(e: Throwable) {
+                        e.printStackTrace()
+                    }
+                })
     }
 
     private fun login(student: Student) {
