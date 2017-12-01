@@ -86,10 +86,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private var studentList = ArrayList<Student>()
     private var weekList = ArrayList<LinkedList<Course>>()
     private val todayList = ArrayList<Course>()
-    private val profileList = ArrayList<Profile>()
     private val todayFragment = TodayFragment.newInstance(todayList)
     private val weekFragment = TableFragment.newInstance(weekList)
-    private val profileFragment = ProfileFragment.newInstance(profileList)
+    private val profileFragment = ProfileFragment.newInstance(Profile())
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -192,13 +191,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         viewpager.adapter = viewPagerAdapter
 
         studentList.clear()
-        profileList.clear()
         studentList.addAll(XhuFileUtil.getArrayFromFile(File(filesDir.absolutePath + File.separator + "data" + File.separator + "user"), Student::class.java))
-        studentList.forEach {
-            if (it.profile != null)
-                profileList.add(it.profile!!)
-        }
-        profileFragment.refreshData()
+
+        if (studentList.size > 0 && studentList[0].profile != null)
+            profileFragment.setProfile(studentList[0].profile!!)
 
         weekAdapter = WeekAdapter(this, 1)
         weekAdapter.setWeekChangeListener(object : WeekChangeListener {
@@ -459,7 +455,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             finish()
             return
         }
-        updateProfile()
+        updateProfile(studentList[0])
         weekList.clear()
         todayList.clear()
         val array = ArrayList<Observable<ContentRT>>()
@@ -594,13 +590,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 }
     }
 
-    private fun updateProfile() {
-        val profileArray = ArrayList<Observable<StudentInfoRT>>()
-        studentList.forEach {
-            profileArray.add(it.getInfo())
-        }
-        profileList.clear()
-        Observable.merge(profileArray)
+    private fun updateProfile(student: Student) {
+        student.getInfo()
                 .subscribeOn(Schedulers.io())
                 .doOnComplete {
                     XhuFileUtil.saveObjectToFile(studentList, File(filesDir.absolutePath + File.separator + "data" + File.separator + "user"))
@@ -608,12 +599,13 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(object : DisposableObserver<StudentInfoRT>() {
+                    private var profile = Profile()
                     override fun onNext(t: StudentInfoRT) {
-                        profileList.add(Profile().map(t))
+                        profile.map(t)
                     }
 
                     override fun onComplete() {
-                        profileFragment.refreshData()
+                        profileFragment.setProfile(profile)
                     }
 
                     override fun onError(e: Throwable) {

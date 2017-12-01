@@ -37,10 +37,12 @@
     <dimen name="layout_header_arrow_size">36dp</dimen>
     <dimen name="layout_title_menu_margin">12dp</dimen>
     <dimen name="layout_week_height">60dp</dimen>
+    <dimen name="profile_img_height">240dp</dimen>
+    <dimen name="profile_img_margin_start">24dp</dimen>
     <dimen name="profile_img_size">80dp</dimen>
     <dimen name="profile_img_margin_top">80dp</dimen>
     <dimen name="profile_text_margin_top_o">32dp</dimen>
-    <dimen name="profile_text_margin_top">8dp</dimen>
+    <dimen name="profile_text_margin_top">16dp</dimen>
     <dimen name="profile_card_radius">8dp</dimen>
     <dimen name="profile_margin">16dp</dimen>
     <dimen name="profile_padding">16dp</dimen>

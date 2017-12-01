@@ -64,12 +64,8 @@
     <string name="course_week_index">第%1$d周</string>
 
     <string name="profile_title">%1$s(%2$s)</string>
-    <string name="profile_sex">性别：%1$s</string>
-    <string name="profile_institute">学院：%1$s</string>
     <string name="profile_professional">专业：%1$s</string>
     <string name="profile_classname">班级：%1$s</string>
-    <string name="profile_grade">年级：%1$s</string>
-    <string name="profile_direction">方向：%1$s</string>
 
     <string name="nav_today">今日</string>
     <string name="nav_week">本周</string>
