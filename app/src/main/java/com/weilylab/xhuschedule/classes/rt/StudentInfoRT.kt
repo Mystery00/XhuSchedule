@@ -5,7 +5,7 @@
  * Last modified 17-11-30 下午12:05
  */
 
-package com.weilylab.xhuschedule.classes
+package com.weilylab.xhuschedule.classes.rt
 
 class StudentInfoRT {
     var profession = ""

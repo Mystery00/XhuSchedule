@@ -28,7 +28,7 @@ import kotlinx.android.synthetic.main.content_login.*
 import android.animation.ValueAnimator
 import android.app.Activity
 import android.support.v4.content.ContextCompat
-import com.weilylab.xhuschedule.classes.LoginRT
+import com.weilylab.xhuschedule.classes.rt.LoginRT
 import com.weilylab.xhuschedule.classes.Student
 import com.weilylab.xhuschedule.util.XhuFileUtil
 import java.io.File

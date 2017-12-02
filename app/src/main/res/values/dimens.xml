@@ -47,4 +47,5 @@
     <dimen name="profile_padding_vertical">8dp</dimen>
     <dimen name="profile_padding_horizontal">16dp</dimen>
     <dimen name="operation_margin">16dp</dimen>
+    <dimen name="exam_padding">16dp</dimen>
 </resources>

@@ -10,7 +10,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES"/>
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
 
     <application
         android:name=".APP"
@@ -66,7 +66,11 @@
                 android:resource="@xml/file_paths" />
         </provider>
 
-        <activity android:name=".activity.ErrorActivity"></activity>
+        <activity android:name=".activity.ErrorActivity" />
+        <activity
+            android:name=".activity.ExamActivity"
+            android:label="@string/title_activity_exam"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

@@ -8,12 +8,13 @@
 package com.weilylab.xhuschedule.classes
 
 import com.google.gson.Gson
-import com.weilylab.xhuschedule.interfaces.CourseService
+import com.weilylab.xhuschedule.classes.rt.ExamRT
+import com.weilylab.xhuschedule.classes.rt.LoginRT
+import com.weilylab.xhuschedule.classes.rt.StudentInfoRT
 import com.weilylab.xhuschedule.interfaces.UserService
 import com.weilylab.xhuschedule.util.ScheduleHelper
 import io.reactivex.Observable
 import io.reactivex.schedulers.Schedulers
-import okhttp3.ResponseBody
 import java.io.InputStreamReader
 import java.io.Serializable
 import java.util.*
@@ -49,6 +50,15 @@ class Student : Serializable {
                 .doOnNext { studentInfoRT ->
                     profile = Profile().map(studentInfoRT)
                 }
+    }
+
+    fun getExam(): Observable<ExamRT> {
+        return ScheduleHelper.tomcatRetrofit
+                .create(UserService::class.java)
+                .getTests(username)
+                .subscribeOn(Schedulers.newThread())
+                .unsubscribeOn(Schedulers.newThread())
+                .map { responseBody -> Gson().fromJson(InputStreamReader(responseBody.byteStream()), ExamRT::class.java) }
     }
 
 }

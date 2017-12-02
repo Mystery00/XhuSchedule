@@ -7,6 +7,7 @@
 
 package com.weilylab.xhuschedule.classes
 
+import com.weilylab.xhuschedule.classes.rt.StudentInfoRT
 import java.io.Serializable
 
 class Profile : Serializable {
