@@ -22,12 +22,18 @@ import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.observers.DisposableObserver
 import io.reactivex.schedulers.Schedulers
+import android.view.ViewTreeObserver
+import android.widget.ImageView
+import com.weilylab.xhuschedule.util.ViewUtil
+import vip.mystery0.tools.logs.Logs
+
 
 /**
  * Created by myste.
  */
 class ProfileFragment : Fragment() {
     companion object {
+        private val TAG = "ProfileFragment"
         fun newInstance(profile: Profile): ProfileFragment {
             val bundle = Bundle()
             bundle.putSerializable("profile", profile)
@@ -49,6 +55,25 @@ class ProfileFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         if (rootView == null) {
             rootView = inflater.inflate(R.layout.fragment_profile, container, false)
+            val headerImg = rootView!!.findViewById<ImageView>(R.id.header_img)
+            val profileImg = rootView!!.findViewById<ImageView>(R.id.profile_img)
+            val textViewLayout = rootView!!.findViewById<View>(R.id.textViewLayout)
+            profileImg.post {
+                Logs.i(TAG, "onCreateView: post")
+                val height = profileImg.measuredHeight
+                val params = profileImg.layoutParams
+                params.width = height
+                profileImg.layoutParams = params
+
+            }
+            headerImg.viewTreeObserver.addOnPreDrawListener(object : ViewTreeObserver.OnPreDrawListener {
+                override fun onPreDraw(): Boolean {
+                    headerImg.viewTreeObserver.removeOnPreDrawListener(this)
+                    headerImg.buildDrawingCache()
+                    ViewUtil.blur(activity, headerImg.drawingCache, textViewLayout)
+                    return true
+                }
+            })
             val recyclerView = rootView!!.findViewById<RecyclerView>(R.id.recycler_view)
             recyclerView.layoutManager = GridLayoutManager(activity, 3)
             recyclerView.adapter = OperationAdapter(activity)
