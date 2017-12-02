@@ -50,13 +50,16 @@ class UISettingsFragment : PreferenceFragment() {
     companion object {
         private val TAG = "UISettingsFragment"
         private val PERMISSION_REQUEST_CODE = 1
-        private val HEADER_REQUEST_CODE = 2
-        private val BACKGROUND_REQUEST_CODE = 3
-        private val HEADER_CROP_REQUEST_CODE = 4
-        private val BACKGROUND_CROP_REQUEST_CODE = 5
+        private val PROFILE_REQUEST_CODE = 2
+        private val HEADER_REQUEST_CODE = 3
+        private val BACKGROUND_REQUEST_CODE = 4
+        private val PROFILE_CROP_REQUEST_CODE = 5
+        private val HEADER_CROP_REQUEST_CODE = 6
+        private val BACKGROUND_CROP_REQUEST_CODE = 7
     }
 
     private var requestType = 0
+    private lateinit var userImgPreference: Preference
     private lateinit var headerImgPreference: Preference
     private lateinit var backgroundImgPreference: Preference
     private lateinit var customTodayOpacityPreference: Preference
@@ -73,6 +76,7 @@ class UISettingsFragment : PreferenceFragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        userImgPreference = findPreference(getString(R.string.key_user_img))
         headerImgPreference = findPreference(getString(R.string.key_header_img))
         backgroundImgPreference = findPreference(getString(R.string.key_background_img))
         customTodayOpacityPreference = findPreference(getString(R.string.key_custom_today_opacity))
@@ -82,6 +86,11 @@ class UISettingsFragment : PreferenceFragment() {
         customTextSizePreference = findPreference(getString(R.string.key_custom_text_size))
         customTextHeightPreference = findPreference(getString(R.string.key_custom_text_height))
         resetPreference = findPreference(getString(R.string.key_reset))
+        userImgPreference.setOnPreferenceClickListener {
+            requestType = PROFILE_REQUEST_CODE
+            requestPermission()
+            true
+        }
         headerImgPreference.setOnPreferenceClickListener {
             requestType = HEADER_REQUEST_CODE
             requestPermission()
@@ -340,6 +349,9 @@ class UISettingsFragment : PreferenceFragment() {
                 HEADER_REQUEST_CODE -> {
                     cropImg(data.data, HEADER_CROP_REQUEST_CODE, 320, 176)
                 }
+                PROFILE_REQUEST_CODE -> {
+                    cropImg(data.data, HEADER_CROP_REQUEST_CODE, 500, 500)
+                }
                 BACKGROUND_CROP_REQUEST_CODE -> {
                     Logs.i(TAG, "onActivityResult: BACKGROUND_CROP_REQUEST_CODE")
                     val saveFile = File(File(activity.filesDir, "CropImg"), "background")
@@ -352,6 +364,14 @@ class UISettingsFragment : PreferenceFragment() {
                     Logs.i(TAG, "onActivityResult: HEADER_CROP_REQUEST_CODE")
                     val saveFile = File(File(activity.filesDir, "CropImg"), "header")
                     Settings.customHeaderImg = saveFile.absolutePath
+                    ScheduleHelper.isImageChange = true
+                    Toast.makeText(activity, R.string.hint_custom_img, Toast.LENGTH_SHORT)
+                            .show()
+                }
+                PROFILE_CROP_REQUEST_CODE -> {
+                    Logs.i(TAG, "onActivityResult: PROFILE_CROP_REQUEST_CODE")
+                    val saveFile = File(File(activity.filesDir, "CropImg"), "user_img")
+                    Settings.userImg = saveFile.absolutePath
                     ScheduleHelper.isImageChange = true
                     Toast.makeText(activity, R.string.hint_custom_img, Toast.LENGTH_SHORT)
                             .show()
@@ -395,7 +415,12 @@ class UISettingsFragment : PreferenceFragment() {
     }
 
     private fun cropImg(uri: Uri, cropCode: Int, width: Int, height: Int) {
-        val savedFile = File(File(activity.filesDir, "CropImg"), if (cropCode == HEADER_CROP_REQUEST_CODE) "header" else "background")
+        val savedFile = File(File(activity.filesDir, "CropImg"), when (cropCode) {
+            HEADER_CROP_REQUEST_CODE -> "header"
+            BACKGROUND_CROP_REQUEST_CODE -> "background"
+            PROFILE_CROP_REQUEST_CODE -> "user_img"
+            else -> throw NullPointerException("裁剪图片请求码错误")
+        })
         if (!savedFile.parentFile.exists())
             savedFile.parentFile.mkdirs()
         val destinationUri = Uri.fromFile(savedFile)

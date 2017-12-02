@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Created by Mystery0 on 17-11-27 上午3:50.
   ~ Copyright (c) 2017. All Rights reserved.
   ~
@@ -44,24 +43,12 @@
                     android:background="@color/colorPrimary">
 
                     <ImageView
-                        android:id="@+id/action_home"
-                        android:layout_width="wrap_content"
-                        android:layout_height="0dp"
-                        android:padding="@dimen/course_padding"
-                        android:layout_marginStart="@dimen/layout_title_menu_margin"
-                        android:contentDescription="@string/app_name"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:srcCompat="@drawable/ic_menu" />
-
-                    <ImageView
                         android:id="@+id/action_sync"
                         android:layout_width="wrap_content"
                         android:layout_height="0dp"
-                        android:padding="@dimen/course_padding"
                         android:layout_marginEnd="@dimen/layout_title_menu_margin"
                         android:contentDescription="@string/app_name"
+                        android:padding="@dimen/course_padding"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
@@ -77,8 +64,8 @@
                         android:textColor="@color/colorWhite"
                         android:textStyle="bold"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@id/action_sync"
-                        app:layout_constraintStart_toEndOf="@id/action_home"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
                 </android.support.constraint.ConstraintLayout>

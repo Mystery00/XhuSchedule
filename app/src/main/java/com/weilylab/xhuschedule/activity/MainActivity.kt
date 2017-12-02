@@ -7,28 +7,19 @@
 
 package com.weilylab.xhuschedule.activity
 
-import android.Manifest
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.graphics.Point
-import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.provider.MediaStore
-import android.support.design.widget.NavigationView
 import android.support.design.widget.Snackbar
 import android.support.v4.content.ContextCompat
-import android.support.v4.view.GravityCompat
 import android.support.v4.view.ViewPager
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Base64
-import android.view.MenuItem
 import android.view.View
-import android.widget.EditText
-import android.widget.TextView
 import android.widget.Toast
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
@@ -47,10 +38,8 @@ import com.weilylab.xhuschedule.fragment.TodayFragment
 import com.weilylab.xhuschedule.interfaces.CourseService
 import com.weilylab.xhuschedule.listener.WeekChangeListener
 import com.weilylab.xhuschedule.util.*
-import com.yalantis.ucrop.UCrop
 import com.zyao89.view.zloading.ZLoadingDialog
 import com.zyao89.view.zloading.Z_TYPE
-import de.hdodenhof.circleimageview.CircleImageView
 import io.reactivex.Observable
 import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -58,7 +47,6 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.observers.DisposableObserver
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlinx.android.synthetic.main.content_main.*
 import vip.mystery0.tools.logs.Logs
 import java.io.File
@@ -67,12 +55,9 @@ import java.net.UnknownHostException
 import java.util.*
 import kotlin.collections.ArrayList
 
-class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
+class MainActivity : AppCompatActivity() {
     companion object {
         private val TAG = "MainActivity"
-        private val REQUEST_PERMISSION = 1
-        private val CHOOSE_IMG = 2
-        private val CROP_IMG = 3
     }
 
     private lateinit var loadingDialog: ZLoadingDialog
@@ -100,8 +85,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 .setCanceledOnTouchOutside(false)
                 .setLoadingColor(ContextCompat.getColor(this, R.color.colorAccent))
                 .setHintTextColor(ContextCompat.getColor(this, R.color.colorAccent))
-
-        nav_view.setNavigationItemSelectedListener(this)
 
         initView()
         if (ScheduleHelper.isFromLogin)
@@ -162,14 +145,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             titleTextView.setTextColor(Settings.customTableTextColor)
             updateAllView()
         }
-        val nickName: TextView = nav_view.getHeaderView(0).findViewById(R.id.nickName)
-        val nickNameString = Settings.nickName
-        nickName.text = if (nickNameString != "") nickNameString else studentList[0].name
-        val group = nav_view.menu.findItem(R.id.nav_group).subMenu
-        group.clear()
-        studentList.forEach {
-            group.add("${it.name}(${it.username})")
-        }
         ScheduleHelper.isImageChange = false
         ScheduleHelper.isUIChange = false
     }
@@ -219,45 +194,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 12, 1, 2 -> background.setImageResource(R.mipmap.d)
             }
         }
-        if (Settings.customHeaderImg != "")
-            Glide.with(this)
-                    .load(Settings.customHeaderImg)
-                    .apply(options)
-                    .into(nav_view.getHeaderView(0).findViewById(R.id.background))
-
-        val userIMG: CircleImageView = nav_view.getHeaderView(0).findViewById(R.id.userIMG)
-        if (Settings.userImg != "")
-            Glide.with(this)
-                    .load(Settings.userImg)
-                    .apply(options)
-                    .into(userIMG)
-        else
-            userIMG.setImageResource(R.mipmap.ic_launcher)
-        val nickName: TextView = nav_view.getHeaderView(0).findViewById(R.id.nickName)
-        nickName.setOnClickListener {
-            val editText = EditText(this)
-            editText.setText(nickName.text)
-            AlertDialog.Builder(this)
-                    .setTitle(R.string.hint_nick_name)
-                    .setView(editText)
-                    .setPositiveButton(android.R.string.ok, { _, _ ->
-                        Settings.nickName = editText.text.toString()
-                        nickName.text = editText.text.toString()
-                    })
-                    .show()
-        }
-        userIMG.setOnClickListener {
-            if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                    != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
-                    != PackageManager.PERMISSION_GRANTED) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
-                    requestPermissions(arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE),
-                            REQUEST_PERMISSION)
-            } else {
-                chooseImg()
-            }
-        }
-
         bottomNavigationView.setOnNavigationItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.bottom_nav_today -> viewpager.currentItem = 0
@@ -285,10 +221,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
         })
 
-
-        action_home.setOnClickListener {
-            drawer_layout.openDrawer(GravityCompat.START)
-        }
         action_sync.setOnClickListener {
             if (isRefreshData)
                 return@setOnClickListener
@@ -298,23 +230,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         titleTextView.setOnClickListener {
             showWeekAnim(!isWeekShow)
         }
-    }
-
-    private fun chooseImg() {
-        startActivityForResult(Intent(Intent.ACTION_PICK)
-                .setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*"),
-                CHOOSE_IMG)
-    }
-
-    private fun cropImg(uri: Uri, cropCode: Int, width: Int, height: Int) {
-        val savedFile = File(File(filesDir, "CropImg"), "user_img")
-        if (!savedFile.parentFile.exists())
-            savedFile.parentFile.mkdirs()
-        val destinationUri = Uri.fromFile(savedFile)
-        UCrop.of(uri, destinationUri)
-                .withAspectRatio(width.toFloat(), height.toFloat())
-                .withMaxResultSize(width, height)
-                .start(this, cropCode)
     }
 
     fun updateAllView() {
@@ -692,73 +607,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                         loginRT = t
                     }
                 })
-    }
-
-    override fun onBackPressed() {
-        if (drawer_layout.isDrawerOpen(GravityCompat.START)) {
-            drawer_layout.closeDrawer(GravityCompat.START)
-        } else {
-            super.onBackPressed()
-        }
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (resultCode == RESULT_OK && data != null)
-            when (requestCode) {
-                CHOOSE_IMG -> {
-                    cropImg(data.data, CROP_IMG, 500, 500)
-                }
-                CROP_IMG -> {
-                    val saveFile = File(File(filesDir, "CropImg"), "user_img")
-                    Settings.userImg = saveFile.absolutePath
-                    val options = RequestOptions()
-                            .signature(MediaStoreSignature("image/*", Calendar.getInstance().timeInMillis, 0))
-                            .diskCacheStrategy(DiskCacheStrategy.NONE)
-                    val userIMG: CircleImageView = nav_view.getHeaderView(0).findViewById(R.id.userIMG)
-                    Glide.with(this)
-                            .load(Settings.userImg)
-                            .apply(options)
-                            .into(userIMG)
-                    Snackbar.make(coordinatorLayout, R.string.hint_custom_img, Snackbar.LENGTH_SHORT)
-                            .show()
-                }
-                UCrop.RESULT_ERROR ->
-                    Snackbar.make(coordinatorLayout, R.string.error_custom_img, Snackbar.LENGTH_SHORT)
-                            .show()
-            }
-        super.onActivityResult(requestCode, resultCode, data)
-    }
-
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == REQUEST_PERMISSION)
-            if (grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
-                chooseImg()
-            } else {
-                Logs.i(TAG, "onRequestPermissionsResult: 权限拒绝")
-                Snackbar.make(coordinatorLayout, R.string.hint_permission, Snackbar.LENGTH_SHORT)
-                        .show()
-            }
-    }
-
-    override fun onNavigationItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.nav_settings -> {
-                startActivity(Intent(this, SettingsActivity::class.java))
-            }
-            R.id.nav_logout -> {
-                val file = File(filesDir.absolutePath + File.separator + "data" + File.separator)
-                if (file.exists())
-                    file.listFiles()
-                            .forEach {
-                                it.delete()
-                            }
-                startActivity(Intent(this@MainActivity, LoginActivity::class.java))
-                finish()
-            }
-        }
-        drawer_layout.closeDrawer(GravityCompat.START)
-        return true
     }
 
     private fun showcase() {
