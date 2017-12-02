@@ -21,6 +21,12 @@ import com.weilylab.xhuschedule.adapter.ColorPickerAdapter
 import com.weilylab.xhuschedule.classes.Course
 import com.weilylab.xhuschedule.listener.ColorPickerChangeListener
 import com.weilylab.xhuschedule.listener.InfoChangeListener
+import android.graphics.drawable.BitmapDrawable
+import android.graphics.Bitmap
+import android.renderscript.Allocation
+import android.renderscript.RenderScript
+import android.renderscript.ScriptIntrinsicBlur
+
 
 /**
  * Created by myste.
@@ -43,7 +49,7 @@ object ViewUtil {
         }
         colorChooser.adapter = adapter
         val text = course.name + if (course.type == "not") "(非本周)" else ""
-        textView.text =text
+        textView.text = text
         textView.setBackgroundColor(Color.parseColor(course.color))
         editTeacherLayout.text = course.teacher
         val startTime = context.resources.getStringArray(R.array.start_time)
@@ -85,5 +91,27 @@ object ViewUtil {
         paint.textAlign = Paint.Align.CENTER
         canvas.drawText(course.name.substring(0, 1), targetRect.centerX().toFloat(), baseline, paint)
         return bitmap
+    }
+
+    fun blur(context: Context, bkg: Bitmap, view: View) {
+        val radius = 20f
+        val overlay = Bitmap.createBitmap(view.measuredWidth,
+                view.measuredHeight, Bitmap.Config.ARGB_8888)
+
+        val canvas = Canvas(overlay)
+        canvas.translate(-view.left.toFloat(), -view.top.toFloat())
+        canvas.drawBitmap(bkg, 0F, 0F, null)
+
+        val rs = RenderScript.create(context)
+
+        val overlayAlloc = Allocation.createFromBitmap(rs, overlay)
+        val blur = ScriptIntrinsicBlur.create(rs, overlayAlloc.element)
+        blur.setInput(overlayAlloc)
+        blur.setRadius(radius)
+        blur.forEach(overlayAlloc)
+        overlayAlloc.copyTo(overlay)
+        view.background = BitmapDrawable(context.resources, overlay)
+        rs.destroy()
+
     }
 }

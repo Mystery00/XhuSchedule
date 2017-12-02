@@ -16,7 +16,7 @@
         android:id="@+id/fold_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="@dimen/profile_padding">
+        android:padding="@dimen/profile_padding_horizontal">
 
         <TextView
             android:id="@+id/textView_student_header"

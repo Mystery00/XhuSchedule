@@ -28,6 +28,8 @@ android {
         versionName autoVersion.name
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
+        renderscriptTargetApi 26
+        renderscriptSupportModeEnabled true
         setProperty("archivesBaseName", "XhuSchedule-$versionName-$versionCode")
         ndk {
             moduleName = 'bspatch'
