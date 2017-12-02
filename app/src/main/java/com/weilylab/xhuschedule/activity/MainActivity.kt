@@ -152,16 +152,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     12, 1, 2 -> background.setImageResource(R.mipmap.d)
                 }
             }
-            if (Settings.customHeaderImg != "")
-                Glide.with(this)
-                        .load(Settings.customHeaderImg)
-                        .apply(options)
-                        .into(nav_view.getHeaderView(0).findViewById(R.id.background))
-            if (Settings.userImg != "")
-                Glide.with(this)
-                        .load(Settings.userImg)
-                        .apply(options)
-                        .into(nav_view.getHeaderView(0).findViewById(R.id.userIMG))
+            profileFragment.setHeaderImg()
+            profileFragment.setProfileImg()
         }
         if (ScheduleHelper.isUIChange) {
             loadingDialog.show()
@@ -255,7 +247,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     .show()
         }
         userIMG.setOnClickListener {
-
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
                     != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
                     != PackageManager.PERMISSION_GRANTED) {
