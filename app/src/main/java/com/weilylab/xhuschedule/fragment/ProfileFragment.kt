@@ -49,7 +49,7 @@ import com.weilylab.xhuschedule.util.DensityUtil
 import com.weilylab.xhuschedule.util.Settings
 import com.weilylab.xhuschedule.util.ViewUtil
 import com.yalantis.ucrop.UCrop
-import kotlinx.android.synthetic.main.app_bar_main.*
+import kotlinx.android.synthetic.main.activity_main.*
 import vip.mystery0.tools.logs.Logs
 import java.io.File
 import java.util.*
@@ -233,7 +233,11 @@ class ProfileFragment : Fragment() {
     }
 
     private fun cropImg(uri: Uri, cropCode: Int, width: Int, height: Int) {
-        val savedFile = File(File(activity.filesDir, "CropImg"), "user_img")
+        val savedFile = File(File(activity.filesDir, "CropImg"), when (cropCode) {
+            HEADER_CROP_REQUEST_CODE -> "header"
+            PROFILE_CROP_REQUEST_CODE -> "user_img"
+            else -> throw NullPointerException("裁剪图片请求码错误")
+        })
         if (!savedFile.parentFile.exists())
             savedFile.parentFile.mkdirs()
         val destinationUri = Uri.fromFile(savedFile)

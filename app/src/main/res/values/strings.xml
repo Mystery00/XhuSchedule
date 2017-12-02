@@ -29,7 +29,13 @@
 
     <string name="prompt_username">用户名</string>
     <string name="prompt_password">密码</string>
-    <string name="prompt_vcode">验证码</string>
+
+    <string name="operation_schedule">查看非本学期课程</string>
+    <string name="operation_logout">注销</string>
+    <string name="operation_exam">考试查询</string>
+    <string name="operation_score">成绩查询</string>
+    <string name="operation_feedback">意见反馈</string>
+    <string name="operation_settings">设置</string>
 
     <string name="hint_dialog_update_vcode">获取验证码中……</string>
     <string name="hint_dialog_login">登录中……</string>
