@@ -25,7 +25,6 @@ import io.reactivex.schedulers.Schedulers
 import android.view.ViewTreeObserver
 import android.widget.ImageView
 import com.weilylab.xhuschedule.util.ViewUtil
-import vip.mystery0.tools.logs.Logs
 
 
 /**
@@ -33,7 +32,6 @@ import vip.mystery0.tools.logs.Logs
  */
 class ProfileFragment : Fragment() {
     companion object {
-        private val TAG = "ProfileFragment"
         fun newInstance(profile: Profile): ProfileFragment {
             val bundle = Bundle()
             bundle.putSerializable("profile", profile)
@@ -59,7 +57,6 @@ class ProfileFragment : Fragment() {
             val profileImg = rootView!!.findViewById<ImageView>(R.id.profile_img)
             val textViewLayout = rootView!!.findViewById<View>(R.id.textViewLayout)
             profileImg.post {
-                Logs.i(TAG, "onCreateView: post")
                 val height = profileImg.measuredHeight
                 val params = profileImg.layoutParams
                 params.width = height
