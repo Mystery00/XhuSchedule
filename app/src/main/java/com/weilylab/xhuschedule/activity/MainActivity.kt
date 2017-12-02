@@ -32,6 +32,9 @@ import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.adapter.ViewPagerAdapter
 import com.weilylab.xhuschedule.adapter.WeekAdapter
 import com.weilylab.xhuschedule.classes.*
+import com.weilylab.xhuschedule.classes.rt.CourseRT
+import com.weilylab.xhuschedule.classes.rt.LoginRT
+import com.weilylab.xhuschedule.classes.rt.StudentInfoRT
 import com.weilylab.xhuschedule.fragment.ProfileFragment
 import com.weilylab.xhuschedule.fragment.TableFragment
 import com.weilylab.xhuschedule.fragment.TodayFragment
@@ -368,7 +371,7 @@ class MainActivity : AppCompatActivity() {
         updateProfile(studentList[0])
         weekList.clear()
         todayList.clear()
-        val array = ArrayList<Observable<ContentRT>>()
+        val array = ArrayList<Observable<CourseRT>>()
         val showFile = File(filesDir.absolutePath + File.separator + "data" + File.separator + "show_user")
         val showList = XhuFileUtil.getArrayListFromFile(showFile, Student::class.java)
         if (showList.size == 0)
@@ -379,8 +382,8 @@ class MainActivity : AppCompatActivity() {
         }
         Observable.merge(array)
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribeWith(object : DisposableObserver<ContentRT>() {
-                    private var contentRT: ContentRT? = null
+                .subscribeWith(object : DisposableObserver<CourseRT>() {
+                    private var courseRT: CourseRT? = null
                     override fun onError(e: Throwable) {
                         loadingDialog.dismiss()
                         isRefreshData = false
@@ -394,17 +397,17 @@ class MainActivity : AppCompatActivity() {
                     }
 
                     override fun onComplete() {
-                        if (contentRT?.rt == "6") {
+                        if (courseRT?.rt == "6") {
                             ScheduleHelper.isLogin = false
                             return
                         }
-                        if (!isTryRefreshData && contentRT?.rt == "0") {
+                        if (!isTryRefreshData && courseRT?.rt == "0") {
                             isTryRefreshData = true
                             updateAllData()
                             return
                         }
                         loadingDialog.dismiss()
-                        if (contentRT?.rt != "1" && contentRT?.rt != "5") {
+                        if (courseRT?.rt != "1" && courseRT?.rt != "5") {
                             isRefreshData = false
                             Snackbar.make(coordinatorLayout, R.string.hint_invalid_cookie, Snackbar.LENGTH_LONG)
                                     .setAction(android.R.string.ok) {
@@ -416,7 +419,7 @@ class MainActivity : AppCompatActivity() {
                             return
                         }
                         isRefreshData = false
-                        if (contentRT?.rt == "5")
+                        if (courseRT?.rt == "5")
                             Snackbar.make(coordinatorLayout, R.string.hint_update_data_error, Snackbar.LENGTH_LONG).show()
                         else {
                             if (isDataNew && showList.size == 1)
@@ -427,13 +430,13 @@ class MainActivity : AppCompatActivity() {
                         updateAllView()
                     }
 
-                    override fun onNext(t: ContentRT) {
-                        contentRT = t
+                    override fun onNext(t: CourseRT) {
+                        courseRT = t
                     }
                 })
     }
 
-    private fun updateData(student: Student): Observable<ContentRT> {
+    private fun updateData(student: Student): Observable<CourseRT> {
         val parentFile = File(filesDir.absolutePath + File.separator + "caches/")
         if (!parentFile.exists())
             parentFile.mkdirs()
@@ -443,7 +446,7 @@ class MainActivity : AppCompatActivity() {
                 .getCourses(student.username)
                 .subscribeOn(Schedulers.newThread())
                 .unsubscribeOn(Schedulers.newThread())
-                .map({ responseBody -> Gson().fromJson(InputStreamReader(responseBody.byteStream()), ContentRT::class.java) })
+                .map({ responseBody -> Gson().fromJson(InputStreamReader(responseBody.byteStream()), CourseRT::class.java) })
                 .subscribeOn(Schedulers.io())
                 .doOnNext { contentRT ->
                     when (contentRT.rt) {

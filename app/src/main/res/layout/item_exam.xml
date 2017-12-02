@@ -19,74 +19,84 @@
         android:padding="@dimen/profile_padding_horizontal">
 
         <TextView
-            android:id="@+id/textView_student_header"
+            android:id="@+id/textView_exam_name"
             android:layout_width="0dp"
             android:layout_height="50dp"
             android:gravity="center_vertical"
             android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/textView_exam_date"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/textView_student_sex"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/profile_text_margin_top"
+            android:id="@+id/textView_exam_date"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:gravity="center_vertical"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView_student_header" />
+            app:layout_constraintStart_toEndOf="@id/textView_exam_name"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/textView_student_institute"
+            android:id="@+id/textView_exam_no"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/profile_text_margin_top"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView_student_sex" />
+            app:layout_constraintTop_toBottomOf="@+id/textView_exam_name" />
 
         <TextView
-            android:id="@+id/textView_professional"
+            android:id="@+id/textView_exam_sname"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/profile_text_margin_top"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView_student_institute" />
+            app:layout_constraintTop_toBottomOf="@+id/textView_exam_no" />
 
         <TextView
-            android:id="@+id/textView_classname"
+            android:id="@+id/textView_exam_location"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/profile_text_margin_top"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView_professional" />
+            app:layout_constraintTop_toBottomOf="@+id/textView_exam_sname" />
 
         <TextView
-            android:id="@+id/textView_student_grade"
+            android:id="@+id/textView_exam_testno"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/profile_text_margin_top"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView_classname" />
+            app:layout_constraintTop_toBottomOf="@+id/textView_exam_location" />
 
         <TextView
-            android:id="@+id/textView_student_direction"
+            android:id="@+id/textView_exam_testtype"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/profile_text_margin_top"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView_student_grade" />
+            app:layout_constraintTop_toBottomOf="@+id/textView_exam_testno" />
+
+        <TextView
+            android:id="@+id/textView_exam_region"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/profile_text_margin_top"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView_exam_testtype" />
 
     </android.support.constraint.ConstraintLayout>
 

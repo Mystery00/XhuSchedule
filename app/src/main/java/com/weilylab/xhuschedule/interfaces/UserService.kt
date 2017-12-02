@@ -21,4 +21,8 @@ interface UserService {
     @FormUrlEncoded
     @POST("/course/User/getInfo")
     fun getInfo(@Field("username") username: String): Observable<ResponseBody>
+
+    @FormUrlEncoded
+    @POST("/course/Course/getTests")
+    fun getTests(@Field("username") username: String): Observable<ResponseBody>
 }

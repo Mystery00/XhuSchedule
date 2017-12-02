@@ -41,73 +41,73 @@ class ProfileAdapter(private val context: Context,
     override fun getItemCount(): Int = list.size
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(context).inflate(R.layout.item_profile, parent, false)
+        val view = LayoutInflater.from(context).inflate(R.layout.item_exam, parent, false)
         return ViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val profile = list[position]
-        holder.header.text = context.getString(R.string.profile_title, profile.no, profile.name)
+//        holder.header.text = context.getString(R.string.profile_title, profile.no, profile.name)
 //        holder.sex.text = context.getString(R.string.profile_sex, profile.sex)
 //        holder.institute.text = context.getString(R.string.profile_institute, profile.institute)
 //        holder.professional.text = context.getString(R.string.profile_professional, profile.profession)
 //        holder.classname.text = context.getString(R.string.profile_classname, profile.classname)
 //        holder.grade.text = context.getString(R.string.profile_grade, profile.grade)
 //        holder.direction.text = context.getString(R.string.profile_direction, profile.direction)
-        holder.foldLayout.post {
-            if (maxHeight == 0) {
-                maxHeight = holder.foldLayout.measuredHeight
-                val layoutParams = holder.foldLayout.layoutParams
-                layoutParams.height = minHeight
-                holder.foldLayout.layoutParams = layoutParams
-                Logs.i(TAG, "onBindViewHolder: " + maxHeight)
-            }
-        }
-        holder.foldLayout.setOnClickListener {
-            val layoutParams = holder.foldLayout.layoutParams
-            Observable.create<Int> { subscriber ->
-                val showDistanceArray = Array(31, { i -> ((maxHeight - minHeight) / 30F) * i + minHeight })
-                if (isExpand)
-                    showDistanceArray.reverse()
-                showDistanceArray.forEach {
-                    subscriber.onNext(it.toInt())
-                    Thread.sleep(8)
-                }
-                subscriber.onComplete()
-            }
-                    .subscribeOn(Schedulers.newThread())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(object : Observer<Int> {
-                        override fun onNext(t: Int) {
-                            layoutParams.height = t
-                            holder.foldLayout.layoutParams = layoutParams
-                        }
-
-                        override fun onSubscribe(d: Disposable) {
-                            isAnimShow = true
-                        }
-
-                        override fun onError(e: Throwable) {
-                            e.printStackTrace()
-                            isAnimShow = false
-                        }
-
-                        override fun onComplete() {
-                            isAnimShow = false
-                            isExpand = !isExpand
-                        }
-                    })
-        }
+//        holder.foldLayout.post {
+//            if (maxHeight == 0) {
+//                maxHeight = holder.foldLayout.measuredHeight
+//                val layoutParams = holder.foldLayout.layoutParams
+//                layoutParams.height = minHeight
+//                holder.foldLayout.layoutParams = layoutParams
+//                Logs.i(TAG, "onBindViewHolder: " + maxHeight)
+//            }
+//        }
+//        holder.foldLayout.setOnClickListener {
+//            val layoutParams = holder.foldLayout.layoutParams
+//            Observable.create<Int> { subscriber ->
+//                val showDistanceArray = Array(31, { i -> ((maxHeight - minHeight) / 30F) * i + minHeight })
+//                if (isExpand)
+//                    showDistanceArray.reverse()
+//                showDistanceArray.forEach {
+//                    subscriber.onNext(it.toInt())
+//                    Thread.sleep(8)
+//                }
+//                subscriber.onComplete()
+//            }
+//                    .subscribeOn(Schedulers.newThread())
+//                    .observeOn(AndroidSchedulers.mainThread())
+//                    .subscribe(object : Observer<Int> {
+//                        override fun onNext(t: Int) {
+//                            layoutParams.height = t
+//                            holder.foldLayout.layoutParams = layoutParams
+//                        }
+//
+//                        override fun onSubscribe(d: Disposable) {
+//                            isAnimShow = true
+//                        }
+//
+//                        override fun onError(e: Throwable) {
+//                            e.printStackTrace()
+//                            isAnimShow = false
+//                        }
+//
+//                        override fun onComplete() {
+//                            isAnimShow = false
+//                            isExpand = !isExpand
+//                        }
+//                    })
+//        }
     }
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        var foldLayout: ConstraintLayout = itemView.findViewById(R.id.fold_layout)
-        var header: TextView = itemView.findViewById(R.id.textView_student_header)
-        var sex: TextView = itemView.findViewById(R.id.textView_student_sex)
-        var institute: TextView = itemView.findViewById(R.id.textView_student_institute)
-        var professional: TextView = itemView.findViewById(R.id.textView_professional)
-        var classname: TextView = itemView.findViewById(R.id.textView_classname)
-        var grade: TextView = itemView.findViewById(R.id.textView_student_grade)
-        var direction: TextView = itemView.findViewById(R.id.textView_student_direction)
+//        var foldLayout: ConstraintLayout = itemView.findViewById(R.id.fold_layout)
+//        var header: TextView = itemView.findViewById(R.id.textView_student_header)
+//        var sex: TextView = itemView.findViewById(R.id.textView_student_sex)
+//        var institute: TextView = itemView.findViewById(R.id.textView_exam_location)
+//        var professional: TextView = itemView.findViewById(R.id.textView_exam_testno)
+//        var classname: TextView = itemView.findViewById(R.id.textView_exam_no)
+//        var grade: TextView = itemView.findViewById(R.id.textView_exam_testtype)
+//        var direction: TextView = itemView.findViewById(R.id.textView_exam_region)
     }
 }

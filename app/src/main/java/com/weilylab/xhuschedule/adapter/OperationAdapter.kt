@@ -18,6 +18,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import com.weilylab.xhuschedule.R
+import com.weilylab.xhuschedule.activity.ExamActivity
 import com.weilylab.xhuschedule.activity.LoginActivity
 import com.weilylab.xhuschedule.activity.MainActivity
 import com.weilylab.xhuschedule.activity.SettingsActivity
@@ -60,9 +61,7 @@ class OperationAdapter(private val context: Context) : RecyclerView.Adapter<Oper
                 0 -> {
 
                 }
-                1 -> {
-
-                }
+                1 -> context.startActivity(Intent(context, ExamActivity::class.java))
                 2 -> {
 
                 }
