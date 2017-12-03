@@ -70,6 +70,32 @@ object CourseUtil {
         return list
     }
 
+    fun getCourses(courses: Array<Course>): ArrayList<LinkedList<Course>> {
+        val tempArray = Array(5, { Array<LinkedList<Course>>(7, { LinkedList() }) })
+        courses.forEach {
+            val timeArray = it.time.split('-')
+            val startTime = (timeArray[0].toInt() - 1) / 2
+            val endTime = (timeArray[1].toInt()) / 2
+            for (index in startTime until endTime) {
+                var flag = false
+                for (temp in tempArray[index][it.day.toInt() - 1]) {
+                    flag = temp.with(it)
+                    if (flag)
+                        break
+                }
+                if (!flag)
+                    tempArray[index][it.day.toInt() - 1].add(it)
+            }
+        }
+        val list = ArrayList<LinkedList<Course>>()
+        tempArray.forEach {
+            it.forEach {
+                list.add(it)
+            }
+        }
+        return list
+    }
+
     fun getWeekCourses(courses: Array<Course>): ArrayList<LinkedList<Course>> {
         val firstWeekOfTerm = Settings.firstWeekOfTerm
         val date = firstWeekOfTerm.split('-')

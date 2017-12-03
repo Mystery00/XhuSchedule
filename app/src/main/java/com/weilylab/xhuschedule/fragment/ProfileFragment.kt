@@ -20,6 +20,7 @@ import android.provider.MediaStore
 import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
+import android.support.v7.app.AlertDialog
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -217,6 +218,22 @@ class ProfileFragment : Fragment() {
                         rootView?.findViewById<TextView>(R.id.textView_title)?.text = getString(R.string.profile_title, profile.no, profile.name)
                         rootView?.findViewById<TextView>(R.id.textView_score_gpa)?.text = getString(R.string.profile_professional, profile.profession)
                         rootView?.findViewById<TextView>(R.id.textView_score_no)?.text = getString(R.string.profile_classname, profile.classname)
+                        rootView?.findViewById<TextView>(R.id.textView_title)?.setOnClickListener {
+                            val stringBuilder = StringBuilder()
+                                    .appendln(getString(R.string.profile_no, profile.no))
+                                    .appendln(getString(R.string.profile_name, profile.name))
+                                    .appendln(getString(R.string.profile_sex, profile.sex))
+                                    .appendln(getString(R.string.profile_grade, profile.grade))
+                                    .appendln(getString(R.string.profile_institute, profile.institute))
+                                    .appendln(getString(R.string.profile_professional, profile.profession))
+                                    .appendln(getString(R.string.profile_classname, profile.classname))
+                                    .appendln(getString(R.string.profile_direction, profile.direction))
+                            AlertDialog.Builder(activity)
+                                    .setTitle(" ")
+                                    .setMessage(stringBuilder.toString())
+                                    .setNegativeButton(android.R.string.ok, null)
+                                    .show()
+                        }
                     }
 
                     override fun onNext(t: Boolean) {

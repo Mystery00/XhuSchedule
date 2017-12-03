@@ -40,6 +40,15 @@
             android:name="com.yalantis.ucrop.UCropActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".activity.ErrorActivity" />
+        <activity
+            android:name=".activity.ExamActivity"
+            android:label="@string/title_activity_exam"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activity.ScoreActivity"
+            android:label="@string/title_activity_score"
+            android:theme="@style/AppTheme.NoActionBar" />
 
         <service
             android:name=".service.UpdateService"
@@ -66,15 +75,6 @@
                 android:resource="@xml/file_paths" />
         </provider>
 
-        <activity android:name=".activity.ErrorActivity" />
-        <activity
-            android:name=".activity.ExamActivity"
-            android:label="@string/title_activity_exam"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".activity.ScoreActivity"
-            android:label="@string/title_activity_score"
-            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>
