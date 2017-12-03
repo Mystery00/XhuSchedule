@@ -55,13 +55,6 @@ class LoginActivity : AppCompatActivity() {
                 .setCanceledOnTouchOutside(false)
                 .setLoadingColor(ContextCompat.getColor(this, R.color.colorAccent))
                 .setHintTextColor(ContextCompat.getColor(this, R.color.colorAccent))
-
-//        val colorAnim = ObjectAnimator.ofInt(login_form, "backgroundColor", -0x7f80, -0x7f7f01)
-//        colorAnim.duration = 3000
-//        colorAnim.setEvaluator(ArgbEvaluator())
-//        colorAnim.repeatCount = ValueAnimator.INFINITE
-//        colorAnim.repeatMode = ValueAnimator.REVERSE
-//        colorAnim.start()
     }
 
     private fun attemptLogin() {
