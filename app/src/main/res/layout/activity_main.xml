@@ -39,6 +39,7 @@
                     app:layout_constraintStart_toStartOf="parent" />
 
                 <android.support.constraint.ConstraintLayout
+                    android:id="@+id/titleLayout"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/layout_week_height"
                     android:background="@color/colorPrimary">
