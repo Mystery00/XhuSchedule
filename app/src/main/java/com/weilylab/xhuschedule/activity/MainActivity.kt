@@ -92,8 +92,11 @@ class MainActivity : AppCompatActivity() {
         initView()
         if (ScheduleHelper.isFromLogin)
             updateAllData()
-        else
+        else {
+            Logs.i(TAG, "show1")
+            loadingDialog.show()
             updateAllView()
+        }
         showUpdateLog()
         if (Settings.isFirstRun)
             showcase()
@@ -146,6 +149,8 @@ class MainActivity : AppCompatActivity() {
             studentList.clear()
             studentList.addAll(XhuFileUtil.getArrayFromFile(File(filesDir.absolutePath + File.separator + "data" + File.separator + "user"), Student::class.java))
             titleTextView.setTextColor(Settings.customTableTextColor)
+            Logs.i(TAG, "show2")
+            loadingDialog.show()
             updateAllView()
         }
         ScheduleHelper.isImageChange = false
@@ -262,12 +267,10 @@ class MainActivity : AppCompatActivity() {
         Observable.merge(array)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(object : Observer<Boolean> {
-                    override fun onSubscribe(d: Disposable) {
-                        loadingDialog.show()
-                    }
+                .subscribe(object : DisposableObserver<Boolean>() {
 
                     override fun onComplete() {
+                        Logs.i(TAG, "dismiss1")
                         loadingDialog.dismiss()
                         if (viewpager.currentItem != 1)
                             titleTextView.visibility = View.GONE
@@ -304,6 +307,7 @@ class MainActivity : AppCompatActivity() {
                     override fun onError(e: Throwable) {
                         e.printStackTrace()
                         isRefreshData = false
+                        Logs.i(TAG, "dismiss2")
                         loadingDialog.dismiss()
                     }
 
@@ -359,6 +363,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun updateAllData() {
+        Logs.i(TAG, "show3")
         loadingDialog.show()
         studentList.clear()
         studentList.addAll(XhuFileUtil.getArrayFromFile(File(filesDir.absolutePath + File.separator + "data" + File.separator + "user"), Student::class.java))
@@ -385,6 +390,7 @@ class MainActivity : AppCompatActivity() {
                 .subscribeWith(object : DisposableObserver<CourseRT>() {
                     private var courseRT: CourseRT? = null
                     override fun onError(e: Throwable) {
+                        Logs.i(TAG, "dismiss3")
                         loadingDialog.dismiss()
                         isRefreshData = false
                         e.printStackTrace()
@@ -406,6 +412,7 @@ class MainActivity : AppCompatActivity() {
                             updateAllData()
                             return
                         }
+                        Logs.i(TAG, "dismiss4")
                         loadingDialog.dismiss()
                         if (courseRT?.rt != "1" && courseRT?.rt != "5") {
                             isRefreshData = false
@@ -469,9 +476,11 @@ class MainActivity : AppCompatActivity() {
                                 Logs.i(TAG, "updateData: 数据未变")
                                 false
                             }
+                            Logs.i(TAG, "dismiss5")
                             loadingDialog.dismiss()
                         }
                         "2" -> {
+                            Logs.i(TAG, "dismiss6")
                             loadingDialog.dismiss()
                             isRefreshData = false
                             ScheduleHelper.isLogin = false
@@ -484,6 +493,7 @@ class MainActivity : AppCompatActivity() {
                                     .show()
                         }
                         "3" -> {
+                            Logs.i(TAG, "dismiss7")
                             loadingDialog.dismiss()
                             isRefreshData = false
                             ScheduleHelper.isLogin = false
@@ -533,6 +543,7 @@ class MainActivity : AppCompatActivity() {
                 .subscribe(object : Observer<LoginRT> {
                     private var loginRT: LoginRT? = null
                     override fun onError(e: Throwable) {
+                        Logs.i(TAG, "dismiss8")
                         loadingDialog.dismiss()
                         isRefreshData = false
                         e.printStackTrace()
@@ -548,8 +559,10 @@ class MainActivity : AppCompatActivity() {
                     }
 
                     override fun onComplete() {
-                        if (loginRT?.rt != "1")
+                        if (loginRT?.rt != "1") {
+                            Logs.i(TAG, "dismiss9")
                             loadingDialog.dismiss()
+                        }
                         when (loginRT?.rt) {
                             "0" -> {
                                 if (!isTryLogin)

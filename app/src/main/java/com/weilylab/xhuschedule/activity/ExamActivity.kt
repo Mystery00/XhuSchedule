@@ -47,12 +47,13 @@ class ExamActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_exam)
         setSupportActionBar(toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
         initView()
     }
 
     private fun initView() {
         loadingDialog = ZLoadingDialog(this)
-                .setLoadingBuilder(Z_TYPE.DOUBLE_CIRCLE)
+                .setLoadingBuilder(Z_TYPE.SEARCH_PATH)
                 .setHintText(getString(R.string.hint_dialog_sync))
                 .setHintTextSize(16F)
                 .setCanceledOnTouchOutside(false)
@@ -66,9 +67,9 @@ class ExamActivity : AppCompatActivity() {
         val array = Array(studentList.size, { i -> "${studentList[i].name}(${studentList[i].username})" })
         val arrayAdapter = ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, array)
         arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        spinner.adapter = arrayAdapter
-        spinner.setSelection(0)
-        spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+        spinner_student.adapter = arrayAdapter
+        spinner_student.setSelection(0)
+        spinner_student.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(parent: AdapterView<*>?) {
             }
 
@@ -79,7 +80,7 @@ class ExamActivity : AppCompatActivity() {
     }
 
     private fun getTests(student: Student) {
-        student.getExam()
+        student.getTests()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(object : Observer<ExamRT> {
                     private var examRT: ExamRT? = null

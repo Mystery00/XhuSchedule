@@ -11,8 +11,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.weilylab.xhuschedule.activity.ExamActivity"
-    tools:showIn="@layout/activity_exam">
+    tools:context="com.weilylab.xhuschedule.activity.ScoreActivity"
+    tools:showIn="@layout/activity_score">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_view"
@@ -22,7 +22,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/spinner_student" />
+        app:layout_constraintTop_toBottomOf="@+id/spinner_year" />
 
     <Spinner
         android:id="@+id/spinner_student"
@@ -33,5 +33,26 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <Spinner
+        android:id="@+id/spinner_year"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:padding="@dimen/exam_padding"
+        app:layout_constraintEnd_toStartOf="@id/spinner_term"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/spinner_student" />
+
+    <Spinner
+        android:id="@+id/spinner_term"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:entries="@array/term_array"
+        android:gravity="center"
+        android:padding="@dimen/exam_padding"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/spinner_year"
+        app:layout_constraintTop_toBottomOf="@id/spinner_student" />
 
 </android.support.constraint.ConstraintLayout>

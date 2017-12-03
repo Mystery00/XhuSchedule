@@ -1,8 +1,8 @@
 /*
- * Created by Mystery0 on 17-12-3 上午2:04.
+ * Created by Mystery0 on 17-12-3 上午3:20.
  * Copyright (c) 2017. All Rights reserved.
  *
- * Last modified 17-12-3 上午2:04
+ * Last modified 17-12-3 上午3:18
  */
 
 package com.weilylab.xhuschedule.adapter
@@ -14,7 +14,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import com.weilylab.xhuschedule.R
-import com.weilylab.xhuschedule.classes.Exam
+import com.weilylab.xhuschedule.classes.Score
 import com.weilylab.xhuschedule.util.DensityUtil
 import io.reactivex.Observable
 import io.reactivex.Observer
@@ -23,8 +23,8 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import kotlin.math.max
 
-class ExamAdapter(private val context: Context,
-                  private val list: ArrayList<Exam>) : RecyclerView.Adapter<ExamAdapter.ViewHolder>() {
+class ScoreAdapter(private val context: Context,
+                   private val list: ArrayList<Score>) : RecyclerView.Adapter<ScoreAdapter.ViewHolder>() {
 
     private var isAnimShowList = ArrayList<Boolean>()
     private var isExpandList = ArrayList<Boolean>()
@@ -32,19 +32,17 @@ class ExamAdapter(private val context: Context,
     private var minHeight = DensityUtil.dip2px(context, 72F)
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val exam = list[position]
+        val score = list[position]
         if (isAnimShowList.size == position)
             isAnimShowList.add(false)
         if (isExpandList.size == position)
             isExpandList.add(false)
-        holder.examNameTextView.text = exam.name
-        holder.examDateTextView.text = exam.date
-        holder.examNoTextView.text = context.getString(R.string.exam_no, exam.no)
-        holder.examSnameTextView.text = context.getString(R.string.exam_sname, exam.sname)
-        holder.examLocationTextView.text = context.getString(R.string.exam_location, exam.location)
-        holder.examTestNoTextView.text = context.getString(R.string.exam_testno, exam.testno)
-        holder.examTestTypeTextView.text = context.getString(R.string.exam_testtype, exam.testtype)
-        holder.examRegionTextView.text = context.getString(R.string.exam_region, exam.region)
+        holder.scoreNameTextView.text = score.name
+        holder.scoreScoreTextView.text = score.score
+        holder.scoreNoTextView.text = context.getString(R.string.score_no, score.no)
+        holder.scoreCourseTypeTextView.text = context.getString(R.string.score_coursetype, score.coursetype)
+        holder.scoreCreditTextView.text = context.getString(R.string.score_credit, score.credit)
+        holder.scoreGpaTextView.text = context.getString(R.string.score_gpa, score.gpa)
         if (maxHeight <= minHeight)
             holder.itemView.post {
                 maxHeight = max(maxHeight, holder.itemView.measuredHeight)
@@ -103,7 +101,7 @@ class ExamAdapter(private val context: Context,
     }
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ViewHolder {
-        return ViewHolder(LayoutInflater.from(context).inflate(R.layout.item_exam, parent, false))
+        return ViewHolder(LayoutInflater.from(context).inflate(R.layout.item_score, parent, false))
     }
 
     override fun getItemCount(): Int = list.size
@@ -114,13 +112,11 @@ class ExamAdapter(private val context: Context,
     }
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        var examNameTextView: TextView = itemView.findViewById(R.id.textView_exam_name)
-        var examDateTextView: TextView = itemView.findViewById(R.id.textView_exam_date)
-        var examNoTextView: TextView = itemView.findViewById(R.id.textView_exam_no)
-        var examSnameTextView: TextView = itemView.findViewById(R.id.textView_exam_sname)
-        var examLocationTextView: TextView = itemView.findViewById(R.id.textView_exam_location)
-        var examTestNoTextView: TextView = itemView.findViewById(R.id.textView_exam_testno)
-        var examTestTypeTextView: TextView = itemView.findViewById(R.id.textView_exam_testtype)
-        var examRegionTextView: TextView = itemView.findViewById(R.id.textView_exam_region)
+        var scoreNameTextView: TextView = itemView.findViewById(R.id.textView_score_name)
+        var scoreScoreTextView: TextView = itemView.findViewById(R.id.textView_score_score)
+        var scoreNoTextView: TextView = itemView.findViewById(R.id.textView_score_no)
+        var scoreCourseTypeTextView: TextView = itemView.findViewById(R.id.textView_score_coursetype)
+        var scoreCreditTextView: TextView = itemView.findViewById(R.id.textView_score_credit)
+        var scoreGpaTextView: TextView = itemView.findViewById(R.id.textView_score_gpa)
     }
 }
