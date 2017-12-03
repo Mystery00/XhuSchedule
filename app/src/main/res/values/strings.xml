@@ -80,6 +80,7 @@
     <string name="exam_no">选课课号：%1$s</string>
     <string name="exam_sname">姓名：%1$s</string>
     <string name="exam_location">考试地点：%1$s</string>
+    <string name="exam_time">考试时间：%1$s</string>
     <string name="exam_testno">座位号：%1$s</string>
     <string name="exam_testtype">考试形式：%1$s</string>
     <string name="exam_region">校区：%1$s</string>
