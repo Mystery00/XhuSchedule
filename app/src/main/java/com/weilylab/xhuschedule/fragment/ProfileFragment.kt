@@ -196,7 +196,8 @@ class ProfileFragment : Fragment() {
                     .load(Settings.userImg)
                     .apply(options)
                     .into(rootView!!.findViewById(R.id.profile_img))
-        }
+        } else
+            rootView!!.findViewById<ImageView>(R.id.profile_img).setImageResource(R.mipmap.profile_img)
     }
 
     fun setProfile(profile: Profile) {
