@@ -23,6 +23,7 @@
     <string name="action_settings">设置</string>
     <string name="action_logout">注销</string>
     <string name="action_sync">数据同步</string>
+    <string name="action_search">搜索</string>
     <string name="action_download_apk">下载APK</string>
     <string name="action_download_patch">下载增量包</string>
     <string name="action_feedback">反馈该信息</string>
@@ -41,6 +42,7 @@
     <string name="hint_dialog_login">登录中……</string>
     <string name="hint_dialog_update_cache">更新缓存中……</string>
     <string name="hint_dialog_check_update">检查更新中……</string>
+    <string name="hint_dialog_init">正在初始化……</string>
     <string name="hint_dialog_sync">信息同步中……</string>
     <string name="hint_invalid_cookie">登陆信息已过期，是否重新登录？</string>
     <string name="hint_try_refresh_data_error">%1$s，是否重新登录？</string>
@@ -79,6 +81,11 @@
     <string name="exam_testno">座位号：%1$s</string>
     <string name="exam_testtype">考试形式：%1$s</string>
     <string name="exam_region">校区：%1$s</string>
+
+    <string name="score_no">课程代码：%1$s</string>
+    <string name="score_coursetype">课程性质：%1$s</string>
+    <string name="score_credit">学分：%1$s</string>
+    <string name="score_gpa">绩点：%1$s</string>
 
     <string name="nav_today">今日</string>
     <string name="nav_week">本周</string>
@@ -124,6 +131,7 @@
     <string name="title_dialog_time">请选择本学期开始时间</string>
     <string name="title_activity_settings">设置</string>
     <string name="title_activity_exam">考试查询</string>
+    <string name="title_activity_score">成绩查询</string>
 
     <string name="test_course_name">课程名称</string>
     <string name="test_course_teacher">任课老师</string>

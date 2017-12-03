@@ -70,7 +70,11 @@
         <activity
             android:name=".activity.ExamActivity"
             android:label="@string/title_activity_exam"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activity.ScoreActivity"
+            android:label="@string/title_activity_score"
+            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>

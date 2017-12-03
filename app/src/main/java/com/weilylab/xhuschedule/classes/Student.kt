@@ -10,11 +10,13 @@ package com.weilylab.xhuschedule.classes
 import com.google.gson.Gson
 import com.weilylab.xhuschedule.classes.rt.ExamRT
 import com.weilylab.xhuschedule.classes.rt.LoginRT
+import com.weilylab.xhuschedule.classes.rt.ScoreRT
 import com.weilylab.xhuschedule.classes.rt.StudentInfoRT
 import com.weilylab.xhuschedule.interfaces.UserService
 import com.weilylab.xhuschedule.util.ScheduleHelper
 import io.reactivex.Observable
 import io.reactivex.schedulers.Schedulers
+import vip.mystery0.tools.logs.Logs
 import java.io.InputStreamReader
 import java.io.Serializable
 import java.util.*
@@ -52,7 +54,7 @@ class Student : Serializable {
                 }
     }
 
-    fun getExam(): Observable<ExamRT> {
+    fun getTests(): Observable<ExamRT> {
         return ScheduleHelper.tomcatRetrofit
                 .create(UserService::class.java)
                 .getTests(username)
@@ -61,4 +63,12 @@ class Student : Serializable {
                 .map { responseBody -> Gson().fromJson(InputStreamReader(responseBody.byteStream()), ExamRT::class.java) }
     }
 
+    fun getScores(year: String?, term: Int?): Observable<ScoreRT> {
+        return ScheduleHelper.tomcatRetrofit
+                .create(UserService::class.java)
+                .getScores(username, year, term)
+                .subscribeOn(Schedulers.newThread())
+                .unsubscribeOn(Schedulers.newThread())
+                .map { responseBody -> Gson().fromJson(InputStreamReader(responseBody.byteStream()), ScoreRT::class.java) }
+    }
 }

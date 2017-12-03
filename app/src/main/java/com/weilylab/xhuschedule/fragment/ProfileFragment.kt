@@ -214,8 +214,8 @@ class ProfileFragment : Fragment() {
                 .subscribe(object : DisposableObserver<Boolean>() {
                     override fun onComplete() {
                         rootView?.findViewById<TextView>(R.id.textView_title)?.text = getString(R.string.profile_title, profile.no, profile.name)
-                        rootView?.findViewById<TextView>(R.id.textView_exam_testno)?.text = getString(R.string.profile_professional, profile.profession)
-                        rootView?.findViewById<TextView>(R.id.textView_exam_no)?.text = getString(R.string.profile_classname, profile.classname)
+                        rootView?.findViewById<TextView>(R.id.textView_score_gpa)?.text = getString(R.string.profile_professional, profile.profession)
+                        rootView?.findViewById<TextView>(R.id.textView_score_no)?.text = getString(R.string.profile_classname, profile.classname)
                     }
 
                     override fun onNext(t: Boolean) {

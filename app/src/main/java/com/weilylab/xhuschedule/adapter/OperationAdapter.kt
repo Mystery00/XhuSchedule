@@ -18,10 +18,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import com.weilylab.xhuschedule.R
-import com.weilylab.xhuschedule.activity.ExamActivity
-import com.weilylab.xhuschedule.activity.LoginActivity
-import com.weilylab.xhuschedule.activity.MainActivity
-import com.weilylab.xhuschedule.activity.SettingsActivity
+import com.weilylab.xhuschedule.activity.*
 import java.io.File
 
 class OperationAdapter(private val context: Context) : RecyclerView.Adapter<OperationAdapter.ViewHolder>() {
@@ -62,9 +59,7 @@ class OperationAdapter(private val context: Context) : RecyclerView.Adapter<Oper
 
                 }
                 1 -> context.startActivity(Intent(context, ExamActivity::class.java))
-                2 -> {
-
-                }
+                2 -> context.startActivity(Intent(context, ScoreActivity::class.java))
                 3 -> {
                     val stringBuilder = StringBuilder()
                     stringBuilder.appendln("App Version: " + context.getString(R.string.app_version_name) + "-" + context.getString(R.string.app_version_code))
