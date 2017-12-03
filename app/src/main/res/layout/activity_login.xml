@@ -5,21 +5,16 @@
   ~ Last modified 17-11-18 下午8:27
   -->
 
-<android.support.v4.widget.NestedScrollView
-    android:id="@+id/login_form"
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/login_form"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_gravity="center"
     android:fillViewport="true"
     android:fitsSystemWindows="true"
     android:orientation="vertical"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingEnd="@dimen/activity_horizontal_margin"
-    android:paddingStart="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.weilylab.xhuschedule.activity.LoginActivity">
 
     <android.support.constraint.ConstraintLayout
@@ -33,32 +28,42 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.5"/>
+            app:layout_constraintGuide_percent="0.5" />
+
+        <ImageView
+            android:id="@+id/login_background"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:contentDescription="@string/app_name"
+            android:scaleType="centerCrop"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@mipmap/login_background" />
 
         <include
             android:id="@+id/include"
             layout="@layout/content_login"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/activity_vertical_margin"
-            android:layout_marginEnd="@dimen/activity_vertical_margin"
-            android:layout_marginStart="@dimen/activity_vertical_margin"
-            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:layout_marginEnd="@dimen/login_horizontal_margin"
+            android:layout_marginStart="@dimen/login_horizontal_margin"
             app:layout_constraintBottom_toBottomOf="@+id/guideline"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/guideline"/>
+            app:layout_constraintTop_toTopOf="@+id/guideline" />
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/login_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/fab_margin"
+            android:layout_marginTop="@dimen/fab_margin"
             android:clickable="true"
             android:focusable="true"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/include"
             app:layout_constraintTop_toBottomOf="@+id/include"
-            app:srcCompat="@drawable/ic_login"/>
+            app:srcCompat="@drawable/ic_login" />
 
     </android.support.constraint.ConstraintLayout>
 
