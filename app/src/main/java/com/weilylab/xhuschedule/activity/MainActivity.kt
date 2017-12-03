@@ -515,11 +515,6 @@ class MainActivity : AppCompatActivity() {
 
     private fun updateProfile(student: Student) {
         student.getInfo()
-                .subscribeOn(Schedulers.io())
-                .doOnComplete {
-                    XhuFileUtil.saveObjectToFile(studentList, File(filesDir.absolutePath + File.separator + "data" + File.separator + "user"))
-                }
-                .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(object : DisposableObserver<StudentInfoRT>() {
                     private var profile = Profile()
@@ -528,6 +523,7 @@ class MainActivity : AppCompatActivity() {
                     }
 
                     override fun onComplete() {
+                        XhuFileUtil.saveObjectToFile(studentList, File(filesDir.absolutePath + File.separator + "data" + File.separator + "user"))
                         profileFragment.setProfile(profile)
                     }
 
