@@ -244,6 +244,8 @@ class ScoreActivity : AppCompatActivity() {
                             "1" -> {
                                 scoreList.clear()
                                 scoreList.addAll(scoreRT?.scores!!)
+                                scoreList.add(Score())
+                                scoreList.addAll(scoreRT?.failscores!!)
                                 adapter.clearList()
                                 adapter.notifyDataSetChanged()
                             }

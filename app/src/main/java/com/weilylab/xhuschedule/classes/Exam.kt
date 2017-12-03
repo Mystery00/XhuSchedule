@@ -8,13 +8,13 @@
 package com.weilylab.xhuschedule.classes
 
 class Exam {
-    lateinit var date: String
-    lateinit var no: String
-    lateinit var testno: String
-    lateinit var sname: String
-    lateinit var name: String
-    lateinit var testtype: String
-    lateinit var location: String
-    lateinit var time: String
-    lateinit var region: String
+    var date: String = ""
+    var no: String = ""
+    var testno: String = ""
+    var sname: String = ""
+    var name: String = ""
+    var testtype: String = ""
+    var location: String = ""
+    var time: String = ""
+    var region: String = ""
 }

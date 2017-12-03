@@ -50,6 +50,8 @@
     <string name="hint_update_data_new">信息同步成功！和之前相比，数据有更新。</string>
     <string name="hint_update_data_error">信息同步完成！但是部分数据存在错误。</string>
     <string name="hint_course_empty">今天没课哦~</string>
+    <string name="hint_data_empty">暂时没有数据哦~</string>
+    <string name="hint_score_fail">未通过成绩</string>
     <string name="hint_permission">读取SD卡文件为必要权限，请授予~</string>
     <string name="hint_custom_img">自定义图片设置成功！</string>
     <string name="hint_nick_name">请设置昵称</string>

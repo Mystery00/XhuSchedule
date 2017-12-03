@@ -24,92 +24,116 @@ import io.reactivex.schedulers.Schedulers
 import kotlin.math.max
 
 class ScoreAdapter(private val context: Context,
-                   private val list: ArrayList<Score>) : RecyclerView.Adapter<ScoreAdapter.ViewHolder>() {
+                   private val list: ArrayList<Score>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private var isAnimShowList = ArrayList<Boolean>()
     private var isExpandList = ArrayList<Boolean>()
     private var maxHeight = 0
     private var minHeight = DensityUtil.dip2px(context, 72F)
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val score = list[position]
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (isAnimShowList.size == position)
             isAnimShowList.add(false)
         if (isExpandList.size == position)
             isExpandList.add(false)
-        holder.scoreNameTextView.text = score.name
-        holder.scoreScoreTextView.text = score.score
-        holder.scoreNoTextView.text = context.getString(R.string.score_no, score.no)
-        holder.scoreCourseTypeTextView.text = context.getString(R.string.score_coursetype, score.coursetype)
-        holder.scoreCreditTextView.text = context.getString(R.string.score_credit, score.credit)
-        holder.scoreGpaTextView.text = context.getString(R.string.score_gpa, score.gpa)
-        if (maxHeight <= minHeight)
-            holder.itemView.post {
-                maxHeight = max(maxHeight, holder.itemView.measuredHeight)
-                val params = holder.itemView.layoutParams
-                if (isExpandList[holder.adapterPosition]) {
-                    params.height = maxHeight
-                } else {
-                    params.height = minHeight
+        when (holder) {
+            is ViewHolder -> {
+                val score = list[position]
+                holder.scoreNameTextView.text = score.name
+                holder.scoreScoreTextView.text = score.score
+                holder.scoreNoTextView.text = context.getString(R.string.score_no, score.no)
+                holder.scoreCourseTypeTextView.text = context.getString(R.string.score_coursetype, score.coursetype)
+                holder.scoreCreditTextView.text = context.getString(R.string.score_credit, score.credit)
+                holder.scoreGpaTextView.text = context.getString(R.string.score_gpa, score.gpa)
+                if (maxHeight <= minHeight)
+                    holder.itemView.post {
+                        maxHeight = max(maxHeight, holder.itemView.measuredHeight)
+                        val params = holder.itemView.layoutParams
+                        if (isExpandList[holder.adapterPosition]) {
+                            params.height = maxHeight
+                        } else {
+                            params.height = minHeight
+                        }
+                        holder.itemView.layoutParams = params
+                    }
+                else {
+                    val params = holder.itemView.layoutParams
+                    if (isExpandList[holder.adapterPosition]) {
+                        params.height = maxHeight
+                    } else {
+                        params.height = minHeight
+                    }
+                    holder.itemView.layoutParams = params
                 }
-                holder.itemView.layoutParams = params
-            }
-        else {
-            val params = holder.itemView.layoutParams
-            if (isExpandList[holder.adapterPosition]) {
-                params.height = maxHeight
-            } else {
-                params.height = minHeight
-            }
-            holder.itemView.layoutParams = params
-        }
-        holder.itemView.setOnClickListener {
-            val layoutParams = holder.itemView.layoutParams
-            Observable.create<Int> { subscriber ->
-                val showArray = Array(31, { i -> ((maxHeight - minHeight) / 30F) * i + minHeight })
-                if (isExpandList[holder.adapterPosition])
-                    showArray.reverse()
-                showArray.forEach {
-                    subscriber.onNext(it.toInt())
-                    Thread.sleep(8)
+                holder.itemView.setOnClickListener {
+                    val layoutParams = holder.itemView.layoutParams
+                    Observable.create<Int> { subscriber ->
+                        val showArray = Array(31, { i -> ((maxHeight - minHeight) / 30F) * i + minHeight })
+                        if (isExpandList[holder.adapterPosition])
+                            showArray.reverse()
+                        showArray.forEach {
+                            subscriber.onNext(it.toInt())
+                            Thread.sleep(8)
+                        }
+                        subscriber.onComplete()
+                    }
+                            .subscribeOn(Schedulers.newThread())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe(object : Observer<Int> {
+                                override fun onNext(t: Int) {
+                                    layoutParams.height = t
+                                    holder.itemView.layoutParams = layoutParams
+                                }
+
+                                override fun onSubscribe(d: Disposable) {
+                                    isAnimShowList[holder.adapterPosition] = true
+                                }
+
+                                override fun onError(e: Throwable) {
+                                    e.printStackTrace()
+                                    isAnimShowList[holder.adapterPosition] = false
+                                }
+
+                                override fun onComplete() {
+                                    isAnimShowList[holder.adapterPosition] = false
+                                    isExpandList[holder.adapterPosition] = !isExpandList[holder.adapterPosition]
+                                }
+                            })
                 }
-                subscriber.onComplete()
             }
-                    .subscribeOn(Schedulers.newThread())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(object : Observer<Int> {
-                        override fun onNext(t: Int) {
-                            layoutParams.height = t
-                            holder.itemView.layoutParams = layoutParams
-                        }
-
-                        override fun onSubscribe(d: Disposable) {
-                            isAnimShowList[holder.adapterPosition] = true
-                        }
-
-                        override fun onError(e: Throwable) {
-                            e.printStackTrace()
-                            isAnimShowList[holder.adapterPosition] = false
-                        }
-
-                        override fun onComplete() {
-                            isAnimShowList[holder.adapterPosition] = false
-                            isExpandList[holder.adapterPosition] = !isExpandList[holder.adapterPosition]
-                        }
-                    })
+            is EmptyViewHolder -> {
+                val textView = holder.itemView as TextView
+                if (list.size == 1)
+                    textView.text = context.getString(R.string.hint_data_empty)
+                else
+                    textView.text = context.getString(R.string.hint_score_fail)
+            }
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ViewHolder {
-        return ViewHolder(LayoutInflater.from(context).inflate(R.layout.item_score, parent, false))
+    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): RecyclerView.ViewHolder {
+        return when (viewType) {
+            1, 2 -> EmptyViewHolder(LayoutInflater.from(context).inflate(R.layout.item_course_empty, parent, false).findViewById<TextView>(R.id.textView))
+            else -> ViewHolder(LayoutInflater.from(context).inflate(R.layout.item_score, parent, false))
+        }
     }
 
     override fun getItemCount(): Int = list.size
+
+    override fun getItemViewType(position: Int): Int {
+        return when {
+            list[position].name == "" -> 1
+            list.size == 1 -> 2
+            else -> 0
+        }
+    }
 
     fun clearList() {
         isAnimShowList.clear()
         isExpandList.clear()
     }
+
+    class EmptyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var scoreNameTextView: TextView = itemView.findViewById(R.id.textView_score_name)
