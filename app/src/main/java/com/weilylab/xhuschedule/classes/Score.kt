@@ -8,10 +8,10 @@
 package com.weilylab.xhuschedule.classes
 
 class Score {
-    lateinit var coursetype: String
-    lateinit var no: String
-    lateinit var score: String
-    lateinit var name: String
-    lateinit var gpa: String
-    lateinit var credit: String
+    var coursetype: String = ""
+    var no: String = ""
+    var score: String = ""
+    var name: String = ""
+    var gpa: String = ""
+    var credit: String = ""
 }
