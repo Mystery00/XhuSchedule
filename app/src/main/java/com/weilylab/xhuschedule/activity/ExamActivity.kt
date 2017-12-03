@@ -109,7 +109,9 @@ class ExamActivity : AppCompatActivity() {
                                 if (!isTryRefreshData) {
                                     isTryRefreshData = true
                                     getTests(student)
-                                }
+                                } else
+                                    Snackbar.make(coordinatorLayout, R.string.error_timeout, Snackbar.LENGTH_LONG)
+                                            .show()
                             }
                             "1" -> {
                                 testList.clear()

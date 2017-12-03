@@ -239,7 +239,9 @@ class ScoreActivity : AppCompatActivity() {
                                 if (!isTryRefreshData) {
                                     isTryRefreshData = true
                                     getTests(student, year, term)
-                                }
+                                } else
+                                    Snackbar.make(coordinatorLayout, R.string.error_timeout, Snackbar.LENGTH_LONG)
+                                            .show()
                             }
                             "1" -> {
                                 scoreList.clear()
