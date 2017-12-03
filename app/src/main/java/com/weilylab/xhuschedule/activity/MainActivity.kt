@@ -168,8 +168,11 @@ class MainActivity : AppCompatActivity() {
         studentList.clear()
         studentList.addAll(XhuFileUtil.getArrayFromFile(File(filesDir.absolutePath + File.separator + "data" + File.separator + "user"), Student::class.java))
 
-        if (studentList.size > 0 && studentList[0].profile != null)
-            profileFragment.setProfile(studentList[0].profile!!)
+        if (studentList.size > 0)
+            if (studentList[0].profile != null)
+                profileFragment.setProfile(studentList[0].profile!!)
+            else
+                updateProfile(studentList[0])
 
         weekAdapter = WeekAdapter(this, 1)
         weekAdapter.setWeekChangeListener(object : WeekChangeListener {
@@ -234,6 +237,9 @@ class MainActivity : AppCompatActivity() {
                 return@setOnClickListener
             isTryRefreshData = false
             updateAllData()
+        }
+        titleLayout.setOnClickListener {
+            Logs.i(TAG, "initView: titleLayout")
         }
         titleTextView.setOnClickListener {
             showWeekAnim(!isWeekShow)
