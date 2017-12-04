@@ -7,14 +7,22 @@
 
 package com.weilylab.xhuschedule.classes
 
+import android.content.Context
 import com.google.gson.Gson
+import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.classes.rt.ExamRT
 import com.weilylab.xhuschedule.classes.rt.LoginRT
 import com.weilylab.xhuschedule.classes.rt.ScoreRT
 import com.weilylab.xhuschedule.classes.rt.StudentInfoRT
 import com.weilylab.xhuschedule.interfaces.UserService
+import com.weilylab.xhuschedule.listener.GetArrayListener
+import com.weilylab.xhuschedule.listener.GetScoreListener
+import com.weilylab.xhuschedule.listener.LoginListener
+import com.weilylab.xhuschedule.listener.ProfileListener
 import com.weilylab.xhuschedule.util.ScheduleHelper
-import io.reactivex.Observable
+import io.reactivex.Observer
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import vip.mystery0.tools.logs.Logs
 import java.io.InputStreamReader
@@ -33,44 +41,234 @@ class Student : Serializable {
     var weekCourses = LinkedList<LinkedList<Course>>()
     var isReady = false
 
-    fun login(): Observable<LoginRT> {
-        return ScheduleHelper.tomcatRetrofit
+    fun login(context: Context, listener: LoginListener) {
+        login(false, context, listener)
+    }
+
+    private fun login(isTryLogin: Boolean, context: Context, listener: LoginListener) {
+        val tag = "Student login"
+        ScheduleHelper.tomcatRetrofit
                 .create(UserService::class.java)
                 .autoLogin(username, password)
+                .doOnComplete {
+                    listener.doInThread()
+                }
                 .subscribeOn(Schedulers.newThread())
                 .unsubscribeOn(Schedulers.newThread())
                 .map({ responseBody -> Gson().fromJson(InputStreamReader(responseBody.byteStream()), LoginRT::class.java) })
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(object : Observer<LoginRT> {
+                    private var loginRT: LoginRT? = null
+                    override fun onNext(t: LoginRT) {
+                        Logs.i(tag, "onNext: ")
+                        loginRT = t
+                    }
+
+                    override fun onComplete() {
+                        Logs.i(tag, "onComplete: ")
+                        when (loginRT?.rt) {
+                            "0" -> {
+                                if (!isTryLogin)
+                                    login(true, context, listener)
+                                else
+                                    listener.error(0, Exception(context.getString(R.string.error_timeout)))
+                            }
+                            "1" -> listener.loginDone(loginRT!!.name)
+                            "2" -> listener.error(2, Exception(context.getString(R.string.error_invalid_username)))
+                            "3" -> listener.error(3, Exception(context.getString(R.string.error_invalid_password)))
+                            else -> listener.error(-2, Exception(context.getString(R.string.error_other)))
+                        }
+                    }
+
+                    override fun onError(e: Throwable) {
+                        Logs.i(tag, "onError: ")
+                        listener.error(-1, e)
+                    }
+
+                    override fun onSubscribe(d: Disposable) {
+                        Logs.i(tag, "onSubscribe: ")
+                    }
+                })
     }
 
-    fun getInfo(): Observable<StudentInfoRT> {
-        return ScheduleHelper.tomcatRetrofit
+    fun getInfo(context: Context, listener: ProfileListener) {
+        getInfo(false, context, listener)
+    }
+
+    private fun getInfo(isTryRefreshData: Boolean, context: Context, listener: ProfileListener) {
+        val tag = "Student getInfo"
+        ScheduleHelper.tomcatRetrofit
                 .create(UserService::class.java)
                 .getInfo(username)
                 .subscribeOn(Schedulers.newThread())
                 .unsubscribeOn(Schedulers.newThread())
                 .map { responseBody -> Gson().fromJson(InputStreamReader(responseBody.byteStream()), StudentInfoRT::class.java) }
-                .doOnNext { studentInfoRT ->
-                    profile = Profile().map(studentInfoRT)
-                }
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(object : Observer<StudentInfoRT> {
+                    private var studentInfoRT: StudentInfoRT? = null
+                    override fun onNext(t: StudentInfoRT) {
+                        Logs.i(tag, "onNext: ")
+                        studentInfoRT = t
+                    }
+
+                    override fun onComplete() {
+                        Logs.i(tag, "onComplete: ")
+                        when (studentInfoRT?.rt) {
+                            "0" ->
+                                if (!isTryRefreshData)
+                                    getInfo(true, context, listener)
+                                else
+                                    listener.error(0, Exception(context.getString(R.string.error_timeout)))
+                            "1" -> {
+                                profile = Profile().map(studentInfoRT!!)
+                                listener.got(profile!!)
+                            }
+                            "2" -> listener.error(2, Exception(context.getString(R.string.error_invalid_username)))
+                            "3" -> listener.error(3, Exception(context.getString(R.string.error_invalid_password)))
+                            "6" -> {
+                                login(context, object : LoginListener {
+                                    override fun doInThread() {
+                                    }
+
+                                    override fun loginDone(name: String) {
+                                        getInfo(true, context, listener)
+                                    }
+
+                                    override fun error(rt: Int, e: Throwable) {
+                                        listener.error(rt, e)
+                                    }
+                                })
+                            }
+                        }
+                    }
+
+                    override fun onError(e: Throwable) {
+                        Logs.i(tag, "onError: ")
+                        listener.error(-1, e)
+                    }
+
+                    override fun onSubscribe(d: Disposable) {
+                        Logs.i(tag, "onSubscribe: ")
+                    }
+                })
     }
 
-    fun getTests(): Observable<ExamRT> {
-        return ScheduleHelper.tomcatRetrofit
+    fun getTests(context: Context, listener: GetArrayListener<Exam>) {
+        getTests(false, context, listener)
+    }
+
+    private fun getTests(isTryRefreshData: Boolean, context: Context, listener: GetArrayListener<Exam>) {
+        val tag = "Student getTests"
+        ScheduleHelper.tomcatRetrofit
                 .create(UserService::class.java)
                 .getTests(username)
                 .subscribeOn(Schedulers.newThread())
                 .unsubscribeOn(Schedulers.newThread())
                 .map { responseBody -> Gson().fromJson(InputStreamReader(responseBody.byteStream()), ExamRT::class.java) }
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(object : Observer<ExamRT> {
+                    private var examRT: ExamRT? = null
+                    override fun onNext(t: ExamRT) {
+                        Logs.i(tag, "onNext: ")
+                        examRT = t
+                    }
+
+                    override fun onComplete() {
+                        Logs.i(tag, "onComplete: ")
+                        when (examRT?.rt) {
+                            "0" ->
+                                if (!isTryRefreshData)
+                                    getTests(true, context, listener)
+                                else
+                                    listener.error(0, Exception(context.getString(R.string.error_timeout)))
+                            "1" -> {
+                            }
+                            "2" -> listener.error(2, Exception(context.getString(R.string.error_invalid_username)))
+                            "3" -> listener.error(3, Exception(context.getString(R.string.error_invalid_password)))
+                            "6" -> {
+                                login(context, object : LoginListener {
+                                    override fun doInThread() {
+                                    }
+
+                                    override fun loginDone(name: String) {
+                                        getTests(true, context, listener)
+                                    }
+
+                                    override fun error(rt: Int, e: Throwable) {
+                                        listener.error(rt, e)
+                                    }
+                                })
+                            }
+                        }
+                    }
+
+                    override fun onError(e: Throwable) {
+                        Logs.i(tag, "onError: ")
+                        listener.error(-1, e)
+                    }
+
+                    override fun onSubscribe(d: Disposable) {
+                        Logs.i(tag, "onSubscribe: ")
+                    }
+                })
     }
 
-    fun getScores(year: String?, term: Int?): Observable<ScoreRT> {
-        return ScheduleHelper.tomcatRetrofit
+    fun getScores(context: Context, year: String?, term: Int?, listener: GetScoreListener) {
+        getScores(false, context, year, term, listener)
+    }
+
+    private fun getScores(isTryRefreshData: Boolean, context: Context, year: String?, term: Int?, listener: GetScoreListener) {
+        val tag = "Student getScores"
+        ScheduleHelper.tomcatRetrofit
                 .create(UserService::class.java)
                 .getScores(username, year, term)
                 .subscribeOn(Schedulers.newThread())
                 .unsubscribeOn(Schedulers.newThread())
                 .map { responseBody -> Gson().fromJson(InputStreamReader(responseBody.byteStream()), ScoreRT::class.java) }
-    }
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(object : Observer<ScoreRT> {
+                    private var scoreRT: ScoreRT? = null
+                    override fun onNext(t: ScoreRT) {
+                        Logs.i(tag, "onNext: ")
+                        scoreRT = t
+                    }
 
-//    fun feedback():Observable<>
+                    override fun onComplete() {
+                        Logs.i(tag, "onComplete: ")
+                        when (scoreRT?.rt) {
+                            "0" ->
+                                if (!isTryRefreshData)
+                                    getScores(true, context, year, term, listener)
+                                else
+                                    listener.error(0, Exception(context.getString(R.string.error_timeout)))
+                            "1" -> listener.got(scoreRT!!.scores, scoreRT!!.failscores)
+                            "2" -> listener.error(2, Exception(context.getString(R.string.error_invalid_username)))
+                            "3" -> listener.error(3, Exception(context.getString(R.string.error_invalid_password)))
+                            "6" -> {
+                                login(context, object : LoginListener {
+                                    override fun doInThread() {
+                                    }
+
+                                    override fun loginDone(name: String) {
+                                        getScores(true, context, year, term, listener)
+                                    }
+
+                                    override fun error(rt: Int, e: Throwable) {
+                                        listener.error(rt, e)
+                                    }
+                                })
+                            }
+                        }
+                    }
+
+                    override fun onError(e: Throwable) {
+                        Logs.i(tag, "onError: ")
+                        listener.error(-1, e)
+                    }
+
+                    override fun onSubscribe(d: Disposable) {
+                        Logs.i(tag, "onSubscribe: ")
+                    }
+                })
+    }
 }

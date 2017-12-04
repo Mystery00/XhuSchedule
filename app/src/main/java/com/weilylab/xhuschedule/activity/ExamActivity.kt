@@ -15,30 +15,22 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.Toast
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.adapter.ExamAdapter
 import com.weilylab.xhuschedule.classes.Exam
 import com.weilylab.xhuschedule.classes.Student
-import com.weilylab.xhuschedule.classes.rt.ExamRT
-import com.weilylab.xhuschedule.classes.rt.LoginRT
+import com.weilylab.xhuschedule.listener.GetArrayListener
 import com.weilylab.xhuschedule.util.XhuFileUtil
 import com.zyao89.view.zloading.ZLoadingDialog
 import com.zyao89.view.zloading.Z_TYPE
-import io.reactivex.Observer
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.Disposable
 
 import kotlinx.android.synthetic.main.activity_exam.*
 import kotlinx.android.synthetic.main.content_exam.*
 import java.io.File
-import java.net.UnknownHostException
 
 class ExamActivity : AppCompatActivity() {
 
     private lateinit var loadingDialog: ZLoadingDialog
-    private var isTryRefreshData = false
-    private var isTryLogin = false
     private val studentList = ArrayList<Student>()
     private val testList = ArrayList<Exam>()
     private lateinit var adapter: ExamAdapter
@@ -80,111 +72,25 @@ class ExamActivity : AppCompatActivity() {
     }
 
     private fun getTests(student: Student) {
-        student.getTests()
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(object : Observer<ExamRT> {
-                    private var examRT: ExamRT? = null
-                    override fun onError(e: Throwable) {
-                        loadingDialog.dismiss()
-                        e.printStackTrace()
-                        if (e is UnknownHostException)
-                            Snackbar.make(coordinatorLayout, R.string.error_network, Snackbar.LENGTH_SHORT)
-                                    .show()
-                        else
-                            Snackbar.make(coordinatorLayout, "请求出错：" + e.message + "，请重试", Snackbar.LENGTH_SHORT)
-                                    .show()
-                    }
+        loadingDialog.show()
+        student.getTests(this,object :GetArrayListener<Exam>{
+            override fun error(rt: Int, e: Throwable) {
+                loadingDialog.dismiss()
+                e.printStackTrace()
+                Snackbar.make(coordinatorLayout, e.message!!, Snackbar.LENGTH_SHORT)
+                        .show()
+            }
 
-                    override fun onNext(t: ExamRT) {
-                        examRT = t
-                    }
+            override fun got(array: Array<Exam>) {
+                loadingDialog.dismiss()
+                testList.clear()
+                testList.addAll(array)
+                adapter.clearList()
+                adapter.notifyDataSetChanged()
+            }
 
-                    override fun onSubscribe(d: Disposable) {
-                        loadingDialog.show()
-                    }
-
-                    override fun onComplete() {
-                        when (examRT?.rt) {
-                            "0" -> {
-                                if (!isTryRefreshData) {
-                                    isTryRefreshData = true
-                                    getTests(student)
-                                } else
-                                    Snackbar.make(coordinatorLayout, R.string.error_timeout, Snackbar.LENGTH_LONG)
-                                            .show()
-                            }
-                            "1" -> {
-                                testList.clear()
-                                testList.addAll(examRT?.tests!!)
-                                adapter.clearList()
-                                adapter.notifyDataSetChanged()
-                            }
-                            "2" -> Snackbar.make(coordinatorLayout, R.string.error_invalid_username, Snackbar.LENGTH_LONG)
-                                    .show()
-                            "3" -> Snackbar.make(coordinatorLayout, R.string.error_invalid_password, Snackbar.LENGTH_LONG)
-                                    .show()
-                            "6" -> {
-                                login(student)
-                                return
-                            }
-                        }
-                        loadingDialog.dismiss()
-                    }
-                })
-    }
-
-    private fun login(student: Student) {
-        student.login()
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(object : Observer<LoginRT> {
-                    private var loginRT: LoginRT? = null
-                    override fun onError(e: Throwable) {
-                        loadingDialog.dismiss()
-                        e.printStackTrace()
-                        if (e is UnknownHostException)
-                            Toast.makeText(this@ExamActivity, R.string.error_network, Toast.LENGTH_SHORT)
-                                    .show()
-                        else
-                            Toast.makeText(this@ExamActivity, e.message, Toast.LENGTH_SHORT)
-                                    .show()
-                    }
-
-                    override fun onSubscribe(d: Disposable) {
-                    }
-
-                    override fun onComplete() {
-                        when (loginRT?.rt) {
-                            "0" -> {
-                                if (!isTryLogin)
-                                    login(student)
-                                else {
-                                    loadingDialog.dismiss()
-                                    Snackbar.make(coordinatorLayout, R.string.error_timeout, Snackbar.LENGTH_LONG)
-                                            .show()
-                                }
-                            }
-                            "1" -> getTests(student)
-                            "2" -> {
-                                loadingDialog.dismiss()
-                                Snackbar.make(coordinatorLayout, R.string.error_invalid_username, Snackbar.LENGTH_LONG)
-                                        .show()
-                            }
-                            "3" -> {
-                                loadingDialog.dismiss()
-                                Snackbar.make(coordinatorLayout, R.string.error_invalid_password, Snackbar.LENGTH_LONG)
-                                        .show()
-                            }
-                            else -> {
-                                loadingDialog.dismiss()
-                                Snackbar.make(coordinatorLayout, R.string.error_other, Snackbar.LENGTH_LONG)
-                                        .show()
-                            }
-                        }
-                    }
-
-                    override fun onNext(t: LoginRT) {
-                        loginRT = t
-                    }
-                })
+            override fun doInThread() {
+            }
+        })
     }
 }
