@@ -19,6 +19,7 @@ import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
+import vip.mystery0.tools.logs.Logs
 import java.io.InputStreamReader
 
 class UpdateService : IntentService("UpdateService") {
@@ -41,6 +42,7 @@ class UpdateService : IntentService("UpdateService") {
                     }
 
                     override fun onComplete() {
+                        Logs.i("UpdateService", "onComplete: " + update.message)
                         if (update.code == 1)
                             UpdateNotification.notify(applicationContext, update.version)
                         stopSelf()

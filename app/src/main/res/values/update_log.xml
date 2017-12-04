@@ -8,13 +8,24 @@
 <resources>
     <string name="dialog_title_update_log">%1$s版的更新日志</string>
     <string-array name="update_list">
-        <item>说明：该版本为紧急修复版本，修复上一版本一些问题</item>
-        <item>说明：查考试、查成绩、桌面小部件都会有的</item>
+        <item>感谢\@Qwin Chen提供登录页图片</item>
+        <item>说明：桌面小部件会有的</item>
+        <item>说明：此版本的一些素材来自开发者，并非来自\@爱吃饭的越越，如果不好看请谅解……</item>
+        <item>说明：鉴于西瓜课表的数据来源来自教务系统（http://jwc.xhu.edu.cn/），所以在选课期间可能会受到干扰，请用户谅解。</item>
         <item> </item>
-        <item>修复：部分用户数据解析错误导致不显示</item>
-        <item>修复：可以添加同一个账号的bug</item>
-        <item>修复：Android 5.0以下部分用户闪退</item>
-        <item>修复：同步课程数据时错误导致信息提示错误</item>
-        <item>修复：Android O上更新后安装问题</item>
+        <item>新增：个人信息页</item>
+        <item>新增：成绩查询功能</item>
+        <item>新增：考试查询功能</item>
+        <item>新增：个人信息查询</item>
+        <item>新增：异常捕获界面（部分手机不会出现），请将异常信息反馈给开发者（界面内提供）</item>
+        <item>新增：自动检查更新开关</item>
+        <item> </item>
+        <item>修复：部分操作下会导致闪退</item>
+        <item>修复：数据存储方式，理论上来说以后更新不会再要求重新登陆了</item>
+        <item>修复：点击标题栏会触发周数选择事件</item>
+        <item>修复：同步数据时对话框显示两次</item>
+        <item> </item>
+        <item>更改：本学期课表和本周课表合并，默认将非本周课程灰掉，依旧显示，可以在设置中关闭显示</item>
+        <item>更改：现在可以在个人信息页更改头像和背景了</item>
     </string-array>
 </resources>

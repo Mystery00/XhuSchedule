@@ -32,6 +32,14 @@
         </Preference>
 
         <Preference
+            android:summary="@string/summary_login_img"
+            android:title="@string/title_login_img">
+            <intent
+                android:action="android.intent.action.VIEW"
+                android:data="@string/link_login_img" />
+        </Preference>
+
+        <Preference
             android:summary="@string/summary_local_img"
             android:title="@string/title_local_img">
             <intent
@@ -42,6 +50,11 @@
     </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/screen_category_about">
+
+        <SwitchPreference
+            android:key="@string/key_auto_check_update"
+            android:summary="@string/summary_auto_check_update"
+            android:title="@string/title_auto_check_update" />
 
         <Preference
             android:summary="@string/summary_weily_product"
