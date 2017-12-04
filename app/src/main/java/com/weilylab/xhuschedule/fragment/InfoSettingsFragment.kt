@@ -13,6 +13,7 @@ import android.os.Build
 import android.os.Bundle
 import android.preference.Preference
 import android.preference.PreferenceFragment
+import android.preference.SwitchPreference
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AlertDialog
 import android.view.LayoutInflater
@@ -24,6 +25,7 @@ import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.classes.Update
 import com.weilylab.xhuschedule.interfaces.UpdateService
 import com.weilylab.xhuschedule.util.ScheduleHelper
+import com.weilylab.xhuschedule.util.Settings
 import com.weilylab.xhuschedule.util.notification.UpdateNotification
 import com.zyao89.view.zloading.ZLoadingDialog
 import com.zyao89.view.zloading.Z_TYPE
@@ -31,6 +33,7 @@ import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
+import vip.mystery0.tools.logs.Logs
 import java.io.InputStreamReader
 import java.net.UnknownHostException
 
@@ -39,6 +42,7 @@ import java.net.UnknownHostException
  */
 class InfoSettingsFragment : PreferenceFragment() {
     private lateinit var loadingDialog: ZLoadingDialog
+    private lateinit var autoCheckUpdatePreference: SwitchPreference
     private lateinit var feedbackPreference: Preference
     private lateinit var updateLogPreference: Preference
     private lateinit var checkUpdatePreference: Preference
@@ -56,9 +60,15 @@ class InfoSettingsFragment : PreferenceFragment() {
                 .setCanceledOnTouchOutside(false)
                 .setLoadingColor(ContextCompat.getColor(activity, R.color.colorAccent))
                 .setHintTextColor(ContextCompat.getColor(activity, R.color.colorAccent))
+        autoCheckUpdatePreference = findPreference(getString(R.string.key_auto_check_update)) as SwitchPreference
         feedbackPreference = findPreference(getString(R.string.key_feedback))
         updateLogPreference = findPreference(getString(R.string.key_update_log))
         checkUpdatePreference = findPreference(getString(R.string.key_check_update))
+        autoCheckUpdatePreference.isChecked = Settings.autoCheckUpdate
+        autoCheckUpdatePreference.setOnPreferenceChangeListener { _, _ ->
+            Settings.autoCheckUpdate = !autoCheckUpdatePreference.isChecked
+            true
+        }
         feedbackPreference.setOnPreferenceClickListener {
             val stringBuilder = StringBuilder()
             stringBuilder.appendln("App Version: " + getString(R.string.app_version_name) + "-" + getString(R.string.app_version_code))

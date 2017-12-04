@@ -58,4 +58,7 @@ object Settings {
     var customTextHeight: Int
         set(value) = sharedPreference.edit().putInt("customHeightSize", value).apply()
         get() = sharedPreference.getInt("customHeightSize", 144)
+    var autoCheckUpdate: Boolean
+        set(value) = sharedPreference.edit().putBoolean("autoCheckUpdate", value).apply()
+        get() = sharedPreference.getBoolean("autoCheckUpdate", true)
 }

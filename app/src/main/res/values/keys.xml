@@ -56,11 +56,17 @@
     <string name="title_developer">开发者</string>
     <string name="summary_developer">\@Mystery0</string>
     <string name="link_developer">https://mystery0.vip/</string>
+    <string name="title_login_img">登录背景图片提供者</string>
+    <string name="summary_login_img">\@Qwin Chen</string>
+    <string name="link_login_img">http://www.jianshu.com/u/de99e3e9e332</string>
     <string name="title_local_img">预设图片提供者</string>
     <string name="summary_local_img">\@BigDingDing</string>
     <string name="link_local_img">http://www.coolapk.com/u/703237</string>
 
     <string name="screen_category_about">关于</string>
+    <string name="key_auto_check_update">key_auto_check_update</string>
+    <string name="title_auto_check_update">自动检查更新</string>
+    <string name="summary_auto_check_update">在每一次启动时自动检查更新，注意，跳过某个版本将会无法使用增量更新</string>
     <string name="key_source_code">key_source_code</string>
     <string name="title_source_code">开源地址</string>
     <string name="summary_source_code">https://github.com/Mystery00/XhuSchedule</string>
