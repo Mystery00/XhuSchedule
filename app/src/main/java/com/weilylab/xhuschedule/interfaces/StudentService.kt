@@ -13,10 +13,14 @@ import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.POST
 
-interface UserService {
+interface StudentService {
     @FormUrlEncoded
     @POST("/course/Course/autoLogin")
     fun autoLogin(@Field("username") username: String, @Field("password") password: String): Observable<ResponseBody>
+
+    @FormUrlEncoded
+    @POST("/course/Course/getCourses")
+    fun getCourses(@Field("username") username: String): Observable<ResponseBody>
 
     @FormUrlEncoded
     @POST("/course/User/getInfo")

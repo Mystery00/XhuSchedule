@@ -25,13 +25,9 @@ import android.support.v4.content.ContextCompat
 import com.weilylab.xhuschedule.classes.Student
 import com.weilylab.xhuschedule.listener.LoginListener
 import com.weilylab.xhuschedule.util.XhuFileUtil
-import vip.mystery0.tools.logs.Logs
 import java.io.File
 
 class LoginActivity : AppCompatActivity() {
-    companion object {
-        private val TAG = "LoginActivity"
-    }
 
     private lateinit var loginDialog: ZLoadingDialog
     private var isAddAccount = false
@@ -93,7 +89,6 @@ class LoginActivity : AppCompatActivity() {
         student.password = passwordStr
         student.login(this, object : LoginListener {
             override fun doInThread() {
-                Logs.i(TAG, "doInThread: ")
             }
 
             override fun error(rt: Int, e: Throwable) {

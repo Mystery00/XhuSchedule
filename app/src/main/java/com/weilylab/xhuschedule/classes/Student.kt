@@ -10,28 +10,20 @@ package com.weilylab.xhuschedule.classes
 import android.content.Context
 import com.google.gson.Gson
 import com.weilylab.xhuschedule.R
-import com.weilylab.xhuschedule.classes.rt.ExamRT
-import com.weilylab.xhuschedule.classes.rt.LoginRT
-import com.weilylab.xhuschedule.classes.rt.ScoreRT
-import com.weilylab.xhuschedule.classes.rt.StudentInfoRT
-import com.weilylab.xhuschedule.interfaces.UserService
-import com.weilylab.xhuschedule.listener.GetArrayListener
-import com.weilylab.xhuschedule.listener.GetScoreListener
-import com.weilylab.xhuschedule.listener.LoginListener
-import com.weilylab.xhuschedule.listener.ProfileListener
+import com.weilylab.xhuschedule.classes.rt.*
+import com.weilylab.xhuschedule.interfaces.StudentService
+import com.weilylab.xhuschedule.listener.*
 import com.weilylab.xhuschedule.util.ScheduleHelper
 import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
+import okhttp3.ResponseBody
 import vip.mystery0.tools.logs.Logs
 import java.io.InputStreamReader
 import java.io.Serializable
 import java.util.*
 
-/**
- * Created by myste.
- */
 class Student : Serializable {
     lateinit var username: String
     lateinit var password: String
@@ -48,7 +40,7 @@ class Student : Serializable {
     private fun login(isTryLogin: Boolean, context: Context, listener: LoginListener) {
         val tag = "Student login"
         ScheduleHelper.tomcatRetrofit
-                .create(UserService::class.java)
+                .create(StudentService::class.java)
                 .autoLogin(username, password)
                 .doOnComplete {
                     listener.doInThread()
@@ -98,8 +90,11 @@ class Student : Serializable {
     private fun getInfo(isTryRefreshData: Boolean, context: Context, listener: ProfileListener) {
         val tag = "Student getInfo"
         ScheduleHelper.tomcatRetrofit
-                .create(UserService::class.java)
+                .create(StudentService::class.java)
                 .getInfo(username)
+                .doOnComplete {
+                    listener.doInThread()
+                }
                 .subscribeOn(Schedulers.newThread())
                 .unsubscribeOn(Schedulers.newThread())
                 .map { responseBody -> Gson().fromJson(InputStreamReader(responseBody.byteStream()), StudentInfoRT::class.java) }
@@ -160,8 +155,11 @@ class Student : Serializable {
     private fun getTests(isTryRefreshData: Boolean, context: Context, listener: GetArrayListener<Exam>) {
         val tag = "Student getTests"
         ScheduleHelper.tomcatRetrofit
-                .create(UserService::class.java)
+                .create(StudentService::class.java)
                 .getTests(username)
+                .doOnComplete {
+                    listener.doInThread()
+                }
                 .subscribeOn(Schedulers.newThread())
                 .unsubscribeOn(Schedulers.newThread())
                 .map { responseBody -> Gson().fromJson(InputStreamReader(responseBody.byteStream()), ExamRT::class.java) }
@@ -181,8 +179,7 @@ class Student : Serializable {
                                     getTests(true, context, listener)
                                 else
                                     listener.error(0, Exception(context.getString(R.string.error_timeout)))
-                            "1" -> {
-                            }
+                            "1" -> listener.got(examRT!!.tests)
                             "2" -> listener.error(2, Exception(context.getString(R.string.error_invalid_username)))
                             "3" -> listener.error(3, Exception(context.getString(R.string.error_invalid_password)))
                             "6" -> {
@@ -220,8 +217,11 @@ class Student : Serializable {
     private fun getScores(isTryRefreshData: Boolean, context: Context, year: String?, term: Int?, listener: GetScoreListener) {
         val tag = "Student getScores"
         ScheduleHelper.tomcatRetrofit
-                .create(UserService::class.java)
+                .create(StudentService::class.java)
                 .getScores(username, year, term)
+                .doOnComplete {
+                    listener.doInThread()
+                }
                 .subscribeOn(Schedulers.newThread())
                 .unsubscribeOn(Schedulers.newThread())
                 .map { responseBody -> Gson().fromJson(InputStreamReader(responseBody.byteStream()), ScoreRT::class.java) }

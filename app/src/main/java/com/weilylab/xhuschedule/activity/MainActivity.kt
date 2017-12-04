@@ -35,7 +35,7 @@ import com.weilylab.xhuschedule.classes.rt.CourseRT
 import com.weilylab.xhuschedule.fragment.ProfileFragment
 import com.weilylab.xhuschedule.fragment.TableFragment
 import com.weilylab.xhuschedule.fragment.TodayFragment
-import com.weilylab.xhuschedule.interfaces.CourseService
+import com.weilylab.xhuschedule.interfaces.StudentService
 import com.weilylab.xhuschedule.listener.LoginListener
 import com.weilylab.xhuschedule.listener.ProfileListener
 import com.weilylab.xhuschedule.listener.WeekChangeListener
@@ -457,7 +457,7 @@ class MainActivity : AppCompatActivity() {
             parentFile.mkdirs()
         val base64Name = XhuFileUtil.filterString(Base64.encodeToString(student.username.toByteArray(), Base64.DEFAULT))
         return ScheduleHelper.tomcatRetrofit
-                .create(CourseService::class.java)
+                .create(StudentService::class.java)
                 .getCourses(student.username)
                 .subscribeOn(Schedulers.newThread())
                 .unsubscribeOn(Schedulers.newThread())
@@ -499,7 +499,6 @@ class MainActivity : AppCompatActivity() {
                                     .show()
                         }
                         "3" -> {
-                            Logs.i(TAG, "dismiss7")
                             loadingDialog.dismiss()
                             isRefreshData = false
                             ScheduleHelper.isLogin = false
