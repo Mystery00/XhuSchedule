@@ -7,8 +7,6 @@
 
 package com.weilylab.xhuschedule.activity
 
-import android.animation.ArgbEvaluator
-import android.animation.ObjectAnimator
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
@@ -19,22 +17,21 @@ import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.util.ScheduleHelper
 import com.zyao89.view.zloading.ZLoadingDialog
 import com.zyao89.view.zloading.Z_TYPE
-import io.reactivex.Observer
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.Disposable
 import kotlinx.android.synthetic.main.activity_login.*
 
 import kotlinx.android.synthetic.main.content_login.*
-import android.animation.ValueAnimator
 import android.app.Activity
 import android.support.v4.content.ContextCompat
-import com.weilylab.xhuschedule.classes.rt.LoginRT
 import com.weilylab.xhuschedule.classes.Student
+import com.weilylab.xhuschedule.listener.LoginListener
 import com.weilylab.xhuschedule.util.XhuFileUtil
+import vip.mystery0.tools.logs.Logs
 import java.io.File
-import java.net.UnknownHostException
 
 class LoginActivity : AppCompatActivity() {
+    companion object {
+        private val TAG = "LoginActivity"
+    }
 
     private lateinit var loginDialog: ZLoadingDialog
     private var isAddAccount = false
@@ -88,81 +85,46 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun login() {
+        loginDialog.show()
         val usernameStr = username.text.toString()
         val passwordStr = password.text.toString()
         val student = Student()
         student.username = usernameStr
         student.password = passwordStr
-        student.login()
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(object : Observer<LoginRT> {
-                    private var loginRT: LoginRT? = null
-                    override fun onNext(t: LoginRT) {
-                        loginRT = t
-                    }
+        student.login(this, object : LoginListener {
+            override fun doInThread() {
+                Logs.i(TAG, "doInThread: ")
+            }
 
-                    override fun onError(e: Throwable) {
-                        loginDialog.dismiss()
-                        e.printStackTrace()
-                        if (e is UnknownHostException)
-                            Toast.makeText(this@LoginActivity, R.string.error_network, Toast.LENGTH_SHORT)
-                                    .show()
-                        else
-                            Toast.makeText(this@LoginActivity, e.message + "，请重试", Toast.LENGTH_SHORT)
-                                    .show()
-                    }
+            override fun error(rt: Int, e: Throwable) {
+                loginDialog.dismiss()
+                Toast.makeText(this@LoginActivity, e.message, Toast.LENGTH_SHORT)
+                        .show()
+            }
 
-                    override fun onSubscribe(d: Disposable) {
-                        loginDialog.show()
-                    }
-
-                    override fun onComplete() {
-                        loginDialog.dismiss()
-                        when (loginRT?.rt) {
-                            "0" -> {
-                                ScheduleHelper.isLogin = isAddAccount
-                                Toast.makeText(this@LoginActivity, R.string.error_timeout, Toast.LENGTH_SHORT)
-                                        .show()
-                            }
-                            "1" -> {
-                                ScheduleHelper.isLogin = true
-                                ScheduleHelper.isFromLogin = true
-                                val userFile = File(filesDir.absolutePath + File.separator + "data" + File.separator + "user")
-                                student.name = loginRT?.name!!
-                                val userList = XhuFileUtil.getArrayListFromFile(userFile,Student::class.java)
-                                var result = false
-                                userList.forEach {
-                                    result = result || it.username == student.username
-                                }
-                                if (!result)
-                                    userList.add(student)
-                                XhuFileUtil.saveObjectToFile(userList, userFile)
-                                Toast.makeText(this@LoginActivity, getString(R.string.success_login, loginRT?.name, getString(R.string.app_name)), Toast.LENGTH_SHORT)
-                                        .show()
-                                if (isAddAccount) {
-                                    setResult(Activity.RESULT_OK, intent)
-                                } else
-                                    startActivity(Intent(this@LoginActivity, MainActivity::class.java))
-                                finish()
-                                return
-                            }
-                            "2" -> {
-                                ScheduleHelper.isLogin = isAddAccount
-                                username.error = getString(R.string.error_invalid_username)
-                                username.requestFocus()
-                            }
-                            "3" -> {
-                                ScheduleHelper.isLogin = isAddAccount
-                                password.error = getString(R.string.error_invalid_password)
-                                password.requestFocus()
-                            }
-                            else -> {
-                                ScheduleHelper.isLogin = isAddAccount
-                                Toast.makeText(this@LoginActivity, R.string.error_other, Toast.LENGTH_SHORT)
-                                        .show()
-                            }
-                        }
-                    }
-                })
+            override fun loginDone(name: String) {
+                ScheduleHelper.isLogin = true
+                ScheduleHelper.isFromLogin = true
+                val userFile = File(filesDir.absolutePath + File.separator + "data" + File.separator + "user")
+                student.name = name
+                val userList = XhuFileUtil.getArrayListFromFile(userFile, Student::class.java)
+                var result = false
+                userList.forEach {
+                    result = result || it.username == student.username
+                }
+                if (!result)
+                    userList.add(student)
+                XhuFileUtil.saveObjectToFile(userList, userFile)
+                loginDialog.dismiss()
+                Toast.makeText(this@LoginActivity, getString(R.string.success_login, name, getString(R.string.app_name)), Toast.LENGTH_SHORT)
+                        .show()
+                if (isAddAccount) {
+                    setResult(Activity.RESULT_OK, intent)
+                } else
+                    startActivity(Intent(this@LoginActivity, MainActivity::class.java))
+                finish()
+                return
+            }
+        })
     }
 }

@@ -20,7 +20,6 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Base64
 import android.view.View
-import android.widget.Toast
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
@@ -33,12 +32,12 @@ import com.weilylab.xhuschedule.adapter.ViewPagerAdapter
 import com.weilylab.xhuschedule.adapter.WeekAdapter
 import com.weilylab.xhuschedule.classes.*
 import com.weilylab.xhuschedule.classes.rt.CourseRT
-import com.weilylab.xhuschedule.classes.rt.LoginRT
-import com.weilylab.xhuschedule.classes.rt.StudentInfoRT
 import com.weilylab.xhuschedule.fragment.ProfileFragment
 import com.weilylab.xhuschedule.fragment.TableFragment
 import com.weilylab.xhuschedule.fragment.TodayFragment
 import com.weilylab.xhuschedule.interfaces.CourseService
+import com.weilylab.xhuschedule.listener.LoginListener
+import com.weilylab.xhuschedule.listener.ProfileListener
 import com.weilylab.xhuschedule.listener.WeekChangeListener
 import com.weilylab.xhuschedule.util.*
 import com.zyao89.view.zloading.ZLoadingDialog
@@ -94,7 +93,6 @@ class MainActivity : AppCompatActivity() {
             updateAllData()
             ScheduleHelper.isFromLogin = false
         } else {
-            Logs.i(TAG, "show1")
             loadingDialog.show()
             updateAllView()
         }
@@ -123,7 +121,7 @@ class MainActivity : AppCompatActivity() {
                         }
             try {
                 dialog.show()
-            }catch (e:Exception){
+            } catch (e: Exception) {
                 e.printStackTrace()
             }
         }
@@ -158,7 +156,6 @@ class MainActivity : AppCompatActivity() {
             studentList.clear()
             studentList.addAll(XhuFileUtil.getArrayFromFile(File(filesDir.absolutePath + File.separator + "data" + File.separator + "user"), Student::class.java))
             titleTextView.setTextColor(Settings.customTableTextColor)
-            Logs.i(TAG, "show2")
             loadingDialog.show()
             updateAllView()
         }
@@ -285,7 +282,6 @@ class MainActivity : AppCompatActivity() {
                 .subscribe(object : DisposableObserver<Boolean>() {
 
                     override fun onComplete() {
-                        Logs.i(TAG, "dismiss1")
                         loadingDialog.dismiss()
                         if (viewpager.currentItem != 1)
                             titleTextView.visibility = View.GONE
@@ -322,7 +318,6 @@ class MainActivity : AppCompatActivity() {
                     override fun onError(e: Throwable) {
                         e.printStackTrace()
                         isRefreshData = false
-                        Logs.i(TAG, "dismiss2")
                         loadingDialog.dismiss()
                     }
 
@@ -379,7 +374,6 @@ class MainActivity : AppCompatActivity() {
 
     private fun updateAllData() {
         Logs.i(TAG, "updateAllData: ")
-        Logs.i(TAG, "show3")
         loadingDialog.show()
         studentList.clear()
         studentList.addAll(XhuFileUtil.getArrayFromFile(File(filesDir.absolutePath + File.separator + "data" + File.separator + "user"), Student::class.java))
@@ -406,7 +400,6 @@ class MainActivity : AppCompatActivity() {
                 .subscribeWith(object : DisposableObserver<CourseRT>() {
                     private var courseRT: CourseRT? = null
                     override fun onError(e: Throwable) {
-                        Logs.i(TAG, "dismiss3")
                         loadingDialog.dismiss()
                         isRefreshData = false
                         e.printStackTrace()
@@ -428,7 +421,6 @@ class MainActivity : AppCompatActivity() {
                             updateAllData()
                             return
                         }
-                        Logs.i(TAG, "dismiss4")
                         loadingDialog.dismiss()
                         if (courseRT?.rt != "1" && courseRT?.rt != "5") {
                             isRefreshData = false
@@ -492,11 +484,9 @@ class MainActivity : AppCompatActivity() {
                                 Logs.i(TAG, "updateData: 数据未变")
                                 false
                             }
-                            Logs.i(TAG, "dismiss5")
                             loadingDialog.dismiss()
                         }
                         "2" -> {
-                            Logs.i(TAG, "dismiss6")
                             loadingDialog.dismiss()
                             isRefreshData = false
                             ScheduleHelper.isLogin = false
@@ -530,111 +520,45 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun updateProfile(student: Student) {
-        student.getInfo()
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeWith(object : DisposableObserver<StudentInfoRT>() {
-                    private var profile = Profile()
-                    override fun onNext(t: StudentInfoRT) {
-                        profile.map(t)
-                    }
+        student.getInfo(this, object : ProfileListener {
+            override fun error(rt: Int, e: Throwable) {
+                Logs.e(TAG, "error: " + rt)
+                e.printStackTrace()
+            }
 
-                    override fun onComplete() {
-                        XhuFileUtil.saveObjectToFile(studentList, File(filesDir.absolutePath + File.separator + "data" + File.separator + "user"))
-                        profileFragment.setProfile(profile)
-                    }
+            override fun doInThread() {
+            }
 
-                    override fun onError(e: Throwable) {
-                        e.printStackTrace()
-                    }
-                })
+            override fun got(profile: Profile) {
+                XhuFileUtil.saveObjectToFile(studentList, File(filesDir.absolutePath + File.separator + "data" + File.separator + "user"))
+                profileFragment.setProfile(profile)
+            }
+        })
     }
 
     private fun login(student: Student) {
-        student.login()
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(object : Observer<LoginRT> {
-                    private var loginRT: LoginRT? = null
-                    override fun onError(e: Throwable) {
-                        Logs.i(TAG, "dismiss8")
-                        loadingDialog.dismiss()
-                        isRefreshData = false
-                        e.printStackTrace()
-                        if (e is UnknownHostException)
-                            Toast.makeText(this@MainActivity, R.string.error_network, Toast.LENGTH_SHORT)
-                                    .show()
-                        else
-                            Toast.makeText(this@MainActivity, e.message, Toast.LENGTH_SHORT)
-                                    .show()
-                    }
-
-                    override fun onSubscribe(d: Disposable) {
-                    }
-
-                    override fun onComplete() {
-                        if (loginRT?.rt != "1") {
-                            Logs.i(TAG, "dismiss9")
-                            loadingDialog.dismiss()
+        student.login(this,object :LoginListener{
+            override fun error(rt: Int, e: Throwable) {
+                isRefreshData = false
+                ScheduleHelper.isLogin = false
+                loadingDialog.dismiss()
+                Snackbar.make(coordinatorLayout, e.message!!, Snackbar.LENGTH_LONG)
+                        .setAction(android.R.string.ok) {
+                            ScheduleHelper.isLogin = false
+                            startActivity(Intent(this@MainActivity, LoginActivity::class.java))
+                            finish()
                         }
-                        when (loginRT?.rt) {
-                            "0" -> {
-                                if (!isTryLogin)
-                                    login(student)
-                                else {
-                                    isRefreshData = false
-                                    ScheduleHelper.isLogin = false
-                                    Snackbar.make(coordinatorLayout, getString(R.string.hint_try_refresh_data_error, getString(R.string.error_timeout)), Snackbar.LENGTH_LONG)
-                                            .setAction(android.R.string.ok) {
-                                                ScheduleHelper.isLogin = false
-                                                startActivity(Intent(this@MainActivity, LoginActivity::class.java))
-                                                finish()
-                                            }
-                                            .show()
-                                }
-                            }
-                            "1" -> {
-                                ScheduleHelper.isLogin = true
-                                updateData(student)
-                            }
-                            "2" -> {
-                                isRefreshData = false
-                                ScheduleHelper.isLogin = false
-                                Snackbar.make(coordinatorLayout, getString(R.string.hint_try_refresh_data_error, getString(R.string.error_invalid_username)), Snackbar.LENGTH_LONG)
-                                        .setAction(android.R.string.ok) {
-                                            ScheduleHelper.isLogin = false
-                                            startActivity(Intent(this@MainActivity, LoginActivity::class.java))
-                                            finish()
-                                        }
-                                        .show()
-                            }
-                            "3" -> {
-                                isRefreshData = false
-                                ScheduleHelper.isLogin = false
-                                Snackbar.make(coordinatorLayout, getString(R.string.hint_try_refresh_data_error, getString(R.string.error_invalid_password)), Snackbar.LENGTH_LONG)
-                                        .setAction(android.R.string.ok) {
-                                            ScheduleHelper.isLogin = false
-                                            startActivity(Intent(this@MainActivity, LoginActivity::class.java))
-                                            finish()
-                                        }
-                                        .show()
-                            }
-                            else -> {
-                                isRefreshData = false
-                                ScheduleHelper.isLogin = false
-                                Snackbar.make(coordinatorLayout, getString(R.string.hint_try_refresh_data_error, getString(R.string.error_other)), Snackbar.LENGTH_LONG)
-                                        .setAction(android.R.string.ok) {
-                                            ScheduleHelper.isLogin = false
-                                            startActivity(Intent(this@MainActivity, LoginActivity::class.java))
-                                            finish()
-                                        }
-                                        .show()
-                            }
-                        }
-                    }
+                        .show()
+            }
 
-                    override fun onNext(t: LoginRT) {
-                        loginRT = t
-                    }
-                })
+            override fun loginDone(name: String) {
+                ScheduleHelper.isLogin = true
+                updateData(student)
+            }
+
+            override fun doInThread() {
+            }
+        })
     }
 
     private fun showcase() {
