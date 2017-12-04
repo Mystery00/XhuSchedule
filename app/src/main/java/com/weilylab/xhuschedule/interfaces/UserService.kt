@@ -29,4 +29,15 @@ interface UserService {
     @FormUrlEncoded
     @POST("/course/Course/getScores")
     fun getScores(@Field("username") username: String, @Field("year") year: String?, @Field("term") term: Int?): Observable<ResponseBody>
+
+    @FormUrlEncoded
+    @POST("/course/Common/feedback")
+    fun feedback(@Field("username") username: String,
+                 @Field("appVersion") appVersion: String,
+                 @Field("systemVersion") systemVersion: String,
+                 @Field("factory") factory: String,
+                 @Field("model") model: String,
+                 @Field("rom") rom: String,
+                 @Field("other") other: String,
+                 @Field("message") message: String): Observable<ResponseBody>
 }

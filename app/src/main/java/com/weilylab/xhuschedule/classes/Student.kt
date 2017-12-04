@@ -71,4 +71,6 @@ class Student : Serializable {
                 .unsubscribeOn(Schedulers.newThread())
                 .map { responseBody -> Gson().fromJson(InputStreamReader(responseBody.byteStream()), ScoreRT::class.java) }
     }
+
+//    fun feedback():Observable<>
 }

@@ -17,8 +17,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.activity.*
+import com.weilylab.xhuschedule.classes.Student
+import com.weilylab.xhuschedule.util.XhuFileUtil
 import java.io.File
 
 class OperationAdapter(private val context: Context) : RecyclerView.Adapter<OperationAdapter.ViewHolder>() {
@@ -34,12 +37,12 @@ class OperationAdapter(private val context: Context) : RecyclerView.Adapter<Oper
                 R.string.operation_settings
         )
         val imgArray = arrayOf(
-                R.drawable.ic_week,
-                R.drawable.ic_week,
-                R.drawable.ic_week,
-                R.drawable.ic_week,
-                R.drawable.ic_week,
-                R.drawable.ic_week
+                R.drawable.ic_schedule,
+                R.drawable.ic_exam,
+                R.drawable.ic_score,
+                R.drawable.ic_feedback,
+                R.drawable.ic_logout,
+                R.drawable.ic_settings
         )
         for (i in 0 until titleArray.size) {
             val map = HashMap<String, Int>()
@@ -56,11 +59,14 @@ class OperationAdapter(private val context: Context) : RecyclerView.Adapter<Oper
         holder.itemView.setOnClickListener {
             when (position) {
                 0 -> {
-
+                    Toast.makeText(context,"暂未开放",Toast.LENGTH_SHORT)
+                            .show()
                 }
                 1 -> context.startActivity(Intent(context, ExamActivity::class.java))
                 2 -> context.startActivity(Intent(context, ScoreActivity::class.java))
                 3 -> {
+//                    val student= XhuFileUtil.getArrayFromFile(File(context.filesDir.absolutePath + File.separator + "data" + File.separator + "user"), Student::class.java)[0]
+//
                     val stringBuilder = StringBuilder()
                     stringBuilder.appendln("App Version: " + context.getString(R.string.app_version_name) + "-" + context.getString(R.string.app_version_code))
                     stringBuilder.appendln("OS Version: " + Build.VERSION.RELEASE + "-" + Build.VERSION.SDK_INT)
