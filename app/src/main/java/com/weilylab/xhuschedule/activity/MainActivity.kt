@@ -121,8 +121,11 @@ class MainActivity : AppCompatActivity() {
                         .setOnDismissListener {
                             sharedPreference.edit().putInt("updateVersion", getString(R.string.app_version_code).toInt() - 1).apply()
                         }
-            if (ScheduleHelper.isLogin)
+            try {
                 dialog.show()
+            }catch (e:Exception){
+                e.printStackTrace()
+            }
         }
     }
 
