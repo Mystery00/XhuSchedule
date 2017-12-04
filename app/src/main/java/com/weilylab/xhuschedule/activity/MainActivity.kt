@@ -111,10 +111,15 @@ class MainActivity : AppCompatActivity() {
             val dialog = AlertDialog.Builder(this)
                     .setTitle(getString(R.string.dialog_title_update_log, getString(R.string.app_version_name) + '-' + getString(R.string.app_version_code)))
                     .setMessage(message)
-                    .setPositiveButton(android.R.string.ok, null)
-                    .setOnDismissListener {
-                        sharedPreference.edit().putInt("updateVersion", getString(R.string.app_version_code).toInt()).apply()
-                    }
+            if (sharedPreference.getInt("updateVersion", 0) == getString(R.string.app_version_code).toInt() - 1)
+                dialog.setPositiveButton("我真的明白了", { _, _ ->
+                    sharedPreference.edit().putInt("updateVersion", getString(R.string.app_version_code).toInt()).apply()
+                })
+            else
+                dialog.setPositiveButton(android.R.string.ok, null)
+                        .setOnDismissListener {
+                            sharedPreference.edit().putInt("updateVersion", getString(R.string.app_version_code).toInt() - 1).apply()
+                        }
             if (ScheduleHelper.isLogin)
                 dialog.show()
         }
