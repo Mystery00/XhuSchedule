@@ -90,9 +90,10 @@ class MainActivity : AppCompatActivity() {
                 .setHintTextColor(ContextCompat.getColor(this, R.color.colorAccent))
 
         initView()
-        if (ScheduleHelper.isFromLogin)
+        if (ScheduleHelper.isFromLogin) {
             updateAllData()
-        else {
+            ScheduleHelper.isFromLogin = false
+        } else {
             Logs.i(TAG, "show1")
             loadingDialog.show()
             updateAllView()
@@ -374,6 +375,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun updateAllData() {
+        Logs.i(TAG, "updateAllData: ")
         Logs.i(TAG, "show3")
         loadingDialog.show()
         studentList.clear()
