@@ -10,9 +10,12 @@ package com.weilylab.xhuschedule.util
 import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
 import android.content.Context
+import android.content.Intent
 import android.widget.RemoteViews
 
 import com.weilylab.xhuschedule.R
+import com.weilylab.xhuschedule.service.GridWidgetService
+import vip.mystery0.tools.logs.Logs
 
 /**
  * Implementation of App Widget functionality.
@@ -20,31 +23,28 @@ import com.weilylab.xhuschedule.R
 class CourseWidget : AppWidgetProvider() {
 
     override fun onUpdate(context: Context, appWidgetManager: AppWidgetManager, appWidgetIds: IntArray) {
-        // There may be multiple widgets active, so update all of them
+        Logs.i(TAG, "onUpdate: ")
         for (appWidgetId in appWidgetIds) {
             updateAppWidget(context, appWidgetManager, appWidgetId)
         }
     }
 
     override fun onEnabled(context: Context) {
-        // Enter relevant functionality for when the first widget is created
+        Logs.i(TAG, "onEnabled: ")
     }
 
     override fun onDisabled(context: Context) {
-        // Enter relevant functionality for when the last widget is disabled
+        Logs.i(TAG, "onDisabled: ")
     }
 
     companion object {
+        private val TAG = "CourseWidget"
 
         internal fun updateAppWidget(context: Context, appWidgetManager: AppWidgetManager,
                                      appWidgetId: Int) {
-
-            val widgetText = context.getString(R.string.appwidget_text)
-            // Construct the RemoteViews object
             val views = RemoteViews(context.packageName, R.layout.course_widget)
-            views.setTextViewText(R.id.appwidget_text, widgetText)
-
-            // Instruct the widget manager to update the widget
+            val intent=Intent(context,GridWidgetService::class.java)
+            views.setRemoteAdapter(R.id.gridView,intent)
             appWidgetManager.updateAppWidget(appWidgetId, views)
         }
     }
