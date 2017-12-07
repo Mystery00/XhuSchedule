@@ -8,9 +8,6 @@
 <resources>
     <string name="app_name">西瓜课表</string>
 
-    <string name="navigation_drawer_open" translatable="false">Open navigation drawer</string>
-    <string name="navigation_drawer_close" translatable="false">Close navigation drawer</string>
-
     <string name="exception_time">崩溃时间：%1$s</string>
     <string name="exception_version">崩溃版本：%1$s_%2$d</string>
     <string name="exception_sdk">SDK：%1$s_%2$d</string>
@@ -151,6 +148,7 @@
     <string name="test_course_current_progress_text_size">当前文字大小为%1$dsp</string>
     <string name="test_course_current_progress_text_height">当前高度为%1$ddp</string>
     <string name="title_activity_schedule">ScheduleActivity</string>
+
     <string name="appwidget_text">EXAMPLE</string>
     <string name="add_widget">Add widget</string>
 </resources>
