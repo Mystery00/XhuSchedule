@@ -350,7 +350,7 @@ class UISettingsFragment : PreferenceFragment() {
                     cropImg(data.data, HEADER_CROP_REQUEST_CODE, 320, 176)
                 }
                 PROFILE_REQUEST_CODE -> {
-                    cropImg(data.data, HEADER_CROP_REQUEST_CODE, 500, 500)
+                    cropImg(data.data, PROFILE_CROP_REQUEST_CODE, 500, 500)
                 }
                 BACKGROUND_CROP_REQUEST_CODE -> {
                     Logs.i(TAG, "onActivityResult: BACKGROUND_CROP_REQUEST_CODE")
