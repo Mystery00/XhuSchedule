@@ -7,6 +7,8 @@
 
 package com.weilylab.xhuschedule.util
 
+import android.content.Context
+import com.weilylab.xhuschedule.R
 import java.util.*
 
 /**
@@ -40,5 +42,12 @@ object CalendarUtil {
             Calendar.SUNDAY -> 7
             else -> calendar.get(Calendar.DAY_OF_WEEK) - 1
         }
+    }
+
+    fun getTodayInfo(context: Context): String {
+        val week = getWeek()
+        val day = getWeekIndex()
+        val weekArray = context.resources.getStringArray(R.array.table_header)
+        return context.getString(R.string.course_today_info, week, weekArray[day - 1])
     }
 }

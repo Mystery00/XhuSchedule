@@ -7,90 +7,90 @@
 
 <resources>
     <string name="screen_category_class">课程设置</string>
-    <string name="key_first_day">key_first_day</string>
+    <string name="key_first_day" translatable="false">key_first_day</string>
     <string name="title_first_day">设置本学期开始时间</string>
-    <string name="key_show_not">key_show_not</string>
+    <string name="key_show_not" translatable="false">key_show_not</string>
     <string name="title_show_not">显示非本周课程</string>
 
     <string name="screen_category_account">账号管理</string>
     <string name="title_current_account">当前已登录账号</string>
-    <string name="key_current_account">key_current_account</string>
+    <string name="key_current_account" translatable="false">key_current_account</string>
     <string name="title_account_manager">账号管理</string>
     <string name="title_add_account">添加账号</string>
-    <string name="key_add_account">key_add_account</string>
+    <string name="key_add_account" translatable="false">key_add_account</string>
     <string name="title_del_account">删除账号</string>
-    <string name="key_del_account">key_del_account</string>
+    <string name="key_del_account" translatable="false">key_del_account</string>
     <string name="title_show_account_manager">账号显示管理</string>
-    <string name="key_show_account_manager">key_show_account_manager</string>
+    <string name="key_show_account_manager" translatable="false">key_show_account_manager</string>
 
     <string name="category_custom">自定义项</string>
     <string name="screen_category_ui">界面设置</string>
     <string name="title_user_img">自定义个人头像</string>
-    <string name="key_user_img">key_user_img</string>
+    <string name="key_user_img" translatable="false">key_user_img</string>
     <string name="title_header_img">自定义个人页背景</string>
-    <string name="key_header_img">key_header_img</string>
+    <string name="key_header_img" translatable="false">key_header_img</string>
     <string name="title_background_img">自定义背景</string>
-    <string name="key_background_img">key_background_img</string>
-    <string name="key_custom_today_opacity">key_custom_today_opacity</string>
+    <string name="key_background_img" translatable="false">key_background_img</string>
+    <string name="key_custom_today_opacity" translatable="false">key_custom_today_opacity</string>
     <string name="title_custom_today_opacity">自定义今日课表透明度</string>
-    <string name="key_custom_table_opacity">key_custom_table_opacity</string>
+    <string name="key_custom_table_opacity" translatable="false">key_custom_table_opacity</string>
     <string name="title_custom_table_opacity">自定义表格透明度</string>
-    <string name="key_custom_today_text_color">key_custom_today_text_color</string>
+    <string name="key_custom_today_text_color" translatable="false">key_custom_today_text_color</string>
     <string name="title_custom_today_text_color">自定义今日课表文字颜色</string>
-    <string name="key_custom_table_text_color">key_custom_table_text_color</string>
+    <string name="key_custom_table_text_color" translatable="false">key_custom_table_text_color</string>
     <string name="title_custom_table_text_color">自定义表格文字颜色</string>
-    <string name="key_custom_text_size">key_custom_text_size</string>
+    <string name="key_custom_text_size" translatable="false">key_custom_text_size</string>
     <string name="title_custom_text_size">自定义文本大小</string>
-    <string name="key_custom_text_height">key_custom_text_height</string>
+    <string name="key_custom_text_height" translatable="false">key_custom_text_height</string>
     <string name="title_custom_text_height">自定义文本高度</string>
-    <string name="key_reset">key_reset</string>
+    <string name="key_reset" translatable="false">key_reset</string>
     <string name="title_reset">界面重置</string>
 
     <string name="screen_category_thanks">鸣谢</string>
     <string name="title_icon_ui">图标以及界面设计</string>
-    <string name="summary_icon">\@爱吃饭的越越</string>
+    <string name="summary_icon" translatable="false">\@爱吃饭的越越</string>
     <string name="title_back">数据提供</string>
-    <string name="summary_back">\@pan</string>
+    <string name="summary_back" translatable="false">\@pan</string>
     <string name="title_ui">产品设计</string>
-    <string name="summary_ui">\@Johnny Zen</string>
+    <string name="summary_ui" translatable="false">\@Johnny Zen</string>
     <string name="title_developer">开发者</string>
-    <string name="summary_developer">\@Mystery0</string>
-    <string name="link_developer">https://mystery0.vip/</string>
+    <string name="summary_developer" translatable="false">\@Mystery0</string>
+    <string name="link_developer" translatable="false">https://mystery0.vip/</string>
     <string name="title_login_img">登录背景图片提供者</string>
-    <string name="summary_login_img">\@Qwin Chen</string>
-    <string name="link_login_img">http://www.jianshu.com/u/de99e3e9e332</string>
+    <string name="summary_login_img" translatable="false">\@Qwin Chen</string>
+    <string name="link_login_img" translatable="false">http://www.jianshu.com/u/de99e3e9e332</string>
     <string name="title_local_img">预设图片提供者</string>
-    <string name="summary_local_img">\@BigDingDing</string>
-    <string name="link_local_img">http://www.coolapk.com/u/703237</string>
+    <string name="summary_local_img" translatable="false">\@BigDingDing</string>
+    <string name="link_local_img" translatable="false">http://www.coolapk.com/u/703237</string>
 
     <string name="screen_category_about">关于</string>
-    <string name="key_auto_check_update">key_auto_check_update</string>
+    <string name="key_auto_check_update" translatable="false">key_auto_check_update</string>
     <string name="title_auto_check_update">自动检查更新</string>
     <string name="summary_auto_check_update">在每一次启动时自动检查更新，注意，跳过某个版本将会无法使用增量更新</string>
-    <string name="key_source_code">key_source_code</string>
+    <string name="key_source_code" translatable="false">key_source_code</string>
     <string name="title_source_code">开源地址</string>
-    <string name="summary_source_code">https://github.com/Mystery00/XhuSchedule</string>
+    <string name="summary_source_code" translatable="false">https://github.com/Mystery00/XhuSchedule</string>
     <string name="title_open_source_license">开源协议</string>
-    <string name="summary_open_source_license">GNU General Public License v3.0</string>
-    <string name="link_open_source_license">https://github.com/Mystery00/XhuSchedule/blob/master/LICENSE.TXT</string>
+    <string name="summary_open_source_license" translatable="false">GNU General Public License v3.0</string>
+    <string name="link_open_source_license" translatable="false">https://github.com/Mystery00/XhuSchedule/blob/master/LICENSE.TXT</string>
     <string name="title_weily_product">微力实验室出品</string>
     <string name="summary_weily_product">点击进入实验室官网</string>
-    <string name="key_feedback">key_feedback</string>
+    <string name="key_feedback" translatable="false">key_feedback</string>
     <string name="title_feedback">意见反馈</string>
     <string name="summary_feedback">请发送邮件到mystery0dyl520@gmail.com并注明APP名称</string>
     <string name="title_more_app">开发者更多应用</string>
     <string name="summary_more_app_coolapk">酷安</string>
-    <string name="link_more_app_coolapk">http://www.coolapk.com/u/631231</string>
-    <string name="summary_more_app_play">Google Play</string>
-    <string name="link_more_app_play">https://play.google.com/store/apps/developer?id=Mystery0</string>
-    <string name="key_update_log">key_update_log</string>
+    <string name="link_more_app_coolapk" translatable="false">http://www.coolapk.com/u/631231</string>
+    <string name="summary_more_app_play" translatable="false">Google Play</string>
+    <string name="link_more_app_play" translatable="false">https://play.google.com/store/apps/developer?id=Mystery0</string>
+    <string name="key_update_log" translatable="false">key_update_log</string>
     <string name="title_update_log">更新日志</string>
-    <string name="key_check_update">key_check_update</string>
+    <string name="key_check_update" translatable="false">key_check_update</string>
     <string name="title_check_update">检查更新</string>
-    <string name="key_version_name">key_version_name</string>
+    <string name="key_version_name" translatable="false">key_version_name</string>
     <string name="title_version_name">版本名称</string>
-    <string name="summary_version_name">@string/app_version_name</string>
-    <string name="key_version_code">key_version_code</string>
+    <string name="summary_version_name" translatable="false">@string/app_version_name</string>
+    <string name="key_version_code" translatable="false">key_version_code</string>
     <string name="title_version_code">版本号</string>
-    <string name="summary_version_code">@string/app_version_code</string>
+    <string name="summary_version_code" translatable="false">@string/app_version_code</string>
 </resources>

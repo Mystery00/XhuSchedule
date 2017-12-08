@@ -19,7 +19,6 @@ import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Base64
-import android.view.View
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
@@ -185,7 +184,7 @@ class MainActivity : AppCompatActivity() {
             override fun onChange(week: Int) {
                 ScheduleHelper.weekIndex = week + 1
                 weekAdapter.setWeekIndex(ScheduleHelper.weekIndex)
-                titleTextView.text = getString(R.string.course_week_index, ScheduleHelper.weekIndex)
+                swipeLayout(bottomNavigationView.menu.getItem(viewpager.currentItem).itemId)
                 updateAllView(ScheduleHelper.weekIndex)
             }
         })
@@ -217,6 +216,7 @@ class MainActivity : AppCompatActivity() {
                 R.id.bottom_nav_week -> viewpager.currentItem = 1
                 R.id.bottom_nav_profile -> viewpager.currentItem = 2
             }
+            swipeLayout(item.itemId)
             true
         }
         viewpager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
@@ -229,12 +229,7 @@ class MainActivity : AppCompatActivity() {
 
             override fun onPageSelected(position: Int) {
                 bottomNavigationView.menu.getItem(position).isChecked = true
-                if (bottomNavigationView.menu.getItem(position).itemId != R.id.bottom_nav_week) {
-                    if (isWeekShow)
-                        showWeekAnim(false)
-                    titleTextView.visibility = View.GONE
-                } else
-                    titleTextView.visibility = View.VISIBLE
+                swipeLayout(bottomNavigationView.menu.getItem(position).itemId)
             }
         })
 
@@ -246,9 +241,6 @@ class MainActivity : AppCompatActivity() {
         }
         titleLayout.setOnClickListener {
             Logs.i(TAG, "initView: titleLayout")
-        }
-        titleTextView.setOnClickListener {
-            showWeekAnim(!isWeekShow)
         }
     }
 
@@ -283,11 +275,7 @@ class MainActivity : AppCompatActivity() {
 
                     override fun onComplete() {
                         loadingDialog.dismiss()
-                        if (viewpager.currentItem != 1)
-                            titleTextView.visibility = View.GONE
-                        else
-                            titleTextView.visibility = View.VISIBLE
-                        titleTextView.text = getString(R.string.course_week_index, ScheduleHelper.weekIndex)
+                        swipeLayout(bottomNavigationView.menu.getItem(viewpager.currentItem).itemId)
                         weekAdapter.setWeekIndex(ScheduleHelper.weekIndex)
                         layout_week_recycler_view.scrollToPosition(ScheduleHelper.weekIndex - 1)
                         if (ScheduleHelper.isCookieAvailable) {
@@ -641,6 +629,46 @@ class MainActivity : AppCompatActivity() {
                             appBar.layoutParams = barLayoutParams
                         }
                     })
+        }
+    }
+
+    private fun swipeLayout(itemId: Int) {
+        when (itemId) {
+            R.id.bottom_nav_today -> {
+                if (isWeekShow)
+                    showWeekAnim(false)
+                titleTextView.setOnClickListener(null)
+                titleTextView.setCompoundDrawables(null, null, null, null)
+                titleTextView.text = CalendarUtil.getTodayInfo(this@MainActivity)
+            }
+            R.id.bottom_nav_week -> {
+                titleTextView.setOnClickListener {
+                    showWeekAnim(!isWeekShow)
+                }
+                titleTextView.text = getString(R.string.course_week_index, ScheduleHelper.weekIndex)
+                val drawable = if (isWeekShow)
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                        resources.getDrawable(R.drawable.ic_expand_less, null)
+                    } else {
+                        null
+                    }
+                else
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                        resources.getDrawable(R.drawable.ic_expand_more, null)
+                    } else {
+                        null
+                    }
+                if (drawable != null) {
+                    drawable.setBounds(0, 0, drawable.minimumWidth, drawable.minimumHeight)
+                    titleTextView.setCompoundDrawables(null, null, drawable, null)
+                }
+            }
+            R.id.bottom_nav_profile -> {
+                if (isWeekShow)
+                    showWeekAnim(false)
+                titleTextView.setOnClickListener(null)
+                titleTextView.setCompoundDrawables(null, null, null, null)
+            }
         }
     }
 }
