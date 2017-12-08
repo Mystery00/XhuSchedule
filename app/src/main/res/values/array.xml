@@ -7,13 +7,13 @@
 
 <resources>
     <string-array name="table_header">
-        <item>周一</item>
-        <item>周二</item>
-        <item>周三</item>
-        <item>周四</item>
-        <item>周五</item>
-        <item>周六</item>
-        <item>周日</item>
+        <item>@string/table_header1</item>
+        <item>@string/table_header2</item>
+        <item>@string/table_header3</item>
+        <item>@string/table_header4</item>
+        <item>@string/table_header5</item>
+        <item>@string/table_header6</item>
+        <item>@string/table_header7</item>
     </string-array>
 
     <string-array name="term_array">
