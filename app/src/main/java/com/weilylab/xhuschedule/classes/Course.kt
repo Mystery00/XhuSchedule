@@ -7,6 +7,7 @@
 
 package com.weilylab.xhuschedule.classes
 
+import com.weilylab.xhuschedule.util.CourseUtil
 import java.io.Serializable
 
 /**
@@ -25,6 +26,7 @@ class Course : Serializable {
     fun with(course: Course): Boolean {
         if (course.name == name) {
             location = "$location ($week)\n${course.location} (${course.week})"
+            type = CourseUtil.typeMerge(type, course.type)
             return true
         }
         return false

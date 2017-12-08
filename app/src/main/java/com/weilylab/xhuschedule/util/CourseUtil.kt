@@ -32,7 +32,7 @@ object CourseUtil {
             try {
                 var other = false
                 when (it.type) {
-                    "0" -> other = true
+                    "-1", "0" -> other = true
                     "1" -> if (weekIndex % 2 == 1)
                         other = true
                     "2" -> if (weekIndex % 2 == 0)
@@ -42,37 +42,11 @@ object CourseUtil {
                 val weekArray = it.week.split('-')
                 val startWeek = weekArray[0].toInt()
                 val endWeek = weekArray[1].toInt()
-                if (weekIndex !in startWeek..endWeek || !other)
+                if ((weekIndex !in startWeek..endWeek) || !other)
                     it.type = "not"
             } catch (e: Exception) {
                 e.printStackTrace()
             }
-            val timeArray = it.time.split('-')
-            val startTime = (timeArray[0].toInt() - 1) / 2
-            val endTime = (timeArray[1].toInt()) / 2
-            for (index in startTime until endTime) {
-                var flag = false
-                for (temp in tempArray[index][it.day.toInt() - 1]) {
-                    flag = temp.with(it)
-                    if (flag)
-                        break
-                }
-                if (!flag)
-                    tempArray[index][it.day.toInt() - 1].add(it)
-            }
-        }
-        val list = ArrayList<LinkedList<Course>>()
-        tempArray.forEach {
-            it.forEach {
-                list.add(it)
-            }
-        }
-        return list
-    }
-
-    fun getCourses(courses: Array<Course>): ArrayList<LinkedList<Course>> {
-        val tempArray = Array(5, { Array<LinkedList<Course>>(7, { LinkedList() }) })
-        courses.forEach {
             val timeArray = it.time.split('-')
             val startTime = (timeArray[0].toInt() - 1) / 2
             val endTime = (timeArray[1].toInt()) / 2
@@ -112,7 +86,7 @@ object CourseUtil {
             try {
                 var other = false
                 when (it.type) {
-                    "0" -> other = true
+                    "-1", "0" -> other = true
                     "1" -> if (weekIndex % 2 == 1)
                         other = true
                     "2" -> if (weekIndex % 2 == 0)
@@ -165,7 +139,7 @@ object CourseUtil {
                 val endWeek = weekArray[1].toInt()
                 var other = false
                 when (it.type) {
-                    "0" -> other = true
+                    "-1", "0" -> other = true
                     "1" -> if (currentWeek % 2 == 1)
                         other = true
                     "2" -> if (currentWeek % 2 == 0)
@@ -208,5 +182,15 @@ object CourseUtil {
             list[i].addAll(bList[i])
         }
         return list
+    }
+
+    fun typeMerge(type1: String, type2: String): String {
+        if (type1 == "not")
+            return type2
+        if (type2 == "not")
+            return type1
+        if (type1 == "-1" || type2 == "-1")
+            return "-1"
+        return type1
     }
 }

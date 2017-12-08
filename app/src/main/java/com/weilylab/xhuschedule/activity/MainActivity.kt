@@ -412,6 +412,7 @@ class MainActivity : AppCompatActivity() {
                     }
 
                     override fun onComplete() {
+                        Logs.i(TAG, "updateAllData: onComplete: " + courseRT?.rt)
                         if (courseRT?.rt == "6") {
                             ScheduleHelper.isLogin = false
                             return
@@ -531,12 +532,13 @@ class MainActivity : AppCompatActivity() {
             override fun got(profile: Profile) {
                 XhuFileUtil.saveObjectToFile(studentList, File(filesDir.absolutePath + File.separator + "data" + File.separator + "user"))
                 profileFragment.setProfile(profile)
+                loadingDialog.dismiss()
             }
         })
     }
 
     private fun login(student: Student) {
-        student.login(this,object :LoginListener{
+        student.login(this, object : LoginListener {
             override fun error(rt: Int, e: Throwable) {
                 isRefreshData = false
                 ScheduleHelper.isLogin = false
