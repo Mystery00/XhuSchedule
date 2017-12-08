@@ -18,7 +18,6 @@ import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
-import okhttp3.ResponseBody
 import vip.mystery0.tools.logs.Logs
 import java.io.InputStreamReader
 import java.io.Serializable
@@ -57,7 +56,7 @@ class Student : Serializable {
                     }
 
                     override fun onComplete() {
-                        Logs.i(tag, "onComplete: ")
+                        Logs.i(tag, "onComplete: "+loginRT?.rt)
                         when (loginRT?.rt) {
                             "0" -> {
                                 if (!isTryLogin)
@@ -107,7 +106,7 @@ class Student : Serializable {
                     }
 
                     override fun onComplete() {
-                        Logs.i(tag, "onComplete: ")
+                        Logs.i(tag, "onComplete: "+studentInfoRT?.rt)
                         when (studentInfoRT?.rt) {
                             "0" ->
                                 if (!isTryRefreshData)
@@ -172,7 +171,7 @@ class Student : Serializable {
                     }
 
                     override fun onComplete() {
-                        Logs.i(tag, "onComplete: ")
+                        Logs.i(tag, "onComplete: "+examRT?.rt)
                         when (examRT?.rt) {
                             "0" ->
                                 if (!isTryRefreshData)
@@ -234,7 +233,7 @@ class Student : Serializable {
                     }
 
                     override fun onComplete() {
-                        Logs.i(tag, "onComplete: ")
+                        Logs.i(tag, "onComplete: "+scoreRT?.rt)
                         when (scoreRT?.rt) {
                             "0" ->
                                 if (!isTryRefreshData)
