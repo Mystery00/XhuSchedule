@@ -392,10 +392,10 @@ class MainActivity : AppCompatActivity() {
                         isRefreshData = false
                         e.printStackTrace()
                         if (e is UnknownHostException)
-                            Snackbar.make(coordinatorLayout, R.string.error_network, Snackbar.LENGTH_SHORT)
+                            Snackbar.make(coordinatorLayoutView, R.string.error_network, Snackbar.LENGTH_SHORT)
                                     .show()
                         else
-                            Snackbar.make(coordinatorLayout, "请求出错：" + e.message + "，请重试", Snackbar.LENGTH_SHORT)
+                            Snackbar.make(coordinatorLayoutView, "请求出错：" + e.message + "，请重试", Snackbar.LENGTH_SHORT)
                                     .show()
                     }
 
@@ -413,7 +413,7 @@ class MainActivity : AppCompatActivity() {
                         loadingDialog.dismiss()
                         if (courseRT?.rt != "1" && courseRT?.rt != "5") {
                             isRefreshData = false
-                            Snackbar.make(coordinatorLayout, R.string.hint_invalid_cookie, Snackbar.LENGTH_LONG)
+                            Snackbar.make(coordinatorLayoutView, R.string.hint_invalid_cookie, Snackbar.LENGTH_LONG)
                                     .setAction(android.R.string.ok) {
                                         ScheduleHelper.isLogin = false
                                         startActivity(Intent(this@MainActivity, LoginActivity::class.java))
@@ -424,12 +424,12 @@ class MainActivity : AppCompatActivity() {
                         }
                         isRefreshData = false
                         if (courseRT?.rt == "5")
-                            Snackbar.make(coordinatorLayout, R.string.hint_update_data_error, Snackbar.LENGTH_LONG).show()
+                            Snackbar.make(coordinatorLayoutView, R.string.hint_update_data_error, Snackbar.LENGTH_LONG).show()
                         else {
                             if (isDataNew && showList.size == 1)
-                                Snackbar.make(coordinatorLayout, R.string.hint_update_data_new, Snackbar.LENGTH_SHORT).show()
+                                Snackbar.make(coordinatorLayoutView, R.string.hint_update_data_new, Snackbar.LENGTH_SHORT).show()
                             else
-                                Snackbar.make(coordinatorLayout, R.string.hint_update_data, Snackbar.LENGTH_SHORT).show()
+                                Snackbar.make(coordinatorLayoutView, R.string.hint_update_data, Snackbar.LENGTH_SHORT).show()
                         }
                         updateAllView()
                     }
@@ -479,7 +479,7 @@ class MainActivity : AppCompatActivity() {
                             loadingDialog.dismiss()
                             isRefreshData = false
                             ScheduleHelper.isLogin = false
-                            Snackbar.make(coordinatorLayout, getString(R.string.hint_try_refresh_data_error, getString(R.string.error_invalid_username)), Snackbar.LENGTH_LONG)
+                            Snackbar.make(coordinatorLayoutView, getString(R.string.hint_try_refresh_data_error, getString(R.string.error_invalid_username)), Snackbar.LENGTH_LONG)
                                     .setAction(android.R.string.ok) {
                                         ScheduleHelper.isLogin = false
                                         startActivity(Intent(this@MainActivity, LoginActivity::class.java))
@@ -491,7 +491,7 @@ class MainActivity : AppCompatActivity() {
                             loadingDialog.dismiss()
                             isRefreshData = false
                             ScheduleHelper.isLogin = false
-                            Snackbar.make(coordinatorLayout, getString(R.string.hint_try_refresh_data_error, getString(R.string.error_invalid_password)), Snackbar.LENGTH_LONG)
+                            Snackbar.make(coordinatorLayoutView, getString(R.string.hint_try_refresh_data_error, getString(R.string.error_invalid_password)), Snackbar.LENGTH_LONG)
                                     .setAction(android.R.string.ok) {
                                         ScheduleHelper.isLogin = false
                                         startActivity(Intent(this@MainActivity, LoginActivity::class.java))
@@ -531,7 +531,7 @@ class MainActivity : AppCompatActivity() {
                 isRefreshData = false
                 ScheduleHelper.isLogin = false
                 loadingDialog.dismiss()
-                Snackbar.make(coordinatorLayout, e.message!!, Snackbar.LENGTH_LONG)
+                Snackbar.make(coordinatorLayoutView, e.message!!, Snackbar.LENGTH_LONG)
                         .setAction(android.R.string.ok) {
                             ScheduleHelper.isLogin = false
                             startActivity(Intent(this@MainActivity, LoginActivity::class.java))
