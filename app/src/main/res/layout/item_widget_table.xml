@@ -5,15 +5,20 @@
   ~ Last modified 17-12-7 下午10:21
   -->
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_gravity="center"
-    android:orientation="vertical">
+    android:layout_gravity="center">
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:contentDescription="@string/app_name" />
 
     <TextView
         android:id="@+id/textView_name"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:textColor="@color/colorWhite"
@@ -22,18 +27,20 @@
 
     <TextView
         android:id="@+id/textView_teacher"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@id/textView_name"
         android:gravity="center"
         android:textColor="@color/colorWhite"
         android:textSize="@dimen/item_course_text_size" />
 
     <TextView
         android:id="@+id/textView_location"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@id/textView_teacher"
         android:gravity="center"
         android:textColor="@color/colorWhite"
         android:textSize="@dimen/item_course_text_size" />
 
-</LinearLayout>
+</RelativeLayout>
