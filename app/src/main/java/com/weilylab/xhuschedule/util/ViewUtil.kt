@@ -26,7 +26,6 @@ import android.graphics.Bitmap
 import android.renderscript.Allocation
 import android.renderscript.RenderScript
 import android.renderscript.ScriptIntrinsicBlur
-import vip.mystery0.tools.logs.Logs
 
 
 /**
@@ -94,6 +93,16 @@ object ViewUtil {
         return bitmap
     }
 
+    fun drawBackground(course: Course): Bitmap {
+        val bitmap = Bitmap.createBitmap(200, 400, Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(bitmap)
+        val rect = RectF(0F, 0F, 200F, 400F)
+        val paint = Paint()
+        paint.color = Color.parseColor(course.color)
+        canvas.drawRoundRect(rect, 10F, 10F, paint)
+        return bitmap
+    }
+
     fun blur(context: Context, bkg: Bitmap, view: View) {
         val radius = 20f
         val overlay = Bitmap.createBitmap(view.measuredWidth,
@@ -113,6 +122,5 @@ object ViewUtil {
         overlayAlloc.copyTo(overlay)
         view.background = BitmapDrawable(context.resources, overlay)
         rs.destroy()
-
     }
 }

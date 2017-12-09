@@ -9,38 +9,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/view"
-        android:layout_width="32dp"
-        android:layout_height="50dp"
-        android:background="@color/colorOpacity"
-        android:gravity="center"
-        android:textColor="@color/colorWhite"
-        android:textStyle="bold" />
-
-    <include
-        android:id="@+id/table_header"
-        layout="@layout/layout_table_header"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_alignBottom="@id/view"
-        android:layout_toEndOf="@id/view" />
-
-    <include
-        android:id="@+id/table_nav"
-        layout="@layout/layout_table_nav"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_alignEnd="@id/view"
-        android:layout_below="@id/view" />
-
     <GridView
         android:id="@+id/gridView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/view"
-        android:layout_toEndOf="@id/view"
         android:gravity="center"
-        android:numColumns="7" />
+        android:numColumns="8" />
 
 </RelativeLayout>

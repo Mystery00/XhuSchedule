@@ -16,6 +16,14 @@
         <item>@string/table_header7</item>
     </string-array>
 
+    <string-array name="table_nav">
+        <item>@string/table_nav1</item>
+        <item>@string/table_nav2</item>
+        <item>@string/table_nav3</item>
+        <item>@string/table_nav4</item>
+        <item>@string/table_nav5</item>
+    </string-array>
+
     <string-array name="term_array">
         <item>1</item>
         <item>2</item>

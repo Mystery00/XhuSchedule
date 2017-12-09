@@ -9,6 +9,7 @@ package com.weilylab.xhuschedule.util
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
 import android.util.Base64
 import android.widget.RemoteViews
 import android.widget.RemoteViewsService
@@ -26,7 +27,6 @@ class GridRemotesViewsFactory(private val context: Context,
     private val showCourses = ArrayList<LinkedList<Course>>()
 
     override fun onCreate() {
-        Logs.i(TAG, "onCreate: ")
         val studentList = XhuFileUtil.getArrayFromFile(File(context.filesDir.absolutePath + File.separator + "data" + File.separator + "user"), Student::class.java)
         val parentFile = File(context.filesDir.absolutePath + File.separator + "caches/")
         if (!parentFile.exists())
@@ -52,12 +52,10 @@ class GridRemotesViewsFactory(private val context: Context,
     }
 
     override fun getLoadingView(): RemoteViews? {
-        Logs.i(TAG, "getLoadingView: ")
         return null
     }
 
     override fun getItemId(position: Int): Long {
-        Logs.i(TAG, "getItemId: ")
         return position.toLong()
     }
 
@@ -66,15 +64,31 @@ class GridRemotesViewsFactory(private val context: Context,
     }
 
     override fun hasStableIds(): Boolean {
-        Logs.i(TAG, "hasStableIds: ")
         return true
     }
 
     override fun getViewAt(position: Int): RemoteViews {
-        Logs.i(TAG, "getViewAt: ")
+        val rows = position / 8 - 1
+        val columns = position % 8 - 1
+        if (rows == -1) {
+            val remotesView = RemoteViews(context.packageName, R.layout.layout_text_view)
+            if (columns == -1)
+                return remotesView
+            val headerArray = context.resources.getStringArray(R.array.table_header)
+            remotesView.setTextViewText(R.id.textView, headerArray[columns])
+            remotesView.setTextColor(R.id.textView, Color.WHITE)
+            return remotesView
+        }
+        if (columns == -1) {
+            val remotesView = RemoteViews(context.packageName, R.layout.layout_text_view)
+            val navArray = context.resources.getStringArray(R.array.table_nav)
+            remotesView.setTextViewText(R.id.textView, navArray[rows])
+            remotesView.setTextColor(R.id.textView, Color.WHITE)
+            return remotesView
+        }
         val remotesViews = RemoteViews(context.packageName, R.layout.item_linear_layout)
         remotesViews.removeAllViews(R.layout.item_linear_layout)
-        val linkedList = showCourses[position]
+        val linkedList = showCourses[rows * 7 + columns]
         linkedList.forEach {
             remotesViews.addView(R.id.linearLayout, addView(context, it))
         }
@@ -82,13 +96,11 @@ class GridRemotesViewsFactory(private val context: Context,
     }
 
     override fun getCount(): Int {
-        Logs.i(TAG, "getCount: ")
-        return showCourses.size
+        return 48
     }
 
     override fun getViewTypeCount(): Int {
-        Logs.i(TAG, "getViewTypeCount: ")
-        return 1
+        return 2
     }
 
     override fun onDestroy() {
@@ -97,6 +109,7 @@ class GridRemotesViewsFactory(private val context: Context,
 
     private fun addView(context: Context, course: Course): RemoteViews {
         val remotesViews = RemoteViews(context.packageName, R.layout.item_widget_table)
+        remotesViews.setImageViewBitmap(R.id.imageView, ViewUtil.drawBackground(course))
         remotesViews.setTextViewText(R.id.textView_name, course.name)
         remotesViews.setTextViewText(R.id.textView_teacher, course.teacher)
         remotesViews.setTextViewText(R.id.textView_location, course.location)
