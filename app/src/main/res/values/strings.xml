@@ -106,11 +106,17 @@
     <string name="table_header6">周六</string>
     <string name="table_header7">周日</string>
 
-    <string name="table_nav1" translatable="false">1\n\n2</string>
-    <string name="table_nav2" translatable="false">3\n\n4</string>
-    <string name="table_nav3" translatable="false">5\n\n6</string>
-    <string name="table_nav4" translatable="false">7\n\n8</string>
-    <string name="table_nav5" translatable="false">9\n\n10</string>
+    <string name="table_nav1" translatable="false">1</string>
+    <string name="table_nav2" translatable="false">2</string>
+    <string name="table_nav3" translatable="false">3</string>
+    <string name="table_nav4" translatable="false">4</string>
+    <string name="table_nav5" translatable="false">5</string>
+    <string name="table_nav6" translatable="false">6</string>
+    <string name="table_nav7" translatable="false">7</string>
+    <string name="table_nav8" translatable="false">8</string>
+    <string name="table_nav9" translatable="false">9</string>
+    <string name="table_nav10" translatable="false">10</string>
+    <string name="table_nav11" translatable="false">11</string>
 
     <string name="update_notification_title">新版本更新 %1$s => %2$s</string>
     <string name="update_notification_content">本次更新包大小为%1$s,增量更新包大小为%2$s</string>

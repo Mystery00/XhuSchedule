@@ -17,7 +17,7 @@ import kotlin.collections.ArrayList
  */
 object CourseUtil {
 
-    fun formatCourses(courses: Array<Course>): ArrayList<LinkedList<Course>> {
+    fun formatCourses(courses: Array<Course>): Array<Array<LinkedList<Course>>> {
         val firstWeekOfTerm = Settings.firstWeekOfTerm
         val date = firstWeekOfTerm.split('-')
         CalendarUtil.startCalendar.set(date[0].toInt(), date[1].toInt(), date[2].toInt(), 0, 0, 0)
@@ -26,8 +26,8 @@ object CourseUtil {
         return formatCourses(courses, currentWeek)
     }
 
-    fun formatCourses(courses: Array<Course>, weekIndex: Int): ArrayList<LinkedList<Course>> {
-        val tempArray = Array(5, { Array<LinkedList<Course>>(7, { LinkedList() }) })
+    fun formatCourses(courses: Array<Course>, weekIndex: Int): Array<Array<LinkedList<Course>>> {
+        val array = Array(11, { Array<LinkedList<Course>>(7, { LinkedList() }) })
         courses.forEach {
             try {
                 var other = false
@@ -48,29 +48,20 @@ object CourseUtil {
                 e.printStackTrace()
             }
             val timeArray = it.time.split('-')
-            val startTime = (timeArray[0].toInt() - 1) / 2
-            val endTime = (timeArray[1].toInt()) / 2
-            for (index in startTime until endTime) {
-                var flag = false
-                for (temp in tempArray[index][it.day.toInt() - 1]) {
-                    flag = temp.with(it)
-                    if (flag)
-                        break
-                }
-                if (!flag)
-                    tempArray[index][it.day.toInt() - 1].add(it)
+            val startTime = timeArray[0].toInt() - 1
+            var flag = false
+            for (temp in array[startTime][it.day.toInt() - 1]) {
+                flag = temp.with(it)
+                if (flag)
+                    break
             }
+            if (!flag)
+                array[startTime][it.day.toInt() - 1].add(it)
         }
-        val list = ArrayList<LinkedList<Course>>()
-        tempArray.forEach {
-            it.forEach {
-                list.add(it)
-            }
-        }
-        return list
+        return array
     }
 
-    fun getWeekCourses(courses: Array<Course>): ArrayList<LinkedList<Course>> {
+    fun getWeekCourses(courses: Array<Course>): Array<Array<LinkedList<Course>>> {
         val firstWeekOfTerm = Settings.firstWeekOfTerm
         val date = firstWeekOfTerm.split('-')
         CalendarUtil.startCalendar.set(date[0].toInt(), date[1].toInt(), date[2].toInt(), 0, 0, 0)
@@ -79,9 +70,9 @@ object CourseUtil {
         return getWeekCourses(courses, currentWeek)
     }
 
-    fun getWeekCourses(courses: Array<Course>, weekIndex: Int): ArrayList<LinkedList<Course>> {
+    fun getWeekCourses(courses: Array<Course>, weekIndex: Int): Array<Array<LinkedList<Course>>> {
         ScheduleHelper.weekIndex = weekIndex
-        val tempArray = Array(5, { Array<LinkedList<Course>>(7, { LinkedList() }) })
+        val array = Array(11, { Array<LinkedList<Course>>(7, { LinkedList() }) })
         courses.filter {
             try {
                 var other = false
@@ -102,26 +93,17 @@ object CourseUtil {
             }
         }.forEach {
             val timeArray = it.time.split('-')
-            val startTime = (timeArray[0].toInt() - 1) / 2
-            val endTime = (timeArray[1].toInt()) / 2
-            for (index in startTime until endTime) {
-                var flag = false
-                for (temp in tempArray[index][it.day.toInt() - 1]) {
-                    flag = temp.with(it)
-                    if (flag)
-                        break
-                }
-                if (!flag)
-                    tempArray[index][it.day.toInt() - 1].add(it)
+            val startTime = timeArray[0].toInt() - 1
+            var flag = false
+            for (temp in array[startTime][it.day.toInt() - 1]) {
+                flag = temp.with(it)
+                if (flag)
+                    break
             }
+            if (!flag)
+                array[startTime][it.day.toInt() - 1].add(it)
         }
-        val list = ArrayList<LinkedList<Course>>()
-        tempArray.forEach {
-            it.forEach {
-                list.add(it)
-            }
-        }
-        return list
+        return array
     }
 
     fun getTodayCourses(courses: Array<Course>): ArrayList<Course> {
