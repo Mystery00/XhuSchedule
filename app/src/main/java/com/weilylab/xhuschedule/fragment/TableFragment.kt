@@ -20,6 +20,7 @@ import android.widget.*
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.adapter.TableAdapter
 import com.weilylab.xhuschedule.classes.Course
+import com.weilylab.xhuschedule.classes.TableLayoutHelper
 import com.weilylab.xhuschedule.util.CalendarUtil
 import com.weilylab.xhuschedule.util.DensityUtil
 import com.weilylab.xhuschedule.util.Settings
@@ -28,13 +29,16 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.observers.DisposableObserver
 import io.reactivex.schedulers.Schedulers
 import java.util.*
+import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
+import kotlin.math.max
 
 /**
  * Created by myste.
  */
 class TableFragment : Fragment() {
     companion object {
-        fun newInstance(list: LinkedList<LinkedList<Course>>): TableFragment {
+        fun newInstance(list: Array<Array<LinkedList<Course>>>): TableFragment {
             val bundle = Bundle()
             bundle.putSerializable("list", list)
             val fragment = TableFragment()
@@ -43,16 +47,16 @@ class TableFragment : Fragment() {
         }
     }
 
-    private lateinit var list: LinkedList<LinkedList<Course>>
-    private lateinit var adapter: TableAdapter
+    private lateinit var list: Array<Array<LinkedList<Course>>>
+    //    private lateinit var adapter: TableAdapter
     private var isReady = false
     private var rootView: View? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         @Suppress("UNCHECKED_CAST")
-        list = arguments.getSerializable("list") as LinkedList<LinkedList<Course>>
-        adapter = TableAdapter(activity, list)
+        list = arguments.getSerializable("list") as Array<Array<LinkedList<Course>>>
+//        adapter = TableAdapter(activity, list)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -80,21 +84,21 @@ class TableFragment : Fragment() {
                 textView.text = text
                 calendar.add(Calendar.DAY_OF_MONTH, 1)
             }
-            val recyclerView: RecyclerView = rootView!!.findViewById(R.id.recycler_view)
+//            val recyclerView: RecyclerView = rootView!!.findViewById(R.id.recycler_view)
             val linearLayout: LinearLayout = rootView!!.findViewById(R.id.table_nav)
             for (i in 0 until linearLayout.childCount) {
                 val layoutParams = linearLayout.getChildAt(i).layoutParams
                 layoutParams.height = DensityUtil.dip2px(activity, Settings.customTextHeight.toFloat())
                 linearLayout.getChildAt(i).layoutParams = layoutParams
             }
-            recyclerView.layoutManager = GridLayoutManager(activity, 7, GridLayoutManager.VERTICAL, false)
-            recyclerView.adapter = adapter
-            recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-                override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
-                    super.onScrolled(recyclerView, dx, dy)
-                    linearLayout.scrollBy(dx, dy)
-                }
-            })
+//            recyclerView.layoutManager = GridLayoutManager(activity, 7, GridLayoutManager.VERTICAL, false)
+//            recyclerView.adapter = adapter
+//            recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+//                override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
+//                    super.onScrolled(recyclerView, dx, dy)
+//                    linearLayout.scrollBy(dx, dy)
+//                }
+//            })
             isReady = true
         }
         return rootView
@@ -130,7 +134,7 @@ class TableFragment : Fragment() {
                                 (tableNav.getChildAt(i) as TextView).setTextColor(Settings.customTableTextColor)
                             }
                         }
-                        adapter.notifyDataSetChanged()
+//                        adapter.notifyDataSetChanged()
                     }
 
                     override fun onError(e: Throwable) {
@@ -145,5 +149,49 @@ class TableFragment : Fragment() {
         super.onDestroyView()
         if (rootView != null)
             (rootView!!.parent as ViewGroup).removeView(rootView)
+    }
+
+    private fun formatView(array: Array<Array<LinkedList<Course>>>) {
+        val itemHeight = DensityUtil.dip2px(activity, Settings.customTextHeight.toFloat())
+        for (day in 0 until 7) {
+            val layoutList = ArrayList<TableLayoutHelper>()
+            val temp = resources.getIdentifier("table_schedule" + (day + 1), "id", "com.weilylab.xhuschedule")
+            val linearLayout: LinearLayout = rootView!!.findViewById(temp)
+            for (time in 0 until 11) {
+                val linkedList = array[time][day]
+                if (linkedList.isEmpty()) {//如果这个位置没有课
+                    val textView = View.inflate(activity, R.layout.layout_text_view, null)
+                    val params = textView.layoutParams
+                    params.height = itemHeight
+                    textView.layoutParams = params
+                    linearLayout.addView(textView)
+                    continue
+                }
+                //该位置有课
+                //判断这个格子是否被占用
+                if (isShowInLayout(layoutList, time)) {
+                }else{
+                    val viewGroup = View.inflate(activity, R.layout.item_linear_layout, null) as LinearLayout
+                    var maxHeight = 0
+                    linkedList.forEach { course ->
+                        //循环确定这个格子的高度
+                        val timeArray = course.time.split('-')
+                        val courseTime = timeArray[1].toInt() - timeArray[0].toInt() + 1//计算这节课长度
+                        maxHeight = max(maxHeight, courseTime * itemHeight)
+                    }
+                    val params = viewGroup.layoutParams
+                    params.height = maxHeight
+                    viewGroup.layoutParams = params
+                }
+            }
+        }
+    }
+
+    private fun isShowInLayout(list: ArrayList<TableLayoutHelper>, itemIndex: Int): Boolean {
+        list.forEach {
+            if (itemIndex in it.start..it.end)
+                return true
+        }
+        return false
     }
 }

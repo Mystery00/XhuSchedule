@@ -7,8 +7,6 @@
 
 package com.weilylab.xhuschedule.util
 
-import com.weilylab.xhuschedule.APP
-import com.weilylab.xhuschedule.util.cookie.CookieManger
 import com.weilylab.xhuschedule.util.cookie.LoadCookiesInterceptor
 import com.weilylab.xhuschedule.util.cookie.SaveCookiesInterceptor
 import okhttp3.OkHttpClient
@@ -43,13 +41,13 @@ object ScheduleHelper {
             .baseUrl("http://tomcat.weilylab.com:7823")
             .client(client)
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-            .build()
+            .build()!!
 
     val phpRetrofit = Retrofit.Builder()
             .baseUrl("http://tomcat.weilylab.com:9783")
             .client(client)
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-            .build()
+            .build()!!
 
     fun getRandomColor(): String {
         val random = Random()
