@@ -257,18 +257,17 @@ class TableFragment : Fragment() {
         if (course.color == "") {
             course.color = '#' + ScheduleHelper.getRandomColor()
         }
-        imageView.setBackgroundColor(Color.parseColor(course.color))
-//        val gradientDrawable = imageView.background as GradientDrawable
-//        when (course.type) {
-//            "-1" -> gradientDrawable.setColor(Color.RED)
-//            "not" -> {
-//                textViewName.setTextColor(Color.GRAY)
-//                textViewTeacher.setTextColor(Color.GRAY)
-//                textViewLocation.setTextColor(Color.GRAY)
-//                gradientDrawable.setColor(Color.parseColor("#9AEEEEEE"))
-//            }
-//            else -> gradientDrawable.setColor(Color.parseColor('#' + Integer.toHexString(Settings.customTableOpacity) + course.color.substring(1)))
-//        }
+        val gradientDrawable = imageView.background as GradientDrawable
+        when (course.type) {
+            "-1" -> gradientDrawable.setColor(Color.RED)
+            "not" -> {
+                textViewName.setTextColor(Color.GRAY)
+                textViewTeacher.setTextColor(Color.GRAY)
+                textViewLocation.setTextColor(Color.GRAY)
+                gradientDrawable.setColor(Color.parseColor("#9AEEEEEE"))
+            }
+            else -> gradientDrawable.setColor(Color.parseColor('#' + Integer.toHexString(Settings.customTableOpacity) + course.color.substring(1)))
+        }
         val timeArray = course.time.split('-')
         val height = (timeArray[1].toInt() - timeArray[0].toInt() + 1) * itemHeight
         val linearLayoutParams = LinearLayout.LayoutParams(0, height, 1F)

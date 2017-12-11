@@ -29,7 +29,8 @@ class Student : Serializable {
     lateinit var name: String
     var profile: Profile? = null
     var todayCourses = ArrayList<Course>()
-    var weekCourses = LinkedList<LinkedList<Course>>()
+    var weekCourses = Array(11, { Array<LinkedList<Course>>(7, { LinkedList() }) })
+    var isMain = false
     var isReady = false
 
     fun login(context: Context, listener: LoginListener) {
@@ -56,7 +57,7 @@ class Student : Serializable {
                     }
 
                     override fun onComplete() {
-                        Logs.i(tag, "onComplete: "+loginRT?.rt)
+                        Logs.i(tag, "onComplete: " + loginRT?.rt)
                         when (loginRT?.rt) {
                             "0" -> {
                                 if (!isTryLogin)
@@ -106,7 +107,7 @@ class Student : Serializable {
                     }
 
                     override fun onComplete() {
-                        Logs.i(tag, "onComplete: "+studentInfoRT?.rt)
+                        Logs.i(tag, "onComplete: " + studentInfoRT?.rt)
                         when (studentInfoRT?.rt) {
                             "0" ->
                                 if (!isTryRefreshData)
@@ -171,7 +172,7 @@ class Student : Serializable {
                     }
 
                     override fun onComplete() {
-                        Logs.i(tag, "onComplete: "+examRT?.rt)
+                        Logs.i(tag, "onComplete: " + examRT?.rt)
                         when (examRT?.rt) {
                             "0" ->
                                 if (!isTryRefreshData)
@@ -233,7 +234,7 @@ class Student : Serializable {
                     }
 
                     override fun onComplete() {
-                        Logs.i(tag, "onComplete: "+scoreRT?.rt)
+                        Logs.i(tag, "onComplete: " + scoreRT?.rt)
                         when (scoreRT?.rt) {
                             "0" ->
                                 if (!isTryRefreshData)
