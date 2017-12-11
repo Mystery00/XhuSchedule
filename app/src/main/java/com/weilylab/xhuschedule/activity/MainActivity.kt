@@ -73,7 +73,7 @@ class MainActivity : AppCompatActivity() {
     private var weekArray = Array(11, { Array<LinkedList<Course>>(7, { LinkedList() }) })
     private val todayList = ArrayList<Course>()
     private val todayFragment = TodayFragment.newInstance(todayList)
-    private val weekFragment = TableFragment.newInstance(emptyArray())
+    private val weekFragment = TableFragment()
     private val profileFragment = ProfileFragment.newInstance(Profile())
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -257,28 +257,39 @@ class MainActivity : AppCompatActivity() {
             finish()
             return
         }
+        //清空数组
+        for (i in 0 until weekArray.size)
+            for (k in 0 until weekArray[i].size)
+                weekArray[i][k].clear()
         todayList.clear()
         ScheduleHelper.isLogin = true
         val array = ArrayList<Observable<Boolean>>()
-        val showFile = File(filesDir.absolutePath + File.separator + "data" + File.separator + "show_user")
-        val showList = XhuFileUtil.getArrayListFromFile(showFile, Student::class.java)
-        if (showList.size == 0)
-            showList.addAll(studentList)
-        showList.forEach {
-            array.add(updateView(it, week))
+        val updateList = ArrayList<Student>()
+        if (Settings.isEnableMultiUserMode)
+            studentList.forEach {
+                array.add(updateView(it, week))
+                updateList.add(it)
+            }
+        else {
+            var mainStudent: Student? = (0 until studentList.size)
+                    .firstOrNull { studentList[it].isMain }
+                    ?.let { studentList[it] }
+            if (mainStudent == null)
+                mainStudent = studentList[0]
+            array.add(updateView(mainStudent, week))
+            updateList.add(mainStudent)
         }
         Observable.merge(array)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(object : DisposableObserver<Boolean>() {
-
                     override fun onComplete() {
                         loadingDialog.dismiss()
                         swipeLayout(bottomNavigationView.menu.getItem(viewpager.currentItem).itemId)
                         weekAdapter.setWeekIndex(ScheduleHelper.weekIndex)
                         layout_week_recycler_view.scrollToPosition(ScheduleHelper.weekIndex - 1)
                         if (ScheduleHelper.isCookieAvailable) {
-                            if (showList.size == 1)
+                            if (!Settings.isEnableMultiUserMode)
                                 when (todayList.size) {
                                     0 -> bottomNavigationView.menu.findItem(R.id.bottom_nav_today).setIcon(R.drawable.ic_sentiment_very_satisfied)
                                     1 -> bottomNavigationView.menu.findItem(R.id.bottom_nav_today).setIcon(R.drawable.ic_sentiment_very_satisfied)
@@ -289,8 +300,12 @@ class MainActivity : AppCompatActivity() {
                                 }
                             else
                                 bottomNavigationView.menu.findItem(R.id.bottom_nav_today).setIcon(R.drawable.ic_sentiment_very_satisfied)
-                            showList.forEach {
-                                weekArray = CourseUtil.mergeCourses(weekArray, it.weekCourses)
+                            updateList.forEach {
+                                val newArray = CourseUtil.mergeCourses(weekArray, it.weekCourses)
+                                for (i in 0 until weekArray.size)
+                                    for (k in 0 until weekArray[i].size) {
+                                        weekArray[i][k].addAll(newArray[i][k])
+                                    }
                                 todayList.addAll(it.todayCourses)
                             }
                             weekFragment.refreshData(weekArray)
@@ -337,7 +352,7 @@ class MainActivity : AppCompatActivity() {
                 return@create
             }
             ScheduleHelper.isCookieAvailable = true
-            student.weekCourses = if (week != -1)
+            val tempArray = if (week != -1)
                 if (Settings.isShowNot)
                     CourseUtil.formatCourses(XhuFileUtil.getCoursesFromFile(this@MainActivity, oldFile), week)
                 else
@@ -347,6 +362,11 @@ class MainActivity : AppCompatActivity() {
                     CourseUtil.formatCourses(XhuFileUtil.getCoursesFromFile(this@MainActivity, oldFile))
                 else
                     CourseUtil.getWeekCourses(XhuFileUtil.getCoursesFromFile(this@MainActivity, oldFile))
+            for (i in 0 until student.weekCourses.size)
+                for (k in 0 until student.weekCourses[i].size) {
+                    student.weekCourses[i][k].clear()
+                    student.weekCourses[i][k].addAll(tempArray[i][k])
+                }
             val todayArray = CourseUtil.getTodayCourses(XhuFileUtil.getCoursesFromFile(this@MainActivity, oldFile))
             student.todayCourses.clear()
             student.todayCourses.addAll(todayArray)

@@ -24,6 +24,7 @@
     <string name="action_download_apk">下载APK</string>
     <string name="action_download_patch">下载增量包</string>
     <string name="action_feedback">反馈该信息</string>
+    <string name="action_open">开启</string>
 
     <string name="prompt_username">用户名</string>
     <string name="prompt_password">密码</string>
@@ -53,6 +54,12 @@
     <string name="hint_custom_img">自定义图片设置成功！</string>
     <string name="hint_nick_name">请设置昵称</string>
     <string name="hint_reset">界面设置已经恢复为默认设置</string>
+
+    <string name="warning_enable_multi_user_mode">
+        请确保您是双学位的学生或者有同时查看多个账号课表的需求。\n\n
+        一般来说，普通学生或者用户没有这种需求，强行开启这个模式并不会导致什么问题，但是可能会使您的课表变得很乱或者很窄，所以，作为一名您的同学，我有必要在这里对您的这个操作进行警告。\n\n
+        请确保您有这样的需求再开启这个开关！
+    </string>
 
     <string name="error_invalid_username">用户名无效</string>
     <string name="error_invalid_password">密码无效</string>

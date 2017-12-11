@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Created by Mystery0 on 17-11-27 上午3:50.
   ~ Copyright (c) 2017. All Rights reserved.
   ~
@@ -23,8 +22,13 @@
             android:title="@string/title_del_account" />
 
         <Preference
-            android:key="@string/key_show_account_manager"
-            android:title="@string/title_show_account_manager" />
+            android:key="@string/key_set_main_account"
+            android:title="@string/title_set_main_account"/>
+
+        <SwitchPreference
+            android:key="@string/key_enable_multi_user_mode"
+            android:summary="@string/summary_enable_multi_user_mode"
+            android:title="@string/title_enable_multi_user_mode" />
 
     </PreferenceCategory>
 

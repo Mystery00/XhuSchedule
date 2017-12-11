@@ -12,7 +12,6 @@ import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
-import android.support.v4.widget.NestedScrollView
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
@@ -40,27 +39,10 @@ import kotlin.math.max
 class TableFragment : Fragment() {
     companion object {
         private val TAG = "TableFragment"
-
-        fun newInstance(list: Array<Array<LinkedList<Course>>>): TableFragment {
-            val bundle = Bundle()
-            bundle.putSerializable("list", list)
-            val fragment = TableFragment()
-            fragment.arguments = bundle
-            return fragment
-        }
     }
 
-    private lateinit var list: Array<Array<LinkedList<Course>>>
-    //    private lateinit var adapter: TableAdapter
     private var isReady = false
     private var rootView: View? = null
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        @Suppress("UNCHECKED_CAST")
-        list = arguments.getSerializable("list") as Array<Array<LinkedList<Course>>>
-//        adapter = TableAdapter(activity, list)
-    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -87,7 +69,6 @@ class TableFragment : Fragment() {
                 textView.text = text
                 calendar.add(Calendar.DAY_OF_MONTH, 1)
             }
-//            val recyclerView: RecyclerView = rootView!!.findViewById(R.id.recycler_view)
             val linearLayout: LinearLayout = rootView!!.findViewById(R.id.table_nav)
             for (i in 0 until linearLayout.childCount) {
                 val layoutParams = linearLayout.getChildAt(i).layoutParams
@@ -98,14 +79,6 @@ class TableFragment : Fragment() {
             val layoutParams = scheduleView.layoutParams
             layoutParams.height = DensityUtil.dip2px(activity, Settings.customTextHeight.toFloat() * 11)
             scheduleView.layoutParams = layoutParams
-//            recyclerView.layoutManager = GridLayoutManager(activity, 7, GridLayoutManager.VERTICAL, false)
-//            recyclerView.adapter = adapter
-//            recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-//                override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
-//                    super.onScrolled(recyclerView, dx, dy)
-//                    linearLayout.scrollBy(dx, dy)
-//                }
-//            })
             isReady = true
         }
         return rootView
@@ -141,7 +114,6 @@ class TableFragment : Fragment() {
                                 (tableNav.getChildAt(i) as TextView).setTextColor(Settings.customTableTextColor)
                             }
                         }
-//                        adapter.notifyDataSetChanged()
                         formatView(array)
                     }
 
