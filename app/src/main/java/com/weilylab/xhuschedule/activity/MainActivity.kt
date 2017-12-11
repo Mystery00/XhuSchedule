@@ -71,9 +71,10 @@ class MainActivity : AppCompatActivity() {
     private var isDataNew = false
     private var studentList = ArrayList<Student>()
     private var weekList = LinkedList<LinkedList<Course>>()
+    private lateinit var weekArray: Array<Array<LinkedList<Course>>>
     private val todayList = ArrayList<Course>()
     private val todayFragment = TodayFragment.newInstance(todayList)
-    private val weekFragment = TableFragment.newInstance(weekList)
+    private val weekFragment = TableFragment.newInstance(emptyArray())
     private val profileFragment = ProfileFragment.newInstance(Profile())
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -296,7 +297,7 @@ class MainActivity : AppCompatActivity() {
                                 weekList.addAll(tempWeekList)
                                 todayList.addAll(it.todayCourses)
                             }
-                            weekFragment.refreshData()
+                            weekFragment.refreshData(weekArray)
                             todayFragment.refreshData()
                         } else
                             updateAllData()
@@ -340,7 +341,7 @@ class MainActivity : AppCompatActivity() {
                 return@create
             }
             ScheduleHelper.isCookieAvailable = true
-            val weekArray = if (week != -1)
+            weekArray = if (week != -1)
                 if (Settings.isShowNot)
                     CourseUtil.formatCourses(XhuFileUtil.getCoursesFromFile(this@MainActivity, oldFile), week)
                 else
@@ -350,8 +351,8 @@ class MainActivity : AppCompatActivity() {
                     CourseUtil.formatCourses(XhuFileUtil.getCoursesFromFile(this@MainActivity, oldFile))
                 else
                     CourseUtil.getWeekCourses(XhuFileUtil.getCoursesFromFile(this@MainActivity, oldFile))
-            student.weekCourses.clear()
-            student.weekCourses.addAll(weekArray)
+//            student.weekCourses.clear()
+//            student.weekCourses.addAll(weekArray)
             val todayArray = CourseUtil.getTodayCourses(XhuFileUtil.getCoursesFromFile(this@MainActivity, oldFile))
             student.todayCourses.clear()
             student.todayCourses.addAll(todayArray)
