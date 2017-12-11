@@ -138,6 +138,7 @@ class TableFragment : Fragment() {
             val layoutList = ArrayList<TableLayoutHelper>()
             val temp = resources.getIdentifier("table_schedule" + (day + 1), "id", "com.weilylab.xhuschedule")
             val linearLayout: LinearLayout = rootView!!.findViewById(temp)
+            linearLayout.removeAllViews()
             for (time in 0 until 11) {
                 val linkedList = array[time][day]
                 Logs.i(TAG, "formatView: position: $time $day")

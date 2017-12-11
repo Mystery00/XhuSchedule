@@ -21,7 +21,7 @@ import io.reactivex.schedulers.Schedulers
 import vip.mystery0.tools.logs.Logs
 import java.io.InputStreamReader
 import java.io.Serializable
-import java.util.*
+import kotlin.collections.ArrayList
 
 class Student : Serializable {
     lateinit var username: String
@@ -29,7 +29,8 @@ class Student : Serializable {
     lateinit var name: String
     var profile: Profile? = null
     var todayCourses = ArrayList<Course>()
-    var weekCourses = Array(11, { Array<LinkedList<Course>>(7, { LinkedList() }) })
+    var weekCourses = ArrayList<ArrayList<ArrayList<Course>>>()
+    //    var weekCourses = Array(11, { Array<LinkedList<Course>>(7, { LinkedList() }) })
     var isMain = false
     var isReady = false
 

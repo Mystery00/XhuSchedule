@@ -303,9 +303,8 @@ class MainActivity : AppCompatActivity() {
                             updateList.forEach {
                                 val newArray = CourseUtil.mergeCourses(weekArray, it.weekCourses)
                                 for (i in 0 until weekArray.size)
-                                    for (k in 0 until weekArray[i].size) {
+                                    for (k in 0 until weekArray[i].size)
                                         weekArray[i][k].addAll(newArray[i][k])
-                                    }
                                 todayList.addAll(it.todayCourses)
                             }
                             weekFragment.refreshData(weekArray)
@@ -363,10 +362,8 @@ class MainActivity : AppCompatActivity() {
                 else
                     CourseUtil.getWeekCourses(XhuFileUtil.getCoursesFromFile(this@MainActivity, oldFile))
             for (i in 0 until student.weekCourses.size)
-                for (k in 0 until student.weekCourses[i].size) {
-                    student.weekCourses[i][k].clear()
+                for (k in 0 until student.weekCourses[i].size)
                     student.weekCourses[i][k].addAll(tempArray[i][k])
-                }
             val todayArray = CourseUtil.getTodayCourses(XhuFileUtil.getCoursesFromFile(this@MainActivity, oldFile))
             student.todayCourses.clear()
             student.todayCourses.addAll(todayArray)
@@ -389,13 +386,21 @@ class MainActivity : AppCompatActivity() {
         updateProfile(studentList[0])
         todayList.clear()
         val array = ArrayList<Observable<CourseRT>>()
-        val showFile = File(filesDir.absolutePath + File.separator + "data" + File.separator + "show_user")
-        val showList = XhuFileUtil.getArrayListFromFile(showFile, Student::class.java)
-        if (showList.size == 0)
-            showList.addAll(studentList)
         isRefreshData = true
-        showList.forEach {
-            array.add(updateData(it))
+        val updateList = ArrayList<Student>()
+        if (Settings.isEnableMultiUserMode)
+            studentList.forEach {
+                array.add(updateData(it))
+                updateList.add(it)
+            }
+        else {
+            var mainStudent: Student? = (0 until studentList.size)
+                    .firstOrNull { studentList[it].isMain }
+                    ?.let { studentList[it] }
+            if (mainStudent == null)
+                mainStudent = studentList[0]
+            array.add(updateData(mainStudent))
+            updateList.add(mainStudent)
         }
         Observable.merge(array)
                 .observeOn(AndroidSchedulers.mainThread())
@@ -440,7 +445,7 @@ class MainActivity : AppCompatActivity() {
                         if (courseRT?.rt == "5")
                             Snackbar.make(coordinatorLayoutView, R.string.hint_update_data_error, Snackbar.LENGTH_LONG).show()
                         else {
-                            if (isDataNew && showList.size == 1)
+                            if (isDataNew && updateList.size == 1)
                                 Snackbar.make(coordinatorLayoutView, R.string.hint_update_data_new, Snackbar.LENGTH_SHORT).show()
                             else
                                 Snackbar.make(coordinatorLayoutView, R.string.hint_update_data, Snackbar.LENGTH_SHORT).show()
@@ -455,6 +460,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun updateData(student: Student): Observable<CourseRT> {
+        Logs.i(TAG, "updateData: " + student.name)
         val parentFile = File(filesDir.absolutePath + File.separator + "caches/")
         if (!parentFile.exists())
             parentFile.mkdirs()

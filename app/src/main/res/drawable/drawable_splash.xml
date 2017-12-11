@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Created by Mystery0 on 17-12-11 下午9:05.
+  ~ Copyright (c) 2017. All Rights reserved.
+  ~
+  ~ Last modified 17-12-11 下午9:05
+  -->
+
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:drawable="@color/colorWhite"/>
+    <item>
+        <bitmap
+            android:gravity="center"
+            android:src="@mipmap/ic_launcher"/>
+    </item>
+</layer-list>
