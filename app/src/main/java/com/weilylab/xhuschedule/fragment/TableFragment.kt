@@ -8,29 +8,30 @@
 package com.weilylab.xhuschedule.fragment
 
 import android.graphics.Color
+import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
-import android.support.v7.widget.GridLayoutManager
-import android.support.v7.widget.RecyclerView
+import android.support.v4.widget.NestedScrollView
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import com.weilylab.xhuschedule.R
-import com.weilylab.xhuschedule.adapter.TableAdapter
 import com.weilylab.xhuschedule.classes.Course
 import com.weilylab.xhuschedule.classes.TableLayoutHelper
 import com.weilylab.xhuschedule.util.CalendarUtil
 import com.weilylab.xhuschedule.util.DensityUtil
+import com.weilylab.xhuschedule.util.ScheduleHelper
 import com.weilylab.xhuschedule.util.Settings
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.observers.DisposableObserver
 import io.reactivex.schedulers.Schedulers
+import vip.mystery0.tools.logs.Logs
 import java.util.*
 import kotlin.collections.ArrayList
-import kotlin.collections.HashMap
 import kotlin.math.max
 
 /**
@@ -38,6 +39,8 @@ import kotlin.math.max
  */
 class TableFragment : Fragment() {
     companion object {
+        private val TAG = "TableFragment"
+
         fun newInstance(list: Array<Array<LinkedList<Course>>>): TableFragment {
             val bundle = Bundle()
             bundle.putSerializable("list", list)
@@ -91,6 +94,10 @@ class TableFragment : Fragment() {
                 layoutParams.height = DensityUtil.dip2px(activity, Settings.customTextHeight.toFloat())
                 linearLayout.getChildAt(i).layoutParams = layoutParams
             }
+            val scheduleView: View = rootView!!.findViewById(R.id.table_schedule)
+            val layoutParams = scheduleView.layoutParams
+            layoutParams.height = DensityUtil.dip2px(activity, Settings.customTextHeight.toFloat() * 11)
+            scheduleView.layoutParams = layoutParams
 //            recyclerView.layoutManager = GridLayoutManager(activity, 7, GridLayoutManager.VERTICAL, false)
 //            recyclerView.adapter = adapter
 //            recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
@@ -104,7 +111,7 @@ class TableFragment : Fragment() {
         return rootView
     }
 
-    fun refreshData() {
+    fun refreshData(array: Array<Array<LinkedList<Course>>>) {
         Observable.create<Boolean> { subscriber ->
             while (true) {
                 if (isReady)
@@ -135,6 +142,7 @@ class TableFragment : Fragment() {
                             }
                         }
 //                        adapter.notifyDataSetChanged()
+                        formatView(array)
                     }
 
                     override fun onError(e: Throwable) {
@@ -152,6 +160,7 @@ class TableFragment : Fragment() {
     }
 
     private fun formatView(array: Array<Array<LinkedList<Course>>>) {
+        val itemWidth = rootView!!.findViewById<LinearLayout>(R.id.table_schedule1).measuredWidth
         val itemHeight = DensityUtil.dip2px(activity, Settings.customTextHeight.toFloat())
         for (day in 0 until 7) {
             val layoutList = ArrayList<TableLayoutHelper>()
@@ -159,26 +168,59 @@ class TableFragment : Fragment() {
             val linearLayout: LinearLayout = rootView!!.findViewById(temp)
             for (time in 0 until 11) {
                 val linkedList = array[time][day]
+                Logs.i(TAG, "formatView: position: $time $day")
                 if (linkedList.isEmpty()) {//如果这个位置没有课
-                    val textView = View.inflate(activity, R.layout.layout_text_view, null)
+                    Logs.i(TAG, "formatView: 没有课")
+                    if (isShowInLayout(layoutList, time))//如果格子被占用，直接继续循环
+                        continue
+                    val textView = LayoutInflater.from(activity).inflate(R.layout.layout_text_view, null)
+                    linearLayout.addView(textView)
                     val params = textView.layoutParams
                     params.height = itemHeight
                     textView.layoutParams = params
-                    linearLayout.addView(textView)
                     continue
                 }
                 //该位置有课
                 //判断这个格子是否被占用
                 if (isShowInLayout(layoutList, time)) {
-                }else{
-                    val viewGroup = View.inflate(activity, R.layout.item_linear_layout, null) as LinearLayout
+                    Logs.i(TAG, "formatView: 有课并且格子被占用")
+                    var tableHelper = TableLayoutHelper()
+                    for (i in 0 until layoutList.size) {
+                        if (time in layoutList[i].start..layoutList[i].end) {
+                            tableHelper = layoutList[i]
+                            break
+                        }
+                    }
+                    linkedList.forEach { course ->
+                        Logs.i(TAG, "formatView: ${course.name}")
+                        Logs.i(TAG, "formatView: tableHelper.end: ${tableHelper.end}")
+                        val timeArray = course.time.split('-')
+                        tableHelper.end = max(tableHelper.end, timeArray[1].toInt() - 1)
+                        Logs.i(TAG, "formatView: tableHelper.end.max: ${tableHelper.end}")
+                        tableHelper.viewGroup.addView(getItemView(course, tableHelper.start))
+                    }
+                    val params = tableHelper.viewGroup.layoutParams
+                    params.height = (tableHelper.end - tableHelper.start + 1) * itemHeight
+                    tableHelper.viewGroup.layoutParams = params
+                } else {//这个格子没有被占用
+                    Logs.i(TAG, "formatView: 有课格子没有被占用")
+                    val view = LayoutInflater.from(activity).inflate(R.layout.item_linear_layout, null)
+                    val viewGroup: LinearLayout = view.findViewById(R.id.linearLayout)
                     var maxHeight = 0
                     linkedList.forEach { course ->
                         //循环确定这个格子的高度
                         val timeArray = course.time.split('-')
                         val courseTime = timeArray[1].toInt() - timeArray[0].toInt() + 1//计算这节课长度
                         maxHeight = max(maxHeight, courseTime * itemHeight)
+                        viewGroup.addView(getItemView(course, time))
                     }
+                    val tableHelper = TableLayoutHelper()
+                    tableHelper.start = time
+                    tableHelper.end = maxHeight / itemHeight + time - 1
+                    tableHelper.viewGroup = viewGroup
+                    Logs.i(TAG, "formatView: " + tableHelper.toString())
+                    layoutList.add(tableHelper)//将这个布局添加进list
+                    linearLayout.addView(viewGroup)
                     val params = viewGroup.layoutParams
                     params.height = maxHeight
                     viewGroup.layoutParams = params
@@ -193,5 +235,45 @@ class TableFragment : Fragment() {
                 return true
         }
         return false
+    }
+
+    private fun getItemView(course: Course, startTime: Int): View {
+        val itemHeight = DensityUtil.dip2px(activity, Settings.customTextHeight.toFloat())
+        val itemView = View.inflate(activity, R.layout.item_widget_table, null)
+        val imageView: ImageView = itemView.findViewById(R.id.imageView)
+        val textViewName: TextView = itemView.findViewById(R.id.textView_name)
+        val textViewTeacher: TextView = itemView.findViewById(R.id.textView_teacher)
+        val textViewLocation: TextView = itemView.findViewById(R.id.textView_location)
+        val textSize = Settings.customTextSize
+        textViewName.setTextSize(TypedValue.COMPLEX_UNIT_SP, textSize.toFloat())
+        textViewTeacher.setTextSize(TypedValue.COMPLEX_UNIT_SP, textSize.toFloat())
+        textViewLocation.setTextSize(TypedValue.COMPLEX_UNIT_SP, textSize.toFloat())
+        textViewName.text = course.name
+        textViewTeacher.text = course.teacher
+        textViewLocation.text = course.location
+        textViewName.setTextColor(Settings.customTableTextColor)
+        textViewTeacher.setTextColor(Settings.customTableTextColor)
+        textViewLocation.setTextColor(Settings.customTableTextColor)
+        if (course.color == "") {
+            course.color = '#' + ScheduleHelper.getRandomColor()
+        }
+        imageView.setBackgroundColor(Color.parseColor(course.color))
+//        val gradientDrawable = imageView.background as GradientDrawable
+//        when (course.type) {
+//            "-1" -> gradientDrawable.setColor(Color.RED)
+//            "not" -> {
+//                textViewName.setTextColor(Color.GRAY)
+//                textViewTeacher.setTextColor(Color.GRAY)
+//                textViewLocation.setTextColor(Color.GRAY)
+//                gradientDrawable.setColor(Color.parseColor("#9AEEEEEE"))
+//            }
+//            else -> gradientDrawable.setColor(Color.parseColor('#' + Integer.toHexString(Settings.customTableOpacity) + course.color.substring(1)))
+//        }
+        val timeArray = course.time.split('-')
+        val height = (timeArray[1].toInt() - timeArray[0].toInt() + 1) * itemHeight
+        val linearLayoutParams = LinearLayout.LayoutParams(0, height, 1F)
+        linearLayoutParams.topMargin = (timeArray[0].toInt() - startTime - 1) * itemHeight
+        itemView.layoutParams = linearLayoutParams
+        return itemView
     }
 }

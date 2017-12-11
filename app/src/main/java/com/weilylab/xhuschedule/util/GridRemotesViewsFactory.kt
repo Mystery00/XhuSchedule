@@ -48,7 +48,7 @@ class GridRemotesViewsFactory(private val context: Context,
         ScheduleHelper.isCookieAvailable = true
         val weekArray = CourseUtil.getWeekCourses(XhuFileUtil.getCoursesFromFile(context, oldFile))
         showCourses.clear()
-        showCourses.addAll(weekArray)
+//        showCourses.addAll(weekArray)
     }
 
     override fun getLoadingView(): RemoteViews? {

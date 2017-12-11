@@ -16,4 +16,8 @@ class TableLayoutHelper {
     var start = 0
     var end = 0
     lateinit var viewGroup: ViewGroup
+
+    override fun toString(): String {
+        return "TableLayoutHelper(start=$start, end=$end, viewGroup=$viewGroup)"
+    }
 }
