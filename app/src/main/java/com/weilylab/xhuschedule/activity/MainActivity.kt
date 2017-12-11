@@ -70,8 +70,7 @@ class MainActivity : AppCompatActivity() {
     private var isAnimShow = false
     private var isDataNew = false
     private var studentList = ArrayList<Student>()
-    private var weekList = LinkedList<LinkedList<Course>>()
-    private lateinit var weekArray: Array<Array<LinkedList<Course>>>
+    private var weekArray = Array(11, { Array<LinkedList<Course>>(7, { LinkedList() }) })
     private val todayList = ArrayList<Course>()
     private val todayFragment = TodayFragment.newInstance(todayList)
     private val weekFragment = TableFragment.newInstance(emptyArray())
@@ -258,7 +257,6 @@ class MainActivity : AppCompatActivity() {
             finish()
             return
         }
-        weekList.clear()
         todayList.clear()
         ScheduleHelper.isLogin = true
         val array = ArrayList<Observable<Boolean>>()
@@ -292,9 +290,7 @@ class MainActivity : AppCompatActivity() {
                             else
                                 bottomNavigationView.menu.findItem(R.id.bottom_nav_today).setIcon(R.drawable.ic_sentiment_very_satisfied)
                             showList.forEach {
-                                val tempWeekList = CourseUtil.mergeCourses(weekList, it.weekCourses)
-                                weekList.clear()
-                                weekList.addAll(tempWeekList)
+                                weekArray = CourseUtil.mergeCourses(weekArray, it.weekCourses)
                                 todayList.addAll(it.todayCourses)
                             }
                             weekFragment.refreshData(weekArray)
@@ -341,7 +337,7 @@ class MainActivity : AppCompatActivity() {
                 return@create
             }
             ScheduleHelper.isCookieAvailable = true
-            weekArray = if (week != -1)
+            student.weekCourses = if (week != -1)
                 if (Settings.isShowNot)
                     CourseUtil.formatCourses(XhuFileUtil.getCoursesFromFile(this@MainActivity, oldFile), week)
                 else
@@ -351,8 +347,6 @@ class MainActivity : AppCompatActivity() {
                     CourseUtil.formatCourses(XhuFileUtil.getCoursesFromFile(this@MainActivity, oldFile))
                 else
                     CourseUtil.getWeekCourses(XhuFileUtil.getCoursesFromFile(this@MainActivity, oldFile))
-//            student.weekCourses.clear()
-//            student.weekCourses.addAll(weekArray)
             val todayArray = CourseUtil.getTodayCourses(XhuFileUtil.getCoursesFromFile(this@MainActivity, oldFile))
             student.todayCourses.clear()
             student.todayCourses.addAll(todayArray)
@@ -373,7 +367,6 @@ class MainActivity : AppCompatActivity() {
             return
         }
         updateProfile(studentList[0])
-        weekList.clear()
         todayList.clear()
         val array = ArrayList<Observable<CourseRT>>()
         val showFile = File(filesDir.absolutePath + File.separator + "data" + File.separator + "show_user")
