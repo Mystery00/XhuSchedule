@@ -13,6 +13,7 @@ import android.os.Bundle
 import android.preference.Preference
 import android.preference.PreferenceCategory
 import android.preference.PreferenceFragment
+import android.preference.SwitchPreference
 import android.support.v7.app.AlertDialog
 import android.view.LayoutInflater
 import android.view.View
@@ -21,8 +22,8 @@ import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.activity.LoginActivity
 import com.weilylab.xhuschedule.classes.Student
 import com.weilylab.xhuschedule.util.ScheduleHelper
+import com.weilylab.xhuschedule.util.Settings
 import com.weilylab.xhuschedule.util.XhuFileUtil
-import vip.mystery0.tools.logs.Logs
 import java.io.File
 
 /**
@@ -30,14 +31,14 @@ import java.io.File
  */
 class AccountSettingsFragment : PreferenceFragment() {
     companion object {
-        private val TAG = "AccountSettingsFragment"
         private val ADD_ACCOUNT_CODE = 1
     }
 
     private lateinit var currentAccountCategory: PreferenceCategory
     private lateinit var addAccountPreference: Preference
     private lateinit var delAccountPreference: Preference
-    private lateinit var managerAccountPreference: Preference
+    private lateinit var setMainAccountPreference: Preference
+    private lateinit var multiUserModePreference: SwitchPreference
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,15 +49,13 @@ class AccountSettingsFragment : PreferenceFragment() {
         currentAccountCategory = findPreference(getString(R.string.key_current_account)) as PreferenceCategory
         addAccountPreference = findPreference(getString(R.string.key_add_account))
         delAccountPreference = findPreference(getString(R.string.key_del_account))
-        managerAccountPreference = findPreference(getString(R.string.key_show_account_manager))
+        setMainAccountPreference = findPreference(getString(R.string.key_set_main_account))
+        multiUserModePreference = findPreference(getString(R.string.key_enable_multi_user_mode)) as SwitchPreference
         val userFile = File(activity.filesDir.absolutePath + File.separator + "data" + File.separator + "user")
         val studentList = XhuFileUtil.getArrayListFromFile(userFile, Student::class.java)
-        studentList.forEach {
-            val preference = Preference(activity)
-            preference.title = it.name
-            preference.summary = it.username
-            currentAccountCategory.addPreference(preference)
-        }
+        updateCategory(studentList)
+        multiUserModePreference.isChecked = Settings.isEnableMultiUserMode
+
         addAccountPreference.setOnPreferenceClickListener {
             startActivityForResult(Intent(activity, LoginActivity::class.java)
                     .putExtra("isAddAccount", true), ADD_ACCOUNT_CODE)
@@ -96,54 +95,66 @@ class AccountSettingsFragment : PreferenceFragment() {
                             if (result)
                                 showIterator.remove()
                         }
+                        val isSetMain = (0 until studentList.size).any { studentList[it].isMain }
+                        if (!isSetMain)
+                            studentList[0].isMain = true
                         XhuFileUtil.saveObjectToFile(studentList, userFile)
                         XhuFileUtil.saveObjectToFile(showList, showFile)
                         studentList.clear()
                         studentList.addAll(XhuFileUtil.getArrayListFromFile(userFile, Student::class.java))
-                        currentAccountCategory.removeAll()
-                        studentList.forEach {
-                            val preference = Preference(activity)
-                            preference.title = it.name
-                            preference.summary = it.username
-                            currentAccountCategory.addPreference(preference)
-                        }
+                        updateCategory(studentList)
                         ScheduleHelper.isUIChange = true
                     })
                     .setNegativeButton(android.R.string.cancel, null)
                     .show()
             true
         }
-        managerAccountPreference.setOnPreferenceClickListener {
+        setMainAccountPreference.setOnPreferenceClickListener {
             studentList.clear()
             studentList.addAll(XhuFileUtil.getArrayListFromFile(userFile, Student::class.java))
-            val showFile = File(activity.filesDir.absolutePath + File.separator + "data" + File.separator + "show_user")
-            val showList = XhuFileUtil.getArrayListFromFile(showFile, Student::class.java)
             val valueArray = Array(studentList.size, { i -> "${studentList[i].name}(${studentList[i].username})" })
-            val checkedArray = BooleanArray(studentList.size, { i ->
-                var result = false
-                showList.forEach {
-                    result = result || it.username == studentList[i].username
-                }
-                result
-            })
+            var mainIndex = (0 until studentList.size).firstOrNull { studentList[it].isMain } ?: 0
             AlertDialog.Builder(activity)
-                    .setTitle(R.string.title_account_manager)
-                    .setMultiChoiceItems(valueArray, checkedArray, { _, which, isChecked ->
-                        Logs.i(TAG, "onCreateView: " + which)
-                        Logs.i(TAG, "onCreateView: " + isChecked)
-                        checkedArray[which] = isChecked
+                    .setTitle(R.string.title_del_account)
+                    .setSingleChoiceItems(valueArray, mainIndex, { _, which ->
+                        mainIndex = which
                     })
                     .setPositiveButton(android.R.string.ok, { _, _ ->
-                        val temp = ArrayList<Student>()
-                        checkedArray.forEachIndexed { index, b ->
-                            if (b)
-                                temp.add(studentList[index])
+                        studentList.forEachIndexed { index, student ->
+                            student.isMain = index == mainIndex
                         }
-                        XhuFileUtil.saveObjectToFile(temp, showFile)
+                        XhuFileUtil.saveObjectToFile(studentList, userFile)
+                        studentList.clear()
+                        studentList.addAll(XhuFileUtil.getArrayListFromFile(userFile, Student::class.java))
+                        updateCategory(studentList)
                         ScheduleHelper.isUIChange = true
                     })
                     .setNegativeButton(android.R.string.cancel, null)
                     .show()
+            true
+        }
+        multiUserModePreference.setOnPreferenceChangeListener { _, _ ->
+            val isEnableMultiUserMode = !multiUserModePreference.isChecked
+            if (isEnableMultiUserMode) {
+                AlertDialog.Builder(activity)
+                        .setTitle(" ")
+                        .setMessage(R.string.warning_enable_multi_user_mode)
+                        .setPositiveButton(R.string.action_open, { _, _ ->
+                            Settings.isEnableMultiUserMode = true
+                            ScheduleHelper.isUIChange = true
+                        })
+                        .setNegativeButton(android.R.string.cancel, { _, _ ->
+                            multiUserModePreference.isChecked = false
+                            Settings.isEnableMultiUserMode = false
+                        })
+                        .setOnDismissListener {
+                            multiUserModePreference.isChecked = Settings.isEnableMultiUserMode
+                        }
+                        .show()
+            } else {
+                Settings.isEnableMultiUserMode = false
+                ScheduleHelper.isUIChange = true
+            }
             true
         }
         return super.onCreateView(inflater, container, savedInstanceState)
@@ -154,14 +165,20 @@ class AccountSettingsFragment : PreferenceFragment() {
         if (requestCode == ADD_ACCOUNT_CODE && resultCode == Activity.RESULT_OK) {
             ScheduleHelper.isUIChange = true
             val userFile = File(activity.filesDir.absolutePath + File.separator + "data" + File.separator + "user")
-            currentAccountCategory.removeAll()
-            XhuFileUtil.getArrayListFromFile(userFile, Student::class.java)
-                    .forEach {
-                        val preference = Preference(activity)
-                        preference.title = it.name
-                        preference.summary = it.username
-                        currentAccountCategory.addPreference(preference)
-                    }
+            updateCategory(XhuFileUtil.getArrayListFromFile(userFile, Student::class.java))
+        }
+    }
+
+    private fun updateCategory(studentList: ArrayList<Student>) {
+        currentAccountCategory.removeAll()
+        studentList.forEach {
+            val preference = Preference(activity)
+            if (it.isMain)
+                preference.title = "${it.name}(主)"
+            else
+                preference.title = it.name
+            preference.summary = it.username
+            currentAccountCategory.addPreference(preference)
         }
     }
 }

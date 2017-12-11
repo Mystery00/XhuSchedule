@@ -20,8 +20,11 @@
     <string name="key_add_account" translatable="false">key_add_account</string>
     <string name="title_del_account">删除账号</string>
     <string name="key_del_account" translatable="false">key_del_account</string>
-    <string name="title_show_account_manager">账号显示管理</string>
-    <string name="key_show_account_manager" translatable="false">key_show_account_manager</string>
+    <string name="key_set_main_account">key_set_main_account</string>
+    <string name="title_set_main_account">设置主账号</string>
+    <string name="summary_enable_multi_user_mode">注意：如果多个用户的课表存在冲突的情况，表格可能会变得很乱，请确定您开启这个模式的意义！</string>
+    <string name="title_enable_multi_user_mode">启用多用户模式</string>
+    <string name="key_enable_multi_user_mode">key_enable_multi_user_mode</string>
 
     <string name="category_custom">自定义项</string>
     <string name="screen_category_ui">界面设置</string>

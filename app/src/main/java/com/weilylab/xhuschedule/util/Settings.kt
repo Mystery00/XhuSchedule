@@ -61,4 +61,7 @@ object Settings {
     var autoCheckUpdate: Boolean//自动检查更新
         set(value) = sharedPreference.edit().putBoolean("autoCheckUpdate", value).apply()
         get() = sharedPreference.getBoolean("autoCheckUpdate", true)
+    var isEnableMultiUserMode: Boolean//是否启用多用户模式
+        set(value) = sharedPreference.edit().putBoolean("isEnableMultiUserMode", value).apply()
+        get() = sharedPreference.getBoolean("isEnableMultiUserMode", false)
 }
