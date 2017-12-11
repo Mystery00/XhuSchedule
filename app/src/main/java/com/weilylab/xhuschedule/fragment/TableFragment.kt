@@ -39,10 +39,25 @@ import kotlin.math.max
 class TableFragment : Fragment() {
     companion object {
         private val TAG = "TableFragment"
+
+        fun newInstance(list: ArrayList<ArrayList<ArrayList<Course>>>): TodayFragment {
+            val bundle = Bundle()
+            bundle.putSerializable("list", list)
+            val fragment = TodayFragment()
+            fragment.arguments = bundle
+            return fragment
+        }
     }
 
+    private lateinit var list:ArrayList<ArrayList<ArrayList<Course>>>
     private var isReady = false
     private var rootView: View? = null
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        @Suppress("UNCHECKED_CAST")
+        list = arguments.getSerializable("list") as ArrayList<ArrayList<ArrayList<Course>>>
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -84,7 +99,7 @@ class TableFragment : Fragment() {
         return rootView
     }
 
-    fun refreshData(array: Array<Array<LinkedList<Course>>>) {
+    fun refreshData() {
         Observable.create<Boolean> { subscriber ->
             while (true) {
                 if (isReady)
@@ -114,7 +129,7 @@ class TableFragment : Fragment() {
                                 (tableNav.getChildAt(i) as TextView).setTextColor(Settings.customTableTextColor)
                             }
                         }
-                        formatView(array)
+                        formatView()
                     }
 
                     override fun onError(e: Throwable) {
@@ -131,7 +146,7 @@ class TableFragment : Fragment() {
             (rootView!!.parent as ViewGroup).removeView(rootView)
     }
 
-    private fun formatView(array: Array<Array<LinkedList<Course>>>) {
+    private fun formatView() {
         val itemWidth = rootView!!.findViewById<LinearLayout>(R.id.table_schedule1).measuredWidth
         val itemHeight = DensityUtil.dip2px(activity, Settings.customTextHeight.toFloat())
         for (day in 0 until 7) {
@@ -140,7 +155,7 @@ class TableFragment : Fragment() {
             val linearLayout: LinearLayout = rootView!!.findViewById(temp)
             linearLayout.removeAllViews()
             for (time in 0 until 11) {
-                val linkedList = array[time][day]
+                val linkedList = list[time][day]
                 Logs.i(TAG, "formatView: position: $time $day")
                 if (linkedList.isEmpty()) {//如果这个位置没有课
                     Logs.i(TAG, "formatView: 没有课")

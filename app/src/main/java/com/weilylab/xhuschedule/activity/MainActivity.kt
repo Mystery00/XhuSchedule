@@ -70,7 +70,7 @@ class MainActivity : AppCompatActivity() {
     private var isAnimShow = false
     private var isDataNew = false
     private var studentList = ArrayList<Student>()
-    private var weekArray = Array(11, { Array<LinkedList<Course>>(7, { LinkedList() }) })
+    private var weekList = ArrayList<ArrayList<ArrayList<Course>>>()
     private val todayList = ArrayList<Course>()
     private val todayFragment = TodayFragment.newInstance(todayList)
     private val weekFragment = TableFragment()
@@ -258,9 +258,9 @@ class MainActivity : AppCompatActivity() {
             return
         }
         //清空数组
-        for (i in 0 until weekArray.size)
-            for (k in 0 until weekArray[i].size)
-                weekArray[i][k].clear()
+        for (i in 0 until weekList.size)
+            for (k in 0 until weekList[i].size)
+                weekList[i][k].clear()
         todayList.clear()
         ScheduleHelper.isLogin = true
         val array = ArrayList<Observable<Boolean>>()
@@ -301,13 +301,13 @@ class MainActivity : AppCompatActivity() {
                             else
                                 bottomNavigationView.menu.findItem(R.id.bottom_nav_today).setIcon(R.drawable.ic_sentiment_very_satisfied)
                             updateList.forEach {
-                                val newArray = CourseUtil.mergeCourses(weekArray, it.weekCourses)
-                                for (i in 0 until weekArray.size)
-                                    for (k in 0 until weekArray[i].size)
-                                        weekArray[i][k].addAll(newArray[i][k])
+                                val newArray = CourseUtil.mergeCourses(weekList, it.weekCourses)
+                                for (i in 0 until weekList.size)
+                                    for (k in 0 until weekList[i].size)
+                                        weekList[i][k].addAll(newArray[i][k])
                                 todayList.addAll(it.todayCourses)
                             }
-                            weekFragment.refreshData(weekArray)
+                            weekFragment.refreshData()
                             todayFragment.refreshData()
                         } else
                             updateAllData()

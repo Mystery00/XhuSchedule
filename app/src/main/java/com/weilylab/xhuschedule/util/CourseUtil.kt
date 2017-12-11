@@ -152,19 +152,17 @@ object CourseUtil {
             arrayOf(CourseTimeInfo(course.week + '周', course.location))
     }
 
-    fun mergeCourses(aList: Array<Array<LinkedList<Course>>>, bList: Array<Array<LinkedList<Course>>>): Array<Array<LinkedList<Course>>> {
+    fun mergeCourses(aList: ArrayList<ArrayList<ArrayList<Course>>>, bList: ArrayList<ArrayList<ArrayList<Course>>>): ArrayList<ArrayList<ArrayList<Course>>> {
         if (aList.isEmpty())
             return bList
         if (bList.isEmpty())
             return aList
-        return Array(11, { time ->
-            Array(7, { day ->
-                val linkedList = LinkedList<Course>()
-                linkedList.addAll(aList[time][day])
-                linkedList.addAll(bList[time][day])
-                linkedList
-            })
-        })
+        val list = ArrayList<ArrayList<ArrayList<Course>>>()
+        for (i in 0 until aList.size)
+            for (k in 0 until aList[i].size) {
+                aList[i][k].addAll(bList[i][k])
+            }
+        return list
     }
 
     fun typeMerge(type1: String, type2: String): String {
