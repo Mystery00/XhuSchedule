@@ -62,7 +62,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     private lateinit var loadingDialog: ZLoadingDialog
+    private lateinit var updateProfileDialog: ZLoadingDialog
     private lateinit var weekAdapter: WeekAdapter
+    private lateinit var mainStudent: Student
     private var isTryRefreshData = false
     private var isTryLogin = false
     private var isRefreshData = false
@@ -82,6 +84,13 @@ class MainActivity : AppCompatActivity() {
         loadingDialog = ZLoadingDialog(this)
                 .setLoadingBuilder(Z_TYPE.DOUBLE_CIRCLE)
                 .setHintText(getString(R.string.hint_dialog_update_cache))
+                .setHintTextSize(16F)
+                .setCanceledOnTouchOutside(false)
+                .setLoadingColor(ContextCompat.getColor(this, R.color.colorAccent))
+                .setHintTextColor(ContextCompat.getColor(this, R.color.colorAccent))
+        updateProfileDialog = ZLoadingDialog(this)
+                .setLoadingBuilder(Z_TYPE.CIRCLE_CLOCK)
+                .setHintText(getString(R.string.hint_dialog_update_profile))
                 .setHintTextSize(16F)
                 .setCanceledOnTouchOutside(false)
                 .setLoadingColor(ContextCompat.getColor(this, R.color.colorAccent))
@@ -173,12 +182,6 @@ class MainActivity : AppCompatActivity() {
         studentList.clear()
         studentList.addAll(XhuFileUtil.getArrayFromFile(File(filesDir.absolutePath + File.separator + "data" + File.separator + "user"), Student::class.java))
 
-        if (studentList.size > 0)
-            if (studentList[0].profile != null)
-                profileFragment.setProfile(studentList[0].profile!!)
-            else
-                updateProfile(studentList[0])
-
         weekAdapter = WeekAdapter(this, 1)
         weekAdapter.setWeekChangeListener(object : WeekChangeListener {
             override fun onChange(week: Int) {
@@ -249,6 +252,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun updateAllView(week: Int) {
+        ScheduleHelper.isAnalysisError = false
         studentList.clear()
         studentList.addAll(XhuFileUtil.getArrayFromFile(File(filesDir.absolutePath + File.separator + "data" + File.separator + "user"), Student::class.java))
         if (studentList.size == 0) {
@@ -263,19 +267,21 @@ class MainActivity : AppCompatActivity() {
         ScheduleHelper.isLogin = true
         val array = ArrayList<Observable<Boolean>>()
         val updateList = ArrayList<Student>()
-        if (Settings.isEnableMultiUserMode)
+        if (Settings.isEnableMultiUserMode) {
             studentList.forEach {
                 array.add(updateView(it, week))
                 updateList.add(it)
             }
-        else {
-            var mainStudent: Student? = (0 until studentList.size)
+            mainStudent = studentList[0]
+        } else {
+            var tempStudent: Student? = (0 until studentList.size)
                     .firstOrNull { studentList[it].isMain }
                     ?.let { studentList[it] }
-            if (mainStudent == null)
-                mainStudent = studentList[0]
-            array.add(updateView(mainStudent, week))
-            updateList.add(mainStudent)
+            if (tempStudent == null)
+                tempStudent = studentList[0]
+            array.add(updateView(tempStudent, week))
+            updateList.add(tempStudent)
+            mainStudent = tempStudent
         }
         Observable.merge(array)
                 .subscribeOn(Schedulers.newThread())
@@ -377,7 +383,7 @@ class MainActivity : AppCompatActivity() {
             finish()
             return
         }
-        updateProfile(studentList[0])
+//        updateProfile(studentList[0])
         todayList.clear()
         val array = ArrayList<Observable<CourseRT>>()
         isRefreshData = true
@@ -439,7 +445,9 @@ class MainActivity : AppCompatActivity() {
                         if (courseRT?.rt == "5")
                             Snackbar.make(coordinatorLayoutView, R.string.hint_update_data_error, Snackbar.LENGTH_LONG).show()
                         else {
-                            if (isDataNew && updateList.size == 1)
+                            if (ScheduleHelper.isAnalysisError) {
+                                Snackbar.make(coordinatorLayoutView, R.string.hint_analyze_error, Snackbar.LENGTH_LONG).show()
+                            } else if (isDataNew && updateList.size == 1)
                                 Snackbar.make(coordinatorLayoutView, R.string.hint_update_data_new, Snackbar.LENGTH_SHORT).show()
                             else
                                 Snackbar.make(coordinatorLayoutView, R.string.hint_update_data, Snackbar.LENGTH_SHORT).show()
@@ -519,24 +527,6 @@ class MainActivity : AppCompatActivity() {
                         }
                     }
                 }
-    }
-
-    private fun updateProfile(student: Student) {
-        student.getInfo(this, object : ProfileListener {
-            override fun error(rt: Int, e: Throwable) {
-                Logs.e(TAG, "error: " + rt)
-                e.printStackTrace()
-            }
-
-            override fun doInThread() {
-            }
-
-            override fun got(profile: Profile) {
-                XhuFileUtil.saveObjectToFile(studentList, File(filesDir.absolutePath + File.separator + "data" + File.separator + "user"))
-                profileFragment.setProfile(profile)
-                loadingDialog.dismiss()
-            }
-        })
     }
 
     private fun login(student: Student) {
@@ -682,6 +672,26 @@ class MainActivity : AppCompatActivity() {
                     showWeekAnim(false)
                 titleTextView.setOnClickListener(null)
                 titleTextView.setCompoundDrawables(null, null, null, null)
+                if (mainStudent.profile == null) {
+                    updateProfileDialog.show()
+                    mainStudent.getInfo(this, object : ProfileListener {
+                        override fun error(rt: Int, e: Throwable) {
+                            updateProfileDialog.dismiss()
+                            Logs.e(TAG, "error: " + rt)
+                            e.printStackTrace()
+                        }
+
+                        override fun doInThread() {
+                        }
+
+                        override fun got(profile: Profile) {
+                            updateProfileDialog.dismiss()
+                            XhuFileUtil.saveObjectToFile(studentList, File(filesDir.absolutePath + File.separator + "data" + File.separator + "user"))
+                            profileFragment.setProfile(profile)
+                        }
+                    })
+                } else
+                    profileFragment.setProfile(mainStudent.profile!!)
             }
         }
     }

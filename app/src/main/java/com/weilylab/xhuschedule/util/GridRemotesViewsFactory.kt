@@ -18,13 +18,11 @@ import com.weilylab.xhuschedule.classes.Course
 import com.weilylab.xhuschedule.classes.Student
 import vip.mystery0.tools.logs.Logs
 import java.io.File
-import java.util.*
 import kotlin.collections.ArrayList
 
-class GridRemotesViewsFactory(private val context: Context,
-                              private val intent: Intent?) : RemoteViewsService.RemoteViewsFactory {
+class GridRemotesViewsFactory(private val context: Context) : RemoteViewsService.RemoteViewsFactory {
     private val TAG = "GridRemotesViewsFactory"
-    private val showCourses = ArrayList<LinkedList<Course>>()
+    private val showCourses = ArrayList<ArrayList<ArrayList<Course>>>()
 
     override fun onCreate() {
         val studentList = XhuFileUtil.getArrayFromFile(File(context.filesDir.absolutePath + File.separator + "data" + File.separator + "user"), Student::class.java)
@@ -48,7 +46,7 @@ class GridRemotesViewsFactory(private val context: Context,
         ScheduleHelper.isCookieAvailable = true
         val weekArray = CourseUtil.getWeekCourses(XhuFileUtil.getCoursesFromFile(context, oldFile))
         showCourses.clear()
-//        showCourses.addAll(weekArray)
+        showCourses.addAll(weekArray)
     }
 
     override fun getLoadingView(): RemoteViews? {
@@ -88,7 +86,7 @@ class GridRemotesViewsFactory(private val context: Context,
         }
         val remotesViews = RemoteViews(context.packageName, R.layout.item_linear_layout)
         remotesViews.removeAllViews(R.layout.item_linear_layout)
-        val linkedList = showCourses[rows * 7 + columns]
+        val linkedList = showCourses[rows][columns]
         linkedList.forEach {
             remotesViews.addView(R.id.linearLayout, addView(context, it))
         }
@@ -96,7 +94,7 @@ class GridRemotesViewsFactory(private val context: Context,
     }
 
     override fun getCount(): Int {
-        return 48
+        return 96
     }
 
     override fun getViewTypeCount(): Int {
@@ -109,7 +107,8 @@ class GridRemotesViewsFactory(private val context: Context,
 
     private fun addView(context: Context, course: Course): RemoteViews {
         val remotesViews = RemoteViews(context.packageName, R.layout.item_widget_table)
-        remotesViews.setImageViewBitmap(R.id.imageView, ViewUtil.drawBackground(course))
+//        remotesViews.setImageViewBitmap(R.id.imageView, ViewUtil.drawBackground(course))
+        remotesViews.setBitmap(R.id.imageView,"setBackground",ViewUtil.drawBackground(course))
         remotesViews.setTextViewText(R.id.textView_name, course.name)
         remotesViews.setTextViewText(R.id.textView_teacher, course.teacher)
         remotesViews.setTextViewText(R.id.textView_location, course.location)

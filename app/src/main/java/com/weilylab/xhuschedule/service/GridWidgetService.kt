@@ -13,6 +13,6 @@ import com.weilylab.xhuschedule.util.GridRemotesViewsFactory
 
 class GridWidgetService : RemoteViewsService() {
     override fun onGetViewFactory(intent: Intent?): RemoteViewsFactory {
-        return GridRemotesViewsFactory(this, intent)
+        return GridRemotesViewsFactory(this)
     }
 }

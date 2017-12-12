@@ -22,6 +22,12 @@
         <item>@string/table_nav3</item>
         <item>@string/table_nav4</item>
         <item>@string/table_nav5</item>
+        <item>@string/table_nav6</item>
+        <item>@string/table_nav7</item>
+        <item>@string/table_nav8</item>
+        <item>@string/table_nav9</item>
+        <item>@string/table_nav10</item>
+        <item>@string/table_nav11</item>
     </string-array>
 
     <string-array name="term_array">

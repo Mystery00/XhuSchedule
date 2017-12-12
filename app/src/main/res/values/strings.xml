@@ -39,6 +39,7 @@
     <string name="hint_dialog_update_vcode">获取验证码中……</string>
     <string name="hint_dialog_login">登录中……</string>
     <string name="hint_dialog_update_cache">更新缓存中……</string>
+    <string name="hint_dialog_update_profile">正在更新个人信息……</string>
     <string name="hint_dialog_check_update">检查更新中……</string>
     <string name="hint_dialog_init">正在初始化……</string>
     <string name="hint_dialog_sync">信息同步中……</string>
@@ -47,6 +48,7 @@
     <string name="hint_update_data">信息同步成功！</string>
     <string name="hint_update_data_new">信息同步成功！和之前相比，数据有更新。</string>
     <string name="hint_update_data_error">信息同步完成！但是部分数据存在错误。</string>
+    <string name="hint_analyze_error">信息同步完成！但是部分数据存在错误。请联系开发者以解决这个问题！</string>
     <string name="hint_course_empty">今天没课哦~</string>
     <string name="hint_data_empty">暂时没有数据哦~</string>
     <string name="hint_score_fail">未通过成绩</string>

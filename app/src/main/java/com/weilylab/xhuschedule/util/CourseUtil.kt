@@ -28,7 +28,7 @@ object CourseUtil {
     fun formatCourses(courses: Array<Course>, weekIndex: Int): ArrayList<ArrayList<ArrayList<Course>>> {
         val array = Array(11, { Array<ArrayList<Course>>(7, { ArrayList() }) })
         courses.forEach {
-            try {
+            try {//尝试解析周数
                 var other = false
                 when (it.type) {
                     "-1", "0" -> other = true
@@ -45,17 +45,23 @@ object CourseUtil {
                     it.type = "not"
             } catch (e: Exception) {
                 e.printStackTrace()
+                ScheduleHelper.isAnalysisError = true
             }
-            val timeArray = it.time.split('-')
-            val startTime = timeArray[0].toInt() - 1
-            var flag = false
-            for (temp in array[startTime][it.day.toInt() - 1]) {
-                flag = temp.with(it)
-                if (flag)
-                    break
+            try {//尝试解析时间
+                val timeArray = it.time.split('-')
+                val startTime = timeArray[0].toInt() - 1
+                var flag = false
+                for (temp in array[startTime][it.day.toInt() - 1]) {
+                    flag = temp.with(it)
+                    if (flag)
+                        break
+                }
+                if (!flag)
+                    array[startTime][it.day.toInt() - 1].add(it)
+            } catch (e: Exception) {
+                e.printStackTrace()
+                ScheduleHelper.isAnalysisError = true
             }
-            if (!flag)
-                array[startTime][it.day.toInt() - 1].add(it)
         }
         val list = ArrayList<ArrayList<ArrayList<Course>>>()
         for (i in 0 until array.size) {

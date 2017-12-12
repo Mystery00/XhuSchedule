@@ -26,6 +26,7 @@ object ScheduleHelper {
     var isImageChange = false
     var isUIChange = false
     var isFromLogin = false
+    var isAnalysisError = false
     var weekIndex = 0
 
     private val client = OkHttpClient.Builder()
