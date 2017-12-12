@@ -9,7 +9,6 @@ package com.weilylab.xhuschedule.util
 
 import com.weilylab.xhuschedule.classes.Course
 import com.weilylab.xhuschedule.classes.CourseTimeInfo
-import java.util.*
 import kotlin.collections.ArrayList
 
 /**
@@ -17,7 +16,7 @@ import kotlin.collections.ArrayList
  */
 object CourseUtil {
 
-    fun formatCourses(courses: Array<Course>): Array<Array<LinkedList<Course>>> {
+    fun formatCourses(courses: Array<Course>): ArrayList<ArrayList<ArrayList<Course>>> {
         val firstWeekOfTerm = Settings.firstWeekOfTerm
         val date = firstWeekOfTerm.split('-')
         CalendarUtil.startCalendar.set(date[0].toInt(), date[1].toInt(), date[2].toInt(), 0, 0, 0)
@@ -26,8 +25,8 @@ object CourseUtil {
         return formatCourses(courses, currentWeek)
     }
 
-    fun formatCourses(courses: Array<Course>, weekIndex: Int): Array<Array<LinkedList<Course>>> {
-        val array = Array(11, { Array<LinkedList<Course>>(7, { LinkedList() }) })
+    fun formatCourses(courses: Array<Course>, weekIndex: Int): ArrayList<ArrayList<ArrayList<Course>>> {
+        val array = Array(11, { Array<ArrayList<Course>>(7, { ArrayList() }) })
         courses.forEach {
             try {
                 var other = false
@@ -58,10 +57,16 @@ object CourseUtil {
             if (!flag)
                 array[startTime][it.day.toInt() - 1].add(it)
         }
-        return array
+        val list = ArrayList<ArrayList<ArrayList<Course>>>()
+        for (i in 0 until array.size) {
+            list.add(ArrayList())
+            for (k in 0 until array[i].size)
+                list[i].add(array[i][k])
+        }
+        return list
     }
 
-    fun getWeekCourses(courses: Array<Course>): Array<Array<LinkedList<Course>>> {
+    fun getWeekCourses(courses: Array<Course>): ArrayList<ArrayList<ArrayList<Course>>> {
         val firstWeekOfTerm = Settings.firstWeekOfTerm
         val date = firstWeekOfTerm.split('-')
         CalendarUtil.startCalendar.set(date[0].toInt(), date[1].toInt(), date[2].toInt(), 0, 0, 0)
@@ -70,9 +75,9 @@ object CourseUtil {
         return getWeekCourses(courses, currentWeek)
     }
 
-    fun getWeekCourses(courses: Array<Course>, weekIndex: Int): Array<Array<LinkedList<Course>>> {
+    fun getWeekCourses(courses: Array<Course>, weekIndex: Int): ArrayList<ArrayList<ArrayList<Course>>> {
         ScheduleHelper.weekIndex = weekIndex
-        val array = Array(11, { Array<LinkedList<Course>>(7, { LinkedList() }) })
+        val array = Array(11, { Array<ArrayList<Course>>(7, { ArrayList() }) })
         courses.filter {
             try {
                 var other = false
@@ -103,7 +108,13 @@ object CourseUtil {
             if (!flag)
                 array[startTime][it.day.toInt() - 1].add(it)
         }
-        return array
+        val list = ArrayList<ArrayList<ArrayList<Course>>>()
+        for (i in 0 until array.size) {
+            list.add(ArrayList())
+            for (k in 0 until array[i].size)
+                list[i].add(array[i][k])
+        }
+        return list
     }
 
     fun getTodayCourses(courses: Array<Course>): ArrayList<Course> {

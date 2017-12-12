@@ -40,10 +40,10 @@ class TableFragment : Fragment() {
     companion object {
         private val TAG = "TableFragment"
 
-        fun newInstance(list: ArrayList<ArrayList<ArrayList<Course>>>): TodayFragment {
+        fun newInstance(list: ArrayList<ArrayList<ArrayList<Course>>>): TableFragment {
             val bundle = Bundle()
             bundle.putSerializable("list", list)
-            val fragment = TodayFragment()
+            val fragment = TableFragment()
             fragment.arguments = bundle
             return fragment
         }

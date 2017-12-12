@@ -73,7 +73,7 @@ class MainActivity : AppCompatActivity() {
     private var weekList = ArrayList<ArrayList<ArrayList<Course>>>()
     private val todayList = ArrayList<Course>()
     private val todayFragment = TodayFragment.newInstance(todayList)
-    private val weekFragment = TableFragment()
+    private val weekFragment = TableFragment.newInstance(weekList)
     private val profileFragment = ProfileFragment.newInstance(Profile())
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -258,9 +258,7 @@ class MainActivity : AppCompatActivity() {
             return
         }
         //清空数组
-        for (i in 0 until weekList.size)
-            for (k in 0 until weekList[i].size)
-                weekList[i][k].clear()
+        weekList.clear()
         todayList.clear()
         ScheduleHelper.isLogin = true
         val array = ArrayList<Observable<Boolean>>()
@@ -301,10 +299,7 @@ class MainActivity : AppCompatActivity() {
                             else
                                 bottomNavigationView.menu.findItem(R.id.bottom_nav_today).setIcon(R.drawable.ic_sentiment_very_satisfied)
                             updateList.forEach {
-                                val newArray = CourseUtil.mergeCourses(weekList, it.weekCourses)
-                                for (i in 0 until weekList.size)
-                                    for (k in 0 until weekList[i].size)
-                                        weekList[i][k].addAll(newArray[i][k])
+                                weekList.addAll(CourseUtil.mergeCourses(weekList, it.weekCourses))
                                 todayList.addAll(it.todayCourses)
                             }
                             weekFragment.refreshData()
@@ -361,9 +356,7 @@ class MainActivity : AppCompatActivity() {
                     CourseUtil.formatCourses(XhuFileUtil.getCoursesFromFile(this@MainActivity, oldFile))
                 else
                     CourseUtil.getWeekCourses(XhuFileUtil.getCoursesFromFile(this@MainActivity, oldFile))
-            for (i in 0 until student.weekCourses.size)
-                for (k in 0 until student.weekCourses[i].size)
-                    student.weekCourses[i][k].addAll(tempArray[i][k])
+            student.weekCourses.addAll(tempArray)
             val todayArray = CourseUtil.getTodayCourses(XhuFileUtil.getCoursesFromFile(this@MainActivity, oldFile))
             student.todayCourses.clear()
             student.todayCourses.addAll(todayArray)
