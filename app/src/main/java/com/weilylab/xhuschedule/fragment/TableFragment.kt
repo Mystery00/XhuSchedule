@@ -18,12 +18,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import com.weilylab.xhuschedule.R
+import com.weilylab.xhuschedule.activity.MainActivity
 import com.weilylab.xhuschedule.classes.Course
 import com.weilylab.xhuschedule.classes.TableLayoutHelper
-import com.weilylab.xhuschedule.util.CalendarUtil
-import com.weilylab.xhuschedule.util.DensityUtil
-import com.weilylab.xhuschedule.util.ScheduleHelper
-import com.weilylab.xhuschedule.util.Settings
+import com.weilylab.xhuschedule.listener.InfoChangeListener
+import com.weilylab.xhuschedule.util.*
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.observers.DisposableObserver
@@ -49,7 +48,7 @@ class TableFragment : Fragment() {
         }
     }
 
-    private lateinit var list:ArrayList<ArrayList<ArrayList<Course>>>
+    private lateinit var list: ArrayList<ArrayList<ArrayList<Course>>>
     private var isReady = false
     private var rootView: View? = null
 
@@ -246,6 +245,7 @@ class TableFragment : Fragment() {
             course.color = '#' + ScheduleHelper.getRandomColor()
         }
         val gradientDrawable = imageView.background as GradientDrawable
+        Logs.i(TAG, "getItemView: " + course.color)
         when (course.type) {
             "-1" -> gradientDrawable.setColor(Color.RED)
             "not" -> {
@@ -261,6 +261,13 @@ class TableFragment : Fragment() {
         val linearLayoutParams = LinearLayout.LayoutParams(0, height, 1F)
         linearLayoutParams.topMargin = (timeArray[0].toInt() - startTime - 1) * itemHeight
         itemView.layoutParams = linearLayoutParams
+        itemView.setOnClickListener {
+            ViewUtil.showAlertDialog(context, course, object : InfoChangeListener {
+                override fun onChange() {
+                    (activity as MainActivity).updateAllView()
+                }
+            })
+        }
         return itemView
     }
 }

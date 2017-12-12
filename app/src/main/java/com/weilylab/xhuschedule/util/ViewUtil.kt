@@ -45,6 +45,7 @@ object ViewUtil {
         adapter.colorPickerChangeListener = object : ColorPickerChangeListener {
             override fun onColorChanged(color: String) {
                 textView.setBackgroundColor(Color.parseColor(color))
+                course.color=color
             }
         }
         colorChooser.adapter = adapter
@@ -69,7 +70,7 @@ object ViewUtil {
             val colorSharedPreference = context.getSharedPreferences("course_color", Context.MODE_PRIVATE)
             val md5 = ScheduleHelper.getMD5(course.name)
             colorSharedPreference.edit()
-                    .putString(md5, adapter.color)
+                    .putString(md5, course.color)
                     .apply()
             infoChangeListener.onChange()
             dialog.dismiss()

@@ -102,7 +102,7 @@ object XhuFileUtil {
         }
     }
 
-    fun getCoursesFromFile(context: Context, file: File): Array<Course> {
+    fun  getCoursesFromFile(context: Context, file: File): Array<Course> {
         try {
             if (!file.exists())
                 return emptyArray()
