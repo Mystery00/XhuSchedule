@@ -30,7 +30,6 @@ class Student : Serializable {
     var profile: Profile? = null
     var todayCourses = ArrayList<Course>()
     var weekCourses = ArrayList<ArrayList<ArrayList<Course>>>()
-    //    var weekCourses = Array(11, { Array<LinkedList<Course>>(7, { LinkedList() }) })
     var isMain = false
     var isReady = false
 

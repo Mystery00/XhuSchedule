@@ -83,7 +83,11 @@ object ViewUtil {
         val canvas = Canvas(bitmap)
         val targetRect = Rect(0, 0, 200, 200)
         val paint = Paint()
-        paint.color = Color.parseColor(course.color)
+        try {
+            paint.color = Color.parseColor(course.color)
+        }catch (e:Exception){
+            paint.color = Color.parseColor('#'+ScheduleHelper.getRandomColor())
+        }
         canvas.drawCircle(100F, 100F, 100F, paint)
         paint.color = Color.WHITE
         paint.textSize = 120F
