@@ -241,11 +241,12 @@ class TableFragment : Fragment() {
         textViewName.setTextColor(Settings.customTableTextColor)
         textViewTeacher.setTextColor(Settings.customTableTextColor)
         textViewLocation.setTextColor(Settings.customTableTextColor)
-        if (course.color == "") {
-            course.color = '#' + ScheduleHelper.getRandomColor()
+        val color: Int = try {
+            Color.parseColor('#' + Integer.toHexString(Settings.customTableOpacity) + course.color.substring(1))
+        } catch (e: Exception) {
+            Color.parseColor('#' + Integer.toHexString(Settings.customTableOpacity) + ScheduleHelper.getRandomColor())
         }
         val gradientDrawable = imageView.background as GradientDrawable
-        Logs.i(TAG, "getItemView: " + course.color)
         when (course.type) {
             "-1" -> gradientDrawable.setColor(Color.RED)
             "not" -> {
@@ -254,7 +255,7 @@ class TableFragment : Fragment() {
                 textViewLocation.setTextColor(Color.GRAY)
                 gradientDrawable.setColor(Color.parseColor("#9AEEEEEE"))
             }
-            else -> gradientDrawable.setColor(Color.parseColor('#' + Integer.toHexString(Settings.customTableOpacity) + course.color.substring(1)))
+            else -> gradientDrawable.setColor(color)
         }
         val timeArray = course.time.split('-')
         val height = (timeArray[1].toInt() - timeArray[0].toInt() + 1) * itemHeight

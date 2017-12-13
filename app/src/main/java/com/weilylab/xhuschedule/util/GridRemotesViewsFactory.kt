@@ -8,7 +8,6 @@
 package com.weilylab.xhuschedule.util
 
 import android.content.Context
-import android.content.Intent
 import android.graphics.Color
 import android.util.Base64
 import android.widget.RemoteViews
@@ -66,8 +65,11 @@ class GridRemotesViewsFactory(private val context: Context) : RemoteViewsService
     }
 
     override fun getViewAt(position: Int): RemoteViews {
+        Logs.i(TAG, "getViewAt: position: " + position)
         val rows = position / 8 - 1
         val columns = position % 8 - 1
+        Logs.i(TAG, "getViewAt: rows: " + rows)
+        Logs.i(TAG, "getViewAt: columns: " + columns)
         if (rows == -1) {
             val remotesView = RemoteViews(context.packageName, R.layout.layout_text_view)
             if (columns == -1)
@@ -107,8 +109,11 @@ class GridRemotesViewsFactory(private val context: Context) : RemoteViewsService
 
     private fun addView(context: Context, course: Course): RemoteViews {
         val remotesViews = RemoteViews(context.packageName, R.layout.item_widget_table)
-//        remotesViews.setImageViewBitmap(R.id.imageView, ViewUtil.drawBackground(course))
-        remotesViews.setBitmap(R.id.imageView,"setBackground",ViewUtil.drawBackground(course))
+        try {
+            remotesViews.setInt(R.id.imageView, "setBackgroundColor", Color.parseColor(course.color))
+        } catch (e: Exception) {
+            remotesViews.setInt(R.id.imageView, "setBackgroundColor", Color.parseColor('#' + ScheduleHelper.getRandomColor()))
+        }
         remotesViews.setTextViewText(R.id.textView_name, course.name)
         remotesViews.setTextViewText(R.id.textView_teacher, course.teacher)
         remotesViews.setTextViewText(R.id.textView_location, course.location)
