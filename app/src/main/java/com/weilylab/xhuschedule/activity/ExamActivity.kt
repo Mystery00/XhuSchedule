@@ -40,6 +40,9 @@ class ExamActivity : AppCompatActivity() {
         setContentView(R.layout.activity_exam)
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        toolbar.setNavigationOnClickListener {
+            finish()
+        }
         initView()
     }
 
