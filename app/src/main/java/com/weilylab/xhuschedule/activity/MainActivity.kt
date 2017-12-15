@@ -246,6 +246,7 @@ class MainActivity : AppCompatActivity() {
             updateAllData()
         }
         titleLayout.setOnClickListener {
+            //占位，在上层处理点击事件
             Logs.i(TAG, "initView: titleLayout")
         }
     }

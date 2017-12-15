@@ -21,8 +21,10 @@ class SplashActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         if (Settings.autoCheckLog) {
             val dir = File(externalCacheDir.absolutePath + File.separator)
+
+        } else {
+            startActivity(Intent(this, MainActivity::class.java))
+            finish()
         }
-        startActivity(Intent(this, MainActivity::class.java))
-        finish()
     }
 }

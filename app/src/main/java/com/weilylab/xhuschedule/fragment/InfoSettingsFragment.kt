@@ -24,16 +24,16 @@ import com.google.gson.Gson
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.classes.Update
 import com.weilylab.xhuschedule.interfaces.UpdateService
+import com.weilylab.xhuschedule.service.DownloadService
 import com.weilylab.xhuschedule.util.ScheduleHelper
 import com.weilylab.xhuschedule.util.Settings
-import com.weilylab.xhuschedule.util.notification.UpdateNotification
 import com.zyao89.view.zloading.ZLoadingDialog
 import com.zyao89.view.zloading.Z_TYPE
 import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
-import vip.mystery0.tools.logs.Logs
+import vip.mystery0.tools.fileUtil.FileUtil
 import java.io.InputStreamReader
 import java.net.UnknownHostException
 
@@ -43,6 +43,7 @@ import java.net.UnknownHostException
 class InfoSettingsFragment : PreferenceFragment() {
     private lateinit var loadingDialog: ZLoadingDialog
     private lateinit var autoCheckUpdatePreference: SwitchPreference
+    private lateinit var autoCheckLogPreference: SwitchPreference
     private lateinit var feedbackPreference: Preference
     private lateinit var updateLogPreference: Preference
     private lateinit var checkUpdatePreference: Preference
@@ -61,12 +62,18 @@ class InfoSettingsFragment : PreferenceFragment() {
                 .setLoadingColor(ContextCompat.getColor(activity, R.color.colorAccent))
                 .setHintTextColor(ContextCompat.getColor(activity, R.color.colorAccent))
         autoCheckUpdatePreference = findPreference(getString(R.string.key_auto_check_update)) as SwitchPreference
+        autoCheckLogPreference = findPreference(getString(R.string.key_auto_check_log)) as SwitchPreference
         feedbackPreference = findPreference(getString(R.string.key_feedback))
         updateLogPreference = findPreference(getString(R.string.key_update_log))
         checkUpdatePreference = findPreference(getString(R.string.key_check_update))
         autoCheckUpdatePreference.isChecked = Settings.autoCheckUpdate
+        autoCheckLogPreference.isChecked = Settings.autoCheckLog
         autoCheckUpdatePreference.setOnPreferenceChangeListener { _, _ ->
             Settings.autoCheckUpdate = !autoCheckUpdatePreference.isChecked
+            true
+        }
+        autoCheckLogPreference.setOnPreferenceChangeListener { _, _ ->
+            Settings.autoCheckLog = !autoCheckLogPreference.isChecked
             true
         }
         feedbackPreference.setOnPreferenceClickListener {
@@ -124,9 +131,29 @@ class InfoSettingsFragment : PreferenceFragment() {
 
                         override fun onComplete() {
                             loadingDialog.dismiss()
-                            if (update.code == 1)
-                                UpdateNotification.notify(activity, update.version)
-                            else
+                            if (update.code == 1) {
+                                val version = update.version
+                                val title = activity.getString(R.string.update_notification_title, activity.getString(R.string.app_version_name), version.versionName)
+                                val content = activity.getString(R.string.update_notification_content, FileUtil.FormatFileSize(version.apkSize), FileUtil.FormatFileSize(version.patchSize))
+                                val bigText = content + "\n" + activity.getString(R.string.update_notification_big_text, version.updateLog)
+                                val builder = AlertDialog.Builder(activity)
+                                        .setTitle(title)
+                                        .setMessage(bigText)
+                                        .setPositiveButton(R.string.action_download_apk, { _, _ ->
+                                            val downloadAPKIntent = Intent(activity, DownloadService::class.java)
+                                            downloadAPKIntent.putExtra("type", "apk")
+                                            downloadAPKIntent.putExtra("fileName", version.versionAPK)
+                                            activity.startService(downloadAPKIntent)
+                                        })
+                                if (version.lastVersion == activity.getString(R.string.app_version_code).toInt())
+                                    builder.setNegativeButton(R.string.action_download_patch, { _, _ ->
+                                        val downloadPatchIntent = Intent(activity, DownloadService::class.java)
+                                        downloadPatchIntent.putExtra("type", "patch")
+                                        downloadPatchIntent.putExtra("fileName", version.lastVersionPatch)
+                                        activity.startService(downloadPatchIntent)
+                                    })
+                                builder.show()
+                            } else
                                 Toast.makeText(activity, update.message, Toast.LENGTH_SHORT)
                                         .show()
                         }
