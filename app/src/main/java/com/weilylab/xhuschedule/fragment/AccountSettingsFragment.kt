@@ -57,8 +57,7 @@ class AccountSettingsFragment : PreferenceFragment() {
         multiUserModePreference.isChecked = Settings.isEnableMultiUserMode
 
         addAccountPreference.setOnPreferenceClickListener {
-            startActivityForResult(Intent(activity, LoginActivity::class.java)
-                    .putExtra("isAddAccount", true), ADD_ACCOUNT_CODE)
+            startActivityForResult(Intent(activity, LoginActivity::class.java), ADD_ACCOUNT_CODE)
             true
         }
         delAccountPreference.setOnPreferenceClickListener {

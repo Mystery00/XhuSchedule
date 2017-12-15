@@ -70,6 +70,9 @@
     <string name="key_auto_check_update" translatable="false">key_auto_check_update</string>
     <string name="title_auto_check_update">自动检查更新</string>
     <string name="summary_auto_check_update">在每一次启动时自动检查更新，注意，跳过某个版本将会无法使用增量更新</string>
+    <string name="key_auto_check_log" translatable="false">key_auto_check_log</string>
+    <string name="title_auto_check_log">启动时检查崩溃日志</string>
+    <string name="summary_auto_check_log">在每一次启动时检查时候有崩溃日志，并提醒是否上传给开发者</string>
     <string name="key_source_code" translatable="false">key_source_code</string>
     <string name="title_source_code">开源地址</string>
     <string name="summary_source_code" translatable="false">https://github.com/Mystery00/XhuSchedule</string>
