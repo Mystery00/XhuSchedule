@@ -10,6 +10,8 @@ package com.weilylab.xhuschedule.activity
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import com.weilylab.xhuschedule.util.Settings
+import java.io.File
 
 /**
  * Created by mystery0.
@@ -17,6 +19,9 @@ import android.support.v7.app.AppCompatActivity
 class SplashActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        if (Settings.autoCheckLog) {
+            val dir = File(externalCacheDir.absolutePath + File.separator)
+        }
         startActivity(Intent(this, MainActivity::class.java))
         finish()
     }

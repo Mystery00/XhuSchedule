@@ -56,6 +56,11 @@
             android:summary="@string/summary_auto_check_update"
             android:title="@string/title_auto_check_update" />
 
+        <SwitchPreference
+            android:key="@string/key_auto_check_log"
+            android:summary="@string/summary_auto_check_log"
+            android:title="@string/title_auto_check_log" />
+
         <Preference
             android:summary="@string/summary_weily_product"
             android:title="@string/title_weily_product">

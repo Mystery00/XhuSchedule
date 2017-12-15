@@ -7,6 +7,8 @@
 
 package com.weilylab.xhuschedule.activity
 
+import android.app.Activity
+import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import android.graphics.Point
@@ -19,6 +21,7 @@ import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Base64
+import android.widget.Toast
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
@@ -59,10 +62,11 @@ import kotlin.collections.ArrayList
 class MainActivity : AppCompatActivity() {
     companion object {
         private val TAG = "MainActivity"
+        private val ADD_ACCOUNT_CODE = 1
     }
 
-    private lateinit var loadingDialog: ZLoadingDialog
-    private lateinit var updateProfileDialog: ZLoadingDialog
+    private lateinit var loadingDialog: Dialog
+    private lateinit var updateProfileDialog: Dialog
     private lateinit var weekAdapter: WeekAdapter
     private lateinit var mainStudent: Student
     private var isTryRefreshData = false
@@ -71,6 +75,7 @@ class MainActivity : AppCompatActivity() {
     private var isWeekShow = false
     private var isAnimShow = false
     private var isDataNew = false
+    private var lastPressBack = 0L
     private var studentList = ArrayList<Student>()
     private var weekList = ArrayList<ArrayList<ArrayList<Course>>>()
     private val todayList = ArrayList<Course>()
@@ -88,6 +93,7 @@ class MainActivity : AppCompatActivity() {
                 .setCanceledOnTouchOutside(false)
                 .setLoadingColor(ContextCompat.getColor(this, R.color.colorAccent))
                 .setHintTextColor(ContextCompat.getColor(this, R.color.colorAccent))
+                .create()
         updateProfileDialog = ZLoadingDialog(this)
                 .setLoadingBuilder(Z_TYPE.CIRCLE_CLOCK)
                 .setHintText(getString(R.string.hint_dialog_update_profile))
@@ -95,15 +101,10 @@ class MainActivity : AppCompatActivity() {
                 .setCanceledOnTouchOutside(false)
                 .setLoadingColor(ContextCompat.getColor(this, R.color.colorAccent))
                 .setHintTextColor(ContextCompat.getColor(this, R.color.colorAccent))
+                .create()
 
         initView()
-        if (ScheduleHelper.isFromLogin) {
-            updateAllData()
-            ScheduleHelper.isFromLogin = false
-        } else {
-            loadingDialog.show()
-            updateAllView()
-        }
+        updateAllView()
         showUpdateLog()
         if (Settings.isFirstRun)
             showcase()
@@ -164,7 +165,6 @@ class MainActivity : AppCompatActivity() {
             studentList.clear()
             studentList.addAll(XhuFileUtil.getArrayFromFile(File(filesDir.absolutePath + File.separator + "data" + File.separator + "user"), Student::class.java))
             titleTextView.setTextColor(Settings.customTableTextColor)
-            loadingDialog.show()
             updateAllView()
         }
         ScheduleHelper.isImageChange = false
@@ -240,6 +240,9 @@ class MainActivity : AppCompatActivity() {
             if (isRefreshData)
                 return@setOnClickListener
             isTryRefreshData = false
+            loadingDialog.setOnDismissListener {
+                isRefreshData = false
+            }
             updateAllData()
         }
         titleLayout.setOnClickListener {
@@ -257,10 +260,10 @@ class MainActivity : AppCompatActivity() {
         studentList.addAll(XhuFileUtil.getArrayFromFile(File(filesDir.absolutePath + File.separator + "data" + File.separator + "user"), Student::class.java))
         if (studentList.size == 0) {
             ScheduleHelper.isLogin = false
-            startActivity(Intent(this, LoginActivity::class.java))
-            finish()
+            startActivityForResult(Intent(this, LoginActivity::class.java), ADD_ACCOUNT_CODE)
             return
         }
+        loadingDialog.show()
         //清空数组
         weekList.clear()
         todayList.clear()
@@ -379,11 +382,9 @@ class MainActivity : AppCompatActivity() {
         studentList.addAll(XhuFileUtil.getArrayFromFile(File(filesDir.absolutePath + File.separator + "data" + File.separator + "user"), Student::class.java))
         if (studentList.size == 0) {
             ScheduleHelper.isLogin = false
-            startActivity(Intent(this, LoginActivity::class.java))
-            finish()
+            startActivityForResult(Intent(this, LoginActivity::class.java), ADD_ACCOUNT_CODE)
             return
         }
-//        updateProfile(studentList[0])
         todayList.clear()
         val array = ArrayList<Observable<CourseRT>>()
         isRefreshData = true
@@ -435,8 +436,7 @@ class MainActivity : AppCompatActivity() {
                             Snackbar.make(coordinatorLayoutView, R.string.hint_invalid_cookie, Snackbar.LENGTH_LONG)
                                     .setAction(android.R.string.ok) {
                                         ScheduleHelper.isLogin = false
-                                        startActivity(Intent(this@MainActivity, LoginActivity::class.java))
-                                        finish()
+                                        startActivityForResult(Intent(this@MainActivity, LoginActivity::class.java), ADD_ACCOUNT_CODE)
                                     }
                                     .show()
                             return
@@ -504,8 +504,7 @@ class MainActivity : AppCompatActivity() {
                             Snackbar.make(coordinatorLayoutView, getString(R.string.hint_try_refresh_data_error, getString(R.string.error_invalid_username)), Snackbar.LENGTH_LONG)
                                     .setAction(android.R.string.ok) {
                                         ScheduleHelper.isLogin = false
-                                        startActivity(Intent(this@MainActivity, LoginActivity::class.java))
-                                        finish()
+                                        startActivityForResult(Intent(this, LoginActivity::class.java), ADD_ACCOUNT_CODE)
                                     }
                                     .show()
                         }
@@ -516,8 +515,7 @@ class MainActivity : AppCompatActivity() {
                             Snackbar.make(coordinatorLayoutView, getString(R.string.hint_try_refresh_data_error, getString(R.string.error_invalid_password)), Snackbar.LENGTH_LONG)
                                     .setAction(android.R.string.ok) {
                                         ScheduleHelper.isLogin = false
-                                        startActivity(Intent(this@MainActivity, LoginActivity::class.java))
-                                        finish()
+                                        startActivityForResult(Intent(this, LoginActivity::class.java), ADD_ACCOUNT_CODE)
                                     }
                                     .show()
                         }
@@ -538,8 +536,7 @@ class MainActivity : AppCompatActivity() {
                 Snackbar.make(coordinatorLayoutView, e.message!!, Snackbar.LENGTH_LONG)
                         .setAction(android.R.string.ok) {
                             ScheduleHelper.isLogin = false
-                            startActivity(Intent(this@MainActivity, LoginActivity::class.java))
-                            finish()
+                            startActivityForResult(Intent(this@MainActivity, LoginActivity::class.java), ADD_ACCOUNT_CODE)
                         }
                         .show()
             }
@@ -694,5 +691,23 @@ class MainActivity : AppCompatActivity() {
                     profileFragment.setProfile(mainStudent.profile!!)
             }
         }
+    }
+
+    override fun onBackPressed() {
+        val press = Calendar.getInstance().timeInMillis
+        if (press - lastPressBack <= 1000) {
+            super.onBackPressed()
+        } else {
+            lastPressBack = press
+            Toast.makeText(this, "再按一次退出", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == ADD_ACCOUNT_CODE && resultCode == Activity.RESULT_OK) {
+            updateAllView()
+        } else
+            finish()
     }
 }

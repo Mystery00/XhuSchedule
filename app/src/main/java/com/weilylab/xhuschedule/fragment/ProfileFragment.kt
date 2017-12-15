@@ -50,7 +50,7 @@ import com.weilylab.xhuschedule.util.DensityUtil
 import com.weilylab.xhuschedule.util.Settings
 import com.weilylab.xhuschedule.util.ViewUtil
 import com.yalantis.ucrop.UCrop
-import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.content_main.*
 import vip.mystery0.tools.logs.Logs
 import java.io.File
 import java.util.*
@@ -296,18 +296,18 @@ class ProfileFragment : Fragment() {
                     val saveFile = File(File(activity.filesDir, "CropImg"), "header")
                     Settings.customHeaderImg = saveFile.absolutePath
                     setHeaderImg()
-                    Snackbar.make((activity as MainActivity).coordinatorLayout, R.string.hint_custom_img, Snackbar.LENGTH_SHORT)
+                    Snackbar.make((activity as MainActivity).coordinatorLayoutView, R.string.hint_custom_img, Snackbar.LENGTH_SHORT)
                             .show()
                 }
                 PROFILE_CROP_REQUEST_CODE -> {
                     val saveFile = File(File(activity.filesDir, "CropImg"), "user_img")
                     Settings.userImg = saveFile.absolutePath
                     setProfileImg()
-                    Snackbar.make((activity as MainActivity).coordinatorLayout, R.string.hint_custom_img, Snackbar.LENGTH_SHORT)
+                    Snackbar.make((activity as MainActivity).coordinatorLayoutView, R.string.hint_custom_img, Snackbar.LENGTH_SHORT)
                             .show()
                 }
                 UCrop.RESULT_ERROR ->
-                    Snackbar.make((activity as MainActivity).coordinatorLayout, R.string.error_custom_img, Snackbar.LENGTH_SHORT)
+                    Snackbar.make((activity as MainActivity).coordinatorLayoutView, R.string.error_custom_img, Snackbar.LENGTH_SHORT)
                             .show()
             }
         super.onActivityResult(requestCode, resultCode, data)

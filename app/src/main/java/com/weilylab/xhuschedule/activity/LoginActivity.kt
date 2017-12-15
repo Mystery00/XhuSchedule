@@ -7,7 +7,6 @@
 
 package com.weilylab.xhuschedule.activity
 
-import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.text.TextUtils
@@ -30,7 +29,6 @@ import java.io.File
 class LoginActivity : AppCompatActivity() {
 
     private lateinit var loginDialog: ZLoadingDialog
-    private var isAddAccount = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,7 +38,6 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun initView() {
-        isAddAccount = intent.getBooleanExtra("isAddAccount", false)
         loginDialog = ZLoadingDialog(this)
                 .setLoadingBuilder(Z_TYPE.STAR_LOADING)
                 .setHintText(getString(R.string.hint_dialog_login))
@@ -99,7 +96,6 @@ class LoginActivity : AppCompatActivity() {
 
             override fun loginDone(name: String) {
                 ScheduleHelper.isLogin = true
-                ScheduleHelper.isFromLogin = true
                 val userFile = File(filesDir.absolutePath + File.separator + "data" + File.separator + "user")
                 student.name = name
                 val userList = XhuFileUtil.getArrayListFromFile(userFile, Student::class.java)
@@ -113,10 +109,7 @@ class LoginActivity : AppCompatActivity() {
                 loginDialog.dismiss()
                 Toast.makeText(this@LoginActivity, getString(R.string.success_login, name, getString(R.string.app_name)), Toast.LENGTH_SHORT)
                         .show()
-                if (isAddAccount) {
-                    setResult(Activity.RESULT_OK, intent)
-                } else
-                    startActivity(Intent(this@LoginActivity, MainActivity::class.java))
+                setResult(Activity.RESULT_OK, intent)
                 finish()
                 return
             }
