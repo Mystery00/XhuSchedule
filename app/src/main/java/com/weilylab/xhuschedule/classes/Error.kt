@@ -8,6 +8,7 @@
 package com.weilylab.xhuschedule.classes
 
 import java.io.Serializable
+
 /**
  * Created by myste.
  */
