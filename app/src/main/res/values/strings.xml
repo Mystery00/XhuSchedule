@@ -56,6 +56,14 @@
     <string name="hint_custom_img">自定义图片设置成功！</string>
     <string name="hint_nick_name">请设置昵称</string>
     <string name="hint_reset">界面设置已经恢复为默认设置</string>
+    <string name="hint_check_log">
+        检测到有崩溃日志没有提交：\n\n
+        日志文件名：%1$s\n\n
+        日志路径：%2$s\n\n
+        日志生成时间：%3$s\n\n
+        是否提交此日志？\n\n
+        （如果需要禁用该检测，请禁用：设置-关于-自动检测日志开关）
+    </string>
 
     <string name="warning_enable_multi_user_mode">
         请确保您是双学位的学生或者有同时查看多个账号课表的需求。\n\n

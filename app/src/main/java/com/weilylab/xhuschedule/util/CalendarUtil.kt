@@ -50,4 +50,10 @@ object CalendarUtil {
         val weekArray = context.resources.getStringArray(R.array.table_header)
         return context.getString(R.string.course_today_info, week, weekArray[day - 1])
     }
+
+    fun showDate(timeInMillis: Long): String {
+        val calendar = Calendar.getInstance()
+        calendar.timeInMillis = timeInMillis
+        return calendar.time.toString()
+    }
 }
