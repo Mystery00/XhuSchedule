@@ -23,7 +23,7 @@ import android.widget.Toast
 import com.google.gson.Gson
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.classes.Update
-import com.weilylab.xhuschedule.interfaces.UpdateService
+import com.weilylab.xhuschedule.interfaces.CommonService
 import com.weilylab.xhuschedule.service.DownloadService
 import com.weilylab.xhuschedule.util.ScheduleHelper
 import com.weilylab.xhuschedule.util.Settings
@@ -106,7 +106,7 @@ class InfoSettingsFragment : PreferenceFragment() {
         checkUpdatePreference.setOnPreferenceClickListener {
             loadingDialog.show()
             ScheduleHelper.phpRetrofit
-                    .create(UpdateService::class.java)
+                    .create(CommonService::class.java)
                     .checkUpdateCall(getString(R.string.app_version_code).toInt())
                     .subscribeOn(Schedulers.newThread())
                     .unsubscribeOn(Schedulers.newThread())

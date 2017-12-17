@@ -43,6 +43,7 @@
     <string name="hint_dialog_check_update">检查更新中……</string>
     <string name="hint_dialog_init">正在初始化……</string>
     <string name="hint_dialog_sync">信息同步中……</string>
+    <string name="hint_dialog_upload_log">日志上传中……</string>
     <string name="hint_invalid_cookie">登陆信息已过期，是否重新登录？</string>
     <string name="hint_try_refresh_data_error">%1$s，是否重新登录？</string>
     <string name="hint_update_data">信息同步成功！</string>

@@ -7,13 +7,17 @@
 
 package com.weilylab.xhuschedule.activity
 
-import android.content.Intent
-import android.net.Uri
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v4.content.ContextCompat
+import android.widget.Toast
 import com.weilylab.xhuschedule.R
-import com.weilylab.xhuschedule.classes.Error
+import com.weilylab.xhuschedule.classes.XhuScheduleError
+import com.weilylab.xhuschedule.listener.UploadLogListener
+import com.zyao89.view.zloading.ZLoadingDialog
+import com.zyao89.view.zloading.Z_TYPE
 import kotlinx.android.synthetic.main.activity_error.*
+import java.io.File
 import java.io.PrintWriter
 import java.io.StringWriter
 
@@ -24,7 +28,15 @@ class ErrorActivity : AppCompatActivity() {
         setContentView(R.layout.activity_error)
         if (intent.getBundleExtra("error") == null)
             finish()
-        val error = intent.getBundleExtra("error").getSerializable("error") as Error
+        val error = intent.getBundleExtra("error").getSerializable("error") as XhuScheduleError
+        val loadingDialog = ZLoadingDialog(this)
+                .setLoadingBuilder(Z_TYPE.SINGLE_CIRCLE)
+                .setHintText(getString(R.string.hint_dialog_upload_log))
+                .setHintTextSize(16F)
+                .setCanceledOnTouchOutside(false)
+                .setLoadingColor(ContextCompat.getColor(this, R.color.colorAccent))
+                .setHintTextColor(ContextCompat.getColor(this, R.color.colorAccent))
+                .create()
 
         text_date.text = getString(R.string.exception_time, error.time)
         text_version.text = getString(R.string.exception_version, error.appVersionName, error.appVersionCode)
@@ -35,18 +47,30 @@ class ErrorActivity : AppCompatActivity() {
         error.ex.printStackTrace(PrintWriter(stringWriter))
         text_exception.text = getString(R.string.exception_message, stringWriter.toString())
         button_feedback.setOnClickListener {
-            val stringBuilder = StringBuilder()
-            stringBuilder.appendln("App Version: " + error.appVersionName + "-" + error.appVersionCode)
-            stringBuilder.appendln("OS Version: " + error.AndroidVersion + "-" + error.sdk)
-            stringBuilder.appendln("Vendor: " + error.vendor)
-            stringBuilder.appendln("Model: " + error.model)
-            stringBuilder.appendln("Detail: " + stringWriter.toString())
-            stringBuilder.appendln("请描述导致闪退的操作：")
-            val data = Intent(Intent.ACTION_SENDTO)
-            data.data = Uri.parse("mailto:mystery0dyl520@gmail.com")
-            data.putExtra(Intent.EXTRA_SUBJECT, "西瓜课表反馈")
-            data.putExtra(Intent.EXTRA_TEXT, stringBuilder.toString())
-            startActivity(data)
+            val logFile = intent.getBundleExtra("error").getSerializable("file") as File
+            error.uploadLog(this, logFile, object : UploadLogListener {
+                override fun error(rt: Int, e: Throwable) {
+                    Toast.makeText(this@ErrorActivity, e.message + "\n请将这个信息反馈给开发者", Toast.LENGTH_LONG).show()
+                    loadingDialog.dismiss()
+                }
+
+                override fun done(code: Int, message: String) {
+                    Toast.makeText(this@ErrorActivity, message, Toast.LENGTH_SHORT)
+                            .show()
+                    loadingDialog.dismiss()
+                }
+
+                override fun doInThread() {
+                    //无效的回调，非本方法使用
+                }
+
+                override fun ready() {
+                    loadingDialog.setOnDismissListener {
+                        finish()
+                    }
+                    loadingDialog.show()
+                }
+            })
         }
     }
 }
