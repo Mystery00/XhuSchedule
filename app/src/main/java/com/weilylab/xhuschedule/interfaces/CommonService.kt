@@ -27,7 +27,6 @@ interface CommonService {
     fun download(@Path("type") type: String, @Path("fileName") fileName: String): Observable<ResponseBody>
 
     @Multipart
-    @FormUrlEncoded
     @POST("/XhuSchedule/interface/upload_log.php")
-    fun uploadLog(@Part requestBody: RequestBody, @Part logFile: MultipartBody.Part): Observable<ResponseBody>
+    fun uploadLog(@PartMap partMap: MutableMap<String,RequestBody>, @Part logFile: MultipartBody.Part): Observable<ResponseBody>
 }

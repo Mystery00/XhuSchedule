@@ -18,6 +18,7 @@ import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
+import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import java.io.File
@@ -72,12 +73,11 @@ data class XhuScheduleError(val time: String, val appVersionName: String,
     /**
      * 从Map中构建请求体
      */
-    private fun createPartFromMap(map: Map<String, String>): RequestBody {
-        val builder = MultipartBody.Builder()
-        builder.setType(MultipartBody.FORM)
+    private fun createPartFromMap(map: Map<String, String>): MutableMap<String, RequestBody> {
+        val requestMap = HashMap<String, RequestBody>()
         for (key in map.keys)
-            builder.addFormDataPart(key, map[key]!!)
-        return builder.build()
+            requestMap.put(key, RequestBody.create(MediaType.parse("text/plain"),map[key]!!))
+        return requestMap
     }
 
     /**

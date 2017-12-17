@@ -20,8 +20,6 @@ import android.widget.TextView
 import android.widget.Toast
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.activity.*
-import com.weilylab.xhuschedule.classes.Student
-import com.weilylab.xhuschedule.util.XhuFileUtil
 import java.io.File
 
 class OperationAdapter(private val context: Context) : RecyclerView.Adapter<OperationAdapter.ViewHolder>() {

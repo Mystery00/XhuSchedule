@@ -15,13 +15,15 @@ class LoadCookiesInterceptor : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
         val request = chain.request()
         val builder = request.newBuilder()
-        val formBody = request.body() as FormBody
-        val host = request.url().host()
-        val username: String? = (0 until formBody.size())
-                .firstOrNull { formBody.encodedName(it) == "username" }
-                ?.let { formBody.encodedValue(it) }
-        if (username != null && CookieManger.getCookie(username, host) != null) {
-            builder.addHeader("Cookie", CookieManger.getCookie(username, host)!!)
+        if (request.body() is FormBody){
+            val formBody = request.body() as FormBody
+            val host = request.url().host()
+            val username: String? = (0 until formBody.size())
+                    .firstOrNull { formBody.encodedName(it) == "username" }
+                    ?.let { formBody.encodedValue(it) }
+            if (username != null && CookieManger.getCookie(username, host) != null) {
+                builder.addHeader("Cookie", CookieManger.getCookie(username, host)!!)
+            }
         }
         return chain.proceed(builder.build())
     }

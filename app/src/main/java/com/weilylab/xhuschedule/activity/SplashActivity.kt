@@ -79,6 +79,9 @@ class SplashActivity : AppCompatActivity() {
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(object : DisposableObserver<Boolean>() {
                         override fun onError(e: Throwable) {
+                            e.printStackTrace()
+                            startActivity(Intent(this@SplashActivity, MainActivity::class.java))
+                            finish()
                         }
 
                         override fun onComplete() {
@@ -86,7 +89,7 @@ class SplashActivity : AppCompatActivity() {
 
                         override fun onNext(t: Boolean) {
                             if (t) {
-                                sharedPreference.edit().putString("saveFile", latestLog!!.name).apply()
+//                                sharedPreference.edit().putString("saveFile", latestLog!!.name).apply()
                                 AlertDialog.Builder(this@SplashActivity)
                                         .setTitle(" ")
                                         .setMessage(getString(R.string.hint_check_log, latestLog!!.name, latestLog!!.absolutePath, CalendarUtil.showDate(latestLog!!.lastModified())))
@@ -94,8 +97,11 @@ class SplashActivity : AppCompatActivity() {
                                             loadingDialog.show()
                                             error!!.uploadLog(this@SplashActivity,latestLog!!,object :UploadLogListener{
                                                 override fun error(rt: Int, e: Throwable) {
+                                                    e.printStackTrace()
                                                     Toast.makeText(this@SplashActivity, e.message + "\n请将这个信息反馈给开发者", Toast.LENGTH_LONG).show()
                                                     loadingDialog.dismiss()
+                                                    startActivity(Intent(this@SplashActivity, MainActivity::class.java))
+                                                    finish()
                                                 }
 
                                                 override fun done(code: Int, message: String) {
