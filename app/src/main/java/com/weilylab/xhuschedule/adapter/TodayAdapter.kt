@@ -34,9 +34,7 @@ class TodayAdapter(private val context: Context,
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
             is EmptyViewHolder -> {
-                val textView = holder.itemView as TextView
-                textView.text = context.getString(R.string.hint_course_empty)
-                textView.setTextColor(Color.WHITE)
+                holder.textView.text = context.getString(R.string.hint_course_empty)
             }
             is ViewHolder -> {
                 val course = list[position]
@@ -66,14 +64,16 @@ class TodayAdapter(private val context: Context,
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         if (viewType == 0) {
-            val view = LayoutInflater.from(parent.context).inflate(R.layout.item_course_empty, parent, false).findViewById<TextView>(R.id.textView)
+            val view = LayoutInflater.from(parent.context).inflate(R.layout.item_course_empty, parent, false)
             return EmptyViewHolder(view)
         }
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_course_today, parent, false)
         return ViewHolder(view)
     }
 
-    class EmptyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
+    class EmptyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        var textView: TextView = itemView.findViewById(R.id.textView)
+    }
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var img: ImageView = itemView.findViewById(R.id.img)

@@ -102,18 +102,18 @@ class ScoreAdapter(private val context: Context,
                 }
             }
             is EmptyViewHolder -> {
-                val textView = holder.itemView as TextView
-                if (list.size == 1)
-                    textView.text = context.getString(R.string.hint_data_empty)
-                else
-                    textView.text = context.getString(R.string.hint_score_fail)
+                holder.textView.text = context.getString(R.string.hint_score_fail)
+            }
+            is TextViewHolder -> {
+                (holder.itemView as TextView).text = context.getString(R.string.hint_data_empty)
             }
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
-            1, 2 -> EmptyViewHolder(LayoutInflater.from(context).inflate(R.layout.item_course_empty, parent, false).findViewById<TextView>(R.id.textView))
+            1 -> EmptyViewHolder(LayoutInflater.from(context).inflate(R.layout.item_course_empty, parent, false))
+            2 -> TextViewHolder(LayoutInflater.from(context).inflate(R.layout.item_text_view, parent, false).findViewById<TextView>(R.id.textView))
             else -> ViewHolder(LayoutInflater.from(context).inflate(R.layout.item_score, parent, false))
         }
     }
@@ -122,8 +122,8 @@ class ScoreAdapter(private val context: Context,
 
     override fun getItemViewType(position: Int): Int {
         return when {
-            list[position].name == "" -> 1
-            list.size == 1 -> 2
+            list.size == 1 -> 1
+            list[position].name == "" -> 2
             else -> 0
         }
     }
@@ -133,7 +133,11 @@ class ScoreAdapter(private val context: Context,
         isExpandList.clear()
     }
 
-    class EmptyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
+    class EmptyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        var textView: TextView = itemView.findViewById(R.id.textView)
+    }
+
+    class TextViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var scoreNameTextView: TextView = itemView.findViewById(R.id.textView_score_name)
