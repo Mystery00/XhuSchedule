@@ -12,7 +12,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import com.weilylab.xhuschedule.activity.ErrorActivity
-import com.weilylab.xhuschedule.classes.Error
+import com.weilylab.xhuschedule.classes.XhuScheduleError
 import com.weilylab.xhuschedule.service.UpdateService
 import com.weilylab.xhuschedule.util.Settings
 import vip.mystery0.tools.crashHandler.CatchExceptionListener
@@ -45,7 +45,7 @@ class APP : Application() {
                 .sendException(object : CatchExceptionListener {
                     override fun onException(date: String, file: File, appVersionName: String, appVersionCode: Int, AndroidVersion: String, sdk: Int, vendor: String, model: String, ex: Throwable) {
                         Logs.i("TAG", "onException: ")
-                        val error = Error(date, appVersionName, appVersionCode, AndroidVersion, sdk, vendor, model, ex)
+                        val error = XhuScheduleError(date, appVersionName, appVersionCode, AndroidVersion, sdk, vendor, model, ex)
                         val bundle = Bundle()
                         bundle.putSerializable("file", file)
                         bundle.putSerializable("error", error)
