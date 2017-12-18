@@ -9,6 +9,7 @@ package com.weilylab.xhuschedule.util
 
 import com.weilylab.xhuschedule.classes.Course
 import com.weilylab.xhuschedule.classes.CourseTimeInfo
+import vip.mystery0.tools.logs.Logs
 import kotlin.collections.ArrayList
 
 /**
@@ -130,6 +131,16 @@ object CourseUtil {
         //获取当前第几周
         val currentWeek = CalendarUtil.getWeek()
         val weekIndex = CalendarUtil.getWeekIndex()
+        return getTodayCourses(courses, currentWeek, weekIndex)
+    }
+
+    fun getTodayCourses(courses: Array<Course>, dayIndex: Int): ArrayList<Course> {
+        val currentWeek = CalendarUtil.getWeek(dayIndex)
+        val weekIndex = dayIndex % 7 + 1
+        return getTodayCourses(courses, currentWeek, weekIndex)
+    }
+
+    private fun getTodayCourses(courses: Array<Course>, currentWeek: Int, weekIndex: Int): ArrayList<Course> {
         val list = ArrayList<Course>()
         courses.filter {
             try {

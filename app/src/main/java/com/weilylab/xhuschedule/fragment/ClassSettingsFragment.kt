@@ -7,6 +7,7 @@
 
 package com.weilylab.xhuschedule.fragment
 
+import android.content.Intent
 import android.os.Bundle
 import android.preference.Preference
 import android.preference.PreferenceFragment
@@ -67,6 +68,8 @@ class ClassSettingsFragment : PreferenceFragment() {
                             calendar.add(Calendar.DATE, calendar.firstDayOfWeek - day)
                             Settings.firstWeekOfTerm = calendar.get(Calendar.YEAR).toString() + '-' + calendar.get(Calendar.MONTH).toString() + '-' + calendar.get(Calendar.DAY_OF_MONTH).toString()
                             firstDayPreference.summary = calendar.get(Calendar.YEAR).toString() + '-' + (calendar.get(Calendar.MONTH) + 1).toString() + '-' + calendar.get(Calendar.DAY_OF_MONTH).toString()
+                            //更新小部件
+                            activity.sendBroadcast(Intent("android.appwidget.action.APPWIDGET_UPDATE"))
                             dialog.dismiss()
                         }
                     }

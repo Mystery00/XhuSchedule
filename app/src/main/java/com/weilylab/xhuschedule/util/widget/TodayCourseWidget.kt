@@ -7,6 +7,7 @@
 
 package com.weilylab.xhuschedule.util.widget
 
+import android.app.PendingIntent
 import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
 import android.content.Context
@@ -15,8 +16,10 @@ import android.widget.RemoteViews
 
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.service.TodayWidgetService
+import com.weilylab.xhuschedule.service.WidgetInitService
+import com.weilylab.xhuschedule.service.WidgetLastActionService
+import com.weilylab.xhuschedule.service.WidgetNextActionService
 import com.weilylab.xhuschedule.util.CalendarUtil
-import vip.mystery0.tools.logs.Logs
 import java.util.*
 
 /**
@@ -25,32 +28,44 @@ import java.util.*
 class TodayCourseWidget : AppWidgetProvider() {
 
     override fun onUpdate(context: Context, appWidgetManager: AppWidgetManager, appWidgetIds: IntArray) {
-        Logs.i(TAG, "onUpdate: ")
-        for (appWidgetId in appWidgetIds) {
-            updateAppWidget(context, appWidgetManager, appWidgetId)
-        }
+        WidgetHelper.saveWidgetIds(context, WidgetHelper.TODAY_TAG, appWidgetIds)
+        context.startService(Intent(context, WidgetInitService::class.java))
+        for (appWidgetId in appWidgetIds)
+            updateAppWidget(context, appWidgetId)
     }
 
     override fun onEnabled(context: Context) {
-        Logs.i(TAG, "onEnabled: ")
 
     }
 
     override fun onDisabled(context: Context) {
-        Logs.i(TAG, "onDisabled: ")
+    }
+
+    override fun onReceive(context: Context, intent: Intent) {
+        super.onReceive(context, intent)
+        if (intent.action == "android.appwidget.action.APPWIDGET_UPDATE" && intent.getStringExtra("TAG") == WidgetHelper.TODAY_TAG) {
+            val appWidgetIds = WidgetHelper.getWidgetIds(context, WidgetHelper.TODAY_TAG)
+            for (appWidgetId in appWidgetIds)
+                AppWidgetManager.getInstance(context).notifyAppWidgetViewDataChanged(appWidgetId, R.id.listView)
+        }
     }
 
     companion object {
-        private val TAG = "TodayCourseWidget"
-
-        internal fun updateAppWidget(context: Context, appWidgetManager: AppWidgetManager,
-                                     appWidgetId: Int) {
-            val views = RemoteViews(context.packageName, R.layout.layout_widget_course_today)
+        internal fun updateAppWidget(context: Context, appWidgetId: Int) {
+            val remoteViews = RemoteViews(context.packageName, R.layout.layout_widget_course_today)
+            val lastIntentClick = Intent(context, WidgetLastActionService::class.java)
+            lastIntentClick.putExtra("TAG", WidgetHelper.TODAY_TAG)
+            val lastPendingIntent = PendingIntent.getService(context, 0, lastIntentClick, PendingIntent.FLAG_UPDATE_CURRENT)
+            remoteViews.setOnClickPendingIntent(R.id.lastDay, lastPendingIntent)
+            val nextIntentClick = Intent(context, WidgetNextActionService::class.java)
+            nextIntentClick.putExtra("TAG", WidgetHelper.TODAY_TAG)
+            val nextPendingIntent = PendingIntent.getService(context, 0, nextIntentClick, PendingIntent.FLAG_UPDATE_CURRENT)
+            remoteViews.setOnClickPendingIntent(R.id.nextDay, nextPendingIntent)
             val calendar = Calendar.getInstance()
-            views.setTextViewText(R.id.dateTitle, "${calendar.get(Calendar.YEAR)}/${calendar.get(Calendar.MONTH) + 1}/${calendar.get(Calendar.DAY_OF_MONTH)}  ${CalendarUtil.getTodayInfo(context)}")
+            remoteViews.setTextViewText(R.id.dateTitle, "${calendar.get(Calendar.YEAR)}/${calendar.get(Calendar.MONTH) + 1}/${calendar.get(Calendar.DAY_OF_MONTH)}  ${CalendarUtil.getTodayInfo(context)}")
             val intent = Intent(context, TodayWidgetService::class.java)
-            views.setRemoteAdapter(R.id.listView, intent)
-            appWidgetManager.updateAppWidget(appWidgetId, views)
+            remoteViews.setRemoteAdapter(R.id.listView, intent)
+            AppWidgetManager.getInstance(context).updateAppWidget(appWidgetId, remoteViews)
         }
     }
 }
