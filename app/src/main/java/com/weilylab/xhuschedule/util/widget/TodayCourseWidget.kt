@@ -47,7 +47,7 @@ class TodayCourseWidget : AppWidgetProvider() {
                                      appWidgetId: Int) {
             Logs.i(TAG, "updateAppWidget: hasData: " + hasData)
             val view = if (hasData) {
-                val views = RemoteViews(context.packageName, R.layout.today_course_widget)
+                val views = RemoteViews(context.packageName, R.layout.layout_widget_course_today)
                 val intent = Intent(context, TodayWidgetService::class.java)
                 views.setRemoteAdapter(R.id.listView, intent)
                 views

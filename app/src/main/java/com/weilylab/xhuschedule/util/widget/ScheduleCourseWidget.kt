@@ -45,7 +45,7 @@ class ScheduleCourseWidget : AppWidgetProvider() {
         internal fun updateAppWidget(context: Context, appWidgetManager: AppWidgetManager,
                                      appWidgetId: Int) {
             val view = if (hasData) {
-                val views = RemoteViews(context.packageName, R.layout.course_widget)
+                val views = RemoteViews(context.packageName, R.layout.layout_widget_course_schedule)
                 val intent = Intent(context, GridWidgetService::class.java)
                 views.setRemoteAdapter(R.id.gridView, intent)
                 views
