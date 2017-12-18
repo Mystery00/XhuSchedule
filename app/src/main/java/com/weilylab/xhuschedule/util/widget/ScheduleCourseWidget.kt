@@ -1,11 +1,11 @@
 /*
- * Created by Mystery0 on 17-12-5 下午3:40.
+ * Created by Mystery0 on 17-12-18 下午1:58.
  * Copyright (c) 2017. All Rights reserved.
  *
- * Last modified 17-12-5 下午3:40
+ * Last modified 17-12-13 下午12:15
  */
 
-package com.weilylab.xhuschedule.util
+package com.weilylab.xhuschedule.util.widget
 
 import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
@@ -20,7 +20,7 @@ import vip.mystery0.tools.logs.Logs
 /**
  * Implementation of App Widget functionality.
  */
-class CourseWidget : AppWidgetProvider() {
+class ScheduleCourseWidget : AppWidgetProvider() {
 
     override fun onUpdate(context: Context, appWidgetManager: AppWidgetManager, appWidgetIds: IntArray) {
         Logs.i(TAG, "onUpdate: ")
@@ -31,6 +31,7 @@ class CourseWidget : AppWidgetProvider() {
 
     override fun onEnabled(context: Context) {
         Logs.i(TAG, "onEnabled: ")
+        hasData = WidgetHelper.checkWeekCache(context)
     }
 
     override fun onDisabled(context: Context) {
@@ -38,14 +39,20 @@ class CourseWidget : AppWidgetProvider() {
     }
 
     companion object {
-        private val TAG = "CourseWidget"
+        private val TAG = "ScheduleCourseWidget"
+        private var hasData = true
 
         internal fun updateAppWidget(context: Context, appWidgetManager: AppWidgetManager,
                                      appWidgetId: Int) {
-            val views = RemoteViews(context.packageName, R.layout.course_widget)
-            val intent = Intent(context, GridWidgetService::class.java)
-            views.setRemoteAdapter(R.id.gridView, intent)
-            appWidgetManager.updateAppWidget(appWidgetId, views)
+            val view = if (hasData) {
+                val views = RemoteViews(context.packageName, R.layout.course_widget)
+                val intent = Intent(context, GridWidgetService::class.java)
+                views.setRemoteAdapter(R.id.gridView, intent)
+                views
+            } else {
+                RemoteViews(context.packageName, R.layout.layout_widget_no_data)
+            }
+            appWidgetManager.updateAppWidget(appWidgetId, view)
         }
     }
 }
