@@ -8,6 +8,7 @@
 package com.weilylab.xhuschedule.util.widget
 
 import android.content.Context
+import android.graphics.Color
 import android.util.Base64
 import android.widget.RemoteViews
 import android.widget.RemoteViewsService
@@ -70,6 +71,11 @@ class ListRemotesViewsFactory(private val context: Context) : RemoteViewsService
         remotesView.setTextViewText(R.id.course_name, course.name)
         remotesView.setTextViewText(R.id.course_teacher, course.teacher)
         remotesView.setTextViewText(R.id.course_time_location, "${course.time} at ${course.location}")
+        try {
+            remotesView.setInt(R.id.background, "setBackgroundColor", Color.parseColor(course.color))
+        } catch (e: Exception) {
+            remotesView.setInt(R.id.background, "setBackgroundColor", Color.parseColor('#' + ScheduleHelper.getRandomColor()))
+        }
         return remotesView
     }
 
