@@ -102,7 +102,7 @@ class SplashActivity : AppCompatActivity() {
 
                         override fun onNext(t: Boolean) {
                             if (t) {
-//                                sharedPreference.edit().putString("saveFile", latestLog!!.name).apply()
+                                sharedPreference.edit().putString("saveFile", latestLog!!.name).apply()
                                 AlertDialog.Builder(this@SplashActivity)
                                         .setTitle(" ")
                                         .setMessage(getString(R.string.hint_check_log, latestLog!!.name, latestLog!!.absolutePath, CalendarUtil.showDate(latestLog!!.lastModified())))
