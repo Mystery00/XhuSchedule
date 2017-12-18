@@ -25,12 +25,6 @@ object Settings {
     var isFirstRun: Boolean//是否是第一次运行
         set(value) = sharedPreference.edit().putBoolean("isFirstRun", value).apply()
         get() = sharedPreference.getBoolean("isFirstRun", true)
-    var isNeedClear: Boolean//是否需要转换资源
-        set(value) = sharedPreference.edit().putBoolean("isNeedClear", value).apply()
-        get() = sharedPreference.getBoolean("isNeedClear", true)
-    var nickName: String//昵称
-        set(value) = sharedPreference.edit().putString("nickName", value).apply()
-        get() = sharedPreference.getString("nickName", "")
     var userImg: String//用户头像路径
         set(value) = sharedPreference.edit().putString("userImg", value).apply()
         get() = sharedPreference.getString("userImg", "")

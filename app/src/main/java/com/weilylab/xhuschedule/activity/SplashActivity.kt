@@ -45,9 +45,22 @@ class SplashActivity : AppCompatActivity() {
                     .setHintTextColor(ContextCompat.getColor(this, R.color.colorAccent))
                     .create()
             var latestLog: File? = null
-            var error:XhuScheduleError?=null
+            var error: XhuScheduleError? = null
             val sharedPreference = getSharedPreferences("updateData", Context.MODE_PRIVATE)
             Observable.create<Boolean> { subscriber ->
+                val colorSharedPreference = getSharedPreferences("course_color", MODE_PRIVATE)
+                /**
+                 * =============================================
+                 * 为了兼容旧版本，在这里将旧版本的数据做一次清理
+                 */
+                val isNeedClear = colorSharedPreference.all.keys.any { it.contains("_trans") }
+                if (isNeedClear)
+                    colorSharedPreference.all.keys.forEach {
+                        colorSharedPreference.edit().remove(it).apply()
+                    }
+                /**
+                 * ==============================================
+                 */
                 //log文件前缀名
                 val fileNamePrefix = "crash"
                 //log文件的扩展名
@@ -70,7 +83,7 @@ class SplashActivity : AppCompatActivity() {
                     return@create
                 }
                 val saveFile = sharedPreference.getString("saveFile", "")
-                error=XhuFileUtil.parseLog(latestLog!!)
+                error = XhuFileUtil.parseLog(latestLog!!)
                 subscriber.onNext(saveFile != latestLog!!.name)
                 subscriber.onComplete()
             }
@@ -95,7 +108,7 @@ class SplashActivity : AppCompatActivity() {
                                         .setMessage(getString(R.string.hint_check_log, latestLog!!.name, latestLog!!.absolutePath, CalendarUtil.showDate(latestLog!!.lastModified())))
                                         .setPositiveButton(R.string.action_feedback, { _, _ ->
                                             loadingDialog.show()
-                                            error!!.uploadLog(this@SplashActivity,latestLog!!,object :UploadLogListener{
+                                            error!!.uploadLog(this@SplashActivity, latestLog!!, object : UploadLogListener {
                                                 override fun error(rt: Int, e: Throwable) {
                                                     e.printStackTrace()
                                                     Toast.makeText(this@SplashActivity, e.message + "\n请将这个信息反馈给开发者", Toast.LENGTH_LONG).show()
