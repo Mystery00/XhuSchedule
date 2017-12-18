@@ -26,10 +26,10 @@
             android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".activity.MainActivity"
             android:screenOrientation="portrait"
@@ -64,6 +64,9 @@
         <service
             android:name=".service.GridWidgetService"
             android:permission="android.permission.BIND_REMOTEVIEWS" />
+        <service
+            android:name=".service.TodayWidgetService"
+            android:permission="android.permission.BIND_REMOTEVIEWS" />
 
         <activity
             android:name=".activity.SettingsActivity"
@@ -81,14 +84,23 @@
                 android:resource="@xml/file_paths" />
         </provider>
 
-        <receiver android:name=".util.CourseWidget">
+        <receiver android:name=".util.widget.ScheduleCourseWidget">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
 
             <meta-data
                 android:name="android.appwidget.provider"
-                android:resource="@xml/course_widget_info" />
+                android:resource="@xml/schedule_course_widget_info" />
+        </receiver>
+        <receiver android:name=".util.widget.TodayCourseWidget">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/today_course_widget_info" />
         </receiver>
     </application>
 

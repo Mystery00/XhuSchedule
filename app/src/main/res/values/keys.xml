@@ -90,6 +90,8 @@
     <string name="summary_more_app_play" translatable="false">Google Play</string>
     <string name="link_more_app_play" translatable="false">https://play.google.com/store/apps/developer?id=Mystery0</string>
     <string name="key_update_log" translatable="false">key_update_log</string>
+    <string name="title_community_link">点击加入群【西瓜课表用户交流反馈】</string>
+    <string name="link_community_link">https://jq.qq.com/?_wv=1027&#038;k=5Nz3XlU</string>
     <string name="title_update_log">更新日志</string>
     <string name="key_check_update" translatable="false">key_check_update</string>
     <string name="title_check_update">检查更新</string>

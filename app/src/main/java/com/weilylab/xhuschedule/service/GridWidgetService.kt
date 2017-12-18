@@ -9,7 +9,7 @@ package com.weilylab.xhuschedule.service
 
 import android.content.Intent
 import android.widget.RemoteViewsService
-import com.weilylab.xhuschedule.util.GridRemotesViewsFactory
+import com.weilylab.xhuschedule.util.widget.GridRemotesViewsFactory
 
 class GridWidgetService : RemoteViewsService() {
     override fun onGetViewFactory(intent: Intent?): RemoteViewsFactory {

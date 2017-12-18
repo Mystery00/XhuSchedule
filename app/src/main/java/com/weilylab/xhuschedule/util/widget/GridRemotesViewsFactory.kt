@@ -1,11 +1,11 @@
 /*
- * Created by Mystery0 on 17-12-7 下午9:25.
+ * Created by Mystery0 on 17-12-18 下午1:58.
  * Copyright (c) 2017. All Rights reserved.
  *
- * Last modified 17-12-7 下午9:25
+ * Last modified 17-12-13 下午5:25
  */
 
-package com.weilylab.xhuschedule.util
+package com.weilylab.xhuschedule.util.widget
 
 import android.content.Context
 import android.graphics.Color
@@ -15,6 +15,9 @@ import android.widget.RemoteViewsService
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.classes.Course
 import com.weilylab.xhuschedule.classes.Student
+import com.weilylab.xhuschedule.util.CourseUtil
+import com.weilylab.xhuschedule.util.ScheduleHelper
+import com.weilylab.xhuschedule.util.XhuFileUtil
 import vip.mystery0.tools.logs.Logs
 import java.io.File
 import kotlin.collections.ArrayList
@@ -37,10 +40,6 @@ class GridRemotesViewsFactory(private val context: Context) : RemoteViewsService
         val oldFile = File(parentFile, base64Name)
         if (!oldFile.exists()) {
             Logs.i(TAG, "onCreate: oldFile.exists(): " + oldFile.exists())
-        }
-        val courses = XhuFileUtil.getCoursesFromFile(context, oldFile)
-        if (courses.isEmpty()) {
-            Logs.i(TAG, "onCreate: courses.isEmpty(): " + courses.isEmpty())
         }
         ScheduleHelper.isCookieAvailable = true
         val weekArray = CourseUtil.getWeekCourses(XhuFileUtil.getCoursesFromFile(context, oldFile))

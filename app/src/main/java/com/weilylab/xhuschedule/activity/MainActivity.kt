@@ -668,6 +668,7 @@ class MainActivity : AppCompatActivity() {
             R.id.bottom_nav_profile -> {
                 if (isWeekShow)
                     showWeekAnim(false)
+                titleTextView.text = getString(R.string.course_profile_title)
                 titleTextView.setOnClickListener(null)
                 titleTextView.setCompoundDrawables(null, null, null, null)
                 if (mainStudent.profile == null) {
