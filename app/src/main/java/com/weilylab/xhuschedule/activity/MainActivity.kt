@@ -576,7 +576,7 @@ class MainActivity : AppCompatActivity() {
                 .start()
     }
 
-    private fun showWeekAnim(isShow: Boolean) {
+    private fun showWeekAnim(isShow: Boolean, isShowArrow: Boolean) {
         if (isAnimShow)
             return
         val trueHeight = DensityUtil.dip2px(this, 60F)
@@ -614,7 +614,7 @@ class MainActivity : AppCompatActivity() {
                                 } else {
                                     null
                                 }
-                            if (drawable != null) {
+                            if (isShowArrow && drawable != null) {
                                 drawable.setBounds(0, 0, drawable.minimumWidth, drawable.minimumHeight)
                                 titleTextView.setCompoundDrawables(null, null, drawable, null)
                             }
@@ -638,14 +638,14 @@ class MainActivity : AppCompatActivity() {
         when (itemId) {
             R.id.bottom_nav_today -> {
                 if (isWeekShow)
-                    showWeekAnim(false)
+                    showWeekAnim(false, false)
                 titleTextView.setOnClickListener(null)
                 titleTextView.setCompoundDrawables(null, null, null, null)
                 titleTextView.text = CalendarUtil.getTodayInfo(this@MainActivity)
             }
             R.id.bottom_nav_week -> {
                 titleTextView.setOnClickListener {
-                    showWeekAnim(!isWeekShow)
+                    showWeekAnim(!isWeekShow, true)
                 }
                 titleTextView.text = getString(R.string.course_week_index, ScheduleHelper.weekIndex)
                 val drawable = if (isWeekShow)
@@ -667,7 +667,7 @@ class MainActivity : AppCompatActivity() {
             }
             R.id.bottom_nav_profile -> {
                 if (isWeekShow)
-                    showWeekAnim(false)
+                    showWeekAnim(false, false)
                 titleTextView.text = getString(R.string.course_profile_title)
                 titleTextView.setOnClickListener(null)
                 titleTextView.setCompoundDrawables(null, null, null, null)
