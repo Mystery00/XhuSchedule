@@ -9,6 +9,7 @@ package com.weilylab.xhuschedule.util
 
 import android.content.Context
 import com.weilylab.xhuschedule.R
+import com.weilylab.xhuschedule.util.widget.WidgetHelper
 import java.util.*
 
 /**
@@ -44,12 +45,28 @@ object CalendarUtil {
         return days
     }
 
+    fun formatInfo(context: Context): String {
+        val firstWeekOfTerm = Settings.firstWeekOfTerm
+        val date = firstWeekOfTerm.split('-')
+        val calendar = Calendar.getInstance()
+        calendar.set(date[0].toInt(), date[1].toInt(), date[2].toInt(), 0, 0, 0)
+        calendar.timeInMillis += WidgetHelper.dayIndex * 60 * 60 * 24 * 1000
+        return "${calendar.get(Calendar.YEAR)}/${calendar.get(Calendar.MONTH) + 1}/${calendar.get(Calendar.DAY_OF_MONTH)}  ${CalendarUtil.getTodayInfo(context, WidgetHelper.dayIndex)}"
+    }
+
     fun getWeekIndex(): Int {
         calendar = Calendar.getInstance()
         return when (calendar.get(Calendar.DAY_OF_WEEK)) {
             Calendar.SUNDAY -> 7
             else -> calendar.get(Calendar.DAY_OF_WEEK) - 1
         }
+    }
+
+    private fun getTodayInfo(context: Context, dayIndex: Int): String {
+        val week = getWeek(dayIndex)
+        val day = dayIndex % 7 + 1
+        val weekArray = context.resources.getStringArray(R.array.table_header)
+        return context.getString(R.string.course_today_info, week, weekArray[day - 1])
     }
 
     fun getTodayInfo(context: Context): String {

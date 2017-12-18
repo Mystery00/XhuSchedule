@@ -39,38 +39,34 @@ class GridRemotesViewsFactory(private val context: Context) : RemoteViewsService
     }
 
     override fun getViewAt(position: Int): RemoteViews {
-        Logs.i(TAG, "getViewAt: position: " + position)
-        val rows = position / 8 - 1
-        val columns = position % 8 - 1
-        Logs.i(TAG, "getViewAt: rows: " + rows)
-        Logs.i(TAG, "getViewAt: columns: " + columns)
-        if (rows == -1) {
-            val remotesView = RemoteViews(context.packageName, R.layout.layout_text_view)
-            if (columns == -1)
-                return remotesView
-            val headerArray = context.resources.getStringArray(R.array.table_header)
-            remotesView.setTextViewText(R.id.textView, headerArray[columns])
-            remotesView.setTextColor(R.id.textView, Color.WHITE)
-            return remotesView
+        return if (WidgetHelper.showScheduleCourses.size == 0) {
+            RemoteViews(context.packageName, R.layout.layout_widget_no_data)
+        } else {
+            val row = WidgetHelper.showScheduleCourses[position]
+            val remotesViews = RemoteViews(context.packageName, R.layout.item_widget_row_table)
+            try {
+                val navArray = context.resources.getStringArray(R.array.table_nav)
+                remotesViews.setTextViewText(R.id.textView, navArray[position])
+                row.forEachIndexed { index, list ->
+                    Logs.i(TAG, "getViewAt: " + index)
+                    val temp = context.resources.getIdentifier("linearLayout" + (index - 1), "id", "com.weilylab.xhuschedule")
+                    remotesViews.removeAllViews(temp)
+                    Logs.i(TAG, "getViewAt: " + list.size)
+                    list.forEach {
+                        Logs.i(TAG, "getViewAt: " + it.name)
+                        remotesViews.addView(temp, addView(context, it))
+                    }
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+            remotesViews
         }
-        if (columns == -1) {
-            val remotesView = RemoteViews(context.packageName, R.layout.layout_text_view)
-            val navArray = context.resources.getStringArray(R.array.table_nav)
-            remotesView.setTextViewText(R.id.textView, navArray[rows])
-            remotesView.setTextColor(R.id.textView, Color.WHITE)
-            return remotesView
-        }
-        val remotesViews = RemoteViews(context.packageName, R.layout.item_linear_layout)
-        remotesViews.removeAllViews(R.layout.item_linear_layout)
-        val linkedList = WidgetHelper.showScheduleCourses[rows][columns]
-        linkedList.forEach {
-            remotesViews.addView(R.id.linearLayout, addView(context, it))
-        }
-        return remotesViews
     }
 
     override fun getCount(): Int {
-        return 96
+        Logs.i(TAG, "getCount: " + WidgetHelper.showScheduleCourses.size)
+        return if (WidgetHelper.isUpdate) 11 else 1
     }
 
     override fun getViewTypeCount(): Int {

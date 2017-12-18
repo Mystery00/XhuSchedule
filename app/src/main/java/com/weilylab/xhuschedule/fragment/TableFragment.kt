@@ -146,7 +146,6 @@ class TableFragment : Fragment() {
     }
 
     private fun formatView() {
-        val itemWidth = rootView!!.findViewById<LinearLayout>(R.id.table_schedule1).measuredWidth
         val itemHeight = DensityUtil.dip2px(activity, Settings.customTextHeight.toFloat())
         for (day in 0 until 7) {
             val layoutList = ArrayList<TableLayoutHelper>()
@@ -155,9 +154,7 @@ class TableFragment : Fragment() {
             linearLayout.removeAllViews()
             for (time in 0 until 11) {
                 val linkedList = list[time][day]
-                Logs.i(TAG, "formatView: position: $time $day")
                 if (linkedList.isEmpty()) {//如果这个位置没有课
-                    Logs.i(TAG, "formatView: 没有课")
                     if (isShowInLayout(layoutList, time))//如果格子被占用，直接继续循环
                         continue
                     val textView = LayoutInflater.from(activity).inflate(R.layout.layout_text_view, null)
@@ -170,7 +167,6 @@ class TableFragment : Fragment() {
                 //该位置有课
                 //判断这个格子是否被占用
                 if (isShowInLayout(layoutList, time)) {
-                    Logs.i(TAG, "formatView: 有课并且格子被占用")
                     var tableHelper = TableLayoutHelper()
                     for (i in 0 until layoutList.size) {
                         if (time in layoutList[i].start..layoutList[i].end) {
@@ -179,18 +175,14 @@ class TableFragment : Fragment() {
                         }
                     }
                     linkedList.forEach { course ->
-                        Logs.i(TAG, "formatView: ${course.name}")
-                        Logs.i(TAG, "formatView: tableHelper.end: ${tableHelper.end}")
                         val timeArray = course.time.split('-')
                         tableHelper.end = max(tableHelper.end, timeArray[1].toInt() - 1)
-                        Logs.i(TAG, "formatView: tableHelper.end.max: ${tableHelper.end}")
                         tableHelper.viewGroup.addView(getItemView(course, tableHelper.start))
                     }
                     val params = tableHelper.viewGroup.layoutParams
                     params.height = (tableHelper.end - tableHelper.start + 1) * itemHeight
                     tableHelper.viewGroup.layoutParams = params
                 } else {//这个格子没有被占用
-                    Logs.i(TAG, "formatView: 有课格子没有被占用")
                     val view = LayoutInflater.from(activity).inflate(R.layout.item_linear_layout, null)
                     val viewGroup: LinearLayout = view.findViewById(R.id.linearLayout)
                     var maxHeight = 0
@@ -205,7 +197,6 @@ class TableFragment : Fragment() {
                     tableHelper.start = time
                     tableHelper.end = maxHeight / itemHeight + time - 1
                     tableHelper.viewGroup = viewGroup
-                    Logs.i(TAG, "formatView: " + tableHelper.toString())
                     layoutList.add(tableHelper)//将这个布局添加进list
                     linearLayout.addView(viewGroup)
                     val params = viewGroup.layoutParams

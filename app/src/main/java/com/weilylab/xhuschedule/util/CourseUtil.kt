@@ -9,7 +9,6 @@ package com.weilylab.xhuschedule.util
 
 import com.weilylab.xhuschedule.classes.Course
 import com.weilylab.xhuschedule.classes.CourseTimeInfo
-import vip.mystery0.tools.logs.Logs
 import kotlin.collections.ArrayList
 
 /**

@@ -15,27 +15,19 @@ import com.weilylab.xhuschedule.util.CalendarUtil
 import com.weilylab.xhuschedule.util.CourseUtil
 import com.weilylab.xhuschedule.util.ScheduleHelper
 import com.weilylab.xhuschedule.util.XhuFileUtil
-import vip.mystery0.tools.logs.Logs
 import java.io.File
 
 /**
  * Created by mystery0.
  */
 object WidgetHelper {
-    private val TAG = "WidgetHelper"
     val TODAY_TAG = "TODAY_TAG"
     val TABLE_TAG = "TABLE_TAG"
-    var weekIndex = 0
+    val ALL_TAG = "ALL_TAG"
     var dayIndex = 0
+    var isUpdate=false
     val showTodayCourses = ArrayList<Course>()
     val showScheduleCourses = ArrayList<ArrayList<ArrayList<Course>>>()
-
-    /**
-     * 同步当前周数
-     */
-    fun syncWeekIndex() {
-        weekIndex = CalendarUtil.getWeek()
-    }
 
     /**
      * 同步当天时间
@@ -57,12 +49,10 @@ object WidgetHelper {
         //判断是否有缓存
         val cacheResult = parentFile.listFiles().filter { it.name == base64Name }.size == 1
         if (!cacheResult) {
-            Logs.i(TAG, "refreshTodayCourses: cacheResult: " + cacheResult)
             return
         }
         val oldFile = File(parentFile, base64Name)
         if (!oldFile.exists()) {
-            Logs.i(TAG, "refreshTodayCourses: oldFile.exists(): " + oldFile.exists())
             return
         }
         ScheduleHelper.isCookieAvailable = true
@@ -82,32 +72,14 @@ object WidgetHelper {
         //判断是否有缓存
         val cacheResult = parentFile.listFiles().filter { it.name == base64Name }.size == 1
         if (!cacheResult) {
-            Logs.i(TAG, "refreshWeekCourses: cacheResult: " + cacheResult)
             return
         }
         val oldFile = File(parentFile, base64Name)
         if (!oldFile.exists()) {
-            Logs.i(TAG, "refreshWeekCourses: oldFile.exists(): " + oldFile.exists())
             return
         }
         ScheduleHelper.isCookieAvailable = true
-        showScheduleCourses.addAll(CourseUtil.getWeekCourses(XhuFileUtil.getCoursesFromFile(context, oldFile), weekIndex))
-    }
-
-    private fun checkCache(context: Context): Array<Course> {
-        val studentList = XhuFileUtil.getArrayFromFile(File(context.filesDir.absolutePath + File.separator + "data" + File.separator + "user"), Student::class.java)
-        val parentFile = File(context.filesDir.absolutePath + File.separator + "caches/")
-        if (!parentFile.exists())
-            parentFile.mkdirs()
-        val base64Name = XhuFileUtil.filterString(Base64.encodeToString(studentList[0].username.toByteArray(), Base64.DEFAULT))
-        //判断是否有缓存
-        val cacheResult = parentFile.listFiles().filter { it.name == base64Name }.size == 1
-        if (!cacheResult)
-            return emptyArray()
-        val oldFile = File(parentFile, base64Name)
-        if (!oldFile.exists())
-            return emptyArray()
-        return XhuFileUtil.getCoursesFromFile(context, oldFile)
+        showScheduleCourses.addAll(CourseUtil.getWeekCourses(XhuFileUtil.getCoursesFromFile(context, oldFile)))
     }
 
     /**
