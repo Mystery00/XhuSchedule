@@ -15,7 +15,9 @@ import android.widget.RemoteViews
 
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.service.TodayWidgetService
+import com.weilylab.xhuschedule.util.CalendarUtil
 import vip.mystery0.tools.logs.Logs
+import java.util.*
 
 /**
  * Implementation of App Widget functionality.
@@ -24,7 +26,6 @@ class TodayCourseWidget : AppWidgetProvider() {
 
     override fun onUpdate(context: Context, appWidgetManager: AppWidgetManager, appWidgetIds: IntArray) {
         Logs.i(TAG, "onUpdate: ")
-        hasData = WidgetHelper.checkTodayCache(context)
         for (appWidgetId in appWidgetIds) {
             updateAppWidget(context, appWidgetManager, appWidgetId)
         }
@@ -41,20 +42,15 @@ class TodayCourseWidget : AppWidgetProvider() {
 
     companion object {
         private val TAG = "TodayCourseWidget"
-        private var hasData = true
 
         internal fun updateAppWidget(context: Context, appWidgetManager: AppWidgetManager,
                                      appWidgetId: Int) {
-            Logs.i(TAG, "updateAppWidget: hasData: " + hasData)
-            val view = if (hasData) {
-                val views = RemoteViews(context.packageName, R.layout.layout_widget_course_today)
-                val intent = Intent(context, TodayWidgetService::class.java)
-                views.setRemoteAdapter(R.id.listView, intent)
-                views
-            } else {
-                RemoteViews(context.packageName, R.layout.layout_widget_no_data)
-            }
-            appWidgetManager.updateAppWidget(appWidgetId, view)
+            val views = RemoteViews(context.packageName, R.layout.layout_widget_course_today)
+            val calendar = Calendar.getInstance()
+            views.setTextViewText(R.id.dateTitle, "${calendar.get(Calendar.YEAR)}/${calendar.get(Calendar.MONTH) + 1}/${calendar.get(Calendar.DAY_OF_MONTH)}  ${CalendarUtil.getTodayInfo(context)}")
+            val intent = Intent(context, TodayWidgetService::class.java)
+            views.setRemoteAdapter(R.id.listView, intent)
+            appWidgetManager.updateAppWidget(appWidgetId, views)
         }
     }
 }

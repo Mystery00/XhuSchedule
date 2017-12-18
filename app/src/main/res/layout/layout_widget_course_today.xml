@@ -8,10 +8,51 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <FrameLayout
+        android:id="@+id/titleLayout"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="@color/colorPrimary">
+
+        <TextView
+            android:id="@+id/dateTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:gravity="center"
+            android:padding="8dp"
+            android:text="@string/app_name"
+            android:textColor="@color/colorWhite" />
+
+        <ImageView
+            android:id="@+id/lastDay"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_gravity="center_vertical|start"
+            android:layout_marginStart="12dp"
+            android:contentDescription="@string/app_name"
+            android:padding="8dp"
+            android:src="@mipmap/ic_last" />
+
+        <ImageView
+            android:id="@+id/nextDay"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_gravity="center_vertical|end"
+            android:layout_marginEnd="12dp"
+            android:contentDescription="@string/app_name"
+            android:padding="8dp"
+            android:src="@mipmap/ic_next" />
+
+    </FrameLayout>
+
     <ListView
         android:id="@+id/listView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_below="@id/titleLayout"
+        android:background="@color/colorWhite"
+        android:divider="@null"
         android:padding="@dimen/widget_margin" />
 
 </RelativeLayout>

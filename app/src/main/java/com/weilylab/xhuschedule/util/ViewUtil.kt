@@ -45,7 +45,7 @@ object ViewUtil {
         adapter.colorPickerChangeListener = object : ColorPickerChangeListener {
             override fun onColorChanged(color: String) {
                 textView.setBackgroundColor(Color.parseColor(color))
-                course.color=color
+                course.color = color
             }
         }
         colorChooser.adapter = adapter
@@ -53,10 +53,15 @@ object ViewUtil {
         textView.text = text
         textView.setBackgroundColor(Color.parseColor(course.color))
         editTeacherLayout.text = course.teacher
-        val startTime = context.resources.getStringArray(R.array.start_time)
-        val endTime = context.resources.getStringArray(R.array.end_time)
-        val time = course.time.trim().split("-")
-        editTimeLayout.text = context.getString(R.string.course_time_format, startTime[time[0].toInt() - 1], endTime[time[1].toInt() - 1])
+        try {
+            val startTime = context.resources.getStringArray(R.array.start_time)
+            val endTime = context.resources.getStringArray(R.array.end_time)
+            val time = course.time.trim().split("-")
+            editTimeLayout.text = context.getString(R.string.course_time_format, startTime[time[0].toInt() - 1], endTime[time[1].toInt() - 1])
+        } catch (e: Exception) {
+            e.printStackTrace()
+            editTimeLayout.text = course.time
+        }
         CourseUtil.splitInfo(course).forEach {
             val child = TextView(context)
             child.text = context.getString(R.string.course_location_format, it.week, it.location)
@@ -85,8 +90,8 @@ object ViewUtil {
         val paint = Paint()
         try {
             paint.color = Color.parseColor(course.color)
-        }catch (e:Exception){
-            paint.color = Color.parseColor('#'+ScheduleHelper.getRandomColor())
+        } catch (e: Exception) {
+            paint.color = Color.parseColor('#' + ScheduleHelper.getRandomColor())
         }
         canvas.drawCircle(100F, 100F, 100F, paint)
         paint.color = Color.WHITE
