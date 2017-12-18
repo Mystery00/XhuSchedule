@@ -43,10 +43,12 @@ class TodayCourseWidget : AppWidgetProvider() {
 
     override fun onReceive(context: Context, intent: Intent) {
         super.onReceive(context, intent)
-        if (intent.action == "android.appwidget.action.APPWIDGET_UPDATE" && intent.getStringExtra("TAG") == WidgetHelper.TODAY_TAG) {
+        if (intent.action == "android.appwidget.action.APPWIDGET_UPDATE" && (intent.getStringExtra("TAG") == WidgetHelper.TODAY_TAG || intent.getStringExtra("TAG") == WidgetHelper.ALL_TAG)) {
             val appWidgetIds = WidgetHelper.getWidgetIds(context, WidgetHelper.TODAY_TAG)
             for (appWidgetId in appWidgetIds)
                 AppWidgetManager.getInstance(context).notifyAppWidgetViewDataChanged(appWidgetId, R.id.listView)
+            val remoteViews = RemoteViews(context.packageName, R.layout.layout_widget_course_today)
+            remoteViews.setTextViewText(R.id.dateTitle, CalendarUtil.formatInfo(context))
         }
     }
 

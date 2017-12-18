@@ -11,6 +11,7 @@ import android.app.Service
 import android.content.Intent
 import android.os.IBinder
 import com.weilylab.xhuschedule.util.widget.WidgetHelper
+import vip.mystery0.tools.logs.Logs
 
 class WidgetInitService : Service() {
 
@@ -18,15 +19,16 @@ class WidgetInitService : Service() {
         return null
     }
 
-    override fun onCreate() {
-        super.onCreate()
+    override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
+        Logs.i("TAG", "onStartCommand: ")
         Thread(Runnable {
-            WidgetHelper.syncWeekIndex()
+            WidgetHelper.refreshWeekCourses(this)
             WidgetHelper.syncDayIndex()
             WidgetHelper.refreshTodayCourses(this)
-            WidgetHelper.refreshWeekCourses(this)
-            sendBroadcast(Intent("android.appwidget.action.APPWIDGET_UPDATE"))
+            sendBroadcast(Intent("android.appwidget.action.APPWIDGET_UPDATE")
+                    .putExtra("TAG", WidgetHelper.ALL_TAG))
             stopSelf()
         }).start()
+        return super.onStartCommand(intent, flags, startId)
     }
 }
