@@ -9,42 +9,17 @@ package com.weilylab.xhuschedule.util.widget
 
 import android.content.Context
 import android.graphics.Color
-import android.util.Base64
 import android.widget.RemoteViews
 import android.widget.RemoteViewsService
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.classes.Course
-import com.weilylab.xhuschedule.classes.Student
-import com.weilylab.xhuschedule.util.CourseUtil
 import com.weilylab.xhuschedule.util.ScheduleHelper
-import com.weilylab.xhuschedule.util.XhuFileUtil
 import vip.mystery0.tools.logs.Logs
-import java.io.File
-import kotlin.collections.ArrayList
 
 class GridRemotesViewsFactory(private val context: Context) : RemoteViewsService.RemoteViewsFactory {
     private val TAG = "GridRemotesViewsFactory"
-    private val showCourses = ArrayList<ArrayList<ArrayList<Course>>>()
 
     override fun onCreate() {
-        val studentList = XhuFileUtil.getArrayFromFile(File(context.filesDir.absolutePath + File.separator + "data" + File.separator + "user"), Student::class.java)
-        val parentFile = File(context.filesDir.absolutePath + File.separator + "caches/")
-        if (!parentFile.exists())
-            parentFile.mkdirs()
-        val base64Name = XhuFileUtil.filterString(Base64.encodeToString(studentList[0].username.toByteArray(), Base64.DEFAULT))
-        //判断是否有缓存
-        val cacheResult = parentFile.listFiles().filter { it.name == base64Name }.size == 1
-        if (!cacheResult) {
-            Logs.i(TAG, "onCreate: cacheResult: " + cacheResult)
-        }
-        val oldFile = File(parentFile, base64Name)
-        if (!oldFile.exists()) {
-            Logs.i(TAG, "onCreate: oldFile.exists(): " + oldFile.exists())
-        }
-        ScheduleHelper.isCookieAvailable = true
-        val weekArray = CourseUtil.getWeekCourses(XhuFileUtil.getCoursesFromFile(context, oldFile))
-        showCourses.clear()
-        showCourses.addAll(weekArray)
     }
 
     override fun getLoadingView(): RemoteViews? {
@@ -87,7 +62,7 @@ class GridRemotesViewsFactory(private val context: Context) : RemoteViewsService
         }
         val remotesViews = RemoteViews(context.packageName, R.layout.item_linear_layout)
         remotesViews.removeAllViews(R.layout.item_linear_layout)
-        val linkedList = showCourses[rows][columns]
+        val linkedList = WidgetHelper.showScheduleCourses[rows][columns]
         linkedList.forEach {
             remotesViews.addView(R.id.linearLayout, addView(context, it))
         }
@@ -109,9 +84,9 @@ class GridRemotesViewsFactory(private val context: Context) : RemoteViewsService
     private fun addView(context: Context, course: Course): RemoteViews {
         val remotesViews = RemoteViews(context.packageName, R.layout.item_widget_table)
         try {
-            remotesViews.setInt(R.id.imageView, "setBackgroundColor", Color.parseColor(course.color))
+            remotesViews.setInt(R.id.background, "setBackgroundColor", Color.parseColor(course.color))
         } catch (e: Exception) {
-            remotesViews.setInt(R.id.imageView, "setBackgroundColor", Color.parseColor('#' + ScheduleHelper.getRandomColor()))
+            remotesViews.setInt(R.id.background, "setBackgroundColor", Color.parseColor('#' + ScheduleHelper.getRandomColor()))
         }
         remotesViews.setTextViewText(R.id.textView_name, course.name)
         remotesViews.setTextViewText(R.id.textView_teacher, course.teacher)

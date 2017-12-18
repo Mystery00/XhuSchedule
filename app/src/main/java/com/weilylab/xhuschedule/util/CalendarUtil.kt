@@ -23,6 +23,15 @@ object CalendarUtil {
     }
 
     fun getWeek(): Int {
+        return getWeek(getDay())
+    }
+
+    fun getWeek(dayIndex: Int): Int {
+        //获取当前第几周
+        return dayIndex / 7 + 1
+    }
+
+    fun getDay(): Int {
         calendar = Calendar.getInstance()
         var days = calendar.get(Calendar.DAY_OF_YEAR) - startCalendar.get(Calendar.DAY_OF_YEAR)
         val nowYear = calendar.get(Calendar.YEAR)
@@ -32,8 +41,7 @@ object CalendarUtil {
                 days += tempCalendar.getActualMaximum(Calendar.DAY_OF_YEAR)
                 tempCalendar.add(Calendar.YEAR, 1)
             } while (tempCalendar.get(Calendar.YEAR) != nowYear)
-        //获取当前第几周
-        return days / 7 + 1
+        return days
     }
 
     fun getWeekIndex(): Int {

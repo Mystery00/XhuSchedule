@@ -102,6 +102,19 @@
                 android:name="android.appwidget.provider"
                 android:resource="@xml/today_course_widget_info" />
         </receiver>
+
+        <service
+            android:name=".service.WidgetLastActionService"
+            android:enabled="true"
+            android:exported="true" />
+        <service
+            android:name=".service.WidgetNextActionService"
+            android:enabled="true"
+            android:exported="true" />
+        <service
+            android:name=".service.WidgetInitService"
+            android:enabled="true"
+            android:exported="true"></service>
     </application>
 
 </manifest>
