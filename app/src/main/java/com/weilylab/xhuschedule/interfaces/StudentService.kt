@@ -18,7 +18,7 @@ interface StudentService {
 
     @FormUrlEncoded
     @POST("/course/Course/getCourses")
-    fun getCourses(@Field("username") username: String): Observable<ResponseBody>
+    fun getCourses(@Field("username") username: String, @Field("year") year: String?, @Field("term") term: Int?): Observable<ResponseBody>
 
     @FormUrlEncoded
     @POST("/course/User/getInfo")

@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/coordinatorLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.weilylab.xhuschedule.activity.ScheduleActivity">
+
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary">
+
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom">
+
+            <ImageView
+                android:id="@+id/action_back"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_marginEnd="@dimen/layout_title_menu_margin"
+                android:contentDescription="@string/app_name"
+                android:padding="@dimen/course_padding"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_arrow_back" />
+
+            <Spinner
+                android:id="@+id/spinner_student"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:padding="@dimen/exam_padding"
+                app:layout_constraintEnd_toStartOf="@id/action_sync"
+                app:layout_constraintStart_toEndOf="@id/action_back"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <Spinner
+                android:id="@+id/spinner_year"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:paddingBottom="@dimen/exam_padding"
+                android:paddingEnd="0dp"
+                android:paddingStart="@dimen/exam_padding"
+                app:layout_constraintEnd_toStartOf="@id/spinner_term"
+                app:layout_constraintStart_toEndOf="@id/action_back"
+                app:layout_constraintTop_toBottomOf="@id/spinner_student" />
+
+            <Spinner
+                android:id="@+id/spinner_term"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:entries="@array/term_array"
+                android:gravity="center"
+                android:paddingBottom="@dimen/exam_padding"
+                android:paddingEnd="@dimen/exam_padding"
+                android:paddingStart="0dp"
+                app:layout_constraintEnd_toStartOf="@id/action_sync"
+                app:layout_constraintStart_toEndOf="@id/spinner_year"
+                app:layout_constraintTop_toBottomOf="@id/spinner_student" />
+
+            <ImageView
+                android:id="@+id/action_sync"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_marginEnd="@dimen/layout_title_menu_margin"
+                android:contentDescription="@string/app_name"
+                android:padding="@dimen/course_padding"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_sync" />
+
+        </android.support.constraint.ConstraintLayout>
+
+    </android.support.design.widget.AppBarLayout>
+
+    <include layout="@layout/content_schedule" />
+
+</android.support.design.widget.CoordinatorLayout>

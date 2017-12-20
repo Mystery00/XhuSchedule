@@ -15,6 +15,31 @@ import kotlin.collections.ArrayList
  * Created by myste.
  */
 object CourseUtil {
+    fun getAllCourses(courses: Array<Course>): ArrayList<ArrayList<ArrayList<Course>>> {val array = Array(11, { Array<ArrayList<Course>>(7, { ArrayList() }) })
+        courses.forEach {
+            try {//尝试解析时间
+                val timeArray = it.time.split('-')
+                val startTime = timeArray[0].toInt() - 1
+                var flag = false
+                for (temp in array[startTime][it.day.toInt() - 1]) {
+                    flag = temp.with(it)
+                    if (flag)
+                        break
+                }
+                if (!flag)
+                    array[startTime][it.day.toInt() - 1].add(it)
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+        val list = ArrayList<ArrayList<ArrayList<Course>>>()
+        for (i in 0 until array.size) {
+            list.add(ArrayList())
+            for (k in 0 until array[i].size)
+                list[i].add(array[i][k])
+        }
+        return list
+    }
 
     fun formatCourses(courses: Array<Course>): ArrayList<ArrayList<ArrayList<Course>>> {
         val firstWeekOfTerm = Settings.firstWeekOfTerm

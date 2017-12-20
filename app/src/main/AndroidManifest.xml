@@ -43,15 +43,29 @@
             android:name="com.yalantis.ucrop.UCropActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".activity.ErrorActivity" />
+        <activity
+            android:name=".activity.ErrorActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activity.ExamActivity"
             android:label="@string/title_activity_exam"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activity.ScoreActivity"
             android:label="@string/title_activity_score"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activity.ScheduleActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+
+        <activity
+            android:name=".activity.SettingsActivity"
+            android:label="@string/title_activity_settings"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
 
         <service
             android:name=".service.UpdateService"
@@ -67,12 +81,6 @@
         <service
             android:name=".service.TodayWidgetService"
             android:permission="android.permission.BIND_REMOTEVIEWS" />
-
-        <activity
-            android:name=".activity.SettingsActivity"
-            android:label="@string/title_activity_settings"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme" />
 
         <provider
             android:name="android.support.v4.content.FileProvider"
@@ -114,7 +122,7 @@
         <service
             android:name=".service.WidgetInitService"
             android:enabled="true"
-            android:exported="true"></service>
+            android:exported="true" />
     </application>
 
 </manifest>

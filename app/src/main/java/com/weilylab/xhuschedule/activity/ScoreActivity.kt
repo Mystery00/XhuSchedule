@@ -122,7 +122,7 @@ class ScoreActivity : AppCompatActivity() {
 
     private fun initProfile(student: Student) {
         initDialog.show()
-        initScores(studentList[0])
+        initScores(student)
         if (student.profile != null) {
             try {
                 val start = student.profile!!.grade.toInt()//进校年份
@@ -158,7 +158,7 @@ class ScoreActivity : AppCompatActivity() {
             if (!parentFile.exists())
                 parentFile.mkdirs()
             val base64Name = XhuFileUtil.filterString(Base64.encodeToString(student.username.toByteArray(), Base64.DEFAULT))
-            val savedFile = File(parentFile, base64Name)
+            val savedFile = File(parentFile, "$base64Name-$year-$term")
             scoreList.clear()
             scoreList.addAll(XhuFileUtil.getArrayListFromFile(savedFile, Score::class.java))
             subscriber.onComplete()
@@ -236,7 +236,7 @@ class ScoreActivity : AppCompatActivity() {
                     if (!parentFile.exists())
                         parentFile.mkdirs()
                     val base64Name = XhuFileUtil.filterString(Base64.encodeToString(student.username.toByteArray(), Base64.DEFAULT))
-                    val savedFile = File(parentFile, base64Name)
+                    val savedFile = File(parentFile, "$base64Name-$year-$term")
                     savedFile.createNewFile()
                     XhuFileUtil.saveObjectToFile(scoreList, savedFile)
                 }).start()
