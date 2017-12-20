@@ -138,7 +138,7 @@
     <string name="table_nav11" translatable="false">11</string>
 
     <string name="update_notification_title">新版本更新 %1$s => %2$s</string>
-    <string name="update_notification_content">本次更新包大小为%1$s,增量更新包大小为%2$s</string>
+    <string name="update_notification_content">本次更新包大小为%1$s,增量更新包大小为%2$s。\n点击通知下载安装包</string>
     <string name="update_notification_big_text">更新日志：\n %1$s</string>
 
     <string name="download_notification_title">正在下载：%1$s</string>
