@@ -102,13 +102,14 @@ class UISettingsFragment : PreferenceFragment() {
             true
         }
         headerImgPreference.setOnPreferenceClickListener {
-            val recyclerView = RecyclerView(activity)
+            val view = View.inflate(activity, R.layout.dialog_choose_img_header, null)
+            val recyclerView: RecyclerView = view.findViewById(R.id.recyclerView)
             recyclerView.layoutManager = LinearLayoutManager(activity)
             val adapter = HeaderAdapter(activity)
             recyclerView.adapter = adapter
             val dialog = AlertDialog.Builder(activity)
                     .setTitle(getString(R.string.title_header_img))
-                    .setView(recyclerView)
+                    .setView(view)
                     .setPositiveButton(android.R.string.cancel, null)
                     .setNegativeButton("从相册选择", { _, _ ->
                         requestType = HEADER_REQUEST_CODE
