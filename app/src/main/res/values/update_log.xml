@@ -8,6 +8,9 @@
 <resources>
     <string name="dialog_title_update_log">%1$s版的更新日志</string>
     <string-array name="update_list">
+        <item>说明：点击链接加入群【西瓜课表用户交流反馈】：426878786</item>
+        <item>说明：微信小程序版本版本现已上线，可以在微信小程序页面直接搜索“西瓜课表”即可使用！不清楚操作的可以在设置-关于中使用微信扫描二维码。</item>
+        <item> </item>
         <item>新增：桌面小部件</item>
         <item>新增：崩溃日志可视化捕获界面以及启动时检测日志上传（可在设置中关闭）</item>
         <item> </item>

@@ -7,6 +7,7 @@
 
 package com.weilylab.xhuschedule.util
 
+import android.app.Activity
 import android.content.Context
 import android.graphics.*
 import android.support.design.widget.FloatingActionButton
@@ -26,6 +27,8 @@ import android.graphics.Bitmap
 import android.renderscript.Allocation
 import android.renderscript.RenderScript
 import android.renderscript.ScriptIntrinsicBlur
+import android.opengl.ETC1.getWidth
+import android.graphics.drawable.Drawable
 
 
 /**
@@ -132,5 +135,27 @@ object ViewUtil {
         overlayAlloc.copyTo(overlay)
         view.background = BitmapDrawable(context.resources, overlay)
         rs.destroy()
+    }
+
+    fun getLight(bitmap: Bitmap, width: Int, height: Int): Int {
+        var r: Int
+        var g: Int
+        var b: Int
+        var number = 0
+        var bright = 0.0
+        var localTemp: Int?
+        val x = arrayOf(0.27 * width, 0.36 * width, 0.5 * width, 0.65 * width, 0.75 * width)
+        val y = arrayOf(0.82 * height, 0.94 * height)
+        for (i in x.indices)
+            for (j in y.indices) {
+                number++
+                localTemp = bitmap.getPixel(x[i].toInt(), y[j].toInt())
+                r = localTemp or -0xff0001 shr 16 and 0x00ff
+                g = localTemp or -0xff01 shr 8 and 0x0000ff
+                b = localTemp or -0x100 and 0x0000ff
+
+                bright += 0.299 * r + 0.587 * g + 0.114 * b
+            }
+        return (bright / number).toInt()
     }
 }
