@@ -96,10 +96,10 @@ class DownloadService : IntentService(TAG) {
         Logs.i(TAG, "download: " + fileName)
         retrofit.create(CommonService::class.java)
                 .download(type, fileName)
-                .subscribeOn(Schedulers.io())
-                .unsubscribeOn(Schedulers.io())
+                .subscribeOn(Schedulers.newThread())
+                .unsubscribeOn(Schedulers.newThread())
                 .map({ responseBody -> responseBody.byteStream() })
-                .observeOn(Schedulers.computation())
+                .observeOn(Schedulers.io())
                 .doOnNext { inputStream ->
                     try {
                         XhuFileUtil.saveFile(inputStream, file)
