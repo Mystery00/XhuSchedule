@@ -1,8 +1,8 @@
 /*
- * Created by Mystery0 on 17-12-18 下午1:58.
+ * Created by Mystery0 on 17-12-21 上午3:41.
  * Copyright (c) 2017. All Rights reserved.
  *
- * Last modified 17-12-13 下午12:15
+ * Last modified 17-12-20 下午5:12
  */
 
 package com.weilylab.xhuschedule.util.widget
