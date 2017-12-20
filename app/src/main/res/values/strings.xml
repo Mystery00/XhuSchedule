@@ -45,6 +45,7 @@
     <string name="hint_dialog_sync">信息同步中……</string>
     <string name="hint_dialog_upload_log">日志上传中……</string>
     <string name="hint_dialog_download_img">图片下载中……</string>
+    <string name="hint_dialog_feedback">正在提交中……</string>
     <string name="hint_invalid_cookie">登陆信息已过期，是否重新登录？</string>
     <string name="hint_try_refresh_data_error">%1$s，是否重新登录？</string>
     <string name="hint_update_data">信息同步成功！</string>
@@ -67,6 +68,8 @@
     </string>
     <string name="hint_logout_title">确定要注销吗？</string>
     <string name="hint_logout_content">注销后将会清空本帐号的数据，请问您确定要注销吗？</string>
+    <string name="hint_feedback">感谢您的建议，我们会尝试做得更好，祝您阖家幸福，生活愉快~</string>
+    <string name="hint_feedback_error">反馈失败，错误码：%1$d，错误信息：%2$s，请联系开发者</string>
 
     <string name="warning_enable_multi_user_mode">
         请确保您是双学位的学生或者有同时查看多个账号课表的需求。\n\n

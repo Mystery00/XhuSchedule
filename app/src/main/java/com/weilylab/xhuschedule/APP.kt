@@ -42,7 +42,6 @@ class APP : Application() {
                 .setDirectory(file)
                 .sendException(object : CatchExceptionListener {
                     override fun onException(date: String, file: File, appVersionName: String, appVersionCode: Int, AndroidVersion: String, sdk: Int, vendor: String, model: String, ex: Throwable) {
-                        Logs.i("TAG", "onException: ")
                         val error = XhuScheduleError(date, appVersionName, appVersionCode, AndroidVersion, sdk, vendor, model, ex)
                         val bundle = Bundle()
                         bundle.putSerializable("file", file)

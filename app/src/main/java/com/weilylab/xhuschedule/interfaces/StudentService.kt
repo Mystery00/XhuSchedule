@@ -9,9 +9,7 @@ package com.weilylab.xhuschedule.interfaces
 
 import io.reactivex.Observable
 import okhttp3.ResponseBody
-import retrofit2.http.Field
-import retrofit2.http.FormUrlEncoded
-import retrofit2.http.POST
+import retrofit2.http.*
 
 interface StudentService {
     @FormUrlEncoded
@@ -34,14 +32,13 @@ interface StudentService {
     @POST("/course/Course/getScores")
     fun getScores(@Field("username") username: String, @Field("year") year: String?, @Field("term") term: Int?): Observable<ResponseBody>
 
-    @FormUrlEncoded
-    @POST("/course/Common/feedback")
-    fun feedback(@Field("username") username: String,
-                 @Field("appVersion") appVersion: String,
-                 @Field("systemVersion") systemVersion: String,
-                 @Field("factory") factory: String,
-                 @Field("model") model: String,
-                 @Field("rom") rom: String,
-                 @Field("other") other: String,
-                 @Field("message") message: String): Observable<ResponseBody>
+    @GET("/course/Common/feedback")
+    fun feedback(@Query("username") username: String,
+                 @Query("appVersion") appVersion: String,
+                 @Query("systemVersion") systemVersion: String,
+                 @Query("factory") vendor: String,
+                 @Query("model") model: String,
+                 @Query("rom") rom: String,
+                 @Query("other") other: String,
+                 @Query("message") message: String): Observable<ResponseBody>
 }

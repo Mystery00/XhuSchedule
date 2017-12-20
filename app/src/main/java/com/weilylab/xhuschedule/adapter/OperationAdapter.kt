@@ -9,18 +9,23 @@ package com.weilylab.xhuschedule.adapter
 
 import android.content.Context
 import android.content.Intent
-import android.net.Uri
-import android.os.Build
+import android.support.v4.content.ContextCompat
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.activity.*
+import com.weilylab.xhuschedule.classes.Student
+import com.weilylab.xhuschedule.listener.FeedBackListener
+import com.weilylab.xhuschedule.util.XhuFileUtil
+import com.zyao89.view.zloading.ZLoadingDialog
+import com.zyao89.view.zloading.Z_TYPE
 import java.io.File
 
 class OperationAdapter(private val context: Context) : RecyclerView.Adapter<OperationAdapter.ViewHolder>() {
@@ -64,21 +69,48 @@ class OperationAdapter(private val context: Context) : RecyclerView.Adapter<Oper
                 1 -> context.startActivity(Intent(context, ExamActivity::class.java))
                 2 -> context.startActivity(Intent(context, ScoreActivity::class.java))
                 3 -> {
-//                    val student= XhuFileUtil.getArrayFromFile(File(context.filesDir.absolutePath + File.separator + "data" + File.separator + "user"), Student::class.java)[0]
-//
-                    val stringBuilder = StringBuilder()
-                    stringBuilder.appendln("App Version: " + context.getString(R.string.app_version_name) + "-" + context.getString(R.string.app_version_code))
-                    stringBuilder.appendln("OS Version: " + Build.VERSION.RELEASE + "-" + Build.VERSION.SDK_INT)
-                    stringBuilder.appendln("Vendor: " + Build.MANUFACTURER)
-                    stringBuilder.appendln("Model: " + Build.MODEL)
-                    stringBuilder.appendln("Manufacture: " + Build.MANUFACTURER)
-                    stringBuilder.appendln("Brand: " + Build.BRAND)
-                    stringBuilder.appendln("Display: " + Build.DISPLAY)
-                    val data = Intent(Intent.ACTION_SENDTO)
-                    data.data = Uri.parse("mailto:mystery0dyl520@gmail.com")
-                    data.putExtra(Intent.EXTRA_SUBJECT, "西瓜课表意见反馈")
-                    data.putExtra(Intent.EXTRA_TEXT, stringBuilder.toString())
-                    context.startActivity(data)
+                    val loadingDialog = ZLoadingDialog(context)
+                            .setLoadingBuilder(Z_TYPE.DOUBLE_CIRCLE)
+                            .setHintText(context.getString(R.string.hint_dialog_feedback))
+                            .setHintTextSize(16F)
+                            .setCanceledOnTouchOutside(false)
+                            .setLoadingColor(ContextCompat.getColor(context, R.color.colorAccent))
+                            .setHintTextColor(ContextCompat.getColor(context, R.color.colorAccent))
+                            .create()
+                    val editText = EditText(context)
+                    editText.hint = "请输入您的建议"
+                    AlertDialog.Builder(context)
+                            .setTitle(R.string.operation_feedback)
+                            .setView(editText)
+                            .setPositiveButton(android.R.string.ok, { dialog, _ ->
+                                loadingDialog.show()
+                                val studentList = XhuFileUtil.getArrayFromFile(File(context.filesDir.absolutePath + File.separator + "data" + File.separator + "user"), Student::class.java)
+                                var mainStudent: Student? = (0 until studentList.size)
+                                        .firstOrNull { studentList[it].isMain }
+                                        ?.let { studentList[it] }
+                                if (mainStudent == null)
+                                    mainStudent = studentList[0]
+                                mainStudent.feedback(context, editText.text.toString(), object : FeedBackListener {
+                                    override fun error(rt: Int, e: Throwable) {
+                                        e.printStackTrace()
+                                        loadingDialog.dismiss()
+                                        Toast.makeText(context, context.getString(R.string.hint_feedback_error, rt, e.message), Toast.LENGTH_LONG)
+                                                .show()
+                                    }
+
+                                    override fun done(rt: Int) {
+                                        loadingDialog.dismiss()
+                                        dialog.dismiss()
+                                        Toast.makeText(context, R.string.hint_feedback, Toast.LENGTH_SHORT)
+                                                .show()
+                                    }
+
+                                    override fun doInThread() {
+                                    }
+                                })
+                            })
+                            .setNegativeButton(android.R.string.cancel, null)
+                            .show()
                 }
                 4 -> {
                     AlertDialog.Builder(context)
