@@ -62,10 +62,7 @@ class OperationAdapter(private val context: Context) : RecyclerView.Adapter<Oper
         holder.textView.setText(map["title"]!!)
         holder.itemView.setOnClickListener {
             when (position) {
-                0 -> {
-                    Toast.makeText(context, "暂未开放", Toast.LENGTH_SHORT)
-                            .show()
-                }
+                0 -> context.startActivity(Intent(context, ScheduleActivity::class.java))
                 1 -> context.startActivity(Intent(context, ExamActivity::class.java))
                 2 -> context.startActivity(Intent(context, ScoreActivity::class.java))
                 3 -> {

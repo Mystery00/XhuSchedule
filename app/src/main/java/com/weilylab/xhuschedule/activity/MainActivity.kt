@@ -450,7 +450,7 @@ class MainActivity : AppCompatActivity() {
         val base64Name = XhuFileUtil.filterString(Base64.encodeToString(student.username.toByteArray(), Base64.DEFAULT))
         return ScheduleHelper.tomcatRetrofit
                 .create(StudentService::class.java)
-                .getCourses(student.username)
+                .getCourses(student.username, null, null)
                 .subscribeOn(Schedulers.newThread())
                 .unsubscribeOn(Schedulers.newThread())
                 .map({ responseBody -> Gson().fromJson(InputStreamReader(responseBody.byteStream()), CourseRT::class.java) })
