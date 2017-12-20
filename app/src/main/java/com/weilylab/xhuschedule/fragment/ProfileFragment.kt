@@ -11,6 +11,7 @@ import android.Manifest
 import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Color
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.net.Uri
@@ -106,6 +107,16 @@ class ProfileFragment : Fragment() {
 
                             override fun onResourceReady(resource: Drawable, model: Any?, target: Target<Drawable>?, dataSource: DataSource?, isFirstResource: Boolean): Boolean {
                                 ViewUtil.blur(activity, (resource as BitmapDrawable).bitmap, textViewLayout)
+                                val light = ViewUtil.getLight(resource.bitmap, resource.intrinsicWidth, resource.intrinsicHeight)
+                                if (light > 128) {
+                                    rootView!!.findViewById<TextView>(R.id.textView_title).setTextColor(Color.parseColor("#555555"))
+                                    rootView!!.findViewById<TextView>(R.id.textView_score_gpa).setTextColor(Color.parseColor("#555555"))
+                                    rootView!!.findViewById<TextView>(R.id.textView_score_no).setTextColor(Color.parseColor("#555555"))
+                                } else {
+                                    rootView!!.findViewById<TextView>(R.id.textView_title).setTextColor(Color.WHITE)
+                                    rootView!!.findViewById<TextView>(R.id.textView_score_gpa).setTextColor(Color.WHITE)
+                                    rootView!!.findViewById<TextView>(R.id.textView_score_no).setTextColor(Color.WHITE)
+                                }
                                 return false
                             }
                         })
@@ -171,11 +182,24 @@ class ProfileFragment : Fragment() {
 
                         override fun onResourceReady(resource: Drawable, model: Any?, target: Target<Drawable>?, dataSource: DataSource?, isFirstResource: Boolean): Boolean {
                             ViewUtil.blur(activity, (resource as BitmapDrawable).bitmap, textViewLayout)
+                            val light = ViewUtil.getLight(resource.bitmap, resource.intrinsicWidth, resource.intrinsicHeight)
+                            if (light > 128) {
+                                rootView!!.findViewById<TextView>(R.id.textView_title).setTextColor(Color.parseColor("#555555"))
+                                rootView!!.findViewById<TextView>(R.id.textView_score_gpa).setTextColor(Color.parseColor("#555555"))
+                                rootView!!.findViewById<TextView>(R.id.textView_score_no).setTextColor(Color.parseColor("#555555"))
+                            } else {
+                                rootView!!.findViewById<TextView>(R.id.textView_title).setTextColor(Color.WHITE)
+                                rootView!!.findViewById<TextView>(R.id.textView_score_gpa).setTextColor(Color.WHITE)
+                                rootView!!.findViewById<TextView>(R.id.textView_score_no).setTextColor(Color.WHITE)
+                            }
                             return false
                         }
                     })
                     .into(headerImg)
         } else {
+            rootView!!.findViewById<TextView>(R.id.textView_title).setTextColor(Color.WHITE)
+            rootView!!.findViewById<TextView>(R.id.textView_score_gpa).setTextColor(Color.WHITE)
+            rootView!!.findViewById<TextView>(R.id.textView_score_no).setTextColor(Color.WHITE)
             headerImg.setImageResource(R.mipmap.header_img)
             headerImg.viewTreeObserver.addOnPreDrawListener(object : ViewTreeObserver.OnPreDrawListener {
                 override fun onPreDraw(): Boolean {

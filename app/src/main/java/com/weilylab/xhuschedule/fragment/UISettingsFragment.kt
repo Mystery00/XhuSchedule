@@ -24,6 +24,8 @@ import android.support.constraint.ConstraintLayout
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.CardView
+import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
@@ -36,6 +38,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.jrummyapps.android.colorpicker.ColorPreference
 import com.weilylab.xhuschedule.R
+import com.weilylab.xhuschedule.adapter.HeaderAdapter
 import com.weilylab.xhuschedule.classes.Course
 import com.weilylab.xhuschedule.interfaces.CommonService
 import com.weilylab.xhuschedule.util.*
@@ -99,12 +102,30 @@ class UISettingsFragment : PreferenceFragment() {
             true
         }
         headerImgPreference.setOnPreferenceClickListener {
-            requestType = HEADER_REQUEST_CODE
-            requestPermission()
+            val recyclerView = RecyclerView(activity)
+            recyclerView.layoutManager = LinearLayoutManager(activity)
+            val adapter = HeaderAdapter(activity)
+            recyclerView.adapter = adapter
+            val dialog = AlertDialog.Builder(activity)
+                    .setTitle(getString(R.string.title_header_img))
+                    .setView(recyclerView)
+                    .setPositiveButton(android.R.string.cancel, null)
+                    .setNegativeButton("从相册选择", { _, _ ->
+                        requestType = HEADER_REQUEST_CODE
+                        requestPermission()
+                    })
+                    .create()
+            dialog.show()
+            adapter.listener = object : HeaderAdapter.ItemSelectedListener {
+                override fun onChecked(link: String, position: Int) {
+                    dialog.dismiss()
+                    downloadImg(link.substring(link.lastIndexOf('/') + 1), "header")
+                }
+            }
             true
         }
         backgroundImgPreference.setOnPreferenceClickListener {
-            val view = View.inflate(activity, R.layout.layout_choose_img, null)
+            val view = View.inflate(activity, R.layout.dialog_choose_img_background, null)
             val image1: ImageView = view.findViewById(R.id.imageView1)
             val image2: ImageView = view.findViewById(R.id.imageView2)
             val image3: ImageView = view.findViewById(R.id.imageView3)
@@ -117,7 +138,7 @@ class UISettingsFragment : PreferenceFragment() {
             Glide.with(activity).load(list[2]).apply(option).into(image3)
             Glide.with(activity).load(list[3]).apply(option).into(image4)
             val dialog = AlertDialog.Builder(activity)
-                    .setTitle(getString(R.string.title_background_img))
+                    .setTitle("${getString(R.string.title_background_img)}，感谢提供者@BigDingDing")
                     .setView(view)
                     .setPositiveButton(android.R.string.cancel, null)
                     .setNegativeButton("从相册选择", { _, _ ->
@@ -128,23 +149,23 @@ class UISettingsFragment : PreferenceFragment() {
             dialog.show()
             image1.setOnClickListener {
                 val link = list[0]
-                downloadImg(link.substring(link.lastIndexOf('/') + 1), "background")
                 dialog.dismiss()
+                downloadImg(link.substring(link.lastIndexOf('/') + 1), "background")
             }
             image2.setOnClickListener {
                 val link = list[1]
-                downloadImg(link.substring(link.lastIndexOf('/') + 1), "background")
                 dialog.dismiss()
+                downloadImg(link.substring(link.lastIndexOf('/') + 1), "background")
             }
             image3.setOnClickListener {
                 val link = list[2]
-                downloadImg(link.substring(link.lastIndexOf('/') + 1), "background")
                 dialog.dismiss()
+                downloadImg(link.substring(link.lastIndexOf('/') + 1), "background")
             }
             image4.setOnClickListener {
                 val link = list[3]
-                downloadImg(link.substring(link.lastIndexOf('/') + 1), "background")
                 dialog.dismiss()
+                downloadImg(link.substring(link.lastIndexOf('/') + 1), "background")
             }
             true
         }
@@ -475,12 +496,22 @@ class UISettingsFragment : PreferenceFragment() {
                 .observeOn(Schedulers.io())
                 .doOnNext { inputStream ->
                     try {
-                        val saveFile = File(File(activity.filesDir, "CropImg"), saveType)
-                        XhuFileUtil.saveFile(inputStream, saveFile)
                         when (saveType) {
-                            "background" -> Settings.customBackgroundImg = saveFile.absolutePath
-                            "header" -> Settings.customHeaderImg = saveFile.absolutePath
-                            "user_img" -> Settings.userImg = saveFile.absolutePath
+                            "background" -> {
+                                val saveFile = File(File(activity.filesDir, "CropImg"), "background")
+                                XhuFileUtil.saveFile(inputStream, saveFile)
+                                Settings.customBackgroundImg = saveFile.absolutePath
+                            }
+                            "header" -> {
+                                val saveFile = File(activity.cacheDir, "temp")
+                                XhuFileUtil.saveFile(inputStream, saveFile)
+                                cropImg(Uri.fromFile(saveFile), HEADER_CROP_REQUEST_CODE, 320, 176)
+                            }
+                            "user_img" -> {
+                                val saveFile = File(File(activity.filesDir, "CropImg"), "user_img")
+                                XhuFileUtil.saveFile(inputStream, saveFile)
+                                Settings.userImg = saveFile.absolutePath
+                            }
                         }
                         ScheduleHelper.isImageChange = true
                     } catch (e: Exception) {

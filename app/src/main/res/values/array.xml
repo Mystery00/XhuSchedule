@@ -84,4 +84,8 @@
         <item>http://img.mystery0.vip/c.png</item>
         <item>http://img.mystery0.vip/d.png</item>
     </string-array>
+
+    <string-array name="header_img">
+        <item>http://img.mystery0.vip/header1.jpg</item>
+    </string-array>
 </resources>
