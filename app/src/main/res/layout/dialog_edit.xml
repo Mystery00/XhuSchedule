@@ -7,8 +7,7 @@
   ~ Last modified 17-11-18 下午4:43
   -->
 
-<android.support.v4.widget.NestedScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -25,7 +24,7 @@
             android:gravity="center"
             android:textColor="#FFFFFF"
             android:textSize="@dimen/dialog_edit_header_text_size"
-            android:textStyle="bold"/>
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/edit_teacher_tag"
@@ -39,7 +38,7 @@
             android:textColor="@color/colorAccent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/toolbar"/>
+            app:layout_constraintTop_toBottomOf="@+id/toolbar" />
 
         <TextView
             android:id="@+id/edit_teacher_layout"
@@ -52,7 +51,7 @@
             android:textSize="@dimen/course_info_text_size"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/edit_teacher_tag"/>
+            app:layout_constraintTop_toBottomOf="@+id/edit_teacher_tag" />
 
         <TextView
             android:id="@+id/edit_time_tag"
@@ -66,7 +65,7 @@
             android:textColor="@color/colorAccent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/edit_teacher_layout"/>
+            app:layout_constraintTop_toBottomOf="@+id/edit_teacher_layout" />
 
         <TextView
             android:id="@+id/edit_time_layout"
@@ -78,7 +77,7 @@
             android:paddingTop="@dimen/time_padding"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/edit_time_tag"/>
+            app:layout_constraintTop_toBottomOf="@+id/edit_time_tag" />
 
         <TextView
             android:id="@+id/edit_location_tag"
@@ -92,7 +91,7 @@
             android:textColor="@color/colorAccent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/edit_time_layout"/>
+            app:layout_constraintTop_toBottomOf="@+id/edit_time_layout" />
 
         <LinearLayout
             android:id="@+id/edit_location_layout"
@@ -105,7 +104,7 @@
             android:paddingTop="@dimen/time_padding"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/edit_location_tag"/>
+            app:layout_constraintTop_toBottomOf="@+id/edit_location_tag" />
 
         <TextView
             android:id="@+id/edit_color_tag"
@@ -119,7 +118,7 @@
             android:textColor="@color/colorAccent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/edit_location_layout"/>
+            app:layout_constraintTop_toBottomOf="@+id/edit_location_layout" />
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/color_chooser"
@@ -132,7 +131,19 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/edit_color_tag"/>
+            app:layout_constraintTop_toBottomOf="@id/edit_color_tag" />
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/floatingActionButtonShare"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/fab_margin"
+            android:clickable="true"
+            android:focusable="true"
+            app:layout_constraintBottom_toTopOf="@+id/edit_teacher_tag"
+            app:layout_constraintEnd_toStartOf="@id/floatingActionButton"
+            app:layout_constraintTop_toBottomOf="@+id/toolbar"
+            app:srcCompat="@drawable/ic_share" />
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/floatingActionButton"
@@ -144,7 +155,7 @@
             app:layout_constraintBottom_toTopOf="@+id/edit_teacher_tag"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/toolbar"
-            app:srcCompat="@drawable/ic_done"/>
+            app:srcCompat="@drawable/ic_done" />
 
     </android.support.constraint.ConstraintLayout>
 
