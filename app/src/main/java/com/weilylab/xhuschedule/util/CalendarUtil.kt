@@ -10,6 +10,7 @@ package com.weilylab.xhuschedule.util
 import android.content.Context
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.util.widget.WidgetHelper
+import vip.mystery0.tools.logs.Logs
 import java.util.*
 
 /**
@@ -50,7 +51,7 @@ object CalendarUtil {
         val date = firstWeekOfTerm.split('-')
         val calendar = Calendar.getInstance()
         calendar.set(date[0].toInt(), date[1].toInt(), date[2].toInt(), 0, 0, 0)
-        calendar.timeInMillis += WidgetHelper.dayIndex * 60 * 60 * 24 * 1000
+        calendar.add(Calendar.DAY_OF_YEAR, WidgetHelper.dayIndex)
         return "${calendar.get(Calendar.YEAR)}/${calendar.get(Calendar.MONTH) + 1}/${calendar.get(Calendar.DAY_OF_MONTH)}  ${CalendarUtil.getTodayInfo(context, WidgetHelper.dayIndex)}"
     }
 
