@@ -7,7 +7,6 @@
 
 package com.weilylab.xhuschedule.util
 
-import android.app.Activity
 import android.content.Context
 import android.graphics.*
 import android.support.design.widget.FloatingActionButton
@@ -27,8 +26,6 @@ import android.graphics.Bitmap
 import android.renderscript.Allocation
 import android.renderscript.RenderScript
 import android.renderscript.ScriptIntrinsicBlur
-import android.opengl.ETC1.getWidth
-import android.graphics.drawable.Drawable
 
 
 /**
@@ -89,7 +86,6 @@ object ViewUtil {
     fun drawImg(course: Course): Bitmap {
         val bitmap = Bitmap.createBitmap(200, 200, Bitmap.Config.ARGB_8888)
         val canvas = Canvas(bitmap)
-        val targetRect = Rect(0, 0, 200, 200)
         val paint = Paint()
         try {
             paint.color = Color.parseColor(course.color)
@@ -97,22 +93,6 @@ object ViewUtil {
             paint.color = Color.parseColor('#' + ScheduleHelper.getRandomColor())
         }
         canvas.drawCircle(100F, 100F, 100F, paint)
-        paint.color = Color.WHITE
-        paint.textSize = 120F
-        val fontMetrics = paint.fontMetrics
-        val baseline = (targetRect.bottom + targetRect.top - fontMetrics.bottom - fontMetrics.top) / 2
-        paint.textAlign = Paint.Align.CENTER
-        canvas.drawText(course.name.substring(0, 1), targetRect.centerX().toFloat(), baseline, paint)
-        return bitmap
-    }
-
-    fun drawBackground(course: Course): Bitmap {
-        val bitmap = Bitmap.createBitmap(200, 400, Bitmap.Config.ARGB_8888)
-        val canvas = Canvas(bitmap)
-        val rect = RectF(0F, 0F, 200F, 400F)
-        val paint = Paint()
-        paint.color = Color.parseColor(course.color)
-        canvas.drawRoundRect(rect, 10F, 10F, paint)
         return bitmap
     }
 
