@@ -25,7 +25,6 @@ object WidgetHelper {
     val TABLE_TAG = "TABLE_TAG"
     val ALL_TAG = "ALL_TAG"
     var dayIndex = 0
-    var isUpdate=false
     val showTodayCourses = ArrayList<Course>()
     val showScheduleCourses = ArrayList<ArrayList<ArrayList<Course>>>()
 
@@ -37,15 +36,36 @@ object WidgetHelper {
     }
 
     /**
+     * 检测是否有数据
+     */
+    fun hasData(data: ArrayList<ArrayList<ArrayList<Course>>>): Boolean {
+        var isEmpty = true
+        for (a in 0 until data.size)
+            for (b in 0 until data[a].size)
+                if (data[a][b].isNotEmpty()) {
+                    isEmpty = false
+                    break
+                }
+        return !isEmpty
+    }
+
+    /**
      * 刷新内存中的当天课表
      */
     fun refreshTodayCourses(context: Context) {
         showTodayCourses.clear()
         val studentList = XhuFileUtil.getArrayFromFile(File(context.filesDir.absolutePath + File.separator + "data" + File.separator + "user"), Student::class.java)
+        if (studentList.isEmpty())
+            return
+        var mainStudent: Student? = (0 until studentList.size)
+                .firstOrNull { studentList[it].isMain }
+                ?.let { studentList[it] }
+        if (mainStudent == null)
+            mainStudent = studentList[0]
         val parentFile = File(context.filesDir.absolutePath + File.separator + "caches/")
         if (!parentFile.exists())
             parentFile.mkdirs()
-        val base64Name = XhuFileUtil.filterString(Base64.encodeToString(studentList[0].username.toByteArray(), Base64.DEFAULT))
+        val base64Name = XhuFileUtil.filterString(Base64.encodeToString(mainStudent.username.toByteArray(), Base64.DEFAULT))
         //判断是否有缓存
         val cacheResult = parentFile.listFiles().filter { it.name == base64Name }.size == 1
         if (!cacheResult) {
@@ -65,10 +85,17 @@ object WidgetHelper {
     fun refreshWeekCourses(context: Context) {
         showScheduleCourses.clear()
         val studentList = XhuFileUtil.getArrayFromFile(File(context.filesDir.absolutePath + File.separator + "data" + File.separator + "user"), Student::class.java)
+        if (studentList.isEmpty())
+            return
+        var mainStudent: Student? = (0 until studentList.size)
+                .firstOrNull { studentList[it].isMain }
+                ?.let { studentList[it] }
+        if (mainStudent == null)
+            mainStudent = studentList[0]
         val parentFile = File(context.filesDir.absolutePath + File.separator + "caches/")
         if (!parentFile.exists())
             parentFile.mkdirs()
-        val base64Name = XhuFileUtil.filterString(Base64.encodeToString(studentList[0].username.toByteArray(), Base64.DEFAULT))
+        val base64Name = XhuFileUtil.filterString(Base64.encodeToString(mainStudent.username.toByteArray(), Base64.DEFAULT))
         //判断是否有缓存
         val cacheResult = parentFile.listFiles().filter { it.name == base64Name }.size == 1
         if (!cacheResult) {

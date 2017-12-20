@@ -41,7 +41,6 @@ class ScheduleCourseWidget : AppWidgetProvider() {
         super.onReceive(context, intent)
         if (intent.action == "android.appwidget.action.APPWIDGET_UPDATE" && (intent.getStringExtra("TAG") == WidgetHelper.TABLE_TAG || intent.getStringExtra("TAG") == WidgetHelper.ALL_TAG)) {
             val appWidgetIds = WidgetHelper.getWidgetIds(context, WidgetHelper.TABLE_TAG)
-            WidgetHelper.isUpdate = true
             for (appWidgetId in appWidgetIds)
                 AppWidgetManager.getInstance(context).notifyAppWidgetViewDataChanged(appWidgetId, R.id.gridView)
         }

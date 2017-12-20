@@ -147,7 +147,29 @@ class TableFragment : Fragment() {
 
     private fun formatView() {
         val itemHeight = DensityUtil.dip2px(activity, Settings.customTextHeight.toFloat())
+        val firstWeekOfTerm = Settings.firstWeekOfTerm
+        Logs.i(TAG, "formatView: " + firstWeekOfTerm)
+        val date = firstWeekOfTerm.split('-')
+        val calendar = Calendar.getInstance()
+        calendar.set(date[0].toInt(), date[1].toInt(), date[2].toInt(), 0, 0, 0)
+        calendar.timeInMillis += (ScheduleHelper.weekIndex - 1) * 7 * 60 * 60 * 24 * 1000
+        val dayWeek = calendar.get(Calendar.DAY_OF_WEEK)
+        if (dayWeek == Calendar.SUNDAY)
+            calendar.add(Calendar.DAY_OF_MONTH, -1)
+        calendar.firstDayOfWeek = Calendar.MONDAY
+        val dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK)
+        calendar.add(Calendar.DATE, calendar.firstDayOfWeek - dayOfWeek)
+        val headerArray = context.resources.getStringArray(R.array.table_header)
+        val month = (calendar.get(Calendar.MONTH) + 1).toString() + "\n月"
+        (rootView!!.findViewById(R.id.view) as TextView).text = month
         for (day in 0 until 7) {
+            val headerTextView = (rootView!!.findViewById(R.id.table_header) as LinearLayout).getChildAt(day) as TextView
+            val text = if (calendar.get(Calendar.DAY_OF_MONTH) == 1)
+                "${headerArray[day]}\n${calendar.get(Calendar.MONTH) + 1}月"
+            else
+                "${headerArray[day]}\n${calendar.get(Calendar.DAY_OF_MONTH)}日"
+            headerTextView.text = text
+            calendar.add(Calendar.DAY_OF_MONTH, 1)
             val layoutList = ArrayList<TableLayoutHelper>()
             val temp = resources.getIdentifier("table_schedule" + (day + 1), "id", "com.weilylab.xhuschedule")
             val linearLayout: LinearLayout = rootView!!.findViewById(temp)

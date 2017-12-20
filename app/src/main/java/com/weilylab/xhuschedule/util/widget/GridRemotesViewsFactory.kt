@@ -39,7 +39,7 @@ class GridRemotesViewsFactory(private val context: Context) : RemoteViewsService
     }
 
     override fun getViewAt(position: Int): RemoteViews {
-        return if (WidgetHelper.showScheduleCourses.size == 0) {
+        return if (!WidgetHelper.hasData(WidgetHelper.showScheduleCourses)) {
             RemoteViews(context.packageName, R.layout.layout_widget_no_data)
         } else {
             val row = WidgetHelper.showScheduleCourses[position]
@@ -63,7 +63,7 @@ class GridRemotesViewsFactory(private val context: Context) : RemoteViewsService
 
     override fun getCount(): Int {
         Logs.i(TAG, "getCount: " + WidgetHelper.showScheduleCourses.size)
-        return if (WidgetHelper.isUpdate) 5 else 1
+        return if (WidgetHelper.hasData(WidgetHelper.showScheduleCourses)) 5 else 1
     }
 
     override fun getViewTypeCount(): Int {

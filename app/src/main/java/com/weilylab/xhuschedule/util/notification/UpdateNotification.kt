@@ -45,7 +45,6 @@ object UpdateNotification {
         val res = context.resources
         val title = res.getString(R.string.update_notification_title, context.getString(R.string.app_version_name), version.versionName)
         val content = res.getString(R.string.update_notification_content, FileUtil.FormatFileSize(version.apkSize), FileUtil.FormatFileSize(version.patchSize))
-        val bigText = content + "\n" + res.getString(R.string.update_notification_big_text, version.updateLog)
 
         val downloadAPKIntent = Intent(context, DownloadService::class.java)
         downloadAPKIntent.putExtra("type", "apk")
@@ -62,8 +61,6 @@ object UpdateNotification {
                 .setContentTitle(title)
                 .setContentText(content)
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                .setStyle(NotificationCompat.BigTextStyle()
-                        .bigText(bigText))
                 .setContentIntent(pendingDownloadAPKIntent)
                 .addAction(NotificationCompat.Action.Builder(R.drawable.ic_stat_update, context.getString(R.string.action_download_apk), pendingDownloadAPKIntent).build())
                 .setAutoCancel(true)
