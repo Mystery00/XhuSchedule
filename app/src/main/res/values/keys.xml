@@ -92,6 +92,9 @@
     <string name="key_update_log" translatable="false">key_update_log</string>
     <string name="title_community_link">点击加入群【西瓜课表用户交流反馈】</string>
     <string name="link_community_link">https://jq.qq.com/?_wv=1027&#038;k=5Nz3XlU</string>
+    <string name="key_weixin">key_weixin</string>
+    <string name="title_weixin">微信小程序二维码</string>
+    <string name="summary_weixin">可以在微信小程序页面直接搜索“西瓜课表”即可使用</string>
     <string name="title_update_log">更新日志</string>
     <string name="key_check_update" translatable="false">key_check_update</string>
     <string name="title_check_update">检查更新</string>
