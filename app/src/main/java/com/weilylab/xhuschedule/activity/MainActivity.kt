@@ -456,6 +456,7 @@ class MainActivity : AppCompatActivity() {
                 .map({ responseBody -> Gson().fromJson(InputStreamReader(responseBody.byteStream()), CourseRT::class.java) })
                 .subscribeOn(Schedulers.io())
                 .doOnNext { contentRT ->
+                    Logs.i(TAG, "updateData: " + contentRT.rt)
                     when (contentRT.rt) {
                         "1", "5" -> {
                             val newFile = File(parentFile, base64Name + ".temp")
@@ -524,7 +525,7 @@ class MainActivity : AppCompatActivity() {
 
             override fun loginDone(name: String) {
                 ScheduleHelper.isLogin = true
-                updateData(student)
+                updateAllData()
             }
 
             override fun doInThread() {
