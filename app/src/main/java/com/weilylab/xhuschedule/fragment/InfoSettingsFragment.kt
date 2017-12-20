@@ -8,8 +8,6 @@
 package com.weilylab.xhuschedule.fragment
 
 import android.content.Intent
-import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.preference.Preference
 import android.preference.PreferenceFragment
@@ -19,14 +17,18 @@ import android.support.v7.app.AlertDialog
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import android.widget.Toast
 import com.google.gson.Gson
 import com.weilylab.xhuschedule.R
+import com.weilylab.xhuschedule.classes.Student
 import com.weilylab.xhuschedule.classes.Update
 import com.weilylab.xhuschedule.interfaces.CommonService
+import com.weilylab.xhuschedule.listener.FeedBackListener
 import com.weilylab.xhuschedule.service.DownloadService
 import com.weilylab.xhuschedule.util.ScheduleHelper
 import com.weilylab.xhuschedule.util.Settings
+import com.weilylab.xhuschedule.util.XhuFileUtil
 import com.zyao89.view.zloading.ZLoadingDialog
 import com.zyao89.view.zloading.Z_TYPE
 import io.reactivex.Observer
@@ -34,6 +36,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import vip.mystery0.tools.fileUtil.FileUtil
+import java.io.File
 import java.io.InputStreamReader
 import java.net.UnknownHostException
 
@@ -45,6 +48,7 @@ class InfoSettingsFragment : PreferenceFragment() {
     private lateinit var autoCheckUpdatePreference: SwitchPreference
     private lateinit var autoCheckLogPreference: SwitchPreference
     private lateinit var feedbackPreference: Preference
+    private lateinit var weixinPreference: Preference
     private lateinit var updateLogPreference: Preference
     private lateinit var checkUpdatePreference: Preference
 
@@ -64,6 +68,7 @@ class InfoSettingsFragment : PreferenceFragment() {
         autoCheckUpdatePreference = findPreference(getString(R.string.key_auto_check_update)) as SwitchPreference
         autoCheckLogPreference = findPreference(getString(R.string.key_auto_check_log)) as SwitchPreference
         feedbackPreference = findPreference(getString(R.string.key_feedback))
+        weixinPreference = findPreference(getString(R.string.key_weixin))
         updateLogPreference = findPreference(getString(R.string.key_update_log))
         checkUpdatePreference = findPreference(getString(R.string.key_check_update))
         autoCheckUpdatePreference.isChecked = Settings.autoCheckUpdate
@@ -77,19 +82,56 @@ class InfoSettingsFragment : PreferenceFragment() {
             true
         }
         feedbackPreference.setOnPreferenceClickListener {
-            val stringBuilder = StringBuilder()
-            stringBuilder.appendln("App Version: " + getString(R.string.app_version_name) + "-" + getString(R.string.app_version_code))
-            stringBuilder.appendln("OS Version: " + Build.VERSION.RELEASE + "-" + Build.VERSION.SDK_INT)
-            stringBuilder.appendln("Vendor: " + Build.MANUFACTURER)
-            stringBuilder.appendln("Model: " + Build.MODEL)
-            stringBuilder.appendln("Manufacture: " + Build.MANUFACTURER)
-            stringBuilder.appendln("Brand: " + Build.BRAND)
-            stringBuilder.appendln("Display: " + Build.DISPLAY)
-            val data = Intent(Intent.ACTION_SENDTO)
-            data.data = Uri.parse("mailto:mystery0dyl520@gmail.com")
-            data.putExtra(Intent.EXTRA_SUBJECT, "西瓜课表意见反馈")
-            data.putExtra(Intent.EXTRA_TEXT, stringBuilder.toString())
-            startActivity(data)
+            val loadingDialog = ZLoadingDialog(activity)
+                    .setLoadingBuilder(Z_TYPE.DOUBLE_CIRCLE)
+                    .setHintText(activity.getString(R.string.hint_dialog_feedback))
+                    .setHintTextSize(16F)
+                    .setCanceledOnTouchOutside(false)
+                    .setLoadingColor(ContextCompat.getColor(activity, R.color.colorAccent))
+                    .setHintTextColor(ContextCompat.getColor(activity, R.color.colorAccent))
+                    .create()
+            val editText = EditText(activity)
+            editText.hint = "请输入您的建议"
+            AlertDialog.Builder(activity)
+                    .setTitle(R.string.operation_feedback)
+                    .setView(editText)
+                    .setPositiveButton(android.R.string.ok, { dialog, _ ->
+                        loadingDialog.show()
+                        val studentList = XhuFileUtil.getArrayFromFile(File(activity.filesDir.absolutePath + File.separator + "data" + File.separator + "user"), Student::class.java)
+                        var mainStudent: Student? = (0 until studentList.size)
+                                .firstOrNull { studentList[it].isMain }
+                                ?.let { studentList[it] }
+                        if (mainStudent == null)
+                            mainStudent = studentList[0]
+                        mainStudent.feedback(activity, editText.text.toString(), object : FeedBackListener {
+                            override fun error(rt: Int, e: Throwable) {
+                                e.printStackTrace()
+                                loadingDialog.dismiss()
+                                Toast.makeText(activity, activity.getString(R.string.hint_feedback_error, rt, e.message), Toast.LENGTH_LONG)
+                                        .show()
+                            }
+
+                            override fun done(rt: Int) {
+                                loadingDialog.dismiss()
+                                dialog.dismiss()
+                                Toast.makeText(activity, R.string.hint_feedback, Toast.LENGTH_SHORT)
+                                        .show()
+                            }
+
+                            override fun doInThread() {
+                            }
+                        })
+                    })
+                    .setNegativeButton(android.R.string.cancel, null)
+                    .show()
+            true
+        }
+        weixinPreference.setOnPreferenceClickListener {
+            AlertDialog.Builder(activity)
+                    .setTitle(R.string.title_weixin)
+                    .setView(R.layout.dialog_weixin)
+                    .setPositiveButton(android.R.string.ok, null)
+                    .show()
             true
         }
         updateLogPreference.setOnPreferenceClickListener {

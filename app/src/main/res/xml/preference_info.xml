@@ -91,6 +91,11 @@
             android:title="@string/title_feedback" />
 
         <Preference
+            android:key="@string/key_weixin"
+            android:summary="@string/summary_weixin"
+            android:title="@string/title_weixin" />
+
+        <Preference
             android:key="@string/key_update_log"
             android:title="@string/title_update_log" />
 
