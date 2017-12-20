@@ -17,6 +17,7 @@ import android.widget.Toast
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.classes.XhuScheduleError
 import com.weilylab.xhuschedule.listener.UploadLogListener
+import com.weilylab.xhuschedule.service.UpdateService
 import com.weilylab.xhuschedule.util.CalendarUtil
 import com.weilylab.xhuschedule.util.Settings
 import com.weilylab.xhuschedule.util.XhuFileUtil
@@ -35,6 +36,8 @@ import kotlin.math.max
 class SplashActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        if (Settings.autoCheckUpdate)
+            startService(Intent(this, UpdateService::class.java))
         if (Settings.autoCheckLog) {
             val loadingDialog = ZLoadingDialog(this)
                     .setLoadingBuilder(Z_TYPE.SINGLE_CIRCLE)
