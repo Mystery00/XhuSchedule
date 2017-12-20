@@ -14,10 +14,8 @@ import android.widget.RemoteViewsService
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.classes.Course
 import com.weilylab.xhuschedule.util.ScheduleHelper
-import vip.mystery0.tools.logs.Logs
 
 class GridRemotesViewsFactory(private val context: Context) : RemoteViewsService.RemoteViewsFactory {
-    private val TAG = "GridRemotesViewsFactory"
 
     override fun onCreate() {
     }
@@ -31,7 +29,6 @@ class GridRemotesViewsFactory(private val context: Context) : RemoteViewsService
     }
 
     override fun onDataSetChanged() {
-        Logs.i(TAG, "onDataSetChanged: ")
     }
 
     override fun hasStableIds(): Boolean {
@@ -62,7 +59,6 @@ class GridRemotesViewsFactory(private val context: Context) : RemoteViewsService
     }
 
     override fun getCount(): Int {
-        Logs.i(TAG, "getCount: " + WidgetHelper.showScheduleCourses.size)
         return if (WidgetHelper.hasData(WidgetHelper.showScheduleCourses)) 5 else 1
     }
 
@@ -71,7 +67,6 @@ class GridRemotesViewsFactory(private val context: Context) : RemoteViewsService
     }
 
     override fun onDestroy() {
-        Logs.i(TAG, "onDestroy: ")
     }
 
     private fun addView(context: Context, course: Course): RemoteViews {
