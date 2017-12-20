@@ -148,11 +148,10 @@ class TableFragment : Fragment() {
     private fun formatView() {
         val itemHeight = DensityUtil.dip2px(activity, Settings.customTextHeight.toFloat())
         val firstWeekOfTerm = Settings.firstWeekOfTerm
-        Logs.i(TAG, "formatView: " + firstWeekOfTerm)
         val date = firstWeekOfTerm.split('-')
         val calendar = Calendar.getInstance()
         calendar.set(date[0].toInt(), date[1].toInt(), date[2].toInt(), 0, 0, 0)
-        calendar.timeInMillis += (ScheduleHelper.weekIndex - 1) * 7 * 60 * 60 * 24 * 1000
+        calendar.add(Calendar.WEEK_OF_YEAR, ScheduleHelper.weekIndex - 1)
         val dayWeek = calendar.get(Calendar.DAY_OF_WEEK)
         if (dayWeek == Calendar.SUNDAY)
             calendar.add(Calendar.DAY_OF_MONTH, -1)
