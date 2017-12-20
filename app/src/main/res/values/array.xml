@@ -87,5 +87,6 @@
 
     <string-array name="header_img">
         <item>http://img.mystery0.vip/header1.jpg</item>
+        <item>http://img.mystery0.vip/header2.jpg</item>
     </string-array>
 </resources>
