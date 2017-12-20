@@ -28,16 +28,17 @@
         layout="@layout/layout_table_header"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:background="@color/colorOpacity"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/view"
         app:layout_constraintTop_toTopOf="@+id/view" />
 
     <android.support.v4.widget.NestedScrollView
+        android:id="@+id/nestedScrollView"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:fillViewport="true"
         android:orientation="vertical"
-        android:id="@+id/nestedScrollView"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -70,14 +71,5 @@
         </android.support.constraint.ConstraintLayout>
 
     </android.support.v4.widget.NestedScrollView>
-
-    <!--<android.support.v7.widget.RecyclerView-->
-    <!--android:id="@+id/recycler_view"-->
-    <!--android:layout_width="0dp"-->
-    <!--android:layout_height="0dp"-->
-    <!--app:layout_constraintBottom_toBottomOf="parent"-->
-    <!--app:layout_constraintEnd_toEndOf="parent"-->
-    <!--app:layout_constraintStart_toEndOf="@+id/view"-->
-    <!--app:layout_constraintTop_toBottomOf="@+id/view" />-->
 
 </android.support.constraint.ConstraintLayout>

@@ -27,7 +27,6 @@ import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.observers.DisposableObserver
 import io.reactivex.schedulers.Schedulers
-import vip.mystery0.tools.logs.Logs
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.math.max
@@ -37,8 +36,6 @@ import kotlin.math.max
  */
 class TableFragment : Fragment() {
     companion object {
-        private val TAG = "TableFragment"
-
         fun newInstance(list: ArrayList<ArrayList<ArrayList<Course>>>): TableFragment {
             val bundle = Bundle()
             bundle.putSerializable("list", list)
@@ -112,15 +109,7 @@ class TableFragment : Fragment() {
                 .subscribe(object : DisposableObserver<Boolean>() {
                     override fun onComplete() {
                         if (rootView != null) {
-                            val tableHeader: LinearLayout = rootView!!.findViewById(R.id.table_header)
                             val tableNav: LinearLayout = rootView!!.findViewById(R.id.table_nav)
-                            for (i in 0 until tableHeader.childCount) {
-                                (tableHeader.getChildAt(i) as TextView).setTextColor(Settings.customTableTextColor)
-                                if (CalendarUtil.getWeekIndex() - 1 == i)
-                                    tableHeader.getChildAt(i).setBackgroundColor(ContextCompat.getColor(activity, R.color.colorWeekPrimary))
-                                else
-                                    tableHeader.getChildAt(i).setBackgroundColor(Color.parseColor("#00000000"))
-                            }
                             for (i in 0 until tableNav.childCount) {
                                 val layoutParams = tableNav.getChildAt(i).layoutParams
                                 layoutParams.height = DensityUtil.dip2px(activity, Settings.customTextHeight.toFloat())
@@ -168,6 +157,10 @@ class TableFragment : Fragment() {
             else
                 "${headerArray[day]}\n${calendar.get(Calendar.DAY_OF_MONTH)}日"
             headerTextView.text = text
+            if (CalendarUtil.getWeekIndex() - 1 == day)
+                headerTextView.setBackgroundColor(ContextCompat.getColor(activity, R.color.colorWeekPrimary))
+            else
+                headerTextView.setBackgroundColor(ContextCompat.getColor(activity, R.color.colorOpacity))
             calendar.add(Calendar.DAY_OF_MONTH, 1)
             val layoutList = ArrayList<TableLayoutHelper>()
             val temp = resources.getIdentifier("table_schedule" + (day + 1), "id", "com.weilylab.xhuschedule")
