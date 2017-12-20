@@ -11,6 +11,7 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
+import android.support.v7.app.AlertDialog
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -57,7 +58,7 @@ class OperationAdapter(private val context: Context) : RecyclerView.Adapter<Oper
         holder.itemView.setOnClickListener {
             when (position) {
                 0 -> {
-                    Toast.makeText(context,"暂未开放",Toast.LENGTH_SHORT)
+                    Toast.makeText(context, "暂未开放", Toast.LENGTH_SHORT)
                             .show()
                 }
                 1 -> context.startActivity(Intent(context, ExamActivity::class.java))
@@ -80,14 +81,20 @@ class OperationAdapter(private val context: Context) : RecyclerView.Adapter<Oper
                     context.startActivity(data)
                 }
                 4 -> {
-                    val file = File(context.filesDir.absolutePath + File.separator + "data" + File.separator)
-                    if (file.exists())
-                        file.listFiles()
-                                .forEach {
-                                    it.delete()
-                                }
-                    context.startActivity(Intent(context, LoginActivity::class.java))
-                    (context as MainActivity).finish()
+                    AlertDialog.Builder(context)
+                            .setTitle(R.string.hint_logout_title)
+                            .setMessage(R.string.hint_logout_content)
+                            .setPositiveButton(android.R.string.ok, { _, _ ->
+                                val file = File(context.filesDir.absolutePath + File.separator + "data" + File.separator)
+                                if (file.exists())
+                                    file.listFiles()
+                                            .forEach {
+                                                it.delete()
+                                            }
+                                context.startActivity(Intent(context, LoginActivity::class.java))
+                            })
+                            .setNegativeButton(android.R.string.cancel, null)
+                            .show()
                 }
                 5 -> context.startActivity(Intent(context, SettingsActivity::class.java))
             }

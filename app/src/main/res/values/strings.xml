@@ -65,6 +65,8 @@
         是否提交此日志？\n\n
         （如果需要禁用该检测，请禁用：设置-关于-自动检测日志开关）
     </string>
+    <string name="hint_logout_title">确定要注销吗？</string>
+    <string name="hint_logout_content">注销后将会清空本帐号的数据，请问您确定要注销吗？</string>
 
     <string name="warning_enable_multi_user_mode">
         请确保您是双学位的学生或者有同时查看多个账号课表的需求。\n\n
