@@ -31,4 +31,13 @@ class Course : Serializable {
         }
         return false
     }
+
+    override fun toString(): String {
+        return "课程名称：$name\n" +
+                "任课教师：$teacher\n" +
+                "上课周数：$week\n" +
+                "星期：$day\n" +
+                "上课时间：$time\n" +
+                "上课地点：$location"
+    }
 }

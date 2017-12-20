@@ -26,6 +26,7 @@ import android.graphics.Bitmap
 import android.renderscript.Allocation
 import android.renderscript.RenderScript
 import android.renderscript.ScriptIntrinsicBlur
+import android.content.Intent
 
 
 /**
@@ -40,6 +41,7 @@ object ViewUtil {
         val editLocationLayout: LinearLayout = view.findViewById(R.id.edit_location_layout)
         val colorChooser: RecyclerView = view.findViewById(R.id.color_chooser)
         val floatingActionButton: FloatingActionButton = view.findViewById(R.id.floatingActionButton)
+        val floatingActionButtonShare: FloatingActionButton = view.findViewById(R.id.floatingActionButtonShare)
         colorChooser.layoutManager = GridLayoutManager(context, 6)
         val adapter = ColorPickerAdapter(course.color, context)
         adapter.colorPickerChangeListener = object : ColorPickerChangeListener {
@@ -79,6 +81,13 @@ object ViewUtil {
                     .apply()
             infoChangeListener.onChange()
             dialog.dismiss()
+        }
+        floatingActionButtonShare.setOnClickListener {
+            val shareIntent = Intent(Intent.ACTION_SEND)
+            shareIntent.putExtra(Intent.EXTRA_TEXT, course.toString())
+            shareIntent.type = "text/plain"
+            //设置分享列表的标题，并且每次都显示分享列表
+            context.startActivity(Intent.createChooser(shareIntent, "分享到"))
         }
         dialog.show()
     }
