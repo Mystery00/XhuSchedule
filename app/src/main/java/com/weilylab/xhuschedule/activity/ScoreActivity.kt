@@ -7,16 +7,19 @@
 
 package com.weilylab.xhuschedule.activity
 
+import android.app.Dialog
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
+import android.util.Base64
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.Toast
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.adapter.ScoreAdapter
 import com.weilylab.xhuschedule.classes.Profile
@@ -27,6 +30,10 @@ import com.weilylab.xhuschedule.listener.ProfileListener
 import com.weilylab.xhuschedule.util.XhuFileUtil
 import com.zyao89.view.zloading.ZLoadingDialog
 import com.zyao89.view.zloading.Z_TYPE
+import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.observers.DisposableObserver
+import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_score.*
 import kotlinx.android.synthetic.main.content_score.*
 import vip.mystery0.tools.logs.Logs
@@ -39,8 +46,8 @@ class ScoreActivity : AppCompatActivity() {
         private val TAG = "ScoreActivity"
     }
 
-    private lateinit var initDialog: ZLoadingDialog
-    private lateinit var loadingDialog: ZLoadingDialog
+    private lateinit var initDialog: Dialog
+    private lateinit var loadingDialog: Dialog
     private val studentList = ArrayList<Student>()
     private val scoreList = ArrayList<Score>()
     private lateinit var adapter: ScoreAdapter
@@ -63,6 +70,7 @@ class ScoreActivity : AppCompatActivity() {
                 .setCanceledOnTouchOutside(false)
                 .setLoadingColor(ContextCompat.getColor(this, R.color.colorAccent))
                 .setHintTextColor(ContextCompat.getColor(this, R.color.colorAccent))
+                .create()
         loadingDialog = ZLoadingDialog(this)
                 .setLoadingBuilder(Z_TYPE.SEARCH_PATH)
                 .setHintText(getString(R.string.hint_dialog_sync))
@@ -70,6 +78,7 @@ class ScoreActivity : AppCompatActivity() {
                 .setCanceledOnTouchOutside(false)
                 .setLoadingColor(ContextCompat.getColor(this, R.color.colorAccent))
                 .setHintTextColor(ContextCompat.getColor(this, R.color.colorAccent))
+                .create()
         adapter = ScoreAdapter(this, scoreList)
         recycler_view.layoutManager = LinearLayoutManager(this)
         recycler_view.adapter = adapter
@@ -90,11 +99,7 @@ class ScoreActivity : AppCompatActivity() {
             }
 
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                Logs.i(TAG, "onItemSelected: " + position)
                 initProfile(studentList[position])
-                scoreList.clear()
-                adapter.clearList()
-                adapter.notifyDataSetChanged()
             }
         }
         spinner_year.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
@@ -113,44 +118,84 @@ class ScoreActivity : AppCompatActivity() {
                 term = spinner_term.selectedItem.toString().toInt()
             }
         }
-        getScores(studentList[0], null, null)
     }
 
     private fun initProfile(student: Student) {
         initDialog.show()
+        initScores(studentList[0])
         if (student.profile != null) {
-            val start = student.profile!!.grade.toInt()//进校年份
-            val calendar = Calendar.getInstance()
-            val end = when (calendar.get(Calendar.MONTH) + 1) {
-                in 1 until 3 -> calendar.get(Calendar.YEAR) - 1
-                in 3 until 9 -> calendar.get(Calendar.YEAR)
-                in 9 until 13 -> calendar.get(Calendar.YEAR) + 1
-                else -> {
-                    Logs.i(TAG, "initProfile: " + (calendar.get(Calendar.MONTH) + 1))
-                    0
+            try {
+                val start = student.profile!!.grade.toInt()//进校年份
+                val calendar = Calendar.getInstance()
+                val end = when (calendar.get(Calendar.MONTH) + 1) {
+                    in 1 until 3 -> calendar.get(Calendar.YEAR) - 1
+                    in 3 until 9 -> calendar.get(Calendar.YEAR)
+                    in 9 until 13 -> calendar.get(Calendar.YEAR) + 1
+                    else -> {
+                        Logs.i(TAG, "initProfile: " + (calendar.get(Calendar.MONTH) + 1))
+                        0
+                    }
                 }
+                val array = Array(end - start, { i -> (start + i).toString() + '-' + (start + i + 1).toString() })
+                val arrayAdapter = ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, array)
+                arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                spinner_year.adapter = arrayAdapter
+                spinner_year.setSelection(array.size - 1)
+                year = spinner_year.selectedItem.toString()
+                initDialog.dismiss()
+            } catch (e: Exception) {
+                e.printStackTrace()
+                getInfo(student)
             }
-            val array = Array(end - start, { i -> (start + i).toString() + '-' + (start + i + 1).toString() })
-            val arrayAdapter = ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, array)
-            arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-            spinner_year.adapter = arrayAdapter
-            spinner_year.setSelection(array.size - 1)
-            year = spinner_year.selectedItem.toString()
-            initDialog.dismiss()
         } else {
-            student.getInfo(this, object : ProfileListener {
-                override fun error(rt: Int, e: Throwable) {
-                    initDialog.dismiss()
-                    e.printStackTrace()
-                    Snackbar.make(coordinatorLayout, e.message!!, Snackbar.LENGTH_LONG)
-                            .show()
-                }
+            getInfo(student)
+        }
+    }
 
-                override fun doInThread() {
-                    XhuFileUtil.saveObjectToFile(studentList, File(filesDir.absolutePath + File.separator + "data" + File.separator + "user"))
-                }
+    private fun initScores(student: Student) {
+        Observable.create<Boolean> { subscriber ->
+            val parentFile = File(filesDir.absolutePath + File.separator + "score/")
+            if (!parentFile.exists())
+                parentFile.mkdirs()
+            val base64Name = XhuFileUtil.filterString(Base64.encodeToString(student.username.toByteArray(), Base64.DEFAULT))
+            val savedFile = File(parentFile, base64Name)
+            scoreList.clear()
+            scoreList.addAll(XhuFileUtil.getArrayListFromFile(savedFile, Score::class.java))
+            subscriber.onComplete()
+        }
+                .subscribeOn(Schedulers.newThread())
+                .unsubscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(object : DisposableObserver<Boolean>() {
+                    override fun onNext(t: Boolean) {
+                    }
 
-                override fun got(profile: Profile) {
+                    override fun onComplete() {
+                        adapter.clearList()
+                        adapter.notifyDataSetChanged()
+                    }
+
+                    override fun onError(e: Throwable) {
+                        e.printStackTrace()
+                    }
+                })
+    }
+
+    private fun getInfo(student: Student) {
+        student.getInfo(this, object : ProfileListener {
+            override fun error(rt: Int, e: Throwable) {
+                initDialog.dismiss()
+                e.printStackTrace()
+                Snackbar.make(coordinatorLayout, e.message!!, Snackbar.LENGTH_LONG)
+                        .show()
+            }
+
+            override fun doInThread() {
+                XhuFileUtil.saveObjectToFile(studentList, File(filesDir.absolutePath + File.separator + "data" + File.separator + "user"))
+            }
+
+            override fun got(profile: Profile) {
+                try {
                     val start = student.profile!!.grade.toInt()//进校年份
                     val calendar = Calendar.getInstance()
                     val end = when (calendar.get(Calendar.MONTH) + 1) {
@@ -168,9 +213,13 @@ class ScoreActivity : AppCompatActivity() {
                     spinner_year.adapter = arrayAdapter
                     spinner_year.setSelection(array.size - 1)
                     initDialog.dismiss()
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    Toast.makeText(this@ScoreActivity, "数据解析错误，无法使用，请联系开发者！", Toast.LENGTH_LONG)
+                            .show()
                 }
-            })
-        }
+            }
+        })
     }
 
     private fun getScores(student: Student, year: String?, term: Int?) {
@@ -182,6 +231,15 @@ class ScoreActivity : AppCompatActivity() {
                 scoreList.addAll(array)
                 scoreList.add(Score())
                 scoreList.addAll(failedArray)
+                Thread(Runnable {
+                    val parentFile = File(filesDir.absolutePath + File.separator + "score/")
+                    if (!parentFile.exists())
+                        parentFile.mkdirs()
+                    val base64Name = XhuFileUtil.filterString(Base64.encodeToString(student.username.toByteArray(), Base64.DEFAULT))
+                    val savedFile = File(parentFile, base64Name)
+                    savedFile.createNewFile()
+                    XhuFileUtil.saveObjectToFile(scoreList, savedFile)
+                }).start()
                 adapter.clearList()
                 adapter.notifyDataSetChanged()
             }

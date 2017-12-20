@@ -8,6 +8,7 @@
 package com.weilylab.xhuschedule.classes
 
 import android.content.Context
+import android.os.Build
 import com.google.gson.Gson
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.classes.rt.*
@@ -251,6 +252,67 @@ class Student : Serializable {
 
                                     override fun loginDone(name: String) {
                                         getScores(true, context, year, term, listener)
+                                    }
+
+                                    override fun error(rt: Int, e: Throwable) {
+                                        listener.error(rt, e)
+                                    }
+                                })
+                            }
+                        }
+                    }
+
+                    override fun onError(e: Throwable) {
+                        Logs.i(tag, "onError: ")
+                        listener.error(-1, e)
+                    }
+
+                    override fun onSubscribe(d: Disposable) {
+                        Logs.i(tag, "onSubscribe: ")
+                    }
+                })
+    }
+
+    fun feedback(context: Context, message: String, listener: FeedBackListener) {
+        val tag = "Student feedback"
+        ScheduleHelper.tomcatRetrofit.create(StudentService::class.java)
+                .feedback(username,
+                        context.getString(R.string.app_version_name) + "-" + context.getString(R.string.app_version_code),
+                        Build.VERSION.RELEASE + "-" + Build.VERSION.SDK_INT,
+                        "Build.MANUFACTURER",
+                        "Build.MODEL",
+                        "Build.DISPLAY",
+//                        "Brand-${Build.BRAND}",
+                        "other",
+                        message)
+                .doOnComplete {
+                    listener.doInThread()
+                }
+                .subscribeOn(Schedulers.newThread())
+                .unsubscribeOn(Schedulers.newThread())
+                .map { responseBody -> Gson().fromJson(InputStreamReader(responseBody.byteStream()), FeedRT::class.java) }
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(object : Observer<FeedRT> {
+                    private var feedRT: FeedRT? = null
+                    override fun onNext(t: FeedRT) {
+                        Logs.i(tag, "onNext: ")
+                        feedRT = t
+                    }
+
+                    override fun onComplete() {
+                        Logs.i(tag, "onComplete: " + feedRT?.rt)
+                        when (feedRT?.rt) {
+                            "0" -> listener.error(0, Exception(context.getString(R.string.error_timeout)))
+                            "1" -> listener.done(1)
+                            "2" -> listener.error(2, Exception(context.getString(R.string.error_invalid_username)))
+                            "3" -> listener.error(3, Exception(context.getString(R.string.error_invalid_password)))
+                            "6" -> {
+                                login(context, object : LoginListener {
+                                    override fun doInThread() {
+                                    }
+
+                                    override fun loginDone(name: String) {
+                                        feedback(context, message, listener)
                                     }
 
                                     override fun error(rt: Int, e: Throwable) {
