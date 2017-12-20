@@ -19,7 +19,8 @@ class LoadCookiesInterceptor : Interceptor {
         var username: String? = null
         when (request.method().toLowerCase()) {
             "get" -> {
-                username = request.url().queryParameterValues("username")[0]
+                val list = request.url().queryParameterValues("username")
+                username = if (list.isNotEmpty()) list[0] else null
             }
             "post" -> {
                 if (request.body() is FormBody) {
