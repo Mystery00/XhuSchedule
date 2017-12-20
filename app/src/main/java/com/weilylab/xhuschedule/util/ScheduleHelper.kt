@@ -49,6 +49,12 @@ object ScheduleHelper {
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .build()!!
 
+    val imgRetrofit=Retrofit.Builder()
+            .baseUrl("http://img.mystery0.vip")
+            .client(client)
+            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+            .build()!!
+
     fun getRandomColor(): String {
         val random = Random()
         //生成红色颜色代码

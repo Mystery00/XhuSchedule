@@ -32,16 +32,23 @@ import android.widget.ImageView
 import android.widget.SeekBar
 import android.widget.TextView
 import android.widget.Toast
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.jrummyapps.android.colorpicker.ColorPreference
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.classes.Course
-import com.weilylab.xhuschedule.util.DensityUtil
-import com.weilylab.xhuschedule.util.ScheduleHelper
-import com.weilylab.xhuschedule.util.Settings
-import com.weilylab.xhuschedule.util.ViewUtil
+import com.weilylab.xhuschedule.interfaces.CommonService
+import com.weilylab.xhuschedule.util.*
 import com.yalantis.ucrop.UCrop
+import com.zyao89.view.zloading.ZLoadingDialog
+import com.zyao89.view.zloading.Z_TYPE
+import io.reactivex.Observer
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
+import io.reactivex.schedulers.Schedulers
 import vip.mystery0.tools.logs.Logs
 import java.io.File
+import java.io.InputStream
 
 /**
  * Created by myste.
@@ -97,25 +104,48 @@ class UISettingsFragment : PreferenceFragment() {
             true
         }
         backgroundImgPreference.setOnPreferenceClickListener {
-            //            val view = View.inflate(activity, R.layout.layout_choose_img, null)
-//            val image1: ImageView = view.findViewById(R.id.imageView1)
-//            val image2: ImageView = view.findViewById(R.id.imageView2)
-//            val image3: ImageView = view.findViewById(R.id.imageView3)
-//            val image4: ImageView = view.findViewById(R.id.imageView4)
-//            val list = activity.resources.getStringArray(R.array.background_img)
-//            Glide.with(activity).load(list[0]).into(image1)
-//            Glide.with(activity).load(list[1]).into(image2)
-//            Glide.with(activity).load(list[2]).into(image3)
-//            Glide.with(activity).load(list[3]).into(image4)
-//            AlertDialog.Builder(activity)
-//                    .setTitle(getString(R.string.title_background_img))
-//                    .setView(view)
-//                    .setPositiveButton(android.R.string.cancel, null)
-//                    .setNegativeButton("从相册选择", { _, _ ->
-            requestType = BACKGROUND_REQUEST_CODE
-            requestPermission()
-//                    })
-//                    .show()
+            val view = View.inflate(activity, R.layout.layout_choose_img, null)
+            val image1: ImageView = view.findViewById(R.id.imageView1)
+            val image2: ImageView = view.findViewById(R.id.imageView2)
+            val image3: ImageView = view.findViewById(R.id.imageView3)
+            val image4: ImageView = view.findViewById(R.id.imageView4)
+            val list = activity.resources.getStringArray(R.array.background_img)
+            val option = RequestOptions()
+                    .override(270, 480)
+            Glide.with(activity).load(list[0]).apply(option).into(image1)
+            Glide.with(activity).load(list[1]).apply(option).into(image2)
+            Glide.with(activity).load(list[2]).apply(option).into(image3)
+            Glide.with(activity).load(list[3]).apply(option).into(image4)
+            val dialog = AlertDialog.Builder(activity)
+                    .setTitle(getString(R.string.title_background_img))
+                    .setView(view)
+                    .setPositiveButton(android.R.string.cancel, null)
+                    .setNegativeButton("从相册选择", { _, _ ->
+                        requestType = BACKGROUND_REQUEST_CODE
+                        requestPermission()
+                    })
+                    .create()
+            dialog.show()
+            image1.setOnClickListener {
+                val link = list[0]
+                downloadImg(link.substring(link.lastIndexOf('/') + 1), "background")
+                dialog.dismiss()
+            }
+            image2.setOnClickListener {
+                val link = list[1]
+                downloadImg(link.substring(link.lastIndexOf('/') + 1), "background")
+                dialog.dismiss()
+            }
+            image3.setOnClickListener {
+                val link = list[2]
+                downloadImg(link.substring(link.lastIndexOf('/') + 1), "background")
+                dialog.dismiss()
+            }
+            image4.setOnClickListener {
+                val link = list[3]
+                downloadImg(link.substring(link.lastIndexOf('/') + 1), "background")
+                dialog.dismiss()
+            }
             true
         }
         customTodayOpacityPreference.setOnPreferenceClickListener {
@@ -353,7 +383,6 @@ class UISettingsFragment : PreferenceFragment() {
                     cropImg(data.data, PROFILE_CROP_REQUEST_CODE, 500, 500)
                 }
                 BACKGROUND_CROP_REQUEST_CODE -> {
-                    Logs.i(TAG, "onActivityResult: BACKGROUND_CROP_REQUEST_CODE")
                     val saveFile = File(File(activity.filesDir, "CropImg"), "background")
                     Settings.customBackgroundImg = saveFile.absolutePath
                     ScheduleHelper.isImageChange = true
@@ -361,7 +390,6 @@ class UISettingsFragment : PreferenceFragment() {
                             .show()
                 }
                 HEADER_CROP_REQUEST_CODE -> {
-                    Logs.i(TAG, "onActivityResult: HEADER_CROP_REQUEST_CODE")
                     val saveFile = File(File(activity.filesDir, "CropImg"), "header")
                     Settings.customHeaderImg = saveFile.absolutePath
                     ScheduleHelper.isImageChange = true
@@ -369,7 +397,6 @@ class UISettingsFragment : PreferenceFragment() {
                             .show()
                 }
                 PROFILE_CROP_REQUEST_CODE -> {
-                    Logs.i(TAG, "onActivityResult: PROFILE_CROP_REQUEST_CODE")
                     val saveFile = File(File(activity.filesDir, "CropImg"), "user_img")
                     Settings.userImg = saveFile.absolutePath
                     ScheduleHelper.isImageChange = true
@@ -428,5 +455,58 @@ class UISettingsFragment : PreferenceFragment() {
                 .withAspectRatio(width.toFloat(), height.toFloat())
                 .withMaxResultSize(width * 10, height * 10)
                 .start(activity, this, cropCode)
+    }
+
+    private fun downloadImg(fileName: String, saveType: String) {
+        val loadingDialog = ZLoadingDialog(activity)
+                .setLoadingBuilder(Z_TYPE.SNAKE_CIRCLE)
+                .setHintText(getString(R.string.hint_dialog_download_img))
+                .setHintTextSize(16F)
+                .setCanceledOnTouchOutside(false)
+                .setLoadingColor(ContextCompat.getColor(activity, R.color.colorAccent))
+                .setHintTextColor(ContextCompat.getColor(activity, R.color.colorAccent))
+                .create()
+        loadingDialog.show()
+        ScheduleHelper.imgRetrofit.create(CommonService::class.java)
+                .downloadImg(fileName)
+                .subscribeOn(Schedulers.newThread())
+                .unsubscribeOn(Schedulers.newThread())
+                .map({ responseBody -> responseBody.byteStream() })
+                .observeOn(Schedulers.io())
+                .doOnNext { inputStream ->
+                    try {
+                        val saveFile = File(File(activity.filesDir, "CropImg"), saveType)
+                        XhuFileUtil.saveFile(inputStream, saveFile)
+                        when (saveType) {
+                            "background" -> Settings.customBackgroundImg = saveFile.absolutePath
+                            "header" -> Settings.customHeaderImg = saveFile.absolutePath
+                            "user_img" -> Settings.userImg = saveFile.absolutePath
+                        }
+                        ScheduleHelper.isImageChange = true
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                    }
+                }
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(object : Observer<InputStream> {
+                    override fun onNext(t: InputStream) {
+                    }
+
+                    override fun onSubscribe(d: Disposable) {
+                    }
+
+                    override fun onError(e: Throwable) {
+                        e.printStackTrace()
+                        loadingDialog.dismiss()
+                        Toast.makeText(activity, R.string.error_custom_img, Toast.LENGTH_SHORT)
+                                .show()
+                    }
+
+                    override fun onComplete() {
+                        loadingDialog.dismiss()
+                        Toast.makeText(activity, R.string.hint_custom_img, Toast.LENGTH_SHORT)
+                                .show()
+                    }
+                })
     }
 }

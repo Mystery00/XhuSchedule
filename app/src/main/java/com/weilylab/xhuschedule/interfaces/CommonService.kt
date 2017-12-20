@@ -28,5 +28,8 @@ interface CommonService {
 
     @Multipart
     @POST("/XhuSchedule/interface/upload_log.php")
-    fun uploadLog(@PartMap partMap: MutableMap<String,RequestBody>, @Part logFile: MultipartBody.Part): Observable<ResponseBody>
+    fun uploadLog(@PartMap partMap: MutableMap<String, RequestBody>, @Part logFile: MultipartBody.Part): Observable<ResponseBody>
+
+    @GET("/{fileName}")
+    fun downloadImg(@Path("fileName") fileName: String): Observable<ResponseBody>
 }

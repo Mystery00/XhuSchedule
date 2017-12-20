@@ -44,18 +44,18 @@
     <string name="hint_dialog_init">正在初始化……</string>
     <string name="hint_dialog_sync">信息同步中……</string>
     <string name="hint_dialog_upload_log">日志上传中……</string>
+    <string name="hint_dialog_download_img">图片下载中……</string>
     <string name="hint_invalid_cookie">登陆信息已过期，是否重新登录？</string>
     <string name="hint_try_refresh_data_error">%1$s，是否重新登录？</string>
     <string name="hint_update_data">信息同步成功！</string>
     <string name="hint_update_data_new">信息同步成功！和之前相比，数据有更新。</string>
     <string name="hint_update_data_error">信息同步完成！但是部分数据存在错误。</string>
     <string name="hint_analyze_error">信息同步完成！但是部分数据存在错误。请联系开发者以解决这个问题！</string>
-    <string name="hint_course_empty">啊啊啊，课程好像跟着风筝飞走了Σ(っ°Д°;)っ!!!</string>
+    <string name="hint_course_empty">啊啊啊，课程好像跟着风筝飞走了\nΣ(っ°Д°;)っ!!!</string>
     <string name="hint_data_empty">暂时没有数据哦~</string>
     <string name="hint_score_fail">未通过成绩</string>
     <string name="hint_permission">读取SD卡文件为必要权限，请授予~</string>
     <string name="hint_custom_img">自定义图片设置成功！</string>
-    <string name="hint_nick_name">请设置昵称</string>
     <string name="hint_reset">界面设置已经恢复为默认设置</string>
     <string name="hint_check_log">
         检测到有崩溃日志没有提交：\n\n

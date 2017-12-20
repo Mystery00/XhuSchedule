@@ -77,4 +77,11 @@
         <item>20:40</item>
         <item>21:35</item>
     </string-array>
+
+    <string-array name="background_img">
+        <item>http://img.mystery0.vip/a.png</item>
+        <item>http://img.mystery0.vip/b.png</item>
+        <item>http://img.mystery0.vip/c.png</item>
+        <item>http://img.mystery0.vip/d.png</item>
+    </string-array>
 </resources>
