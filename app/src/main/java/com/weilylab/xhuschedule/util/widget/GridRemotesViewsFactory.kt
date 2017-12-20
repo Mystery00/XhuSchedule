@@ -39,11 +39,11 @@ class GridRemotesViewsFactory(private val context: Context) : RemoteViewsService
         return if (!WidgetHelper.hasData(WidgetHelper.showScheduleCourses)) {
             RemoteViews(context.packageName, R.layout.layout_widget_no_data)
         } else {
-            val row = WidgetHelper.showScheduleCourses[position]
+            val row = WidgetHelper.showScheduleCourses[position * 2]
             val remotesViews = RemoteViews(context.packageName, R.layout.item_widget_row_table)
             try {
                 val navArray = context.resources.getStringArray(R.array.table_nav)
-                remotesViews.setTextViewText(R.id.textView, navArray[position])
+                remotesViews.setTextViewText(R.id.textView, "${navArray[position * 2]}\n\n${navArray[position * 2 + 1]}")
                 row.forEachIndexed { index, list ->
                     val temp = context.resources.getIdentifier("linearLayout" + (index + 1), "id", "com.weilylab.xhuschedule")
                     remotesViews.removeAllViews(temp)
