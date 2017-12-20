@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  ~ Created by Mystery0 on 17-11-27 上午3:50.
+  ~ Created by Mystery0 on 17-12-21 上午3:41.
   ~ Copyright (c) 2017. All Rights reserved.
   ~
-  ~ Last modified 17-11-25 下午1:30
+  ~ Last modified 17-11-27 上午3:50
   -->
 
 <android.support.design.widget.CoordinatorLayout
@@ -13,7 +13,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.weilylab.xhuschedule.activity.SettingActivity">
+    tools:context="com.weilylab.xhuschedule.activity.SettingsActivity">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
