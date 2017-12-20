@@ -30,13 +30,15 @@ class WidgetNextActionService : Service() {
 //                    if (WidgetHelper.weekIndex < 19)
 //                        WidgetHelper.weekIndex++
 //                    WidgetHelper.refreshWeekCourses(this)
-//                    sendBroadcast(Intent("android.appwidget.action.APPWIDGET_UPDATE"))
+//                    sendBroadcast(Intent("android.appwidget.action.APPWIDGET_UPDATE")
+//                          .putExtra("TAG", tag))
 //                }
                 WidgetHelper.TODAY_TAG -> {
                     if (WidgetHelper.dayIndex < 140)
                         WidgetHelper.dayIndex++
                     WidgetHelper.refreshTodayCourses(this)
-                    sendBroadcast(Intent("android.appwidget.action.APPWIDGET_UPDATE"))
+                    sendBroadcast(Intent("android.appwidget.action.APPWIDGET_UPDATE")
+                            .putExtra("TAG", tag))
                 }
             }
             stopSelf()

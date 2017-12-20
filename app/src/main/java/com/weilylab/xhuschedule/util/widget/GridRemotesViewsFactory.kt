@@ -48,12 +48,9 @@ class GridRemotesViewsFactory(private val context: Context) : RemoteViewsService
                 val navArray = context.resources.getStringArray(R.array.table_nav)
                 remotesViews.setTextViewText(R.id.textView, navArray[position])
                 row.forEachIndexed { index, list ->
-                    Logs.i(TAG, "getViewAt: " + index)
-                    val temp = context.resources.getIdentifier("linearLayout" + (index - 1), "id", "com.weilylab.xhuschedule")
+                    val temp = context.resources.getIdentifier("linearLayout" + (index + 1), "id", "com.weilylab.xhuschedule")
                     remotesViews.removeAllViews(temp)
-                    Logs.i(TAG, "getViewAt: " + list.size)
                     list.forEach {
-                        Logs.i(TAG, "getViewAt: " + it.name)
                         remotesViews.addView(temp, addView(context, it))
                     }
                 }
@@ -66,7 +63,7 @@ class GridRemotesViewsFactory(private val context: Context) : RemoteViewsService
 
     override fun getCount(): Int {
         Logs.i(TAG, "getCount: " + WidgetHelper.showScheduleCourses.size)
-        return if (WidgetHelper.isUpdate) 11 else 1
+        return if (WidgetHelper.isUpdate) 5 else 1
     }
 
     override fun getViewTypeCount(): Int {
