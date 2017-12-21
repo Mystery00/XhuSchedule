@@ -19,6 +19,7 @@ import com.weilylab.xhuschedule.classes.XhuScheduleError
 import com.weilylab.xhuschedule.listener.UploadLogListener
 import com.weilylab.xhuschedule.service.UpdateService
 import com.weilylab.xhuschedule.util.CalendarUtil
+import com.weilylab.xhuschedule.util.ScheduleHelper
 import com.weilylab.xhuschedule.util.Settings
 import com.weilylab.xhuschedule.util.XhuFileUtil
 import com.zyao89.view.zloading.ZLoadingDialog
@@ -28,6 +29,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.observers.DisposableObserver
 import io.reactivex.schedulers.Schedulers
 import java.io.File
+import java.util.*
 import kotlin.math.max
 
 /**
@@ -36,6 +38,9 @@ import kotlin.math.max
 class SplashActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val calendar = Calendar.getInstance()
+        if (calendar.get(Calendar.MONTH) == 11 && calendar.get(Calendar.DAY_OF_MONTH) == 25)
+            ScheduleHelper.isShowChristmas = true
         if (Settings.autoCheckUpdate)
             startService(Intent(this, UpdateService::class.java))
         if (Settings.autoCheckLog) {

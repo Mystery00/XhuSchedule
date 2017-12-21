@@ -47,6 +47,10 @@
                 android:data="@string/link_local_img" />
         </Preference>
 
+        <Preference
+            android:summary="@string/summary_snowfall"
+            android:title="@string/title_snowfall" />
+
     </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/screen_category_about">

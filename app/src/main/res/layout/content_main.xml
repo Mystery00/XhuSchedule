@@ -50,4 +50,23 @@
 
     </android.support.design.widget.CoordinatorLayout>
 
+    <com.jetradarmobile.snowfall.SnowfallView
+        android:id="@+id/snowfallView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:snowflakeAlphaMax="255"
+        app:snowflakeAlphaMin="150"
+        app:snowflakeAngleMax="5"
+        app:snowflakeSizeMax="16dp"
+        app:snowflakeSizeMin="2dp"
+        app:snowflakeSpeedMax="12"
+        app:snowflakeSpeedMin="4"
+        app:snowflakesAlreadyFalling="false"
+        app:snowflakesFadingEnabled="true"
+        app:snowflakesNum="250" />
+
 </android.support.constraint.ConstraintLayout>

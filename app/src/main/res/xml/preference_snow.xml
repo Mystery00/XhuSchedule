@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Created by Mystery0 on 17-12-22 上午12:20.
+  ~ Copyright (c) 2017. All Rights reserved.
+  ~
+  ~ Last modified 17-12-22 上午12:20
+  -->
+
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <Preference
+        android:key="key"
+        android:title="~~~~~" />
+
+    <PreferenceCategory android:key="category">
+
+        <Preference
+            android:key="let_it_snow"
+            android:title="Let it snow ~" />
+
+        <Preference
+            android:key="merry_christmas"
+            android:title="Merry Christmas ~" />
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

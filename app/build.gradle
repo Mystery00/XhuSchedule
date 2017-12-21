@@ -81,6 +81,7 @@ dependencies {
     compile 'com.github.yalantis:ucrop:2.2.1'
     compile 'com.github.bumptech.glide:glide:4.3.1'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.3.1'
+    compile 'com.github.jetradarmobile:android-snowfall:1.1.6'
 }
 repositories {
     mavenCentral()

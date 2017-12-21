@@ -21,6 +21,7 @@ import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Base64
+import android.view.View
 import android.widget.Toast
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
@@ -69,6 +70,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var updateProfileDialog: Dialog
     private lateinit var weekAdapter: WeekAdapter
     private lateinit var mainStudent: Student
+    private var isShowDialog = false//是否显示圣诞节快乐对话框
     private var isTryRefreshData = false
     private var isTryLogin = false
     private var isRefreshData = false
@@ -102,7 +104,6 @@ class MainActivity : AppCompatActivity() {
                 .setLoadingColor(ContextCompat.getColor(this, R.color.colorAccent))
                 .setHintTextColor(ContextCompat.getColor(this, R.color.colorAccent))
                 .create()
-
         initView()
         updateAllView()
         showUpdateLog()
@@ -138,6 +139,11 @@ class MainActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
+        if (!ScheduleHelper.isShowChristmas)
+            snowfallView.visibility = View.GONE
+        else {
+            snowfallView.visibility = View.VISIBLE
+        }
         if (ScheduleHelper.isImageChange) {
             val options = RequestOptions()
                     .signature(MediaStoreSignature("image/*", Calendar.getInstance().timeInMillis, 0))

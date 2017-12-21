@@ -14,10 +14,7 @@ import android.preference.PreferenceActivity
 import android.preference.PreferenceFragment
 import android.view.MenuItem
 import com.weilylab.xhuschedule.R
-import com.weilylab.xhuschedule.fragment.AccountSettingsFragment
-import com.weilylab.xhuschedule.fragment.ClassSettingsFragment
-import com.weilylab.xhuschedule.fragment.InfoSettingsFragment
-import com.weilylab.xhuschedule.fragment.UISettingsFragment
+import com.weilylab.xhuschedule.fragment.*
 
 /**
  * A [PreferenceActivity] that presents a set of application settings. On
@@ -65,6 +62,7 @@ class SettingsActivity : AppCompatPreferenceActivity() {
         AccountSettingsFragment::class.java.name -> true
         UISettingsFragment::class.java.name -> true
         InfoSettingsFragment::class.java.name -> true
+        SnowFragment::class.java.name -> true
         else -> false
     }
 

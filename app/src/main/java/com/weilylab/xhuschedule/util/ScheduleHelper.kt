@@ -26,6 +26,7 @@ object ScheduleHelper {
     var isImageChange = false
     var isUIChange = false
     var isAnalysisError = false
+    var isShowChristmas = false
     var weekIndex = 0
 
     private val client = OkHttpClient.Builder()
@@ -49,7 +50,7 @@ object ScheduleHelper {
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .build()!!
 
-    val imgRetrofit=Retrofit.Builder()
+    val imgRetrofit = Retrofit.Builder()
             .baseUrl("http://img.mystery0.vip")
             .client(client)
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
