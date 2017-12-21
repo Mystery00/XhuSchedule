@@ -35,7 +35,7 @@ class SnowFragment : PreferenceFragment() {
         if (calendar.get(Calendar.MONTH) != 11 || calendar.get(Calendar.DAY_OF_MONTH) != 25)
             category.removeAll()
         key.setOnPreferenceClickListener {
-            if (clickTime >= 20) {
+            if (clickTime >= 20 || ScheduleHelper.isShowChristmas) {
                 Toast.makeText(activity, "Merry Christmas ~", Toast.LENGTH_SHORT)
                         .show()
                 ScheduleHelper.isShowChristmas = true
