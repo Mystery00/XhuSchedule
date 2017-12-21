@@ -34,7 +34,10 @@ class TodayAdapter(private val context: Context,
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
             is EmptyViewHolder -> {
-                holder.textView.text = context.getString(R.string.hint_course_empty)
+                holder.textView.text = if (ScheduleHelper.isShowChristmas)
+                    "Merry Christmas ~"
+                else
+                    context.getString(R.string.hint_course_empty)
             }
             is ViewHolder -> {
                 val course = list[position]

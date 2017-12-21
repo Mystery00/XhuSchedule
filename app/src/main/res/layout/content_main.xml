@@ -61,7 +61,7 @@
         app:snowflakeAlphaMax="255"
         app:snowflakeAlphaMin="150"
         app:snowflakeAngleMax="5"
-        app:snowflakeSizeMax="16dp"
+        app:snowflakeSizeMax="12dp"
         app:snowflakeSizeMin="2dp"
         app:snowflakeSpeedMax="12"
         app:snowflakeSpeedMin="4"
