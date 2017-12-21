@@ -14,5 +14,6 @@
         <item>修复：部分机型启动时图片异常显示</item>
         <item>修复：成绩查询的时候可能导致崩溃</item>
         <item>修复：下拉列表之后加载本地缓存</item>
+        <item>修复：Android O上添加小部件可能会闪退</item>
     </string-array>
 </resources>
