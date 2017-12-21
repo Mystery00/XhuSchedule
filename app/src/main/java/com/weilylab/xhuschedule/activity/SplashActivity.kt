@@ -39,8 +39,7 @@ class SplashActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val calendar = Calendar.getInstance()
-        if (calendar.get(Calendar.MONTH) == 11 && calendar.get(Calendar.DAY_OF_MONTH) == 25)
-            ScheduleHelper.isShowChristmas = true
+        ScheduleHelper.isShowChristmas = (calendar.get(Calendar.MONTH) == 11 && calendar.get(Calendar.DAY_OF_MONTH) == 25)
         if (Settings.autoCheckUpdate)
             startService(Intent(this, UpdateService::class.java))
         if (Settings.autoCheckLog) {
