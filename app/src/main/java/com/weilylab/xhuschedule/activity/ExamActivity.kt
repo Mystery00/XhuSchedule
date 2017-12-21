@@ -60,8 +60,8 @@ class ExamActivity : AppCompatActivity() {
         studentList.clear()
         studentList.addAll(XhuFileUtil.getArrayFromFile(File(filesDir.absolutePath + File.separator + "data" + File.separator + "user"), Student::class.java))
         val array = Array(studentList.size, { i -> "${studentList[i].name}(${studentList[i].username})" })
-        val arrayAdapter = ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, array)
-        arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        val arrayAdapter = ArrayAdapter<String>(this, R.layout.simple_spinner_item, array)
+        arrayAdapter.setDropDownViewResource(R.layout.simple_spinner_item)
         spinner_student.adapter = arrayAdapter
         spinner_student.setSelection(0)
         spinner_student.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {

@@ -28,7 +28,7 @@ class ScoreAdapter(private val context: Context,
 
     private var isAnimShowList = ArrayList<Boolean>()
     private var isExpandList = ArrayList<Boolean>()
-    private var maxHeight = 0
+    private var maxHeight = DensityUtil.dip2px(context, 240F)
     private var minHeight = DensityUtil.dip2px(context, 72F)
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
@@ -45,26 +45,13 @@ class ScoreAdapter(private val context: Context,
                 holder.scoreCourseTypeTextView.text = context.getString(R.string.score_coursetype, score.coursetype)
                 holder.scoreCreditTextView.text = context.getString(R.string.score_credit, score.credit)
                 holder.scoreGpaTextView.text = context.getString(R.string.score_gpa, score.gpa)
-                if (maxHeight <= minHeight)
-                    holder.itemView.post {
-                        maxHeight = max(maxHeight, holder.itemView.measuredHeight)
-                        val params = holder.itemView.layoutParams
-                        if (isExpandList[holder.adapterPosition]) {
-                            params.height = maxHeight
-                        } else {
-                            params.height = minHeight
-                        }
-                        holder.itemView.layoutParams = params
-                    }
-                else {
-                    val params = holder.itemView.layoutParams
-                    if (isExpandList[holder.adapterPosition]) {
-                        params.height = maxHeight
-                    } else {
-                        params.height = minHeight
-                    }
-                    holder.itemView.layoutParams = params
+                val params = holder.itemView.layoutParams
+                if (isExpandList[holder.adapterPosition]) {
+                    params.height = maxHeight
+                } else {
+                    params.height = minHeight
                 }
+                holder.itemView.layoutParams = params
                 holder.itemView.setOnClickListener {
                     val layoutParams = holder.itemView.layoutParams
                     Observable.create<Int> { subscriber ->

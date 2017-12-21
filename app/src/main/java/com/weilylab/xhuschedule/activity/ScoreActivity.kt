@@ -50,6 +50,7 @@ class ScoreActivity : AppCompatActivity() {
     private lateinit var loadingDialog: Dialog
     private val studentList = ArrayList<Student>()
     private val scoreList = ArrayList<Score>()
+    private var isInit = false
     private lateinit var adapter: ScoreAdapter
     private var year = ""
     private var term = 0
@@ -85,14 +86,18 @@ class ScoreActivity : AppCompatActivity() {
         studentList.clear()
         studentList.addAll(XhuFileUtil.getArrayFromFile(File(filesDir.absolutePath + File.separator + "data" + File.separator + "user"), Student::class.java))
         val array = Array(studentList.size, { i -> "${studentList[i].name}(${studentList[i].username})" })
-        val arrayAdapter = ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, array)
-        arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        val arrayAdapter = ArrayAdapter<String>(this, R.layout.simple_spinner_item, array)
+        arrayAdapter.setDropDownViewResource(R.layout.simple_spinner_item)
         spinner_student.adapter = arrayAdapter
         spinner_student.setSelection(0)
         spinner_term.setSelection(when (Calendar.getInstance().get(Calendar.MONTH) + 1) {
             in 3 until 9 -> 1
             else -> 0
         })
+        val termArray = resources.getStringArray(R.array.term_array)
+        val termArrayAdapter = ArrayAdapter<String>(this, R.layout.simple_spinner_item, termArray)
+        termArrayAdapter.setDropDownViewResource(R.layout.simple_spinner_item)
+        spinner_term.adapter = termArrayAdapter
         term = spinner_term.selectedItem.toString().toInt()
         spinner_student.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -108,6 +113,7 @@ class ScoreActivity : AppCompatActivity() {
 
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 year = spinner_year.selectedItem.toString()
+                initScores(studentList[spinner_student.selectedItemPosition])
             }
         }
         spinner_term.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
@@ -116,13 +122,14 @@ class ScoreActivity : AppCompatActivity() {
 
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 term = spinner_term.selectedItem.toString().toInt()
+                if (isInit)
+                    initScores(studentList[spinner_student.selectedItemPosition])
             }
         }
     }
 
     private fun initProfile(student: Student) {
         initDialog.show()
-        initScores(student)
         if (student.profile != null) {
             try {
                 val start = student.profile!!.grade.toInt()//进校年份
@@ -137,12 +144,13 @@ class ScoreActivity : AppCompatActivity() {
                     }
                 }
                 val array = Array(end - start, { i -> (start + i).toString() + '-' + (start + i + 1).toString() })
-                val arrayAdapter = ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, array)
-                arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                val arrayAdapter = ArrayAdapter<String>(this, R.layout.simple_spinner_item, array)
+                arrayAdapter.setDropDownViewResource(R.layout.simple_spinner_item)
                 spinner_year.adapter = arrayAdapter
                 spinner_year.setSelection(array.size - 1)
                 year = spinner_year.selectedItem.toString()
                 initDialog.dismiss()
+                isInit = true
             } catch (e: Exception) {
                 e.printStackTrace()
                 getInfo(student)
@@ -172,7 +180,7 @@ class ScoreActivity : AppCompatActivity() {
 
                     override fun onComplete() {
                         adapter.clearList()
-                        adapter.notifyDataSetChanged()
+                        adapter.notifyItemRangeChanged(0, scoreList.size)
                     }
 
                     override fun onError(e: Throwable) {
@@ -208,8 +216,8 @@ class ScoreActivity : AppCompatActivity() {
                         }
                     }
                     val array = Array(end - start, { i -> (start + i).toString() + '-' + (start + i + 1).toString() })
-                    val arrayAdapter = ArrayAdapter<String>(this@ScoreActivity, android.R.layout.simple_spinner_item, array)
-                    arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                    val arrayAdapter = ArrayAdapter<String>(this@ScoreActivity, R.layout.simple_spinner_item, array)
+                    arrayAdapter.setDropDownViewResource(R.layout.simple_spinner_item)
                     spinner_year.adapter = arrayAdapter
                     spinner_year.setSelection(array.size - 1)
                     initDialog.dismiss()
@@ -226,22 +234,13 @@ class ScoreActivity : AppCompatActivity() {
         loadingDialog.show()
         student.getScores(this, year, term, object : GetScoreListener {
             override fun got(array: Array<Score>, failedArray: Array<Score>) {
-                loadingDialog.dismiss()
                 scoreList.clear()
                 scoreList.addAll(array)
                 scoreList.add(Score())
                 scoreList.addAll(failedArray)
-                Thread(Runnable {
-                    val parentFile = File(filesDir.absolutePath + File.separator + "score/")
-                    if (!parentFile.exists())
-                        parentFile.mkdirs()
-                    val base64Name = XhuFileUtil.filterString(Base64.encodeToString(student.username.toByteArray(), Base64.DEFAULT))
-                    val savedFile = File(parentFile, "$base64Name-$year-$term")
-                    savedFile.createNewFile()
-                    XhuFileUtil.saveObjectToFile(scoreList, savedFile)
-                }).start()
                 adapter.clearList()
-                adapter.notifyDataSetChanged()
+                adapter.notifyItemRangeChanged(0, scoreList.size)
+                loadingDialog.dismiss()
             }
 
             override fun error(rt: Int, e: Throwable) {
@@ -252,6 +251,13 @@ class ScoreActivity : AppCompatActivity() {
             }
 
             override fun doInThread() {
+                val parentFile = File(filesDir.absolutePath + File.separator + "score/")
+                if (!parentFile.exists())
+                    parentFile.mkdirs()
+                val base64Name = XhuFileUtil.filterString(Base64.encodeToString(student.username.toByteArray(), Base64.DEFAULT))
+                val savedFile = File(parentFile, "$base64Name-$year-$term")
+                savedFile.createNewFile()
+                XhuFileUtil.saveObjectToFile(scoreList, savedFile)
             }
         })
     }

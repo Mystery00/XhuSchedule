@@ -97,14 +97,18 @@ class ScheduleActivity : AppCompatActivity() {
         studentList.clear()
         studentList.addAll(XhuFileUtil.getArrayFromFile(File(filesDir.absolutePath + File.separator + "data" + File.separator + "user"), Student::class.java))
         val array = Array(studentList.size, { i -> "${studentList[i].name}(${studentList[i].username})" })
-        val arrayAdapter = ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, array)
-        arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        val arrayAdapter = ArrayAdapter<String>(this, R.layout.simple_spinner_item_white, array)
+        arrayAdapter.setDropDownViewResource(R.layout.simple_spinner_item)
         spinner_student.adapter = arrayAdapter
         spinner_student.setSelection(0)
         spinner_term.setSelection(when (Calendar.getInstance().get(Calendar.MONTH) + 1) {
             in 3 until 9 -> 1
             else -> 0
         })
+        val termArray = resources.getStringArray(R.array.term_array)
+        val termArrayAdapter = ArrayAdapter<String>(this, R.layout.simple_spinner_item_white, termArray)
+        termArrayAdapter.setDropDownViewResource(R.layout.simple_spinner_item)
+        spinner_term.adapter = termArrayAdapter
         term = spinner_term.selectedItem.toString().toInt()
         spinner_student.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -120,6 +124,7 @@ class ScheduleActivity : AppCompatActivity() {
 
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 year = spinner_year.selectedItem.toString()
+                showCourses(studentList[spinner_student.selectedItemPosition])
             }
         }
         spinner_term.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
@@ -128,6 +133,7 @@ class ScheduleActivity : AppCompatActivity() {
 
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 term = spinner_term.selectedItem.toString().toInt()
+                showCourses(studentList[spinner_student.selectedItemPosition])
             }
         }
         action_back.setOnClickListener {
@@ -140,7 +146,6 @@ class ScheduleActivity : AppCompatActivity() {
 
     private fun initProfile(student: Student) {
         initDialog.show()
-        showCourses(student)
         if (student.profile != null) {
             try {
                 val start = student.profile!!.grade.toInt()//进校年份
@@ -154,8 +159,8 @@ class ScheduleActivity : AppCompatActivity() {
                     }
                 }
                 val array = Array(end - start, { i -> (start + i).toString() + '-' + (start + i + 1).toString() })
-                val arrayAdapter = ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, array)
-                arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                val arrayAdapter = ArrayAdapter<String>(this, R.layout.simple_spinner_item_white, array)
+                arrayAdapter.setDropDownViewResource(R.layout.simple_spinner_item)
                 spinner_year.adapter = arrayAdapter
                 spinner_year.setSelection(array.size - 1)
                 year = spinner_year.selectedItem.toString()
@@ -398,8 +403,8 @@ class ScheduleActivity : AppCompatActivity() {
                         }
                     }
                     val array = Array(end - start, { i -> (start + i).toString() + '-' + (start + i + 1).toString() })
-                    val arrayAdapter = ArrayAdapter<String>(this@ScheduleActivity, android.R.layout.simple_spinner_item, array)
-                    arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                    val arrayAdapter = ArrayAdapter<String>(this@ScheduleActivity, R.layout.simple_spinner_item_white, array)
+                    arrayAdapter.setDropDownViewResource(R.layout.simple_spinner_item)
                     spinner_year.adapter = arrayAdapter
                     spinner_year.setSelection(array.size - 1)
                     initDialog.dismiss()

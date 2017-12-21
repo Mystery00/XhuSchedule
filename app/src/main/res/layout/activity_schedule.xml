@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Created by Mystery0 on 17-12-21 上午3:41.
   ~ Copyright (c) 2017. All Rights reserved.
   ~
@@ -40,8 +39,10 @@
                 android:id="@+id/spinner_student"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:animationCache="true"
+                android:background="@drawable/spinner_white"
                 android:gravity="center"
-                android:padding="@dimen/exam_padding"
+                android:spinnerMode="dropdown"
                 app:layout_constraintEnd_toStartOf="@id/action_sync"
                 app:layout_constraintStart_toEndOf="@id/action_back"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -50,10 +51,10 @@
                 android:id="@+id/spinner_year"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:animationCache="true"
+                android:background="@drawable/spinner_white"
                 android:gravity="center"
-                android:paddingBottom="@dimen/exam_padding"
-                android:paddingEnd="0dp"
-                android:paddingStart="@dimen/exam_padding"
+                android:spinnerMode="dropdown"
                 app:layout_constraintEnd_toStartOf="@id/spinner_term"
                 app:layout_constraintStart_toEndOf="@id/action_back"
                 app:layout_constraintTop_toBottomOf="@id/spinner_student" />
@@ -61,12 +62,12 @@
             <Spinner
                 android:id="@+id/spinner_term"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:entries="@array/term_array"
+                android:layout_height="0dp"
+                android:animationCache="true"
+                android:background="@drawable/spinner_white"
                 android:gravity="center"
-                android:paddingBottom="@dimen/exam_padding"
-                android:paddingEnd="@dimen/exam_padding"
-                android:paddingStart="0dp"
+                android:spinnerMode="dropdown"
+                app:layout_constraintBottom_toBottomOf="@id/spinner_year"
                 app:layout_constraintEnd_toStartOf="@id/action_sync"
                 app:layout_constraintStart_toEndOf="@id/spinner_year"
                 app:layout_constraintTop_toBottomOf="@id/spinner_student" />

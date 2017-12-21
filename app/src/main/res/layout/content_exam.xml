@@ -29,8 +29,10 @@
         android:id="@+id/spinner_student"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:animationCache="true"
+        android:background="@drawable/selector_spinner"
         android:gravity="center"
-        android:padding="@dimen/exam_padding"
+        android:spinnerMode="dropdown"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
