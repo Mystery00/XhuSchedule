@@ -85,10 +85,6 @@ class Student : Serializable {
     }
 
     fun getInfo(context: Context, listener: ProfileListener) {
-        getInfo(false, context, listener)
-    }
-
-    private fun getInfo(isTryRefreshData: Boolean, context: Context, listener: ProfileListener) {
         val tag = "Student getInfo"
         ScheduleHelper.tomcatRetrofit
                 .create(StudentService::class.java)
@@ -110,11 +106,7 @@ class Student : Serializable {
                     override fun onComplete() {
                         Logs.i(tag, "onComplete: " + studentInfoRT?.rt)
                         when (studentInfoRT?.rt) {
-                            "0" ->
-                                if (!isTryRefreshData)
-                                    getInfo(true, context, listener)
-                                else
-                                    listener.error(0, Exception(context.getString(R.string.error_timeout)))
+                            "0" -> listener.error(0, Exception(context.getString(R.string.error_timeout)))
                             "1" -> {
                                 profile = Profile().map(studentInfoRT!!)
                                 listener.got(profile!!)
@@ -127,7 +119,7 @@ class Student : Serializable {
                                     }
 
                                     override fun loginDone(name: String) {
-                                        getInfo(true, context, listener)
+                                        getInfo(context, listener)
                                     }
 
                                     override fun error(rt: Int, e: Throwable) {
@@ -135,12 +127,13 @@ class Student : Serializable {
                                     }
                                 })
                             }
+                            else -> listener.error(-1, Exception(context.getString(R.string.error_other)))
                         }
                     }
 
                     override fun onError(e: Throwable) {
                         Logs.i(tag, "onError: ")
-                        listener.error(-1, e)
+                        listener.error(-2, e)
                     }
 
                     override fun onSubscribe(d: Disposable) {
@@ -150,10 +143,6 @@ class Student : Serializable {
     }
 
     fun getTests(context: Context, listener: GetArrayListener<Exam>) {
-        getTests(false, context, listener)
-    }
-
-    private fun getTests(isTryRefreshData: Boolean, context: Context, listener: GetArrayListener<Exam>) {
         val tag = "Student getTests"
         ScheduleHelper.tomcatRetrofit
                 .create(StudentService::class.java)
@@ -175,11 +164,7 @@ class Student : Serializable {
                     override fun onComplete() {
                         Logs.i(tag, "onComplete: " + examRT?.rt)
                         when (examRT?.rt) {
-                            "0" ->
-                                if (!isTryRefreshData)
-                                    getTests(true, context, listener)
-                                else
-                                    listener.error(0, Exception(context.getString(R.string.error_timeout)))
+                            "0" -> listener.error(0, Exception(context.getString(R.string.error_timeout)))
                             "1" -> listener.got(examRT!!.tests)
                             "2" -> listener.error(2, Exception(context.getString(R.string.error_invalid_username)))
                             "3" -> listener.error(3, Exception(context.getString(R.string.error_invalid_password)))
@@ -189,7 +174,7 @@ class Student : Serializable {
                                     }
 
                                     override fun loginDone(name: String) {
-                                        getTests(true, context, listener)
+                                        getTests(context, listener)
                                     }
 
                                     override fun error(rt: Int, e: Throwable) {
@@ -197,12 +182,13 @@ class Student : Serializable {
                                     }
                                 })
                             }
+                            else -> listener.error(-1, Exception(context.getString(R.string.error_other)))
                         }
                     }
 
                     override fun onError(e: Throwable) {
                         Logs.i(tag, "onError: ")
-                        listener.error(-1, e)
+                        listener.error(-2, e)
                     }
 
                     override fun onSubscribe(d: Disposable) {
@@ -212,10 +198,6 @@ class Student : Serializable {
     }
 
     fun getScores(context: Context, year: String?, term: Int?, listener: GetScoreListener) {
-        getScores(false, context, year, term, listener)
-    }
-
-    private fun getScores(isTryRefreshData: Boolean, context: Context, year: String?, term: Int?, listener: GetScoreListener) {
         val tag = "Student getScores"
         ScheduleHelper.tomcatRetrofit
                 .create(StudentService::class.java)
@@ -237,11 +219,7 @@ class Student : Serializable {
                     override fun onComplete() {
                         Logs.i(tag, "onComplete: " + scoreRT?.rt)
                         when (scoreRT?.rt) {
-                            "0" ->
-                                if (!isTryRefreshData)
-                                    getScores(true, context, year, term, listener)
-                                else
-                                    listener.error(0, Exception(context.getString(R.string.error_timeout)))
+                            "0" -> listener.error(0, Exception(context.getString(R.string.error_timeout)))
                             "1" -> listener.got(scoreRT!!.scores, scoreRT!!.failscores)
                             "2" -> listener.error(2, Exception(context.getString(R.string.error_invalid_username)))
                             "3" -> listener.error(3, Exception(context.getString(R.string.error_invalid_password)))
@@ -251,7 +229,7 @@ class Student : Serializable {
                                     }
 
                                     override fun loginDone(name: String) {
-                                        getScores(true, context, year, term, listener)
+                                        getScores(context, year, term, listener)
                                     }
 
                                     override fun error(rt: Int, e: Throwable) {
@@ -259,12 +237,13 @@ class Student : Serializable {
                                     }
                                 })
                             }
+                            else -> listener.error(-1, Exception(context.getString(R.string.error_other)))
                         }
                     }
 
                     override fun onError(e: Throwable) {
                         Logs.i(tag, "onError: ")
-                        listener.error(-1, e)
+                        listener.error(-2, e)
                     }
 
                     override fun onSubscribe(d: Disposable) {
@@ -320,12 +299,13 @@ class Student : Serializable {
                                     }
                                 })
                             }
+                            else -> listener.error(-1, Exception(context.getString(R.string.error_other)))
                         }
                     }
 
                     override fun onError(e: Throwable) {
                         Logs.i(tag, "onError: ")
-                        listener.error(-1, e)
+                        listener.error(-2, e)
                     }
 
                     override fun onSubscribe(d: Disposable) {

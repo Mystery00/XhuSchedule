@@ -464,7 +464,7 @@ class MainActivity : AppCompatActivity() {
                 .doOnNext { contentRT ->
                     Logs.i(TAG, "updateData: " + contentRT.rt)
                     when (contentRT.rt) {
-                        "1", "5" -> {
+                        "1", "5" -> {//请求成功或者数据存在问题
                             val newFile = File(parentFile, base64Name + ".temp")
                             newFile.createNewFile()
                             XhuFileUtil.saveObjectToFile(contentRT.courses, newFile)
@@ -485,7 +485,7 @@ class MainActivity : AppCompatActivity() {
                             }
                             loadingDialog.dismiss()
                         }
-                        "2" -> {
+                        "2" -> {//用户名错误
                             loadingDialog.dismiss()
                             isRefreshData = false
                             ScheduleHelper.isLogin = false
@@ -496,7 +496,7 @@ class MainActivity : AppCompatActivity() {
                                     }
                                     .show()
                         }
-                        "3" -> {
+                        "3" -> {//密码错误
                             loadingDialog.dismiss()
                             isRefreshData = false
                             ScheduleHelper.isLogin = false
@@ -507,9 +507,15 @@ class MainActivity : AppCompatActivity() {
                                     }
                                     .show()
                         }
-                        else -> {
+                        "6" -> {
                             isTryLogin = false
                             login(student)
+                        }
+                        else -> {
+                            loadingDialog.dismiss()
+                            isRefreshData = false
+                            Snackbar.make(coordinatorLayoutView, R.string.error_timeout, Snackbar.LENGTH_LONG)
+                                    .show()
                         }
                     }
                 }
