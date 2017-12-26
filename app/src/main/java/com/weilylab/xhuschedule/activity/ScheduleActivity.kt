@@ -31,6 +31,7 @@ import com.weilylab.xhuschedule.classes.Student
 import com.weilylab.xhuschedule.classes.TableLayoutHelper
 import com.weilylab.xhuschedule.classes.rt.CourseRT
 import com.weilylab.xhuschedule.interfaces.StudentService
+import com.weilylab.xhuschedule.listener.InitProfileListener
 import com.weilylab.xhuschedule.listener.LoginListener
 import com.weilylab.xhuschedule.listener.ProfileListener
 import com.weilylab.xhuschedule.util.*
@@ -53,6 +54,7 @@ class ScheduleActivity : AppCompatActivity() {
     private lateinit var loadingDialog: Dialog
     private val studentList = ArrayList<Student>()
     private var weekList = ArrayList<ArrayList<ArrayList<Course>>>()
+    private var currentStudent: Student? = null
     private var year = ""
     private var term = 0
 
@@ -97,84 +99,36 @@ class ScheduleActivity : AppCompatActivity() {
         studentList.clear()
         studentList.addAll(XhuFileUtil.getArrayFromFile(File(filesDir.absolutePath + File.separator + "data" + File.separator + "user"), Student::class.java))
         val array = Array(studentList.size, { i -> "${studentList[i].name}(${studentList[i].username})" })
-        val arrayAdapter = ArrayAdapter<String>(this, R.layout.simple_spinner_item_white, array)
-        arrayAdapter.setDropDownViewResource(R.layout.simple_spinner_item)
-        spinner_student.adapter = arrayAdapter
-        spinner_student.setSelection(0)
-        spinner_term.setSelection(when (Calendar.getInstance().get(Calendar.MONTH) + 1) {
-            in 3 until 9 -> 1
-            else -> 0
+        val termArray = arrayOf("1", "2", "3")
+        ViewUtil.setPopupView(this, array, textViewStudent, R.layout.item_popup_view_white, { position ->
+            currentStudent = studentList[position]
+            if (currentStudent != null)
+                ViewUtil.initProfile(this, currentStudent!!, textViewYear, object : InitProfileListener {
+                    override fun done(position: Int, year: String) {
+                        this@ScheduleActivity.year = year
+                        showCourses(currentStudent)
+                    }
+
+                    override fun error(dialog: Dialog) {
+                        getInfo(currentStudent!!, dialog)
+                    }
+                })
         })
-        val termArray = resources.getStringArray(R.array.term_array)
-        val termArrayAdapter = ArrayAdapter<String>(this, R.layout.simple_spinner_item_white, termArray)
-        termArrayAdapter.setDropDownViewResource(R.layout.simple_spinner_item)
-        spinner_term.adapter = termArrayAdapter
-        term = spinner_term.selectedItem.toString().toInt()
-        spinner_student.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-            }
-
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                initProfile(studentList[position])
-            }
-        }
-        spinner_year.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-            }
-
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                year = spinner_year.selectedItem.toString()
-                showCourses(studentList[spinner_student.selectedItemPosition])
-            }
-        }
-        spinner_term.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-            }
-
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                term = spinner_term.selectedItem.toString().toInt()
-                showCourses(studentList[spinner_student.selectedItemPosition])
-            }
-        }
+        ViewUtil.setPopupView(this, termArray, textViewTerm, R.layout.item_popup_view_white, { position ->
+            term = position + 1
+            showCourses(currentStudent)
+        })
         action_back.setOnClickListener {
             finish()
         }
         action_sync.setOnClickListener {
-            getCourses(studentList[spinner_student.selectedItemPosition], year, term)
+            getCourses(currentStudent, year, term)
         }
     }
 
-    private fun initProfile(student: Student) {
-        initDialog.show()
-        if (student.profile != null) {
-            try {
-                val start = student.profile!!.grade.toInt()//进校年份
-                val calendar = Calendar.getInstance()
-                val end = when (calendar.get(Calendar.MONTH) + 1) {
-                    in 1 until 3 -> calendar.get(Calendar.YEAR) - 1
-                    in 3 until 9 -> calendar.get(Calendar.YEAR)
-                    in 9 until 13 -> calendar.get(Calendar.YEAR) + 1
-                    else -> {
-                        0
-                    }
-                }
-                val array = Array(end - start, { i -> (start + i).toString() + '-' + (start + i + 1).toString() })
-                val arrayAdapter = ArrayAdapter<String>(this, R.layout.simple_spinner_item_white, array)
-                arrayAdapter.setDropDownViewResource(R.layout.simple_spinner_item)
-                spinner_year.adapter = arrayAdapter
-                spinner_year.setSelection(array.size - 1)
-                year = spinner_year.selectedItem.toString()
-                initDialog.dismiss()
-            } catch (e: Exception) {
-                e.printStackTrace()
-                getInfo(student)
-            }
-        } else {
-            getInfo(student)
-        }
-    }
-
-    private fun getCourses(student: Student, year: String?, term: Int?) {
+    private fun getCourses(student: Student?, year: String?, term: Int?) {
+        if (student == null)
+            return
         loadingDialog.show()
         ScheduleHelper.tomcatRetrofit
                 .create(StudentService::class.java)
@@ -224,7 +178,9 @@ class ScheduleActivity : AppCompatActivity() {
                 })
     }
 
-    private fun showCourses(student: Student) {
+    private fun showCourses(student: Student?) {
+        if (student == null)
+            return
         Observable.create<Boolean> { subscriber ->
             val parentFile = File(filesDir.absolutePath + File.separator + "courses/")
             if (!parentFile.exists())
@@ -377,7 +333,7 @@ class ScheduleActivity : AppCompatActivity() {
         return itemView
     }
 
-    private fun getInfo(student: Student) {
+    private fun getInfo(student: Student, initDialog: Dialog) {
         student.getInfo(this, object : ProfileListener {
             override fun error(rt: Int, e: Throwable) {
                 initDialog.dismiss()
@@ -403,10 +359,10 @@ class ScheduleActivity : AppCompatActivity() {
                         }
                     }
                     val array = Array(end - start, { i -> (start + i).toString() + '-' + (start + i + 1).toString() })
-                    val arrayAdapter = ArrayAdapter<String>(this@ScheduleActivity, R.layout.simple_spinner_item_white, array)
-                    arrayAdapter.setDropDownViewResource(R.layout.simple_spinner_item)
-                    spinner_year.adapter = arrayAdapter
-                    spinner_year.setSelection(array.size - 1)
+                    ViewUtil.setPopupView(this@ScheduleActivity, array, textViewYear, { position ->
+                        year = array[position]
+                        showCourses(currentStudent)
+                    })
                     initDialog.dismiss()
                 } catch (e: Exception) {
                     e.printStackTrace()

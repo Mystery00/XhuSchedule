@@ -22,44 +22,42 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/spinner_year" />
+        app:layout_constraintTop_toBottomOf="@+id/textViewTerm" />
 
-    <Spinner
-        android:id="@+id/spinner_student"
+    <TextView
+        android:id="@+id/textViewStudent"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:animationCache="true"
-        android:background="@drawable/selector_spinner"
+        android:layout_height="40dp"
+        android:layout_margin="@dimen/popup_view_margin"
+        android:background="@drawable/drawable_popup_view"
         android:gravity="center"
-        android:spinnerMode="dropdown"
+        android:text="@string/hint_popup_view_student"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Spinner
-        android:id="@+id/spinner_year"
+    <TextView
+        android:id="@+id/textViewYear"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:animationCache="true"
-        android:background="@drawable/selector_spinner"
+        android:layout_height="40dp"
+        android:layout_margin="@dimen/popup_view_margin"
+        android:background="@drawable/drawable_popup_view"
         android:gravity="center"
-        android:spinnerMode="dropdown"
-        app:layout_constraintEnd_toStartOf="@id/spinner_term"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/spinner_student" />
-
-    <Spinner
-        android:id="@+id/spinner_term"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:animationCache="true"
-        android:background="@drawable/selector_spinner"
-        android:entries="@array/term_array"
-        android:gravity="center"
-        android:spinnerMode="dropdown"
-        app:layout_constraintBottom_toBottomOf="@id/spinner_year"
+        android:text="@string/hint_popup_view_year"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/spinner_year"
-        app:layout_constraintTop_toBottomOf="@id/spinner_student" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/textViewStudent" />
+
+    <TextView
+        android:id="@+id/textViewTerm"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:layout_margin="@dimen/popup_view_margin"
+        android:background="@drawable/drawable_popup_view"
+        android:gravity="center"
+        android:text="@string/hint_popup_view_term"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/textViewYear" />
 
 </android.support.constraint.ConstraintLayout>

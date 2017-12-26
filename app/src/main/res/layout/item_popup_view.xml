@@ -1,18 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?><!--
-  ~ Created by Mystery0 on 17-12-21 下午9:34.
+  ~ Created by Mystery0 on 17-12-21 下午7:52.
   ~ Copyright (c) 2017. All Rights reserved.
   ~
-  ~ Last modified 17-12-21 下午9:28
+  ~ Last modified 17-12-21 下午7:52
   -->
 
 <TextView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:gravity="center_vertical"
-    android:paddingBottom="12dp"
-    android:paddingEnd="0dp"
-    android:paddingStart="12dp"
-    android:paddingTop="12dp"
+    android:layout_margin="@dimen/popup_view_margin"
+    android:background="@drawable/drawable_popup_view"
+    android:gravity="center"
+    android:padding="@dimen/popup_view_margin"
     android:singleLine="true"
-    android:textColor="#FFFFFF"
+    android:textColor="#808080"
     android:textSize="18sp" />

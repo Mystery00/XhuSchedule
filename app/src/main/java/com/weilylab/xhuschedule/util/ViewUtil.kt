@@ -14,8 +14,6 @@ import android.support.v7.app.AlertDialog
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.View
-import android.widget.LinearLayout
-import android.widget.TextView
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.adapter.ColorPickerAdapter
 import com.weilylab.xhuschedule.classes.Course
@@ -27,6 +25,15 @@ import android.renderscript.Allocation
 import android.renderscript.RenderScript
 import android.renderscript.ScriptIntrinsicBlur
 import android.content.Intent
+import android.support.annotation.LayoutRes
+import android.support.v4.content.ContextCompat
+import android.support.v7.app.ActionBar
+import android.widget.*
+import com.weilylab.xhuschedule.classes.Student
+import com.weilylab.xhuschedule.listener.InitProfileListener
+import com.zyao89.view.zloading.ZLoadingDialog
+import com.zyao89.view.zloading.Z_TYPE
+import java.util.*
 
 
 /**
@@ -90,6 +97,67 @@ object ViewUtil {
             context.startActivity(Intent.createChooser(shareIntent, "分享到"))
         }
         dialog.show()
+    }
+
+    fun setPopupView(context: Context, array: Array<String>, textView: TextView, listener: (position: Int) -> Unit) = setPopupView(context, array, textView, null, listener)
+
+    fun setPopupView(context: Context, array: Array<String>, textView: TextView, @LayoutRes layout: Int?, listener: (position: Int) -> Unit) {
+        val itemLayout = layout ?: R.layout.item_popup_view
+        val termArrayAdapter = ArrayAdapter<String>(context, itemLayout, array)
+        val termListView = ListView(context)
+        termListView.setBackgroundColor(Color.WHITE)
+        val termPopupWindow = PopupWindow(termListView, ActionBar.LayoutParams.MATCH_PARENT, ActionBar.LayoutParams.WRAP_CONTENT, true)
+        termPopupWindow.isFocusable = true
+        termPopupWindow.isOutsideTouchable = true
+        termPopupWindow.setOnDismissListener {
+            termPopupWindow.dismiss()
+        }
+        termListView.adapter = termArrayAdapter
+        termListView.setOnItemClickListener { _, _, position, _ ->
+            if (textView.text.toString() != array[position]) {
+                textView.text = array[position]
+                listener(position)
+            }
+            termPopupWindow.dismiss()
+        }
+        textView.setOnClickListener {
+            if (!termPopupWindow.isShowing)
+                termPopupWindow.showAsDropDown(textView, 0, 10)
+        }
+    }
+
+    fun initProfile(context: Context, student: Student, textViewYear: TextView, listener: InitProfileListener) {
+        val initDialog = ZLoadingDialog(context)
+                .setLoadingBuilder(Z_TYPE.SNAKE_CIRCLE)
+                .setHintText(context.getString(R.string.hint_dialog_init))
+                .setHintTextSize(16F)
+                .setCanceledOnTouchOutside(false)
+                .setLoadingColor(ContextCompat.getColor(context, R.color.colorAccent))
+                .setHintTextColor(ContextCompat.getColor(context, R.color.colorAccent))
+                .create()
+        initDialog.show()
+        if (student.profile != null) {
+            try {
+                val start = student.profile!!.grade.toInt()//进校年份
+                val calendar = Calendar.getInstance()
+                val end = when (calendar.get(Calendar.MONTH) + 1) {
+                    in 1 until 3 -> calendar.get(Calendar.YEAR) - 1
+                    in 3 until 9 -> calendar.get(Calendar.YEAR)
+                    in 9 until 13 -> calendar.get(Calendar.YEAR) + 1
+                    else -> 0
+                }
+                val yearArray = Array(end - start, { i -> (start + i).toString() + '-' + (start + i + 1).toString() })
+                ViewUtil.setPopupView(context, yearArray, textViewYear, { position ->
+                    listener.done(position, yearArray[position])
+                })
+                initDialog.dismiss()
+            } catch (e: Exception) {
+                e.printStackTrace()
+                listener.error(initDialog)
+            }
+        } else {
+            listener.error(initDialog)
+        }
     }
 
     fun drawImg(course: Course): Bitmap {

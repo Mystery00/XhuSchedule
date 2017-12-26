@@ -12,14 +12,12 @@ import android.support.design.widget.Snackbar
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
-import android.view.View
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.adapter.ExamAdapter
 import com.weilylab.xhuschedule.classes.Exam
 import com.weilylab.xhuschedule.classes.Student
 import com.weilylab.xhuschedule.listener.GetArrayListener
+import com.weilylab.xhuschedule.util.ViewUtil
 import com.weilylab.xhuschedule.util.XhuFileUtil
 import com.zyao89.view.zloading.ZLoadingDialog
 import com.zyao89.view.zloading.Z_TYPE
@@ -60,23 +58,14 @@ class ExamActivity : AppCompatActivity() {
         studentList.clear()
         studentList.addAll(XhuFileUtil.getArrayFromFile(File(filesDir.absolutePath + File.separator + "data" + File.separator + "user"), Student::class.java))
         val array = Array(studentList.size, { i -> "${studentList[i].name}(${studentList[i].username})" })
-        val arrayAdapter = ArrayAdapter<String>(this, R.layout.simple_spinner_item, array)
-        arrayAdapter.setDropDownViewResource(R.layout.simple_spinner_item)
-        spinner_student.adapter = arrayAdapter
-        spinner_student.setSelection(0)
-        spinner_student.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-            }
-
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                getTests(studentList[position])
-            }
-        }
+        ViewUtil.setPopupView(this,array,textViewStudent,{position ->
+            getTests(studentList[position])
+        })
     }
 
     private fun getTests(student: Student) {
         loadingDialog.show()
-        student.getTests(this,object :GetArrayListener<Exam>{
+        student.getTests(this, object : GetArrayListener<Exam> {
             override fun error(rt: Int, e: Throwable) {
                 loadingDialog.dismiss()
                 e.printStackTrace()
