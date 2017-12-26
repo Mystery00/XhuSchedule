@@ -9,7 +9,6 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="@dimen/popup_view_margin"
-    android:background="@drawable/drawable_popup_view"
     android:gravity="center"
     android:padding="@dimen/popup_view_margin"
     android:singleLine="true"

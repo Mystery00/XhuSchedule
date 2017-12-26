@@ -45,6 +45,7 @@ import kotlinx.android.synthetic.main.activity_schedule.*
 import kotlinx.android.synthetic.main.content_schedule.*
 import java.io.File
 import java.io.InputStreamReader
+import java.net.UnknownHostException
 import java.util.*
 import kotlin.math.max
 
@@ -100,10 +101,10 @@ class ScheduleActivity : AppCompatActivity() {
         studentList.addAll(XhuFileUtil.getArrayFromFile(File(filesDir.absolutePath + File.separator + "data" + File.separator + "user"), Student::class.java))
         val array = Array(studentList.size, { i -> "${studentList[i].name}(${studentList[i].username})" })
         val termArray = arrayOf("1", "2", "3")
-        ViewUtil.setPopupView(this, array, textViewStudent, R.layout.item_popup_view_white, { position ->
+        ViewUtil.setPopupView(this, array, textViewStudent, DensityUtil.getWidth(this, 56F, 56F), { position ->
             currentStudent = studentList[position]
             if (currentStudent != null)
-                ViewUtil.initProfile(this, currentStudent!!, textViewYear, object : InitProfileListener {
+                ViewUtil.initProfile(this, currentStudent!!, textViewYear, DensityUtil.getWidth(this, 56F, 56F), object : InitProfileListener {
                     override fun done(position: Int, year: String) {
                         this@ScheduleActivity.year = year
                         showCourses(currentStudent)
@@ -114,7 +115,7 @@ class ScheduleActivity : AppCompatActivity() {
                     }
                 })
         })
-        ViewUtil.setPopupView(this, termArray, textViewTerm, R.layout.item_popup_view_white, { position ->
+        ViewUtil.setPopupView(this, termArray, textViewTerm, DensityUtil.getWidth(this, 56F, 56F), { position ->
             term = position + 1
             showCourses(currentStudent)
         })
@@ -162,8 +163,13 @@ class ScheduleActivity : AppCompatActivity() {
                                 Snackbar.make(coordinatorLayout, getString(R.string.hint_try_refresh_data_error, getString(R.string.error_invalid_password)), Snackbar.LENGTH_LONG)
                                         .show()
                             }
-                            else -> {
+                            "6" -> {
                                 login(student, year, term)
+                            }
+                            else -> {
+                                loadingDialog.dismiss()
+                                Snackbar.make(coordinatorLayout, R.string.error_timeout, Snackbar.LENGTH_LONG)
+                                        .show()
                             }
                         }
                     }
@@ -173,7 +179,14 @@ class ScheduleActivity : AppCompatActivity() {
                     }
 
                     override fun onError(e: Throwable) {
+                        loadingDialog.dismiss()
                         e.printStackTrace()
+                        if (e is UnknownHostException)
+                            Snackbar.make(coordinatorLayout, R.string.error_network, Snackbar.LENGTH_SHORT)
+                                    .show()
+                        else
+                            Snackbar.make(coordinatorLayout, "请求出错：" + e.message + "，请重试", Snackbar.LENGTH_SHORT)
+                                    .show()
                     }
                 })
     }
@@ -359,7 +372,7 @@ class ScheduleActivity : AppCompatActivity() {
                         }
                     }
                     val array = Array(end - start, { i -> (start + i).toString() + '-' + (start + i + 1).toString() })
-                    ViewUtil.setPopupView(this@ScheduleActivity, array, textViewYear, { position ->
+                    ViewUtil.setPopupView(this@ScheduleActivity, array, textViewYear, DensityUtil.getWidth(this@ScheduleActivity, 56F, 56F), { position ->
                         year = array[position]
                         showCourses(currentStudent)
                     })

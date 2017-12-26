@@ -7,9 +7,7 @@
 
 package com.weilylab.xhuschedule.util
 
-import android.app.Activity
 import android.content.Context
-import android.graphics.Point
 
 
 /**
@@ -22,10 +20,11 @@ object DensityUtil {
     fun px2dip(context: Context,
                pxValue: Float): Int = (pxValue / context.resources.displayMetrics.density + 0.5F).toInt()
 
-    fun getScreenWidth(activity: Activity): Int {
-        val display = activity.windowManager.defaultDisplay
-        val size = Point()
-        display.getSize(size)
-        return size.x
+    fun getScreenWidth(context: Context): Int {
+        return context.resources.displayMetrics.widthPixels
+    }
+
+    fun getWidth(context: Context, leftMarginDip: Float, rightMarginDip: Float): Int {
+        return getScreenWidth(context) - dip2px(context, leftMarginDip) - dip2px(context, rightMarginDip)
     }
 }

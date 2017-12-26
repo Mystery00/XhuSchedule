@@ -7,6 +7,7 @@
 
 package com.weilylab.xhuschedule.util
 
+import android.app.Activity
 import android.content.Context
 import android.graphics.*
 import android.support.design.widget.FloatingActionButton
@@ -99,34 +100,34 @@ object ViewUtil {
         dialog.show()
     }
 
-    fun setPopupView(context: Context, array: Array<String>, textView: TextView, listener: (position: Int) -> Unit) = setPopupView(context, array, textView, null, listener)
+    fun setPopupView(context: Context, array: Array<String>, textView: TextView, listener: (position: Int) -> Unit) = setPopupView(context, array, textView, DensityUtil.getScreenWidth(context), listener)
 
-    fun setPopupView(context: Context, array: Array<String>, textView: TextView, @LayoutRes layout: Int?, listener: (position: Int) -> Unit) {
-        val itemLayout = layout ?: R.layout.item_popup_view
-        val termArrayAdapter = ArrayAdapter<String>(context, itemLayout, array)
-        val termListView = ListView(context)
-        termListView.setBackgroundColor(Color.WHITE)
-        val termPopupWindow = PopupWindow(termListView, ActionBar.LayoutParams.MATCH_PARENT, ActionBar.LayoutParams.WRAP_CONTENT, true)
-        termPopupWindow.isFocusable = true
-        termPopupWindow.isOutsideTouchable = true
-        termPopupWindow.setOnDismissListener {
-            termPopupWindow.dismiss()
+    fun setPopupView(context: Context, array: Array<String>, textView: TextView, width: Int, listener: (position: Int) -> Unit) {
+        val arrayAdapter = ArrayAdapter<String>(context, R.layout.item_popup_view, array)
+        val listView = ListView(context)
+        listView.setBackgroundResource(R.drawable.drawable_popup_view)
+        val popupWindow = PopupWindow(listView, width, ActionBar.LayoutParams.WRAP_CONTENT, true)
+        popupWindow.isOutsideTouchable = true
+        popupWindow.setOnDismissListener {
+            popupWindow.dismiss()
         }
-        termListView.adapter = termArrayAdapter
-        termListView.setOnItemClickListener { _, _, position, _ ->
+        listView.adapter = arrayAdapter
+        listView.setOnItemClickListener { _, _, position, _ ->
             if (textView.text.toString() != array[position]) {
                 textView.text = array[position]
                 listener(position)
             }
-            termPopupWindow.dismiss()
+            popupWindow.dismiss()
         }
         textView.setOnClickListener {
-            if (!termPopupWindow.isShowing)
-                termPopupWindow.showAsDropDown(textView, 0, 10)
+            if (!popupWindow.isShowing)
+                popupWindow.showAsDropDown(textView, 0, 10)
         }
     }
 
-    fun initProfile(context: Context, student: Student, textViewYear: TextView, listener: InitProfileListener) {
+    fun initProfile(context: Context, student: Student, textViewYear: TextView, listener: InitProfileListener) = initProfile(context, student, textViewYear, DensityUtil.getScreenWidth(context), listener)
+
+    fun initProfile(context: Context, student: Student, textViewYear: TextView, width: Int, listener: InitProfileListener) {
         val initDialog = ZLoadingDialog(context)
                 .setLoadingBuilder(Z_TYPE.SNAKE_CIRCLE)
                 .setHintText(context.getString(R.string.hint_dialog_init))
@@ -147,7 +148,7 @@ object ViewUtil {
                     else -> 0
                 }
                 val yearArray = Array(end - start, { i -> (start + i).toString() + '-' + (start + i + 1).toString() })
-                ViewUtil.setPopupView(context, yearArray, textViewYear, { position ->
+                ViewUtil.setPopupView(context, yearArray, textViewYear, width, { position ->
                     listener.done(position, yearArray[position])
                 })
                 initDialog.dismiss()
