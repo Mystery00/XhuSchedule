@@ -25,6 +25,7 @@ import com.weilylab.xhuschedule.classes.Student
 import com.weilylab.xhuschedule.listener.GetScoreListener
 import com.weilylab.xhuschedule.listener.InitProfileListener
 import com.weilylab.xhuschedule.listener.ProfileListener
+import com.weilylab.xhuschedule.util.CalendarUtil
 import com.weilylab.xhuschedule.util.ViewUtil
 import com.weilylab.xhuschedule.util.XhuFileUtil
 import com.zyao89.view.zloading.ZLoadingDialog
@@ -35,15 +36,11 @@ import io.reactivex.observers.DisposableObserver
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_score.*
 import kotlinx.android.synthetic.main.content_score.*
-import vip.mystery0.tools.logs.Logs
 
 import java.io.File
 import java.util.*
 
 class ScoreActivity : AppCompatActivity() {
-    companion object {
-        private val TAG = "ScoreActivity"
-    }
 
     private lateinit var loadingDialog: Dialog
     private val studentList = ArrayList<Student>()
@@ -51,7 +48,7 @@ class ScoreActivity : AppCompatActivity() {
     private lateinit var adapter: ScoreAdapter
     private var currentStudent: Student? = null
     private var year = ""
-    private var term = 0
+    private var term = 1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -96,6 +93,21 @@ class ScoreActivity : AppCompatActivity() {
         ViewUtil.setPopupView(this, termArray, textViewTerm, { position ->
             term = position + 1
             initScores(currentStudent)
+        })
+
+        //初始化显示数据
+        textViewStudent.text = studentArray[0]
+        currentStudent = studentList[0]
+        textViewTerm.text = termArray[0]
+        ViewUtil.initProfile(this, currentStudent!!, textViewYear, object : InitProfileListener {
+            override fun done(position: Int, year: String) {
+                this@ScoreActivity.year = year
+                initScores(currentStudent)
+            }
+
+            override fun error(dialog: Dialog) {
+                getInfo(currentStudent!!, dialog)
+            }
         })
     }
 
@@ -143,6 +155,13 @@ class ScoreActivity : AppCompatActivity() {
                 scoreList.addAll(failedArray)
                 adapter.clearList()
                 adapter.notifyItemRangeChanged(0, scoreList.size)
+                val parentFile = File(filesDir.absolutePath + File.separator + "score/")
+                if (!parentFile.exists())
+                    parentFile.mkdirs()
+                val base64Name = XhuFileUtil.filterString(Base64.encodeToString(student.username.toByteArray(), Base64.DEFAULT))
+                val savedFile = File(parentFile, "$base64Name-$year-$term")
+                savedFile.createNewFile()
+                XhuFileUtil.saveObjectToFile(scoreList, savedFile)
                 loadingDialog.dismiss()
             }
 
@@ -154,13 +173,6 @@ class ScoreActivity : AppCompatActivity() {
             }
 
             override fun doInThread() {
-                val parentFile = File(filesDir.absolutePath + File.separator + "score/")
-                if (!parentFile.exists())
-                    parentFile.mkdirs()
-                val base64Name = XhuFileUtil.filterString(Base64.encodeToString(student.username.toByteArray(), Base64.DEFAULT))
-                val savedFile = File(parentFile, "$base64Name-$year-$term")
-                savedFile.createNewFile()
-                XhuFileUtil.saveObjectToFile(scoreList, savedFile)
             }
         })
     }

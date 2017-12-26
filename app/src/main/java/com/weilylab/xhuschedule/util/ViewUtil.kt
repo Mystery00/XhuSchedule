@@ -142,15 +142,16 @@ object ViewUtil {
                 val start = student.profile!!.grade.toInt()//进校年份
                 val calendar = Calendar.getInstance()
                 val end = when (calendar.get(Calendar.MONTH) + 1) {
-                    in 1 until 3 -> calendar.get(Calendar.YEAR) - 1
-                    in 3 until 9 -> calendar.get(Calendar.YEAR)
+                    in 1 until 9 -> calendar.get(Calendar.YEAR)
                     in 9 until 13 -> calendar.get(Calendar.YEAR) + 1
                     else -> 0
                 }
-                val yearArray = Array(end - start, { i -> (start + i).toString() + '-' + (start + i + 1).toString() })
+                val yearArray = Array(end - start, { i -> "${start + i}-${start + i + 1}" })
                 ViewUtil.setPopupView(context, yearArray, textViewYear, width, { position ->
                     listener.done(position, yearArray[position])
                 })
+                textViewYear.text = yearArray[yearArray.size - 1]
+                listener.done(yearArray.size - 1, yearArray[yearArray.size - 1])
                 initDialog.dismiss()
             } catch (e: Exception) {
                 e.printStackTrace()

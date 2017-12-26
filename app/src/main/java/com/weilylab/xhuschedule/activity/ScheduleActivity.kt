@@ -57,7 +57,7 @@ class ScheduleActivity : AppCompatActivity() {
     private var weekList = ArrayList<ArrayList<ArrayList<Course>>>()
     private var currentStudent: Student? = null
     private var year = ""
-    private var term = 0
+    private var term = 1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -125,6 +125,21 @@ class ScheduleActivity : AppCompatActivity() {
         action_sync.setOnClickListener {
             getCourses(currentStudent, year, term)
         }
+
+        //初始化显示数据
+        textViewStudent.text = array[0]
+        currentStudent = studentList[0]
+        textViewTerm.text = termArray[0]
+        ViewUtil.initProfile(this, currentStudent!!, textViewYear, DensityUtil.getWidth(this, 56F, 56F), object : InitProfileListener {
+            override fun done(position: Int, year: String) {
+                this@ScheduleActivity.year = year
+                showCourses(currentStudent)
+            }
+
+            override fun error(dialog: Dialog) {
+                getInfo(currentStudent!!, dialog)
+            }
+        })
     }
 
     private fun getCourses(student: Student?, year: String?, term: Int?) {
