@@ -21,22 +21,14 @@ import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
+import vip.mystery0.tools.flexibleCardView.FlexibleCardView
 import kotlin.math.max
 
 class ExamAdapter(private val context: Context,
                   private val list: ArrayList<Exam>) : RecyclerView.Adapter<ExamAdapter.ViewHolder>() {
 
-    private var isAnimShowList = ArrayList<Boolean>()
-    private var isExpandList = ArrayList<Boolean>()
-    private var maxHeight = 0
-    private var minHeight = DensityUtil.dip2px(context, 72F)
-
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val exam = list[position]
-        if (isAnimShowList.size == position)
-            isAnimShowList.add(false)
-        if (isExpandList.size == position)
-            isExpandList.add(false)
         holder.examNameTextView.text = exam.name
         holder.examDateTextView.text = exam.date
         holder.examNoTextView.text = context.getString(R.string.exam_no, exam.no)
@@ -46,60 +38,11 @@ class ExamAdapter(private val context: Context,
         holder.examTestNoTextView.text = context.getString(R.string.exam_testno, exam.testno)
         holder.examTestTypeTextView.text = context.getString(R.string.exam_testtype, exam.testtype)
         holder.examRegionTextView.text = context.getString(R.string.exam_region, exam.region)
-        if (maxHeight <= minHeight)
-            holder.itemView.post {
-                maxHeight = max(maxHeight, holder.itemView.measuredHeight)
-                val params = holder.itemView.layoutParams
-                if (isExpandList[holder.adapterPosition]) {
-                    params.height = maxHeight
-                } else {
-                    params.height = minHeight
-                }
-                holder.itemView.layoutParams = params
-            }
-        else {
-            val params = holder.itemView.layoutParams
-            if (isExpandList[holder.adapterPosition]) {
-                params.height = maxHeight
-            } else {
-                params.height = minHeight
-            }
-            holder.itemView.layoutParams = params
-        }
-        holder.itemView.setOnClickListener {
-            val layoutParams = holder.itemView.layoutParams
-            Observable.create<Int> { subscriber ->
-                val showArray = Array(31, { i -> ((maxHeight - minHeight) / 30F) * i + minHeight })
-                if (isExpandList[holder.adapterPosition])
-                    showArray.reverse()
-                showArray.forEach {
-                    subscriber.onNext(it.toInt())
-                    Thread.sleep(8)
-                }
-                subscriber.onComplete()
-            }
-                    .subscribeOn(Schedulers.newThread())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(object : Observer<Int> {
-                        override fun onNext(t: Int) {
-                            layoutParams.height = t
-                            holder.itemView.layoutParams = layoutParams
-                        }
-
-                        override fun onSubscribe(d: Disposable) {
-                            isAnimShowList[holder.adapterPosition] = true
-                        }
-
-                        override fun onError(e: Throwable) {
-                            e.printStackTrace()
-                            isAnimShowList[holder.adapterPosition] = false
-                        }
-
-                        override fun onComplete() {
-                            isAnimShowList[holder.adapterPosition] = false
-                            isExpandList[holder.adapterPosition] = !isExpandList[holder.adapterPosition]
-                        }
-                    })
+        holder.flexibleCardView.setShowState(exam.isExpand)
+        holder.flexibleCardView.setOnClickListener {
+            holder.flexibleCardView.showAnime({ isExpand ->
+                exam.isExpand = isExpand
+            })
         }
     }
 
@@ -109,12 +52,8 @@ class ExamAdapter(private val context: Context,
 
     override fun getItemCount(): Int = list.size
 
-    fun clearList() {
-        isAnimShowList.clear()
-        isExpandList.clear()
-    }
-
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        var flexibleCardView = itemView as FlexibleCardView
         var examNameTextView: TextView = itemView.findViewById(R.id.textView_exam_name)
         var examDateTextView: TextView = itemView.findViewById(R.id.textView_exam_date)
         var examNoTextView: TextView = itemView.findViewById(R.id.textView_exam_no)

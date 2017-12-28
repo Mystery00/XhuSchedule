@@ -17,4 +17,5 @@ class Exam {
     var location: String = ""
     var time: String = ""
     var region: String = ""
+    var isExpand=false
 }

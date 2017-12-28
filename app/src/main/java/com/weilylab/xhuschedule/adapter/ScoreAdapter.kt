@@ -16,6 +16,7 @@ import android.widget.TextView
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.classes.Score
 import vip.mystery0.tools.flexibleCardView.FlexibleCardView
+import vip.mystery0.tools.logs.Logs
 
 class ScoreAdapter(private val context: Context,
                    private val list: ArrayList<Score>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {

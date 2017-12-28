@@ -134,6 +134,66 @@ class ProfileFragment : Fragment() {
         return rootView
     }
 
+    fun setHeaderImg() {
+        val headerImg = rootView!!.findViewById<ImageView>(R.id.header_img)
+        val textViewLayout = rootView!!.findViewById<View>(R.id.textViewLayout)
+        if (Settings.customHeaderImg != "") {
+            val options = RequestOptions()
+                    .signature(MediaStoreSignature("image/*", Calendar.getInstance().timeInMillis, 0))
+                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+            Glide.with(this)
+                    .load(Settings.customHeaderImg)
+                    .apply(options)
+                    .listener(object : RequestListener<Drawable> {
+                        override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Drawable>?, isFirstResource: Boolean): Boolean {
+                            return false
+                        }
+
+                        override fun onResourceReady(resource: Drawable, model: Any?, target: Target<Drawable>?, dataSource: DataSource?, isFirstResource: Boolean): Boolean {
+                            ViewUtil.blur(activity, (resource as BitmapDrawable).bitmap, textViewLayout)
+                            val light = ViewUtil.getLight(resource.bitmap, resource.intrinsicWidth, resource.intrinsicHeight)
+                            if (light > 128) {
+                                rootView!!.findViewById<TextView>(R.id.textView_title).setTextColor(Color.parseColor("#555555"))
+                                rootView!!.findViewById<TextView>(R.id.textView_score_gpa).setTextColor(Color.parseColor("#555555"))
+                                rootView!!.findViewById<TextView>(R.id.textView_score_no).setTextColor(Color.parseColor("#555555"))
+                            } else {
+                                rootView!!.findViewById<TextView>(R.id.textView_title).setTextColor(Color.WHITE)
+                                rootView!!.findViewById<TextView>(R.id.textView_score_gpa).setTextColor(Color.WHITE)
+                                rootView!!.findViewById<TextView>(R.id.textView_score_no).setTextColor(Color.WHITE)
+                            }
+                            return false
+                        }
+                    })
+                    .into(headerImg)
+        } else {
+            rootView!!.findViewById<TextView>(R.id.textView_title).setTextColor(Color.WHITE)
+            rootView!!.findViewById<TextView>(R.id.textView_score_gpa).setTextColor(Color.WHITE)
+            rootView!!.findViewById<TextView>(R.id.textView_score_no).setTextColor(Color.WHITE)
+            headerImg.setImageResource(R.mipmap.header_img)
+            headerImg.viewTreeObserver.addOnPreDrawListener(object : ViewTreeObserver.OnPreDrawListener {
+                override fun onPreDraw(): Boolean {
+                    headerImg.viewTreeObserver.removeOnPreDrawListener(this)
+                    headerImg.buildDrawingCache()
+                    ViewUtil.blur(activity, headerImg.drawingCache, textViewLayout)
+                    return true
+                }
+            })
+        }
+    }
+
+    fun setProfileImg() {
+        if (Settings.userImg != "") {
+            val options = RequestOptions()
+                    .signature(MediaStoreSignature("image/*", Calendar.getInstance().timeInMillis, 0))
+                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+            Glide.with(this)
+                    .load(Settings.userImg)
+                    .apply(options)
+                    .into(rootView!!.findViewById(R.id.profile_img))
+        } else
+            rootView!!.findViewById<ImageView>(R.id.profile_img).setImageResource(R.mipmap.profile_img)
+    }
+
     fun setProfile(profile: Profile) {
         Observable.create<Boolean> { subscriber ->
             while (true) {

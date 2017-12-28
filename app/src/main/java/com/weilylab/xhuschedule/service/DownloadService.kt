@@ -139,7 +139,7 @@ class DownloadService : IntentService(TAG) {
                             Uri.fromFile(installFile)
                         Logs.i(TAG, "onComplete: " + installFile.absolutePath)
                         Logs.i(TAG, "onComplete: " + uri)
-                        installIntent.setDataAndType(uri, context.contentResolver.getType(uri))
+                        installIntent.setDataAndType(uri, "application/vnd.android.package-archive")
                         startActivity(installIntent)
                         DownloadNotification.cancel(context)
                         stopSelf()

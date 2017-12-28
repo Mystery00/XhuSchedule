@@ -77,7 +77,6 @@ class ExamActivity : AppCompatActivity() {
                 loadingDialog.dismiss()
                 testList.clear()
                 testList.addAll(array)
-                adapter.clearList()
                 adapter.notifyDataSetChanged()
             }
 
