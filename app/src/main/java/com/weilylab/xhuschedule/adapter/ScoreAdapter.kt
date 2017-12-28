@@ -39,7 +39,7 @@ class ScoreAdapter(private val context: Context,
                 }
             }
             is EmptyViewHolder -> {
-                holder.textView.text = context.getString(R.string.hint_score_fail)
+                holder.textView.text = context.getString(R.string.hint_data_empty)
             }
         }
     }
