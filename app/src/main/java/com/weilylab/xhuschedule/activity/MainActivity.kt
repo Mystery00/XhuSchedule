@@ -70,7 +70,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var updateProfileDialog: Dialog
     private lateinit var weekAdapter: WeekAdapter
     private lateinit var mainStudent: Student
-    private var isShowDialog = false//是否显示圣诞节快乐对话框
     private var isTryRefreshData = false
     private var isTryLogin = false
     private var isRefreshData = false
@@ -139,10 +138,10 @@ class MainActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        if (!ScheduleHelper.isShowChristmas)
-            snowfallView.visibility = View.GONE
-        else {
+        if (TempSharedPreferenceUtil.snowFall)
             snowfallView.visibility = View.VISIBLE
+        else {
+            snowfallView.visibility = View.GONE
         }
         if (ScheduleHelper.isImageChange) {
             val options = RequestOptions()
@@ -661,10 +660,7 @@ class MainActivity : AppCompatActivity() {
             R.id.bottom_nav_profile -> {
                 if (isWeekShow)
                     showWeekAnim(false, false)
-                titleTextView.text = if (ScheduleHelper.isShowChristmas)
-                    "Merry Christmas ~"
-                else
-                    getString(R.string.course_profile_title)
+                titleTextView.text = getString(R.string.course_profile_title)
                 titleTextView.setOnClickListener(null)
                 titleTextView.setCompoundDrawables(null, null, null, null)
                 if (mainStudent.profile == null) {

@@ -10,16 +10,17 @@ package com.weilylab.xhuschedule.fragment
 import android.os.Bundle
 import android.preference.PreferenceCategory
 import android.preference.PreferenceFragment
+import android.preference.SwitchPreference
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.util.ScheduleHelper
+import com.weilylab.xhuschedule.util.TempSharedPreferenceUtil
 import java.util.*
 
 class SnowFragment : PreferenceFragment() {
-    private var clickTime = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,23 +28,13 @@ class SnowFragment : PreferenceFragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        val key = findPreference("key")
-        val category = findPreference("category") as PreferenceCategory
-        val letItSnow = findPreference("let_it_snow")
-        val merryChristmas = findPreference("merry_christmas")
-        val calendar = Calendar.getInstance()
-        if (calendar.get(Calendar.MONTH) != 11 || calendar.get(Calendar.DAY_OF_MONTH) != 25)
-            category.removeAll()
-        key.setOnPreferenceClickListener {
-            if (clickTime >= 20 || ScheduleHelper.isShowChristmas) {
-                Toast.makeText(activity, "Merry Christmas ~", Toast.LENGTH_SHORT)
-                        .show()
-                ScheduleHelper.isShowChristmas = true
-                category.removeAll()
-                category.addPreference(letItSnow)
-                category.addPreference(merryChristmas)
-            } else
-                clickTime++
+        val enable = findPreference("enable") as SwitchPreference
+
+        enable.isChecked = TempSharedPreferenceUtil.snowFall
+
+        enable.setOnPreferenceChangeListener { _, _ ->
+            val snowFall = !enable.isChecked
+            TempSharedPreferenceUtil.snowFall = snowFall
             true
         }
         return super.onCreateView(inflater, container, savedInstanceState)

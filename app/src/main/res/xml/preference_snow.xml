@@ -7,20 +7,16 @@
 
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <SwitchPreference
+        android:key="enable"
+        android:title="在主界面启用SnowFall" />
+
     <Preference
-        android:key="key"
-        android:title="~~~~~" />
-
-    <PreferenceCategory android:key="category">
-
-        <Preference
-            android:key="let_it_snow"
-            android:title="Let it snow ~" />
-
-        <Preference
-            android:key="merry_christmas"
-            android:title="Merry Christmas ~" />
-
-    </PreferenceCategory>
+        android:summary="Copyright © 2016 JetRadar\nLicensed under the Apache License, Version 2.0"
+        android:title="android-snowfall" >
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:data="https://github.com/JetradarMobile/android-snowfall" />
+    </Preference>
 
 </PreferenceScreen>

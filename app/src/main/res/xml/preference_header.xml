@@ -25,7 +25,7 @@
     <header
         android:fragment="com.weilylab.xhuschedule.fragment.SnowFragment"
         android:icon="@drawable/ic_snow"
-        android:title=" " />
+        android:title="Let it snow ~" />
 
     <header
         android:fragment="com.weilylab.xhuschedule.fragment.InfoSettingsFragment"

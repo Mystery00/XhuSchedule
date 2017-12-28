@@ -65,8 +65,6 @@
     <string name="title_local_img">预设图片提供者</string>
     <string name="summary_local_img" translatable="false">\@BigDingDing</string>
     <string name="link_local_img" translatable="false">http://www.coolapk.com/u/703237</string>
-    <string name="title_snowfall">android-snowfall</string>
-    <string name="summary_snowfall">Copyright © 2016 JetRadar\nLicensed under the Apache License, Version 2.0</string>
 
     <string name="screen_category_about">关于</string>
     <string name="key_auto_check_update" translatable="false">key_auto_check_update</string>
