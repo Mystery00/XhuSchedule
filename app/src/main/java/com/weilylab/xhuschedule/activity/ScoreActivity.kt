@@ -25,7 +25,7 @@ import com.weilylab.xhuschedule.classes.Student
 import com.weilylab.xhuschedule.listener.GetScoreListener
 import com.weilylab.xhuschedule.listener.InitProfileListener
 import com.weilylab.xhuschedule.listener.ProfileListener
-import com.weilylab.xhuschedule.util.CalendarUtil
+import com.weilylab.xhuschedule.util.Settings
 import com.weilylab.xhuschedule.util.ViewUtil
 import com.weilylab.xhuschedule.util.XhuFileUtil
 import com.zyao89.view.zloading.ZLoadingDialog
@@ -121,8 +121,11 @@ class ScoreActivity : AppCompatActivity() {
                 parentFile.mkdirs()
             val base64Name = XhuFileUtil.filterString(Base64.encodeToString(student.username.toByteArray(), Base64.DEFAULT))
             val savedFile = File(parentFile, "$base64Name-$year-$term")
+            val savedFailedFile = File(parentFile, "$base64Name-$year-$term-failed")
             scoreList.clear()
             scoreList.addAll(XhuFileUtil.getArrayListFromFile(savedFile, Score::class.java))
+            if (Settings.isShowFailed)
+                scoreList.addAll(XhuFileUtil.getArrayListFromFile(savedFailedFile, Score::class.java))
             subscriber.onComplete()
         }
                 .subscribeOn(Schedulers.newThread())
@@ -133,8 +136,7 @@ class ScoreActivity : AppCompatActivity() {
                     }
 
                     override fun onComplete() {
-                        adapter.clearList()
-                        adapter.notifyItemRangeChanged(0, scoreList.size)
+                        adapter.notifyDataSetChanged()
                     }
 
                     override fun onError(e: Throwable) {
@@ -151,17 +153,17 @@ class ScoreActivity : AppCompatActivity() {
             override fun got(array: Array<Score>, failedArray: Array<Score>) {
                 scoreList.clear()
                 scoreList.addAll(array)
-                scoreList.add(Score())
-                scoreList.addAll(failedArray)
-                adapter.clearList()
-                adapter.notifyItemRangeChanged(0, scoreList.size)
+                adapter.notifyDataSetChanged()
                 val parentFile = File(filesDir.absolutePath + File.separator + "score/")
                 if (!parentFile.exists())
                     parentFile.mkdirs()
                 val base64Name = XhuFileUtil.filterString(Base64.encodeToString(student.username.toByteArray(), Base64.DEFAULT))
                 val savedFile = File(parentFile, "$base64Name-$year-$term")
+                val savedFailedFile = File(parentFile, "$base64Name-$year-$term-failed")
                 savedFile.createNewFile()
+                savedFailedFile.createNewFile()
                 XhuFileUtil.saveObjectToFile(scoreList, savedFile)
+                XhuFileUtil.saveObjectToFile(failedArray.toList(), savedFailedFile)
                 loadingDialog.dismiss()
             }
 
@@ -217,8 +219,9 @@ class ScoreActivity : AppCompatActivity() {
         })
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.menu_activity_score, menu)
+        menu.findItem(R.id.action_show_failed).isChecked = Settings.isShowFailed
         return true
     }
 
@@ -230,6 +233,12 @@ class ScoreActivity : AppCompatActivity() {
             }
             R.id.action_search -> {
                 getScores(currentStudent, year, term)
+                true
+            }
+            R.id.action_show_failed -> {
+                item.isChecked = !item.isChecked
+                Settings.isShowFailed = item.isChecked
+                initScores(currentStudent)
                 true
             }
             else -> super.onOptionsItemSelected(item)

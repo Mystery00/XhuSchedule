@@ -34,7 +34,7 @@ class APP : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        Logs.setLevel(Logs.LogLevel.Debug)
+        Logs.setLevel(Logs.Debug)
         val file = File(externalCacheDir.absolutePath + File.separator)
         if (!file.exists())
             file.mkdirs()

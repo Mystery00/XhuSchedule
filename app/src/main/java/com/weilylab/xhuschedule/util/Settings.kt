@@ -61,4 +61,7 @@ object Settings {
     var isEnableMultiUserMode: Boolean//是否启用多用户模式
         set(value) = sharedPreference.edit().putBoolean("isEnableMultiUserMode", value).apply()
         get() = sharedPreference.getBoolean("isEnableMultiUserMode", false)
+    var isShowFailed: Boolean//是否显示未通过成绩
+        set(value) = sharedPreference.edit().putBoolean("isShowFailed", value).apply()
+        get() = sharedPreference.getBoolean("isShowFailed", true)
 }

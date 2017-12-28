@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Created by Mystery0 on 17-12-21 上午3:41.
   ~ Copyright (c) 2017. All Rights reserved.
   ~
@@ -13,4 +12,13 @@
         android:icon="@drawable/ic_search"
         android:title="@string/action_search"
         app:showAsAction="ifRoom" />
+
+    <group android:checkableBehavior="all">
+        <item
+            android:id="@+id/action_show_failed"
+            android:title="@string/action_show_failed"
+            app:showAsAction="never" />
+    </group>
+
+
 </menu>

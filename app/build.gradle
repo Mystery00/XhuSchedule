@@ -73,7 +73,7 @@ dependencies {
     compile 'com.squareup.retrofit2:converter-gson:2.3.0'
     compile 'com.squareup.okhttp3:okhttp:3.9.0'
     compile 'com.squareup.okhttp3:logging-interceptor:3.9.0'
-    compile 'com.github.Mystery00.ToolsDemo:tools:2.2.6'
+    compile 'com.github.Mystery00.ToolsDemo:tools:2.3.3'
     compile 'com.zyao89:zloading:1.0.8'
     compile 'de.hdodenhof:circleimageview:2.2.0'
     compile 'com.jrummyapps:colorpicker:2.1.6'
@@ -91,6 +91,6 @@ buildscript {
         maven { url 'https://jitpack.io' }
     }
     dependencies {
-        classpath 'com.github.Mystery00.ToolsDemo:autoversion:2.2.6'
+        classpath 'com.github.Mystery00.ToolsDemo:autoversion:2.3.3'
     }
 }
