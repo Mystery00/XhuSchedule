@@ -17,6 +17,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.request.RequestOptions
+import com.bumptech.glide.signature.MediaStoreSignature
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.activity.MainActivity
 import com.weilylab.xhuschedule.classes.Course
@@ -93,6 +97,36 @@ class TableFragment : Fragment() {
             isReady = true
         }
         return rootView
+    }
+
+    fun setBackground() {
+        Observable.create<Boolean> { subscriber->
+            while (true)
+                if (rootView!=null)
+                    break
+            subscriber.onComplete()
+        }
+                .subscribeOn(Schedulers.newThread())
+                .unsubscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(object :DisposableObserver<Boolean>(){
+                    override fun onError(e: Throwable) {
+                        e.printStackTrace()
+                    }
+
+                    override fun onNext(t: Boolean) {
+                    }
+
+                    override fun onComplete() {
+                        val options = RequestOptions()
+                                .signature(MediaStoreSignature("image/*", Calendar.getInstance().timeInMillis, 0))
+                                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                        Glide.with(this@TableFragment)
+                                .load(Settings.customBackgroundImg)
+                                .apply(options)
+                                .into(rootView!!.findViewById(R.id.background))
+                    }
+                })
     }
 
     fun refreshData() {

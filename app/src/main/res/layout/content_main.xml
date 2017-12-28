@@ -23,17 +23,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:menu="@menu/menu_bottom_navigation_view" />
 
-    <ImageView
-        android:id="@+id/background"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:contentDescription="@string/app_name"
-        android:scaleType="centerCrop"
-        app:layout_constraintBottom_toTopOf="@+id/bottomNavigationView"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <android.support.design.widget.CoordinatorLayout
         android:id="@+id/coordinatorLayoutView"
         android:layout_width="0dp"
@@ -43,10 +32,14 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <android.support.v4.view.ViewPager
+        <com.github.ybq.parallaxviewpager.ParallaxViewPager
             android:id="@+id/viewpager"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            app:interpolator="@anim/decelerate_interpolator"
+            app:mode="right_overlay"
+            app:outset="62%"
+            app:shadow_width="30dp"/>
 
     </android.support.design.widget.CoordinatorLayout>
 

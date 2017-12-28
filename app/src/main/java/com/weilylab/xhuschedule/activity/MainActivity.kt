@@ -144,14 +144,10 @@ class MainActivity : AppCompatActivity() {
             snowfallView.visibility = View.GONE
         }
         if (ScheduleHelper.isImageChange) {
-            val options = RequestOptions()
-                    .signature(MediaStoreSignature("image/*", Calendar.getInstance().timeInMillis, 0))
-                    .diskCacheStrategy(DiskCacheStrategy.NONE)
-            if (Settings.customBackgroundImg != "")
-                Glide.with(this)
-                        .load(Settings.customBackgroundImg)
-                        .apply(options)
-                        .into(background)
+            if (Settings.customBackgroundImg != ""){
+                todayFragment.setBackground()
+                weekFragment.setBackground()
+            }
             profileFragment.setHeaderImg()
             profileFragment.setProfileImg()
         }
@@ -190,14 +186,10 @@ class MainActivity : AppCompatActivity() {
         layout_week_recycler_view.adapter = weekAdapter
         layout_week_recycler_view.scrollToPosition(0)
 
-        val options = RequestOptions()
-                .signature(MediaStoreSignature("image/*", Calendar.getInstance().timeInMillis, 0))
-                .diskCacheStrategy(DiskCacheStrategy.NONE)
-        if (Settings.customBackgroundImg != "")
-            Glide.with(this)
-                    .load(Settings.customBackgroundImg)
-                    .apply(options)
-                    .into(background)
+        if (Settings.customBackgroundImg != ""){
+            todayFragment.setBackground()
+            weekFragment.setBackground()
+        }
         bottomNavigationView.setOnNavigationItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.bottom_nav_today -> viewpager.currentItem = 0
