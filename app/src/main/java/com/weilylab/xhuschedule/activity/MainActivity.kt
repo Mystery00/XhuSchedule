@@ -43,6 +43,7 @@ import com.weilylab.xhuschedule.listener.LoginListener
 import com.weilylab.xhuschedule.listener.ProfileListener
 import com.weilylab.xhuschedule.listener.WeekChangeListener
 import com.weilylab.xhuschedule.util.*
+import com.weilylab.xhuschedule.util.widget.WidgetHelper
 import com.zyao89.view.zloading.ZLoadingDialog
 import com.zyao89.view.zloading.Z_TYPE
 import io.reactivex.Observable
@@ -430,6 +431,8 @@ class MainActivity : AppCompatActivity() {
                             else
                                 Snackbar.make(coordinatorLayoutView, R.string.hint_update_data, Snackbar.LENGTH_SHORT).show()
                         }
+                        sendBroadcast(Intent("android.appwidget.action.APPWIDGET_UPDATE")
+                                .putExtra("TAG", WidgetHelper.ALL_TAG))
                         updateAllView()
                     }
 

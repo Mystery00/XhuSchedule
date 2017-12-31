@@ -7,6 +7,7 @@
 
 package com.weilylab.xhuschedule.util.widget
 
+import android.app.PendingIntent
 import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
 import android.content.Context
@@ -48,6 +49,9 @@ class ExamWidget : AppWidgetProvider() {
     companion object {
         internal fun updateAppWidget(context: Context, appWidgetId: Int) {
             val remoteViews = RemoteViews(context.packageName, R.layout.layout_widget_course_exam)
+            val refreshIntent = Intent(context, WidgetInitService::class.java)
+            val refreshPendingIntent = PendingIntent.getService(context, 0, refreshIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+            remoteViews.setOnClickPendingIntent(R.id.dateTitle, refreshPendingIntent)
             remoteViews.setTextViewText(R.id.dateTitle, CalendarUtil.formatInfo(context))
             val intent = Intent(context, ExamWidgetService::class.java)
             remoteViews.setRemoteAdapter(R.id.listView, intent)

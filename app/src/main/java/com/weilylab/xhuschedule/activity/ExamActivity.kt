@@ -7,6 +7,7 @@
 
 package com.weilylab.xhuschedule.activity
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v4.content.ContextCompat
@@ -20,6 +21,7 @@ import com.weilylab.xhuschedule.classes.Student
 import com.weilylab.xhuschedule.listener.GetArrayListener
 import com.weilylab.xhuschedule.util.ViewUtil
 import com.weilylab.xhuschedule.util.XhuFileUtil
+import com.weilylab.xhuschedule.util.widget.WidgetHelper
 import com.zyao89.view.zloading.ZLoadingDialog
 import com.zyao89.view.zloading.Z_TYPE
 
@@ -85,6 +87,8 @@ class ExamActivity : AppCompatActivity() {
                 val savedFile = File(parentFile, base64Name)
                 savedFile.createNewFile()
                 XhuFileUtil.saveObjectToFile(testList, savedFile)
+                sendBroadcast(Intent("android.appwidget.action.APPWIDGET_UPDATE")
+                        .putExtra("TAG", WidgetHelper.ALL_TAG))
                 loadingDialog.dismiss()
             }
 
