@@ -60,7 +60,7 @@ class ExamListRemotesViewsFactory(private val context: Context) : RemoteViewsSer
             }
             remotesView
         } else {
-            RemoteViews(context.packageName, R.layout.layout_widget_no_data)
+            RemoteViews(context.packageName, R.layout.layout_widget_no_exam)
         }
     }
 

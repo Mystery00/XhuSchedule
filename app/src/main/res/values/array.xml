@@ -72,15 +72,22 @@
         <item>21:35</item>
     </string-array>
 
+    <string-array name="thumbnail_background_img">
+        <item>https://mystery0.vip/img/interface/thumbnail_a.png</item>
+        <item>https://mystery0.vip/img/interface/thumbnail_b.png</item>
+        <item>https://mystery0.vip/img/interface/thumbnail_c.png</item>
+        <item>https://mystery0.vip/img/interface/thumbnail_d.png</item>
+    </string-array>
+
     <string-array name="background_img">
-        <item>http://img.mystery0.vip/a.png</item>
-        <item>http://img.mystery0.vip/b.png</item>
-        <item>http://img.mystery0.vip/c.png</item>
-        <item>http://img.mystery0.vip/d.png</item>
+        <item>https://mystery0.vip/img/interface/a.png</item>
+        <item>https://mystery0.vip/img/interface/b.png</item>
+        <item>https://mystery0.vip/img/interface/c.png</item>
+        <item>https://mystery0.vip/img/interface/d.png</item>
     </string-array>
 
     <string-array name="header_img">
-        <item>http://img.mystery0.vip/header1.jpg</item>
-        <item>http://img.mystery0.vip/header2.jpg</item>
+        <item>https://mystery0.vip/img/interface/header1.jpg</item>
+        <item>https://mystery0.vip/img/interface/header2.jpg</item>
     </string-array>
 </resources>

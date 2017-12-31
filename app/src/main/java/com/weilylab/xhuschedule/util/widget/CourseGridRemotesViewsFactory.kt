@@ -37,7 +37,7 @@ class CourseGridRemotesViewsFactory(private val context: Context) : RemoteViewsS
 
     override fun getViewAt(position: Int): RemoteViews {
         return if (!WidgetHelper.hasData(WidgetHelper.showScheduleCourses)) {
-            RemoteViews(context.packageName, R.layout.layout_widget_no_data)
+            RemoteViews(context.packageName, R.layout.layout_widget_no_course)
         } else {
             val row = WidgetHelper.showScheduleCourses[position * 2]
             val remotesViews = RemoteViews(context.packageName, R.layout.item_widget_row_table)
