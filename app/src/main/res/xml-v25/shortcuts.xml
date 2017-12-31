@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Created by Mystery0 on 17-12-31 下午8:02.
+  ~ Copyright (c) 2017. All Rights reserved.
+  ~
+  ~ Last modified 17-12-31 下午8:02
+  -->
+
+<shortcuts xmlns:android="http://schemas.android.com/apk/res/android">
+    <shortcut
+        android:enabled="true"
+        android:icon="@mipmap/ic_shortcut_refresh_widget"
+        android:shortcutId="title_shortcuts_refresh_widget"
+        android:shortcutLongLabel="@string/title_shortcuts_refresh_widget"
+        android:shortcutShortLabel="@string/title_shortcuts_refresh_widget">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetClass="com.weilylab.xhuschedule.activity.shortcut.RefreshWidgetActivity"
+            android:targetPackage="com.weilylab.xhuschedule" />
+    </shortcut>
+    <shortcut
+        android:enabled="true"
+        android:icon="@mipmap/ic_shortcut_refresh_color"
+        android:shortcutId="title_shortcuts_refresh_color"
+        android:shortcutLongLabel="@string/title_shortcuts_refresh_color"
+        android:shortcutShortLabel="@string/title_shortcuts_refresh_color">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetClass="com.weilylab.xhuschedule.activity.shortcut.RefreshColorActivity"
+            android:targetPackage="com.weilylab.xhuschedule" />
+    </shortcut>
+</shortcuts>

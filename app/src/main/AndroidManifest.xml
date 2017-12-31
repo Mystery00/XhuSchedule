@@ -29,6 +29,10 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
+            <meta-data
+                android:name="android.app.shortcuts"
+                android:resource="@xml/shortcuts" />
         </activity>
         <activity
             android:name=".activity.MainActivity"
@@ -65,6 +69,12 @@
             android:label="@string/title_activity_settings"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
+        <activity
+            android:name=".activity.shortcut.RefreshWidgetActivity"
+            android:theme="@android:style/Theme.NoDisplay" />
+        <activity
+            android:name=".activity.shortcut.RefreshColorActivity"
+            android:theme="@android:style/Theme.NoDisplay" />
 
         <service
             android:name=".service.UpdateService"
@@ -74,6 +84,22 @@
             android:name=".service.DownloadService"
             android:enabled="true"
             android:exported="true" />
+        <service
+            android:name=".service.WidgetLastActionService"
+            android:enabled="true"
+            android:exported="true" />
+        <service
+            android:name=".service.WidgetNextActionService"
+            android:enabled="true"
+            android:exported="true" />
+        <service
+            android:name=".service.WidgetInitService"
+            android:enabled="true"
+            android:exported="true" />
+        <service
+            android:name=".service.ClearCacheColorService"
+            android:enabled="true"
+            android:exported="true"/>
         <service
             android:name=".service.GridWidgetService"
             android:permission="android.permission.BIND_REMOTEVIEWS" />
@@ -116,30 +142,17 @@
                 android:name="android.appwidget.provider"
                 android:resource="@xml/today_course_widget_info" />
         </receiver>
-
         <receiver
             android:name=".util.widget.ExamWidget"
             android:label="考试查询">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
+
             <meta-data
                 android:name="android.appwidget.provider"
                 android:resource="@xml/exam_widget_info" />
         </receiver>
-
-        <service
-            android:name=".service.WidgetLastActionService"
-            android:enabled="true"
-            android:exported="true" />
-        <service
-            android:name=".service.WidgetNextActionService"
-            android:enabled="true"
-            android:exported="true" />
-        <service
-            android:name=".service.WidgetInitService"
-            android:enabled="true"
-            android:exported="true" />
     </application>
 
 </manifest>
