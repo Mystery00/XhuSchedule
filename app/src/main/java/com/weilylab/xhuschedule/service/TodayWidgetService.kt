@@ -9,13 +9,13 @@ package com.weilylab.xhuschedule.service
 
 import android.content.Intent
 import android.widget.RemoteViewsService
-import com.weilylab.xhuschedule.util.widget.ListRemotesViewsFactory
+import com.weilylab.xhuschedule.util.widget.CourseListRemotesViewsFactory
 
 /**
  * Created by mystery0.
  */
 class TodayWidgetService:RemoteViewsService() {
     override fun onGetViewFactory(intent: Intent?): RemoteViewsFactory {
-        return ListRemotesViewsFactory(this)
+        return CourseListRemotesViewsFactory(this)
     }
 }

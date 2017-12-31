@@ -37,13 +37,6 @@ class TodayCourseWidget : AppWidgetProvider() {
             updateAppWidget(context, appWidgetId)
     }
 
-    override fun onEnabled(context: Context) {
-
-    }
-
-    override fun onDisabled(context: Context) {
-    }
-
     override fun onReceive(context: Context, intent: Intent) {
         super.onReceive(context, intent)
         if (intent.action == "android.appwidget.action.APPWIDGET_UPDATE" && (intent.getStringExtra("TAG") == WidgetHelper.TODAY_TAG || intent.getStringExtra("TAG") == WidgetHelper.ALL_TAG)) {

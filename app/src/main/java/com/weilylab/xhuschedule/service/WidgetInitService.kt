@@ -52,6 +52,7 @@ class WidgetInitService : Service() {
             WidgetHelper.refreshWeekCourses(this)
             WidgetHelper.syncDayIndex()
             WidgetHelper.refreshTodayCourses(this)
+            WidgetHelper.refreshExamList(this)
             sendBroadcast(Intent("android.appwidget.action.APPWIDGET_UPDATE")
                     .putExtra("TAG", WidgetHelper.ALL_TAG))
             stopSelf()

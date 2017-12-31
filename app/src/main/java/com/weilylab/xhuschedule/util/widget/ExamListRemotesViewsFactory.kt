@@ -1,8 +1,8 @@
 /*
- * Created by Mystery0 on 17-12-21 上午3:41.
+ * Created by Mystery0 on 17-12-31 下午5:33.
  * Copyright (c) 2017. All Rights reserved.
  *
- * Last modified 17-12-18 下午9:17
+ * Last modified 17-12-31 下午5:33
  */
 
 package com.weilylab.xhuschedule.util.widget
@@ -18,7 +18,7 @@ import com.weilylab.xhuschedule.util.Settings
 /**
  * Created by mystery0.
  */
-class ListRemotesViewsFactory(private val context: Context) : RemoteViewsService.RemoteViewsFactory {
+class ExamListRemotesViewsFactory(private val context: Context) : RemoteViewsService.RemoteViewsFactory {
 
     override fun onCreate() {
     }
@@ -39,7 +39,7 @@ class ListRemotesViewsFactory(private val context: Context) : RemoteViewsService
     }
 
     override fun getViewAt(position: Int): RemoteViews {
-        return if (WidgetHelper.showTodayCourses.size != 0) {
+        return if (WidgetHelper.showExamList.size != 0) {
             val course = WidgetHelper.showTodayCourses[position]
             val remotesView = RemoteViews(context.packageName, R.layout.item_widget_today)
             remotesView.setTextViewText(R.id.course_name, course.name)

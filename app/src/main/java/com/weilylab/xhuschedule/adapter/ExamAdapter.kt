@@ -15,14 +15,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.classes.Exam
-import com.weilylab.xhuschedule.util.DensityUtil
-import io.reactivex.Observable
-import io.reactivex.Observer
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.Disposable
-import io.reactivex.schedulers.Schedulers
 import vip.mystery0.tools.flexibleCardView.FlexibleCardView
-import kotlin.math.max
 
 class ExamAdapter(private val context: Context,
                   private val list: ArrayList<Exam>) : RecyclerView.Adapter<ExamAdapter.ViewHolder>() {
@@ -31,11 +24,11 @@ class ExamAdapter(private val context: Context,
         val exam = list[position]
         holder.examNameTextView.text = exam.name
         holder.examDateTextView.text = exam.date
+        holder.examTestNoTextView.text = exam.testno
         holder.examNoTextView.text = context.getString(R.string.exam_no, exam.no)
         holder.examSnameTextView.text = context.getString(R.string.exam_sname, exam.sname)
         holder.examLocationTextView.text = context.getString(R.string.exam_location, exam.location)
         holder.examTimeTextView.text = context.getString(R.string.exam_time, exam.time)
-        holder.examTestNoTextView.text = context.getString(R.string.exam_testno, exam.testno)
         holder.examTestTypeTextView.text = context.getString(R.string.exam_testtype, exam.testtype)
         holder.examRegionTextView.text = context.getString(R.string.exam_region, exam.region)
         holder.flexibleCardView.setShowState(exam.isExpand)

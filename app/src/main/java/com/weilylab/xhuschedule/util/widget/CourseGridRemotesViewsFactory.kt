@@ -15,7 +15,7 @@ import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.classes.Course
 import com.weilylab.xhuschedule.util.ScheduleHelper
 
-class GridRemotesViewsFactory(private val context: Context) : RemoteViewsService.RemoteViewsFactory {
+class CourseGridRemotesViewsFactory(private val context: Context) : RemoteViewsService.RemoteViewsFactory {
 
     override fun onCreate() {
     }

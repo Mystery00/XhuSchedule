@@ -3,7 +3,7 @@
   ~ Copyright (c) 2017. All Rights reserved.
   ~
   ~ Last modified 17-12-21 上午2:35
-  -->
+-->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.weilylab.xhuschedule">
 
@@ -60,7 +60,6 @@
             android:name=".activity.ScheduleActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
-
         <activity
             android:name=".activity.SettingsActivity"
             android:label="@string/title_activity_settings"
@@ -123,6 +122,16 @@
             android:name=".service.WidgetInitService"
             android:enabled="true"
             android:exported="true" />
+
+        <receiver android:name=".util.widget.ExamWidget">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/exam_widget_info" />
+        </receiver>
     </application>
 
 </manifest>

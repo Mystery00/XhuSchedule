@@ -12,6 +12,7 @@ import android.support.design.widget.Snackbar
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
+import android.util.Base64
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.adapter.ExamAdapter
 import com.weilylab.xhuschedule.classes.Exam
@@ -58,7 +59,7 @@ class ExamActivity : AppCompatActivity() {
         studentList.clear()
         studentList.addAll(XhuFileUtil.getArrayFromFile(File(filesDir.absolutePath + File.separator + "data" + File.separator + "user"), Student::class.java))
         val array = Array(studentList.size, { i -> "${studentList[i].name}(${studentList[i].username})" })
-        ViewUtil.setPopupView(this,array,textViewStudent,{position ->
+        ViewUtil.setPopupView(this, array, textViewStudent, { position ->
             getTests(studentList[position])
         })
     }
@@ -74,10 +75,17 @@ class ExamActivity : AppCompatActivity() {
             }
 
             override fun got(array: Array<Exam>) {
-                loadingDialog.dismiss()
                 testList.clear()
                 testList.addAll(array)
                 adapter.notifyDataSetChanged()
+                val parentFile = File(filesDir.absolutePath + File.separator + "exam/")
+                if (!parentFile.exists())
+                    parentFile.mkdirs()
+                val base64Name = XhuFileUtil.filterString(Base64.encodeToString(student.username.toByteArray(), Base64.DEFAULT))
+                val savedFile = File(parentFile, base64Name)
+                savedFile.createNewFile()
+                XhuFileUtil.saveObjectToFile(testList, savedFile)
+                loadingDialog.dismiss()
             }
 
             override fun doInThread() {
