@@ -23,10 +23,6 @@ import android.support.v7.widget.LinearLayoutManager
 import android.util.Base64
 import android.view.View
 import android.widget.Toast
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.bumptech.glide.request.RequestOptions
-import com.bumptech.glide.signature.MediaStoreSignature
 import com.getkeepsafe.taptargetview.TapTarget
 import com.getkeepsafe.taptargetview.TapTargetSequence
 import com.google.gson.Gson
@@ -120,20 +116,35 @@ class MainActivity : AppCompatActivity() {
             val dialog = AlertDialog.Builder(this)
                     .setTitle(getString(R.string.dialog_title_update_log, getString(R.string.app_version_name) + '-' + getString(R.string.app_version_code)))
                     .setMessage(message)
-            if (sharedPreference.getInt("updateVersion", 0) == getString(R.string.app_version_code).toInt() - 1)
-                dialog.setPositiveButton("我真的明白了", { _, _ ->
-                    sharedPreference.edit().putInt("updateVersion", getString(R.string.app_version_code).toInt()).apply()
-                })
-            else
-                dialog.setPositiveButton(android.R.string.ok, null)
-                        .setOnDismissListener {
-                            sharedPreference.edit().putInt("updateVersion", getString(R.string.app_version_code).toInt() - 1).apply()
-                        }
-            try {
-                dialog.show()
-            } catch (e: Exception) {
-                e.printStackTrace()
+                    .setCancelable(false)
+                    .setPositiveButton(android.R.string.ok, null)
+                    .setOnDismissListener {
+                        sharedPreference.edit().putInt("updateVersion", getString(R.string.app_version_code).toInt()).apply()
+                    }
+                    .create()
+            dialog.show()
+            Observable.create<Boolean> { subscriber ->
+                Thread.sleep(2000)
+                subscriber.onComplete()
             }
+                    .subscribeOn(Schedulers.newThread())
+                    .unsubscribeOn(Schedulers.newThread())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(object : Observer<Boolean> {
+                        override fun onSubscribe(d: Disposable) {
+                            dialog.getButton(AlertDialog.BUTTON_POSITIVE).isEnabled = false
+                        }
+
+                        override fun onError(e: Throwable) {
+                        }
+
+                        override fun onComplete() {
+                            dialog.getButton(AlertDialog.BUTTON_POSITIVE).isEnabled = true
+                        }
+
+                        override fun onNext(t: Boolean) {
+                        }
+                    })
         }
     }
 
@@ -145,7 +156,7 @@ class MainActivity : AppCompatActivity() {
             snowfallView.visibility = View.GONE
         }
         if (ScheduleHelper.isImageChange) {
-            if (Settings.customBackgroundImg != ""){
+            if (Settings.customBackgroundImg != "") {
                 todayFragment.setBackground()
                 weekFragment.setBackground()
             }
@@ -187,7 +198,7 @@ class MainActivity : AppCompatActivity() {
         layout_week_recycler_view.adapter = weekAdapter
         layout_week_recycler_view.scrollToPosition(0)
 
-        if (Settings.customBackgroundImg != ""){
+        if (Settings.customBackgroundImg != "") {
             todayFragment.setBackground()
             weekFragment.setBackground()
         }
