@@ -15,6 +15,7 @@
         android:id="@+id/background"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:background="@color/colorWhite"
         android:contentDescription="@string/app_name"
         android:scaleType="centerCrop"
         app:layout_constraintBottom_toBottomOf="parent"

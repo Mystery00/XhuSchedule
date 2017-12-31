@@ -13,6 +13,7 @@
         android:id="@+id/background"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/colorWhite"
         android:contentDescription="@string/app_name"
         android:scaleType="centerCrop" />
 
