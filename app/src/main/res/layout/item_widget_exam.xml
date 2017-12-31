@@ -23,23 +23,22 @@
         android:textStyle="bold" />
 
     <TextView
-        android:id="@+id/course_teacher"
+        android:id="@+id/exam_location_time"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/course_name"
+        android:layout_below="@id/exam_name"
         android:paddingBottom="4dp"
         android:paddingEnd="8dp"
         android:paddingStart="8dp"
         android:paddingTop="4dp"
         android:textColor="@color/colorWhite" />
 
-
     <TextView
-        android:id="@+id/course_time_location"
+        android:id="@+id/exam_no"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/course_teacher"
-        android:paddingBottom="8dp"
+        android:layout_below="@id/exam_location_time"
+        android:paddingBottom="4dp"
         android:paddingEnd="8dp"
         android:paddingStart="8dp"
         android:paddingTop="4dp"

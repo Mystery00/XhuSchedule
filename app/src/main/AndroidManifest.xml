@@ -80,6 +80,9 @@
         <service
             android:name=".service.TodayWidgetService"
             android:permission="android.permission.BIND_REMOTEVIEWS" />
+        <service
+            android:name=".service.ExamWidgetService"
+            android:permission="android.permission.BIND_REMOTEVIEWS" />
 
         <provider
             android:name="android.support.v4.content.FileProvider"
@@ -91,7 +94,9 @@
                 android:resource="@xml/file_paths" />
         </provider>
 
-        <receiver android:name=".util.widget.ScheduleCourseWidget">
+        <receiver
+            android:name=".util.widget.ScheduleCourseWidget"
+            android:label="本周课表">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
@@ -100,7 +105,9 @@
                 android:name="android.appwidget.provider"
                 android:resource="@xml/schedule_course_widget_info" />
         </receiver>
-        <receiver android:name=".util.widget.TodayCourseWidget">
+        <receiver
+            android:name=".util.widget.TodayCourseWidget"
+            android:label="今日课表">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
@@ -108,6 +115,17 @@
             <meta-data
                 android:name="android.appwidget.provider"
                 android:resource="@xml/today_course_widget_info" />
+        </receiver>
+
+        <receiver
+            android:name=".util.widget.ExamWidget"
+            android:label="考试查询">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/exam_widget_info" />
         </receiver>
 
         <service
@@ -122,16 +140,6 @@
             android:name=".service.WidgetInitService"
             android:enabled="true"
             android:exported="true" />
-
-        <receiver android:name=".util.widget.ExamWidget">
-            <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-            </intent-filter>
-
-            <meta-data
-                android:name="android.appwidget.provider"
-                android:resource="@xml/exam_widget_info" />
-        </receiver>
     </application>
 
 </manifest>

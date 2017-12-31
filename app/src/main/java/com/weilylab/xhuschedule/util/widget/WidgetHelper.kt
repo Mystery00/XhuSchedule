@@ -29,7 +29,7 @@ object WidgetHelper {
     var dayIndex = 0
     val showTodayCourses = ArrayList<Course>()
     val showScheduleCourses = ArrayList<ArrayList<ArrayList<Course>>>()
-    val showExamList=ArrayList<Exam>()
+    val showExamList = ArrayList<Exam>()
 
     /**
      * 同步当天时间
@@ -115,8 +115,7 @@ object WidgetHelper {
     /**
      * 刷新内存中的考试列表
      */
-    fun refreshExamList(context: Context){
-        showExamList.clear()
+    fun refreshExamList(context: Context) {
         val studentList = XhuFileUtil.getArrayFromFile(File(context.filesDir.absolutePath + File.separator + "data" + File.separator + "user"), Student::class.java)
         if (studentList.isEmpty())
             return
@@ -139,7 +138,16 @@ object WidgetHelper {
             return
         }
         ScheduleHelper.isCookieAvailable = true
-        showExamList.addAll(XhuFileUtil.getArrayListFromFile(oldFile,Exam::class.java))
+        getExamList(XhuFileUtil.getArrayListFromFile(oldFile, Exam::class.java))
+    }
+
+    /**
+     * 解析转换考试列表
+     */
+    private fun getExamList(oldList: ArrayList<Exam>) {
+        showExamList.clear()
+        showExamList.addAll(oldList.filter { it.date != "" }
+                .toList())
     }
 
     /**

@@ -19,6 +19,7 @@ import com.weilylab.xhuschedule.util.Settings
  * Created by mystery0.
  */
 class ExamListRemotesViewsFactory(private val context: Context) : RemoteViewsService.RemoteViewsFactory {
+    private val colorSharedPreference = context.getSharedPreferences("course_color", Context.MODE_PRIVATE)
 
     override fun onCreate() {
     }
@@ -40,23 +41,21 @@ class ExamListRemotesViewsFactory(private val context: Context) : RemoteViewsSer
 
     override fun getViewAt(position: Int): RemoteViews {
         return if (WidgetHelper.showExamList.size != 0) {
-            val course = WidgetHelper.showTodayCourses[position]
-            val remotesView = RemoteViews(context.packageName, R.layout.item_widget_today)
-            remotesView.setTextViewText(R.id.course_name, course.name)
-            remotesView.setTextViewText(R.id.course_teacher, course.teacher)
+            val exam = WidgetHelper.showExamList[position]
+            val remotesView = RemoteViews(context.packageName, R.layout.item_widget_exam)
+            remotesView.setTextViewText(R.id.exam_name, exam.name)
+            remotesView.setTextViewText(R.id.exam_location_time, "${exam.time} at ${exam.location}")
+            remotesView.setTextViewText(R.id.exam_no, "座位号：${exam.testno}")
             try {
-                val startTime = context.resources.getStringArray(R.array.start_time)
-                val endTime = context.resources.getStringArray(R.array.end_time)
-                val time = course.time.trim().split("-")
-                val showTime = context.getString(R.string.course_time_format, startTime[time[0].toInt() - 1], endTime[time[1].toInt() - 1])
-                remotesView.setTextViewText(R.id.course_time_location, "$showTime at ${course.location}")
+                val md5 = ScheduleHelper.getMD5(exam.name)
+                var savedColor = colorSharedPreference.getString(md5, "")
+                if (savedColor == "") {
+                    savedColor = '#' + ScheduleHelper.getRandomColor()
+                    colorSharedPreference.edit().putString(md5, savedColor).apply()
+                }
+                remotesView.setInt(R.id.background, "setBackgroundColor", Color.parseColor('#' + Integer.toHexString(Settings.customTodayOpacity) + savedColor.substring(1)))
             } catch (e: Exception) {
                 e.printStackTrace()
-                remotesView.setTextViewText(R.id.course_time_location, "${course.time} at ${course.location}")
-            }
-            try {
-                remotesView.setInt(R.id.background, "setBackgroundColor", Color.parseColor('#' + Integer.toHexString(Settings.customTodayOpacity) + course.color.substring(1)))
-            } catch (e: Exception) {
                 remotesView.setInt(R.id.background, "setBackgroundColor", Color.parseColor('#' + Integer.toHexString(Settings.customTodayOpacity) + ScheduleHelper.getRandomColor()))
             }
             remotesView
@@ -66,7 +65,7 @@ class ExamListRemotesViewsFactory(private val context: Context) : RemoteViewsSer
     }
 
     override fun getCount(): Int {
-        return if (WidgetHelper.showTodayCourses.size != 0) WidgetHelper.showTodayCourses.size else 1
+        return if (WidgetHelper.showExamList.size != 0) WidgetHelper.showExamList.size else 1
     }
 
     override fun getViewTypeCount(): Int {
