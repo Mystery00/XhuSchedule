@@ -9,13 +9,13 @@ package com.weilylab.xhuschedule.adapter
 
 import android.content.Context
 import android.content.Intent
+import android.support.design.widget.TextInputLayout
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
@@ -74,12 +74,19 @@ class OperationAdapter(private val context: Context) : RecyclerView.Adapter<Oper
                             .setLoadingColor(ContextCompat.getColor(context, R.color.colorAccent))
                             .setHintTextColor(ContextCompat.getColor(context, R.color.colorAccent))
                             .create()
-                    val editText = EditText(context)
-                    editText.hint = "请输入您的建议"
+                    val layout = View.inflate(context, R.layout.dialog_feedback, null)
+                    val emailInput: TextInputLayout = layout.findViewById(R.id.input_email)
+                    val textInput: TextInputLayout = layout.findViewById(R.id.input_text)
                     AlertDialog.Builder(context)
                             .setTitle(R.string.operation_feedback)
-                            .setView(editText)
+                            .setView(layout)
                             .setPositiveButton(android.R.string.ok, { dialog, _ ->
+                                if (emailInput.editText!!.text.toString().isEmpty()) {
+                                    Toast.makeText(context, R.string.hint_feedback_empty, Toast.LENGTH_SHORT)
+                                            .show()
+                                    return@setPositiveButton
+                                }
+                                val text = "联系邮箱：${emailInput.editText!!.text}\n${textInput.editText!!.text}"
                                 loadingDialog.show()
                                 val studentList = XhuFileUtil.getArrayFromFile(File(context.filesDir.absolutePath + File.separator + "data" + File.separator + "user"), Student::class.java)
                                 var mainStudent: Student? = (0 until studentList.size)
@@ -87,7 +94,7 @@ class OperationAdapter(private val context: Context) : RecyclerView.Adapter<Oper
                                         ?.let { studentList[it] }
                                 if (mainStudent == null)
                                     mainStudent = studentList[0]
-                                mainStudent.feedback(context, editText.text.toString(), object : FeedBackListener {
+                                mainStudent.feedback(context, text, object : FeedBackListener {
                                     override fun error(rt: Int, e: Throwable) {
                                         e.printStackTrace()
                                         loadingDialog.dismiss()
