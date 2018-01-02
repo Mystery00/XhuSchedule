@@ -24,6 +24,7 @@ import vip.mystery0.tools.fileUtil.FileUtil
 
 object UpdateNotification {
     private val NOTIFICATION_TAG = "Update"
+    private val NOTIFICATION_ID = 2
 
     private fun initChannelID(context: Context) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -31,7 +32,7 @@ object UpdateNotification {
             val id = context.getString(R.string.notification_channel_id)
             val name = context.getString(R.string.notification_channel_name)
             val description = context.getString(R.string.notification_channel_description)
-            val importance = NotificationManager.IMPORTANCE_HIGH
+            val importance = NotificationManager.IMPORTANCE_NONE
             val mChannel = NotificationChannel(id, name, importance)
             mChannel.description = description
             mChannel.enableLights(true)
@@ -72,12 +73,12 @@ object UpdateNotification {
     private fun notify(context: Context, notification: Notification) {
         val notificationManager = context
                 .getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        notificationManager.notify(NOTIFICATION_TAG, 0, notification)
+        notificationManager.notify(NOTIFICATION_TAG, NOTIFICATION_ID, notification)
     }
 
     fun cancel(context: Context) {
         val notificationManager = context
                 .getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        notificationManager.cancel(NOTIFICATION_TAG, 0)
+        notificationManager.cancel(NOTIFICATION_TAG, NOTIFICATION_ID)
     }
 }

@@ -258,9 +258,9 @@ class Student : Serializable {
                 .feedback(username,
                         context.getString(R.string.app_version_name) + "-" + context.getString(R.string.app_version_code),
                         Build.VERSION.RELEASE + "-" + Build.VERSION.SDK_INT,
-                        "Build.MANUFACTURER",
-                        "Build.MODEL",
-                        "Build.DISPLAY",
+                        Build.MANUFACTURER,
+                        Build.MODEL,
+                        Build.DISPLAY,
 //                        "Brand-${Build.BRAND}",
                         "other",
                         message)
