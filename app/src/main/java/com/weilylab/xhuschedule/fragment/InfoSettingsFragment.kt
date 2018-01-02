@@ -12,12 +12,12 @@ import android.os.Bundle
 import android.preference.Preference
 import android.preference.PreferenceFragment
 import android.preference.SwitchPreference
+import android.support.design.widget.TextInputLayout
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AlertDialog
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
 import android.widget.Toast
 import com.google.gson.Gson
 import com.weilylab.xhuschedule.R
@@ -90,40 +90,48 @@ class InfoSettingsFragment : PreferenceFragment() {
                     .setLoadingColor(ContextCompat.getColor(activity, R.color.colorAccent))
                     .setHintTextColor(ContextCompat.getColor(activity, R.color.colorAccent))
                     .create()
-            val editText = EditText(activity)
-            editText.hint = "请输入您的建议"
-            AlertDialog.Builder(activity)
+            val layout = View.inflate(activity, R.layout.dialog_feedback, null)
+            val emailInput: TextInputLayout = layout.findViewById(R.id.input_email)
+            val textInput: TextInputLayout = layout.findViewById(R.id.input_text)
+            val dialog = AlertDialog.Builder(activity)
                     .setTitle(R.string.operation_feedback)
-                    .setView(editText)
-                    .setPositiveButton(android.R.string.ok, { dialog, _ ->
-                        loadingDialog.show()
-                        val studentList = XhuFileUtil.getArrayFromFile(File(activity.filesDir.absolutePath + File.separator + "data" + File.separator + "user"), Student::class.java)
-                        var mainStudent: Student? = (0 until studentList.size)
-                                .firstOrNull { studentList[it].isMain }
-                                ?.let { studentList[it] }
-                        if (mainStudent == null)
-                            mainStudent = studentList[0]
-                        mainStudent.feedback(activity, editText.text.toString(), object : FeedBackListener {
-                            override fun error(rt: Int, e: Throwable) {
-                                e.printStackTrace()
-                                loadingDialog.dismiss()
-                                Toast.makeText(activity, activity.getString(R.string.hint_feedback_error, rt, e.message), Toast.LENGTH_LONG)
-                                        .show()
-                            }
-
-                            override fun done(rt: Int) {
-                                loadingDialog.dismiss()
-                                dialog.dismiss()
-                                Toast.makeText(activity, R.string.hint_feedback, Toast.LENGTH_SHORT)
-                                        .show()
-                            }
-
-                            override fun doInThread() {
-                            }
-                        })
-                    })
+                    .setView(layout)
+                    .setPositiveButton(android.R.string.ok, null)
                     .setNegativeButton(android.R.string.cancel, null)
-                    .show()
+                    .create()
+            dialog.show()
+            dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
+                if (emailInput.editText!!.text.toString().isEmpty()||textInput.editText!!.text.toString().isEmpty()) {
+                    Toast.makeText(activity, R.string.hint_feedback_empty, Toast.LENGTH_SHORT)
+                            .show()
+                } else {
+                    loadingDialog.show()
+                    val studentList = XhuFileUtil.getArrayFromFile(File(activity.filesDir.absolutePath + File.separator + "data" + File.separator + "user"), Student::class.java)
+                    var mainStudent: Student? = (0 until studentList.size)
+                            .firstOrNull { studentList[it].isMain }
+                            ?.let { studentList[it] }
+                    if (mainStudent == null)
+                        mainStudent = studentList[0]
+                    mainStudent.feedback(activity, emailInput.editText!!.text.toString(), textInput.editText!!.text.toString(), object : FeedBackListener {
+                        override fun error(rt: Int, e: Throwable) {
+                            e.printStackTrace()
+                            loadingDialog.dismiss()
+                            Toast.makeText(activity, getString(R.string.hint_feedback_error, rt, e.message), Toast.LENGTH_LONG)
+                                    .show()
+                        }
+
+                        override fun done(rt: Int) {
+                            loadingDialog.dismiss()
+                            dialog.dismiss()
+                            Toast.makeText(activity, R.string.hint_feedback, Toast.LENGTH_SHORT)
+                                    .show()
+                        }
+
+                        override fun doInThread() {
+                        }
+                    })
+                }
+            }
             true
         }
         weixinPreference.setOnPreferenceClickListener {

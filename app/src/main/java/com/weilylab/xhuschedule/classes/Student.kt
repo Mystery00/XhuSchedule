@@ -252,7 +252,7 @@ class Student : Serializable {
                 })
     }
 
-    fun feedback(context: Context, message: String, listener: FeedBackListener) {
+    fun feedback(context: Context, emailAddress:String,message: String, listener: FeedBackListener) {
         val tag = "Student feedback"
         ScheduleHelper.tomcatRetrofit.create(StudentService::class.java)
                 .feedback(username,
@@ -261,7 +261,7 @@ class Student : Serializable {
                         "Build.MANUFACTURER",
                         "Build.MODEL",
                         "Build.DISPLAY",
-                        "Brand-Build.BRAND",
+                        "联系方式：$emailAddress",
                         message)
                 .doOnComplete {
                     listener.doInThread()
@@ -290,7 +290,7 @@ class Student : Serializable {
                                     }
 
                                     override fun loginDone(name: String) {
-                                        feedback(context, message, listener)
+                                        feedback(context, message, emailAddress,listener)
                                     }
 
                                     override fun error(rt: Int, e: Throwable) {

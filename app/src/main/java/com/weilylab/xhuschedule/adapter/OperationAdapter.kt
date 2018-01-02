@@ -77,44 +77,45 @@ class OperationAdapter(private val context: Context) : RecyclerView.Adapter<Oper
                     val layout = View.inflate(context, R.layout.dialog_feedback, null)
                     val emailInput: TextInputLayout = layout.findViewById(R.id.input_email)
                     val textInput: TextInputLayout = layout.findViewById(R.id.input_text)
-                    AlertDialog.Builder(context)
+                    val dialog = AlertDialog.Builder(context)
                             .setTitle(R.string.operation_feedback)
                             .setView(layout)
-                            .setPositiveButton(android.R.string.ok, { dialog, _ ->
-                                if (emailInput.editText!!.text.toString().isEmpty()) {
-                                    Toast.makeText(context, R.string.hint_feedback_empty, Toast.LENGTH_SHORT)
-                                            .show()
-                                    return@setPositiveButton
-                                }
-                                val text = "联系邮箱：${emailInput.editText!!.text}\n${textInput.editText!!.text}"
-                                loadingDialog.show()
-                                val studentList = XhuFileUtil.getArrayFromFile(File(context.filesDir.absolutePath + File.separator + "data" + File.separator + "user"), Student::class.java)
-                                var mainStudent: Student? = (0 until studentList.size)
-                                        .firstOrNull { studentList[it].isMain }
-                                        ?.let { studentList[it] }
-                                if (mainStudent == null)
-                                    mainStudent = studentList[0]
-                                mainStudent.feedback(context, text, object : FeedBackListener {
-                                    override fun error(rt: Int, e: Throwable) {
-                                        e.printStackTrace()
-                                        loadingDialog.dismiss()
-                                        Toast.makeText(context, context.getString(R.string.hint_feedback_error, rt, e.message), Toast.LENGTH_LONG)
-                                                .show()
-                                    }
-
-                                    override fun done(rt: Int) {
-                                        loadingDialog.dismiss()
-                                        dialog.dismiss()
-                                        Toast.makeText(context, R.string.hint_feedback, Toast.LENGTH_SHORT)
-                                                .show()
-                                    }
-
-                                    override fun doInThread() {
-                                    }
-                                })
-                            })
+                            .setPositiveButton(android.R.string.ok, null)
                             .setNegativeButton(android.R.string.cancel, null)
-                            .show()
+                            .create()
+                    dialog.show()
+                    dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
+                        if (emailInput.editText!!.text.toString().isEmpty() || textInput.editText!!.text.toString().isEmpty()) {
+                            Toast.makeText(context, R.string.hint_feedback_empty, Toast.LENGTH_SHORT)
+                                    .show()
+                        } else {
+                            loadingDialog.show()
+                            val studentList = XhuFileUtil.getArrayFromFile(File(context.filesDir.absolutePath + File.separator + "data" + File.separator + "user"), Student::class.java)
+                            var mainStudent: Student? = (0 until studentList.size)
+                                    .firstOrNull { studentList[it].isMain }
+                                    ?.let { studentList[it] }
+                            if (mainStudent == null)
+                                mainStudent = studentList[0]
+                            mainStudent.feedback(context, emailInput.editText!!.text.toString(), textInput.editText!!.text.toString(), object : FeedBackListener {
+                                override fun error(rt: Int, e: Throwable) {
+                                    e.printStackTrace()
+                                    loadingDialog.dismiss()
+                                    Toast.makeText(context, context.getString(R.string.hint_feedback_error, rt, e.message), Toast.LENGTH_LONG)
+                                            .show()
+                                }
+
+                                override fun done(rt: Int) {
+                                    loadingDialog.dismiss()
+                                    dialog.dismiss()
+                                    Toast.makeText(context, R.string.hint_feedback, Toast.LENGTH_SHORT)
+                                            .show()
+                                }
+
+                                override fun doInThread() {
+                                }
+                            })
+                        }
+                    }
                 }
                 4 -> {
                     AlertDialog.Builder(context)
