@@ -68,9 +68,8 @@ class SplashActivity : AppCompatActivity() {
                 val fileNamePrefix = "crash"
                 //log文件的扩展名
                 val fileNameSuffix = "txt"
-                val dir = File(externalCacheDir.absolutePath + File.separator)
                 var modified = 0L
-                dir.listFiles()
+                cacheDir.listFiles()
                         .filter {
                             it.name.startsWith(fileNamePrefix, true) && it.name.endsWith(fileNameSuffix, true)
                         }

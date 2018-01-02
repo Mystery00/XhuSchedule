@@ -35,11 +35,10 @@ class APP : Application() {
     override fun onCreate() {
         super.onCreate()
         Logs.setLevel(Logs.Debug)
-        val file = File(externalCacheDir.absolutePath + File.separator)
-        if (!file.exists())
-            file.mkdirs()
+        if (!cacheDir.exists())
+            cacheDir.mkdirs()
         CrashHandler.getInstance(this)
-                .setDirectory(file)
+                .setDirectory(cacheDir)
                 .sendException(object : CatchExceptionListener {
                     override fun onException(date: String, file: File, appVersionName: String, appVersionCode: Int, AndroidVersion: String, sdk: Int, vendor: String, model: String, ex: Throwable) {
                         val error = XhuScheduleError(date, appVersionName, appVersionCode, AndroidVersion, sdk, vendor, model, ex)
