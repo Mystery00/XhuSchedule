@@ -74,6 +74,9 @@
     <string name="hint_popup_view_student">请选择要查询的学生</string>
     <string name="hint_popup_view_year">请选择要查询的学年</string>
     <string name="hint_popup_view_term">请选择要查询的学期</string>
+    <string name="hint_exam_days">%1$d 天后</string>
+    <string name="hint_exam_days_hour">%1$d 小时后</string>
+    <string name="hint_exam_days_ago">已考过</string>
 
     <string name="warning_enable_multi_user_mode">
         请确保您是双学位的学生或者有同时查看多个账号课表的需求。\n\n

@@ -64,6 +64,9 @@ class ExamActivity : AppCompatActivity() {
         ViewUtil.setPopupView(this, array, textViewStudent, { position ->
             getTests(studentList[position])
         })
+        //初始化显示数据
+        textViewStudent.text = array[0]
+        getTests(studentList[0])
     }
 
     private fun getTests(student: Student) {

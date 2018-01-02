@@ -9,6 +9,7 @@ package com.weilylab.xhuschedule.util
 
 import android.content.Context
 import com.weilylab.xhuschedule.R
+import com.weilylab.xhuschedule.classes.Exam
 import com.weilylab.xhuschedule.util.widget.WidgetHelper
 import vip.mystery0.tools.logs.Logs
 import java.util.*
@@ -81,5 +82,35 @@ object CalendarUtil {
         val calendar = Calendar.getInstance()
         calendar.timeInMillis = timeInMillis
         return calendar.time.toString()
+    }
+
+    fun getExamShowInfo(context: Context, exam: Exam): String {
+        if (exam.date == "")
+            return "时间计算出错"
+        try {
+            val days = exam.date.split('-')
+            val startTime = exam.time.split('-')[0].split(':')
+            val endTime = exam.time.split('-')[1].split(':')
+            val startCalendar = Calendar.getInstance()
+            startCalendar.set(days[0].toInt(), days[1].toInt() - 1, days[2].toInt(), startTime[0].toInt(), startTime[1].toInt(), 0)
+            val endCalendar = Calendar.getInstance()
+            endCalendar.set(days[0].toInt(), days[1].toInt() - 1, days[2].toInt(), endTime[0].toInt(), endTime[1].toInt(), 0)
+            val nowCalendar = Calendar.getInstance()
+            return when {
+                nowCalendar.timeInMillis < startCalendar.timeInMillis -> {
+                    val millis = startCalendar.timeInMillis - nowCalendar.timeInMillis
+                    if (millis > 1000 * 60 * 60 * 24)//大于一天
+                        context.getString(R.string.hint_exam_days, millis / 1000 / 60 / 60 / 24)
+                    else//小时
+                        context.getString(R.string.hint_exam_days_hour, millis / 1000 / 60 / 60)
+                }
+                nowCalendar.timeInMillis > endCalendar.timeInMillis ->
+                    context.getString(R.string.hint_exam_days_ago)
+                else -> "考试中"
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            return "时间计算出错"
+        }
     }
 }

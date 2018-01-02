@@ -12,6 +12,7 @@ import android.graphics.Color
 import android.widget.RemoteViews
 import android.widget.RemoteViewsService
 import com.weilylab.xhuschedule.R
+import com.weilylab.xhuschedule.util.CalendarUtil
 import com.weilylab.xhuschedule.util.ScheduleHelper
 import com.weilylab.xhuschedule.util.Settings
 
@@ -46,6 +47,7 @@ class ExamListRemotesViewsFactory(private val context: Context) : RemoteViewsSer
             remotesView.setTextViewText(R.id.exam_name, exam.name)
             remotesView.setTextViewText(R.id.exam_location_time, "${exam.time} at ${exam.location}")
             remotesView.setTextViewText(R.id.exam_no, "座位号：${exam.testno}")
+            remotesView.setTextViewText(R.id.exam_days, CalendarUtil.getExamShowInfo(context, exam))
             try {
                 val md5 = ScheduleHelper.getMD5(exam.name)
                 var savedColor = colorSharedPreference.getString(md5, "")
