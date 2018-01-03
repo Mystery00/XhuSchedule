@@ -94,9 +94,6 @@ class ExamActivity : AppCompatActivity() {
                         .putExtra("TAG", WidgetHelper.ALL_TAG))
                 loadingDialog.dismiss()
             }
-
-            override fun doInThread() {
-            }
         })
     }
 }

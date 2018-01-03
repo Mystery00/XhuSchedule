@@ -370,11 +370,8 @@ class ScheduleActivity : AppCompatActivity() {
                         .show()
             }
 
-            override fun doInThread() {
-                XhuFileUtil.saveObjectToFile(studentList, File(filesDir.absolutePath + File.separator + "data" + File.separator + "user"))
-            }
-
             override fun got(profile: Profile) {
+                XhuFileUtil.saveObjectToFile(studentList, File(filesDir.absolutePath + File.separator + "data" + File.separator + "user"))
                 try {
                     val start = student.profile!!.grade.toInt()//进校年份
                     val calendar = Calendar.getInstance()
@@ -411,9 +408,6 @@ class ScheduleActivity : AppCompatActivity() {
 
             override fun loginDone(name: String) {
                 getCourses(student, year, term)
-            }
-
-            override fun doInThread() {
             }
         })
     }

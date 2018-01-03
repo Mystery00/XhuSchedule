@@ -544,9 +544,6 @@ class MainActivity : AppCompatActivity() {
                 ScheduleHelper.isLogin = true
                 updateAllData()
             }
-
-            override fun doInThread() {
-            }
         })
     }
 
@@ -676,9 +673,6 @@ class MainActivity : AppCompatActivity() {
                             updateProfileDialog.dismiss()
                             Logs.e(TAG, "error: " + rt)
                             e.printStackTrace()
-                        }
-
-                        override fun doInThread() {
                         }
 
                         override fun got(profile: Profile) {

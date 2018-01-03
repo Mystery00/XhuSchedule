@@ -127,10 +127,6 @@ class SplashActivity : AppCompatActivity() {
                                                     finish()
                                                 }
 
-                                                override fun doInThread() {
-                                                    //无效的回调，非本方法使用
-                                                }
-
                                                 override fun ready() {
                                                 }
                                             })

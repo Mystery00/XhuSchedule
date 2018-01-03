@@ -43,9 +43,6 @@ class Student : Serializable {
         ScheduleHelper.tomcatRetrofit
                 .create(StudentService::class.java)
                 .autoLogin(username, password)
-                .doOnComplete {
-                    listener.doInThread()
-                }
                 .subscribeOn(Schedulers.newThread())
                 .unsubscribeOn(Schedulers.newThread())
                 .map({ responseBody -> Gson().fromJson(InputStreamReader(responseBody.byteStream()), LoginRT::class.java) })
@@ -89,9 +86,6 @@ class Student : Serializable {
         ScheduleHelper.tomcatRetrofit
                 .create(StudentService::class.java)
                 .getInfo(username)
-                .doOnComplete {
-                    listener.doInThread()
-                }
                 .subscribeOn(Schedulers.newThread())
                 .unsubscribeOn(Schedulers.newThread())
                 .map { responseBody -> Gson().fromJson(InputStreamReader(responseBody.byteStream()), StudentInfoRT::class.java) }
@@ -115,9 +109,6 @@ class Student : Serializable {
                             "3" -> listener.error(3, Exception(context.getString(R.string.error_invalid_password)))
                             "6" -> {
                                 login(context, object : LoginListener {
-                                    override fun doInThread() {
-                                    }
-
                                     override fun loginDone(name: String) {
                                         getInfo(context, listener)
                                     }
@@ -147,9 +138,6 @@ class Student : Serializable {
         ScheduleHelper.tomcatRetrofit
                 .create(StudentService::class.java)
                 .getTests(username)
-                .doOnComplete {
-                    listener.doInThread()
-                }
                 .subscribeOn(Schedulers.newThread())
                 .unsubscribeOn(Schedulers.newThread())
                 .map { responseBody -> Gson().fromJson(InputStreamReader(responseBody.byteStream()), ExamRT::class.java) }
@@ -170,9 +158,6 @@ class Student : Serializable {
                             "3" -> listener.error(3, Exception(context.getString(R.string.error_invalid_password)))
                             "6" -> {
                                 login(context, object : LoginListener {
-                                    override fun doInThread() {
-                                    }
-
                                     override fun loginDone(name: String) {
                                         getTests(context, listener)
                                     }
@@ -202,9 +187,6 @@ class Student : Serializable {
         ScheduleHelper.tomcatRetrofit
                 .create(StudentService::class.java)
                 .getScores(username, year, term)
-                .doOnComplete {
-                    listener.doInThread()
-                }
                 .subscribeOn(Schedulers.newThread())
                 .unsubscribeOn(Schedulers.newThread())
                 .map { responseBody -> Gson().fromJson(InputStreamReader(responseBody.byteStream()), ScoreRT::class.java) }
@@ -225,9 +207,6 @@ class Student : Serializable {
                             "3" -> listener.error(3, Exception(context.getString(R.string.error_invalid_password)))
                             "6" -> {
                                 login(context, object : LoginListener {
-                                    override fun doInThread() {
-                                    }
-
                                     override fun loginDone(name: String) {
                                         getScores(context, year, term, listener)
                                     }
@@ -263,9 +242,6 @@ class Student : Serializable {
                         "Build.DISPLAY",
                         "联系方式：$emailAddress",
                         message)
-                .doOnComplete {
-                    listener.doInThread()
-                }
                 .subscribeOn(Schedulers.newThread())
                 .unsubscribeOn(Schedulers.newThread())
                 .map { responseBody -> Gson().fromJson(InputStreamReader(responseBody.byteStream()), FeedRT::class.java) }
@@ -286,9 +262,6 @@ class Student : Serializable {
                             "3" -> listener.error(3, Exception(context.getString(R.string.error_invalid_password)))
                             "6" -> {
                                 login(context, object : LoginListener {
-                                    override fun doInThread() {
-                                    }
-
                                     override fun loginDone(name: String) {
                                         feedback(context, message, emailAddress,listener)
                                     }

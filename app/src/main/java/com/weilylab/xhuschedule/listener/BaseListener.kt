@@ -9,5 +9,4 @@ package com.weilylab.xhuschedule.listener
 
 interface BaseListener {
     fun error(rt: Int, e:Throwable)
-    fun doInThread()
 }

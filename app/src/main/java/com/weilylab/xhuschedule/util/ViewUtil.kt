@@ -146,7 +146,6 @@ object ViewUtil {
                     in 9 until 13 -> calendar.get(Calendar.YEAR) + 1
                     else -> 0
                 }
-                Logs.i(TAG, "initProfile: $start - $end")
                 val yearArray = Array(end - start, { i -> "${start + i}-${start + i + 1}" })
                 setPopupView(context, yearArray, textViewYear, width, { position ->
                     listener.done(position, yearArray[position])

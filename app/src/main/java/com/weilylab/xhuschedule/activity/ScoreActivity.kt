@@ -173,9 +173,6 @@ class ScoreActivity : AppCompatActivity() {
                 Snackbar.make(coordinatorLayout, e.message!!, Snackbar.LENGTH_SHORT)
                         .show()
             }
-
-            override fun doInThread() {
-            }
         })
     }
 
@@ -188,23 +185,17 @@ class ScoreActivity : AppCompatActivity() {
                         .show()
             }
 
-            override fun doInThread() {
-                XhuFileUtil.saveObjectToFile(studentList, File(filesDir.absolutePath + File.separator + "data" + File.separator + "user"))
-            }
-
             override fun got(profile: Profile) {
+                XhuFileUtil.saveObjectToFile(studentList, File(filesDir.absolutePath + File.separator + "data" + File.separator + "user"))
                 try {
                     val start = student.profile!!.grade.toInt()//进校年份
                     val calendar = Calendar.getInstance()
                     val end = when (calendar.get(Calendar.MONTH) + 1) {
-                        in 1 until 3 -> calendar.get(Calendar.YEAR) - 1
-                        in 3 until 9 -> calendar.get(Calendar.YEAR)
+                        in 1 until 9 -> calendar.get(Calendar.YEAR)
                         in 9 until 13 -> calendar.get(Calendar.YEAR) + 1
-                        else -> {
-                            0
-                        }
+                        else -> 0
                     }
-                    val array = Array(end - start, { i -> (start + i).toString() + '-' + (start + i + 1).toString() })
+                    val array = Array(end - start, { i -> "${start + i}-${start + i + 1}" })
                     ViewUtil.setPopupView(this@ScoreActivity, array, textViewYear, { position ->
                         year = array[position]
                         initScores(currentStudent)

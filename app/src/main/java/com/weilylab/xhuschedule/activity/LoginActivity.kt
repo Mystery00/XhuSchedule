@@ -85,9 +85,6 @@ class LoginActivity : AppCompatActivity() {
         student.username = usernameStr
         student.password = passwordStr
         student.login(this, object : LoginListener {
-            override fun doInThread() {
-            }
-
             override fun error(rt: Int, e: Throwable) {
                 loginDialog.dismiss()
                 Toast.makeText(this@LoginActivity, e.message, Toast.LENGTH_SHORT)
