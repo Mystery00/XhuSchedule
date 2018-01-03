@@ -94,7 +94,7 @@ class AccountSettingsFragment : PreferenceFragment() {
                             if (result)
                                 showIterator.remove()
                         }
-                        val isSetMain = (0 until studentList.size).any { studentList[it].isMain }
+                        val isSetMain = studentList.size == 0 || (0 until studentList.size).any { studentList[it].isMain }
                         if (!isSetMain)
                             studentList[0].isMain = true
                         XhuFileUtil.saveObjectToFile(studentList, userFile)
@@ -114,7 +114,7 @@ class AccountSettingsFragment : PreferenceFragment() {
             val valueArray = Array(studentList.size, { i -> "${studentList[i].name}(${studentList[i].username})" })
             var mainIndex = (0 until studentList.size).firstOrNull { studentList[it].isMain } ?: 0
             AlertDialog.Builder(activity)
-                    .setTitle(R.string.title_del_account)
+                    .setTitle(R.string.title_set_main_account)
                     .setSingleChoiceItems(valueArray, mainIndex, { _, which ->
                         mainIndex = which
                     })

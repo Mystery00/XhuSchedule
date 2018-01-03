@@ -35,7 +35,6 @@ import com.zyao89.view.zloading.Z_TYPE
 import vip.mystery0.tools.logs.Logs
 import java.util.*
 
-
 /**
  * Created by myste.
  */
@@ -141,15 +140,15 @@ object ViewUtil {
         if (student.profile != null) {
             try {
                 val start = student.profile!!.grade.toInt()//进校年份
-                Logs.i(TAG, "initProfile: "+start)
                 val calendar = Calendar.getInstance()
                 val end = when (calendar.get(Calendar.MONTH) + 1) {
                     in 1 until 9 -> calendar.get(Calendar.YEAR)
                     in 9 until 13 -> calendar.get(Calendar.YEAR) + 1
                     else -> 0
                 }
+                Logs.i(TAG, "initProfile: $start - $end")
                 val yearArray = Array(end - start, { i -> "${start + i}-${start + i + 1}" })
-                ViewUtil.setPopupView(context, yearArray, textViewYear, width, { position ->
+                setPopupView(context, yearArray, textViewYear, width, { position ->
                     listener.done(position, yearArray[position])
                 })
                 textViewYear.text = yearArray[yearArray.size - 1]
