@@ -110,9 +110,6 @@ class OperationAdapter(private val context: Context) : RecyclerView.Adapter<Oper
                                     Toast.makeText(context, R.string.hint_feedback, Toast.LENGTH_SHORT)
                                             .show()
                                 }
-
-                                override fun doInThread() {
-                                }
                             })
                         }
                     }
