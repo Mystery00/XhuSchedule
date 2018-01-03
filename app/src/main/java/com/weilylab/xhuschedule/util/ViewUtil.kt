@@ -32,14 +32,12 @@ import com.weilylab.xhuschedule.classes.Student
 import com.weilylab.xhuschedule.listener.InitProfileListener
 import com.zyao89.view.zloading.ZLoadingDialog
 import com.zyao89.view.zloading.Z_TYPE
-import vip.mystery0.tools.logs.Logs
 import java.util.*
 
 /**
  * Created by myste.
  */
 object ViewUtil {
-    private val TAG = "ViewUtil"
 
     fun showAlertDialog(context: Context, course: Course, infoChangeListener: InfoChangeListener) {
         val view = View.inflate(context, R.layout.dialog_edit, null)
