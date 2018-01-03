@@ -126,9 +126,6 @@ class InfoSettingsFragment : PreferenceFragment() {
                             Toast.makeText(activity, R.string.hint_feedback, Toast.LENGTH_SHORT)
                                     .show()
                         }
-
-                        override fun doInThread() {
-                        }
                     })
                 }
             }
