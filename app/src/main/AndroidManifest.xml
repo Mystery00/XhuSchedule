@@ -60,6 +60,12 @@
             android:label="@string/title_activity_score"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
+
+        <activity
+            android:name=".activity.ExpScoreActivity"
+            android:label="@string/title_activity_expscore"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activity.ScheduleActivity"
             android:screenOrientation="portrait"
@@ -99,7 +105,7 @@
         <service
             android:name=".service.ClearCacheColorService"
             android:enabled="true"
-            android:exported="true"/>
+            android:exported="true" />
         <service
             android:name=".service.GridWidgetService"
             android:permission="android.permission.BIND_REMOTEVIEWS" />

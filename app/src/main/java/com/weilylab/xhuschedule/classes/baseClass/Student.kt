@@ -211,6 +211,52 @@ class Student : Serializable {
                 })
     }
 
+    fun getExpScores(year: String?,term: Int?,listener: GetExpScoreListener){
+        val tag = "Student getScores"
+        ScheduleHelper.tomcatRetrofit
+                .create(StudentService::class.java)
+                .getExpScores(username, year, term)
+                .subscribeOn(Schedulers.newThread())
+                .unsubscribeOn(Schedulers.newThread())
+                .map { responseBody -> Gson().fromJson(InputStreamReader(responseBody.byteStream()), GetExpScoresRT::class.java) }
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(object : Observer<GetExpScoresRT> {
+                    private var getExpScoresRT: GetExpScoresRT? = null
+                    override fun onNext(t: GetExpScoresRT) {
+                        Logs.i(tag, "onNext: ")
+                        getExpScoresRT = t
+                    }
+
+                    override fun onComplete() {
+                        Logs.i(tag, "onComplete: " + getExpScoresRT?.rt)
+                        when (getExpScoresRT?.rt) {
+                            "0" -> listener.got(getExpScoresRT!!.expscores)
+                            "405" -> {
+                                login(object : LoginListener {
+                                    override fun loginDone() {
+                                        getExpScores(year, term, listener)
+                                    }
+
+                                    override fun error(rt: Int, e: Throwable) {
+                                        listener.error(rt, e)
+                                    }
+                                })
+                            }
+                            else -> listener.error(getExpScoresRT!!.rt.toInt(), Exception(getExpScoresRT?.msg))
+                        }
+                    }
+
+                    override fun onError(e: Throwable) {
+                        Logs.i(tag, "onError: ")
+                        listener.error(-1, e)
+                    }
+
+                    override fun onSubscribe(d: Disposable) {
+                        Logs.i(tag, "onSubscribe: ")
+                    }
+                })
+    }
+
     fun feedback(context: Context, emailAddress: String, message: String, listener: FeedBackListener) {
         val tag = "Student feedback"
         ScheduleHelper.tomcatRetrofit.create(CommonService::class.java)

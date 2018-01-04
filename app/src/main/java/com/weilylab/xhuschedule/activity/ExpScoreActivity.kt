@@ -1,29 +1,28 @@
 /*
- * Created by Mystery0 on 17-12-21 上午3:41.
- * Copyright (c) 2017. All Rights reserved.
+ * Created by Mystery0 on 18-1-4 下午8:18.
+ * Copyright (c) 2018. All Rights reserved.
  *
- * Last modified 17-12-21 上午2:28
+ * Last modified 18-1-4 下午8:18
  */
 
 package com.weilylab.xhuschedule.activity
 
 import android.app.Dialog
-import android.content.Intent
+import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v4.content.ContextCompat
-import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Base64
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
 import com.weilylab.xhuschedule.R
-import com.weilylab.xhuschedule.adapter.ScoreAdapter
+import com.weilylab.xhuschedule.adapter.ExpScoreAdapter
+import com.weilylab.xhuschedule.classes.baseClass.ExpScore
 import com.weilylab.xhuschedule.classes.baseClass.Profile
-import com.weilylab.xhuschedule.classes.baseClass.Score
 import com.weilylab.xhuschedule.classes.baseClass.Student
-import com.weilylab.xhuschedule.listener.GetScoreListener
+import com.weilylab.xhuschedule.listener.GetExpScoreListener
 import com.weilylab.xhuschedule.listener.InitProfileListener
 import com.weilylab.xhuschedule.listener.ProfileListener
 import com.weilylab.xhuschedule.util.Settings
@@ -35,25 +34,24 @@ import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.observers.DisposableObserver
 import io.reactivex.schedulers.Schedulers
-import kotlinx.android.synthetic.main.activity_score.*
-import kotlinx.android.synthetic.main.content_score.*
-
+import kotlinx.android.synthetic.main.activity_experiment_score.*
+import kotlinx.android.synthetic.main.content_experiment_score.*
 import java.io.File
 import java.util.*
 
-class ScoreActivity : AppCompatActivity() {
+class ExpScoreActivity : AppCompatActivity() {
 
     private lateinit var loadingDialog: Dialog
     private val studentList = ArrayList<Student>()
-    private val scoreList = ArrayList<Score>()
-    private lateinit var adapter: ScoreAdapter
+    private val scoreList = ArrayList<ExpScore>()
+    private lateinit var adapter: ExpScoreAdapter
     private var currentStudent: Student? = null
     private var year = ""
     private var term = 1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_score)
+        setContentView(R.layout.activity_experiment_score)
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         initView()
@@ -68,7 +66,7 @@ class ScoreActivity : AppCompatActivity() {
                 .setLoadingColor(ContextCompat.getColor(this, R.color.colorAccent))
                 .setHintTextColor(ContextCompat.getColor(this, R.color.colorAccent))
                 .create()
-        adapter = ScoreAdapter(this, scoreList)
+        adapter = ExpScoreAdapter(this, scoreList)
         recycler_view.layoutManager = LinearLayoutManager(this)
         recycler_view.adapter = adapter
         studentList.clear()
@@ -82,7 +80,7 @@ class ScoreActivity : AppCompatActivity() {
             if (currentStudent != null)
                 ViewUtil.initProfile(this, currentStudent!!, textViewYear, object : InitProfileListener {
                     override fun done(position: Int, year: String) {
-                        this@ScoreActivity.year = year
+                        this@ExpScoreActivity.year = year
                         initScores(currentStudent)
                     }
 
@@ -102,7 +100,7 @@ class ScoreActivity : AppCompatActivity() {
         textViewTerm.text = termArray[0]
         ViewUtil.initProfile(this, currentStudent!!, textViewYear, object : InitProfileListener {
             override fun done(position: Int, year: String) {
-                this@ScoreActivity.year = year
+                this@ExpScoreActivity.year = year
                 initScores(currentStudent)
             }
 
@@ -117,16 +115,13 @@ class ScoreActivity : AppCompatActivity() {
         if (student == null)
             return
         Observable.create<Boolean> { subscriber ->
-            val parentFile = File(filesDir.absolutePath + File.separator + "score/")
+            val parentFile = File(filesDir.absolutePath + File.separator + "expScore/")
             if (!parentFile.exists())
                 parentFile.mkdirs()
             val base64Name = XhuFileUtil.filterString(Base64.encodeToString(student.username.toByteArray(), Base64.DEFAULT))
             val savedFile = File(parentFile, "$base64Name-$year-$term")
-            val savedFailedFile = File(parentFile, "$base64Name-$year-$term-failed")
             scoreList.clear()
-            scoreList.addAll(XhuFileUtil.getArrayListFromFile(savedFile, Score::class.java))
-            if (Settings.isShowFailed)
-                scoreList.addAll(XhuFileUtil.getArrayListFromFile(savedFailedFile, Score::class.java))
+            scoreList.addAll(XhuFileUtil.getArrayListFromFile(savedFile, ExpScore::class.java))
             subscriber.onComplete()
         }
                 .subscribeOn(Schedulers.newThread())
@@ -150,21 +145,18 @@ class ScoreActivity : AppCompatActivity() {
         if (student == null)
             return
         loadingDialog.show()
-        student.getScores(year, term, object : GetScoreListener {
-            override fun got(array: Array<Score>, failedArray: Array<Score>) {
+        student.getExpScores(year, term, object : GetExpScoreListener {
+            override fun got(array: Array<ExpScore>) {
                 scoreList.clear()
                 scoreList.addAll(array)
                 adapter.notifyDataSetChanged()
-                val parentFile = File(filesDir.absolutePath + File.separator + "score/")
+                val parentFile = File(filesDir.absolutePath + File.separator + "expScore/")
                 if (!parentFile.exists())
                     parentFile.mkdirs()
                 val base64Name = XhuFileUtil.filterString(Base64.encodeToString(student.username.toByteArray(), Base64.DEFAULT))
                 val savedFile = File(parentFile, "$base64Name-$year-$term")
-                val savedFailedFile = File(parentFile, "$base64Name-$year-$term-failed")
                 savedFile.createNewFile()
-                savedFailedFile.createNewFile()
                 XhuFileUtil.saveObjectToFile(scoreList, savedFile)
-                XhuFileUtil.saveObjectToFile(failedArray.toList(), savedFailedFile)
                 loadingDialog.dismiss()
             }
 
@@ -197,14 +189,14 @@ class ScoreActivity : AppCompatActivity() {
                         else -> 0
                     }
                     val array = Array(end - start, { i -> "${start + i}-${start + i + 1}" })
-                    ViewUtil.setPopupView(this@ScoreActivity, array, textViewYear, { position ->
+                    ViewUtil.setPopupView(this@ExpScoreActivity, array, textViewYear, { position ->
                         year = array[position]
                         initScores(currentStudent)
                     })
                     initDialog.dismiss()
                 } catch (e: Exception) {
                     e.printStackTrace()
-                    Toast.makeText(this@ScoreActivity, "数据解析错误，无法使用，请联系开发者！", Toast.LENGTH_LONG)
+                    Toast.makeText(this@ExpScoreActivity, "数据解析错误，无法使用，请联系开发者！", Toast.LENGTH_LONG)
                             .show()
                 }
             }
@@ -213,7 +205,8 @@ class ScoreActivity : AppCompatActivity() {
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.menu_activity_score, menu)
-        menu.findItem(R.id.action_show_failed).isChecked = Settings.isShowFailed
+        menu.removeItem(R.id.action_show_failed)
+        menu.removeItem(R.id.action_experiment)
         return true
     }
 
@@ -225,16 +218,6 @@ class ScoreActivity : AppCompatActivity() {
             }
             R.id.action_search -> {
                 getScores(currentStudent, year, term)
-                true
-            }
-            R.id.action_show_failed -> {
-                item.isChecked = !item.isChecked
-                Settings.isShowFailed = item.isChecked
-                initScores(currentStudent)
-                true
-            }
-            R.id.action_experiment -> {
-                startActivity(Intent(this, ExpScoreActivity::class.java))
                 true
             }
             else -> super.onOptionsItemSelected(item)

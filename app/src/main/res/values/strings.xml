@@ -26,6 +26,7 @@
     <string name="action_feedback">反馈该信息</string>
     <string name="action_open">开启</string>
     <string name="action_show_failed">显示未通过成绩</string>
+    <string name="action_experiment">实验项目成绩查询</string>
 
     <string name="prompt_username">用户名</string>
     <string name="prompt_password">密码</string>
@@ -127,6 +128,9 @@
     <string name="score_coursetype">课程性质：%1$s</string>
     <string name="score_credit">学分：%1$s</string>
     <string name="score_gpa">绩点：%1$s</string>
+    <string name="expscore_exptype">项目性质：%1$s</string>
+    <string name="expscore_coursename">课程名称：%1$s</string>
+    <string name="expscore_name">项目名称</string>
 
     <string name="nav_today">今日</string>
     <string name="nav_week">本周</string>
@@ -179,6 +183,7 @@
     <string name="title_activity_settings">设置</string>
     <string name="title_activity_exam">考试查询</string>
     <string name="title_activity_score">成绩查询</string>
+    <string name="title_activity_expscore">实验成绩查询</string>
 
     <string name="title_shortcuts_refresh_widget">刷新桌面小部件数据</string>
     <string name="title_shortcuts_refresh_color">重新生成课程颜色</string>

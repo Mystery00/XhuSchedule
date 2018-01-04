@@ -20,5 +20,8 @@
             app:showAsAction="never" />
     </group>
 
-
+    <item
+        android:id="@+id/action_experiment"
+        android:title="@string/action_experiment"
+        app:showAsAction="never" />
 </menu>
