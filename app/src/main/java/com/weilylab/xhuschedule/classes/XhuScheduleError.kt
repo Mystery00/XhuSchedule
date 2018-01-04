@@ -11,7 +11,7 @@ import android.content.Context
 import com.google.gson.Gson
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.classes.response.UploadLogResponse
-import com.weilylab.xhuschedule.interfaces.CommonService
+import com.weilylab.xhuschedule.interfaces.PhpService
 import com.weilylab.xhuschedule.listener.UploadLogListener
 import com.weilylab.xhuschedule.util.ScheduleHelper
 import io.reactivex.Observer
@@ -44,7 +44,7 @@ data class XhuScheduleError(val time: String, val appVersionName: String,
         map.put("vendor", vendor)
         map.put("model", model)
         ScheduleHelper.phpRetrofit
-                .create(CommonService::class.java)
+                .create(PhpService::class.java)
                 .uploadLog(createPartFromMap(map), prepareFilePart("logFile", logFile))
                 .subscribeOn(Schedulers.newThread())
                 .unsubscribeOn(Schedulers.newThread())

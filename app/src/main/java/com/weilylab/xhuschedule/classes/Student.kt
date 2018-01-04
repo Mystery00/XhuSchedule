@@ -12,7 +12,9 @@ import android.os.Build
 import com.google.gson.Gson
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.classes.rt.*
+import com.weilylab.xhuschedule.interfaces.CommonService
 import com.weilylab.xhuschedule.interfaces.StudentService
+import com.weilylab.xhuschedule.interfaces.UserService
 import com.weilylab.xhuschedule.listener.*
 import com.weilylab.xhuschedule.util.ScheduleHelper
 import io.reactivex.Observer
@@ -41,7 +43,7 @@ class Student : Serializable {
     private fun login(isTryLogin: Boolean, context: Context, listener: LoginListener) {
         val tag = "Student login"
         ScheduleHelper.tomcatRetrofit
-                .create(StudentService::class.java)
+                .create(UserService::class.java)
                 .autoLogin(username, password)
                 .subscribeOn(Schedulers.newThread())
                 .unsubscribeOn(Schedulers.newThread())
@@ -233,7 +235,7 @@ class Student : Serializable {
 
     fun feedback(context: Context, emailAddress:String,message: String, listener: FeedBackListener) {
         val tag = "Student feedback"
-        ScheduleHelper.tomcatRetrofit.create(StudentService::class.java)
+        ScheduleHelper.tomcatRetrofit.create(CommonService::class.java)
                 .feedback(username,
                         context.getString(R.string.app_version_name) + "-" + context.getString(R.string.app_version_code),
                         Build.VERSION.RELEASE + "-" + Build.VERSION.SDK_INT,

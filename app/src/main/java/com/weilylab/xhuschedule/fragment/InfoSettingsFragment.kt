@@ -23,7 +23,7 @@ import com.google.gson.Gson
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.classes.Student
 import com.weilylab.xhuschedule.classes.Update
-import com.weilylab.xhuschedule.interfaces.CommonService
+import com.weilylab.xhuschedule.interfaces.PhpService
 import com.weilylab.xhuschedule.listener.FeedBackListener
 import com.weilylab.xhuschedule.service.DownloadService
 import com.weilylab.xhuschedule.util.ScheduleHelper
@@ -153,7 +153,7 @@ class InfoSettingsFragment : PreferenceFragment() {
         checkUpdatePreference.setOnPreferenceClickListener {
             loadingDialog.show()
             ScheduleHelper.phpRetrofit
-                    .create(CommonService::class.java)
+                    .create(PhpService::class.java)
                     .checkUpdateCall(getString(R.string.app_version_code).toInt())
                     .subscribeOn(Schedulers.newThread())
                     .unsubscribeOn(Schedulers.newThread())

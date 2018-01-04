@@ -12,7 +12,7 @@ import android.content.Intent
 import com.google.gson.Gson
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.classes.Update
-import com.weilylab.xhuschedule.interfaces.CommonService
+import com.weilylab.xhuschedule.interfaces.PhpService
 import com.weilylab.xhuschedule.util.ScheduleHelper
 import com.weilylab.xhuschedule.util.notification.UpdateNotification
 import io.reactivex.Observer
@@ -22,10 +22,10 @@ import io.reactivex.schedulers.Schedulers
 import vip.mystery0.tools.logs.Logs
 import java.io.InputStreamReader
 
-class UpdateService : IntentService("CommonService") {
+class UpdateService : IntentService("PhpService") {
     override fun onHandleIntent(intent: Intent?) {
         ScheduleHelper.phpRetrofit
-                .create(CommonService::class.java)
+                .create(PhpService::class.java)
                 .checkUpdateCall(getString(R.string.app_version_code).toInt())
                 .subscribeOn(Schedulers.newThread())
                 .unsubscribeOn(Schedulers.newThread())
@@ -42,7 +42,7 @@ class UpdateService : IntentService("CommonService") {
                     }
 
                     override fun onComplete() {
-                        Logs.i("CommonService", "onComplete: " + update.message)
+                        Logs.i("PhpService", "onComplete: " + update.message)
                         if (update.code == 1)
                             UpdateNotification.notify(applicationContext, update.version)
                         stopSelf()

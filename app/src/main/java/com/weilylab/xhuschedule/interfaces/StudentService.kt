@@ -13,32 +13,22 @@ import retrofit2.http.*
 
 interface StudentService {
     @FormUrlEncoded
-    @POST("/course/Course/autoLogin")
-    fun autoLogin(@Field("username") username: String, @Field("password") password: String): Observable<ResponseBody>
-
-    @FormUrlEncoded
-    @POST("/course/Course/getCourses")
+    @POST("/Course/getCourses")
     fun getCourses(@Field("username") username: String, @Field("year") year: String?, @Field("term") term: Int?): Observable<ResponseBody>
 
     @FormUrlEncoded
-    @POST("/course/User/getInfo")
+    @POST("/Test/getInfo")
     fun getInfo(@Field("username") username: String): Observable<ResponseBody>
 
     @FormUrlEncoded
-    @POST("/course/Course/getTests")
+    @POST("/Test/getTests")
     fun getTests(@Field("username") username: String): Observable<ResponseBody>
 
     @FormUrlEncoded
-    @POST("/course/Course/getScores")
+    @POST("/Score/getScores")
     fun getScores(@Field("username") username: String, @Field("year") year: String?, @Field("term") term: Int?): Observable<ResponseBody>
 
-    @GET("/course/Common/feedback")
-    fun feedback(@Query("username") username: String,
-                 @Query("appVersion") appVersion: String,
-                 @Query("systemVersion") systemVersion: String,
-                 @Query("factory") vendor: String,
-                 @Query("model") model: String,
-                 @Query("rom") rom: String,
-                 @Query("other") other: String,
-                 @Query("message") message: String): Observable<ResponseBody>
+    @FormUrlEncoded
+    @POST("/Score/getExpScores")
+    fun getExpScores(@Field("username") username: String, @Field("year") year: String?, @Field("term") term: Int?): Observable<ResponseBody>
 }

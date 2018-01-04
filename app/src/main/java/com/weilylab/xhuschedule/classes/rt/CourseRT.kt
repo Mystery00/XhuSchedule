@@ -12,7 +12,6 @@ import com.weilylab.xhuschedule.classes.Course
 /**
  * Created by myste.
  */
-class CourseRT {
-    lateinit var rt: String
+class CourseRT:RT() {
     lateinit var courses: Array<Course>
 }

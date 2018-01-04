@@ -40,7 +40,7 @@ import com.jrummyapps.android.colorpicker.ColorPreference
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.adapter.HeaderAdapter
 import com.weilylab.xhuschedule.classes.Course
-import com.weilylab.xhuschedule.interfaces.CommonService
+import com.weilylab.xhuschedule.interfaces.PhpService
 import com.weilylab.xhuschedule.util.*
 import com.yalantis.ucrop.UCrop
 import com.zyao89.view.zloading.ZLoadingDialog
@@ -490,7 +490,7 @@ class UISettingsFragment : PreferenceFragment() {
                 .setHintTextColor(ContextCompat.getColor(activity, R.color.colorAccent))
                 .create()
         loadingDialog.show()
-        ScheduleHelper.imgRetrofit.create(CommonService::class.java)
+        ScheduleHelper.imgRetrofit.create(PhpService::class.java)
                 .downloadImg(fileName)
                 .subscribeOn(Schedulers.newThread())
                 .unsubscribeOn(Schedulers.newThread())

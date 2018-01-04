@@ -9,8 +9,7 @@ package com.weilylab.xhuschedule.classes.rt
 
 import com.weilylab.xhuschedule.classes.Score
 
-class ScoreRT {
-    lateinit var rt: String
+class ScoreRT:RT() {
     lateinit var scores: Array<Score>
     lateinit var failscores: Array<Score>
 }

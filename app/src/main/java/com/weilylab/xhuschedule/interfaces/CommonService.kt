@@ -1,35 +1,28 @@
 /*
- * Created by Mystery0 on 17-12-21 上午3:41.
- * Copyright (c) 2017. All Rights reserved.
+ * Created by Mystery0 on 18-1-4 下午4:50.
+ * Copyright (c) 2018. All Rights reserved.
  *
- * Last modified 17-12-20 下午8:17
+ * Last modified 18-1-4 下午4:50
  */
 
 package com.weilylab.xhuschedule.interfaces
 
 import io.reactivex.Observable
-import okhttp3.MultipartBody
-import okhttp3.RequestBody
 import okhttp3.ResponseBody
-import retrofit2.http.*
+import retrofit2.http.GET
+import retrofit2.http.Query
 
-/**
- * Created by myste.
- */
 interface CommonService {
-    @Streaming
-    @FormUrlEncoded
-    @POST("/XhuSchedule/interface/checkUpdate.php")
-    fun checkUpdateCall(@Field("currentVersion") currentVersion: Int): Observable<ResponseBody>
 
-    @Streaming
-    @GET("/XhuSchedule/{type}/{fileName}")
-    fun download(@Path("type") type: String, @Path("fileName") fileName: String): Observable<ResponseBody>
+    @GET("/Common/feedback")
+    fun feedback(@Query("username") username: String,
+                 @Query("appVersion") appVersion: String,
+                 @Query("systemVersion") systemVersion: String,
+                 @Query("factory") vendor: String,
+                 @Query("model") model: String,
+                 @Query("rom") rom: String,
+                 @Query("other") other: String,
+                 @Query("message") message: String): Observable<ResponseBody>
 
-    @Multipart
-    @POST("/XhuSchedule/interface/upload_log.php")
-    fun uploadLog(@PartMap partMap: MutableMap<String, RequestBody>, @Part logFile: MultipartBody.Part): Observable<ResponseBody>
 
-    @GET("/{fileName}")
-    fun downloadImg(@Path("fileName") fileName: String): Observable<ResponseBody>
 }

@@ -10,8 +10,4 @@ package com.weilylab.xhuschedule.classes.rt
 /**
  * Created by myste.
  */
-class LoginRT
-{
-    lateinit var rt: String
-    lateinit var name: String
-}
+class LoginRT:RT()

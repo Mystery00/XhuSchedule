@@ -7,6 +7,5 @@
 
 package com.weilylab.xhuschedule.classes.rt
 
-class FeedRT {
-    lateinit var rt: String
+class FeedRT:RT() {
 }

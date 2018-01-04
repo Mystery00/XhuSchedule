@@ -14,7 +14,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Environment
 import android.support.v4.content.FileProvider
-import com.weilylab.xhuschedule.interfaces.CommonService
+import com.weilylab.xhuschedule.interfaces.PhpService
 import com.weilylab.xhuschedule.listener.DownloadProgressListener
 import com.weilylab.xhuschedule.util.BsPatch
 import com.weilylab.xhuschedule.util.notification.DownloadNotification
@@ -94,7 +94,7 @@ class DownloadService : IntentService(TAG) {
 
     private fun download(context: Context, type: String, fileName: String, file: File) {
         Logs.i(TAG, "download: " + fileName)
-        retrofit.create(CommonService::class.java)
+        retrofit.create(PhpService::class.java)
                 .download(type, fileName)
                 .subscribeOn(Schedulers.newThread())
                 .unsubscribeOn(Schedulers.newThread())

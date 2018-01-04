@@ -9,7 +9,6 @@ package com.weilylab.xhuschedule.classes.rt
 
 import com.weilylab.xhuschedule.classes.Exam
 
-class ExamRT {
-    lateinit var rt: String
+class ExamRT:RT() {
     lateinit var tests: Array<Exam>
 }

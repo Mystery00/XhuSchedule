@@ -38,7 +38,7 @@ object ScheduleHelper {
             .build()
 
     val tomcatRetrofit = Retrofit.Builder()
-            .baseUrl("http://tomcat.weilylab.com:7823")
+            .baseUrl("http://tomcat.weilylab.com:7823/xhuschedule")
             .client(client)
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .build()!!
@@ -50,7 +50,7 @@ object ScheduleHelper {
             .build()!!
 
     val imgRetrofit = Retrofit.Builder()
-            .baseUrl("http://img.mystery0.vip")
+            .baseUrl("https://mystery0.vip")
             .client(client)
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .build()!!
