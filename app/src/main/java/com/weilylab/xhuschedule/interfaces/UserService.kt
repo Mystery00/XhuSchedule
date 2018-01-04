@@ -18,5 +18,7 @@ interface UserService {
     @POST("/User/autoLogin")
     fun autoLogin(@Field("username") username: String, @Field("password") password: String): Observable<ResponseBody>
 
-
+    @FormUrlEncoded
+    @POST("/User/getInfo")
+    fun getInfo(@Field("username") username: String): Observable<ResponseBody>
 }

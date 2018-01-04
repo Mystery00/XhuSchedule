@@ -60,7 +60,7 @@ class ExamActivity : AppCompatActivity() {
         recycler_view.adapter = adapter
         studentList.clear()
         studentList.addAll(XhuFileUtil.getArrayFromFile(File(filesDir.absolutePath + File.separator + "data" + File.separator + "user"), Student::class.java))
-        val array = Array(studentList.size, { i -> "${studentList[i].name}(${studentList[i].username})" })
+        val array = Array(studentList.size, { i -> studentList[i].username })
         ViewUtil.setPopupView(this, array, textViewStudent, { position ->
             getTests(studentList[position])
         })
@@ -71,11 +71,11 @@ class ExamActivity : AppCompatActivity() {
 
     private fun getTests(student: Student) {
         loadingDialog.show()
-        student.getTests(this, object : GetArrayListener<Exam> {
+        student.getTests(object : GetArrayListener<Exam> {
             override fun error(rt: Int, e: Throwable) {
                 loadingDialog.dismiss()
                 e.printStackTrace()
-                Snackbar.make(coordinatorLayout, e.message!!, Snackbar.LENGTH_SHORT)
+                Snackbar.make(coordinatorLayout, e.message.toString(), Snackbar.LENGTH_SHORT)
                         .show()
             }
 

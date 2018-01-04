@@ -29,7 +29,6 @@ import kotlin.collections.ArrayList
 class Student : Serializable {
     lateinit var username: String
     lateinit var password: String
-    lateinit var name: String
     var profile: Profile? = null
     var todayCourses = ArrayList<Course>()
     var weekCourses = ArrayList<ArrayList<ArrayList<Course>>>()
@@ -74,24 +73,24 @@ class Student : Serializable {
     fun getInfo(listener: ProfileListener) {
         val tag = "Student getInfo"
         ScheduleHelper.tomcatRetrofit
-                .create(StudentService::class.java)
+                .create(UserService::class.java)
                 .getInfo(username)
                 .subscribeOn(Schedulers.newThread())
                 .unsubscribeOn(Schedulers.newThread())
-                .map { responseBody -> Gson().fromJson(InputStreamReader(responseBody.byteStream()), InfoRT::class.java) }
+                .map { responseBody -> Gson().fromJson(InputStreamReader(responseBody.byteStream()), GetInfoRT::class.java) }
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(object : Observer<InfoRT> {
-                    private var infoRT: InfoRT? = null
-                    override fun onNext(t: InfoRT) {
+                .subscribe(object : Observer<GetInfoRT> {
+                    private var getInfoRT: GetInfoRT? = null
+                    override fun onNext(t: GetInfoRT) {
                         Logs.i(tag, "onNext: ")
-                        infoRT = t
+                        getInfoRT = t
                     }
 
                     override fun onComplete() {
-                        Logs.i(tag, "onComplete: " + infoRT?.rt)
-                        when (infoRT?.rt) {
+                        Logs.i(tag, "onComplete: " + getInfoRT?.rt)
+                        when (getInfoRT?.rt) {
                             "0" -> {
-                                profile = Profile().map(infoRT!!)
+                                profile = Profile().map(getInfoRT!!)
                                 listener.got(profile!!)
                             }
                             "405" -> {
@@ -105,7 +104,7 @@ class Student : Serializable {
                                     }
                                 })
                             }
-                            else -> listener.error(infoRT!!.rt.toInt(), Exception(infoRT?.msg))
+                            else -> listener.error(getInfoRT!!.rt.toInt(), Exception(getInfoRT?.msg))
                         }
                     }
 

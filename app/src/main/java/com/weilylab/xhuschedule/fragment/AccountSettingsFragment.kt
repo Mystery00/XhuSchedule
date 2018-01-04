@@ -63,7 +63,7 @@ class AccountSettingsFragment : PreferenceFragment() {
         delAccountPreference.setOnPreferenceClickListener {
             studentList.clear()
             studentList.addAll(XhuFileUtil.getArrayListFromFile(userFile, Student::class.java))
-            val valueArray = Array(studentList.size, { i -> "${studentList[i].name}(${studentList[i].username})" })
+            val valueArray = Array(studentList.size, { i -> studentList[i].username })
             val checkedArray = BooleanArray(studentList.size, { false })
             AlertDialog.Builder(activity)
                     .setTitle(R.string.title_del_account)
@@ -111,7 +111,7 @@ class AccountSettingsFragment : PreferenceFragment() {
         setMainAccountPreference.setOnPreferenceClickListener {
             studentList.clear()
             studentList.addAll(XhuFileUtil.getArrayListFromFile(userFile, Student::class.java))
-            val valueArray = Array(studentList.size, { i -> "${studentList[i].name}(${studentList[i].username})" })
+            val valueArray = Array(studentList.size, { i -> studentList[i].username })
             var mainIndex = (0 until studentList.size).firstOrNull { studentList[it].isMain } ?: 0
             AlertDialog.Builder(activity)
                     .setTitle(R.string.title_set_main_account)
@@ -173,10 +173,9 @@ class AccountSettingsFragment : PreferenceFragment() {
         studentList.forEach {
             val preference = Preference(activity)
             if (it.isMain)
-                preference.title = "${it.name}(主)"
+                preference.title = "${it.username}(主)"
             else
-                preference.title = it.name
-            preference.summary = it.username
+                preference.title = it.username
             currentAccountCategory.addPreference(preference)
         }
     }

@@ -84,17 +84,16 @@ class LoginActivity : AppCompatActivity() {
         val student = Student()
         student.username = usernameStr
         student.password = passwordStr
-        student.login(this, object : LoginListener {
+        student.login(object : LoginListener {
             override fun error(rt: Int, e: Throwable) {
                 loginDialog.dismiss()
-                Toast.makeText(this@LoginActivity, e.message, Toast.LENGTH_SHORT)
+                Toast.makeText(this@LoginActivity, e.message.toString(), Toast.LENGTH_SHORT)
                         .show()
             }
 
-            override fun loginDone(name: String) {
+            override fun loginDone() {
                 ScheduleHelper.isLogin = true
                 val userFile = File(filesDir.absolutePath + File.separator + "data" + File.separator + "user")
-                student.name = name
                 val userList = XhuFileUtil.getArrayListFromFile(userFile, Student::class.java)
                 var result = false
                 userList.forEach {
@@ -104,7 +103,7 @@ class LoginActivity : AppCompatActivity() {
                     userList.add(student)
                 XhuFileUtil.saveObjectToFile(userList, userFile)
                 loginDialog.dismiss()
-                Toast.makeText(this@LoginActivity, getString(R.string.success_login, name, getString(R.string.app_name)), Toast.LENGTH_SHORT)
+                Toast.makeText(this@LoginActivity, getString(R.string.success_login, getString(R.string.app_name)), Toast.LENGTH_SHORT)
                         .show()
                 setResult(Activity.RESULT_OK, intent)
                 finish()

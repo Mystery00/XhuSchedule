@@ -99,7 +99,7 @@ class ScheduleActivity : AppCompatActivity() {
         }
         studentList.clear()
         studentList.addAll(XhuFileUtil.getArrayFromFile(File(filesDir.absolutePath + File.separator + "data" + File.separator + "user"), Student::class.java))
-        val array = Array(studentList.size, { i -> "${studentList[i].name}(${studentList[i].username})" })
+        val array = Array(studentList.size, { i -> studentList[i].username })
         val termArray = arrayOf("1", "2", "3")
         ViewUtil.setPopupView(this, array, textViewStudent, DensityUtil.getWidth(this, 56F, 56F), { position ->
             currentStudent = studentList[position]
@@ -155,42 +155,37 @@ class ScheduleActivity : AppCompatActivity() {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(object : DisposableObserver<GetCourseRT>() {
-                    private lateinit var contentRTGet: GetCourseRT
+                    private lateinit var getCourseRT: GetCourseRT
                     override fun onComplete() {
                         val parentFile = File(filesDir.absolutePath + File.separator + "courses/")
                         if (!parentFile.exists())
                             parentFile.mkdirs()
                         val base64Name = XhuFileUtil.filterString(Base64.encodeToString(student.username.toByteArray(), Base64.DEFAULT))
-                        when (contentRTGet.rt) {
-                            "1", "5" -> {
+                        when (getCourseRT.rt) {
+                            "0", "202" -> {
                                 val newFile = File(parentFile, "$base64Name-$year-$term")
                                 newFile.createNewFile()
-                                XhuFileUtil.saveObjectToFile(contentRTGet.courses, newFile)
+                                XhuFileUtil.saveObjectToFile(getCourseRT.courses, newFile)
                                 showCourses(student)
                             }
-                            "2" -> {
+                            "401", "402" -> {
                                 loadingDialog.dismiss()
-                                Snackbar.make(coordinatorLayout, getString(R.string.hint_try_refresh_data_error, getString(R.string.error_invalid_username)), Snackbar.LENGTH_LONG)
+                                Snackbar.make(coordinatorLayout, getString(R.string.hint_try_refresh_data_error, getCourseRT.msg), Snackbar.LENGTH_LONG)
                                         .show()
                             }
-                            "3" -> {
-                                loadingDialog.dismiss()
-                                Snackbar.make(coordinatorLayout, getString(R.string.hint_try_refresh_data_error, getString(R.string.error_invalid_password)), Snackbar.LENGTH_LONG)
-                                        .show()
-                            }
-                            "6" -> {
+                            "405" -> {
                                 login(student, year, term)
                             }
                             else -> {
                                 loadingDialog.dismiss()
-                                Snackbar.make(coordinatorLayout, R.string.error_timeout, Snackbar.LENGTH_LONG)
+                                Snackbar.make(coordinatorLayout, getCourseRT.msg, Snackbar.LENGTH_LONG)
                                         .show()
                             }
                         }
                     }
 
                     override fun onNext(t: GetCourseRT) {
-                        contentRTGet = t
+                        getCourseRT = t
                     }
 
                     override fun onError(e: Throwable) {

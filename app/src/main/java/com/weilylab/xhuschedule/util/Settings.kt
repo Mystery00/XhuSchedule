@@ -21,7 +21,7 @@ object Settings {
         get() = sharedPreference.getString("firstWeekOfTerm", "2017-8-4")
     var isShowNot: Boolean//是否显示非本周课程
         set(value) = sharedPreference.edit().putBoolean("isShowNot", value).apply()
-        get() = sharedPreference.getBoolean("isShowNot", true)
+        get() = sharedPreference.getBoolean("isShowNot", false)
     var isFirstRun: Boolean//是否是第一次运行
         set(value) = sharedPreference.edit().putBoolean("isFirstRun", value).apply()
         get() = sharedPreference.getBoolean("isFirstRun", true)

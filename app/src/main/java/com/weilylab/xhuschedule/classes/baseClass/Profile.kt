@@ -7,7 +7,7 @@
 
 package com.weilylab.xhuschedule.classes.baseClass
 
-import com.weilylab.xhuschedule.classes.rt.InfoRT
+import com.weilylab.xhuschedule.classes.rt.GetInfoRT
 import java.io.Serializable
 
 class Profile : Serializable {
@@ -20,15 +20,15 @@ class Profile : Serializable {
     var institute = ""
     var direction = ""
 
-    fun map(studentInfoRT: InfoRT): Profile {
-        profession = studentInfoRT.profession
-        no = studentInfoRT.no
-        classname = studentInfoRT.classname
-        sex = studentInfoRT.sex
-        grade = studentInfoRT.grade
-        name = studentInfoRT.name
-        institute = studentInfoRT.institute
-        direction = studentInfoRT.direction
+    fun map(studentGetInfoRT: GetInfoRT): Profile {
+        profession = studentGetInfoRT.profession
+        no = studentGetInfoRT.no
+        classname = studentGetInfoRT.classname
+        sex = studentGetInfoRT.sex
+        grade = studentGetInfoRT.grade
+        name = studentGetInfoRT.name
+        institute = studentGetInfoRT.institute
+        direction = studentGetInfoRT.direction
         return this
     }
 }

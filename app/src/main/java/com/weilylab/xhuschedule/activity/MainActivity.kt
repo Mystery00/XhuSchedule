@@ -70,7 +70,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var weekAdapter: WeekAdapter
     private lateinit var mainStudent: Student
     private var isTryRefreshData = false
-    private var isTryLogin = false
     private var isRefreshData = false
     private var isWeekShow = false
     private var isAnimShow = false
@@ -407,7 +406,7 @@ class MainActivity : AppCompatActivity() {
                             Snackbar.make(coordinatorLayoutView, R.string.error_network, Snackbar.LENGTH_SHORT)
                                     .show()
                         else
-                            Snackbar.make(coordinatorLayoutView, "请求出错：" + e.message + "，请重试", Snackbar.LENGTH_SHORT)
+                            Snackbar.make(coordinatorLayoutView, "请求出错：${e.message.toString()}，请重试", Snackbar.LENGTH_SHORT)
                                     .show()
                     }
 
@@ -456,7 +455,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun updateData(student: Student): Observable<GetCourseRT> {
-        Logs.i(TAG, "updateData: " + student.name)
         val parentFile = File(filesDir.absolutePath + File.separator + "caches/")
         if (!parentFile.exists())
             parentFile.mkdirs()
@@ -468,13 +466,13 @@ class MainActivity : AppCompatActivity() {
                 .unsubscribeOn(Schedulers.newThread())
                 .map({ responseBody -> Gson().fromJson(InputStreamReader(responseBody.byteStream()), GetCourseRT::class.java) })
                 .subscribeOn(Schedulers.io())
-                .doOnNext { contentRT ->
-                    Logs.i(TAG, "updateData: " + contentRT.rt)
-                    when (contentRT.rt) {
-                        "1", "5" -> {//请求成功或者数据存在问题
+                .doOnNext { getCourseRT ->
+                    Logs.i(TAG, "updateData: " + getCourseRT.rt)
+                    when (getCourseRT.rt) {
+                        "0", "202" -> {//请求成功或者数据存在问题
                             val newFile = File(parentFile, base64Name + ".temp")
                             newFile.createNewFile()
-                            XhuFileUtil.saveObjectToFile(contentRT.courses, newFile)
+                            XhuFileUtil.saveObjectToFile(getCourseRT.courses, newFile)
                             val newMD5 = XhuFileUtil.getMD5(newFile)
                             val oldFile = File(parentFile, base64Name)
                             var oldMD5 = ""
@@ -492,36 +490,24 @@ class MainActivity : AppCompatActivity() {
                             }
                             loadingDialog.dismiss()
                         }
-                        "2" -> {//用户名错误
+                        "401", "402" -> {//前端信息错误
                             loadingDialog.dismiss()
                             isRefreshData = false
                             ScheduleHelper.isLogin = false
-                            Snackbar.make(coordinatorLayoutView, getString(R.string.hint_try_refresh_data_error, getString(R.string.error_invalid_username)), Snackbar.LENGTH_LONG)
+                            Snackbar.make(coordinatorLayoutView, getString(R.string.hint_try_refresh_data_error, getCourseRT?.msg), Snackbar.LENGTH_LONG)
                                     .setAction(android.R.string.ok) {
                                         ScheduleHelper.isLogin = false
                                         startActivityForResult(Intent(this, LoginActivity::class.java), ADD_ACCOUNT_CODE)
                                     }
                                     .show()
                         }
-                        "3" -> {//密码错误
-                            loadingDialog.dismiss()
-                            isRefreshData = false
-                            ScheduleHelper.isLogin = false
-                            Snackbar.make(coordinatorLayoutView, getString(R.string.hint_try_refresh_data_error, getString(R.string.error_invalid_password)), Snackbar.LENGTH_LONG)
-                                    .setAction(android.R.string.ok) {
-                                        ScheduleHelper.isLogin = false
-                                        startActivityForResult(Intent(this, LoginActivity::class.java), ADD_ACCOUNT_CODE)
-                                    }
-                                    .show()
-                        }
-                        "6" -> {
-                            isTryLogin = false
+                        "405" -> {//未登录
                             login(student)
                         }
                         else -> {
                             loadingDialog.dismiss()
                             isRefreshData = false
-                            Snackbar.make(coordinatorLayoutView, R.string.error_timeout, Snackbar.LENGTH_LONG)
+                            Snackbar.make(coordinatorLayoutView, "错误码：${getCourseRT.rt}；错误信息：${getCourseRT.msg}", Snackbar.LENGTH_LONG)
                                     .show()
                         }
                     }
@@ -529,12 +515,12 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun login(student: Student) {
-        student.login(this, object : LoginListener {
+        student.login(object : LoginListener {
             override fun error(rt: Int, e: Throwable) {
                 isRefreshData = false
                 ScheduleHelper.isLogin = false
                 loadingDialog.dismiss()
-                Snackbar.make(coordinatorLayoutView, e.message!!, Snackbar.LENGTH_LONG)
+                Snackbar.make(coordinatorLayoutView, e.message.toString(), Snackbar.LENGTH_LONG)
                         .setAction(android.R.string.ok) {
                             ScheduleHelper.isLogin = false
                             startActivityForResult(Intent(this@MainActivity, LoginActivity::class.java), ADD_ACCOUNT_CODE)
@@ -542,7 +528,7 @@ class MainActivity : AppCompatActivity() {
                         .show()
             }
 
-            override fun loginDone(name: String) {
+            override fun loginDone() {
                 ScheduleHelper.isLogin = true
                 updateAllData()
             }
@@ -670,7 +656,7 @@ class MainActivity : AppCompatActivity() {
                 titleTextView.setCompoundDrawables(null, null, null, null)
                 if (mainStudent.profile == null) {
                     updateProfileDialog.show()
-                    mainStudent.getInfo(this, object : ProfileListener {
+                    mainStudent.getInfo(object : ProfileListener {
                         override fun error(rt: Int, e: Throwable) {
                             updateProfileDialog.dismiss()
                             Logs.e(TAG, "error: " + rt)

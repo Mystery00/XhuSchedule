@@ -73,7 +73,7 @@ class ScoreActivity : AppCompatActivity() {
         studentList.clear()
         studentList.addAll(XhuFileUtil.getArrayFromFile(File(filesDir.absolutePath + File.separator + "data" + File.separator + "user"), Student::class.java))
 
-        val studentArray = Array(studentList.size, { i -> "${studentList[i].name}(${studentList[i].username})" })
+        val studentArray = Array(studentList.size, { i -> studentList[i].username })
         val termArray = arrayOf("1", "2", "3")
 
         ViewUtil.setPopupView(this, studentArray, textViewStudent, { position ->
@@ -149,7 +149,7 @@ class ScoreActivity : AppCompatActivity() {
         if (student == null)
             return
         loadingDialog.show()
-        student.getScores(this, year, term, object : GetScoreListener {
+        student.getScores(year, term, object : GetScoreListener {
             override fun got(array: Array<Score>, failedArray: Array<Score>) {
                 scoreList.clear()
                 scoreList.addAll(array)
@@ -177,11 +177,11 @@ class ScoreActivity : AppCompatActivity() {
     }
 
     private fun getInfo(student: Student, initDialog: Dialog) {
-        student.getInfo(this, object : ProfileListener {
+        student.getInfo(object : ProfileListener {
             override fun error(rt: Int, e: Throwable) {
                 initDialog.dismiss()
                 e.printStackTrace()
-                Snackbar.make(coordinatorLayout, e.message!!, Snackbar.LENGTH_LONG)
+                Snackbar.make(coordinatorLayout, e.message.toString(), Snackbar.LENGTH_LONG)
                         .show()
             }
 
