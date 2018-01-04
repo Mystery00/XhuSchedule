@@ -13,18 +13,18 @@ import retrofit2.http.*
 
 interface StudentService {
     @FormUrlEncoded
-    @POST("/Course/getCourses")
+    @POST("/xhuschedule/Course/getCourses")
     fun getCourses(@Field("username") username: String, @Field("year") year: String?, @Field("term") term: Int?): Observable<ResponseBody>
 
     @FormUrlEncoded
-    @POST("/Test/getTests")
+    @POST("/xhuschedule/Test/getTests")
     fun getTests(@Field("username") username: String): Observable<ResponseBody>
 
     @FormUrlEncoded
-    @POST("/Score/getScores")
+    @POST("/xhuschedule/Score/getScores")
     fun getScores(@Field("username") username: String, @Field("year") year: String?, @Field("term") term: Int?): Observable<ResponseBody>
 
     @FormUrlEncoded
-    @POST("/Score/getExpScores")
+    @POST("/xhuschedule/Score/getExpScores")
     fun getExpScores(@Field("username") username: String, @Field("year") year: String?, @Field("term") term: Int?): Observable<ResponseBody>
 }

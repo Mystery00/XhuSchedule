@@ -14,7 +14,7 @@ import retrofit2.http.Query
 
 interface CommonService {
 
-    @GET("/Common/feedback")
+    @GET("/xhuschedule/Common/feedback")
     fun feedback(@Query("username") username: String,
                  @Query("appVersion") appVersion: String,
                  @Query("systemVersion") systemVersion: String,

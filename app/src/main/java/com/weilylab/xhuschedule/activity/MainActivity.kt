@@ -412,40 +412,26 @@ class MainActivity : AppCompatActivity() {
 
                     override fun onComplete() {
                         Logs.i(TAG, "updateAllData: onComplete: " + getCourseRT?.rt)
-                        if (getCourseRT?.rt == "6") {
-                            ScheduleHelper.isLogin = false
-                            return
-                        }
-                        if (!isTryRefreshData && getCourseRT?.rt == "0") {
-                            isTryRefreshData = true
-                            updateAllData()
-                            return
-                        }
                         loadingDialog.dismiss()
-                        if (getCourseRT?.rt != "1" && getCourseRT?.rt != "5") {
-                            isRefreshData = false
-                            Snackbar.make(coordinatorLayoutView, R.string.hint_invalid_cookie, Snackbar.LENGTH_LONG)
-                                    .setAction(android.R.string.ok) {
-                                        ScheduleHelper.isLogin = false
-                                        startActivityForResult(Intent(this@MainActivity, LoginActivity::class.java), ADD_ACCOUNT_CODE)
-                                    }
-                                    .show()
-                            return
-                        }
                         isRefreshData = false
-                        if (getCourseRT?.rt == "5")
-                            Snackbar.make(coordinatorLayoutView, R.string.hint_update_data_error, Snackbar.LENGTH_LONG).show()
-                        else {
-                            if (ScheduleHelper.isAnalysisError) {
-                                Snackbar.make(coordinatorLayoutView, R.string.hint_analyze_error, Snackbar.LENGTH_LONG).show()
-                            } else if (isDataNew && updateList.size == 1)
-                                Snackbar.make(coordinatorLayoutView, R.string.hint_update_data_new, Snackbar.LENGTH_SHORT).show()
-                            else
-                                Snackbar.make(coordinatorLayoutView, R.string.hint_update_data, Snackbar.LENGTH_SHORT).show()
+                        when (getCourseRT?.rt) {
+                            "0", "202" -> {
+                                if (getCourseRT?.rt == "202")
+                                    Snackbar.make(coordinatorLayoutView, R.string.hint_update_data_error, Snackbar.LENGTH_LONG).show()
+                                else {
+                                    if (ScheduleHelper.isAnalysisError) {
+                                        Snackbar.make(coordinatorLayoutView, R.string.hint_analyze_error, Snackbar.LENGTH_LONG).show()
+                                    } else if (isDataNew && updateList.size == 1)
+                                        Snackbar.make(coordinatorLayoutView, R.string.hint_update_data_new, Snackbar.LENGTH_SHORT).show()
+                                    else
+                                        Snackbar.make(coordinatorLayoutView, R.string.hint_update_data, Snackbar.LENGTH_SHORT).show()
+                                }
+                                sendBroadcast(Intent("android.appwidget.action.APPWIDGET_UPDATE")
+                                        .putExtra("TAG", WidgetHelper.ALL_TAG))
+                                updateAllView()
+                            }
+                            else -> Logs.i(TAG, "onComplete: ${getCourseRT?.rt} ${getCourseRT?.msg}")
                         }
-                        sendBroadcast(Intent("android.appwidget.action.APPWIDGET_UPDATE")
-                                .putExtra("TAG", WidgetHelper.ALL_TAG))
-                        updateAllView()
                     }
 
                     override fun onNext(t: GetCourseRT) {
@@ -507,7 +493,7 @@ class MainActivity : AppCompatActivity() {
                         else -> {
                             loadingDialog.dismiss()
                             isRefreshData = false
-                            Snackbar.make(coordinatorLayoutView, "错误码：${getCourseRT.rt}；错误信息：${getCourseRT.msg}", Snackbar.LENGTH_LONG)
+                            Snackbar.make(coordinatorLayoutView, getCourseRT.msg, Snackbar.LENGTH_LONG)
                                     .show()
                         }
                     }
