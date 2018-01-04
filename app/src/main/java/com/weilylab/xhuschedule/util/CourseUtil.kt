@@ -7,8 +7,8 @@
 
 package com.weilylab.xhuschedule.util
 
-import com.weilylab.xhuschedule.classes.Course
-import com.weilylab.xhuschedule.classes.CourseTimeInfo
+import com.weilylab.xhuschedule.classes.baseClass.Course
+import com.weilylab.xhuschedule.classes.baseClass.CourseTimeInfo
 import kotlin.collections.ArrayList
 
 /**

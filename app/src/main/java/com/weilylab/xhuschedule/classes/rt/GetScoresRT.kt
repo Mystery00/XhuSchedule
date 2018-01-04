@@ -7,9 +7,9 @@
 
 package com.weilylab.xhuschedule.classes.rt
 
-import com.weilylab.xhuschedule.classes.Score
+import com.weilylab.xhuschedule.classes.baseClass.Score
 
-class ScoreRT:RT() {
+class GetScoresRT :RT() {
     lateinit var scores: Array<Score>
     lateinit var failscores: Array<Score>
 }

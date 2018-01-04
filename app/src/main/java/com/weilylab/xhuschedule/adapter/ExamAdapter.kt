@@ -14,7 +14,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import com.weilylab.xhuschedule.R
-import com.weilylab.xhuschedule.classes.Exam
+import com.weilylab.xhuschedule.classes.baseClass.Exam
 import vip.mystery0.tools.flexibleCardView.FlexibleCardView
 
 class ExamAdapter(private val context: Context,

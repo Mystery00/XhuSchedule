@@ -23,8 +23,8 @@ import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.signature.MediaStoreSignature
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.activity.MainActivity
-import com.weilylab.xhuschedule.classes.Course
-import com.weilylab.xhuschedule.classes.TableLayoutHelper
+import com.weilylab.xhuschedule.classes.baseClass.Course
+import com.weilylab.xhuschedule.classes.baseClass.TableLayoutHelper
 import com.weilylab.xhuschedule.listener.InfoChangeListener
 import com.weilylab.xhuschedule.util.*
 import io.reactivex.Observable

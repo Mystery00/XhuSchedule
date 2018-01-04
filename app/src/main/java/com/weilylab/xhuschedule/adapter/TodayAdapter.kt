@@ -16,7 +16,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.activity.MainActivity
-import com.weilylab.xhuschedule.classes.Course
+import com.weilylab.xhuschedule.classes.baseClass.Course
 import com.weilylab.xhuschedule.listener.InfoChangeListener
 import com.weilylab.xhuschedule.util.ScheduleHelper
 import com.weilylab.xhuschedule.util.Settings

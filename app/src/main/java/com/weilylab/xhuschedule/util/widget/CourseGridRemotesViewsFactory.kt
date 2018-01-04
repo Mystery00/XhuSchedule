@@ -12,7 +12,7 @@ import android.graphics.Color
 import android.widget.RemoteViews
 import android.widget.RemoteViewsService
 import com.weilylab.xhuschedule.R
-import com.weilylab.xhuschedule.classes.Course
+import com.weilylab.xhuschedule.classes.baseClass.Course
 import com.weilylab.xhuschedule.util.ScheduleHelper
 
 class CourseGridRemotesViewsFactory(private val context: Context) : RemoteViewsService.RemoteViewsFactory {

@@ -5,7 +5,7 @@
  * Last modified 17-12-3 上午10:37
  */
 
-package com.weilylab.xhuschedule.classes
+package com.weilylab.xhuschedule.classes.baseClass
 
 class Score {
     var coursetype: String = ""

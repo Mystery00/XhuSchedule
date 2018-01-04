@@ -5,7 +5,7 @@
  * Last modified 17-12-3 上午10:37
  */
 
-package com.weilylab.xhuschedule.classes
+package com.weilylab.xhuschedule.classes.baseClass
 
 class Exam {
     var date: String = ""
@@ -17,5 +17,5 @@ class Exam {
     var location: String = ""
     var time: String = ""
     var region: String = ""
-    var isExpand=false
+    var isExpand = false
 }

@@ -1,13 +1,13 @@
 /*
- * Created by Mystery0 on 17-12-21 上午3:41.
- * Copyright (c) 2017. All Rights reserved.
+ * Created by Mystery0 on 18-1-4 下午5:14.
+ * Copyright (c) 2018. All Rights reserved.
  *
- * Last modified 17-12-3 上午1:34
+ * Last modified 17-12-21 上午3:41
  */
 
-package com.weilylab.xhuschedule.classes
+package com.weilylab.xhuschedule.classes.baseClass
 
-import com.weilylab.xhuschedule.classes.rt.StudentInfoRT
+import com.weilylab.xhuschedule.classes.rt.InfoRT
 import java.io.Serializable
 
 class Profile : Serializable {
@@ -20,7 +20,7 @@ class Profile : Serializable {
     var institute = ""
     var direction = ""
 
-    fun map(studentInfoRT: StudentInfoRT): Profile {
+    fun map(studentInfoRT: InfoRT): Profile {
         profession = studentInfoRT.profession
         no = studentInfoRT.no
         classname = studentInfoRT.classname

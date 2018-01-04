@@ -8,5 +8,5 @@
 package com.weilylab.xhuschedule.listener
 
 interface LoginListener:BaseListener {
-    fun loginDone(name: String)
+    fun loginDone()
 }

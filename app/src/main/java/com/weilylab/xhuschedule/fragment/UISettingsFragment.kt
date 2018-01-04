@@ -39,7 +39,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.jrummyapps.android.colorpicker.ColorPreference
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.adapter.HeaderAdapter
-import com.weilylab.xhuschedule.classes.Course
+import com.weilylab.xhuschedule.classes.baseClass.Course
 import com.weilylab.xhuschedule.interfaces.PhpService
 import com.weilylab.xhuschedule.util.*
 import com.yalantis.ucrop.UCrop

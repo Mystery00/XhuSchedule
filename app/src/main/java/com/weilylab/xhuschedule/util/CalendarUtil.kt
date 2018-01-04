@@ -9,9 +9,8 @@ package com.weilylab.xhuschedule.util
 
 import android.content.Context
 import com.weilylab.xhuschedule.R
-import com.weilylab.xhuschedule.classes.Exam
+import com.weilylab.xhuschedule.classes.baseClass.Exam
 import com.weilylab.xhuschedule.util.widget.WidgetHelper
-import vip.mystery0.tools.logs.Logs
 import java.util.*
 
 /**

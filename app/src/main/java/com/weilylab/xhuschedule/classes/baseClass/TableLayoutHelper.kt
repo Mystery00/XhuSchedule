@@ -5,7 +5,7 @@
  * Last modified 17-12-11 下午10:28
  */
 
-package com.weilylab.xhuschedule.classes
+package com.weilylab.xhuschedule.classes.baseClass
 
 import android.view.ViewGroup
 

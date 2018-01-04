@@ -11,7 +11,7 @@ import android.app.IntentService
 import android.content.Intent
 import com.google.gson.Gson
 import com.weilylab.xhuschedule.R
-import com.weilylab.xhuschedule.classes.Update
+import com.weilylab.xhuschedule.classes.baseClass.Update
 import com.weilylab.xhuschedule.interfaces.PhpService
 import com.weilylab.xhuschedule.util.ScheduleHelper
 import com.weilylab.xhuschedule.util.notification.UpdateNotification

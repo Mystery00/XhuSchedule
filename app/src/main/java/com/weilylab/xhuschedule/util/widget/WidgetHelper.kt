@@ -9,9 +9,9 @@ package com.weilylab.xhuschedule.util.widget
 
 import android.content.Context
 import android.util.Base64
-import com.weilylab.xhuschedule.classes.Course
-import com.weilylab.xhuschedule.classes.Exam
-import com.weilylab.xhuschedule.classes.Student
+import com.weilylab.xhuschedule.classes.baseClass.Course
+import com.weilylab.xhuschedule.classes.baseClass.Exam
+import com.weilylab.xhuschedule.classes.baseClass.Student
 import com.weilylab.xhuschedule.util.CalendarUtil
 import com.weilylab.xhuschedule.util.CourseUtil
 import com.weilylab.xhuschedule.util.ScheduleHelper

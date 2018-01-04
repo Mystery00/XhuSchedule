@@ -7,11 +7,8 @@
 
 package com.weilylab.xhuschedule.classes.rt
 
-import com.weilylab.xhuschedule.classes.Course
+import com.weilylab.xhuschedule.classes.baseClass.Exam
 
-/**
- * Created by myste.
- */
-class CourseRT:RT() {
-    lateinit var courses: Array<Course>
+class GetTestsRT :RT() {
+    lateinit var tests: Array<Exam>
 }

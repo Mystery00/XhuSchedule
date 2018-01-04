@@ -1,11 +1,11 @@
 /*
- * Created by Mystery0 on 17-12-21 上午3:41.
- * Copyright (c) 2017. All Rights reserved.
+ * Created by Mystery0 on 18-1-4 下午5:14.
+ * Copyright (c) 2018. All Rights reserved.
  *
- * Last modified 17-12-21 上午3:25
+ * Last modified 17-12-21 上午3:41
  */
 
-package com.weilylab.xhuschedule.classes
+package com.weilylab.xhuschedule.classes.baseClass
 
 import com.weilylab.xhuschedule.util.CourseUtil
 import java.io.Serializable

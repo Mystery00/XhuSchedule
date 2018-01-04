@@ -25,11 +25,11 @@ import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.signature.MediaStoreSignature
 import com.google.gson.Gson
 import com.weilylab.xhuschedule.R
-import com.weilylab.xhuschedule.classes.Course
-import com.weilylab.xhuschedule.classes.Profile
-import com.weilylab.xhuschedule.classes.Student
-import com.weilylab.xhuschedule.classes.TableLayoutHelper
-import com.weilylab.xhuschedule.classes.rt.CourseRT
+import com.weilylab.xhuschedule.classes.baseClass.Course
+import com.weilylab.xhuschedule.classes.baseClass.Profile
+import com.weilylab.xhuschedule.classes.baseClass.Student
+import com.weilylab.xhuschedule.classes.baseClass.TableLayoutHelper
+import com.weilylab.xhuschedule.classes.rt.GetCourseRT
 import com.weilylab.xhuschedule.interfaces.StudentService
 import com.weilylab.xhuschedule.listener.InitProfileListener
 import com.weilylab.xhuschedule.listener.LoginListener
@@ -151,21 +151,21 @@ class ScheduleActivity : AppCompatActivity() {
                 .getCourses(student.username, year, term)
                 .subscribeOn(Schedulers.newThread())
                 .unsubscribeOn(Schedulers.newThread())
-                .map({ responseBody -> Gson().fromJson(InputStreamReader(responseBody.byteStream()), CourseRT::class.java) })
+                .map({ responseBody -> Gson().fromJson(InputStreamReader(responseBody.byteStream()), GetCourseRT::class.java) })
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(object : DisposableObserver<CourseRT>() {
-                    private lateinit var contentRT: CourseRT
+                .subscribe(object : DisposableObserver<GetCourseRT>() {
+                    private lateinit var contentRTGet: GetCourseRT
                     override fun onComplete() {
                         val parentFile = File(filesDir.absolutePath + File.separator + "courses/")
                         if (!parentFile.exists())
                             parentFile.mkdirs()
                         val base64Name = XhuFileUtil.filterString(Base64.encodeToString(student.username.toByteArray(), Base64.DEFAULT))
-                        when (contentRT.rt) {
+                        when (contentRTGet.rt) {
                             "1", "5" -> {
                                 val newFile = File(parentFile, "$base64Name-$year-$term")
                                 newFile.createNewFile()
-                                XhuFileUtil.saveObjectToFile(contentRT.courses, newFile)
+                                XhuFileUtil.saveObjectToFile(contentRTGet.courses, newFile)
                                 showCourses(student)
                             }
                             "2" -> {
@@ -189,8 +189,8 @@ class ScheduleActivity : AppCompatActivity() {
                         }
                     }
 
-                    override fun onNext(t: CourseRT) {
-                        contentRT = t
+                    override fun onNext(t: GetCourseRT) {
+                        contentRTGet = t
                     }
 
                     override fun onError(e: Throwable) {
@@ -362,7 +362,7 @@ class ScheduleActivity : AppCompatActivity() {
     }
 
     private fun getInfo(student: Student, initDialog: Dialog) {
-        student.getInfo(this, object : ProfileListener {
+        student.getInfo(object : ProfileListener {
             override fun error(rt: Int, e: Throwable) {
                 initDialog.dismiss()
                 e.printStackTrace()
@@ -399,14 +399,14 @@ class ScheduleActivity : AppCompatActivity() {
     }
 
     private fun login(student: Student, year: String?, term: Int?) {
-        student.login(this, object : LoginListener {
+        student.login(object : LoginListener {
             override fun error(rt: Int, e: Throwable) {
                 loadingDialog.dismiss()
                 Snackbar.make(coordinatorLayout, e.message!!, Snackbar.LENGTH_LONG)
                         .show()
             }
 
-            override fun loginDone(name: String) {
+            override fun loginDone() {
                 getCourses(student, year, term)
             }
         })

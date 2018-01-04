@@ -19,9 +19,9 @@ import android.view.MenuItem
 import android.widget.Toast
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.adapter.ScoreAdapter
-import com.weilylab.xhuschedule.classes.Profile
-import com.weilylab.xhuschedule.classes.Score
-import com.weilylab.xhuschedule.classes.Student
+import com.weilylab.xhuschedule.classes.baseClass.Profile
+import com.weilylab.xhuschedule.classes.baseClass.Score
+import com.weilylab.xhuschedule.classes.baseClass.Student
 import com.weilylab.xhuschedule.listener.GetScoreListener
 import com.weilylab.xhuschedule.listener.InitProfileListener
 import com.weilylab.xhuschedule.listener.ProfileListener

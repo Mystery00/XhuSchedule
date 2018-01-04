@@ -18,7 +18,7 @@ import android.app.PendingIntent
 import android.content.Intent
 import android.graphics.Color
 import android.os.Build
-import com.weilylab.xhuschedule.classes.Version
+import com.weilylab.xhuschedule.classes.baseClass.Version
 import com.weilylab.xhuschedule.service.DownloadService
 import vip.mystery0.tools.fileUtil.FileUtil
 

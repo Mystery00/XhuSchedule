@@ -12,7 +12,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import com.weilylab.xhuschedule.activity.ErrorActivity
-import com.weilylab.xhuschedule.classes.XhuScheduleError
+import com.weilylab.xhuschedule.classes.baseClass.XhuScheduleError
 import vip.mystery0.tools.crashHandler.CatchExceptionListener
 import vip.mystery0.tools.crashHandler.CrashHandler
 import vip.mystery0.tools.logs.Logs

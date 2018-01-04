@@ -21,7 +21,7 @@ import android.widget.TextView
 import android.widget.Toast
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.activity.*
-import com.weilylab.xhuschedule.classes.Student
+import com.weilylab.xhuschedule.classes.baseClass.Student
 import com.weilylab.xhuschedule.listener.FeedBackListener
 import com.weilylab.xhuschedule.util.XhuFileUtil
 import com.zyao89.view.zloading.ZLoadingDialog

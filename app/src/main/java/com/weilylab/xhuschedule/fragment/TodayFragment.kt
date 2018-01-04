@@ -20,7 +20,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.signature.MediaStoreSignature
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.adapter.TodayAdapter
-import com.weilylab.xhuschedule.classes.Course
+import com.weilylab.xhuschedule.classes.baseClass.Course
 import com.weilylab.xhuschedule.util.Settings
 import io.reactivex.Observable
 import io.reactivex.Observer

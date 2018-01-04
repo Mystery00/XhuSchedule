@@ -7,7 +7,7 @@
 
 package com.weilylab.xhuschedule.classes.rt
 
-class StudentInfoRT:RT() {
+class InfoRT :RT() {
     var profession = ""
     var no = ""
     var classname = ""

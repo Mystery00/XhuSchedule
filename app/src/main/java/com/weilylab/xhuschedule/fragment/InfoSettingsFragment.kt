@@ -21,8 +21,8 @@ import android.view.ViewGroup
 import android.widget.Toast
 import com.google.gson.Gson
 import com.weilylab.xhuschedule.R
-import com.weilylab.xhuschedule.classes.Student
-import com.weilylab.xhuschedule.classes.Update
+import com.weilylab.xhuschedule.classes.baseClass.Student
+import com.weilylab.xhuschedule.classes.baseClass.Update
 import com.weilylab.xhuschedule.interfaces.PhpService
 import com.weilylab.xhuschedule.listener.FeedBackListener
 import com.weilylab.xhuschedule.service.DownloadService

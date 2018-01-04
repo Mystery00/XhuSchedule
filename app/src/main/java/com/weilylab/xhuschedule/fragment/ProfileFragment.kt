@@ -21,7 +21,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.adapter.OperationAdapter
-import com.weilylab.xhuschedule.classes.Profile
+import com.weilylab.xhuschedule.classes.baseClass.Profile
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.observers.DisposableObserver

@@ -14,7 +14,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import com.weilylab.xhuschedule.R
-import com.weilylab.xhuschedule.classes.Score
+import com.weilylab.xhuschedule.classes.baseClass.Score
 import vip.mystery0.tools.flexibleCardView.FlexibleCardView
 
 class ScoreAdapter(private val context: Context,

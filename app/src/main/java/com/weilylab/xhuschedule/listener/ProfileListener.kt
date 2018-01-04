@@ -7,7 +7,7 @@
 
 package com.weilylab.xhuschedule.listener
 
-import com.weilylab.xhuschedule.classes.Profile
+import com.weilylab.xhuschedule.classes.baseClass.Profile
 
 interface ProfileListener:BaseListener {
     fun got(profile: Profile)

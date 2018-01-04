@@ -12,7 +12,7 @@ import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.widget.Toast
 import com.weilylab.xhuschedule.R
-import com.weilylab.xhuschedule.classes.XhuScheduleError
+import com.weilylab.xhuschedule.classes.baseClass.XhuScheduleError
 import com.weilylab.xhuschedule.listener.UploadLogListener
 import com.zyao89.view.zloading.ZLoadingDialog
 import com.zyao89.view.zloading.Z_TYPE

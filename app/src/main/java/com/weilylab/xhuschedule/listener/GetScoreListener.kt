@@ -7,8 +7,8 @@
 
 package com.weilylab.xhuschedule.listener
 
-import com.weilylab.xhuschedule.classes.Score
+import com.weilylab.xhuschedule.classes.baseClass.Score
 
 interface GetScoreListener :BaseListener{
-    fun got(array: Array<Score>,failedArray: Array<Score>)
+    fun got(array: Array<Score>, failedArray: Array<Score>)
 }

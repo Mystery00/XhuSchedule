@@ -10,8 +10,8 @@ package com.weilylab.xhuschedule.util
 import android.content.Context
 import com.google.gson.Gson
 import com.google.gson.JsonParser
-import com.weilylab.xhuschedule.classes.Course
-import com.weilylab.xhuschedule.classes.XhuScheduleError
+import com.weilylab.xhuschedule.classes.baseClass.Course
+import com.weilylab.xhuschedule.classes.baseClass.XhuScheduleError
 import vip.mystery0.tools.logs.Logs
 import java.io.*
 import java.math.BigInteger

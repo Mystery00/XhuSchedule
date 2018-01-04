@@ -16,7 +16,7 @@ import android.support.v7.widget.RecyclerView
 import android.view.View
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.adapter.ColorPickerAdapter
-import com.weilylab.xhuschedule.classes.Course
+import com.weilylab.xhuschedule.classes.baseClass.Course
 import com.weilylab.xhuschedule.listener.ColorPickerChangeListener
 import com.weilylab.xhuschedule.listener.InfoChangeListener
 import android.graphics.drawable.BitmapDrawable
@@ -28,7 +28,7 @@ import android.content.Intent
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.ActionBar
 import android.widget.*
-import com.weilylab.xhuschedule.classes.Student
+import com.weilylab.xhuschedule.classes.baseClass.Student
 import com.weilylab.xhuschedule.listener.InitProfileListener
 import com.zyao89.view.zloading.ZLoadingDialog
 import com.zyao89.view.zloading.Z_TYPE

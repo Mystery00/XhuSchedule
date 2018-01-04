@@ -5,7 +5,7 @@
  * Last modified 17-12-17 下午7:05
  */
 
-package com.weilylab.xhuschedule.classes
+package com.weilylab.xhuschedule.classes.baseClass
 
 import android.content.Context
 import com.google.gson.Gson

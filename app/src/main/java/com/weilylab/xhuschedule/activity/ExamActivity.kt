@@ -16,8 +16,8 @@ import android.support.v7.widget.LinearLayoutManager
 import android.util.Base64
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.adapter.ExamAdapter
-import com.weilylab.xhuschedule.classes.Exam
-import com.weilylab.xhuschedule.classes.Student
+import com.weilylab.xhuschedule.classes.baseClass.Exam
+import com.weilylab.xhuschedule.classes.baseClass.Student
 import com.weilylab.xhuschedule.listener.GetArrayListener
 import com.weilylab.xhuschedule.util.ViewUtil
 import com.weilylab.xhuschedule.util.XhuFileUtil

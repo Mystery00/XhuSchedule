@@ -5,7 +5,7 @@
  * Last modified 17-11-27 上午3:50
  */
 
-package com.weilylab.xhuschedule.classes
+package com.weilylab.xhuschedule.classes.baseClass
 
 /**
  * Created by myste.
