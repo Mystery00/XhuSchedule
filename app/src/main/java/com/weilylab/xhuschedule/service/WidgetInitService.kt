@@ -24,7 +24,8 @@ class WidgetInitService : Service() {
         return null
     }
 
-    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+    override fun onCreate() {
+        super.onCreate()
         val notification = NotificationCompat.Builder(this, "Xhu Schedule")
                 .setSmallIcon(R.mipmap.ic_launcher)
                 .setContentText("正在初始化数据")
@@ -32,7 +33,6 @@ class WidgetInitService : Service() {
                 .setPriority(NotificationManagerCompat.IMPORTANCE_NONE)
                 .build()
         startForeground(NOTIFICATION_ID, notification)
-
         Thread(Runnable {
             WidgetHelper.refreshWeekCourses(this)
             WidgetHelper.syncDayIndex()
@@ -42,7 +42,6 @@ class WidgetInitService : Service() {
                     .putExtra("TAG", WidgetHelper.ALL_TAG))
             stopSelf()
         }).start()
-        return super.onStartCommand(intent, flags, startId)
     }
 
     override fun onDestroy() {
