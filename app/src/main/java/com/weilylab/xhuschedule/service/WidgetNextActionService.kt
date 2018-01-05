@@ -26,13 +26,6 @@ class WidgetNextActionService : Service() {
             isRun = true
             val tag = intent.getStringExtra("TAG")
             when (tag) {
-//                WidgetHelper.TABLE_TAG -> {
-//                    if (WidgetHelper.weekIndex < 19)
-//                        WidgetHelper.weekIndex++
-//                    WidgetHelper.refreshWeekCourses(this)
-//                    sendBroadcast(Intent("android.appwidget.action.APPWIDGET_UPDATE")
-//                          .putExtra("TAG", tag))
-//                }
                 WidgetHelper.TODAY_TAG -> {
                     if (WidgetHelper.dayIndex < 140)
                         WidgetHelper.dayIndex++
