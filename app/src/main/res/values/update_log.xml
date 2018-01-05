@@ -8,9 +8,24 @@
 <resources>
     <string name="dialog_title_update_log">%1$s版的更新日志</string>
     <string-array name="update_list">
+        <item>说明：检测到还有很大一部分的同学在使用旧版本，所以希望看到这个更新日志的同学提醒一下他们更新最新版本</item>
+        <item>说明：关于OPPO、VIVO、HuaWei等使用国产定制系统的同学在检测更新的时候无反应，请检查该应用的通知权限是否允许（定制系统大多默认禁止）</item>
+        <item>说明：关于更新时提示解析程序包错误，可能是下载安装\增量包的时候未完成，可以尝试重新下载或者去https://coolapk.com/apk/com.weilylab.xhuschedule手动下载之后安装</item>
+        <item> </item>
         <item>说明：欢迎加入群【西瓜课表用户交流反馈】：426878786，在这里有Android客户端和微信小程序的开发者，可以进群提前体验新功能，也可以进群交流、反馈异常、提交建议等……</item>
         <item>说明：微信小程序版本版本现已上线，可以在微信小程序页面直接搜索“西瓜课表”即可使用！不清楚操作的可以在设置-关于中使用微信扫描二维码。</item>
         <item> </item>
-        <item>该版本为测试版</item>
+        <item>新增：实验项目成绩查询（打开方式：成绩查询-实验项目查询）</item>
+        <item>新增：使用全新接口，更好的处理因为各种原因导致的各种各样的问题</item>
+        <item>新增：桌面小部件-考试查询，考试时间显示</item>
+        <item> </item>
+        <item>修复：考试查询没有默认选中学生信息</item>
+        <item>修复：成绩查询时因为只有一门考试所以不显示成绩</item>
+        <item>修复：考试查询、成绩查询以及非本学期课表查询时无法查询2017–2018学年数据</item>
+        <item>修复：在只有一个账号时，删除唯一的账号导致崩溃</item>
+        <item>修复：Android 8.1上无法创建桌面小部件</item>
+        <item>修复：前台服务无显示</item>
+        <item> </item>
+        <item>修改：意见反馈界面增加联系方式，方便开发者联系用户处理建议</item>
     </string-array>
 </resources>
