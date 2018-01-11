@@ -14,9 +14,9 @@ class Version {
     var versionCode = -1
     lateinit var versionName: String
     lateinit var updateLog: String
-    lateinit var versionAPK: String
+    lateinit var versionAPK: String//1.3.4之后更改为下载的CDN链接
     var apkSize = -1L
     var lastVersion = -1
-    lateinit var lastVersionPatch: String
+    lateinit var lastVersionPatch: String//1.3.4之后更改为下载的CDN链接
     var patchSize = -1L
 }

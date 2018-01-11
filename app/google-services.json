@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "8929979529",
+    "firebase_url": "https://xhuschedule.firebaseio.com",
+    "project_id": "xhuschedule",
+    "storage_bucket": "xhuschedule.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:8929979529:android:c84ff6f36af3e8b6",
+        "android_client_info": {
+          "package_name": "com.weilylab.xhuschedule"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "8929979529-2ae5fo79gjo2rc3hv1m6q3afgnses4pi.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBz8cajm2765Xo8g9rjX5nGiHc4-MPYi-A"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
