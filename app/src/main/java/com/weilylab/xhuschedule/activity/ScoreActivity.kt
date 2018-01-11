@@ -41,7 +41,7 @@ import kotlinx.android.synthetic.main.content_score.*
 import java.io.File
 import java.util.*
 
-class ScoreActivity : AppCompatActivity() {
+class ScoreActivity : BaseActivity() {
 
     private lateinit var loadingDialog: Dialog
     private val studentList = ArrayList<Student>()

@@ -39,7 +39,7 @@ import kotlinx.android.synthetic.main.content_experiment_score.*
 import java.io.File
 import java.util.*
 
-class ExpScoreActivity : AppCompatActivity() {
+class ExpScoreActivity : BaseActivity() {
 
     private lateinit var loadingDialog: Dialog
     private val studentList = ArrayList<Student>()

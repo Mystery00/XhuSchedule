@@ -26,7 +26,7 @@ import com.weilylab.xhuschedule.listener.LoginListener
 import com.weilylab.xhuschedule.util.XhuFileUtil
 import java.io.File
 
-class LoginActivity : AppCompatActivity() {
+class LoginActivity : BaseActivity() {
 
     private lateinit var loginDialog: ZLoadingDialog
 

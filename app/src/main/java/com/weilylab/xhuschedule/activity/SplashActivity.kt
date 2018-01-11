@@ -33,7 +33,7 @@ import kotlin.math.max
 /**
  * Created by mystery0.
  */
-class SplashActivity : AppCompatActivity() {
+class SplashActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (Settings.autoCheckUpdate)

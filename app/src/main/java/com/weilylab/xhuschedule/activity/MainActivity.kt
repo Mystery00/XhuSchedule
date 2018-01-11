@@ -59,7 +59,7 @@ import java.net.UnknownHostException
 import java.util.*
 import kotlin.collections.ArrayList
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : BaseActivity() {
     companion object {
         private val TAG = "MainActivity"
         private val ADD_ACCOUNT_CODE = 1
@@ -123,7 +123,8 @@ class MainActivity : AppCompatActivity() {
                         sharedPreference.edit().putInt("updateVersion", getString(R.string.app_version_code).toInt()).apply()
                     }
                     .create()
-            dialog.show()
+            if (APPActivityManager.appManager.currentActivity() == this)
+                dialog.show()
             Observable.create<Boolean> { subscriber ->
                 Thread.sleep(2000)
                 subscriber.onComplete()

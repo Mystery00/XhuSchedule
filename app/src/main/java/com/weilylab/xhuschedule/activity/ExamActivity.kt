@@ -29,7 +29,7 @@ import kotlinx.android.synthetic.main.activity_exam.*
 import kotlinx.android.synthetic.main.content_exam.*
 import java.io.File
 
-class ExamActivity : AppCompatActivity() {
+class ExamActivity : BaseActivity() {
 
     private lateinit var loadingDialog: ZLoadingDialog
     private val studentList = ArrayList<Student>()

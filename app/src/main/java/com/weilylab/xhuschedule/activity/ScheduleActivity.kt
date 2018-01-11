@@ -49,7 +49,7 @@ import java.net.UnknownHostException
 import java.util.*
 import kotlin.math.max
 
-class ScheduleActivity : AppCompatActivity() {
+class ScheduleActivity : BaseActivity() {
 
     private lateinit var initDialog: Dialog
     private lateinit var loadingDialog: Dialog

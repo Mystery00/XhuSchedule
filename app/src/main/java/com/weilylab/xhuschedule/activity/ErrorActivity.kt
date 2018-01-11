@@ -21,7 +21,7 @@ import java.io.File
 import java.io.PrintWriter
 import java.io.StringWriter
 
-class ErrorActivity : AppCompatActivity() {
+class ErrorActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
