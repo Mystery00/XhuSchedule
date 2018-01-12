@@ -64,7 +64,6 @@ class SettingsActivity : AppCompatPreferenceActivity() {
         AccountSettingsFragment::class.java.name -> true
         UISettingsFragment::class.java.name -> true
         InfoSettingsFragment::class.java.name -> true
-        SnowFragment::class.java.name -> true
         else -> false
     }
 

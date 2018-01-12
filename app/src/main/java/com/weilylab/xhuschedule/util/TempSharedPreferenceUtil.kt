@@ -13,7 +13,4 @@ import com.weilylab.xhuschedule.APP
 object TempSharedPreferenceUtil {
     private val sharedPreference = APP.getContext().getSharedPreferences("temp", Context.MODE_PRIVATE)
 
-    var snowFall: Boolean
-        set(value) = sharedPreference.edit().putBoolean("snowFall", value).apply()
-        get() = sharedPreference.getBoolean("snowFall", false)
 }

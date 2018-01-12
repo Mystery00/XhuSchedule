@@ -20,7 +20,6 @@ import android.support.v4.view.ViewPager
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Base64
-import android.view.View
 import android.widget.Toast
 import com.getkeepsafe.taptargetview.TapTarget
 import com.getkeepsafe.taptargetview.TapTargetSequence
@@ -151,11 +150,6 @@ class MainActivity : BaseActivity() {
 
     override fun onResume() {
         super.onResume()
-        if (TempSharedPreferenceUtil.snowFall)
-            snowfallView.visibility = View.VISIBLE
-        else {
-            snowfallView.visibility = View.GONE
-        }
         if (ScheduleHelper.isImageChange) {
             if (Settings.customBackgroundImg != "") {
                 todayFragment.setBackground()
