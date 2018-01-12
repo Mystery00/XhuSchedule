@@ -60,7 +60,6 @@
             android:label="@string/title_activity_score"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
-
         <activity
             android:name=".activity.ExpScoreActivity"
             android:label="@string/title_activity_expscore"
@@ -159,6 +158,8 @@
                 android:name="android.appwidget.provider"
                 android:resource="@xml/exam_widget_info" />
         </receiver>
+
+        <activity android:name=".activity.NoticeActivity"></activity>
     </application>
 
 </manifest>

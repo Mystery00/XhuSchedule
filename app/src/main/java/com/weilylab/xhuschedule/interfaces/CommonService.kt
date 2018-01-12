@@ -24,5 +24,6 @@ interface CommonService {
                  @Query("other") other: String,
                  @Query("message") message: String): Observable<ResponseBody>
 
-
+    @GET("/xhuschedule/Common/getNotices")
+    fun getNotices(@Query("platform") platform: String?): Observable<ResponseBody>
 }
