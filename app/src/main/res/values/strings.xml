@@ -23,6 +23,7 @@
     <string name="action_search">搜索</string>
     <string name="action_download_apk">下载APK</string>
     <string name="action_download_patch">下载增量包</string>
+    <string name="action_download_cancel">忽略这个版本</string>
     <string name="action_feedback">反馈该信息</string>
     <string name="action_open">开启</string>
     <string name="action_show_failed">显示未通过成绩</string>

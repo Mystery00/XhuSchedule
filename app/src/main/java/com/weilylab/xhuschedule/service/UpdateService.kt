@@ -16,7 +16,7 @@ import com.weilylab.xhuschedule.classes.baseClass.Update
 import com.weilylab.xhuschedule.interfaces.PhpService
 import com.weilylab.xhuschedule.util.APPActivityManager
 import com.weilylab.xhuschedule.util.ScheduleHelper
-import com.weilylab.xhuschedule.util.notification.UpdateNotification
+import com.weilylab.xhuschedule.util.Settings
 import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
@@ -29,8 +29,7 @@ class UpdateService : IntentService("PhpService") {
     override fun onHandleIntent(intent: Intent?) {
         ScheduleHelper.phpRetrofit
                 .create(PhpService::class.java)
-//                .checkUpdateCall(getString(R.string.app_version_code).toInt())
-                .checkUpdateCall(1)
+                .checkUpdateCall(getString(R.string.app_version_code).toInt())
                 .subscribeOn(Schedulers.newThread())
                 .unsubscribeOn(Schedulers.newThread())
                 .map { responseBody -> Gson().fromJson(InputStreamReader(responseBody.byteStream()), Update::class.java) }
@@ -47,27 +46,33 @@ class UpdateService : IntentService("PhpService") {
 
                     override fun onComplete() {
                         Logs.i("PhpService", "onComplete: " + update.message)
-                        if (update.code == 1) {
+                        if (update.code == 1 && update.version.versionCode != Settings.ignoreUpdate) {
                             val version = update.version
-                            UpdateNotification.notify(applicationContext, version)
                             val title = getString(R.string.update_notification_title, getString(R.string.app_version_name), version.versionName)
-                            val content = getString(R.string.update_notification_content, FileUtil.FormatFileSize(version.apkSize), FileUtil.FormatFileSize(version.patchSize))
-                            val bigText = content + "\n" + getString(R.string.update_notification_big_text, version.updateLog)
+                            val bigText = getString(R.string.update_notification_big_text, version.updateLog)
                             val builder = AlertDialog.Builder(APPActivityManager.appManager.currentActivity())
                                     .setTitle(title)
                                     .setMessage(bigText)
-                                    .setPositiveButton(R.string.action_download_apk, { _, _ ->
+                                    .setPositiveButton("${getString(R.string.action_download_apk)}(${FileUtil.FormatFileSize(version.apkSize)})", { _, _ ->
                                         val downloadAPKIntent = Intent(this@UpdateService, DownloadService::class.java)
                                         downloadAPKIntent.putExtra("type", "apk")
                                         downloadAPKIntent.putExtra("fileName", version.versionAPK)
                                         startService(downloadAPKIntent)
                                     })
                             if (version.lastVersion == getString(R.string.app_version_code).toInt())
-                                builder.setNegativeButton(R.string.action_download_patch, { _, _ ->
+                                builder.setNegativeButton("${getString(R.string.action_download_patch)}(${FileUtil.FormatFileSize(version.patchSize)})", { _, _ ->
                                     val downloadPatchIntent = Intent(this@UpdateService, DownloadService::class.java)
                                     downloadPatchIntent.putExtra("type", "patch")
                                     downloadPatchIntent.putExtra("fileName", version.lastVersionPatch)
                                     startService(downloadPatchIntent)
+                                })
+                            if (version.isMust)
+                                builder.setOnCancelListener {
+                                    APPActivityManager.appManager.finishAllActivity()
+                                }
+                            else
+                                builder.setNeutralButton(R.string.action_download_cancel, { _, _ ->
+                                    Settings.ignoreUpdate = version.versionCode
                                 })
                             builder.show()
                         }

@@ -64,4 +64,7 @@ object Settings {
     var isShowFailed: Boolean//是否显示未通过成绩
         set(value) = sharedPreference.edit().putBoolean("isShowFailed", value).apply()
         get() = sharedPreference.getBoolean("isShowFailed", true)
+    var ignoreUpdate: Int//忽略更新的版本号
+        set(value) = sharedPreference.edit().putInt("ignoreUpdate", value).apply()
+        get() = sharedPreference.getInt("ignoreUpdate", 0)
 }
