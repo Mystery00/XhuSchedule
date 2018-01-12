@@ -15,6 +15,7 @@ import android.preference.PreferenceFragment
 import android.view.MenuItem
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.fragment.*
+import com.weilylab.xhuschedule.util.APPActivityManager
 
 /**
  * A [PreferenceActivity] that presents a set of application settings. On
@@ -30,6 +31,7 @@ class SettingsActivity : AppCompatPreferenceActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        APPActivityManager.appManager.addActivity(this)
         setupActionBar()
     }
 
@@ -78,5 +80,10 @@ class SettingsActivity : AppCompatPreferenceActivity() {
                 finish()
         }
         return true
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        APPActivityManager.appManager.finishActivity(this)
     }
 }

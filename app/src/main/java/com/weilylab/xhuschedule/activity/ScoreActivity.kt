@@ -12,7 +12,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v4.content.ContextCompat
-import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Base64
 import android.view.Menu
@@ -110,6 +109,9 @@ class ScoreActivity : BaseActivity() {
                 getInfo(currentStudent!!, dialog)
             }
         })
+        floatingActionButton.setOnClickListener {
+            getScores(currentStudent, year, term)
+        }
     }
 
 
@@ -221,10 +223,6 @@ class ScoreActivity : BaseActivity() {
         return when (item.itemId) {
             android.R.id.home -> {
                 finish()
-                true
-            }
-            R.id.action_search -> {
-                getScores(currentStudent, year, term)
                 true
             }
             R.id.action_show_failed -> {
