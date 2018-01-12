@@ -80,6 +80,11 @@
         <activity
             android:name=".activity.shortcut.RefreshColorActivity"
             android:theme="@android:style/Theme.NoDisplay" />
+        <activity
+            android:name=".activity.NoticeActivity"
+            android:label="@string/title_activity_notice"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
 
         <service
             android:name=".service.UpdateService"
@@ -158,8 +163,6 @@
                 android:name="android.appwidget.provider"
                 android:resource="@xml/exam_widget_info" />
         </receiver>
-
-        <activity android:name=".activity.NoticeActivity"></activity>
     </application>
 
 </manifest>

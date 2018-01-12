@@ -32,6 +32,7 @@
     <string name="prompt_username">用户名</string>
     <string name="prompt_password">密码</string>
 
+    <string name="operation_notice">通知公告</string>
     <string name="operation_schedule">查看非本学期课程</string>
     <string name="operation_logout">注销</string>
     <string name="operation_exam">考试查询</string>
@@ -185,6 +186,7 @@
     <string name="title_activity_exam">考试查询</string>
     <string name="title_activity_score">成绩查询</string>
     <string name="title_activity_expscore">实验成绩查询</string>
+    <string name="title_activity_notice">通知公告</string>
 
     <string name="title_shortcuts_refresh_widget">刷新桌面小部件数据</string>
     <string name="title_shortcuts_refresh_color">重新生成课程颜色</string>

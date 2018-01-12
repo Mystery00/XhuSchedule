@@ -9,7 +9,6 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'vip.mystery0.autoversion'
-apply plugin: 'com.google.gms.google-services'
 
 autoVersion {
     major 1

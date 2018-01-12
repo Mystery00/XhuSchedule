@@ -59,6 +59,7 @@ class OperationAdapter(private val context: Context) : RecyclerView.Adapter<Oper
 
     init {
         val titleArray = arrayOf(
+                R.string.operation_notice,
                 R.string.operation_schedule,
                 R.string.operation_exam,
                 R.string.operation_score,
@@ -67,6 +68,7 @@ class OperationAdapter(private val context: Context) : RecyclerView.Adapter<Oper
                 R.string.operation_settings
         )
         val imgArray = arrayOf(
+                R.drawable.ic_notice,
                 R.drawable.ic_schedule,
                 R.drawable.ic_exam,
                 R.drawable.ic_score,
@@ -88,10 +90,11 @@ class OperationAdapter(private val context: Context) : RecyclerView.Adapter<Oper
         holder.textView.setText(map["title"]!!)
         holder.itemView.setOnClickListener {
             when (position) {
-                0 -> context.startActivity(Intent(context, ScheduleActivity::class.java))
-                1 -> context.startActivity(Intent(context, ExamActivity::class.java))
-                2 -> context.startActivity(Intent(context, ScoreActivity::class.java))
-                3 -> {
+                0 -> context.startActivity(Intent(context, NoticeActivity::class.java))
+                1 -> context.startActivity(Intent(context, ScheduleActivity::class.java))
+                2 -> context.startActivity(Intent(context, ExamActivity::class.java))
+                3 -> context.startActivity(Intent(context, ScoreActivity::class.java))
+                4 -> {
                     val loadingDialog = ZLoadingDialog(context)
                             .setLoadingBuilder(Z_TYPE.DOUBLE_CIRCLE)
                             .setHintText(context.getString(R.string.hint_dialog_feedback))
@@ -140,7 +143,7 @@ class OperationAdapter(private val context: Context) : RecyclerView.Adapter<Oper
                         }
                     }
                 }
-                4 -> {
+                5 -> {
                     AlertDialog.Builder(context)
                             .setTitle(R.string.hint_logout_title)
                             .setMessage(R.string.hint_logout_content)
@@ -156,7 +159,7 @@ class OperationAdapter(private val context: Context) : RecyclerView.Adapter<Oper
                             .setNegativeButton(android.R.string.cancel, null)
                             .show()
                 }
-                5 -> context.startActivity(Intent(context, SettingsActivity::class.java))
+                6 -> context.startActivity(Intent(context, SettingsActivity::class.java))
             }
         }
     }
