@@ -24,7 +24,6 @@ import com.weilylab.xhuschedule.classes.baseClass.Student
 import com.weilylab.xhuschedule.listener.GetExpScoreListener
 import com.weilylab.xhuschedule.listener.InitProfileListener
 import com.weilylab.xhuschedule.listener.ProfileListener
-import com.weilylab.xhuschedule.util.Settings
 import com.weilylab.xhuschedule.util.ViewUtil
 import com.weilylab.xhuschedule.util.XhuFileUtil
 import com.zyao89.view.zloading.ZLoadingDialog
@@ -107,6 +106,10 @@ class ExpScoreActivity : BaseActivity() {
                 getInfo(currentStudent!!, dialog)
             }
         })
+
+        floatingActionButton.setOnClickListener {
+            getScores(currentStudent, year, term)
+        }
     }
 
 
@@ -213,10 +216,6 @@ class ExpScoreActivity : BaseActivity() {
         return when (item.itemId) {
             android.R.id.home -> {
                 finish()
-                true
-            }
-            R.id.action_search -> {
-                getScores(currentStudent, year, term)
                 true
             }
             else -> super.onOptionsItemSelected(item)
