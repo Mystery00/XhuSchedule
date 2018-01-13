@@ -23,11 +23,6 @@
         android:title="@string/screen_category_ui" />
 
     <header
-        android:fragment="com.weilylab.xhuschedule.fragment.SnowFragment"
-        android:icon="@drawable/ic_snow"
-        android:title="Let it snow ~" />
-
-    <header
         android:fragment="com.weilylab.xhuschedule.fragment.InfoSettingsFragment"
         android:icon="@drawable/ic_info_outline"
         android:title="@string/screen_category_about" />
