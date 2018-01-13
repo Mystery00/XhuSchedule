@@ -12,8 +12,8 @@
 
     <View
         android:id="@+id/badgeView"
-        android:layout_width="4dp"
-        android:layout_height="4dp"
+        android:layout_width="8dp"
+        android:layout_height="8dp"
         android:background="@drawable/drawable_badge_view"
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="@id/imageView"
