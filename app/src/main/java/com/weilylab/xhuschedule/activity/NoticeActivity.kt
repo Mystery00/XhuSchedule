@@ -44,6 +44,7 @@ import com.weilylab.xhuschedule.classes.baseClass.Notice
 import com.weilylab.xhuschedule.classes.rt.GetNoticesRT
 import com.weilylab.xhuschedule.interfaces.CommonService
 import com.weilylab.xhuschedule.util.ScheduleHelper
+import com.weilylab.xhuschedule.util.Settings
 import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
@@ -83,7 +84,7 @@ class NoticeActivity : BaseActivity() {
     private fun refresh() {
         ScheduleHelper.tomcatRetrofit
                 .create(CommonService::class.java)
-                .getNotices(null)
+                .getNotices("Android")
                 .subscribeOn(Schedulers.newThread())
                 .unsubscribeOn(Schedulers.newThread())
                 .map { responseBody -> Gson().fromJson(InputStreamReader(responseBody.byteStream()), GetNoticesRT::class.java) }
@@ -117,5 +118,23 @@ class NoticeActivity : BaseActivity() {
                             }
                     }
                 })
+    }
+
+    override fun onDestroy() {
+        val shownNoticeID = Settings.shownNoticeID.split('|')
+        val tempList = ArrayList<String>()
+        shownNoticeID.forEach {
+            tempList.add(it)
+        }
+        list.forEach {
+            if (!shownNoticeID.contains(it.id.toString()))
+                tempList.add(it.id.toString())
+        }
+        var value = ""
+        tempList.forEachIndexed { index, s ->
+            value += if (index == tempList.size - 1) s else "$s|"
+        }
+        Settings.shownNoticeID = value
+        super.onDestroy()
     }
 }

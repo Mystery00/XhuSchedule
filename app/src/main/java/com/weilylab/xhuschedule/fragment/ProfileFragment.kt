@@ -40,6 +40,7 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.GridLayoutManager
+import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -84,6 +85,7 @@ class ProfileFragment : Fragment() {
     private var profile: Profile? = null
     private var isReady = false
     private var rootView: View? = null
+    private var adapter: OperationAdapter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -154,7 +156,8 @@ class ProfileFragment : Fragment() {
                 })
             val recyclerView = rootView!!.findViewById<RecyclerView>(R.id.recycler_view)
             recyclerView.layoutManager = GridLayoutManager(activity, 3)
-            recyclerView.adapter = OperationAdapter(activity)
+            adapter = OperationAdapter(activity)
+            recyclerView.adapter = adapter
         }
         isReady = true
         return rootView
@@ -261,6 +264,11 @@ class ProfileFragment : Fragment() {
                     override fun onError(e: Throwable) {
                     }
                 })
+    }
+
+    fun updateNoticeBadge() {
+        if (adapter != null)
+            adapter!!.notifyDataSetChanged()
     }
 
     override fun onDestroyView() {

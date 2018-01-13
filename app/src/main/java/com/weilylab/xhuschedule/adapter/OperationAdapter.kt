@@ -45,14 +45,24 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import com.google.gson.Gson
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.activity.*
 import com.weilylab.xhuschedule.classes.baseClass.Student
+import com.weilylab.xhuschedule.classes.rt.GetNoticesRT
+import com.weilylab.xhuschedule.interfaces.CommonService
 import com.weilylab.xhuschedule.listener.FeedBackListener
+import com.weilylab.xhuschedule.util.ScheduleHelper
+import com.weilylab.xhuschedule.util.Settings
 import com.weilylab.xhuschedule.util.XhuFileUtil
 import com.zyao89.view.zloading.ZLoadingDialog
 import com.zyao89.view.zloading.Z_TYPE
+import io.reactivex.Observer
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
+import io.reactivex.schedulers.Schedulers
 import java.io.File
+import java.io.InputStreamReader
 
 class OperationAdapter(private val context: Context) : RecyclerView.Adapter<OperationAdapter.ViewHolder>() {
     private val list = ArrayList<HashMap<String, Int>>()
@@ -64,6 +74,7 @@ class OperationAdapter(private val context: Context) : RecyclerView.Adapter<Oper
                 R.string.operation_exam,
                 R.string.operation_score,
                 R.string.operation_feedback,
+                R.string.operation_share,
                 R.string.operation_logout,
                 R.string.operation_settings
         )
@@ -73,6 +84,7 @@ class OperationAdapter(private val context: Context) : RecyclerView.Adapter<Oper
                 R.drawable.ic_exam,
                 R.drawable.ic_score,
                 R.drawable.ic_feedback,
+                R.drawable.ic_share_app,
                 R.drawable.ic_logout,
                 R.drawable.ic_settings
         )
@@ -88,6 +100,45 @@ class OperationAdapter(private val context: Context) : RecyclerView.Adapter<Oper
         val map = list[position]
         holder.imageView.setImageResource(map["icon"]!!)
         holder.textView.setText(map["title"]!!)
+        if (position == 0) {
+            ScheduleHelper.tomcatRetrofit
+                    .create(CommonService::class.java)
+                    .getNotices("Android")
+                    .subscribeOn(Schedulers.newThread())
+                    .unsubscribeOn(Schedulers.newThread())
+                    .map { responseBody -> Gson().fromJson(InputStreamReader(responseBody.byteStream()), GetNoticesRT::class.java) }
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(object : Observer<GetNoticesRT> {
+                        private var getNoticeRT: GetNoticesRT? = null
+                        override fun onSubscribe(d: Disposable) {
+                        }
+
+                        override fun onError(e: Throwable) {
+                            e.printStackTrace()
+                        }
+
+                        override fun onNext(t: GetNoticesRT) {
+                            getNoticeRT = t
+                        }
+
+                        override fun onComplete() {
+                            if (getNoticeRT != null)
+                                when (getNoticeRT!!.rt) {
+                                    "0" -> {
+                                        val notices = getNoticeRT!!.notices
+                                        var isNotice = false
+                                        val shownNoticeID = Settings.shownNoticeID.split('|')
+                                        notices.forEach {
+                                            if (!shownNoticeID.contains(it.id.toString()))
+                                                isNotice = true
+                                        }
+                                        if (isNotice)
+                                            holder.badgeView.visibility = View.VISIBLE
+                                    }
+                                }
+                        }
+                    })
+        }
         holder.itemView.setOnClickListener {
             when (position) {
                 0 -> context.startActivity(Intent(context, NoticeActivity::class.java))
@@ -144,6 +195,13 @@ class OperationAdapter(private val context: Context) : RecyclerView.Adapter<Oper
                     }
                 }
                 5 -> {
+                    val shareIntent = Intent(Intent.ACTION_SEND)
+                    shareIntent.putExtra(Intent.EXTRA_TEXT, context.getString(R.string.hint_share_message))
+                    shareIntent.type = "text/plain"
+                    //设置分享列表的标题，并且每次都显示分享列表
+                    context.startActivity(Intent.createChooser(shareIntent, "分享西瓜课表到"))
+                }
+                6 -> {
                     AlertDialog.Builder(context)
                             .setTitle(R.string.hint_logout_title)
                             .setMessage(R.string.hint_logout_content)
@@ -159,7 +217,7 @@ class OperationAdapter(private val context: Context) : RecyclerView.Adapter<Oper
                             .setNegativeButton(android.R.string.cancel, null)
                             .show()
                 }
-                6 -> context.startActivity(Intent(context, SettingsActivity::class.java))
+                7 -> context.startActivity(Intent(context, SettingsActivity::class.java))
             }
         }
     }
@@ -172,6 +230,7 @@ class OperationAdapter(private val context: Context) : RecyclerView.Adapter<Oper
     override fun getItemCount(): Int = list.size
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        var badgeView: View = itemView.findViewById(R.id.badgeView)
         var imageView: ImageView = itemView.findViewById(R.id.imageView)
         var textView: TextView = itemView.findViewById(R.id.textView)
     }

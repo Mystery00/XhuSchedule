@@ -93,4 +93,7 @@ object Settings {
     var ignoreUpdate: Int//忽略更新的版本号
         set(value) = sharedPreference.edit().putInt("ignoreUpdate", value).apply()
         get() = sharedPreference.getInt("ignoreUpdate", 0)
+    var shownNoticeID: String//查看过的公告id
+        set(value) = sharedPreference.edit().putString("shownNoticeID", value).apply()
+        get() = sharedPreference.getString("shownNoticeID", "")
 }

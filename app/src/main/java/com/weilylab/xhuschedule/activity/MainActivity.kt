@@ -191,6 +191,9 @@ class MainActivity : BaseActivity() {
             titleTextView.setTextColor(Settings.customTableTextColor)
             updateAllView()
         }
+        if (bottomNavigationView.menu.getItem(2).isChecked) {//刷新小红点状态
+            profileFragment.updateNoticeBadge()
+        }
         ScheduleHelper.isImageChange = false
         ScheduleHelper.isUIChange = false
     }
@@ -657,6 +660,7 @@ class MainActivity : BaseActivity() {
             R.id.bottom_nav_profile -> {
                 if (isWeekShow)
                     showWeekAnim(false, false)
+                profileFragment.updateNoticeBadge()
                 titleTextView.text = getString(R.string.course_profile_title)
                 titleTextView.setOnClickListener(null)
                 titleTextView.setCompoundDrawables(null, null, null, null)
