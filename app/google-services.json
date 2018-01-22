@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "8929979529-l4up3aomjv0gqpqm9um7r87fn7l12s20.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.weilylab.xhuschedule",
+            "certificate_hash": "0859fe98eea099671c8f76563633ce758547b606"
+          }
+        },
+        {
           "client_id": "8929979529-2ae5fo79gjo2rc3hv1m6q3afgnses4pi.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -29,8 +37,13 @@
           "status": 1
         },
         "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "8929979529-2ae5fo79gjo2rc3hv1m6q3afgnses4pi.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         },
         "ads_service": {
           "status": 2

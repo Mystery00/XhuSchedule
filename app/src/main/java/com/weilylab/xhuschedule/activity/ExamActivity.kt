@@ -44,6 +44,7 @@ import com.weilylab.xhuschedule.adapter.ExamAdapter
 import com.weilylab.xhuschedule.classes.baseClass.Exam
 import com.weilylab.xhuschedule.classes.baseClass.Student
 import com.weilylab.xhuschedule.listener.GetArrayListener
+import com.weilylab.xhuschedule.util.FirebaseUtil
 import com.weilylab.xhuschedule.util.ViewUtil
 import com.weilylab.xhuschedule.util.XhuFileUtil
 import com.weilylab.xhuschedule.util.widget.WidgetHelper
@@ -63,6 +64,10 @@ class ExamActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val params = Bundle()
+        params.putString(FirebaseUtil.VERSION_NAME, getString(R.string.app_version_name))
+        params.putString(FirebaseUtil.VERSION_CODE, getString(R.string.app_version_code))
+        mFirebaseAnalytics.logEvent(FirebaseUtil.VIEW_EXAM, params)
         setContentView(R.layout.activity_exam)
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)

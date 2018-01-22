@@ -48,6 +48,7 @@ import android.app.Activity
 import android.support.v4.content.ContextCompat
 import com.weilylab.xhuschedule.classes.baseClass.Student
 import com.weilylab.xhuschedule.listener.LoginListener
+import com.weilylab.xhuschedule.util.FirebaseUtil
 import com.weilylab.xhuschedule.util.XhuFileUtil
 import java.io.File
 
@@ -98,6 +99,9 @@ class LoginActivity : BaseActivity() {
         if (cancel) {
             focusView?.requestFocus()
         } else {
+            val params = Bundle()
+            params.putString(FirebaseUtil.STUDENT_NUMBER, usernameStr)
+            mFirebaseAnalytics.logEvent(FirebaseUtil.START_LOGIN, params)
             login()
         }
     }

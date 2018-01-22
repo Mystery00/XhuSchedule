@@ -35,15 +35,18 @@ package com.weilylab.xhuschedule.service
 
 import android.app.Service
 import android.content.Intent
+import android.os.Bundle
 import android.os.IBinder
 import android.support.v4.app.NotificationCompat
 import android.support.v4.app.NotificationManagerCompat
+import com.weilylab.xhuschedule.APP
 import com.weilylab.xhuschedule.R
+import com.weilylab.xhuschedule.util.FirebaseUtil
 import com.weilylab.xhuschedule.util.widget.WidgetHelper
 
 class WidgetInitService : Service() {
     companion object {
-        private val NOTIFICATION_ID = 0
+        private const val NOTIFICATION_ID = 0
     }
 
     override fun onBind(intent: Intent): IBinder? {
@@ -52,6 +55,10 @@ class WidgetInitService : Service() {
 
     override fun onCreate() {
         super.onCreate()
+        val params = Bundle()
+        params.putString(FirebaseUtil.VERSION_NAME, getString(R.string.app_version_name))
+        params.putString(FirebaseUtil.VERSION_CODE, getString(R.string.app_version_code))
+        APP.getFirebaseAnalytics().logEvent(FirebaseUtil.INIT_WIDGET, params)
         val notification = NotificationCompat.Builder(this, "Xhu Schedule")
                 .setSmallIcon(R.mipmap.ic_launcher)
                 .setContentText("正在初始化数据")

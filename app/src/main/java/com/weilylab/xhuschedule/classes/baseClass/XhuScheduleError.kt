@@ -61,14 +61,14 @@ data class XhuScheduleError(val time: String, val appVersionName: String,
 
     fun uploadLog(context: Context, logFile: File, listener: UploadLogListener) {
         val map = HashMap<String, String>()
-        map.put("date", time)
-        map.put("appName", context.getString(R.string.app_name))
-        map.put("appVersionName", appVersionName)
-        map.put("appVersionCode", appVersionCode.toString())
-        map.put("androidVersion", AndroidVersion)
-        map.put("sdk", sdk.toString())
-        map.put("vendor", vendor)
-        map.put("model", model)
+        map["date"] = time
+        map["appName"] = context.getString(R.string.app_name)
+        map["appVersionName"] = appVersionName
+        map["appVersionCode"] = appVersionCode.toString()
+        map["androidVersion"] = AndroidVersion
+        map["sdk"] = sdk.toString()
+        map["vendor"] = vendor
+        map["model"] = model
         ScheduleHelper.phpRetrofit
                 .create(PhpService::class.java)
                 .uploadLog(createPartFromMap(map), prepareFilePart("logFile", logFile))

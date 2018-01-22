@@ -38,11 +38,15 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
+import android.os.Bundle
 import android.os.Environment
 import android.support.v4.content.FileProvider
+import com.weilylab.xhuschedule.APP
+import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.interfaces.PhpService
 import com.weilylab.xhuschedule.listener.DownloadProgressListener
 import com.weilylab.xhuschedule.util.BsPatch
+import com.weilylab.xhuschedule.util.FirebaseUtil
 import com.weilylab.xhuschedule.util.notification.DownloadNotification
 import com.weilylab.xhuschedule.util.XhuFileUtil
 import com.weilylab.xhuschedule.util.download.Download
@@ -120,6 +124,11 @@ class DownloadService : IntentService(TAG) {
 
     private fun download(context: Context, type: String, fileName: String, file: File) {
         Logs.i(TAG, "download: " + fileName)
+        val params = Bundle()
+        params.putString(FirebaseUtil.VERSION_NAME, context.getString(R.string.app_version_name))
+        params.putString(FirebaseUtil.VERSION_CODE, context.getString(R.string.app_version_code))
+        params.putString(FirebaseUtil.TYPE, type)
+        APP.getFirebaseAnalytics().logEvent(FirebaseUtil.DOWNLOAD_APK, params)
         retrofit.create(PhpService::class.java)
                 .download(type, fileName)
                 .subscribeOn(Schedulers.newThread())

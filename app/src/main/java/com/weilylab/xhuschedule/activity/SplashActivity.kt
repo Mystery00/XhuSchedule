@@ -44,6 +44,7 @@ import com.weilylab.xhuschedule.classes.baseClass.XhuScheduleError
 import com.weilylab.xhuschedule.listener.UploadLogListener
 import com.weilylab.xhuschedule.service.UpdateService
 import com.weilylab.xhuschedule.util.CalendarUtil
+import com.weilylab.xhuschedule.util.FirebaseUtil
 import com.weilylab.xhuschedule.util.Settings
 import com.weilylab.xhuschedule.util.XhuFileUtil
 import com.zyao89.view.zloading.ZLoadingDialog
@@ -61,6 +62,10 @@ import kotlin.math.max
 class SplashActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val params = Bundle()
+        params.putString(FirebaseUtil.VERSION_NAME, getString(R.string.app_version_name))
+        params.putString(FirebaseUtil.VERSION_CODE, getString(R.string.app_version_code))
+        mFirebaseAnalytics.logEvent(FirebaseUtil.BOOT, params)
         if (Settings.autoCheckUpdate)
             startService(Intent(this, UpdateService::class.java))
         if (Settings.autoCheckLog) {
