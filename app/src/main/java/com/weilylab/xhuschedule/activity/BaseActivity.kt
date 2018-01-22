@@ -35,14 +35,15 @@ package com.weilylab.xhuschedule.activity
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.weilylab.xhuschedule.util.APPActivityManager
-import com.weilylab.xhuschedule.APP
 
 
 abstract class BaseActivity : AppCompatActivity() {
-    var mFirebaseAnalytics = APP.getFirebaseAnalytics()
+    lateinit var mFirebaseAnalytics: FirebaseAnalytics
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this)
         APPActivityManager.appManager.addActivity(this)
     }
 

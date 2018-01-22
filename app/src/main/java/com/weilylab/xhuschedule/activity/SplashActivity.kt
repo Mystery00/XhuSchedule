@@ -39,6 +39,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.widget.Toast
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.classes.baseClass.XhuScheduleError
 import com.weilylab.xhuschedule.listener.UploadLogListener
@@ -65,6 +66,7 @@ class SplashActivity : BaseActivity() {
         val params = Bundle()
         params.putString(FirebaseUtil.VERSION_NAME, getString(R.string.app_version_name))
         params.putString(FirebaseUtil.VERSION_CODE, getString(R.string.app_version_code))
+        val mFirebaseAnalytics=FirebaseAnalytics.getInstance(this)
         mFirebaseAnalytics.logEvent(FirebaseUtil.BOOT, params)
         if (Settings.autoCheckUpdate)
             startService(Intent(this, UpdateService::class.java))

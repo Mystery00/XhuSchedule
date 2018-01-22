@@ -61,11 +61,11 @@ class APP : Application() {
 
     init {
         app = this
-        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this)
     }
 
     override fun onCreate() {
         super.onCreate()
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this)
         Logs.setLevel(Logs.Debug)
         if (!cacheDir.exists())
             cacheDir.mkdirs()
