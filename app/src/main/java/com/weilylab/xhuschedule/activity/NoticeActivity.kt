@@ -37,13 +37,13 @@ import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.gson.Gson
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.adapter.NoticeAdapter
 import com.weilylab.xhuschedule.classes.baseClass.Notice
 import com.weilylab.xhuschedule.classes.rt.GetNoticesRT
 import com.weilylab.xhuschedule.interfaces.CommonService
-import com.weilylab.xhuschedule.util.FirebaseUtil
 import com.weilylab.xhuschedule.util.ScheduleHelper
 import com.weilylab.xhuschedule.util.Settings
 import io.reactivex.Observer
@@ -59,10 +59,9 @@ class NoticeActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-//        val params = Bundle()
-//        params.putString(FirebaseUtil.VERSION_NAME, getString(R.string.app_version_name))
-//        params.putString(FirebaseUtil.VERSION_CODE, getString(R.string.app_version_code))
-//        mFirebaseAnalytics.logEvent(FirebaseUtil.VIEW_NOTICE, params)
+        val params = Bundle()
+        params.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "notice")
+        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, params)
         setContentView(R.layout.activity_notice)
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)

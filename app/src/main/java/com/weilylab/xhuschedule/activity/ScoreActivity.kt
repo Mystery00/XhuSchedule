@@ -43,6 +43,7 @@ import android.util.Base64
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.adapter.ScoreAdapter
 import com.weilylab.xhuschedule.classes.baseClass.Profile
@@ -51,7 +52,6 @@ import com.weilylab.xhuschedule.classes.baseClass.Student
 import com.weilylab.xhuschedule.listener.GetScoreListener
 import com.weilylab.xhuschedule.listener.InitProfileListener
 import com.weilylab.xhuschedule.listener.ProfileListener
-import com.weilylab.xhuschedule.util.FirebaseUtil
 import com.weilylab.xhuschedule.util.Settings
 import com.weilylab.xhuschedule.util.ViewUtil
 import com.weilylab.xhuschedule.util.XhuFileUtil
@@ -79,10 +79,9 @@ class ScoreActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-//        val params = Bundle()
-//        params.putString(FirebaseUtil.VERSION_NAME, getString(R.string.app_version_name))
-//        params.putString(FirebaseUtil.VERSION_CODE, getString(R.string.app_version_code))
-//        mFirebaseAnalytics.logEvent(FirebaseUtil.VIEW_SCORE, params)
+        val params = Bundle()
+        params.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "scores")
+        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, params)
         setContentView(R.layout.activity_score)
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)

@@ -49,6 +49,7 @@ import android.util.Base64
 import android.widget.Toast
 import com.getkeepsafe.taptargetview.TapTarget
 import com.getkeepsafe.taptargetview.TapTargetSequence
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.gson.Gson
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.adapter.ViewPagerAdapter
@@ -108,10 +109,9 @@ class MainActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-//        val params = Bundle()
-//        params.putString(FirebaseUtil.VERSION_NAME, getString(R.string.app_version_name))
-//        params.putString(FirebaseUtil.VERSION_CODE, getString(R.string.app_version_code))
-//        mFirebaseAnalytics.logEvent(FirebaseUtil.BOOT_COMPLETE_MAIN, params)
+        val params = Bundle()
+        params.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "main")
+        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, params)
         setContentView(R.layout.activity_main)
         loadingDialog = ZLoadingDialog(this)
                 .setLoadingBuilder(Z_TYPE.DOUBLE_CIRCLE)

@@ -42,7 +42,6 @@ import com.weilylab.xhuschedule.interfaces.CommonService
 import com.weilylab.xhuschedule.interfaces.StudentService
 import com.weilylab.xhuschedule.interfaces.UserService
 import com.weilylab.xhuschedule.listener.*
-import com.weilylab.xhuschedule.util.FirebaseUtil
 import com.weilylab.xhuschedule.util.ScheduleHelper
 import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -63,7 +62,7 @@ class Student : Serializable {
     var isReady = false
 
     fun login(listener: LoginListener) {
-        val tag = FirebaseUtil.STUDENT_LOGIN
+        val tag = "student_login"
         ScheduleHelper.tomcatRetrofit
                 .create(UserService::class.java)
                 .autoLogin(username, password)
@@ -76,10 +75,6 @@ class Student : Serializable {
                     override fun onNext(t: AutoLoginRT) {
                         Logs.i(tag, "onNext: ")
                         autoLoginRT = t
-//                        val params = Bundle()
-//                        params.putString(FirebaseUtil.STUDENT_NUMBER, username)
-//                        params.putString(FirebaseUtil.RT, autoLoginRT?.rt)
-//                        APP.getFirebaseAnalytics().logEvent(FirebaseUtil.STUDENT_LOGIN, params)
                     }
 
                     override fun onComplete() {
@@ -102,7 +97,7 @@ class Student : Serializable {
     }
 
     fun getInfo(listener: ProfileListener) {
-        val tag = FirebaseUtil.STUDENT_GET_INFO
+        val tag = "student_get_info"
         ScheduleHelper.tomcatRetrofit
                 .create(UserService::class.java)
                 .getInfo(username)
@@ -115,10 +110,6 @@ class Student : Serializable {
                     override fun onNext(t: GetInfoRT) {
                         Logs.i(tag, "onNext: ")
                         getInfoRT = t
-//                        val params = Bundle()
-//                        params.putString(FirebaseUtil.STUDENT_NUMBER, username)
-//                        params.putString(FirebaseUtil.RT, getInfoRT?.rt)
-//                        APP.getFirebaseAnalytics().logEvent(FirebaseUtil.STUDENT_GET_INFO, params)
                     }
 
                     override fun onComplete() {
@@ -155,7 +146,7 @@ class Student : Serializable {
     }
 
     fun getTests(listener: GetArrayListener<Exam>) {
-        val tag = FirebaseUtil.STUDENT_GET_TESTS
+        val tag = "student_get_tests"
         ScheduleHelper.tomcatRetrofit
                 .create(StudentService::class.java)
                 .getTests(username)
@@ -168,10 +159,6 @@ class Student : Serializable {
                     override fun onNext(t: GetTestsRT) {
                         Logs.i(tag, "onNext: ")
                         getTestsRT = t
-//                        val params = Bundle()
-//                        params.putString(FirebaseUtil.STUDENT_NUMBER, username)
-//                        params.putString(FirebaseUtil.RT, getTestsRT?.rt)
-//                        APP.getFirebaseAnalytics().logEvent(FirebaseUtil.STUDENT_GET_TESTS, params)
                     }
 
                     override fun onComplete() {
@@ -205,7 +192,7 @@ class Student : Serializable {
     }
 
     fun getScores(year: String?, term: Int?, listener: GetScoreListener) {
-        val tag = FirebaseUtil.STUDENT_GET_SCORES
+        val tag = "student_get_scores"
         ScheduleHelper.tomcatRetrofit
                 .create(StudentService::class.java)
                 .getScores(username, year, term)
@@ -218,10 +205,6 @@ class Student : Serializable {
                     override fun onNext(t: GetScoresRT) {
                         Logs.i(tag, "onNext: ")
                         getScoresRT = t
-//                        val params = Bundle()
-//                        params.putString(FirebaseUtil.STUDENT_NUMBER, username)
-//                        params.putString(FirebaseUtil.RT, getScoresRT?.rt)
-//                        APP.getFirebaseAnalytics().logEvent(FirebaseUtil.STUDENT_GET_SCORES, params)
                     }
 
                     override fun onComplete() {
@@ -255,7 +238,7 @@ class Student : Serializable {
     }
 
     fun getExpScores(year: String?, term: Int?, listener: GetExpScoreListener) {
-        val tag = FirebaseUtil.STUDENT_GET_EXP_SCORES
+        val tag = "student_get_exp_scores"
         ScheduleHelper.tomcatRetrofit
                 .create(StudentService::class.java)
                 .getExpScores(username, year, term)
@@ -268,10 +251,6 @@ class Student : Serializable {
                     override fun onNext(t: GetExpScoresRT) {
                         Logs.i(tag, "onNext: ")
                         getExpScoresRT = t
-//                        val params = Bundle()
-//                        params.putString(FirebaseUtil.STUDENT_NUMBER, username)
-//                        params.putString(FirebaseUtil.RT, getExpScoresRT?.rt)
-//                        APP.getFirebaseAnalytics().logEvent(tag, params)
                     }
 
                     override fun onComplete() {
@@ -305,7 +284,7 @@ class Student : Serializable {
     }
 
     fun feedback(context: Context, emailAddress: String, message: String, listener: FeedBackListener) {
-        val tag = FirebaseUtil.STUDENT_FEEDBACK
+        val tag = "student_feedback"
         ScheduleHelper.tomcatRetrofit.create(CommonService::class.java)
                 .feedback(username,
                         context.getString(R.string.app_version_name) + "-" + context.getString(R.string.app_version_code),
@@ -324,10 +303,6 @@ class Student : Serializable {
                     override fun onNext(t: FeedbackRT) {
                         Logs.i(tag, "onNext: ")
                         feedbackRT = t
-//                        val params = Bundle()
-//                        params.putString(FirebaseUtil.STUDENT_NUMBER, username)
-//                        params.putString(FirebaseUtil.RT, feedbackRT?.rt)
-//                        APP.getFirebaseAnalytics().logEvent(tag, params)
                     }
 
                     override fun onComplete() {

@@ -5,6 +5,7 @@
   ~ Last modified 17-12-21 上午2:35
 -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.weilylab.xhuschedule">
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -163,6 +164,12 @@
                 android:name="android.appwidget.provider"
                 android:resource="@xml/exam_widget_info" />
         </receiver>
+
+        <!--禁用FirebaseInitProvider-->
+        <provider
+            android:name="com.google.firebase.provider.FirebaseInitProvider"
+            android:authorities="${applicationId}.firebaseinitprovider"
+            tools:node="remove" />
     </application>
 
 </manifest>

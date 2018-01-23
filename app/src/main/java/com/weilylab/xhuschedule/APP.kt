@@ -37,6 +37,10 @@ import android.app.Application
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import com.google.firebase.FirebaseApp
+import com.google.firebase.analytics.FirebaseAnalytics
+import com.oasisfeng.condom.CondomContext
+import com.oasisfeng.condom.CondomOptions
 import com.weilylab.xhuschedule.activity.ErrorActivity
 import com.weilylab.xhuschedule.classes.baseClass.XhuScheduleError
 import vip.mystery0.tools.crashHandler.CatchExceptionListener
@@ -50,11 +54,11 @@ import java.io.File
 class APP : Application() {
     companion object {
         private var app: APP? = null
-//        private var mFirebaseAnalytics: FirebaseAnalytics? = null
+        private var mFirebaseAnalytics: FirebaseAnalytics? = null
 
         fun getContext(): Context = app!!
 
-//        fun getFirebaseAnalytics(): FirebaseAnalytics = mFirebaseAnalytics!!
+        fun getFirebaseAnalytics(): FirebaseAnalytics = mFirebaseAnalytics!!
     }
 
     init {
@@ -63,11 +67,11 @@ class APP : Application() {
 
     override fun onCreate() {
         super.onCreate()
-//        val condom = CondomContext.wrap(this, "Firebase", CondomOptions().setOutboundJudge { _, _, target_package ->
-//            target_package == "com.google.android.gms"
-//        })
-//        FirebaseApp.initializeApp(condom)
-//        mFirebaseAnalytics = FirebaseAnalytics.getInstance(condom)
+        val condom = CondomContext.wrap(this, "Firebase", CondomOptions().setOutboundJudge { _, _, target_package ->
+            target_package == "com.google.android.gms"
+        })
+        FirebaseApp.initializeApp(condom)
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(condom)
         Logs.setLevel(Logs.Debug)
         if (!cacheDir.exists())
             cacheDir.mkdirs()

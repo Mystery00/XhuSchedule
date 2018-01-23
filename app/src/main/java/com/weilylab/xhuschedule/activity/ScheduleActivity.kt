@@ -48,6 +48,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.signature.MediaStoreSignature
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.gson.Gson
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.classes.baseClass.Course
@@ -86,10 +87,9 @@ class ScheduleActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-//        val params = Bundle()
-//        params.putString(FirebaseUtil.VERSION_NAME, getString(R.string.app_version_name))
-//        params.putString(FirebaseUtil.VERSION_CODE, getString(R.string.app_version_code))
-//        mFirebaseAnalytics.logEvent(FirebaseUtil.VIEW_SCHEDULE, params)
+        val params = Bundle()
+        params.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "schedule")
+        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, params)
         setContentView(R.layout.activity_schedule)
         initView()
     }

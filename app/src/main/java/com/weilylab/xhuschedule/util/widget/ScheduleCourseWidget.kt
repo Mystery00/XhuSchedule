@@ -39,13 +39,12 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.widget.RemoteViews
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.weilylab.xhuschedule.APP
 
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.service.GridWidgetService
 import com.weilylab.xhuschedule.service.WidgetInitService
-import com.weilylab.xhuschedule.util.FirebaseUtil
-import vip.mystery0.tools.logs.Logs
 
 /**
  * Implementation of App Widget functionality.
@@ -53,27 +52,11 @@ import vip.mystery0.tools.logs.Logs
 class ScheduleCourseWidget : AppWidgetProvider() {
 
     override fun onUpdate(context: Context, appWidgetManager: AppWidgetManager, appWidgetIds: IntArray) {
-        Logs.i(TAG, "onUpdate: ")
+        APP.getFirebaseAnalytics().logEvent(FirebaseAnalytics.Event.VIEW_ITEM,Bundle())
         WidgetHelper.saveWidgetIds(context, WidgetHelper.TABLE_TAG, appWidgetIds)
         context.startService(Intent(context, WidgetInitService::class.java))
         for (appWidgetId in appWidgetIds)
             updateAppWidget(context, appWidgetId)
-    }
-
-    override fun onEnabled(context: Context) {
-        super.onEnabled(context)
-        val params = Bundle()
-        params.putString(FirebaseUtil.VERSION_NAME, context.getString(R.string.app_version_name))
-        params.putString(FirebaseUtil.VERSION_CODE, context.getString(R.string.app_version_code))
-        APP.getFirebaseAnalytics().logEvent(FirebaseUtil.ENABLE_WIDGET_SCHEDULE, params)
-    }
-
-    override fun onDisabled(context: Context) {
-        super.onDisabled(context)
-        val params = Bundle()
-        params.putString(FirebaseUtil.VERSION_NAME, context.getString(R.string.app_version_name))
-        params.putString(FirebaseUtil.VERSION_CODE, context.getString(R.string.app_version_code))
-        APP.getFirebaseAnalytics().logEvent(FirebaseUtil.DISABLE_WIDGET_SCHEDULE, params)
     }
 
     override fun onReceive(context: Context, intent: Intent) {
@@ -86,8 +69,6 @@ class ScheduleCourseWidget : AppWidgetProvider() {
     }
 
     companion object {
-        private val TAG = "ScheduleCourseWidget"
-
         internal fun updateAppWidget(context: Context, appWidgetId: Int) {
             val remoteViews = RemoteViews(context.packageName, R.layout.layout_widget_course_schedule)
             val intent = Intent(context, GridWidgetService::class.java)

@@ -56,11 +56,6 @@ import com.weilylab.xhuschedule.util.APPActivityManager
 class SettingsActivity : AppCompatPreferenceActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-//        val mFirebaseAnalytics = APP.getFirebaseAnalytics()
-//        val params = Bundle()
-//        params.putString(FirebaseUtil.VERSION_NAME, getString(R.string.app_version_name))
-//        params.putString(FirebaseUtil.VERSION_CODE, getString(R.string.app_version_code))
-//        mFirebaseAnalytics.logEvent(FirebaseUtil.VIEW_SETTINGS, params)
         APPActivityManager.appManager.addActivity(this)
         setupActionBar()
     }

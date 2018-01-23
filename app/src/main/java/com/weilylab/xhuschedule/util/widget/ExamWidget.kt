@@ -40,13 +40,13 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.widget.RemoteViews
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.weilylab.xhuschedule.APP
 
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.service.ExamWidgetService
 import com.weilylab.xhuschedule.service.WidgetInitService
 import com.weilylab.xhuschedule.util.CalendarUtil
-import com.weilylab.xhuschedule.util.FirebaseUtil
 
 /**
  * Implementation of App Widget functionality.
@@ -54,6 +54,7 @@ import com.weilylab.xhuschedule.util.FirebaseUtil
 class ExamWidget : AppWidgetProvider() {
 
     override fun onUpdate(context: Context, appWidgetManager: AppWidgetManager, appWidgetIds: IntArray) {
+        APP.getFirebaseAnalytics().logEvent(FirebaseAnalytics.Event.VIEW_ITEM,Bundle())
         WidgetHelper.saveWidgetIds(context, WidgetHelper.EXAM_TAG, appWidgetIds)
         context.startService(Intent(context, WidgetInitService::class.java))
         for (appWidgetId in appWidgetIds)
@@ -69,22 +70,6 @@ class ExamWidget : AppWidgetProvider() {
                 AppWidgetManager.getInstance(context).notifyAppWidgetViewDataChanged(appWidgetId, R.id.listView)
             }
         }
-    }
-
-    override fun onEnabled(context: Context) {
-        super.onEnabled(context)
-        val params = Bundle()
-        params.putString(FirebaseUtil.VERSION_NAME, context.getString(R.string.app_version_name))
-        params.putString(FirebaseUtil.VERSION_CODE, context.getString(R.string.app_version_code))
-        APP.getFirebaseAnalytics().logEvent(FirebaseUtil.ENABLE_WIDGET_EXAM, params)
-    }
-
-    override fun onDisabled(context: Context) {
-        super.onDisabled(context)
-        val params = Bundle()
-        params.putString(FirebaseUtil.VERSION_NAME, context.getString(R.string.app_version_name))
-        params.putString(FirebaseUtil.VERSION_CODE, context.getString(R.string.app_version_code))
-        APP.getFirebaseAnalytics().logEvent(FirebaseUtil.DISABLE_WIDGET_EXAM, params)
     }
 
     companion object {

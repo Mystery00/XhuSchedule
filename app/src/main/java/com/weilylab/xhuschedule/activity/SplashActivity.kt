@@ -39,12 +39,12 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.widget.Toast
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.classes.baseClass.XhuScheduleError
 import com.weilylab.xhuschedule.listener.UploadLogListener
 import com.weilylab.xhuschedule.service.UpdateService
 import com.weilylab.xhuschedule.util.CalendarUtil
-import com.weilylab.xhuschedule.util.FirebaseUtil
 import com.weilylab.xhuschedule.util.Settings
 import com.weilylab.xhuschedule.util.XhuFileUtil
 import com.zyao89.view.zloading.ZLoadingDialog
@@ -54,6 +54,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.observers.DisposableObserver
 import io.reactivex.schedulers.Schedulers
 import java.io.File
+import java.util.*
 import kotlin.math.max
 
 /**
@@ -62,11 +63,9 @@ import kotlin.math.max
 class SplashActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-//        val params = Bundle()
-//        params.putString(FirebaseUtil.VERSION_NAME, getString(R.string.app_version_name))
-//        params.putString(FirebaseUtil.VERSION_CODE, getString(R.string.app_version_code))
-//        val mFirebaseAnalytics=FirebaseAnalytics.getInstance(this)
-//        mFirebaseAnalytics.logEvent(FirebaseUtil.BOOT, params)
+        val params = Bundle()
+        params.putString(FirebaseAnalytics.Param.START_DATE, Calendar.getInstance().time.toString())
+        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.APP_OPEN, params)
         if (Settings.autoCheckUpdate)
             startService(Intent(this, UpdateService::class.java))
         if (Settings.autoCheckLog) {
