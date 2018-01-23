@@ -72,14 +72,14 @@ class ErrorActivity : BaseActivity() {
         val stringWriter = StringWriter()
         error.ex.printStackTrace(PrintWriter(stringWriter))
         text_exception.text = getString(R.string.exception_message, stringWriter.toString())
-        val params = Bundle()
-        params.putString("error_time", error.time)
-        params.putString("version", "${error.appVersionName}-${error.appVersionCode}")
-        params.putString("sdk", error.sdk.toString())
-        params.putString("vendor", error.vendor)
-        params.putString("model", error.model)
-        params.putString("error_detail", error.ex.message)
-        mFirebaseAnalytics.logEvent(FirebaseUtil.SHOW_ERROR_DETAIL, params)
+//        val params = Bundle()
+//        params.putString("error_time", error.time)
+//        params.putString("version", "${error.appVersionName}-${error.appVersionCode}")
+//        params.putString("sdk", error.sdk.toString())
+//        params.putString("vendor", error.vendor)
+//        params.putString("model", error.model)
+//        params.putString("error_detail", error.ex.message)
+//        mFirebaseAnalytics.logEvent(FirebaseUtil.SHOW_ERROR_DETAIL, params)
         button_feedback.setOnClickListener {
             val logFile = intent.getBundleExtra("error").getSerializable("file") as File
             error.uploadLog(this, logFile, object : UploadLogListener {

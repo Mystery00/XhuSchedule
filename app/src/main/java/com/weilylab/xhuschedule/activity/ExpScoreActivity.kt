@@ -76,10 +76,10 @@ class ExpScoreActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val params = Bundle()
-        params.putString(FirebaseUtil.VERSION_NAME, getString(R.string.app_version_name))
-        params.putString(FirebaseUtil.VERSION_CODE, getString(R.string.app_version_code))
-        mFirebaseAnalytics.logEvent(FirebaseUtil.VIEW_EXP_SCORE, params)
+//        val params = Bundle()
+//        params.putString(FirebaseUtil.VERSION_NAME, getString(R.string.app_version_name))
+//        params.putString(FirebaseUtil.VERSION_CODE, getString(R.string.app_version_code))
+//        mFirebaseAnalytics.logEvent(FirebaseUtil.VIEW_EXP_SCORE, params)
         setContentView(R.layout.activity_experiment_score)
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)

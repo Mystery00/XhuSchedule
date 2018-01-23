@@ -39,12 +39,9 @@ import android.os.Bundle
 import android.preference.PreferenceActivity
 import android.preference.PreferenceFragment
 import android.view.MenuItem
-import com.google.firebase.analytics.FirebaseAnalytics
-import com.weilylab.xhuschedule.APP
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.fragment.*
 import com.weilylab.xhuschedule.util.APPActivityManager
-import com.weilylab.xhuschedule.util.FirebaseUtil
 
 /**
  * A [PreferenceActivity] that presents a set of application settings. On
@@ -59,11 +56,11 @@ import com.weilylab.xhuschedule.util.FirebaseUtil
 class SettingsActivity : AppCompatPreferenceActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val mFirebaseAnalytics = APP.getFirebaseAnalytics()
-        val params = Bundle()
-        params.putString(FirebaseUtil.VERSION_NAME, getString(R.string.app_version_name))
-        params.putString(FirebaseUtil.VERSION_CODE, getString(R.string.app_version_code))
-        mFirebaseAnalytics.logEvent(FirebaseUtil.VIEW_SETTINGS, params)
+//        val mFirebaseAnalytics = APP.getFirebaseAnalytics()
+//        val params = Bundle()
+//        params.putString(FirebaseUtil.VERSION_NAME, getString(R.string.app_version_name))
+//        params.putString(FirebaseUtil.VERSION_CODE, getString(R.string.app_version_code))
+//        mFirebaseAnalytics.logEvent(FirebaseUtil.VIEW_SETTINGS, params)
         APPActivityManager.appManager.addActivity(this)
         setupActionBar()
     }

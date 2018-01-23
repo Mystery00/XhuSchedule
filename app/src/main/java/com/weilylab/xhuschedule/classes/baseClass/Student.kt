@@ -35,9 +35,7 @@ package com.weilylab.xhuschedule.classes.baseClass
 
 import android.content.Context
 import android.os.Build
-import android.os.Bundle
 import com.google.gson.Gson
-import com.weilylab.xhuschedule.APP
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.classes.rt.*
 import com.weilylab.xhuschedule.interfaces.CommonService
@@ -78,10 +76,10 @@ class Student : Serializable {
                     override fun onNext(t: AutoLoginRT) {
                         Logs.i(tag, "onNext: ")
                         autoLoginRT = t
-                        val params = Bundle()
-                        params.putString(FirebaseUtil.STUDENT_NUMBER, username)
-                        params.putString(FirebaseUtil.RT, autoLoginRT?.rt)
-                        APP.getFirebaseAnalytics().logEvent(FirebaseUtil.STUDENT_LOGIN, params)
+//                        val params = Bundle()
+//                        params.putString(FirebaseUtil.STUDENT_NUMBER, username)
+//                        params.putString(FirebaseUtil.RT, autoLoginRT?.rt)
+//                        APP.getFirebaseAnalytics().logEvent(FirebaseUtil.STUDENT_LOGIN, params)
                     }
 
                     override fun onComplete() {
@@ -117,10 +115,10 @@ class Student : Serializable {
                     override fun onNext(t: GetInfoRT) {
                         Logs.i(tag, "onNext: ")
                         getInfoRT = t
-                        val params = Bundle()
-                        params.putString(FirebaseUtil.STUDENT_NUMBER, username)
-                        params.putString(FirebaseUtil.RT, getInfoRT?.rt)
-                        APP.getFirebaseAnalytics().logEvent(FirebaseUtil.STUDENT_GET_INFO, params)
+//                        val params = Bundle()
+//                        params.putString(FirebaseUtil.STUDENT_NUMBER, username)
+//                        params.putString(FirebaseUtil.RT, getInfoRT?.rt)
+//                        APP.getFirebaseAnalytics().logEvent(FirebaseUtil.STUDENT_GET_INFO, params)
                     }
 
                     override fun onComplete() {
@@ -170,10 +168,10 @@ class Student : Serializable {
                     override fun onNext(t: GetTestsRT) {
                         Logs.i(tag, "onNext: ")
                         getTestsRT = t
-                        val params = Bundle()
-                        params.putString(FirebaseUtil.STUDENT_NUMBER, username)
-                        params.putString(FirebaseUtil.RT, getTestsRT?.rt)
-                        APP.getFirebaseAnalytics().logEvent(FirebaseUtil.STUDENT_GET_TESTS, params)
+//                        val params = Bundle()
+//                        params.putString(FirebaseUtil.STUDENT_NUMBER, username)
+//                        params.putString(FirebaseUtil.RT, getTestsRT?.rt)
+//                        APP.getFirebaseAnalytics().logEvent(FirebaseUtil.STUDENT_GET_TESTS, params)
                     }
 
                     override fun onComplete() {
@@ -220,10 +218,10 @@ class Student : Serializable {
                     override fun onNext(t: GetScoresRT) {
                         Logs.i(tag, "onNext: ")
                         getScoresRT = t
-                        val params = Bundle()
-                        params.putString(FirebaseUtil.STUDENT_NUMBER, username)
-                        params.putString(FirebaseUtil.RT, getScoresRT?.rt)
-                        APP.getFirebaseAnalytics().logEvent(FirebaseUtil.STUDENT_GET_SCORES, params)
+//                        val params = Bundle()
+//                        params.putString(FirebaseUtil.STUDENT_NUMBER, username)
+//                        params.putString(FirebaseUtil.RT, getScoresRT?.rt)
+//                        APP.getFirebaseAnalytics().logEvent(FirebaseUtil.STUDENT_GET_SCORES, params)
                     }
 
                     override fun onComplete() {
@@ -270,10 +268,10 @@ class Student : Serializable {
                     override fun onNext(t: GetExpScoresRT) {
                         Logs.i(tag, "onNext: ")
                         getExpScoresRT = t
-                        val params = Bundle()
-                        params.putString(FirebaseUtil.STUDENT_NUMBER, username)
-                        params.putString(FirebaseUtil.RT, getExpScoresRT?.rt)
-                        APP.getFirebaseAnalytics().logEvent(tag, params)
+//                        val params = Bundle()
+//                        params.putString(FirebaseUtil.STUDENT_NUMBER, username)
+//                        params.putString(FirebaseUtil.RT, getExpScoresRT?.rt)
+//                        APP.getFirebaseAnalytics().logEvent(tag, params)
                     }
 
                     override fun onComplete() {
@@ -326,10 +324,10 @@ class Student : Serializable {
                     override fun onNext(t: FeedbackRT) {
                         Logs.i(tag, "onNext: ")
                         feedbackRT = t
-                        val params = Bundle()
-                        params.putString(FirebaseUtil.STUDENT_NUMBER, username)
-                        params.putString(FirebaseUtil.RT, feedbackRT?.rt)
-                        APP.getFirebaseAnalytics().logEvent(tag, params)
+//                        val params = Bundle()
+//                        params.putString(FirebaseUtil.STUDENT_NUMBER, username)
+//                        params.putString(FirebaseUtil.RT, feedbackRT?.rt)
+//                        APP.getFirebaseAnalytics().logEvent(tag, params)
                     }
 
                     override fun onComplete() {

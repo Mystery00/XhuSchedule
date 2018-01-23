@@ -37,13 +37,8 @@ import android.app.Application
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import com.google.firebase.FirebaseApp
-import com.google.firebase.analytics.FirebaseAnalytics
-import com.oasisfeng.condom.CondomContext
-import com.oasisfeng.condom.CondomOptions
 import com.weilylab.xhuschedule.activity.ErrorActivity
 import com.weilylab.xhuschedule.classes.baseClass.XhuScheduleError
-import com.weilylab.xhuschedule.util.FirebaseUtil
 import vip.mystery0.tools.crashHandler.CatchExceptionListener
 import vip.mystery0.tools.crashHandler.CrashHandler
 import vip.mystery0.tools.logs.Logs
@@ -55,11 +50,11 @@ import java.io.File
 class APP : Application() {
     companion object {
         private var app: APP? = null
-        private var mFirebaseAnalytics: FirebaseAnalytics? = null
+//        private var mFirebaseAnalytics: FirebaseAnalytics? = null
 
         fun getContext(): Context = app!!
 
-        fun getFirebaseAnalytics(): FirebaseAnalytics = mFirebaseAnalytics!!
+//        fun getFirebaseAnalytics(): FirebaseAnalytics = mFirebaseAnalytics!!
     }
 
     init {
@@ -68,11 +63,11 @@ class APP : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        val condom = CondomContext.wrap(this, "Firebase", CondomOptions().setOutboundJudge { _, _, target_package ->
-            target_package == "com.google.android.gms"
-        })
-        FirebaseApp.initializeApp(condom)
-        mFirebaseAnalytics = FirebaseAnalytics.getInstance(condom)
+//        val condom = CondomContext.wrap(this, "Firebase", CondomOptions().setOutboundJudge { _, _, target_package ->
+//            target_package == "com.google.android.gms"
+//        })
+//        FirebaseApp.initializeApp(condom)
+//        mFirebaseAnalytics = FirebaseAnalytics.getInstance(condom)
         Logs.setLevel(Logs.Debug)
         if (!cacheDir.exists())
             cacheDir.mkdirs()
@@ -87,14 +82,14 @@ class APP : Application() {
                         val intent = Intent(applicationContext, ErrorActivity::class.java)
                         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                         intent.putExtra("error", bundle)
-                        val params = Bundle()
-                        params.putString("error_time", error.time)
-                        params.putString("version", "${error.appVersionName}-${error.appVersionCode}")
-                        params.putString("sdk", error.sdk.toString())
-                        params.putString("vendor", error.vendor)
-                        params.putString("model", error.model)
-                        params.putString("error_detail", ex.message)
-                        mFirebaseAnalytics?.logEvent(FirebaseUtil.THROW_ERROR, params)
+//                        val params = Bundle()
+//                        params.putString("error_time", error.time)
+//                        params.putString("version", "${error.appVersionName}-${error.appVersionCode}")
+//                        params.putString("sdk", error.sdk.toString())
+//                        params.putString("vendor", error.vendor)
+//                        params.putString("model", error.model)
+//                        params.putString("error_detail", ex.message)
+//                        mFirebaseAnalytics?.logEvent(FirebaseUtil.THROW_ERROR, params)
                         startActivity(intent)
                     }
                 })

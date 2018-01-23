@@ -99,9 +99,9 @@ class LoginActivity : BaseActivity() {
         if (cancel) {
             focusView?.requestFocus()
         } else {
-            val params = Bundle()
-            params.putString(FirebaseUtil.STUDENT_NUMBER, usernameStr)
-            mFirebaseAnalytics.logEvent(FirebaseUtil.START_LOGIN, params)
+//            val params = Bundle()
+//            params.putString(FirebaseUtil.STUDENT_NUMBER, usernameStr)
+//            mFirebaseAnalytics.logEvent(FirebaseUtil.START_LOGIN, params)
             login()
         }
     }
