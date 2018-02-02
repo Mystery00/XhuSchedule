@@ -60,6 +60,7 @@ import com.weilylab.xhuschedule.util.XhuFileUtil
 import com.zyao89.view.zloading.ZLoadingDialog
 import com.zyao89.view.zloading.Z_TYPE
 import vip.mystery0.tools.fileUtil.FileUtil
+import vip.mystery0.tools.logs.Logs
 import java.io.File
 import java.net.UnknownHostException
 
@@ -178,6 +179,7 @@ class InfoSettingsFragment : PreferenceFragment() {
             val reference = FirebaseDatabase.getInstance().getReference(FirebaseConstant.LATEST_VERSION)
             reference.addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onCancelled(databaseError: DatabaseError?) {
+                    loadingDialog.dismiss()
                     if (databaseError == null)
                         return
                     val exception = databaseError.toException()
@@ -191,7 +193,9 @@ class InfoSettingsFragment : PreferenceFragment() {
                 }
 
                 override fun onDataChange(dataSnapshot: DataSnapshot?) {
+                    loadingDialog.dismiss()
                     val version = dataSnapshot?.getValue(Version::class.java)
+                    Logs.i("TAG", "onDataChange: $version")
                     if (version == null) {
                         Toast.makeText(activity, R.string.error_real_time_database_null, Toast.LENGTH_LONG)
                                 .show()
