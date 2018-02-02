@@ -70,17 +70,17 @@ object UpdateNotification {
     fun notify(context: Context, version: Version) {
         initChannelID(context)
         val res = context.resources
-        val title = res.getString(R.string.update_notification_title, context.getString(R.string.app_version_name), version.versionName)
-        val content = res.getString(R.string.update_notification_content, FileUtil.FormatFileSize(version.apkSize), FileUtil.FormatFileSize(version.patchSize))
+        val title = res.getString(R.string.dialog_update_title, context.getString(R.string.app_version_name), version.versionName)
+        val content = res.getString(R.string.dialog_update_content, FileUtil.FormatFileSize(version.apkSize), FileUtil.FormatFileSize(version.patchSize))
 
         val downloadAPKIntent = Intent(context, DownloadService::class.java)
         downloadAPKIntent.putExtra("type", "apk")
-        downloadAPKIntent.putExtra("fileName", version.versionAPK)
+        downloadAPKIntent.putExtra("fileName", version.apkDownloadUrl)
         val pendingDownloadAPKIntent = PendingIntent.getService(context, 5, downloadAPKIntent, PendingIntent.FLAG_UPDATE_CURRENT)
 
         val downloadPatchIntent = Intent(context, DownloadService::class.java)
         downloadPatchIntent.putExtra("type", "patch")
-        downloadPatchIntent.putExtra("fileName", version.lastVersionPatch)
+        downloadPatchIntent.putExtra("fileName", version.patchDownloadUrl)
         val pendingDownloadPatchIntent = PendingIntent.getService(context, 6, downloadPatchIntent, PendingIntent.FLAG_UPDATE_CURRENT)
 
         val builder = NotificationCompat.Builder(context, "Xhu Schedule")
@@ -91,7 +91,7 @@ object UpdateNotification {
                 .setContentIntent(pendingDownloadAPKIntent)
                 .addAction(NotificationCompat.Action.Builder(R.drawable.ic_stat_update, context.getString(R.string.action_download_apk), pendingDownloadAPKIntent).build())
                 .setAutoCancel(true)
-        if (version.lastVersion == context.getString(R.string.app_version_code).toInt())
+        if (version.lastVersionCode == context.getString(R.string.app_version_code).toInt())
             builder.addAction(NotificationCompat.Action.Builder(R.drawable.ic_stat_update, context.getString(R.string.action_download_patch), pendingDownloadPatchIntent).build())
         notify(context, builder.build())
     }

@@ -37,13 +37,17 @@ package com.weilylab.xhuschedule.classes.baseClass
  * Created by myste.
  */
 class Version {
+    lateinit var apkDownloadUrl: String
+    var apkSize = -1L
+    var must = false//是否强制更新
+    var lastVersionCode = -1
+    lateinit var patchDownloadUrl: String
+    var patchSize = -1L
+    lateinit var updateLog: String
     var versionCode = -1
     lateinit var versionName: String
-    lateinit var updateLog: String
-    lateinit var versionAPK: String
-    var apkSize = -1L
-    var lastVersion = -1
-    lateinit var lastVersionPatch: String
-    var patchSize = -1L
-    var isMust = false//是否强制更新
+
+    override fun toString(): String {
+        return "Version(apkDownloadUrl='$apkDownloadUrl', apkSize=$apkSize, must=$must, lastVersionCode=$lastVersionCode, patchDownloadUrl='$patchDownloadUrl', patchSize=$patchSize, updateLog='$updateLog', versionCode=$versionCode, versionName='$versionName')"
+    }
 }
