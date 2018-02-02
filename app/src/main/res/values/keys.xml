@@ -104,4 +104,12 @@
     <string name="key_version_code" translatable="false">key_version_code</string>
     <string name="title_version_code">版本号</string>
     <string name="summary_version_code" translatable="false">@string/app_version_code</string>
+
+    <string name="key_debug_enable">key_debug_enable</string>
+    <string name="title_debug_enable">调试模式</string>
+    <string name="category_debug_firebase">Firebase</string>
+    <string name="key_debug_crash">key_debug_crash</string>
+    <string name="title_debug_crash">帮助开发者调试Crashlytics</string>
+    <string name="key_debug_real_time_database">key_debug_real_time_database</string>
+    <string name="title_debug_real_time_database">帮助开发者调试实时数据库</string>
 </resources>

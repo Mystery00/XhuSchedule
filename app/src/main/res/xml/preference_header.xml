@@ -23,6 +23,11 @@
         android:title="@string/screen_category_ui" />
 
     <header
+        android:fragment="com.weilylab.xhuschedule.fragment.DebugFragment"
+        android:icon="@drawable/ic_debug_mode"
+        android:title="@string/title_debug_enable" />
+
+    <header
         android:fragment="com.weilylab.xhuschedule.fragment.InfoSettingsFragment"
         android:icon="@drawable/ic_info_outline"
         android:title="@string/screen_category_about" />
