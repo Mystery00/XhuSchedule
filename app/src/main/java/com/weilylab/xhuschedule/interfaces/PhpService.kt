@@ -45,15 +45,19 @@ import retrofit2.http.*
 interface PhpService {
     @Streaming
     @FormUrlEncoded
-    @POST("/XhuSchedule/interface/checkUpdate.php")
+    @POST("/interface/checkUpdate.php")
     fun checkUpdateCall(@Field("currentVersion") currentVersion: Int): Observable<ResponseBody>
 
     @Streaming
-    @GET("/XhuSchedule/{type}/{fileName}")
+    @GET("/interface/checkVersion.php")
+    fun checkVersion(): Observable<ResponseBody>
+
+    @Streaming
+    @GET("/{type}/{fileName}")
     fun download(@Path("type") type: String, @Path("fileName") fileName: String): Observable<ResponseBody>
 
     @Multipart
-    @POST("/XhuSchedule/interface/upload_log.php")
+    @POST("/interface/upload_log.php")
     fun uploadLog(@PartMap partMap: MutableMap<String, RequestBody>, @Part logFile: MultipartBody.Part): Observable<ResponseBody>
 
     @GET("/{fileName}")

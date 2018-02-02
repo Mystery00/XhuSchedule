@@ -46,8 +46,4 @@ class Version {
     lateinit var updateLog: String
     var versionCode = -1
     lateinit var versionName: String
-
-    override fun toString(): String {
-        return "Version(apkDownloadUrl='$apkDownloadUrl', apkSize=$apkSize, must=$must, lastVersionCode=$lastVersionCode, patchDownloadUrl='$patchDownloadUrl', patchSize=$patchSize, updateLog='$updateLog', versionCode=$versionCode, versionName='$versionName')"
-    }
 }

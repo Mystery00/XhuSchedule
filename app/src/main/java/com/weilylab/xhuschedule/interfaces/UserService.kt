@@ -41,10 +41,10 @@ import retrofit2.http.POST
 
 interface UserService {
     @FormUrlEncoded
-    @POST("/xhuschedule/User/autoLogin")
+    @POST("/User/autoLogin")
     fun autoLogin(@Field("username") username: String, @Field("password") password: String): Observable<ResponseBody>
 
     @FormUrlEncoded
-    @POST("/xhuschedule/User/getInfo")
+    @POST("/User/getInfo")
     fun getInfo(@Field("username") username: String): Observable<ResponseBody>
 }

@@ -64,13 +64,13 @@ object ScheduleHelper {
             .build()
 
     val tomcatRetrofit = Retrofit.Builder()
-            .baseUrl("http://tomcat.weilylab.com:7823")
+            .baseUrl("https://xhuschedule.mostpan.com")
             .client(client)
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .build()!!
 
     val phpRetrofit = Retrofit.Builder()
-            .baseUrl("http://tomcat.weilylab.com:9783")
+            .baseUrl("http://xhuschedule.mostpan.com:9783")
             .client(client)
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .build()!!

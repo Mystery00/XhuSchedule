@@ -45,23 +45,24 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
+import com.google.gson.Gson
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.classes.baseClass.Student
 import com.weilylab.xhuschedule.classes.baseClass.Version
+import com.weilylab.xhuschedule.interfaces.PhpService
 import com.weilylab.xhuschedule.listener.FeedBackListener
 import com.weilylab.xhuschedule.service.DownloadService
-import com.weilylab.xhuschedule.util.FirebaseConstant
+import com.weilylab.xhuschedule.util.ScheduleHelper
 import com.weilylab.xhuschedule.util.Settings
 import com.weilylab.xhuschedule.util.XhuFileUtil
 import com.zyao89.view.zloading.ZLoadingDialog
 import com.zyao89.view.zloading.Z_TYPE
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.observers.DisposableObserver
+import io.reactivex.schedulers.Schedulers
 import vip.mystery0.tools.fileUtil.FileUtil
-import vip.mystery0.tools.logs.Logs
 import java.io.File
+import java.io.InputStreamReader
 import java.net.UnknownHostException
 
 /**
@@ -176,57 +177,59 @@ class InfoSettingsFragment : PreferenceFragment() {
         }
         checkUpdatePreference.setOnPreferenceClickListener {
             loadingDialog.show()
-            val reference = FirebaseDatabase.getInstance().getReference(FirebaseConstant.LATEST_VERSION)
-            reference.addListenerForSingleValueEvent(object : ValueEventListener {
-                override fun onCancelled(databaseError: DatabaseError?) {
-                    loadingDialog.dismiss()
-                    if (databaseError == null)
-                        return
-                    val exception = databaseError.toException()
-                    exception.printStackTrace()
-                    if (exception is UnknownHostException)
-                        Toast.makeText(activity, R.string.error_network, Toast.LENGTH_LONG)
-                                .show()
-                    else
-                        Toast.makeText(activity, "请求出错：" + exception.message, Toast.LENGTH_LONG)
-                                .show()
-                }
+            ScheduleHelper.phpRetrofit
+                    .create(PhpService::class.java)
+                    .checkVersion()
+                    .subscribeOn(Schedulers.newThread())
+                    .unsubscribeOn(Schedulers.newThread())
+                    .map { responseBody -> Gson().fromJson(InputStreamReader(responseBody.byteStream()), Version::class.java) }
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(object : DisposableObserver<Version>() {
+                        private lateinit var version: Version
 
-                override fun onDataChange(dataSnapshot: DataSnapshot?) {
-                    loadingDialog.dismiss()
-                    val version = dataSnapshot?.getValue(Version::class.java)
-                    Logs.i("TAG", "onDataChange: $version")
-                    if (version == null) {
-                        Toast.makeText(activity, R.string.error_real_time_database_null, Toast.LENGTH_LONG)
-                                .show()
-                        return
-                    }
-                    if (version.versionCode > getString(R.string.app_version_code).toInt()) {
-                        val title = activity.getString(R.string.dialog_update_title, activity.getString(R.string.app_version_name), version.versionName)
-                        val content = activity.getString(R.string.dialog_update_content, FileUtil.FormatFileSize(version.apkSize), FileUtil.FormatFileSize(version.patchSize))
-                        val text = content + "\n" + activity.getString(R.string.dialog_update_text, version.updateLog)
-                        val builder = AlertDialog.Builder(activity)
-                                .setTitle(title)
-                                .setMessage(text)
-                                .setPositiveButton(R.string.action_download_apk, { _, _ ->
-                                    val downloadAPKIntent = Intent(activity, DownloadService::class.java)
-                                    downloadAPKIntent.putExtra("type", "apk")
-                                    downloadAPKIntent.putExtra("fileName", version.apkDownloadUrl)
-                                    activity.startService(downloadAPKIntent)
-                                })
-                        if (version.lastVersionCode == activity.getString(R.string.app_version_code).toInt())
-                            builder.setNegativeButton(R.string.action_download_patch, { _, _ ->
-                                val downloadPatchIntent = Intent(activity, DownloadService::class.java)
-                                downloadPatchIntent.putExtra("type", "patch")
-                                downloadPatchIntent.putExtra("fileName", version.patchDownloadUrl)
-                                activity.startService(downloadPatchIntent)
-                            })
-                        builder.show()
-                    } else
-                        Toast.makeText(activity, R.string.hint_dialog_check_update_latest, Toast.LENGTH_SHORT)
-                                .show()
-                }
-            })
+                        override fun onError(e: Throwable) {
+                            loadingDialog.dismiss()
+                            e.printStackTrace()
+                            if (e is UnknownHostException)
+                                Toast.makeText(activity, R.string.error_network, Toast.LENGTH_SHORT)
+                                        .show()
+                            else
+                                Toast.makeText(activity, "请求出错：" + e.message, Toast.LENGTH_SHORT)
+                                        .show()
+                        }
+
+                        override fun onComplete() {
+                            loadingDialog.dismiss()
+                            if (version.versionCode > getString(R.string.app_version_code).toInt()) {
+                                val title = activity.getString(R.string.dialog_update_title, activity.getString(R.string.app_version_name), version.versionName)
+                                val content = activity.getString(R.string.dialog_update_content, FileUtil.FormatFileSize(version.apkSize), FileUtil.FormatFileSize(version.patchSize))
+                                val text = content + "\n" + activity.getString(R.string.dialog_update_text, version.updateLog)
+                                val builder = AlertDialog.Builder(activity)
+                                        .setTitle(title)
+                                        .setMessage(text)
+                                        .setPositiveButton(R.string.action_download_apk, { _, _ ->
+                                            val downloadAPKIntent = Intent(activity, DownloadService::class.java)
+                                            downloadAPKIntent.putExtra("type", "apk")
+                                            downloadAPKIntent.putExtra("fileName", version.apkDownloadUrl)
+                                            activity.startService(downloadAPKIntent)
+                                        })
+                                if (version.lastVersionCode == activity.getString(R.string.app_version_code).toInt())
+                                    builder.setNegativeButton(R.string.action_download_patch, { _, _ ->
+                                        val downloadPatchIntent = Intent(activity, DownloadService::class.java)
+                                        downloadPatchIntent.putExtra("type", "patch")
+                                        downloadPatchIntent.putExtra("fileName", version.patchDownloadUrl)
+                                        activity.startService(downloadPatchIntent)
+                                    })
+                                builder.show()
+                            } else
+                                Toast.makeText(activity, R.string.hint_dialog_check_update_latest, Toast.LENGTH_SHORT)
+                                        .show()
+                        }
+
+                        override fun onNext(version: Version) {
+                            this.version = version
+                        }
+                    })
             true
         }
         return super.onCreateView(inflater, container, savedInstanceState)

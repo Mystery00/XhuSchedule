@@ -40,7 +40,7 @@ import retrofit2.http.Query
 
 interface CommonService {
 
-    @GET("/xhuschedule/Common/feedback")
+    @GET("/Common/feedback")
     fun feedback(@Query("username") username: String,
                  @Query("appVersion") appVersion: String,
                  @Query("systemVersion") systemVersion: String,
@@ -50,6 +50,6 @@ interface CommonService {
                  @Query("other") other: String,
                  @Query("message") message: String): Observable<ResponseBody>
 
-    @GET("/xhuschedule/Common/getNotices")
+    @GET("/Common/getNotices")
     fun getNotices(@Query("platform") platform: String?): Observable<ResponseBody>
 }
