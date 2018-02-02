@@ -67,9 +67,11 @@ class UpdateService : IntentService("PhpService") {
 
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 val version = dataSnapshot.getValue(Version::class.java)
-                if (version == null)
+                if (version == null) {
                     stopSelf()
-                if (version!!.versionCode > getString(R.string.app_version_code).toInt()) {
+                    return
+                }
+                if (version.versionCode > getString(R.string.app_version_code).toInt()) {
                     val title = getString(R.string.dialog_update_title, getString(R.string.app_version_name), version.versionName)
                     val bigText = getString(R.string.dialog_update_text, version.updateLog)
                     val builder = AlertDialog.Builder(APPActivityManager.appManager.currentActivity())

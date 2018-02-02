@@ -192,10 +192,12 @@ class InfoSettingsFragment : PreferenceFragment() {
 
                 override fun onDataChange(dataSnapshot: DataSnapshot?) {
                     val version = dataSnapshot?.getValue(Version::class.java)
-                    if (version == null)
+                    if (version == null) {
                         Toast.makeText(activity, R.string.error_real_time_database_null, Toast.LENGTH_LONG)
                                 .show()
-                    if (version!!.versionCode > getString(R.string.app_version_code).toInt()) {
+                        return
+                    }
+                    if (version.versionCode > getString(R.string.app_version_code).toInt()) {
                         val title = activity.getString(R.string.dialog_update_title, activity.getString(R.string.app_version_name), version.versionName)
                         val content = activity.getString(R.string.dialog_update_content, FileUtil.FormatFileSize(version.apkSize), FileUtil.FormatFileSize(version.patchSize))
                         val text = content + "\n" + activity.getString(R.string.dialog_update_text, version.updateLog)
