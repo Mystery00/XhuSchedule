@@ -108,6 +108,8 @@
     <string name="key_debug_enable">key_debug_enable</string>
     <string name="title_debug_enable">调试模式</string>
     <string name="category_debug_firebase">Firebase</string>
+    <string name="key_disable_firebase">key_disable_firebase</string>
+    <string name="title_disable_firebase">禁用Firebase</string>
     <string name="key_debug_crash">key_debug_crash</string>
     <string name="title_debug_crash">调试Crashlytics</string>
     <string name="summary_debug_crash">点击将会产生一个错误并尝试提交该错误到Firebase，具体结果请联系开发者，感谢您的帮助！</string>

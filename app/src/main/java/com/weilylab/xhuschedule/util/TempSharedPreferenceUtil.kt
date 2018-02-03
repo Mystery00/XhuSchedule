@@ -39,4 +39,7 @@ import com.weilylab.xhuschedule.APP
 object TempSharedPreferenceUtil {
     private val sharedPreference = APP.getContext().getSharedPreferences("temp", Context.MODE_PRIVATE)
 
+    var disableFirebase: Boolean
+        set(value) = sharedPreference.edit().putBoolean("disableFirebase", value).apply()
+        get() = sharedPreference.getBoolean("disableFirebase", true)
 }

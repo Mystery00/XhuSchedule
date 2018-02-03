@@ -13,6 +13,10 @@
 
     <PreferenceCategory android:title="@string/category_debug_firebase">
 
+        <SwitchPreference
+            android:key="@string/key_disable_firebase"
+            android:title="@string/title_disable_firebase" />
+
         <Preference
             android:key="@string/key_debug_crash"
             android:summary="@string/summary_debug_crash"

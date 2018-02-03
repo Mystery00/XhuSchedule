@@ -33,6 +33,7 @@
 
 package com.weilylab.xhuschedule
 
+import android.annotation.SuppressLint
 import android.app.Application
 import android.content.Context
 import android.content.Intent
@@ -43,6 +44,7 @@ import com.oasisfeng.condom.CondomContext
 import com.oasisfeng.condom.CondomOptions
 import com.weilylab.xhuschedule.activity.ErrorActivity
 import com.weilylab.xhuschedule.classes.baseClass.XhuScheduleError
+import com.weilylab.xhuschedule.util.TempSharedPreferenceUtil
 import vip.mystery0.tools.crashHandler.CatchExceptionListener
 import vip.mystery0.tools.crashHandler.CrashHandler
 import vip.mystery0.tools.logs.Logs
@@ -55,10 +57,14 @@ class APP : Application() {
     companion object {
         private var app: APP? = null
         private var mFirebaseAnalytics: FirebaseAnalytics? = null
+        @SuppressLint("StaticFieldLeak")
+        private var mFirebaseApp: FirebaseApp? = null
 
         fun getContext(): Context = app!!
 
         fun getFirebaseAnalytics(): FirebaseAnalytics = mFirebaseAnalytics!!
+
+        fun getFirebaseApp(): FirebaseApp? = mFirebaseApp
     }
 
     init {
@@ -70,7 +76,7 @@ class APP : Application() {
         val condom = CondomContext.wrap(this, "Firebase", CondomOptions().setOutboundJudge { _, _, target_package ->
             target_package == "com.google.android.gms"
         })
-        FirebaseApp.initializeApp(condom)
+        mFirebaseApp = FirebaseApp.initializeApp(condom)
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(condom)
         Logs.setLevel(Logs.Debug)
         if (!cacheDir.exists())
