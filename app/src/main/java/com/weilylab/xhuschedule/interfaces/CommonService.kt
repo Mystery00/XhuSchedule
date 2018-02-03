@@ -37,6 +37,8 @@ import io.reactivex.Observable
 import okhttp3.ResponseBody
 import retrofit2.http.GET
 import retrofit2.http.Query
+import retrofit2.http.Streaming
+import retrofit2.http.Url
 
 interface CommonService {
 
@@ -52,4 +54,8 @@ interface CommonService {
 
     @GET("/Common/getNotices")
     fun getNotices(@Query("platform") platform: String?): Observable<ResponseBody>
+
+    @Streaming
+    @GET
+    fun downloadFile(@Url url: String):Observable<ResponseBody>
 }

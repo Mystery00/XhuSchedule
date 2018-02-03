@@ -38,7 +38,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.preference.Preference
 import android.preference.PreferenceCategory
-import android.preference.PreferenceFragment
 import android.preference.SwitchPreference
 import android.support.v7.app.AlertDialog
 import android.view.LayoutInflater
@@ -55,9 +54,9 @@ import java.io.File
 /**
  * Created by myste.
  */
-class AccountSettingsFragment : PreferenceFragment() {
+class AccountSettingsFragment : BasePreferenceFragment() {
     companion object {
-        private val ADD_ACCOUNT_CODE = 1
+        private const val ADD_ACCOUNT_CODE = 1
     }
 
     private lateinit var currentAccountCategory: PreferenceCategory
@@ -72,11 +71,11 @@ class AccountSettingsFragment : PreferenceFragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        currentAccountCategory = findPreference(getString(R.string.key_current_account)) as PreferenceCategory
-        addAccountPreference = findPreference(getString(R.string.key_add_account))
-        delAccountPreference = findPreference(getString(R.string.key_del_account))
-        setMainAccountPreference = findPreference(getString(R.string.key_set_main_account))
-        multiUserModePreference = findPreference(getString(R.string.key_enable_multi_user_mode)) as SwitchPreference
+        currentAccountCategory = findPreference(R.string.key_current_account) as PreferenceCategory
+        addAccountPreference = findPreference(R.string.key_add_account)
+        delAccountPreference = findPreference(R.string.key_del_account)
+        setMainAccountPreference = findPreference(R.string.key_set_main_account)
+        multiUserModePreference = findPreference(R.string.key_enable_multi_user_mode) as SwitchPreference
         val userFile = File(activity.filesDir.absolutePath + File.separator + "data" + File.separator + "user")
         val studentList = XhuFileUtil.getArrayListFromFile(userFile, Student::class.java)
         updateCategory(studentList)

@@ -96,4 +96,7 @@ object Settings {
     var shownNoticeID: String//查看过的公告id
         set(value) = sharedPreference.edit().putString("shownNoticeID", value).apply()
         get() = sharedPreference.getString("shownNoticeID", "")
+    var debugMode: Boolean//调试模式
+        set(value) = sharedPreference.edit().putBoolean("debugMode", value).apply()
+        get() = sharedPreference.getBoolean("debugMode", false)
 }

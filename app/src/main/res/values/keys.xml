@@ -109,7 +109,13 @@
     <string name="title_debug_enable">调试模式</string>
     <string name="category_debug_firebase">Firebase</string>
     <string name="key_debug_crash">key_debug_crash</string>
-    <string name="title_debug_crash">帮助开发者调试Crashlytics</string>
+    <string name="title_debug_crash">调试Crashlytics</string>
+    <string name="summary_debug_crash">点击将会产生一个错误并尝试提交该错误到Firebase，具体结果请联系开发者，感谢您的帮助！</string>
     <string name="key_debug_real_time_database">key_debug_real_time_database</string>
-    <string name="title_debug_real_time_database">帮助开发者调试实时数据库</string>
+    <string name="title_debug_real_time_database">调试Realtime Database</string>
+    <string name="key_debug_storage">key_debug_storage</string>
+    <string name="title_debug_storage">调试Storage</string>
+    <string name="key_debug_fcm">key_debug_fcm</string>
+    <string name="title_debug_fcm">调试FCM</string>
+    <string name="summary_debug_fcm">使用前请打开该应用的通知权限</string>
 </resources>

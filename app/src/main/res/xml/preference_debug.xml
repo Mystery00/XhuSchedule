@@ -15,11 +15,21 @@
 
         <Preference
             android:key="@string/key_debug_crash"
+            android:summary="@string/summary_debug_crash"
             android:title="@string/title_debug_crash" />
 
         <Preference
             android:key="@string/key_debug_real_time_database"
             android:title="@string/title_debug_real_time_database" />
+
+        <Preference
+            android:key="@string/key_debug_storage"
+            android:title="@string/title_debug_storage" />
+
+        <Preference
+            android:key="@string/key_debug_fcm"
+            android:summary="@string/summary_debug_fcm"
+            android:title="@string/title_debug_fcm" />
 
     </PreferenceCategory>
 

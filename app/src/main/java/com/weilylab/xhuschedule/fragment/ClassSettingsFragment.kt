@@ -52,7 +52,7 @@ import java.util.*
 /**
  * Created by myste.
  */
-class ClassSettingsFragment : PreferenceFragment() {
+class ClassSettingsFragment : BasePreferenceFragment() {
     private lateinit var firstDayPreference: Preference
     private lateinit var showNotPreference: SwitchPreference
 
@@ -62,8 +62,8 @@ class ClassSettingsFragment : PreferenceFragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        firstDayPreference = findPreference(getString(R.string.key_first_day))
-        showNotPreference = findPreference(getString(R.string.key_show_not)) as SwitchPreference
+        firstDayPreference = findPreference(R.string.key_first_day)
+        showNotPreference = findPreference(R.string.key_show_not) as SwitchPreference
         val date = Settings.firstWeekOfTerm.split('-')
         firstDayPreference.summary = date[0] + '-' + (date[1].toInt() + 1) + '-' + date[2]
         showNotPreference.isChecked = Settings.isShowNot

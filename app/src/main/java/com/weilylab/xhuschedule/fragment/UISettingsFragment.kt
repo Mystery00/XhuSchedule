@@ -44,7 +44,6 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.preference.Preference
-import android.preference.PreferenceFragment
 import android.provider.MediaStore
 import android.support.constraint.ConstraintLayout
 import android.support.v4.content.ContextCompat
@@ -82,16 +81,16 @@ import java.io.InputStream
 /**
  * Created by myste.
  */
-class UISettingsFragment : PreferenceFragment() {
+class UISettingsFragment : BasePreferenceFragment() {
     companion object {
-        private val TAG = "UISettingsFragment"
-        private val PERMISSION_REQUEST_CODE = 1
-        private val PROFILE_REQUEST_CODE = 2
-        private val HEADER_REQUEST_CODE = 3
-        private val BACKGROUND_REQUEST_CODE = 4
-        private val PROFILE_CROP_REQUEST_CODE = 5
-        private val HEADER_CROP_REQUEST_CODE = 6
-        private val BACKGROUND_CROP_REQUEST_CODE = 7
+        private const val TAG = "UISettingsFragment"
+        private const val PERMISSION_REQUEST_CODE = 1
+        private const val PROFILE_REQUEST_CODE = 2
+        private const val HEADER_REQUEST_CODE = 3
+        private const val BACKGROUND_REQUEST_CODE = 4
+        private const val PROFILE_CROP_REQUEST_CODE = 5
+        private const val HEADER_CROP_REQUEST_CODE = 6
+        private const val BACKGROUND_CROP_REQUEST_CODE = 7
     }
 
     private var requestType = 0
@@ -112,16 +111,16 @@ class UISettingsFragment : PreferenceFragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        userImgPreference = findPreference(getString(R.string.key_user_img))
-        headerImgPreference = findPreference(getString(R.string.key_header_img))
-        backgroundImgPreference = findPreference(getString(R.string.key_background_img))
-        customTodayOpacityPreference = findPreference(getString(R.string.key_custom_today_opacity))
-        customTableOpacityPreference = findPreference(getString(R.string.key_custom_table_opacity))
-        customTodayTextColorPreference = findPreference(getString(R.string.key_custom_today_text_color)) as ColorPreference
-        customTableTextColorPreference = findPreference(getString(R.string.key_custom_table_text_color)) as ColorPreference
-        customTextSizePreference = findPreference(getString(R.string.key_custom_text_size))
-        customTextHeightPreference = findPreference(getString(R.string.key_custom_text_height))
-        resetPreference = findPreference(getString(R.string.key_reset))
+        userImgPreference = findPreference(R.string.key_user_img)
+        headerImgPreference = findPreference(R.string.key_header_img)
+        backgroundImgPreference = findPreference(R.string.key_background_img)
+        customTodayOpacityPreference = findPreference(R.string.key_custom_today_opacity)
+        customTableOpacityPreference = findPreference(R.string.key_custom_table_opacity)
+        customTodayTextColorPreference = findPreference(R.string.key_custom_today_text_color) as ColorPreference
+        customTableTextColorPreference = findPreference(R.string.key_custom_table_text_color) as ColorPreference
+        customTextSizePreference = findPreference(R.string.key_custom_text_size)
+        customTextHeightPreference = findPreference(R.string.key_custom_text_height)
+        resetPreference = findPreference(R.string.key_reset)
         userImgPreference.setOnPreferenceClickListener {
             requestType = PROFILE_REQUEST_CODE
             requestPermission()

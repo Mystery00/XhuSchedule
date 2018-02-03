@@ -9,4 +9,5 @@ package com.weilylab.xhuschedule.util
 
 object FirebaseConstant {
     const val LATEST_VERSION="latest_version"
+    const val TEST="test"
 }

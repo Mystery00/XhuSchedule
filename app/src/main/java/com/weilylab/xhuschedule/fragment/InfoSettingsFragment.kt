@@ -36,7 +36,6 @@ package com.weilylab.xhuschedule.fragment
 import android.content.Intent
 import android.os.Bundle
 import android.preference.Preference
-import android.preference.PreferenceFragment
 import android.preference.SwitchPreference
 import android.support.design.widget.TextInputLayout
 import android.support.v4.content.ContextCompat
@@ -68,7 +67,7 @@ import java.net.UnknownHostException
 /**
  * Created by myste.
  */
-class InfoSettingsFragment : PreferenceFragment() {
+class InfoSettingsFragment : BasePreferenceFragment() {
     private lateinit var loadingDialog: ZLoadingDialog
     private lateinit var autoCheckUpdatePreference: SwitchPreference
     private lateinit var autoCheckLogPreference: SwitchPreference
@@ -90,12 +89,12 @@ class InfoSettingsFragment : PreferenceFragment() {
                 .setCanceledOnTouchOutside(false)
                 .setLoadingColor(ContextCompat.getColor(activity, R.color.colorAccent))
                 .setHintTextColor(ContextCompat.getColor(activity, R.color.colorAccent))
-        autoCheckUpdatePreference = findPreference(getString(R.string.key_auto_check_update)) as SwitchPreference
-        autoCheckLogPreference = findPreference(getString(R.string.key_auto_check_log)) as SwitchPreference
-        feedbackPreference = findPreference(getString(R.string.key_feedback))
-        weixinPreference = findPreference(getString(R.string.key_weixin))
-        updateLogPreference = findPreference(getString(R.string.key_update_log))
-        checkUpdatePreference = findPreference(getString(R.string.key_check_update))
+        autoCheckUpdatePreference = findPreference(R.string.key_auto_check_update) as SwitchPreference
+        autoCheckLogPreference = findPreference(R.string.key_auto_check_log) as SwitchPreference
+        feedbackPreference = findPreference(R.string.key_feedback)
+        weixinPreference = findPreference(R.string.key_weixin)
+        updateLogPreference = findPreference(R.string.key_update_log)
+        checkUpdatePreference = findPreference(R.string.key_check_update)
         autoCheckUpdatePreference.isChecked = Settings.autoCheckUpdate
         autoCheckLogPreference.isChecked = Settings.autoCheckLog
         autoCheckUpdatePreference.setOnPreferenceChangeListener { _, _ ->

@@ -52,6 +52,7 @@
     <string name="hint_dialog_upload_log">日志上传中……</string>
     <string name="hint_dialog_download_img">图片下载中……</string>
     <string name="hint_dialog_feedback">正在提交中……</string>
+    <string name="hint_dialog_connect_firebase">正在连接Firebase……</string>
     <string name="hint_invalid_cookie">登陆信息已过期，是否重新登录？</string>
     <string name="hint_try_refresh_data_error">%1$s，是否重新登录？</string>
     <string name="hint_update_data">信息同步成功！</string>
