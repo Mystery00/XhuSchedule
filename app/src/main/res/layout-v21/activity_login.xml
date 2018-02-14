@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?><!--
-  ~ Created by Mystery0 on 17-12-21 上午3:41.
-  ~ Copyright (c) 2017. All Rights reserved.
+  ~ Created by Mystery0 on 18-2-15 上午2:01.
+  ~ Copyright (c) 2018. All Rights reserved.
   ~
-  ~ Last modified 17-12-4 上午11:06
+  ~ Last modified 18-2-15 上午2:01
   -->
 
 
@@ -118,8 +118,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/login_margin"
+            android:backgroundTint="@color/login_button_color"
             android:text="@string/action_login"
-            android:background="@color/login_button_color"
             app:layout_constraintEnd_toEndOf="@+id/cardView"
             app:layout_constraintStart_toStartOf="@+id/cardView"
             app:layout_constraintTop_toBottomOf="@+id/cardView" />

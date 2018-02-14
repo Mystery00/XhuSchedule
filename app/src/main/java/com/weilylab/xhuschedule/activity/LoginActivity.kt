@@ -43,7 +43,6 @@ import com.zyao89.view.zloading.ZLoadingDialog
 import com.zyao89.view.zloading.Z_TYPE
 import kotlinx.android.synthetic.main.activity_login.*
 
-import kotlinx.android.synthetic.main.content_login.*
 import android.app.Activity
 import android.support.v4.content.ContextCompat
 import com.google.firebase.analytics.FirebaseAnalytics
