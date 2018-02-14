@@ -21,9 +21,4 @@
         <item name="windowNoTitle">true</item>
     </style>
 
-    <style name="LoginFormButton" parent="Widget.AppCompat.Button.Colored">
-        <item name="android:colorButtonNormal">@color/login_button_color</item>
-        <item name="android:colorControlHighlight">@color/login_button_color</item>
-    </style>
-
 </resources>

@@ -114,11 +114,11 @@
 
         <Button
             android:id="@+id/login_button"
-            style="@style/LoginFormButton"
+            style="@style/Widget.AppCompat.Button.Colored"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/login_margin"
-            android:backgroundTint="@color/login_button_color"
+            android:backgroundTint="@color/colorPrimary"
             android:text="@string/action_login"
             app:layout_constraintEnd_toEndOf="@+id/cardView"
             app:layout_constraintStart_toStartOf="@+id/cardView"
