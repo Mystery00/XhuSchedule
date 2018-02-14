@@ -89,7 +89,7 @@ class ProfileFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        profile = arguments.getSerializable("profile") as Profile
+        profile = arguments?.getSerializable("profile") as Profile
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -111,7 +111,7 @@ class ProfileFragment : Fragment() {
                             }
 
                             override fun onResourceReady(resource: Drawable, model: Any?, target: Target<Drawable>?, dataSource: DataSource?, isFirstResource: Boolean): Boolean {
-                                ViewUtil.blur(activity, (resource as BitmapDrawable).bitmap, textViewLayout)
+                                ViewUtil.blur(activity!!, (resource as BitmapDrawable).bitmap, textViewLayout)
                                 val light = ViewUtil.getLight(resource.bitmap, resource.intrinsicWidth, resource.intrinsicHeight)
                                 if (light > 128) {
                                     rootView!!.findViewById<TextView>(R.id.textView_title).setTextColor(Color.parseColor("#555555"))
@@ -133,8 +133,8 @@ class ProfileFragment : Fragment() {
                         .diskCacheStrategy(DiskCacheStrategy.NONE)
                 var height = profileImg.measuredHeight
                 val params = profileImg.layoutParams
-                if (DensityUtil.px2dip(activity, height.toFloat()) > 120) {
-                    height = DensityUtil.dip2px(activity, 120F)
+                if (DensityUtil.px2dip(activity!!, height.toFloat()) > 120) {
+                    height = DensityUtil.dip2px(activity!!, 120F)
                     params.height = height
                 }
                 params.width = height
@@ -150,13 +150,13 @@ class ProfileFragment : Fragment() {
                     override fun onPreDraw(): Boolean {
                         headerImg.viewTreeObserver.removeOnPreDrawListener(this)
                         headerImg.buildDrawingCache()
-                        ViewUtil.blur(activity, headerImg.drawingCache, textViewLayout)
+                        ViewUtil.blur(activity!!, headerImg.drawingCache, textViewLayout)
                         return true
                     }
                 })
             val recyclerView = rootView!!.findViewById<RecyclerView>(R.id.recycler_view)
             recyclerView.layoutManager = GridLayoutManager(activity, 3)
-            adapter = OperationAdapter(activity)
+            adapter = OperationAdapter(activity!!)
             recyclerView.adapter = adapter
         }
         isReady = true
@@ -179,7 +179,7 @@ class ProfileFragment : Fragment() {
                         }
 
                         override fun onResourceReady(resource: Drawable, model: Any?, target: Target<Drawable>?, dataSource: DataSource?, isFirstResource: Boolean): Boolean {
-                            ViewUtil.blur(activity, (resource as BitmapDrawable).bitmap, textViewLayout)
+                            ViewUtil.blur(activity!!, (resource as BitmapDrawable).bitmap, textViewLayout)
                             val light = ViewUtil.getLight(resource.bitmap, resource.intrinsicWidth, resource.intrinsicHeight)
                             if (light > 128) {
                                 rootView!!.findViewById<TextView>(R.id.textView_title).setTextColor(Color.parseColor("#555555"))
@@ -203,7 +203,7 @@ class ProfileFragment : Fragment() {
                 override fun onPreDraw(): Boolean {
                     headerImg.viewTreeObserver.removeOnPreDrawListener(this)
                     headerImg.buildDrawingCache()
-                    ViewUtil.blur(activity, headerImg.drawingCache, textViewLayout)
+                    ViewUtil.blur(activity!!, headerImg.drawingCache, textViewLayout)
                     return true
                 }
             })
@@ -250,7 +250,7 @@ class ProfileFragment : Fragment() {
                                     .appendln(getString(R.string.profile_professional, profile.profession))
                                     .appendln(getString(R.string.profile_classname, profile.classname))
                                     .appendln(getString(R.string.profile_direction, profile.direction))
-                            AlertDialog.Builder(activity)
+                            AlertDialog.Builder(activity!!)
                                     .setTitle(" ")
                                     .setMessage(stringBuilder.toString())
                                     .setNegativeButton(android.R.string.ok, null)

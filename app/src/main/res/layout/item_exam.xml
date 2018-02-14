@@ -4,10 +4,10 @@
   ~
   ~ Last modified 17-12-3 下午2:04
   -->
-<vip.mystery0.tools.flexibleCardView.FlexibleCardView xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="72dp"
+    android:layout_height="wrap_content"
     android:layout_margin="@dimen/profile_margin"
     app:cardCornerRadius="@dimen/profile_card_radius"
     app:cardElevation="2dp">
@@ -40,74 +40,85 @@
         <TextView
             android:id="@+id/textView_exam_testno"
             android:layout_width="wrap_content"
-            android:paddingStart="24dp"
-            android:paddingEnd="0dp"
             android:layout_height="40dp"
             android:gravity="center"
-            app:layout_constraintStart_toEndOf="@id/textView_exam_date"
+            android:paddingEnd="0dp"
+            android:paddingStart="24dp"
             android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/textView_exam_date" />
 
         <TextView
-            android:id="@+id/textView_exam_no"
+            android:id="@+id/textView_details"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/profile_text_margin_top"
             android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView_exam_name" />
+            app:layout_constraintTop_toBottomOf="@id/textView_exam_name" />
 
-        <TextView
-            android:id="@+id/textView_exam_sname"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/profile_text_margin_top"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView_exam_no" />
+        <!--<TextView-->
+        <!--android:id="@+id/textView_exam_no"-->
+        <!--android:layout_width="0dp"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginTop="@dimen/profile_text_margin_top"-->
+        <!--android:textStyle="bold"-->
+        <!--app:layout_constraintEnd_toEndOf="parent"-->
+        <!--app:layout_constraintStart_toStartOf="parent"-->
+        <!--app:layout_constraintTop_toBottomOf="@+id/textView_exam_name" />-->
 
-        <TextView
-            android:id="@+id/textView_exam_location"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/profile_text_margin_top"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView_exam_sname" />
+        <!--<TextView-->
+        <!--android:id="@+id/textView_exam_sname"-->
+        <!--android:layout_width="0dp"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginTop="@dimen/profile_text_margin_top"-->
+        <!--android:textStyle="bold"-->
+        <!--app:layout_constraintEnd_toEndOf="parent"-->
+        <!--app:layout_constraintStart_toStartOf="parent"-->
+        <!--app:layout_constraintTop_toBottomOf="@+id/textView_exam_no" />-->
 
-        <TextView
-            android:id="@+id/textView_exam_time"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/profile_text_margin_top"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView_exam_location" />
+        <!--<TextView-->
+        <!--android:id="@+id/textView_exam_location"-->
+        <!--android:layout_width="0dp"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginTop="@dimen/profile_text_margin_top"-->
+        <!--android:textStyle="bold"-->
+        <!--app:layout_constraintEnd_toEndOf="parent"-->
+        <!--app:layout_constraintStart_toStartOf="parent"-->
+        <!--app:layout_constraintTop_toBottomOf="@+id/textView_exam_sname" />-->
 
-        <TextView
-            android:id="@+id/textView_exam_testtype"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/profile_text_margin_top"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView_exam_time" />
+        <!--<TextView-->
+        <!--android:id="@+id/textView_exam_time"-->
+        <!--android:layout_width="0dp"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginTop="@dimen/profile_text_margin_top"-->
+        <!--android:textStyle="bold"-->
+        <!--app:layout_constraintEnd_toEndOf="parent"-->
+        <!--app:layout_constraintStart_toStartOf="parent"-->
+        <!--app:layout_constraintTop_toBottomOf="@+id/textView_exam_location" />-->
 
-        <TextView
-            android:id="@+id/textView_exam_region"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/profile_text_margin_top"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView_exam_testtype" />
+        <!--<TextView-->
+        <!--android:id="@+id/textView_exam_testtype"-->
+        <!--android:layout_width="0dp"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginTop="@dimen/profile_text_margin_top"-->
+        <!--android:textStyle="bold"-->
+        <!--app:layout_constraintEnd_toEndOf="parent"-->
+        <!--app:layout_constraintStart_toStartOf="parent"-->
+        <!--app:layout_constraintTop_toBottomOf="@+id/textView_exam_time" />-->
+
+        <!--<TextView-->
+        <!--android:id="@+id/textView_exam_region"-->
+        <!--android:layout_width="0dp"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginTop="@dimen/profile_text_margin_top"-->
+        <!--android:textStyle="bold"-->
+        <!--app:layout_constraintEnd_toEndOf="parent"-->
+        <!--app:layout_constraintStart_toStartOf="parent"-->
+        <!--app:layout_constraintTop_toBottomOf="@+id/textView_exam_testtype" />-->
 
     </android.support.constraint.ConstraintLayout>
 
-</vip.mystery0.tools.flexibleCardView.FlexibleCardView>
+</android.support.v7.widget.CardView>

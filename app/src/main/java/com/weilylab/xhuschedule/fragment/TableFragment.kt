@@ -82,7 +82,7 @@ class TableFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         @Suppress("UNCHECKED_CAST")
-        list = arguments.getSerializable("list") as ArrayList<ArrayList<ArrayList<Course>>>
+        list = arguments?.getSerializable("list") as ArrayList<ArrayList<ArrayList<Course>>>
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -91,7 +91,7 @@ class TableFragment : Fragment() {
             rootView = inflater.inflate(R.layout.fragment_table, container, false)
             val monthView: TextView = rootView!!.findViewById(R.id.view)
             val tableHeader: LinearLayout = rootView!!.findViewById(R.id.table_header)
-            tableHeader.getChildAt(CalendarUtil.getWeekIndex() - 1).setBackgroundColor(ContextCompat.getColor(activity, R.color.colorWeekPrimary))
+            tableHeader.getChildAt(CalendarUtil.getWeekIndex() - 1).setBackgroundColor(ContextCompat.getColor(activity!!, R.color.colorWeekPrimary))
             val calendar = Calendar.getInstance()
             val dayWeek = calendar.get(Calendar.DAY_OF_WEEK)
             if (dayWeek == Calendar.SUNDAY)
@@ -113,12 +113,12 @@ class TableFragment : Fragment() {
             val linearLayout: LinearLayout = rootView!!.findViewById(R.id.table_nav)
             for (i in 0 until linearLayout.childCount) {
                 val layoutParams = linearLayout.getChildAt(i).layoutParams
-                layoutParams.height = DensityUtil.dip2px(activity, Settings.customTextHeight.toFloat())
+                layoutParams.height = DensityUtil.dip2px(activity!!, Settings.customTextHeight.toFloat())
                 linearLayout.getChildAt(i).layoutParams = layoutParams
             }
             val scheduleView: View = rootView!!.findViewById(R.id.table_schedule)
             val layoutParams = scheduleView.layoutParams
-            layoutParams.height = DensityUtil.dip2px(activity, Settings.customTextHeight.toFloat() * 11)
+            layoutParams.height = DensityUtil.dip2px(activity!!, Settings.customTextHeight.toFloat() * 11)
             scheduleView.layoutParams = layoutParams
             isReady = true
         }
@@ -172,7 +172,7 @@ class TableFragment : Fragment() {
                             val tableNav: LinearLayout = rootView!!.findViewById(R.id.table_nav)
                             for (i in 0 until tableNav.childCount) {
                                 val layoutParams = tableNav.getChildAt(i).layoutParams
-                                layoutParams.height = DensityUtil.dip2px(activity, Settings.customTextHeight.toFloat())
+                                layoutParams.height = DensityUtil.dip2px(activity!!, Settings.customTextHeight.toFloat())
                                 tableNav.getChildAt(i).layoutParams = layoutParams
                                 (tableNav.getChildAt(i) as TextView).setTextColor(Settings.customTableTextColor)
                             }
@@ -195,7 +195,7 @@ class TableFragment : Fragment() {
     }
 
     private fun formatView() {
-        val itemHeight = DensityUtil.dip2px(activity, Settings.customTextHeight.toFloat())
+        val itemHeight = DensityUtil.dip2px(activity!!, Settings.customTextHeight.toFloat())
         val firstWeekOfTerm = Settings.firstWeekOfTerm
         val date = firstWeekOfTerm.split('-')
         val calendar = Calendar.getInstance()
@@ -207,7 +207,7 @@ class TableFragment : Fragment() {
         calendar.firstDayOfWeek = Calendar.MONDAY
         val dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK)
         calendar.add(Calendar.DATE, calendar.firstDayOfWeek - dayOfWeek)
-        val headerArray = context.resources.getStringArray(R.array.table_header)
+        val headerArray = context!!.resources.getStringArray(R.array.table_header)
         val month = (calendar.get(Calendar.MONTH) + 1).toString() + "\n月"
         (rootView!!.findViewById(R.id.view) as TextView).text = month
         for (day in 0 until 7) {
@@ -218,9 +218,9 @@ class TableFragment : Fragment() {
                 "${headerArray[day]}\n${calendar.get(Calendar.DAY_OF_MONTH)}日"
             headerTextView.text = text
             if (CalendarUtil.getWeekIndex() - 1 == day)
-                headerTextView.setBackgroundColor(ContextCompat.getColor(activity, R.color.colorWeekPrimary))
+                headerTextView.setBackgroundColor(ContextCompat.getColor(activity!!, R.color.colorWeekPrimary))
             else
-                headerTextView.setBackgroundColor(ContextCompat.getColor(activity, R.color.colorOpacity))
+                headerTextView.setBackgroundColor(ContextCompat.getColor(activity!!, R.color.colorOpacity))
             calendar.add(Calendar.DAY_OF_MONTH, 1)
             val layoutList = ArrayList<TableLayoutHelper>()
             val temp = resources.getIdentifier("table_schedule" + (day + 1), "id", "com.weilylab.xhuschedule")
@@ -290,7 +290,7 @@ class TableFragment : Fragment() {
     }
 
     private fun getItemView(course: Course, startTime: Int): View {
-        val itemHeight = DensityUtil.dip2px(activity, Settings.customTextHeight.toFloat())
+        val itemHeight = DensityUtil.dip2px(activity!!, Settings.customTextHeight.toFloat())
         val itemView = View.inflate(activity, R.layout.item_widget_table, null)
         val imageView: ImageView = itemView.findViewById(R.id.imageView)
         val textViewName: TextView = itemView.findViewById(R.id.textView_name)
@@ -328,7 +328,7 @@ class TableFragment : Fragment() {
         linearLayoutParams.topMargin = (timeArray[0].toInt() - startTime - 1) * itemHeight
         itemView.layoutParams = linearLayoutParams
         itemView.setOnClickListener {
-            ViewUtil.showAlertDialog(context, course, object : InfoChangeListener {
+            ViewUtil.showAlertDialog(context!!, course, object : InfoChangeListener {
                 override fun onChange() {
                     (activity as MainActivity).updateAllView()
                 }

@@ -201,7 +201,7 @@ class InfoSettingsFragment : BasePreferenceFragment() {
                             loadingDialog.dismiss()
                             if (version.versionCode > getString(R.string.app_version_code).toInt()) {
                                 val title = activity.getString(R.string.dialog_update_title, activity.getString(R.string.app_version_name), version.versionName)
-                                val content = activity.getString(R.string.dialog_update_content, FileUtil.FormatFileSize(version.apkSize), FileUtil.FormatFileSize(version.patchSize))
+                                val content = activity.getString(R.string.dialog_update_content, FileUtil.formatFileSize(version.apkSize), FileUtil.formatFileSize(version.patchSize))
                                 val text = content + "\n" + activity.getString(R.string.dialog_update_text, version.updateLog)
                                 val builder = AlertDialog.Builder(activity)
                                         .setTitle(title)

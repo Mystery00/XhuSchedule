@@ -71,7 +71,7 @@ object UpdateNotification {
         initChannelID(context)
         val res = context.resources
         val title = res.getString(R.string.dialog_update_title, context.getString(R.string.app_version_name), version.versionName)
-        val content = res.getString(R.string.dialog_update_content, FileUtil.FormatFileSize(version.apkSize), FileUtil.FormatFileSize(version.patchSize))
+        val content = res.getString(R.string.dialog_update_content, FileUtil.formatFileSize(version.apkSize), FileUtil.formatFileSize(version.patchSize))
 
         val downloadAPKIntent = Intent(context, DownloadService::class.java)
         downloadAPKIntent.putExtra("type", "apk")

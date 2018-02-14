@@ -41,7 +41,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.classes.baseClass.Score
-import vip.mystery0.tools.flexibleCardView.FlexibleCardView
+import com.weilylab.xhuschedule.view.TextViewUtils
 
 class ScoreAdapter(private val context: Context,
                    private val list: ArrayList<Score>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -52,16 +52,28 @@ class ScoreAdapter(private val context: Context,
                 val score = list[position]
                 holder.scoreNameTextView.text = score.name
                 holder.scoreScoreTextView.text = score.score
-                holder.scoreNoTextView.text = context.getString(R.string.score_no, score.no)
-                holder.scoreCourseTypeTextView.text = context.getString(R.string.score_coursetype, score.coursetype)
-                holder.scoreCreditTextView.text = context.getString(R.string.score_credit, score.credit)
-                holder.scoreGpaTextView.text = context.getString(R.string.score_gpa, score.gpa)
-                holder.flexibleCardView.setShowState(score.isExpand)
-                holder.flexibleCardView.setOnClickListener {
-                    holder.flexibleCardView.showAnime({ isExpand ->
-                        score.isExpand = isExpand
-                    })
+                val text = context.getString(R.string.score_no, score.no) + "\n" +
+                        context.getString(R.string.score_coursetype, score.coursetype) + "\n" +
+                        context.getString(R.string.score_credit, score.credit) + "\n" +
+                        context.getString(R.string.score_gpa, score.gpa)
+                holder.detailsTextView.text = text
+                TextViewUtils.setMaxLinesWithAnimation(holder.detailsTextView, 0)
+                holder.itemView.setOnClickListener {
+                    if (holder.detailsTextView.maxLines == 0)
+                        TextViewUtils.setMaxLinesWithAnimation(holder.detailsTextView, Integer.MAX_VALUE)
+                    else
+                        TextViewUtils.setMaxLinesWithAnimation(holder.detailsTextView, 0)
                 }
+//                holder.scoreNoTextView.text = context.getString(R.string.score_no, score.no)
+//                holder.scoreCourseTypeTextView.text = context.getString(R.string.score_coursetype, score.coursetype)
+//                holder.scoreCreditTextView.text = context.getString(R.string.score_credit, score.credit)
+//                holder.scoreGpaTextView.text = context.getString(R.string.score_gpa, score.gpa)
+//                holder.flexibleCardView.setShowState(score.isExpand)
+//                holder.flexibleCardView.setOnClickListener {
+//                    holder.flexibleCardView.showAnime({ isExpand ->
+//                        score.isExpand = isExpand
+//                    })
+//                }
             }
             is EmptyViewHolder -> {
                 holder.textView.text = context.getString(R.string.hint_data_empty)
@@ -91,12 +103,13 @@ class ScoreAdapter(private val context: Context,
     }
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        var flexibleCardView = itemView as FlexibleCardView
+        //        var flexibleCardView = itemView as FlexibleCardView
         var scoreNameTextView: TextView = itemView.findViewById(R.id.textView_score_name)
         var scoreScoreTextView: TextView = itemView.findViewById(R.id.textView_score_score)
-        var scoreNoTextView: TextView = itemView.findViewById(R.id.textView_score_no)
-        var scoreCourseTypeTextView: TextView = itemView.findViewById(R.id.textView_score_coursetype)
-        var scoreCreditTextView: TextView = itemView.findViewById(R.id.textView_score_credit)
-        var scoreGpaTextView: TextView = itemView.findViewById(R.id.textView_score_gpa)
+        var detailsTextView: TextView = itemView.findViewById(R.id.textView_details)
+//        var scoreNoTextView: TextView = itemView.findViewById(R.id.textView_score_no)
+//        var scoreCourseTypeTextView: TextView = itemView.findViewById(R.id.textView_score_coursetype)
+//        var scoreCreditTextView: TextView = itemView.findViewById(R.id.textView_score_credit)
+//        var scoreGpaTextView: TextView = itemView.findViewById(R.id.textView_score_gpa)
     }
 }

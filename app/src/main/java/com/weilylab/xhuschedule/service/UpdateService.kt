@@ -68,14 +68,14 @@ class UpdateService : IntentService("PhpService") {
                             val builder = AlertDialog.Builder(APPActivityManager.appManager.currentActivity())
                                     .setTitle(title)
                                     .setMessage(text)
-                                    .setPositiveButton("${getString(R.string.action_download_apk)}(${FileUtil.FormatFileSize(version.apkSize)})", { _, _ ->
+                                    .setPositiveButton("${getString(R.string.action_download_apk)}(${FileUtil.formatFileSize(version.apkSize)})", { _, _ ->
                                         val downloadAPKIntent = Intent(this@UpdateService, DownloadService::class.java)
                                         downloadAPKIntent.putExtra("type", "apk")
                                         downloadAPKIntent.putExtra("url", version.apkDownloadUrl)
                                         startService(downloadAPKIntent)
                                     })
                             if (version.lastVersionCode == getString(R.string.app_version_code).toInt())
-                                builder.setNegativeButton("${getString(R.string.action_download_patch)}(${FileUtil.FormatFileSize(version.patchSize)})", { _, _ ->
+                                builder.setNegativeButton("${getString(R.string.action_download_patch)}(${FileUtil.formatFileSize(version.patchSize)})", { _, _ ->
                                     val downloadPatchIntent = Intent(this@UpdateService, DownloadService::class.java)
                                     downloadPatchIntent.putExtra("type", "patch")
                                     downloadPatchIntent.putExtra("url", version.patchDownloadUrl)

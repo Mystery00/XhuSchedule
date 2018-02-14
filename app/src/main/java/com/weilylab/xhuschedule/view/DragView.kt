@@ -50,7 +50,8 @@ class DragView : LinearLayout {
     constructor(context: Context, attributeSet: AttributeSet, defStyle: Int) : super(context, attributeSet, defStyle)
 
     private val viewDragHelper: ViewDragHelper = ViewDragHelper.create(this, 1F, object : ViewDragHelper.Callback() {
-        override fun tryCaptureView(child: View?, pointerId: Int): Boolean = true
+
+        override fun tryCaptureView(child: View, pointerId: Int): Boolean = true
 
         override fun getViewHorizontalDragRange(child: View): Int = measuredWidth - child.measuredWidth
 
@@ -63,7 +64,7 @@ class DragView : LinearLayout {
 
     override fun onInterceptTouchEvent(ev: MotionEvent): Boolean = viewDragHelper.shouldInterceptTouchEvent(ev)
 
-    override fun onTouchEvent(event: MotionEvent?): Boolean {
+    override fun onTouchEvent(event: MotionEvent): Boolean {
         viewDragHelper.processTouchEvent(event)
         return true
     }

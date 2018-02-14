@@ -79,8 +79,8 @@ class TodayFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         @Suppress("UNCHECKED_CAST")
-        list = arguments.getSerializable("list") as ArrayList<Course>
-        adapter = TodayAdapter(activity, list)
+        list = arguments?.getSerializable("list") as ArrayList<Course>
+        adapter = TodayAdapter(activity!!, list)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,

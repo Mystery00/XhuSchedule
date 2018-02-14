@@ -41,8 +41,6 @@ import android.view.ViewGroup
 import android.widget.TextView
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.classes.baseClass.ExpScore
-import com.weilylab.xhuschedule.classes.baseClass.Score
-import vip.mystery0.tools.flexibleCardView.FlexibleCardView
 
 class ExpScoreAdapter(private val context: Context,
                       private val list: ArrayList<ExpScore>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -53,16 +51,16 @@ class ExpScoreAdapter(private val context: Context,
                 val score = list[position]
                 holder.scoreNameTextView.text = score.name
                 holder.scoreScoreTextView.text = score.score
-                holder.scoreNoTextView.text = context.getString(R.string.score_no, score.no)
-                holder.scoreCourseTypeTextView.text = context.getString(R.string.expscore_exptype, score.exptype)
-                holder.scoreCreditTextView.text = context.getString(R.string.score_credit, score.credit)
-                holder.scoreGpaTextView.text = context.getString(R.string.expscore_coursename, score.coursename)
-                holder.flexibleCardView.setShowState(score.isExpand)
-                holder.flexibleCardView.setOnClickListener {
-                    holder.flexibleCardView.showAnime({ isExpand ->
-                        score.isExpand = isExpand
-                    })
-                }
+//                holder.scoreNoTextView.text = context.getString(R.string.score_no, score.no)
+//                holder.scoreCourseTypeTextView.text = context.getString(R.string.expscore_exptype, score.exptype)
+//                holder.scoreCreditTextView.text = context.getString(R.string.score_credit, score.credit)
+//                holder.scoreGpaTextView.text = context.getString(R.string.expscore_coursename, score.coursename)
+//                holder.flexibleCardView.setShowState(score.isExpand)
+//                holder.flexibleCardView.setOnClickListener {
+//                    holder.flexibleCardView.showAnime({ isExpand ->
+//                        score.isExpand = isExpand
+//                    })
+//                }
             }
             is EmptyViewHolder -> {
                 holder.textView.text = context.getString(R.string.hint_data_empty)
@@ -92,12 +90,13 @@ class ExpScoreAdapter(private val context: Context,
     }
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        var flexibleCardView = itemView as FlexibleCardView
+        //        var flexibleCardView = itemView as FlexibleCardView
         var scoreNameTextView: TextView = itemView.findViewById(R.id.textView_score_name)
         var scoreScoreTextView: TextView = itemView.findViewById(R.id.textView_score_score)
-        var scoreNoTextView: TextView = itemView.findViewById(R.id.textView_score_no)
-        var scoreCourseTypeTextView: TextView = itemView.findViewById(R.id.textView_score_coursetype)
-        var scoreCreditTextView: TextView = itemView.findViewById(R.id.textView_score_credit)
-        var scoreGpaTextView: TextView = itemView.findViewById(R.id.textView_score_gpa)
+        var detailsTextView: TextView = itemView.findViewById(R.id.textView_details)
+//        var scoreNoTextView: TextView = itemView.findViewById(R.id.textView_score_no)
+//        var scoreCourseTypeTextView: TextView = itemView.findViewById(R.id.textView_score_coursetype)
+//        var scoreCreditTextView: TextView = itemView.findViewById(R.id.textView_score_credit)
+//        var scoreGpaTextView: TextView = itemView.findViewById(R.id.textView_score_gpa)
     }
 }
