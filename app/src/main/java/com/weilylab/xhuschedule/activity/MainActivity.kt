@@ -33,12 +33,13 @@
 
 package com.weilylab.xhuschedule.activity
 
+import android.animation.ObjectAnimator
 import android.app.Activity
 import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import android.graphics.Point
-import android.os.Build
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v4.content.ContextCompat
@@ -87,13 +88,14 @@ import kotlin.collections.ArrayList
 class MainActivity : BaseActivity() {
     companion object {
         private val TAG = "MainActivity"
-        private val ADD_ACCOUNT_CODE = 1
+        private const val ADD_ACCOUNT_CODE = 1
     }
 
     private lateinit var loadingDialog: Dialog
     private lateinit var updateProfileDialog: Dialog
     private lateinit var weekAdapter: WeekAdapter
     private lateinit var mainStudent: Student
+    private var arrowDrawable: Drawable? = null
     private var isTryRefreshData = false
     private var isRefreshData = false
     private var isWeekShow = false
@@ -113,6 +115,7 @@ class MainActivity : BaseActivity() {
         params.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "main")
         mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, params)
         setContentView(R.layout.activity_main)
+        arrowDrawable = ContextCompat.getDrawable(this@MainActivity, R.drawable.ms__arrow)
         loadingDialog = ZLoadingDialog(this)
                 .setLoadingBuilder(Z_TYPE.DOUBLE_CIRCLE)
                 .setHintText(getString(R.string.hint_dialog_update_cache))
@@ -598,22 +601,11 @@ class MainActivity : BaseActivity() {
 
                         override fun onComplete() {
                             isWeekShow = isShow
-                            val drawable = if (isWeekShow)
-                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                                    resources.getDrawable(R.drawable.ic_expand_less, null)
-                                } else {
-                                    null
-                                }
-                            else
-                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                                    resources.getDrawable(R.drawable.ic_expand_more, null)
-                                } else {
-                                    null
-                                }
-                            if (isShowArrow && drawable != null) {
-                                drawable.setBounds(0, 0, drawable.minimumWidth, drawable.minimumHeight)
-                                titleTextView.setCompoundDrawables(null, null, drawable, null)
-                            }
+                            titleTextView.setCompoundDrawablesWithIntrinsicBounds(null, null, if (isShowArrow) arrowDrawable else null, null)
+                            val start = if (isShow) 0 else 10000
+                            val end = if (isShow) 10000 else 0
+                            val animator = ObjectAnimator.ofInt(arrowDrawable!!, "level", start, end)
+                            animator.start()
                             isAnimShow = false
                         }
 
@@ -636,30 +628,15 @@ class MainActivity : BaseActivity() {
                 if (isWeekShow)
                     showWeekAnim(false, false)
                 titleTextView.setOnClickListener(null)
-                titleTextView.setCompoundDrawables(null, null, null, null)
                 titleTextView.text = CalendarUtil.getTodayInfo(this@MainActivity)
+                titleTextView.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null)
             }
             R.id.bottom_nav_week -> {
                 titleTextView.setOnClickListener {
                     showWeekAnim(!isWeekShow, true)
                 }
                 titleTextView.text = getString(R.string.course_week_index, ScheduleHelper.weekIndex)
-                val drawable = if (isWeekShow)
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                        resources.getDrawable(R.drawable.ic_expand_less, null)
-                    } else {
-                        null
-                    }
-                else
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                        resources.getDrawable(R.drawable.ic_expand_more, null)
-                    } else {
-                        null
-                    }
-                if (drawable != null) {
-                    drawable.setBounds(0, 0, drawable.minimumWidth, drawable.minimumHeight)
-                    titleTextView.setCompoundDrawables(null, null, drawable, null)
-                }
+                titleTextView.setCompoundDrawablesWithIntrinsicBounds(null, null, arrowDrawable, null)
             }
             R.id.bottom_nav_profile -> {
                 if (isWeekShow)
@@ -667,7 +644,7 @@ class MainActivity : BaseActivity() {
                 profileFragment.updateNoticeBadge()
                 titleTextView.text = getString(R.string.course_profile_title)
                 titleTextView.setOnClickListener(null)
-                titleTextView.setCompoundDrawables(null, null, null, null)
+                titleTextView.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null)
                 if (mainStudent.profile == null) {
                     updateProfileDialog.show()
                     mainStudent.getInfo(object : ProfileListener {

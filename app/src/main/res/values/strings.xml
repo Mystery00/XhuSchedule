@@ -196,6 +196,7 @@
     <string name="title_activity_score">成绩查询</string>
     <string name="title_activity_expscore">实验成绩查询</string>
     <string name="title_activity_notice">通知公告</string>
+    <string name="title_activity_schedule">查看非本学期课程</string>
 
     <string name="title_item_username">用户名</string>
     <string name="title_item_year">学年</string>
