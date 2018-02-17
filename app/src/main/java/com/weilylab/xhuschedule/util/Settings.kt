@@ -85,11 +85,14 @@ object Settings {
         set(value) = sharedPreference.edit().putBoolean(Constant.AUTO_CHECK_LOG, value).apply()
         get() = sharedPreference.getBoolean(Constant.AUTO_CHECK_LOG, true)
     var isEnableMultiUserMode: Boolean//是否启用多用户模式
-        set(value) = sharedPreference.edit().putBoolean(Constant.IS_ENABLE_MULTTI_USER_MODE, value).apply()
-        get() = sharedPreference.getBoolean(Constant.IS_ENABLE_MULTTI_USER_MODE, false)
+        set(value) = sharedPreference.edit().putBoolean(Constant.IS_ENABLE_MULTI_USER_MODE, value).apply()
+        get() = sharedPreference.getBoolean(Constant.IS_ENABLE_MULTI_USER_MODE, false)
     var isShowFailed: Boolean//是否显示未通过成绩
         set(value) = sharedPreference.edit().putBoolean(Constant.IS_SHOW_FAILED, value).apply()
         get() = sharedPreference.getBoolean(Constant.IS_SHOW_FAILED, true)
+    var isAutoSelect: Boolean//是否自动查询数据
+        set(value) = sharedPreference.edit().putBoolean(Constant.IS_AUTO_SELECT, value).apply()
+        get() = sharedPreference.getBoolean(Constant.IS_AUTO_SELECT, true)
     var ignoreUpdate: Int//忽略更新的版本号
         set(value) = sharedPreference.edit().putInt(Constant.IGNORE_UPDATE, value).apply()
         get() = sharedPreference.getInt(Constant.IGNORE_UPDATE, 0)

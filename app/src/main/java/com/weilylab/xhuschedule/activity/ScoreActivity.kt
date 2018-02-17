@@ -76,7 +76,7 @@ class ScoreActivity : BaseActivity() {
     private val TAG = "ScoreActivity"
     private lateinit var initDialog: Dialog
     private lateinit var loadingDialog: Dialog
-    private lateinit var dialogBuilder: AlertDialog.Builder
+    private lateinit var alertDialog: AlertDialog
     private val studentList = ArrayList<Student>()
     private val scoreList = ArrayList<Score>()
     private lateinit var adapter: ScoreAdapter
@@ -118,7 +118,7 @@ class ScoreActivity : BaseActivity() {
         studentList.clear()
         studentList.addAll(XhuFileUtil.getArrayFromFile(File(filesDir.absolutePath + File.separator + "data" + File.separator + "user"), Student::class.java))
         initInfo()
-        dialogBuilder.show()
+        alertDialog.show()
         floatingActionButton.setOnClickListener {
             getScores(currentStudent, year, term)
         }
@@ -150,6 +150,8 @@ class ScoreActivity : BaseActivity() {
 
                     override fun onComplete() {
                         adapter.notifyDataSetChanged()
+                        if (scoreList.size == 0 && Settings.isAutoSelect)
+                            getScores(currentStudent, year, term)
                     }
 
                     override fun onError(e: Throwable) {
@@ -193,6 +195,7 @@ class ScoreActivity : BaseActivity() {
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.menu_activity_score, menu)
         menu.findItem(R.id.action_show_failed).isChecked = Settings.isShowFailed
+        menu.findItem(R.id.action_auto_select).isChecked = Settings.isAutoSelect
         return true
     }
 
@@ -208,9 +211,9 @@ class ScoreActivity : BaseActivity() {
                 initScores(currentStudent)
                 true
             }
-            R.id.action_auto_select->{
-                item.isChecked=!item.isChecked
-
+            R.id.action_auto_select -> {
+                item.isChecked = !item.isChecked
+                Settings.isAutoSelect = item.isChecked
                 true
             }
             R.id.action_experiment -> {
@@ -218,8 +221,10 @@ class ScoreActivity : BaseActivity() {
                 true
             }
             R.id.action_filter_list -> {
-                dialogBuilder.setNegativeButton(android.R.string.cancel, null)
-                dialogBuilder.show()
+                alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setOnClickListener {
+                    alertDialog.dismiss()
+                }
+                alertDialog.show()
                 true
             }
             else -> super.onOptionsItemSelected(item)
@@ -247,7 +252,7 @@ class ScoreActivity : BaseActivity() {
             usernameSpinner.selectedIndex = 0
             setUsername(studentArray[0], yearSpinner, termSpinner, true)
         }
-        dialogBuilder = AlertDialog.Builder(this)
+        alertDialog = AlertDialog.Builder(this)
                 .setTitle("title")
                 .setView(view)
                 .setPositiveButton(android.R.string.ok, { _, _ ->
@@ -256,6 +261,7 @@ class ScoreActivity : BaseActivity() {
                 .setNegativeButton(android.R.string.cancel, { _, _ ->
                     finish()
                 })
+                .create()
     }
 
     private fun setUsername(username: String?, yearSpinner: MaterialSpinner, termSpinner: MaterialSpinner, isAutoSelect: Boolean) {
