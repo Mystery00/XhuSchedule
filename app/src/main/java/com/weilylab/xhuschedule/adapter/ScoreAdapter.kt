@@ -33,47 +33,86 @@
 
 package com.weilylab.xhuschedule.adapter
 
+import android.animation.ValueAnimator
 import android.content.Context
+import android.support.graphics.drawable.VectorDrawableCompat
+import android.support.v4.content.ContextCompat
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.classes.baseClass.Score
 import com.weilylab.xhuschedule.view.TextViewUtils
+import vip.mystery0.tools.logs.Logs
 
 class ScoreAdapter(private val context: Context,
                    private val list: ArrayList<Score>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+    private val TAG = "ScoreAdapter"
+    private var valueAnimator: ValueAnimator? = null
+    private var openedHolder: ViewHolder? = null
+    private var currentIndex = -1
+    private val drawable = VectorDrawableCompat.create(context.resources, R.drawable.ic_point, null)
+
+    init {
+        drawable?.setBounds(0, 0, drawable.minimumWidth, drawable.minimumHeight)
+        drawable?.setTint(ContextCompat.getColor(context, R.color.colorAccent))
+    }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
             is ViewHolder -> {
+                holder.itemView.tag = position
                 val score = list[position]
                 holder.scoreNameTextView.text = score.name
                 holder.scoreScoreTextView.text = score.score
-                val text = context.getString(R.string.score_no, score.no) + "\n" +
-                        context.getString(R.string.score_coursetype, score.coursetype) + "\n" +
-                        context.getString(R.string.score_credit, score.credit) + "\n" +
+                val text = "\n" + context.getString(R.string.score_no, score.no) + "\n\n" +
+                        context.getString(R.string.score_coursetype, score.coursetype) + "\n\n" +
+                        context.getString(R.string.score_credit, score.credit) + "\n\n" +
                         context.getString(R.string.score_gpa, score.gpa)
                 holder.detailsTextView.text = text
-                TextViewUtils.setMaxLinesWithAnimation(holder.detailsTextView, 0)
-                holder.itemView.setOnClickListener {
-                    if (holder.detailsTextView.maxLines == 0)
-                        TextViewUtils.setMaxLinesWithAnimation(holder.detailsTextView, Integer.MAX_VALUE)
-                    else
-                        TextViewUtils.setMaxLinesWithAnimation(holder.detailsTextView, 0)
+                //没有动画的展开伸缩
+                if (currentIndex == holder.itemView.tag) {
+                    holder.detailsTextView.maxLines = Int.MAX_VALUE
+                    holder.imageView.setImageDrawable(drawable)
+                } else {
+                    holder.detailsTextView.maxLines = 1
+                    holder.imageView.setImageDrawable(null)
                 }
-//                holder.scoreNoTextView.text = context.getString(R.string.score_no, score.no)
-//                holder.scoreCourseTypeTextView.text = context.getString(R.string.score_coursetype, score.coursetype)
-//                holder.scoreCreditTextView.text = context.getString(R.string.score_credit, score.credit)
-//                holder.scoreGpaTextView.text = context.getString(R.string.score_gpa, score.gpa)
-//                holder.flexibleCardView.setShowState(score.isExpand)
-//                holder.flexibleCardView.setOnClickListener {
-//                    holder.flexibleCardView.showAnime({ isExpand ->
-//                        score.isExpand = isExpand
-//                    })
-//                }
+                holder.itemView.setOnClickListener {
+                    Logs.i(TAG, "onBindViewHolder: 点击事件")
+                    valueAnimator?.cancel()
+                    //带动画的展开收缩
+                    when (currentIndex) {
+                        -1 -> {
+                            Logs.i(TAG, "onBindViewHolder: 没有条目被选中")
+                            valueAnimator = TextViewUtils.setMaxLinesWithAnimation(holder.detailsTextView, Int.MAX_VALUE)
+                            holder.imageView.setImageDrawable(drawable)
+                            currentIndex = holder.adapterPosition
+                            openedHolder = holder
+                        }
+                        holder.adapterPosition -> {
+                            Logs.i(TAG, "onBindViewHolder: 选中的是当前条目")
+                            valueAnimator = TextViewUtils.setMaxLinesWithAnimation(holder.detailsTextView, 1)
+                            holder.imageView.setImageDrawable(null)
+                            currentIndex = -1
+                            openedHolder = null
+                        }
+                        else -> {
+                            Logs.i(TAG, "onBindViewHolder: 选中的其他条目")
+                            if (openedHolder != null) {
+                                valueAnimator = TextViewUtils.setMaxLinesWithAnimation(openedHolder!!.detailsTextView, 1)
+                                openedHolder!!.imageView.setImageDrawable(null)
+                            }
+                            valueAnimator = TextViewUtils.setMaxLinesWithAnimation(holder.detailsTextView, Int.MAX_VALUE)
+                            holder.imageView.setImageDrawable(drawable)
+                            currentIndex = holder.adapterPosition
+                            openedHolder = holder
+                        }
+                    }
+                }
             }
             is EmptyViewHolder -> {
                 holder.textView.text = context.getString(R.string.hint_data_empty)
@@ -103,13 +142,9 @@ class ScoreAdapter(private val context: Context,
     }
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        //        var flexibleCardView = itemView as FlexibleCardView
+        var imageView: ImageView = itemView.findViewById(R.id.imageView)
         var scoreNameTextView: TextView = itemView.findViewById(R.id.textView_score_name)
         var scoreScoreTextView: TextView = itemView.findViewById(R.id.textView_score_score)
         var detailsTextView: TextView = itemView.findViewById(R.id.textView_details)
-//        var scoreNoTextView: TextView = itemView.findViewById(R.id.textView_score_no)
-//        var scoreCourseTypeTextView: TextView = itemView.findViewById(R.id.textView_score_coursetype)
-//        var scoreCreditTextView: TextView = itemView.findViewById(R.id.textView_score_credit)
-//        var scoreGpaTextView: TextView = itemView.findViewById(R.id.textView_score_gpa)
     }
 }
