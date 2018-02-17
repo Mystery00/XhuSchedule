@@ -56,6 +56,11 @@ class ScoreAdapter(private val context: Context,
     private var currentIndex = -1
     private val drawable = VectorDrawableCompat.create(context.resources, R.drawable.ic_point, null)
 
+    companion object {
+        private const val NO_DATA = 1
+        private const val NORMAL_DATA = 2
+    }
+
     init {
         drawable?.setBounds(0, 0, drawable.minimumWidth, drawable.minimumHeight)
         drawable?.setTint(ContextCompat.getColor(context, R.color.colorAccent))
@@ -122,18 +127,17 @@ class ScoreAdapter(private val context: Context,
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
-            1 -> EmptyViewHolder(LayoutInflater.from(context).inflate(R.layout.item_course_empty, parent, false))
+            NO_DATA -> EmptyViewHolder(LayoutInflater.from(context).inflate(R.layout.item_data_empty, parent, false))
             else -> ViewHolder(LayoutInflater.from(context).inflate(R.layout.item_score, parent, false))
         }
     }
 
-    override fun getItemCount(): Int = list.size
+    override fun getItemCount(): Int = if (list.size != 0) list.size else 1
 
     override fun getItemViewType(position: Int): Int {
         return when {
-            list.size == 0 -> 1
-            list[position].name == "" -> 2
-            else -> 0
+            list.size == 0 -> NO_DATA
+            else -> NORMAL_DATA
         }
     }
 

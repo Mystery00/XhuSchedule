@@ -89,7 +89,7 @@ class TodayAdapter(private val context: Context,
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         if (viewType == 0) {
-            val view = LayoutInflater.from(parent.context).inflate(R.layout.item_course_empty, parent, false)
+            val view = LayoutInflater.from(parent.context).inflate(R.layout.item_data_empty, parent, false)
             return EmptyViewHolder(view)
         }
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_course_today, parent, false)

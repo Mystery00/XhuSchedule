@@ -37,6 +37,7 @@ import android.app.Dialog
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v4.content.ContextCompat
+import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Base64
 import android.view.Menu
@@ -65,7 +66,6 @@ import java.io.File
 import java.util.*
 
 class ExpScoreActivity : BaseActivity() {
-
     private lateinit var loadingDialog: Dialog
     private val studentList = ArrayList<Student>()
     private val scoreList = ArrayList<ExpScore>()
@@ -96,6 +96,9 @@ class ExpScoreActivity : BaseActivity() {
                 .create()
         adapter = ExpScoreAdapter(this, scoreList)
         recycler_view.layoutManager = LinearLayoutManager(this)
+        val divider = DividerItemDecoration(this, DividerItemDecoration.VERTICAL)
+        divider.setDrawable(ContextCompat.getDrawable(this, R.drawable.lines)!!)
+        recycler_view.addItemDecoration(divider)
         recycler_view.adapter = adapter
         studentList.clear()
         studentList.addAll(XhuFileUtil.getArrayFromFile(File(filesDir.absolutePath + File.separator + "data" + File.separator + "user"), Student::class.java))

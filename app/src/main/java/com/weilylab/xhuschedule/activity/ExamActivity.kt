@@ -37,6 +37,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v4.content.ContextCompat
+import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Base64
 import com.google.firebase.analytics.FirebaseAnalytics
@@ -86,6 +87,9 @@ class ExamActivity : BaseActivity() {
                 .setHintTextColor(ContextCompat.getColor(this, R.color.colorAccent))
         adapter = ExamAdapter(this, testList)
         recycler_view.layoutManager = LinearLayoutManager(this)
+        val divider = DividerItemDecoration(this, DividerItemDecoration.VERTICAL)
+        divider.setDrawable(ContextCompat.getDrawable(this, R.drawable.lines)!!)
+        recycler_view.addItemDecoration(divider)
         recycler_view.adapter = adapter
         studentList.clear()
         studentList.addAll(XhuFileUtil.getArrayFromFile(File(filesDir.absolutePath + File.separator + "data" + File.separator + "user"), Student::class.java))
