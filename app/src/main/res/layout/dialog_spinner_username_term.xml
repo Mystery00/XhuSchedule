@@ -10,15 +10,37 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
+    <TextView
+        android:id="@+id/title_username"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:gravity="center"
+        android:padding="8dp"
+        android:text="@string/title_item_username"
+        app:layout_constraintBottom_toBottomOf="@id/spinner_username"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/spinner_username" />
+
     <com.jaredrummler.materialspinner.MaterialSpinner
         android:id="@+id/spinner_username"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toTopOf="@id/spinner_year"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@id/title_username"
         app:layout_constraintTop_toTopOf="parent"
         app:ms_hint="@string/hint_popup_view_student" />
+
+    <TextView
+        android:id="@+id/title_year"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:gravity="center"
+        android:text="@string/title_item_year"
+        app:layout_constraintBottom_toBottomOf="@id/spinner_year"
+        app:layout_constraintEnd_toEndOf="@id/title_username"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/spinner_year" />
 
     <com.jaredrummler.materialspinner.MaterialSpinner
         android:id="@+id/spinner_year"
@@ -26,9 +48,20 @@
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toTopOf="@id/spinner_term"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@id/title_year"
         app:layout_constraintTop_toBottomOf="@id/spinner_username"
         app:ms_hint="@string/hint_popup_view_year" />
+
+    <TextView
+        android:id="@+id/title_term"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:gravity="center"
+        android:text="@string/title_item_term"
+        app:layout_constraintBottom_toBottomOf="@id/spinner_term"
+        app:layout_constraintEnd_toEndOf="@id/title_username"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/spinner_term" />
 
     <com.jaredrummler.materialspinner.MaterialSpinner
         android:id="@+id/spinner_term"
@@ -36,7 +69,7 @@
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@id/title_term"
         app:layout_constraintTop_toBottomOf="@id/spinner_year"
         app:ms_hint="@string/hint_popup_view_term" />
 

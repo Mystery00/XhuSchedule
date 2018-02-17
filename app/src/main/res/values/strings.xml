@@ -190,11 +190,17 @@
     <string name="showcase_swipe_refresh">您可以通过下拉来随时刷新缓存</string>
 
     <string name="title_dialog_time">请选择本学期开始时间</string>
+    <string name="title_dialog_select">请选择需要查询的信息</string>
+
     <string name="title_activity_settings">设置</string>
     <string name="title_activity_exam">考试查询</string>
     <string name="title_activity_score">成绩查询</string>
     <string name="title_activity_expscore">实验成绩查询</string>
     <string name="title_activity_notice">通知公告</string>
+
+    <string name="title_item_username">用户名</string>
+    <string name="title_item_year">学年</string>
+    <string name="title_item_term">学期</string>
 
     <string name="title_shortcuts_refresh_widget">刷新桌面小部件数据</string>
     <string name="title_shortcuts_refresh_color">重新生成课程颜色</string>

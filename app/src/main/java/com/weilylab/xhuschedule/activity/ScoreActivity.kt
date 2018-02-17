@@ -97,7 +97,7 @@ class ScoreActivity : BaseActivity() {
 
     private fun initView() {
         loadingDialog = ZLoadingDialog(this)
-                .setLoadingBuilder(Z_TYPE.SEARCH_PATH)
+                .setLoadingBuilder(Z_TYPE.SINGLE_CIRCLE)
                 .setHintText(getString(R.string.hint_dialog_sync))
                 .setHintTextSize(16F)
                 .setCanceledOnTouchOutside(false)
@@ -123,7 +123,6 @@ class ScoreActivity : BaseActivity() {
             getScores(currentStudent, year, term)
         }
     }
-
 
     private fun initScores(student: Student?) {
         if (student == null)
@@ -253,7 +252,7 @@ class ScoreActivity : BaseActivity() {
             setUsername(studentArray[0], yearSpinner, termSpinner, true)
         }
         alertDialog = AlertDialog.Builder(this)
-                .setTitle("title")
+                .setTitle(R.string.title_dialog_select)
                 .setView(view)
                 .setPositiveButton(android.R.string.ok, { _, _ ->
                     initScores(currentStudent)
