@@ -87,9 +87,6 @@ class ExamActivity : BaseActivity() {
                 .setHintTextColor(ContextCompat.getColor(this, R.color.colorAccent))
         adapter = ExamAdapter(this, testList)
         recycler_view.layoutManager = LinearLayoutManager(this)
-        val divider = DividerItemDecoration(this, DividerItemDecoration.VERTICAL)
-        divider.setDrawable(ContextCompat.getDrawable(this, R.drawable.lines)!!)
-        recycler_view.addItemDecoration(divider)
         recycler_view.adapter = adapter
         studentList.clear()
         studentList.addAll(XhuFileUtil.getArrayFromFile(File(filesDir.absolutePath + File.separator + "data" + File.separator + "user"), Student::class.java))
