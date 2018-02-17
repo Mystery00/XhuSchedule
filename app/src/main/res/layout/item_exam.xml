@@ -10,17 +10,28 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:layout_marginStart="8dp"
+        android:contentDescription="@string/app_name"
+        app:layout_constraintBottom_toBottomOf="@id/textView_exam_name"
+        app:layout_constraintEnd_toStartOf="@id/textView_exam_name"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/textView_exam_name" />
+
     <TextView
         android:id="@+id/textView_exam_name"
         android:layout_width="0dp"
         android:layout_height="28dp"
-        android:layout_marginStart="@dimen/item_margin_horizontal"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="@dimen/item_margin_vertical"
         android:gravity="center_vertical"
         android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toStartOf="@id/textView_exam_date"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@id/imageView"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView

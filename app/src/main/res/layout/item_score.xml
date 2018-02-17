@@ -9,6 +9,17 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:layout_marginStart="8dp"
+        android:contentDescription="@string/app_name"
+        app:layout_constraintBottom_toBottomOf="@id/textView_score_name"
+        app:layout_constraintEnd_toStartOf="@id/textView_score_name"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/textView_score_name" />
+
     <TextView
         android:id="@+id/textView_score_name"
         android:layout_width="0dp"
@@ -49,16 +60,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/textView_score_name" />
-
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="16dp"
-        android:layout_height="16dp"
-        android:layout_marginStart="8dp"
-        android:contentDescription="@string/app_name"
-        app:layout_constraintBottom_toBottomOf="@id/textView_score_name"
-        app:layout_constraintEnd_toStartOf="@id/textView_score_name"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/textView_score_name" />
 
 </android.support.constraint.ConstraintLayout>

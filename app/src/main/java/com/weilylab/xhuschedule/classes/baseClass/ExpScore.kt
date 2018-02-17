@@ -40,5 +40,4 @@ class ExpScore {
     var coursename:String=""
     var name: String = ""
     var credit: String = ""
-    var isExpand = false
 }

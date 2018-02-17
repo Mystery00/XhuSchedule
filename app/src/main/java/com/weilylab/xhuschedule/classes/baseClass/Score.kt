@@ -40,5 +40,4 @@ class Score {
     var name: String = ""
     var gpa: String = ""
     var credit: String = ""
-    var isExpand = false
 }
