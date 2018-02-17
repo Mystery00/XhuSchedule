@@ -126,16 +126,16 @@ class TableFragment : Fragment() {
     }
 
     fun setBackground() {
-        Observable.create<Boolean> { subscriber->
+        Observable.create<Boolean> { subscriber ->
             while (true)
-                if (rootView!=null)
+                if (rootView != null)
                     break
             subscriber.onComplete()
         }
                 .subscribeOn(Schedulers.newThread())
                 .unsubscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(object :DisposableObserver<Boolean>(){
+                .subscribe(object : DisposableObserver<Boolean>() {
                     override fun onError(e: Throwable) {
                         e.printStackTrace()
                     }
@@ -218,9 +218,9 @@ class TableFragment : Fragment() {
                 "${headerArray[day]}\n${calendar.get(Calendar.DAY_OF_MONTH)}日"
             headerTextView.text = text
             if (CalendarUtil.getWeekIndex() - 1 == day)
-                headerTextView.setBackgroundColor(ContextCompat.getColor(activity!!, R.color.colorWeekPrimary))
+                headerTextView.setBackgroundColor(ContextCompat.getColor(activity!!, R.color.colorWeekIndex))
             else
-                headerTextView.setBackgroundColor(ContextCompat.getColor(activity!!, R.color.colorOpacity))
+                headerTextView.setBackgroundColor(ContextCompat.getColor(activity!!, R.color.colorWeekNotIndex))
             calendar.add(Calendar.DAY_OF_MONTH, 1)
             val layoutList = ArrayList<TableLayoutHelper>()
             val temp = resources.getIdentifier("table_schedule" + (day + 1), "id", "com.weilylab.xhuschedule")

@@ -27,7 +27,7 @@
         android:id="@+id/view"
         android:layout_width="32dp"
         android:layout_height="0dp"
-        android:background="@color/colorOpacity"
+        android:background="@color/colorPrimary"
         android:gravity="center"
         android:textColor="@color/colorWhite"
         android:textStyle="bold"
@@ -40,7 +40,7 @@
         layout="@layout/layout_table_header"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:background="@color/colorOpacity"
+        android:background="@color/colorPrimary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/view"
         app:layout_constraintTop_toTopOf="@+id/view" />
