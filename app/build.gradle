@@ -35,6 +35,8 @@ android {
         ndk {
             moduleName = 'bspatch'
         }
+        // Enabling multi dex support.
+        multiDexEnabled true
     }
     buildTypes {
         debug {
@@ -88,6 +90,7 @@ dependencies {
     compile 'com.github.ybq:parallaxviewpager:2.0.0'
     compile 'com.oasisfeng.condom:library:2.2.0'
     compile 'com.jaredrummler:material-spinner:1.2.4'
+    compile 'com.android.support:multidex:1.0.2'
     compile('com.crashlytics.sdk.android:crashlytics:2.7.1@aar') {
         transitive = true
     }
