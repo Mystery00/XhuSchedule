@@ -16,75 +16,111 @@
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="?attr/colorPrimary">
+        android:theme="@style/AppTheme.AppBarOverlay">
 
-        <android.support.constraint.ConstraintLayout
+        <android.support.design.widget.CollapsingToolbarLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom">
+            app:layout_scrollFlags="scroll|enterAlwaysCollapsed">
 
-            <ImageView
-                android:id="@+id/action_back"
-                android:layout_width="wrap_content"
-                android:layout_height="0dp"
-                android:contentDescription="@string/app_name"
-                android:padding="@dimen/course_padding"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/ic_arrow_back" />
+            <android.support.constraint.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-            <TextView
-                android:id="@+id/textViewStudent"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/popup_view_margin"
-                android:background="@drawable/drawable_popup_view"
-                android:gravity="center"
-                android:padding="@dimen/popup_view_margin"
-                android:text="@string/hint_popup_view_student"
-                app:layout_constraintEnd_toStartOf="@id/action_sync"
-                app:layout_constraintStart_toEndOf="@id/action_back"
-                app:layout_constraintTop_toTopOf="parent" />
+                <android.support.constraint.Guideline
+                    android:id="@+id/guideline"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    app:layout_constraintGuide_percent="0.5" />
 
-            <TextView
-                android:id="@+id/textViewYear"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/popup_view_margin"
-                android:background="@drawable/drawable_popup_view"
-                android:gravity="center"
-                android:padding="@dimen/popup_view_margin"
-                android:text="@string/hint_popup_view_year"
-                app:layout_constraintEnd_toStartOf="@id/action_sync"
-                app:layout_constraintStart_toEndOf="@id/action_back"
-                app:layout_constraintTop_toBottomOf="@id/textViewStudent" />
+                <android.support.v7.widget.Toolbar
+                    android:id="@+id/toolbar"
+                    android:layout_width="0dp"
+                    android:layout_height="?attr/actionBarSize"
+                    android:background="?attr/colorPrimary"
+                    app:layout_constraintBottom_toTopOf="@id/spinner_username"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:popupTheme="@style/AppTheme.PopupOverlay" />
 
-            <TextView
-                android:id="@+id/textViewTerm"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/popup_view_margin"
-                android:background="@drawable/drawable_popup_view"
-                android:gravity="center"
-                android:padding="@dimen/popup_view_margin"
-                android:text="@string/hint_popup_view_term"
-                app:layout_constraintEnd_toStartOf="@id/action_sync"
-                app:layout_constraintStart_toEndOf="@id/action_back"
-                app:layout_constraintTop_toBottomOf="@id/textViewYear" />
+                <TextView
+                    android:id="@+id/title_username"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:layout_marginStart="@dimen/material_margin"
+                    android:gravity="center_vertical"
+                    android:text="@string/title_item_username"
+                    android:textColor="@color/colorWhite"
+                    app:layout_constraintBottom_toBottomOf="@id/spinner_username"
+                    app:layout_constraintEnd_toStartOf="@id/spinner_username"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/spinner_username" />
 
-            <ImageView
-                android:id="@+id/action_sync"
-                android:layout_width="wrap_content"
-                android:layout_height="0dp"
-                android:contentDescription="@string/app_name"
-                android:padding="@dimen/course_padding"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/ic_sync" />
+                <com.jaredrummler.materialspinner.MaterialSpinner
+                    android:id="@+id/spinner_username"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/material_margin"
+                    app:layout_constraintBottom_toTopOf="@id/spinner_year"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/title_username"
+                    app:layout_constraintTop_toBottomOf="@id/toolbar"
+                    app:ms_background_color="@color/colorPrimary"
+                    app:ms_hint="@string/hint_popup_view_student" />
 
-        </android.support.constraint.ConstraintLayout>
+                <TextView
+                    android:id="@+id/title_year"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_marginStart="@dimen/material_margin"
+                    android:gravity="center_vertical"
+                    android:text="@string/title_item_year"
+                    android:textColor="@color/colorWhite"
+                    app:layout_constraintBottom_toBottomOf="@id/spinner_year"
+                    app:layout_constraintEnd_toEndOf="@id/title_username"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/spinner_year" />
+
+                <com.jaredrummler.materialspinner.MaterialSpinner
+                    android:id="@+id/spinner_year"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/guideline"
+                    app:layout_constraintStart_toEndOf="@id/title_year"
+                    app:layout_constraintTop_toBottomOf="@id/spinner_username"
+                    app:ms_background_color="@color/colorPrimary"
+                    app:ms_hint="@string/hint_popup_view_year" />
+
+                <TextView
+                    android:id="@+id/title_term"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:gravity="center_vertical"
+                    android:text="@string/title_item_term"
+                    android:textColor="@color/colorWhite"
+                    app:layout_constraintBottom_toBottomOf="@id/spinner_year"
+                    app:layout_constraintEnd_toStartOf="@id/spinner_term"
+                    app:layout_constraintStart_toStartOf="@id/guideline"
+                    app:layout_constraintTop_toTopOf="@id/spinner_year" />
+
+                <com.jaredrummler.materialspinner.MaterialSpinner
+                    android:id="@+id/spinner_term"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_marginEnd="@dimen/material_margin"
+                    app:layout_constraintBottom_toBottomOf="@id/spinner_year"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/title_term"
+                    app:layout_constraintTop_toTopOf="@id/spinner_year"
+                    app:ms_background_color="@color/colorPrimary"
+                    app:ms_hint="@string/hint_popup_view_term" />
+
+            </android.support.constraint.ConstraintLayout>
+
+        </android.support.design.widget.CollapsingToolbarLayout>
 
     </android.support.design.widget.AppBarLayout>
 

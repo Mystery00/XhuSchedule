@@ -42,6 +42,8 @@ import android.support.v4.content.ContextCompat
 import android.util.Base64
 import android.util.TypedValue
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.widget.*
 import com.bumptech.glide.Glide
@@ -57,18 +59,20 @@ import com.weilylab.xhuschedule.classes.baseClass.Student
 import com.weilylab.xhuschedule.classes.baseClass.TableLayoutHelper
 import com.weilylab.xhuschedule.classes.rt.GetCourseRT
 import com.weilylab.xhuschedule.interfaces.StudentService
-import com.weilylab.xhuschedule.listener.InitProfileListener
 import com.weilylab.xhuschedule.listener.LoginListener
 import com.weilylab.xhuschedule.listener.ProfileListener
 import com.weilylab.xhuschedule.util.*
 import com.zyao89.view.zloading.ZLoadingDialog
 import com.zyao89.view.zloading.Z_TYPE
 import io.reactivex.Observable
+import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
 import io.reactivex.observers.DisposableObserver
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_schedule.*
 import kotlinx.android.synthetic.main.content_schedule.*
+import vip.mystery0.tools.logs.Logs
 import java.io.File
 import java.io.InputStreamReader
 import java.net.UnknownHostException
@@ -76,14 +80,14 @@ import java.util.*
 import kotlin.math.max
 
 class ScheduleActivity : BaseActivity() {
-
+    private val TAG = "ScheduleActivity"
     private lateinit var initDialog: Dialog
     private lateinit var loadingDialog: Dialog
     private val studentList = ArrayList<Student>()
     private var weekList = ArrayList<ArrayList<ArrayList<Course>>>()
     private var currentStudent: Student? = null
-    private var year = ""
-    private var term = 1
+    private var year: String? = null
+    private var term: Int? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -91,6 +95,8 @@ class ScheduleActivity : BaseActivity() {
         params.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "schedule")
         mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, params)
         setContentView(R.layout.activity_schedule)
+        setSupportActionBar(toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
         initView()
     }
 
@@ -104,7 +110,7 @@ class ScheduleActivity : BaseActivity() {
                 .setHintTextColor(ContextCompat.getColor(this, R.color.colorAccent))
                 .create()
         loadingDialog = ZLoadingDialog(this)
-                .setLoadingBuilder(Z_TYPE.SEARCH_PATH)
+                .setLoadingBuilder(Z_TYPE.SINGLE_CIRCLE)
                 .setHintText(getString(R.string.hint_dialog_sync))
                 .setHintTextSize(16F)
                 .setCanceledOnTouchOutside(false)
@@ -128,48 +134,9 @@ class ScheduleActivity : BaseActivity() {
         }
         studentList.clear()
         studentList.addAll(XhuFileUtil.getArrayFromFile(File(filesDir.absolutePath + File.separator + "data" + File.separator + "user"), Student::class.java))
-        val array = Array(studentList.size, { i -> studentList[i].username })
-        val termArray = arrayOf("1", "2", "3")
-        ViewUtil.setPopupView(this, array, textViewStudent, DensityUtil.getWidth(this, 56F, 56F), { position ->
-            currentStudent = studentList[position]
-            if (currentStudent != null)
-                ViewUtil.initProfile(this, currentStudent!!, textViewYear, DensityUtil.getWidth(this, 56F, 56F), object : InitProfileListener {
-                    override fun done(position: Int, year: String) {
-                        this@ScheduleActivity.year = year
-                        showCourses(currentStudent)
-                    }
-
-                    override fun error(dialog: Dialog) {
-                        getInfo(currentStudent!!, dialog)
-                    }
-                })
-        })
-        ViewUtil.setPopupView(this, termArray, textViewTerm, DensityUtil.getWidth(this, 56F, 56F), { position ->
-            term = position + 1
-            showCourses(currentStudent)
-        })
-        action_back.setOnClickListener {
-            finish()
-        }
-        action_sync.setOnClickListener {
-            getCourses(currentStudent, year, term)
-        }
-
-        //初始化显示数据
-        textViewStudent.text = array[0]
-        currentStudent = studentList[0]
-        textViewTerm.text = termArray[0]
-        ViewUtil.initProfile(this, currentStudent!!, textViewYear, DensityUtil.getWidth(this, 56F, 56F), object : InitProfileListener {
-            override fun done(position: Int, year: String) {
-                this@ScheduleActivity.year = year
-                showCourses(currentStudent)
-            }
-
-            override fun error(dialog: Dialog) {
-                getInfo(currentStudent!!, dialog)
-            }
-        })
+        initInfo()
     }
+
 
     private fun getCourses(student: Student?, year: String?, term: Int?) {
         if (student == null)
@@ -385,43 +352,6 @@ class ScheduleActivity : BaseActivity() {
         return itemView
     }
 
-    private fun getInfo(student: Student, initDialog: Dialog) {
-        student.getInfo(object : ProfileListener {
-            override fun error(rt: Int, e: Throwable) {
-                initDialog.dismiss()
-                e.printStackTrace()
-                Snackbar.make(coordinatorLayout, e.message!!, Snackbar.LENGTH_LONG)
-                        .show()
-            }
-
-            override fun got(profile: Profile) {
-                XhuFileUtil.saveObjectToFile(studentList, File(filesDir.absolutePath + File.separator + "data" + File.separator + "user"))
-                try {
-                    val start = student.profile!!.grade.toInt()//进校年份
-                    val calendar = Calendar.getInstance()
-                    val end = when (calendar.get(Calendar.MONTH) + 1) {
-                        in 1 until 3 -> calendar.get(Calendar.YEAR) - 1
-                        in 3 until 9 -> calendar.get(Calendar.YEAR)
-                        in 9 until 13 -> calendar.get(Calendar.YEAR) + 1
-                        else -> {
-                            0
-                        }
-                    }
-                    val array = Array(end - start, { i -> (start + i).toString() + '-' + (start + i + 1).toString() })
-                    ViewUtil.setPopupView(this@ScheduleActivity, array, textViewYear, DensityUtil.getWidth(this@ScheduleActivity, 56F, 56F), { position ->
-                        year = array[position]
-                        showCourses(currentStudent)
-                    })
-                    initDialog.dismiss()
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                    Toast.makeText(this@ScheduleActivity, "数据解析错误，无法使用，请联系开发者！", Toast.LENGTH_LONG)
-                            .show()
-                }
-            }
-        })
-    }
-
     private fun login(student: Student, year: String?, term: Int?) {
         student.login(object : LoginListener {
             override fun error(rt: Int, e: Throwable) {
@@ -434,5 +364,124 @@ class ScheduleActivity : BaseActivity() {
                 getCourses(student, year, term)
             }
         })
+    }
+
+    private fun initInfo() {
+        val studentArray = Array(studentList.size, { i -> studentList[i].username })
+        spinner_username.setItems(studentArray.toList())
+        spinner_term.setItems(1, 2, 3)
+        spinner_username.setOnItemSelectedListener { _, _, _, username ->
+            setUsername(username.toString(), true)
+        }
+        spinner_year.setOnItemSelectedListener { _, _, _, year ->
+            this.year = year.toString()
+            showCourses(currentStudent)
+        }
+        spinner_term.setOnItemSelectedListener { _, _, _, term ->
+            this.term = term as Int
+            showCourses(currentStudent)
+        }
+        if (studentArray.size == 1) {
+            spinner_username.selectedIndex = 0
+            setUsername(studentArray[0], true)
+        }
+    }
+
+    private fun setUsername(username: String?, isAutoSelect: Boolean) {
+        val userList = ArrayList<Student>()
+        val yearList = ArrayList<String>()
+        //初始化入学年份
+        Observable.create<Any> {
+            userList.addAll(XhuFileUtil.getArrayFromFile(File(filesDir.absolutePath + File.separator + "data" + File.separator + "user"), Student::class.java))
+            val selectedStudent = userList.firstOrNull { it.username == username }
+            if (selectedStudent == null) {
+                it.onComplete()
+                return@create
+            }
+            currentStudent = selectedStudent
+            if (selectedStudent.profile != null) {
+                val start = selectedStudent.profile!!.grade.toInt()//进校年份
+                val calendar = Calendar.getInstance()
+                val end = when (calendar.get(Calendar.MONTH) + 1) {
+                    in 1 until 9 -> calendar.get(Calendar.YEAR)
+                    in 9 until 13 -> calendar.get(Calendar.YEAR) + 1
+                    else -> 0
+                }
+                val yearArray = Array(end - start, { i -> "${start + i}-${start + i + 1}" })
+                yearList.clear()
+                yearList.addAll(yearArray)
+                it.onComplete()
+            } else {
+                selectedStudent.getInfo(object : ProfileListener {
+                    override fun error(rt: Int, e: Throwable) {
+                        it.onError(e)
+                    }
+
+                    override fun got(profile: Profile) {
+                        val start = profile.grade.toInt()//进校年份
+                        val calendar = Calendar.getInstance()
+                        val end = when (calendar.get(Calendar.MONTH) + 1) {
+                            in 1 until 9 -> calendar.get(Calendar.YEAR)
+                            in 9 until 13 -> calendar.get(Calendar.YEAR) + 1
+                            else -> 0
+                        }
+                        val yearArray = Array(end - start, { i -> "${start + i}-${start + i + 1}" })
+                        yearList.clear()
+                        yearList.addAll(yearArray)
+                        it.onComplete()
+                    }
+                })
+            }
+        }
+                .subscribeOn(Schedulers.newThread())
+                .unsubscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(object : Observer<Any> {
+                    override fun onComplete() {
+                        initDialog.dismiss()
+                        spinner_year.setItems(yearList)
+                        if (isAutoSelect) {
+                            val term = CalendarUtil.getTermType()
+                            spinner_year.selectedIndex = yearList.size - 1//自动选择最后一年
+                            spinner_term.selectedIndex = term - 1//自动选择学期
+                            year = yearList[yearList.size - 1]
+                            this@ScheduleActivity.term = term
+                        }
+                        showCourses(currentStudent)
+                    }
+
+                    override fun onSubscribe(d: Disposable) {
+                        initDialog.show()
+                    }
+
+                    override fun onNext(t: Any) {
+                    }
+
+                    override fun onError(e: Throwable) {
+                        initDialog.dismiss()
+                        Logs.wtf(TAG, "onError: ", e)
+                        Snackbar.make(coordinatorLayout, e.message.toString(), Snackbar.LENGTH_LONG)
+                                .show()
+                    }
+                })
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_activity_schedule, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            android.R.id.home -> {
+                finish()
+                true
+            }
+            R.id.action_sync -> {
+                getCourses(currentStudent, year, term)
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 }

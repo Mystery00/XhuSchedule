@@ -14,47 +14,6 @@
     tools:context="com.weilylab.xhuschedule.activity.ExamActivity"
     tools:showIn="@layout/activity_exam">
 
-    <android.support.constraint.ConstraintLayout
-        android:id="@+id/header"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:background="@color/colorWhite"
-        app:layout_constraintBottom_toTopOf="@id/recycler_view"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <android.support.constraint.Guideline
-            android:id="@+id/guideline"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.5" />
-
-        <TextView
-            android:id="@+id/title_username"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:gravity="center"
-            android:padding="8dp"
-            android:text="@string/title_item_username"
-            app:layout_constraintBottom_toBottomOf="@id/spinner_username"
-            app:layout_constraintEnd_toStartOf="@id/spinner_username"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@id/spinner_username" />
-
-        <com.jaredrummler.materialspinner.MaterialSpinner
-            android:id="@+id/spinner_username"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/title_username"
-            app:layout_constraintTop_toTopOf="parent"
-            app:ms_hint="@string/hint_popup_view_student" />
-
-    </android.support.constraint.ConstraintLayout>
-
     <View
         android:id="@+id/shadow"
         android:layout_width="0dp"
@@ -62,7 +21,7 @@
         android:background="@drawable/shadow"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/header" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_view"
@@ -71,6 +30,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/header" />
+        app:layout_constraintTop_toTopOf="parent" />
 
 </android.support.constraint.ConstraintLayout>
