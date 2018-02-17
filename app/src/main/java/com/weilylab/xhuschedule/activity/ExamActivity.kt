@@ -37,14 +37,11 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v4.content.ContextCompat
-import android.support.v7.app.AlertDialog
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Base64
-import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
 import com.google.firebase.analytics.FirebaseAnalytics
-import com.jaredrummler.materialspinner.MaterialSpinner
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.adapter.ExamAdapter
 import com.weilylab.xhuschedule.classes.baseClass.Exam
@@ -68,11 +65,9 @@ import java.io.File
 class ExamActivity : BaseActivity() {
     private val TAG = "ExamActivity"
     private lateinit var loadingDialog: ZLoadingDialog
-    private lateinit var alertDialog: AlertDialog
     private val studentList = ArrayList<Student>()
     private val testList = ArrayList<Exam>()
     private lateinit var adapter: ExamAdapter
-    private var username: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -112,35 +107,20 @@ class ExamActivity : BaseActivity() {
                 finish()
                 true
             }
-            R.id.action_filter_list -> {
-                alertDialog.show()
-                true
-            }
             else -> super.onOptionsItemSelected(item)
         }
     }
 
     private fun initInfo() {
         val studentArray = Array(studentList.size, { i -> studentList[i].username })
-        val view = LayoutInflater.from(this).inflate(R.layout.dialog_spinner_username, null)
-        val usernameSpinner = view.findViewById<MaterialSpinner>(R.id.spinner_username)
-        usernameSpinner.setItems(studentArray)
-        usernameSpinner.setOnItemSelectedListener { _, _, _, username ->
-            this.username = username.toString()
+        spinner_username.setItems(studentArray.toList())
+        spinner_username.setOnItemSelectedListener { _, _, _, username ->
+            setUsername(username.toString())
         }
         if (studentList.size == 1) {
-            usernameSpinner.selectedIndex = 0
+            spinner_username.selectedIndex = 0
+            setUsername(studentArray[0])
         }
-        alertDialog = AlertDialog.Builder(this)
-                .setTitle(R.string.title_dialog_select)
-                .setView(view)
-                .setPositiveButton(android.R.string.ok, { _, _ ->
-                    setUsername(username)
-                })
-                .setNegativeButton(android.R.string.cancel, { _, _ ->
-                    finish()
-                })
-                .create()
     }
 
     private fun setUsername(username: String?) {
