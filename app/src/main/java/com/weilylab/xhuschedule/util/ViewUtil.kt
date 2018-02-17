@@ -54,6 +54,7 @@ import android.content.Intent
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.ActionBar
 import android.widget.*
+import com.jaredrummler.materialspinner.MaterialSpinnerAdapter
 import com.weilylab.xhuschedule.classes.baseClass.Student
 import com.weilylab.xhuschedule.listener.InitProfileListener
 import com.zyao89.view.zloading.ZLoadingDialog
@@ -127,9 +128,10 @@ object ViewUtil {
     fun setPopupView(context: Context, array: Array<String>, textView: TextView, listener: (position: Int) -> Unit) = setPopupView(context, array, textView, DensityUtil.getScreenWidth(context), listener)
 
     fun setPopupView(context: Context, array: Array<String>, textView: TextView, width: Int, listener: (position: Int) -> Unit) {
-        val arrayAdapter = ArrayAdapter<String>(context, R.layout.item_popup_view, array)
+//        val arrayAdapter = ArrayAdapter<String>(context, R.layout.item_popup_view, array)
+        val arrayAdapter = MaterialSpinnerAdapter<String>(context, array.toList())
         val listView = ListView(context)
-        listView.setBackgroundResource(R.drawable.drawable_popup_view)
+//        listView.setBackgroundResource(R.drawable.ms__selector)
         val popupWindow = PopupWindow(listView, width, ActionBar.LayoutParams.WRAP_CONTENT, true)
         popupWindow.isOutsideTouchable = true
         popupWindow.setOnDismissListener {
