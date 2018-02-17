@@ -38,45 +38,51 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v4.content.ContextCompat
-import android.support.v7.widget.DividerItemDecoration
+import android.support.v7.app.AlertDialog
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Base64
+import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.Toast
 import com.google.firebase.analytics.FirebaseAnalytics
+import com.jaredrummler.materialspinner.MaterialSpinner
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.adapter.ScoreAdapter
 import com.weilylab.xhuschedule.classes.baseClass.Profile
 import com.weilylab.xhuschedule.classes.baseClass.Score
 import com.weilylab.xhuschedule.classes.baseClass.Student
 import com.weilylab.xhuschedule.listener.GetScoreListener
-import com.weilylab.xhuschedule.listener.InitProfileListener
 import com.weilylab.xhuschedule.listener.ProfileListener
+import com.weilylab.xhuschedule.util.CalendarUtil
 import com.weilylab.xhuschedule.util.Settings
-import com.weilylab.xhuschedule.util.ViewUtil
 import com.weilylab.xhuschedule.util.XhuFileUtil
 import com.zyao89.view.zloading.ZLoadingDialog
 import com.zyao89.view.zloading.Z_TYPE
 import io.reactivex.Observable
+import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
 import io.reactivex.observers.DisposableObserver
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_score.*
 import kotlinx.android.synthetic.main.content_score.*
+import vip.mystery0.tools.logs.Logs
 
 import java.io.File
 import java.util.*
+import kotlin.collections.ArrayList
 
 class ScoreActivity : BaseActivity() {
-
+    private val TAG = "ScoreActivity"
+    private lateinit var initDialog: Dialog
     private lateinit var loadingDialog: Dialog
+    private lateinit var dialogBuilder: AlertDialog.Builder
     private val studentList = ArrayList<Student>()
     private val scoreList = ArrayList<Score>()
     private lateinit var adapter: ScoreAdapter
     private var currentStudent: Student? = null
-    private var year = ""
-    private var term = 1
+    private var year: String? = null
+    private var term: Int? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -98,48 +104,21 @@ class ScoreActivity : BaseActivity() {
                 .setLoadingColor(ContextCompat.getColor(this, R.color.colorAccent))
                 .setHintTextColor(ContextCompat.getColor(this, R.color.colorAccent))
                 .create()
+        initDialog = ZLoadingDialog(this)
+                .setLoadingBuilder(Z_TYPE.SNAKE_CIRCLE)
+                .setHintText(getString(R.string.hint_dialog_init))
+                .setHintTextSize(16F)
+                .setCanceledOnTouchOutside(false)
+                .setLoadingColor(ContextCompat.getColor(this, R.color.colorAccent))
+                .setHintTextColor(ContextCompat.getColor(this, R.color.colorAccent))
+                .create()
         adapter = ScoreAdapter(this, scoreList)
         recycler_view.layoutManager = LinearLayoutManager(this)
         recycler_view.adapter = adapter
         studentList.clear()
         studentList.addAll(XhuFileUtil.getArrayFromFile(File(filesDir.absolutePath + File.separator + "data" + File.separator + "user"), Student::class.java))
-
-        val studentArray = Array(studentList.size, { i -> studentList[i].username })
-        val termArray = arrayOf("1", "2", "3")
-
-        ViewUtil.setPopupView(this, studentArray, textViewStudent, { position ->
-            currentStudent = studentList[position]
-            if (currentStudent != null)
-                ViewUtil.initProfile(this, currentStudent!!, textViewYear, object : InitProfileListener {
-                    override fun done(position: Int, year: String) {
-                        this@ScoreActivity.year = year
-                        initScores(currentStudent)
-                    }
-
-                    override fun error(dialog: Dialog) {
-                        getInfo(currentStudent!!, dialog)
-                    }
-                })
-        })
-        ViewUtil.setPopupView(this, termArray, textViewTerm, { position ->
-            term = position + 1
-            initScores(currentStudent)
-        })
-
-        //初始化显示数据
-        textViewStudent.text = studentArray[0]
-        currentStudent = studentList[0]
-        textViewTerm.text = termArray[0]
-        ViewUtil.initProfile(this, currentStudent!!, textViewYear, object : InitProfileListener {
-            override fun done(position: Int, year: String) {
-                this@ScoreActivity.year = year
-                initScores(currentStudent)
-            }
-
-            override fun error(dialog: Dialog) {
-                getInfo(currentStudent!!, dialog)
-            }
-        })
+        initInfo()
+        dialogBuilder.show()
         floatingActionButton.setOnClickListener {
             getScores(currentStudent, year, term)
         }
@@ -180,6 +159,7 @@ class ScoreActivity : BaseActivity() {
     }
 
     private fun getScores(student: Student?, year: String?, term: Int?) {
+        Logs.i(TAG, "getScores: year: $year term: $term")
         if (student == null)
             return
         loadingDialog.show()
@@ -210,40 +190,6 @@ class ScoreActivity : BaseActivity() {
         })
     }
 
-    private fun getInfo(student: Student, initDialog: Dialog) {
-        student.getInfo(object : ProfileListener {
-            override fun error(rt: Int, e: Throwable) {
-                initDialog.dismiss()
-                e.printStackTrace()
-                Snackbar.make(coordinatorLayout, e.message.toString(), Snackbar.LENGTH_LONG)
-                        .show()
-            }
-
-            override fun got(profile: Profile) {
-                XhuFileUtil.saveObjectToFile(studentList, File(filesDir.absolutePath + File.separator + "data" + File.separator + "user"))
-                try {
-                    val start = student.profile!!.grade.toInt()//进校年份
-                    val calendar = Calendar.getInstance()
-                    val end = when (calendar.get(Calendar.MONTH) + 1) {
-                        in 1 until 9 -> calendar.get(Calendar.YEAR)
-                        in 9 until 13 -> calendar.get(Calendar.YEAR) + 1
-                        else -> 0
-                    }
-                    val array = Array(end - start, { i -> "${start + i}-${start + i + 1}" })
-                    ViewUtil.setPopupView(this@ScoreActivity, array, textViewYear, { position ->
-                        year = array[position]
-                        initScores(currentStudent)
-                    })
-                    initDialog.dismiss()
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                    Toast.makeText(this@ScoreActivity, "数据解析错误，无法使用，请联系开发者！", Toast.LENGTH_LONG)
-                            .show()
-                }
-            }
-        })
-    }
-
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.menu_activity_score, menu)
         menu.findItem(R.id.action_show_failed).isChecked = Settings.isShowFailed
@@ -262,11 +208,131 @@ class ScoreActivity : BaseActivity() {
                 initScores(currentStudent)
                 true
             }
+            R.id.action_auto_select->{
+                item.isChecked=!item.isChecked
+
+                true
+            }
             R.id.action_experiment -> {
                 startActivity(Intent(this, ExpScoreActivity::class.java))
                 true
             }
+            R.id.action_filter_list -> {
+                dialogBuilder.setNegativeButton(android.R.string.cancel, null)
+                dialogBuilder.show()
+                true
+            }
             else -> super.onOptionsItemSelected(item)
         }
+    }
+
+    private fun initInfo() {
+        val studentArray = Array(studentList.size, { i -> studentList[i].username })
+        val view = LayoutInflater.from(this).inflate(R.layout.dialog_spinner_username_term, null)
+        val usernameSpinner = view.findViewById<MaterialSpinner>(R.id.spinner_username)
+        val yearSpinner = view.findViewById<MaterialSpinner>(R.id.spinner_year)
+        val termSpinner = view.findViewById<MaterialSpinner>(R.id.spinner_term)
+        usernameSpinner.setItems(studentArray.toList())
+        termSpinner.setItems(1, 2, 3)
+        usernameSpinner.setOnItemSelectedListener { _, _, _, username ->
+            setUsername(username.toString(), yearSpinner, termSpinner, true)
+        }
+        yearSpinner.setOnItemSelectedListener { _, _, _, year ->
+            this.year = year.toString()
+        }
+        termSpinner.setOnItemSelectedListener { _, _, _, term ->
+            this.term = term as Int
+        }
+        if (studentArray.size == 1) {
+            usernameSpinner.selectedIndex = 0
+            setUsername(studentArray[0], yearSpinner, termSpinner, true)
+        }
+        dialogBuilder = AlertDialog.Builder(this)
+                .setTitle("title")
+                .setView(view)
+                .setPositiveButton(android.R.string.ok, { _, _ ->
+                    initScores(currentStudent)
+                })
+                .setNegativeButton(android.R.string.cancel, { _, _ ->
+                    finish()
+                })
+    }
+
+    private fun setUsername(username: String?, yearSpinner: MaterialSpinner, termSpinner: MaterialSpinner, isAutoSelect: Boolean) {
+        val userList = ArrayList<Student>()
+        val yearList = ArrayList<String>()
+        //初始化入学年份
+        Observable.create<Any> {
+            userList.addAll(XhuFileUtil.getArrayFromFile(File(filesDir.absolutePath + File.separator + "data" + File.separator + "user"), Student::class.java))
+            val selectedStudent = userList.firstOrNull { it.username == username }
+            if (selectedStudent == null) {
+                it.onComplete()
+                return@create
+            }
+            currentStudent = selectedStudent
+            if (selectedStudent.profile != null) {
+                val start = selectedStudent.profile!!.grade.toInt()//进校年份
+                val calendar = Calendar.getInstance()
+                val end = when (calendar.get(Calendar.MONTH) + 1) {
+                    in 1 until 9 -> calendar.get(Calendar.YEAR)
+                    in 9 until 13 -> calendar.get(Calendar.YEAR) + 1
+                    else -> 0
+                }
+                val yearArray = Array(end - start, { i -> "${start + i}-${start + i + 1}" })
+                yearList.clear()
+                yearList.addAll(yearArray)
+                it.onComplete()
+            } else {
+                selectedStudent.getInfo(object : ProfileListener {
+                    override fun error(rt: Int, e: Throwable) {
+                        it.onError(e)
+                    }
+
+                    override fun got(profile: Profile) {
+                        val start = profile.grade.toInt()//进校年份
+                        val calendar = Calendar.getInstance()
+                        val end = when (calendar.get(Calendar.MONTH) + 1) {
+                            in 1 until 9 -> calendar.get(Calendar.YEAR)
+                            in 9 until 13 -> calendar.get(Calendar.YEAR) + 1
+                            else -> 0
+                        }
+                        val yearArray = Array(end - start, { i -> "${start + i}-${start + i + 1}" })
+                        yearList.clear()
+                        yearList.addAll(yearArray)
+                        it.onComplete()
+                    }
+                })
+            }
+        }
+                .subscribeOn(Schedulers.newThread())
+                .unsubscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(object : Observer<Any> {
+                    override fun onComplete() {
+                        initDialog.dismiss()
+                        yearSpinner.setItems(yearList)
+                        if (isAutoSelect) {
+                            val term = CalendarUtil.getTermType()
+                            yearSpinner.selectedIndex = yearList.size - 1//自动选择最后一年
+                            termSpinner.selectedIndex = term - 1//自动选择学期
+                            year = yearList[yearList.size - 1]
+                            this@ScoreActivity.term = term
+                        }
+                    }
+
+                    override fun onSubscribe(d: Disposable) {
+                        initDialog.show()
+                    }
+
+                    override fun onNext(t: Any) {
+                    }
+
+                    override fun onError(e: Throwable) {
+                        initDialog.dismiss()
+                        Logs.wtf(TAG, "onError: ", e)
+                        Snackbar.make(coordinatorLayout, e.message.toString(), Snackbar.LENGTH_LONG)
+                                .show()
+                    }
+                })
     }
 }

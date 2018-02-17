@@ -34,11 +34,8 @@
 package com.weilylab.xhuschedule.util.notification
 
 import android.app.Notification
-import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
-import android.graphics.Color
-import android.os.Build
 import android.support.v4.app.NotificationCompat
 
 import com.weilylab.xhuschedule.R
@@ -46,12 +43,11 @@ import com.weilylab.xhuschedule.util.download.Download
 import vip.mystery0.tools.fileUtil.FileUtil
 
 object DownloadNotification {
-    private val NOTIFICATION_TAG = "Download"
-    private val NOTIFICATION_ID = 1
+    private const val NOTIFICATION_TAG = "Download"
+    private const val NOTIFICATION_ID = 1
     private lateinit var notificationBuilder: NotificationCompat.Builder
 
     fun notify(context: Context, fileName: String) {
-        UpdateNotification.cancel(context)
         notificationBuilder = NotificationCompat.Builder(context, "Xhu Schedule")
                 .setSound(null)
                 .setVibrate(null)

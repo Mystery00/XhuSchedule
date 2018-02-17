@@ -50,7 +50,6 @@ import vip.mystery0.tools.fileUtil.FileUtil
 import java.io.InputStreamReader
 
 class UpdateService : IntentService("PhpService") {
-
     override fun onHandleIntent(intent: Intent?) {
         ScheduleHelper.phpRetrofit
                 .create(PhpService::class.java)

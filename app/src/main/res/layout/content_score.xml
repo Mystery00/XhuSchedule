@@ -20,42 +20,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewTerm" />
-
-    <TextView
-        android:id="@+id/textViewStudent"
-        android:layout_width="0dp"
-        android:layout_height="40dp"
-        android:layout_margin="@dimen/popup_view_margin"
-        android:background="@drawable/drawable_popup_view"
-        android:gravity="center"
-        android:text="@string/hint_popup_view_student"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/textViewYear"
-        android:layout_width="0dp"
-        android:layout_height="40dp"
-        android:layout_margin="@dimen/popup_view_margin"
-        android:background="@drawable/drawable_popup_view"
-        android:gravity="center"
-        android:text="@string/hint_popup_view_year"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/textViewStudent" />
-
-    <TextView
-        android:id="@+id/textViewTerm"
-        android:layout_width="0dp"
-        android:layout_height="40dp"
-        android:layout_margin="@dimen/popup_view_margin"
-        android:background="@drawable/drawable_popup_view"
-        android:gravity="center"
-        android:text="@string/hint_popup_view_term"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/textViewYear" />
 
 </android.support.constraint.ConstraintLayout>

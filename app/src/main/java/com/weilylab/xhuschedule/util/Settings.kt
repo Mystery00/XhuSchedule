@@ -43,60 +43,60 @@ object Settings {
     private val sharedPreference = APP.getContext().getSharedPreferences("settings", Context.MODE_PRIVATE)
 
     var firstWeekOfTerm: String//开学时间
-        set(value) = sharedPreference.edit().putString("firstWeekOfTerm", value).apply()
-        get() = sharedPreference.getString("firstWeekOfTerm", "2017-8-4")
+        set(value) = sharedPreference.edit().putString(Constant.FIRST_WEEK_OF_TERM, value).apply()
+        get() = sharedPreference.getString(Constant.FIRST_WEEK_OF_TERM, "2017-8-4")
     var isShowNot: Boolean//是否显示非本周课程
-        set(value) = sharedPreference.edit().putBoolean("isShowNot", value).apply()
-        get() = sharedPreference.getBoolean("isShowNot", false)
+        set(value) = sharedPreference.edit().putBoolean(Constant.IS_SHOW_NOT, value).apply()
+        get() = sharedPreference.getBoolean(Constant.IS_SHOW_NOT, false)
     var isFirstRun: Boolean//是否是第一次运行
-        set(value) = sharedPreference.edit().putBoolean("isFirstRun", value).apply()
-        get() = sharedPreference.getBoolean("isFirstRun", true)
+        set(value) = sharedPreference.edit().putBoolean(Constant.IS_FIRST_RUN, value).apply()
+        get() = sharedPreference.getBoolean(Constant.IS_FIRST_RUN, true)
     var userImg: String//用户头像路径
-        set(value) = sharedPreference.edit().putString("userImg", value).apply()
-        get() = sharedPreference.getString("userImg", "")
+        set(value) = sharedPreference.edit().putString(Constant.USER_IMG, value).apply()
+        get() = sharedPreference.getString(Constant.USER_IMG, "")
     var customHeaderImg: String//头部图片路径
-        set(value) = sharedPreference.edit().putString("customHeaderImg", value).apply()
-        get() = sharedPreference.getString("customHeaderImg", "")
+        set(value) = sharedPreference.edit().putString(Constant.CUSTOM_HEADER_IMG, value).apply()
+        get() = sharedPreference.getString(Constant.CUSTOM_HEADER_IMG, "")
     var customBackgroundImg: String//背景图片路径
-        set(value) = sharedPreference.edit().putString("customBackgroundImg", value).apply()
-        get() = sharedPreference.getString("customBackgroundImg", "")
+        set(value) = sharedPreference.edit().putString(Constant.CUSTOM_BACKGROUND_IMG, value).apply()
+        get() = sharedPreference.getString(Constant.CUSTOM_BACKGROUND_IMG, "")
     var customTableOpacity: Int//表格不透明度
-        set(value) = sharedPreference.edit().putInt("customTableOpacity", value).apply()
-        get() = sharedPreference.getInt("customTableOpacity", 154)
+        set(value) = sharedPreference.edit().putInt(Constant.CUSTOM_TABLE_OPACITY, value).apply()
+        get() = sharedPreference.getInt(Constant.CUSTOM_TABLE_OPACITY, 154)
     var customTodayOpacity: Int//当天课程不透明度
-        set(value) = sharedPreference.edit().putInt("customTodayOpacity", value).apply()
-        get() = sharedPreference.getInt("customTodayOpacity", 154)
+        set(value) = sharedPreference.edit().putInt(Constant.CUSTOM_TODAY_OPACITY, value).apply()
+        get() = sharedPreference.getInt(Constant.CUSTOM_TODAY_OPACITY, 154)
     var customTableTextColor: Int//表头文字颜色
-        set(value) = sharedPreference.edit().putInt("customTableTextColor", value).apply()
-        get() = sharedPreference.getInt("customTableTextColor", -1)
+        set(value) = sharedPreference.edit().putInt(Constant.CUSTOM_TABLE_TEXT_COLOR, value).apply()
+        get() = sharedPreference.getInt(Constant.CUSTOM_TABLE_TEXT_COLOR, -1)
     var customTodayTextColor: Int//今日课程文字颜色
-        set(value) = sharedPreference.edit().putInt("customTodayTextColor", value).apply()
-        get() = sharedPreference.getInt("customTodayTextColor", -11184811)
+        set(value) = sharedPreference.edit().putInt(Constant.CUSTOM_TODAY_TEXT_COLOR, value).apply()
+        get() = sharedPreference.getInt(Constant.CUSTOM_TODAY_TEXT_COLOR, -11184811)
     var customTextSize: Int//文字大小
-        set(value) = sharedPreference.edit().putInt("customTextSize", value).apply()
-        get() = sharedPreference.getInt("customTextSize", 12)
+        set(value) = sharedPreference.edit().putInt(Constant.CUSTOM_TEXT_SIZE, value).apply()
+        get() = sharedPreference.getInt(Constant.CUSTOM_TEXT_SIZE, 12)
     var customTextHeight: Int//课程格子高度
-        set(value) = sharedPreference.edit().putInt("customHeightSize", value).apply()
-        get() = sharedPreference.getInt("customHeightSize", 72)
+        set(value) = sharedPreference.edit().putInt(Constant.CUSTOM_HEIGHT_SIZE, value).apply()
+        get() = sharedPreference.getInt(Constant.CUSTOM_HEIGHT_SIZE, 72)
     var autoCheckUpdate: Boolean//自动检查更新
-        set(value) = sharedPreference.edit().putBoolean("autoCheckUpdate", value).apply()
-        get() = sharedPreference.getBoolean("autoCheckUpdate", true)
+        set(value) = sharedPreference.edit().putBoolean(Constant.AUTO_CHECK_UPDATE, value).apply()
+        get() = sharedPreference.getBoolean(Constant.AUTO_CHECK_UPDATE, true)
     var autoCheckLog: Boolean//自动检查崩溃日志
-        set(value) = sharedPreference.edit().putBoolean("autoCheckLog", value).apply()
-        get() = sharedPreference.getBoolean("autoCheckLog", true)
+        set(value) = sharedPreference.edit().putBoolean(Constant.AUTO_CHECK_LOG, value).apply()
+        get() = sharedPreference.getBoolean(Constant.AUTO_CHECK_LOG, true)
     var isEnableMultiUserMode: Boolean//是否启用多用户模式
-        set(value) = sharedPreference.edit().putBoolean("isEnableMultiUserMode", value).apply()
-        get() = sharedPreference.getBoolean("isEnableMultiUserMode", false)
+        set(value) = sharedPreference.edit().putBoolean(Constant.IS_ENABLE_MULTTI_USER_MODE, value).apply()
+        get() = sharedPreference.getBoolean(Constant.IS_ENABLE_MULTTI_USER_MODE, false)
     var isShowFailed: Boolean//是否显示未通过成绩
-        set(value) = sharedPreference.edit().putBoolean("isShowFailed", value).apply()
-        get() = sharedPreference.getBoolean("isShowFailed", true)
+        set(value) = sharedPreference.edit().putBoolean(Constant.IS_SHOW_FAILED, value).apply()
+        get() = sharedPreference.getBoolean(Constant.IS_SHOW_FAILED, true)
     var ignoreUpdate: Int//忽略更新的版本号
-        set(value) = sharedPreference.edit().putInt("ignoreUpdate", value).apply()
-        get() = sharedPreference.getInt("ignoreUpdate", 0)
+        set(value) = sharedPreference.edit().putInt(Constant.IGNORE_UPDATE, value).apply()
+        get() = sharedPreference.getInt(Constant.IGNORE_UPDATE, 0)
     var shownNoticeID: String//查看过的公告id
-        set(value) = sharedPreference.edit().putString("shownNoticeID", value).apply()
-        get() = sharedPreference.getString("shownNoticeID", "")
+        set(value) = sharedPreference.edit().putString(Constant.SHOW_NOTICE_ID, value).apply()
+        get() = sharedPreference.getString(Constant.SHOW_NOTICE_ID, "")
     var debugMode: Boolean//调试模式
-        set(value) = sharedPreference.edit().putBoolean("debugMode", value).apply()
-        get() = sharedPreference.getBoolean("debugMode", false)
+        set(value) = sharedPreference.edit().putBoolean(Constant.DEBUG_MODE, value).apply()
+        get() = sharedPreference.getBoolean(Constant.DEBUG_MODE, false)
 }

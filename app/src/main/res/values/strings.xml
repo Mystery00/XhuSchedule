@@ -28,7 +28,9 @@
     <string name="action_feedback">反馈该信息</string>
     <string name="action_open">开启</string>
     <string name="action_show_failed">显示未通过成绩</string>
+    <string name="action_auto_select">自动查询数据</string>
     <string name="action_experiment">实验项目成绩查询</string>
+    <string name="action_filter_list">过滤</string>
 
     <string name="prompt_username">用户名</string>
     <string name="prompt_password">密码</string>

@@ -138,4 +138,15 @@ object CalendarUtil {
             return "时间计算出错"
         }
     }
+
+    const val FIRST_TERM = 1
+    const val SECOND_TERM = 2
+
+    fun getTermType():Int {
+        val calendar = Calendar.getInstance()
+        return when (calendar.get(Calendar.MONTH) + 1) {
+            in 3 until 9 -> SECOND_TERM
+            else -> FIRST_TERM
+        }
+    }
 }

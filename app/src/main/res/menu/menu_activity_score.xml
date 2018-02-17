@@ -13,11 +13,22 @@
             android:id="@+id/action_show_failed"
             android:title="@string/action_show_failed"
             app:showAsAction="never" />
+
+        <item
+            android:id="@+id/action_auto_select"
+            android:title="@string/action_auto_select"
+            app:showAsAction="never" />
     </group>
 
     <item
         android:id="@+id/action_experiment"
         android:icon="@drawable/ic_laboratory"
         android:title="@string/action_experiment"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/action_filter_list"
+        android:icon="@drawable/ic_filter_list"
+        android:title="@string/action_filter_list"
         app:showAsAction="ifRoom" />
 </menu>
