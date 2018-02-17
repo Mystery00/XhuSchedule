@@ -37,14 +37,11 @@ import android.app.Dialog
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v4.content.ContextCompat
-import android.support.v7.app.AlertDialog
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Base64
-import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
 import com.google.firebase.analytics.FirebaseAnalytics
-import com.jaredrummler.materialspinner.MaterialSpinner
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.adapter.ExpScoreAdapter
 import com.weilylab.xhuschedule.classes.baseClass.ExpScore
@@ -73,13 +70,12 @@ class ExpScoreActivity : BaseActivity() {
     private val TAG = "ExpScoreActivity"
     private lateinit var initDialog: Dialog
     private lateinit var loadingDialog: Dialog
-    private lateinit var alertDialog: AlertDialog
     private val studentList = ArrayList<Student>()
     private val scoreList = ArrayList<ExpScore>()
     private lateinit var adapter: ExpScoreAdapter
     private var currentStudent: Student? = null
-    private var year = ""
-    private var term = 1
+    private var year: String? = null
+    private var term: Int? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -115,14 +111,13 @@ class ExpScoreActivity : BaseActivity() {
         studentList.clear()
         studentList.addAll(XhuFileUtil.getArrayFromFile(File(filesDir.absolutePath + File.separator + "data" + File.separator + "user"), Student::class.java))
         initInfo()
-        alertDialog.show()
         floatingActionButton.setOnClickListener {
             getExpScores(currentStudent, year, term)
         }
     }
 
     private fun initScores(student: Student?) {
-        if (student == null)
+        if (student == null || year == null || term == null)
             return
         Observable.create<Boolean> { subscriber ->
             val parentFile = File(filesDir.absolutePath + File.separator + "expScore/")
@@ -199,51 +194,32 @@ class ExpScoreActivity : BaseActivity() {
                 Settings.isAutoSelect = item.isChecked
                 true
             }
-            R.id.action_filter_list -> {
-                alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setOnClickListener {
-                    alertDialog.dismiss()
-                }
-                alertDialog.show()
-                true
-            }
             else -> super.onOptionsItemSelected(item)
         }
     }
 
     private fun initInfo() {
         val studentArray = Array(studentList.size, { i -> studentList[i].username })
-        val view = LayoutInflater.from(this).inflate(R.layout.dialog_spinner_username_term, null)
-        val usernameSpinner = view.findViewById<MaterialSpinner>(R.id.spinner_username)
-        val yearSpinner = view.findViewById<MaterialSpinner>(R.id.spinner_year)
-        val termSpinner = view.findViewById<MaterialSpinner>(R.id.spinner_term)
-        usernameSpinner.setItems(studentArray.toList())
-        termSpinner.setItems(1, 2, 3)
-        usernameSpinner.setOnItemSelectedListener { _, _, _, username ->
-            setUsername(username.toString(), yearSpinner, termSpinner, true)
+        spinner_username.setItems(studentArray.toList())
+        spinner_term.setItems(1, 2, 3)
+        spinner_username.setOnItemSelectedListener { _, _, _, username ->
+            setUsername(username.toString(), true)
         }
-        yearSpinner.setOnItemSelectedListener { _, _, _, year ->
+        spinner_year.setOnItemSelectedListener { _, _, _, year ->
             this.year = year.toString()
+            initScores(currentStudent)
         }
-        termSpinner.setOnItemSelectedListener { _, _, _, term ->
+        spinner_term.setOnItemSelectedListener { _, _, _, term ->
             this.term = term as Int
+            initScores(currentStudent)
         }
         if (studentArray.size == 1) {
-            usernameSpinner.selectedIndex = 0
-            setUsername(studentArray[0], yearSpinner, termSpinner, true)
+            spinner_username.selectedIndex = 0
+            setUsername(studentArray[0], true)
         }
-        alertDialog = AlertDialog.Builder(this)
-                .setTitle(R.string.title_dialog_select)
-                .setView(view)
-                .setPositiveButton(android.R.string.ok, { _, _ ->
-                    initScores(currentStudent)
-                })
-                .setNegativeButton(android.R.string.cancel, { _, _ ->
-                    finish()
-                })
-                .create()
     }
 
-    private fun setUsername(username: String?, yearSpinner: MaterialSpinner, termSpinner: MaterialSpinner, isAutoSelect: Boolean) {
+    private fun setUsername(username: String?, isAutoSelect: Boolean) {
         val userList = ArrayList<Student>()
         val yearList = ArrayList<String>()
         //初始化入学年份
@@ -295,14 +271,15 @@ class ExpScoreActivity : BaseActivity() {
                 .subscribe(object : Observer<Any> {
                     override fun onComplete() {
                         initDialog.dismiss()
-                        yearSpinner.setItems(yearList)
+                        spinner_year.setItems(yearList)
                         if (isAutoSelect) {
                             val term = CalendarUtil.getTermType()
-                            yearSpinner.selectedIndex = yearList.size - 1//自动选择最后一年
-                            termSpinner.selectedIndex = term - 1//自动选择学期
+                            spinner_year.selectedIndex = yearList.size - 1//自动选择最后一年
+                            spinner_term.selectedIndex = term - 1//自动选择学期
                             year = yearList[yearList.size - 1]
                             this@ExpScoreActivity.term = term
                         }
+                        initScores(currentStudent)
                     }
 
                     override fun onSubscribe(d: Disposable) {

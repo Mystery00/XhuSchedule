@@ -25,10 +25,4 @@
         android:icon="@drawable/ic_laboratory"
         android:title="@string/action_experiment"
         app:showAsAction="ifRoom" />
-
-    <item
-        android:id="@+id/action_filter_list"
-        android:icon="@drawable/ic_filter_list"
-        android:title="@string/action_filter_list"
-        app:showAsAction="always" />
 </menu>

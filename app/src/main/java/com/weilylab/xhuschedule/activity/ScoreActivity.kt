@@ -120,7 +120,7 @@ class ScoreActivity : BaseActivity() {
     }
 
     private fun initScores(student: Student?) {
-        if (student == null)
+        if (student == null || year == null || term == null)
             return
         Observable.create<Boolean> { subscriber ->
             val parentFile = File(filesDir.absolutePath + File.separator + "score/")
@@ -227,6 +227,7 @@ class ScoreActivity : BaseActivity() {
         }
         spinner_year.setOnItemSelectedListener { _, _, _, year ->
             this.year = year.toString()
+            initScores(currentStudent)
         }
         spinner_term.setOnItemSelectedListener { _, _, _, term ->
             this.term = term as Int
