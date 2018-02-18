@@ -30,4 +30,12 @@
         <item name="android:windowBackground">@drawable/drawable_splash</item>
     </style>
 
+    <style name="LoginButton" parent="Widget.AppCompat.Button.Colored">
+        <item name="android:background">@color/colorPrimary</item>
+    </style>
+
+    <style name="LogoutButton" parent="Widget.AppCompat.Button.Colored">
+        <item name="android:background">@color/colorRed</item>
+    </style>
+
 </resources>

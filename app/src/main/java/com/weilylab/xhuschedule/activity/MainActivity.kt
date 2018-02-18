@@ -188,7 +188,6 @@ class MainActivity : BaseActivity() {
                 todayFragment.setBackground()
                 weekFragment.setBackground()
             }
-            profileFragment.setHeaderImg()
             profileFragment.setProfileImg()
         }
         if (ScheduleHelper.isUIChange) {

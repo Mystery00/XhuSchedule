@@ -26,14 +26,14 @@
         android:id="@+id/spinner_username"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="@id/button"
+        app:layout_constraintBottom_toTopOf="@id/button_logout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/title_username"
         app:layout_constraintTop_toTopOf="parent"
         app:ms_hint="@string/hint_popup_view_student" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/button_logout"
         style="@style/Widget.AppCompat.Button.ButtonBar.AlertDialog"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

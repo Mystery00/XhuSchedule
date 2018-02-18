@@ -14,7 +14,9 @@
     <color name="colorWeekPrimary">#30ba95</color>
     <color name="colorWeekNotIndex">#36d3a8</color>
     <color name="colorWeekIndex">#30ba95</color>
+
     <color name="colorWhite">#FFFFFF</color>
+    <color name="colorRed">#ff0000</color>
 
     <color name="login_color">#bfbfbf</color>
 

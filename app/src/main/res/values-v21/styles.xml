@@ -21,4 +21,12 @@
         <item name="windowNoTitle">true</item>
     </style>
 
+    <style name="LoginButton" parent="Widget.AppCompat.Button.Colored">
+        <item name="android:backgroundTint">@color/colorPrimary</item>
+    </style>
+
+    <style name="LogoutButton" parent="Widget.AppCompat.Button.Colored">
+        <item name="android:backgroundTint">@color/colorRed</item>
+    </style>
+
 </resources>

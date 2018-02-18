@@ -33,13 +33,11 @@
 
 package com.weilylab.xhuschedule.fragment
 
-import android.graphics.Color
-import android.graphics.drawable.BitmapDrawable
-import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v4.content.ContextCompat
 import android.support.v7.app.AlertDialog
-import android.support.v7.widget.GridLayoutManager
+import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -53,19 +51,12 @@ import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.observers.DisposableObserver
 import io.reactivex.schedulers.Schedulers
-import android.view.ViewTreeObserver
 import android.widget.ImageView
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.bumptech.glide.load.engine.GlideException
-import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.RequestOptions
-import com.bumptech.glide.request.target.Target
 import com.bumptech.glide.signature.MediaStoreSignature
-import com.weilylab.xhuschedule.util.DensityUtil
 import com.weilylab.xhuschedule.util.Settings
-import com.weilylab.xhuschedule.util.ViewUtil
 import java.util.*
 
 /**
@@ -95,119 +86,17 @@ class ProfileFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         if (rootView == null) {
             rootView = inflater.inflate(R.layout.fragment_profile, container, false)
-            val headerImg = rootView!!.findViewById<ImageView>(R.id.header_img)
-            val profileImg = rootView!!.findViewById<ImageView>(R.id.profile_img)
-            val textViewLayout = rootView!!.findViewById<View>(R.id.textViewLayout)
-            if (Settings.customHeaderImg != "") {
-                val options = RequestOptions()
-                        .signature(MediaStoreSignature("image/*", Calendar.getInstance().timeInMillis, 0))
-                        .diskCacheStrategy(DiskCacheStrategy.NONE)
-                Glide.with(this)
-                        .load(Settings.customHeaderImg)
-                        .apply(options)
-                        .listener(object : RequestListener<Drawable> {
-                            override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Drawable>?, isFirstResource: Boolean): Boolean {
-                                return false
-                            }
-
-                            override fun onResourceReady(resource: Drawable, model: Any?, target: Target<Drawable>?, dataSource: DataSource?, isFirstResource: Boolean): Boolean {
-                                ViewUtil.blur(activity!!, (resource as BitmapDrawable).bitmap, textViewLayout)
-                                val light = ViewUtil.getLight(resource.bitmap, resource.intrinsicWidth, resource.intrinsicHeight)
-                                if (light > 128) {
-                                    rootView!!.findViewById<TextView>(R.id.textView_title).setTextColor(Color.parseColor("#555555"))
-                                    rootView!!.findViewById<TextView>(R.id.textView_score_gpa).setTextColor(Color.parseColor("#555555"))
-                                    rootView!!.findViewById<TextView>(R.id.textView_score_no).setTextColor(Color.parseColor("#555555"))
-                                } else {
-                                    rootView!!.findViewById<TextView>(R.id.textView_title).setTextColor(Color.WHITE)
-                                    rootView!!.findViewById<TextView>(R.id.textView_score_gpa).setTextColor(Color.WHITE)
-                                    rootView!!.findViewById<TextView>(R.id.textView_score_no).setTextColor(Color.WHITE)
-                                }
-                                return false
-                            }
-                        })
-                        .into(headerImg)
-            }
-            profileImg.post {
-                val options = RequestOptions()
-                        .signature(MediaStoreSignature("image/*", Calendar.getInstance().timeInMillis, 0))
-                        .diskCacheStrategy(DiskCacheStrategy.NONE)
-                var height = profileImg.measuredHeight
-                val params = profileImg.layoutParams
-                if (DensityUtil.px2dip(activity!!, height.toFloat()) > 120) {
-                    height = DensityUtil.dip2px(activity!!, 120F)
-                    params.height = height
-                }
-                params.width = height
-                profileImg.layoutParams = params
-                if (Settings.userImg != "")
-                    Glide.with(this)
-                            .load(Settings.userImg)
-                            .apply(options)
-                            .into(profileImg)
-            }
-            if (Settings.customHeaderImg == "")
-                headerImg.viewTreeObserver.addOnPreDrawListener(object : ViewTreeObserver.OnPreDrawListener {
-                    override fun onPreDraw(): Boolean {
-                        headerImg.viewTreeObserver.removeOnPreDrawListener(this)
-                        headerImg.buildDrawingCache()
-                        ViewUtil.blur(activity!!, headerImg.drawingCache, textViewLayout)
-                        return true
-                    }
-                })
+            setProfileImg()
             val recyclerView = rootView!!.findViewById<RecyclerView>(R.id.recycler_view)
-            recyclerView.layoutManager = GridLayoutManager(activity, 3)
+            recyclerView.layoutManager = LinearLayoutManager(activity)
+            val divider = DividerItemDecoration(activity, DividerItemDecoration.VERTICAL)
+            divider.setDrawable(ContextCompat.getDrawable(activity!!, R.drawable.lines)!!)
+            recyclerView.addItemDecoration(divider)
             adapter = OperationAdapter(activity!!)
             recyclerView.adapter = adapter
         }
         isReady = true
         return rootView
-    }
-
-    fun setHeaderImg() {
-        val headerImg = rootView!!.findViewById<ImageView>(R.id.header_img)
-        val textViewLayout = rootView!!.findViewById<View>(R.id.textViewLayout)
-        if (Settings.customHeaderImg != "") {
-            val options = RequestOptions()
-                    .signature(MediaStoreSignature("image/*", Calendar.getInstance().timeInMillis, 0))
-                    .diskCacheStrategy(DiskCacheStrategy.NONE)
-            Glide.with(this)
-                    .load(Settings.customHeaderImg)
-                    .apply(options)
-                    .listener(object : RequestListener<Drawable> {
-                        override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Drawable>?, isFirstResource: Boolean): Boolean {
-                            return false
-                        }
-
-                        override fun onResourceReady(resource: Drawable, model: Any?, target: Target<Drawable>?, dataSource: DataSource?, isFirstResource: Boolean): Boolean {
-                            ViewUtil.blur(activity!!, (resource as BitmapDrawable).bitmap, textViewLayout)
-                            val light = ViewUtil.getLight(resource.bitmap, resource.intrinsicWidth, resource.intrinsicHeight)
-                            if (light > 128) {
-                                rootView!!.findViewById<TextView>(R.id.textView_title).setTextColor(Color.parseColor("#555555"))
-                                rootView!!.findViewById<TextView>(R.id.textView_score_gpa).setTextColor(Color.parseColor("#555555"))
-                                rootView!!.findViewById<TextView>(R.id.textView_score_no).setTextColor(Color.parseColor("#555555"))
-                            } else {
-                                rootView!!.findViewById<TextView>(R.id.textView_title).setTextColor(Color.WHITE)
-                                rootView!!.findViewById<TextView>(R.id.textView_score_gpa).setTextColor(Color.WHITE)
-                                rootView!!.findViewById<TextView>(R.id.textView_score_no).setTextColor(Color.WHITE)
-                            }
-                            return false
-                        }
-                    })
-                    .into(headerImg)
-        } else {
-            rootView!!.findViewById<TextView>(R.id.textView_title).setTextColor(Color.WHITE)
-            rootView!!.findViewById<TextView>(R.id.textView_score_gpa).setTextColor(Color.WHITE)
-            rootView!!.findViewById<TextView>(R.id.textView_score_no).setTextColor(Color.WHITE)
-            headerImg.setImageResource(R.mipmap.header_img)
-            headerImg.viewTreeObserver.addOnPreDrawListener(object : ViewTreeObserver.OnPreDrawListener {
-                override fun onPreDraw(): Boolean {
-                    headerImg.viewTreeObserver.removeOnPreDrawListener(this)
-                    headerImg.buildDrawingCache()
-                    ViewUtil.blur(activity!!, headerImg.drawingCache, textViewLayout)
-                    return true
-                }
-            })
-        }
     }
 
     fun setProfileImg() {
@@ -238,8 +127,6 @@ class ProfileFragment : Fragment() {
                 .subscribe(object : DisposableObserver<Boolean>() {
                     override fun onComplete() {
                         rootView?.findViewById<TextView>(R.id.textView_title)?.text = getString(R.string.profile_title, profile.no, profile.name)
-                        rootView?.findViewById<TextView>(R.id.textView_score_gpa)?.text = getString(R.string.profile_professional, profile.profession)
-                        rootView?.findViewById<TextView>(R.id.textView_score_no)?.text = getString(R.string.profile_classname, profile.classname)
                         rootView?.findViewById<TextView>(R.id.textView_title)?.setOnClickListener {
                             val stringBuilder = StringBuilder()
                                     .appendln(getString(R.string.profile_no, profile.no))

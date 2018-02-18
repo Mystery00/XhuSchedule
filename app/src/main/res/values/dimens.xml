@@ -45,12 +45,15 @@
     <dimen name="profile_img_height">270dp</dimen>
     <dimen name="profile_img_margin_start">24dp</dimen>
     <dimen name="profile_img_size">60dp</dimen>
-    <dimen name="profile_img_margin_top">40dp</dimen>
+    <dimen name="profile_img_margin_top">16dp</dimen>
     <dimen name="profile_text_margin_top">16dp</dimen>
     <dimen name="profile_card_radius">8dp</dimen>
     <dimen name="profile_margin">16dp</dimen>
+    <dimen name="profile_margin_top">32dp</dimen>
     <dimen name="profile_padding_vertical">8dp</dimen>
     <dimen name="profile_padding_horizontal">16dp</dimen>
+    <dimen name="profile_item_margin_horizontal">12dp</dimen>
+    <dimen name="profile_item_margin_vertical">8dp</dimen>
     <dimen name="operation_margin">16dp</dimen>
     <dimen name="exam_padding">16dp</dimen>
     <dimen name="popup_view_margin">4dp</dimen>
