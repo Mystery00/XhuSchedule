@@ -398,6 +398,7 @@ class MainActivity : BaseActivity() {
     private fun updateAllData() {
         Logs.i(TAG, "updateAllData: ")
         loadingDialog.show()
+        ObjectAnimator.ofFloat(action_sync, "rotation", 0F, 360F).setDuration(1000).start()
         studentList.clear()
         studentList.addAll(XhuFileUtil.getArrayFromFile(File(filesDir.absolutePath + File.separator + "data" + File.separator + "user"), Student::class.java))
         if (studentList.size == 0) {

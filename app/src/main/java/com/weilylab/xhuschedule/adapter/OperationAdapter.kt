@@ -75,7 +75,6 @@ class OperationAdapter(private val context: Context) : RecyclerView.Adapter<Oper
                 R.string.operation_score,
                 R.string.operation_feedback,
                 R.string.operation_share,
-                R.string.operation_logout,
                 R.string.operation_settings
         )
         val imgArray = arrayOf(
@@ -85,7 +84,6 @@ class OperationAdapter(private val context: Context) : RecyclerView.Adapter<Oper
                 R.drawable.ic_score,
                 R.drawable.ic_feedback,
                 R.drawable.ic_share_app,
-                R.drawable.ic_logout,
                 R.drawable.ic_settings
         )
         for (i in 0 until titleArray.size) {
@@ -201,23 +199,7 @@ class OperationAdapter(private val context: Context) : RecyclerView.Adapter<Oper
                     //设置分享列表的标题，并且每次都显示分享列表
                     context.startActivity(Intent.createChooser(shareIntent, "分享西瓜课表到"))
                 }
-                6 -> {
-                    AlertDialog.Builder(context)
-                            .setTitle(R.string.hint_logout_title)
-                            .setMessage(R.string.hint_logout_content)
-                            .setPositiveButton(android.R.string.ok, { _, _ ->
-                                val file = File(context.filesDir.absolutePath + File.separator + "data" + File.separator)
-                                if (file.exists())
-                                    file.listFiles()
-                                            .forEach {
-                                                it.delete()
-                                            }
-                                context.startActivity(Intent(context, LoginActivity::class.java))
-                            })
-                            .setNegativeButton(android.R.string.cancel, null)
-                            .show()
-                }
-                7 -> context.startActivity(Intent(context, SettingsActivity::class.java))
+                6 -> context.startActivity(Intent(context, SettingsActivity::class.java))
             }
         }
     }
