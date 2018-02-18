@@ -597,15 +597,14 @@ class MainActivity : BaseActivity() {
                     .subscribe(object : Observer<Int> {
                         override fun onSubscribe(d: Disposable) {
                             isAnimShow = true
+                            val start = if (isShow) 0 else 10000
+                            val end = if (isShow) 10000 else 0
+                            ObjectAnimator.ofInt(arrowDrawable!!, "level", start, end).setDuration(240).start()
                         }
 
                         override fun onComplete() {
                             isWeekShow = isShow
                             titleTextView.setCompoundDrawablesWithIntrinsicBounds(null, null, if (isShowArrow) arrowDrawable else null, null)
-                            val start = if (isShow) 0 else 10000
-                            val end = if (isShow) 10000 else 0
-                            val animator = ObjectAnimator.ofInt(arrowDrawable!!, "level", start, end)
-                            animator.start()
                             isAnimShow = false
                         }
 
