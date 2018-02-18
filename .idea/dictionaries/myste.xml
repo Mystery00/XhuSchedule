@@ -16,6 +16,7 @@
       <w>expscore</w>
       <w>exptype</w>
       <w>ffffff</w>
+      <w>firebaseinitprovider</w>
       <w>firestore</w>
       <w>itsuki</w>
       <w>jetradar</w>
@@ -29,6 +30,7 @@
       <w>realtime</w>
       <w>remoteviews</w>
       <w>sname</w>
+      <w>tauth</w>
       <w>testno</w>
       <w>testtype</w>
       <w>transprency</w>

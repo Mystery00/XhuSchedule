@@ -33,8 +33,10 @@
 
 package com.weilylab.xhuschedule.adapter
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.os.Bundle
 import android.support.design.widget.TextInputLayout
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AlertDialog
@@ -46,11 +48,18 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import com.google.gson.Gson
+import com.tencent.connect.common.Constants
+import com.tencent.connect.share.QQShare
+import com.tencent.tauth.IUiListener
+import com.tencent.tauth.Tencent
+import com.tencent.tauth.UiError
+import com.weilylab.xhuschedule.APP
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.activity.*
 import com.weilylab.xhuschedule.classes.baseClass.Student
 import com.weilylab.xhuschedule.classes.rt.GetNoticesRT
 import com.weilylab.xhuschedule.interfaces.CommonService
+import com.weilylab.xhuschedule.listener.EmptyTencentListener
 import com.weilylab.xhuschedule.listener.FeedBackListener
 import com.weilylab.xhuschedule.util.ScheduleHelper
 import com.weilylab.xhuschedule.util.Settings
@@ -61,6 +70,7 @@ import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
+import vip.mystery0.tools.logs.Logs
 import java.io.File
 import java.io.InputStreamReader
 
@@ -193,11 +203,19 @@ class OperationAdapter(private val context: Context) : RecyclerView.Adapter<Oper
                     }
                 }
                 5 -> {
-                    val shareIntent = Intent(Intent.ACTION_SEND)
-                    shareIntent.putExtra(Intent.EXTRA_TEXT, context.getString(R.string.hint_share_message))
-                    shareIntent.type = "text/plain"
-                    //设置分享列表的标题，并且每次都显示分享列表
-                    context.startActivity(Intent.createChooser(shareIntent, "分享西瓜课表到"))
+                    val params = Bundle()
+                    params.putInt(QQShare.SHARE_TO_QQ_KEY_TYPE, QQShare.SHARE_TO_QQ_TYPE_APP)
+                    params.putString(QQShare.SHARE_TO_QQ_TITLE, "西瓜课表")
+                    params.putString(QQShare.SHARE_TO_QQ_SUMMARY,  context.getString(R.string.hint_share_message))
+                    params.putString(QQShare.SHARE_TO_QQ_TARGET_URL,"https://www.coolapk.com/apk/com.weilylab.xhuschedule")
+                    params.putString(QQShare.SHARE_TO_QQ_IMAGE_URL, "http://image.coolapk.com/apk_logo/2017/1127/ic_launcher-web-168930-o_1bvsva94q1dlcmg319lo1gvu1f5iq-uid-631231@512x512.png")
+                    params.putString(QQShare.SHARE_TO_QQ_APP_NAME,  "西瓜课表")
+                    APP.tencent.shareToQQ(context as Activity,params,EmptyTencentListener())
+//                    val shareIntent = Intent(Intent.ACTION_SEND)
+//                    shareIntent.putExtra(Intent.EXTRA_TEXT, context.getString(R.string.hint_share_message))
+//                    shareIntent.type = "text/plain"
+//                    //设置分享列表的标题，并且每次都显示分享列表
+//                    context.startActivity(Intent.createChooser(shareIntent, "分享西瓜课表到"))
                 }
                 6 -> context.startActivity(Intent(context, SettingsActivity::class.java))
             }

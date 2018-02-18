@@ -42,9 +42,9 @@ import com.google.firebase.FirebaseApp
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.oasisfeng.condom.CondomContext
 import com.oasisfeng.condom.CondomOptions
+import com.tencent.tauth.Tencent
 import com.weilylab.xhuschedule.activity.ErrorActivity
 import com.weilylab.xhuschedule.classes.baseClass.XhuScheduleError
-import com.weilylab.xhuschedule.util.TempSharedPreferenceUtil
 import vip.mystery0.tools.crashHandler.CatchExceptionListener
 import vip.mystery0.tools.crashHandler.CrashHandler
 import vip.mystery0.tools.logs.Logs
@@ -59,6 +59,7 @@ class APP : Application() {
         private var mFirebaseAnalytics: FirebaseAnalytics? = null
         @SuppressLint("StaticFieldLeak")
         private var mFirebaseApp: FirebaseApp? = null
+        lateinit var tencent: Tencent
 
         fun getContext(): Context = app!!
 
@@ -73,15 +74,16 @@ class APP : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        val condom = CondomContext.wrap(this, "Firebase", CondomOptions().setOutboundJudge { _, _, target_package ->
+        val condom = CondomContext.wrap(applicationContext, "Firebase", CondomOptions().setOutboundJudge { _, _, target_package ->
             target_package == "com.google.android.gms"
         })
         mFirebaseApp = FirebaseApp.initializeApp(condom)
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(condom)
+        tencent = Tencent.createInstance("1106663023", CondomContext.wrap(applicationContext, "Tencent"))
         Logs.setLevel(Logs.Debug)
         if (!cacheDir.exists())
             cacheDir.mkdirs()
-        CrashHandler.getInstance(this)
+        CrashHandler.getInstance(applicationContext)
                 .setDirectory(cacheDir)
                 .sendException(object : CatchExceptionListener {
                     override fun onException(date: String, file: File, appVersionName: String, appVersionCode: Int, AndroidVersion: String, sdk: Int, vendor: String, model: String, ex: Throwable) {
@@ -92,14 +94,6 @@ class APP : Application() {
                         val intent = Intent(applicationContext, ErrorActivity::class.java)
                         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                         intent.putExtra("error", bundle)
-//                        val params = Bundle()
-//                        params.putString("error_time", error.time)
-//                        params.putString("version", "${error.appVersionName}-${error.appVersionCode}")
-//                        params.putString("sdk", error.sdk.toString())
-//                        params.putString("vendor", error.vendor)
-//                        params.putString("model", error.model)
-//                        params.putString("error_detail", ex.message)
-//                        mFirebaseAnalytics?.logEvent(FirebaseUtil.THROW_ERROR, params)
                         startActivity(intent)
                     }
                 })
