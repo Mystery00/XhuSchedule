@@ -731,9 +731,8 @@ class MainActivity : BaseActivity() {
     }
 
     private fun registerWeibo(savedInstanceState: Bundle?) {
-        val context = CondomContext.wrap(this, "Weibo")
         // 创建微博分享接口实例
-        mWeiboShareAPI = WeiboShareSDK.createWeiboAPI(context, "2170085314")
+        mWeiboShareAPI = WeiboShareSDK.createWeiboAPI(this, "2170085314")
 
         // 注册第三方应用到微博客户端中，注册成功后该应用将显示在微博的应用列表中。
         // 但该附件栏集成分享权限需要合作申请，详情请查看 Demo 提示
