@@ -74,27 +74,26 @@ class OperationAdapter(private val context: Context) : RecyclerView.Adapter<Oper
     private val dialogView = View.inflate(context, R.layout.dialog_share_with_friends, null)
     private val recyclerView = dialogView.findViewById<RecyclerView>(R.id.recyclerView)
     private val cancel = dialogView.findViewById<TextView>(R.id.textView_cancel)
+    private val shareWithFriendsAdapter = ShareWithFriendsAdapter(context)
 
     init {
         recyclerView.layoutManager = GridLayoutManager(context, 3)
-        recyclerView.adapter = ShareWithFriendsAdapter(context)
+        recyclerView.adapter = shareWithFriendsAdapter
         val titleArray = arrayOf(
                 R.string.operation_notice,
                 R.string.operation_schedule,
                 R.string.operation_exam,
                 R.string.operation_score,
                 R.string.operation_feedback,
-                R.string.operation_share,
-                R.string.operation_settings
+                R.string.operation_share
         )
         val imgArray = arrayOf(
-                R.drawable.ic_notice,
-                R.drawable.ic_schedule,
-                R.drawable.ic_exam,
-                R.drawable.ic_score,
-                R.drawable.ic_feedback,
-                R.drawable.ic_share_app,
-                R.drawable.ic_settings
+                R.mipmap.ic_notice,
+                R.mipmap.ic_bookstore,
+                R.mipmap.ic_exam,
+                R.mipmap.ic_list,
+                R.mipmap.ic_feedback,
+                R.mipmap.ic_share
         )
         for (i in 0 until titleArray.size) {
             val map = HashMap<String, Int>()
@@ -214,23 +213,10 @@ class OperationAdapter(private val context: Context) : RecyclerView.Adapter<Oper
                     cancel.setOnClickListener {
                         shareView.dismiss()
                     }
+                    shareWithFriendsAdapter.shareView = shareView
                     shareView.showAtLocation((context as MainActivity).bottomNavigationView, Gravity.BOTTOM, 0, 0)
                     setWindowAlpha(0.6F)
-//                    val params = Bundle()
-//                    params.putInt(QQShare.SHARE_TO_QQ_KEY_TYPE, QQShare.SHARE_TO_QQ_TYPE_APP)
-//                    params.putString(QQShare.SHARE_TO_QQ_TITLE, "西瓜课表")
-//                    params.putString(QQShare.SHARE_TO_QQ_SUMMARY, context.getString(R.string.hint_share_message))
-//                    params.putString(QQShare.SHARE_TO_QQ_TARGET_URL, "https://www.coolapk.com/apk/com.weilylab.xhuschedule")
-//                    params.putString(QQShare.SHARE_TO_QQ_IMAGE_URL, "http://image.coolapk.com/apk_logo/2017/1127/ic_launcher-web-168930-o_1bvsva94q1dlcmg319lo1gvu1f5iq-uid-631231@512x512.png")
-//                    params.putString(QQShare.SHARE_TO_QQ_APP_NAME, "西瓜课表")
-//                    APP.tencent.shareToQQ(context as Activity, params, APP.tencentListener)
-//                    val shareIntent = Intent(Intent.ACTION_SEND)
-//                    shareIntent.putExtra(Intent.EXTRA_TEXT, context.getString(R.string.hint_share_message))
-//                    shareIntent.type = "text/plain"
-//                    //设置分享列表的标题，并且每次都显示分享列表
-//                    context.startActivity(Intent.createChooser(shareIntent, "分享西瓜课表到"))
                 }
-                6 -> context.startActivity(Intent(context, SettingsActivity::class.java))
             }
         }
     }

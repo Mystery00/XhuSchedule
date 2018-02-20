@@ -7,36 +7,41 @@
 
 package com.weilylab.xhuschedule.adapter
 
+import android.app.Activity
 import android.content.Context
+import android.content.Intent
+import android.os.Bundle
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.PopupWindow
 import android.widget.TextView
+import com.tencent.connect.share.QQShare
+import com.weilylab.xhuschedule.APP
 import com.weilylab.xhuschedule.R
 
 class ShareWithFriendsAdapter(private val context: Context) : RecyclerView.Adapter<ShareWithFriendsAdapter.ViewHolder>() {
     private val list = ArrayList<HashMap<String, Int>>()
+    var shareView:PopupWindow?=null
 
     init {
         val titleArray = arrayOf(
-                R.string.operation_notice,
-                R.string.operation_schedule,
-                R.string.operation_exam,
-                R.string.operation_score,
-                R.string.operation_feedback,
-                R.string.operation_share,
-                R.string.operation_settings
+                R.string.share_qq,
+                R.string.share_qzone,
+                R.string.share_weibo,
+                R.string.share_weixin,
+                R.string.share_friends,
+                R.string.share_more
         )
         val imgArray = arrayOf(
-                R.drawable.ic_notice,
-                R.drawable.ic_schedule,
-                R.drawable.ic_exam,
-                R.drawable.ic_score,
-                R.drawable.ic_feedback,
-                R.drawable.ic_share_app,
-                R.drawable.ic_settings
+                R.drawable.ic_share_qq,
+                R.drawable.ic_share_qzone,
+                R.drawable.ic_share_weibo,
+                R.drawable.ic_share_weixin,
+                R.drawable.ic_share_friends,
+                R.drawable.ic_share_more
         )
         for (i in 0 until titleArray.size) {
             val map = HashMap<String, Int>()
@@ -50,6 +55,45 @@ class ShareWithFriendsAdapter(private val context: Context) : RecyclerView.Adapt
         val map = list[position]
         holder.imageView.setImageResource(map["icon"]!!)
         holder.textView.setText(map["title"]!!)
+        holder.itemView.setOnClickListener {
+            when (holder.adapterPosition) {
+                0 -> {//分享到qq
+                    val params = Bundle()
+                    params.putInt(QQShare.SHARE_TO_QQ_KEY_TYPE, QQShare.SHARE_TO_QQ_TYPE_APP)
+                    params.putString(QQShare.SHARE_TO_QQ_TITLE, "西瓜课表")
+                    params.putString(QQShare.SHARE_TO_QQ_SUMMARY, context.getString(R.string.hint_share_message))
+                    params.putString(QQShare.SHARE_TO_QQ_TARGET_URL, "https://www.coolapk.com/apk/com.weilylab.xhuschedule")
+                    params.putString(QQShare.SHARE_TO_QQ_IMAGE_URL, "http://image.coolapk.com/apk_logo/2017/1127/ic_launcher-web-168930-o_1bvsva94q1dlcmg319lo1gvu1f5iq-uid-631231@512x512.png")
+                    params.putString(QQShare.SHARE_TO_QQ_APP_NAME, "西瓜课表")
+                    APP.tencent.shareToQQ(context as Activity, params, APP.tencentListener)
+                }
+                1 -> {//分享到空间
+                    val params = Bundle()
+                    params.putInt(QQShare.SHARE_TO_QQ_KEY_TYPE, QQShare.SHARE_TO_QQ_TYPE_APP)
+                    params.putString(QQShare.SHARE_TO_QQ_TITLE, "西瓜课表")
+                    params.putString(QQShare.SHARE_TO_QQ_SUMMARY, context.getString(R.string.hint_share_message))
+                    params.putString(QQShare.SHARE_TO_QQ_TARGET_URL, "https://www.coolapk.com/apk/com.weilylab.xhuschedule")
+                    params.putString(QQShare.SHARE_TO_QQ_IMAGE_URL, "http://image.coolapk.com/apk_logo/2017/1127/ic_launcher-web-168930-o_1bvsva94q1dlcmg319lo1gvu1f5iq-uid-631231@512x512.png")
+                    params.putString(QQShare.SHARE_TO_QQ_APP_NAME, "西瓜课表")
+                    params.putInt(QQShare.SHARE_TO_QQ_EXT_INT, QQShare.SHARE_TO_QQ_FLAG_QZONE_AUTO_OPEN)
+                    APP.tencent.shareToQQ(context as Activity, params, APP.tencentListener)
+                }
+                2 -> {//分享到微博
+                }
+                3 -> {//分享到微信
+                }
+                4 -> {//分享到朋友圈
+                }
+                5 -> {//系统分享
+                    val shareIntent = Intent(Intent.ACTION_SEND)
+                    shareIntent.putExtra(Intent.EXTRA_TEXT, context.getString(R.string.hint_share_message))
+                    shareIntent.type = "text/plain"
+                    //设置分享列表的标题，并且每次都显示分享列表
+                    context.startActivity(Intent.createChooser(shareIntent, "分享西瓜课表到"))
+                }
+            }
+            shareView?.dismiss()
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ViewHolder {

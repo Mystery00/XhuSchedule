@@ -42,6 +42,7 @@ import android.graphics.Point
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.support.design.widget.Snackbar
+import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
 import android.support.v4.view.ViewPager
 import android.support.v7.app.AlertDialog
@@ -92,6 +93,7 @@ class MainActivity : BaseActivity() {
     companion object {
         private val TAG = "MainActivity"
         private const val ADD_ACCOUNT_CODE = 1
+        private const val ANIMATION_DURATION = 480L
     }
 
     private lateinit var loadingDialog: Dialog
@@ -108,9 +110,11 @@ class MainActivity : BaseActivity() {
     private var studentList = ArrayList<Student>()
     private var weekList = ArrayList<ArrayList<ArrayList<Course>>>()
     private val todayList = ArrayList<Course>()
+    private val animatorList = ArrayList<ObjectAnimator>()
     private val todayFragment = TodayFragment.newInstance(todayList)
     private val weekFragment = TableFragment.newInstance(weekList)
     private val profileFragment = ProfileFragment.newInstance(Profile())
+    private var lastIndex = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -266,6 +270,9 @@ class MainActivity : BaseActivity() {
                 isRefreshData = false
             }
             updateAllData()
+        }
+        action_settings.setOnClickListener {
+            startActivity(Intent(this, SettingsActivity::class.java))
         }
         titleLayout.setOnClickListener {
             //占位，在上层处理点击事件
@@ -627,6 +634,9 @@ class MainActivity : BaseActivity() {
     private fun swipeLayout(itemId: Int) {
         when (itemId) {
             R.id.bottom_nav_today -> {
+                if (lastIndex == 2)
+                    setListenerRefresh()
+                lastIndex = viewpager.currentItem
                 if (isWeekShow)
                     showWeekAnim(false, false)
                 titleTextView.setOnClickListener(null)
@@ -634,6 +644,9 @@ class MainActivity : BaseActivity() {
                 titleTextView.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null)
             }
             R.id.bottom_nav_week -> {
+                if (lastIndex == 2)
+                    setListenerRefresh()
+                lastIndex = viewpager.currentItem
                 titleTextView.setOnClickListener {
                     showWeekAnim(!isWeekShow, true)
                 }
@@ -641,6 +654,9 @@ class MainActivity : BaseActivity() {
                 titleTextView.setCompoundDrawablesWithIntrinsicBounds(null, null, arrowDrawable, null)
             }
             R.id.bottom_nav_profile -> {
+                if (lastIndex != 2)
+                    setListenerSettings()
+                lastIndex = viewpager.currentItem
                 if (isWeekShow)
                     showWeekAnim(false, false)
                 profileFragment.updateNoticeBadge()
@@ -666,6 +682,26 @@ class MainActivity : BaseActivity() {
                     profileFragment.setProfile(mainStudent.profile!!)
             }
         }
+    }
+
+    private fun setListenerRefresh() {
+        animatorList.forEach { it.cancel() }
+        animatorList.clear()
+        animatorList.add(ObjectAnimator.ofFloat(action_sync, "rotation", 360F, 0F).setDuration(ANIMATION_DURATION))
+        animatorList.add(ObjectAnimator.ofFloat(action_sync, "translationX", DensityUtil.dip2px(this, 68F).toFloat(), 0F).setDuration(ANIMATION_DURATION))
+        animatorList.add(ObjectAnimator.ofFloat(action_settings, "rotation", 0F, 360F).setDuration(ANIMATION_DURATION))
+        animatorList.add(ObjectAnimator.ofFloat(action_settings, "translationX", -DensityUtil.dip2px(this, 68F).toFloat(), 0F).setDuration(ANIMATION_DURATION))
+        animatorList.forEach { it.start() }
+    }
+
+    private fun setListenerSettings() {
+        animatorList.forEach { it.cancel() }
+        animatorList.clear()
+        animatorList.add(ObjectAnimator.ofFloat(action_sync, "rotation", 0F, 360F).setDuration(ANIMATION_DURATION))
+        animatorList.add(ObjectAnimator.ofFloat(action_sync, "translationX", 0F, DensityUtil.dip2px(this, 68F).toFloat()).setDuration(ANIMATION_DURATION))
+        animatorList.add(ObjectAnimator.ofFloat(action_settings, "rotation", 360F, 0F).setDuration(ANIMATION_DURATION))
+        animatorList.add(ObjectAnimator.ofFloat(action_settings, "translationX", 0F, -DensityUtil.dip2px(this, 68F).toFloat()).setDuration(ANIMATION_DURATION))
+        animatorList.forEach { it.start() }
     }
 
     override fun onBackPressed() {

@@ -36,13 +36,18 @@
     <string name="prompt_password">密码</string>
 
     <string name="operation_notice">通知公告</string>
-    <string name="operation_schedule">查看非本学期课程</string>
+    <string name="operation_schedule">课程查询</string>
     <string name="operation_exam">考试查询</string>
     <string name="operation_score">成绩查询</string>
     <string name="operation_feedback">意见反馈</string>
-    <string name="operation_share">推荐给朋友</string>
-    <string name="operation_logout">注销</string>
-    <string name="operation_settings">设置</string>
+    <string name="operation_share">分享应用</string>
+
+    <string name="share_qq">QQ</string>
+    <string name="share_weixin">微信</string>
+    <string name="share_weibo">微博</string>
+    <string name="share_qzone">空间</string>
+    <string name="share_friends">朋友圈</string>
+    <string name="share_more">更多</string>
 
     <string name="hint_dialog_update_vcode">获取验证码中……</string>
     <string name="hint_dialog_login">登录中……</string>
@@ -89,7 +94,7 @@
     <string name="hint_exam_days_ago">已考过</string>
     <string name="hint_feedback_email">联系方式</string>
     <string name="hint_feedback_text">建议</string>
-    <string name="hint_share_message">嗨，我正在使用西瓜课表查课程哦~ 除了查课表，还可以查考试，查成绩。觉得挺不错的，所以分享给你，下载链接：https://www.coolapk.com/apk/com.weilylab.xhuschedule</string>
+    <string name="hint_share_message">嗨，我正在使用西瓜课表2.0查课程哦~ 除了查课表，还可以查考试，查成绩。 下载链接：https://www.coolapk.com/apk/com.weilylab.xhuschedule</string>
 
     <string name="warning_enable_multi_user_mode">
         请确保您是双学位的学生或者有同时查看多个账号课表的需求。\n\n
@@ -198,7 +203,7 @@
     <string name="title_activity_score">成绩查询</string>
     <string name="title_activity_expscore">实验成绩查询</string>
     <string name="title_activity_notice">通知公告</string>
-    <string name="title_activity_schedule">查看非本学期课程</string>
+    <string name="title_activity_schedule">课程查询</string>
 
     <string name="title_item_username">用户名</string>
     <string name="title_item_year">学年</string>

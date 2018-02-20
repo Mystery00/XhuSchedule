@@ -9,7 +9,7 @@
 <resources>
     <color name="colorPrimary">#36d3a8</color>
     <color name="colorPrimaryDark">#2bab88</color>
-    <color name="colorAccent">#00E5FF</color>
+    <color name="colorAccent">#ff4081</color>
     <color name="colorWeekAccent">#36d3a8</color>
     <color name="colorWeekPrimary">#30ba95</color>
     <color name="colorWeekNotIndex">#36d3a8</color>
