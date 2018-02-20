@@ -42,7 +42,6 @@ import android.graphics.Point
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.support.design.widget.Snackbar
-import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
 import android.support.v4.view.ViewPager
 import android.support.v7.app.AlertDialog
@@ -53,6 +52,9 @@ import com.getkeepsafe.taptargetview.TapTarget
 import com.getkeepsafe.taptargetview.TapTargetSequence
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.gson.Gson
+import com.oasisfeng.condom.CondomContext
+import com.sina.weibo.sdk.api.share.IWeiboShareAPI
+import com.sina.weibo.sdk.api.share.WeiboShareSDK
 import com.tencent.connect.common.Constants
 import com.tencent.tauth.Tencent
 import com.weilylab.xhuschedule.APP
@@ -115,6 +117,7 @@ class MainActivity : BaseActivity() {
     private val weekFragment = TableFragment.newInstance(weekList)
     private val profileFragment = ProfileFragment.newInstance(Profile())
     private var lastIndex = 0
+    lateinit var mWeiboShareAPI: IWeiboShareAPI
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -123,6 +126,7 @@ class MainActivity : BaseActivity() {
         mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, params)
         setContentView(R.layout.activity_main)
         arrowDrawable = ContextCompat.getDrawable(this@MainActivity, R.drawable.ms__arrow)
+        registerWeibo(savedInstanceState)
         loadingDialog = ZLoadingDialog(this)
                 .setLoadingBuilder(Z_TYPE.DOUBLE_CIRCLE)
                 .setHintText(getString(R.string.hint_dialog_update_cache))
@@ -724,5 +728,36 @@ class MainActivity : BaseActivity() {
                 finish()
         }
         super.onActivityResult(requestCode, resultCode, data)
+    }
+
+    private fun registerWeibo(savedInstanceState: Bundle?) {
+        val context = CondomContext.wrap(this, "Weibo")
+        // 创建微博分享接口实例
+        mWeiboShareAPI = WeiboShareSDK.createWeiboAPI(context, "2170085314")
+
+        // 注册第三方应用到微博客户端中，注册成功后该应用将显示在微博的应用列表中。
+        // 但该附件栏集成分享权限需要合作申请，详情请查看 Demo 提示
+        // NOTE：请务必提前注册，即界面初始化的时候或是应用程序初始化时，进行注册
+//        mWeiboShareAPI.registerApp()
+
+        // 当 Activity 被重新初始化时（该 Activity 处于后台时，可能会由于内存不足被杀掉了），
+        // 需要调用 {@link IWeiboShareAPI#handleWeiboResponse} 来接收微博客户端返回的数据。
+        // 执行成功，返回 true，并调用 {@link IWeiboHandler.Response#onResponse}；
+        // 失败返回 false，不调用上述回调
+        if (savedInstanceState != null) {
+            mWeiboShareAPI.handleWeiboResponse(intent) {
+                Logs.i(TAG, "registerWeibo: $it")
+            }
+        }
+    }
+
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        // 从当前应用唤起微博并进行分享后，返回到当前应用时，需要在此处调用该函数
+        // 来接收微博客户端返回的数据；执行成功，返回 true，并调用
+        // {@link IWeiboHandler.Response#onResponse}；失败返回 false，不调用上述回调
+        mWeiboShareAPI.handleWeiboResponse(intent) {
+            Logs.i(TAG, "registerWeibo: $it")
+        }
     }
 }

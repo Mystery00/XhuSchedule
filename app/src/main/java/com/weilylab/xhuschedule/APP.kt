@@ -66,8 +66,6 @@ class APP : Application() {
         fun getContext(): Context = app!!
 
         fun getFirebaseAnalytics(): FirebaseAnalytics = mFirebaseAnalytics!!
-
-        fun getFirebaseApp(): FirebaseApp? = mFirebaseApp
     }
 
     init {

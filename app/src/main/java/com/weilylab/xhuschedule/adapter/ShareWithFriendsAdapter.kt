@@ -10,6 +10,7 @@ package com.weilylab.xhuschedule.adapter
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -18,13 +19,19 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.PopupWindow
 import android.widget.TextView
+import android.widget.Toast
+import com.sina.weibo.sdk.api.ImageObject
+import com.sina.weibo.sdk.api.TextObject
+import com.sina.weibo.sdk.api.WeiboMultiMessage
+import com.sina.weibo.sdk.api.share.SendMultiMessageToWeiboRequest
 import com.tencent.connect.share.QQShare
 import com.weilylab.xhuschedule.APP
 import com.weilylab.xhuschedule.R
+import com.weilylab.xhuschedule.activity.MainActivity
 
 class ShareWithFriendsAdapter(private val context: Context) : RecyclerView.Adapter<ShareWithFriendsAdapter.ViewHolder>() {
     private val list = ArrayList<HashMap<String, Int>>()
-    var shareView:PopupWindow?=null
+    var shareView: PopupWindow? = null
 
     init {
         val titleArray = arrayOf(
@@ -79,6 +86,23 @@ class ShareWithFriendsAdapter(private val context: Context) : RecyclerView.Adapt
                     APP.tencent.shareToQQ(context as Activity, params, APP.tencentListener)
                 }
                 2 -> {//分享到微博
+                    val weiboShareAPI = (context as MainActivity).mWeiboShareAPI
+                    if (weiboShareAPI.isWeiboAppInstalled) {
+                        val weiboMultiMessage = WeiboMultiMessage()
+                        val imageObject = ImageObject()
+                        imageObject.setImageObject(BitmapFactory.decodeResource(context.resources, R.mipmap.ic_launcher))
+                        weiboMultiMessage.mediaObject = imageObject
+                        val textObject = TextObject()
+                        textObject.text = context.getString(R.string.hint_share_message)
+                        weiboMultiMessage.textObject = textObject
+                        val request = SendMultiMessageToWeiboRequest()
+                        request.transaction = System.currentTimeMillis().toString()
+                        request.multiMessage = weiboMultiMessage
+                        weiboShareAPI.sendRequest(request)
+                    } else {
+                        Toast.makeText(context, "未安装微博！", Toast.LENGTH_SHORT)
+                                .show()
+                    }
                 }
                 3 -> {//分享到微信
                 }

@@ -91,6 +91,7 @@ dependencies {
         transitive = true
     }
     implementation files('libs/tencent_sdk.jar')
+    implementation files('libs/weibo_sdk.jar')
 }
 repositories {
     mavenCentral()
