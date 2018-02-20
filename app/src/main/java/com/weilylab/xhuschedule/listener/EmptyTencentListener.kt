@@ -11,17 +11,17 @@ import com.tencent.tauth.IUiListener
 import com.tencent.tauth.UiError
 import vip.mystery0.tools.logs.Logs
 
-class EmptyTencentListener:IUiListener {
-    private val TAG = "EmptyTencentListener"
+class EmptyTencentListener : IUiListener {
+    private val tag = "EmptyTencentListener"
     override fun onComplete(p0: Any?) {
-        Logs.i(TAG, "onComplete: ")
+        Logs.i(tag, "onComplete: $p0")
     }
 
     override fun onCancel() {
-        Logs.i(TAG, "onCancel: ")
+        Logs.i(tag, "onCancel: ")
     }
 
     override fun onError(p0: UiError?) {
-        Logs.i(TAG, "onError: ")
+        Logs.i(tag, "onError: $p0")
     }
 }

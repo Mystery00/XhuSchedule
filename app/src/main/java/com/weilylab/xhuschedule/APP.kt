@@ -45,6 +45,7 @@ import com.oasisfeng.condom.CondomOptions
 import com.tencent.tauth.Tencent
 import com.weilylab.xhuschedule.activity.ErrorActivity
 import com.weilylab.xhuschedule.classes.baseClass.XhuScheduleError
+import com.weilylab.xhuschedule.listener.EmptyTencentListener
 import vip.mystery0.tools.crashHandler.CatchExceptionListener
 import vip.mystery0.tools.crashHandler.CrashHandler
 import vip.mystery0.tools.logs.Logs
@@ -60,6 +61,7 @@ class APP : Application() {
         @SuppressLint("StaticFieldLeak")
         private var mFirebaseApp: FirebaseApp? = null
         lateinit var tencent: Tencent
+        val tencentListener = EmptyTencentListener()
 
         fun getContext(): Context = app!!
 

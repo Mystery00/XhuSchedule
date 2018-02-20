@@ -52,6 +52,9 @@ import com.getkeepsafe.taptargetview.TapTarget
 import com.getkeepsafe.taptargetview.TapTargetSequence
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.gson.Gson
+import com.tencent.connect.common.Constants
+import com.tencent.tauth.Tencent
+import com.weilylab.xhuschedule.APP
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.adapter.ViewPagerAdapter
 import com.weilylab.xhuschedule.adapter.WeekAdapter
@@ -676,10 +679,14 @@ class MainActivity : BaseActivity() {
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        when {
+            requestCode == ADD_ACCOUNT_CODE && resultCode == Activity.RESULT_OK ->
+                updateAllData()
+            requestCode == Constants.REQUEST_QQ_SHARE ->
+                Tencent.onActivityResultData(requestCode, resultCode, data, APP.tencentListener)
+            else ->
+                finish()
+        }
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == ADD_ACCOUNT_CODE && resultCode == Activity.RESULT_OK) {
-            updateAllData()
-        } else
-            finish()
     }
 }

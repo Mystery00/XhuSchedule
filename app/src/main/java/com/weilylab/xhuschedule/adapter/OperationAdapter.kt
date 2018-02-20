@@ -98,8 +98,8 @@ class OperationAdapter(private val context: Context) : RecyclerView.Adapter<Oper
         )
         for (i in 0 until titleArray.size) {
             val map = HashMap<String, Int>()
-            map.put("title", titleArray[i])
-            map.put("icon", imgArray[i])
+            map["title"] = titleArray[i]
+            map["icon"] = imgArray[i]
             list.add(map)
         }
     }
@@ -206,11 +206,11 @@ class OperationAdapter(private val context: Context) : RecyclerView.Adapter<Oper
                     val params = Bundle()
                     params.putInt(QQShare.SHARE_TO_QQ_KEY_TYPE, QQShare.SHARE_TO_QQ_TYPE_APP)
                     params.putString(QQShare.SHARE_TO_QQ_TITLE, "西瓜课表")
-                    params.putString(QQShare.SHARE_TO_QQ_SUMMARY,  context.getString(R.string.hint_share_message))
-                    params.putString(QQShare.SHARE_TO_QQ_TARGET_URL,"https://www.coolapk.com/apk/com.weilylab.xhuschedule")
+                    params.putString(QQShare.SHARE_TO_QQ_SUMMARY, context.getString(R.string.hint_share_message))
+                    params.putString(QQShare.SHARE_TO_QQ_TARGET_URL, "https://www.coolapk.com/apk/com.weilylab.xhuschedule")
                     params.putString(QQShare.SHARE_TO_QQ_IMAGE_URL, "http://image.coolapk.com/apk_logo/2017/1127/ic_launcher-web-168930-o_1bvsva94q1dlcmg319lo1gvu1f5iq-uid-631231@512x512.png")
-                    params.putString(QQShare.SHARE_TO_QQ_APP_NAME,  "西瓜课表")
-                    APP.tencent.shareToQQ(context as Activity,params,EmptyTencentListener())
+                    params.putString(QQShare.SHARE_TO_QQ_APP_NAME, "西瓜课表")
+                    APP.tencent.shareToQQ(context as Activity, params, APP.tencentListener)
 //                    val shareIntent = Intent(Intent.ACTION_SEND)
 //                    shareIntent.putExtra(Intent.EXTRA_TEXT, context.getString(R.string.hint_share_message))
 //                    shareIntent.type = "text/plain"
