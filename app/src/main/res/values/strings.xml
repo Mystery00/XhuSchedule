@@ -30,6 +30,7 @@
     <string name="action_show_failed">显示未通过成绩</string>
     <string name="action_auto_select">自动查询数据</string>
     <string name="action_experiment">实验项目成绩查询</string>
+    <string name="action_cancel">取消</string>
 
     <string name="prompt_username">用户名</string>
     <string name="prompt_password">密码</string>
@@ -190,6 +191,7 @@
 
     <string name="title_dialog_time">请选择本学期开始时间</string>
     <string name="title_dialog_select">请选择需要查询的信息</string>
+    <string name="title_dialog_share_with_friends">分享给朋友们</string>
 
     <string name="title_activity_settings">设置</string>
     <string name="title_activity_exam">考试查询</string>

@@ -33,33 +33,28 @@
 
 package com.weilylab.xhuschedule.adapter
 
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.os.Bundle
+import android.graphics.drawable.ColorDrawable
 import android.support.design.widget.TextInputLayout
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AlertDialog
+import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.PopupWindow
 import android.widget.TextView
 import android.widget.Toast
 import com.google.gson.Gson
-import com.tencent.connect.common.Constants
-import com.tencent.connect.share.QQShare
-import com.tencent.tauth.IUiListener
-import com.tencent.tauth.Tencent
-import com.tencent.tauth.UiError
-import com.weilylab.xhuschedule.APP
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.activity.*
 import com.weilylab.xhuschedule.classes.baseClass.Student
 import com.weilylab.xhuschedule.classes.rt.GetNoticesRT
 import com.weilylab.xhuschedule.interfaces.CommonService
-import com.weilylab.xhuschedule.listener.EmptyTencentListener
 import com.weilylab.xhuschedule.listener.FeedBackListener
 import com.weilylab.xhuschedule.util.ScheduleHelper
 import com.weilylab.xhuschedule.util.Settings
@@ -70,14 +65,19 @@ import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
-import vip.mystery0.tools.logs.Logs
+import kotlinx.android.synthetic.main.content_main.*
 import java.io.File
 import java.io.InputStreamReader
 
 class OperationAdapter(private val context: Context) : RecyclerView.Adapter<OperationAdapter.ViewHolder>() {
     private val list = ArrayList<HashMap<String, Int>>()
+    private val dialogView = View.inflate(context, R.layout.dialog_share_with_friends, null)
+    private val recyclerView = dialogView.findViewById<RecyclerView>(R.id.recyclerView)
+    private val cancel = dialogView.findViewById<TextView>(R.id.textView_cancel)
 
     init {
+        recyclerView.layoutManager = GridLayoutManager(context, 3)
+        recyclerView.adapter = ShareWithFriendsAdapter(context)
         val titleArray = arrayOf(
                 R.string.operation_notice,
                 R.string.operation_schedule,
@@ -203,14 +203,27 @@ class OperationAdapter(private val context: Context) : RecyclerView.Adapter<Oper
                     }
                 }
                 5 -> {
-                    val params = Bundle()
-                    params.putInt(QQShare.SHARE_TO_QQ_KEY_TYPE, QQShare.SHARE_TO_QQ_TYPE_APP)
-                    params.putString(QQShare.SHARE_TO_QQ_TITLE, "西瓜课表")
-                    params.putString(QQShare.SHARE_TO_QQ_SUMMARY, context.getString(R.string.hint_share_message))
-                    params.putString(QQShare.SHARE_TO_QQ_TARGET_URL, "https://www.coolapk.com/apk/com.weilylab.xhuschedule")
-                    params.putString(QQShare.SHARE_TO_QQ_IMAGE_URL, "http://image.coolapk.com/apk_logo/2017/1127/ic_launcher-web-168930-o_1bvsva94q1dlcmg319lo1gvu1f5iq-uid-631231@512x512.png")
-                    params.putString(QQShare.SHARE_TO_QQ_APP_NAME, "西瓜课表")
-                    APP.tencent.shareToQQ(context as Activity, params, APP.tencentListener)
+                    val shareView = PopupWindow(dialogView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+                    shareView.isOutsideTouchable = true
+                    shareView.isFocusable = true
+                    shareView.animationStyle = R.style.Animation
+                    shareView.setBackgroundDrawable(ColorDrawable(0x00000000))
+                    shareView.setOnDismissListener {
+                        setWindowAlpha(1F)
+                    }
+                    cancel.setOnClickListener {
+                        shareView.dismiss()
+                    }
+                    shareView.showAtLocation((context as MainActivity).bottomNavigationView, Gravity.BOTTOM, 0, 0)
+                    setWindowAlpha(0.6F)
+//                    val params = Bundle()
+//                    params.putInt(QQShare.SHARE_TO_QQ_KEY_TYPE, QQShare.SHARE_TO_QQ_TYPE_APP)
+//                    params.putString(QQShare.SHARE_TO_QQ_TITLE, "西瓜课表")
+//                    params.putString(QQShare.SHARE_TO_QQ_SUMMARY, context.getString(R.string.hint_share_message))
+//                    params.putString(QQShare.SHARE_TO_QQ_TARGET_URL, "https://www.coolapk.com/apk/com.weilylab.xhuschedule")
+//                    params.putString(QQShare.SHARE_TO_QQ_IMAGE_URL, "http://image.coolapk.com/apk_logo/2017/1127/ic_launcher-web-168930-o_1bvsva94q1dlcmg319lo1gvu1f5iq-uid-631231@512x512.png")
+//                    params.putString(QQShare.SHARE_TO_QQ_APP_NAME, "西瓜课表")
+//                    APP.tencent.shareToQQ(context as Activity, params, APP.tencentListener)
 //                    val shareIntent = Intent(Intent.ACTION_SEND)
 //                    shareIntent.putExtra(Intent.EXTRA_TEXT, context.getString(R.string.hint_share_message))
 //                    shareIntent.type = "text/plain"
@@ -220,6 +233,12 @@ class OperationAdapter(private val context: Context) : RecyclerView.Adapter<Oper
                 6 -> context.startActivity(Intent(context, SettingsActivity::class.java))
             }
         }
+    }
+
+    private fun setWindowAlpha(alpha: Float) {
+        val layoutParams = (context as MainActivity).window.attributes
+        layoutParams.alpha = alpha
+        context.window.attributes = layoutParams
     }
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ViewHolder {

@@ -30,6 +30,12 @@
         <item name="android:windowBackground">@drawable/drawable_splash</item>
     </style>
 
+    <!-- popup window 动画 -->
+    <style name="Animation">
+        <item name="android:windowEnterAnimation">@anim/enter_animation</item>
+        <item name="android:windowExitAnimation">@anim/out_animation</item>
+    </style>
+
     <style name="LoginButton" parent="Widget.AppCompat.Button.Colored">
         <item name="android:background">@color/colorPrimary</item>
     </style>
