@@ -33,8 +33,6 @@
 
 package com.weilylab.xhuschedule.util
 
-import com.oasisfeng.condom.CondomContext
-import com.tencent.tauth.Tencent
 import com.weilylab.xhuschedule.util.cookie.LoadCookiesInterceptor
 import com.weilylab.xhuschedule.util.cookie.SaveCookiesInterceptor
 import okhttp3.OkHttpClient

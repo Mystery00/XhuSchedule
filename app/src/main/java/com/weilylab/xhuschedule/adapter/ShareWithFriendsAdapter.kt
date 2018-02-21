@@ -25,6 +25,9 @@ import com.sina.weibo.sdk.api.TextObject
 import com.sina.weibo.sdk.api.WeiboMultiMessage
 import com.sina.weibo.sdk.api.share.SendMultiMessageToWeiboRequest
 import com.tencent.connect.share.QQShare
+import com.tencent.mm.opensdk.modelmsg.SendMessageToWX
+import com.tencent.mm.opensdk.modelmsg.WXImageObject
+import com.tencent.mm.opensdk.modelmsg.WXMediaMessage
 import com.weilylab.xhuschedule.APP
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.activity.MainActivity
@@ -105,8 +108,38 @@ class ShareWithFriendsAdapter(private val context: Context) : RecyclerView.Adapt
                     }
                 }
                 3 -> {//分享到微信
+                    val wxAPI = (context as MainActivity).wxAPI
+                    if (wxAPI.isWXAppInstalled) {
+                        val wxMediaMessage = WXMediaMessage()
+                        val wxImageObject = WXImageObject(BitmapFactory.decodeResource(context.resources, R.mipmap.ic_launcher))
+                        wxMediaMessage.mediaObject = wxImageObject
+                        wxMediaMessage.description = context.getString(R.string.hint_share_message)
+                        val request = SendMessageToWX.Req()
+                        request.transaction = "ShareWithWeiXin${System.currentTimeMillis()}"
+                        request.message = wxMediaMessage
+                        request.scene = SendMessageToWX.Req.WXSceneSession
+                        wxAPI.sendReq(request)
+                    } else {
+                        Toast.makeText(context, "未安装微信！", Toast.LENGTH_SHORT)
+                                .show()
+                    }
                 }
                 4 -> {//分享到朋友圈
+                    val wxAPI = (context as MainActivity).wxAPI
+                    if (wxAPI.isWXAppInstalled) {
+                        val wxMediaMessage = WXMediaMessage()
+                        val wxImageObject = WXImageObject(BitmapFactory.decodeResource(context.resources, R.mipmap.ic_launcher))
+                        wxMediaMessage.mediaObject = wxImageObject
+                        wxMediaMessage.description = context.getString(R.string.hint_share_message)
+                        val req = SendMessageToWX.Req()
+                        req.transaction = "ShareWithFriends${System.currentTimeMillis()}"
+                        req.message = wxMediaMessage
+                        req.scene = SendMessageToWX.Req.WXSceneTimeline
+                        wxAPI.sendReq(req)
+                    } else {
+                        Toast.makeText(context, "未安装微信！", Toast.LENGTH_SHORT)
+                                .show()
+                    }
                 }
                 5 -> {//系统分享
                     val shareIntent = Intent(Intent.ACTION_SEND)

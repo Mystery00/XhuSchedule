@@ -56,6 +56,8 @@ import com.oasisfeng.condom.CondomContext
 import com.sina.weibo.sdk.api.share.IWeiboShareAPI
 import com.sina.weibo.sdk.api.share.WeiboShareSDK
 import com.tencent.connect.common.Constants
+import com.tencent.mm.opensdk.openapi.IWXAPI
+import com.tencent.mm.opensdk.openapi.WXAPIFactory
 import com.tencent.tauth.Tencent
 import com.weilylab.xhuschedule.APP
 import com.weilylab.xhuschedule.R
@@ -118,6 +120,7 @@ class MainActivity : BaseActivity() {
     private val profileFragment = ProfileFragment.newInstance(Profile())
     private var lastIndex = 0
     lateinit var mWeiboShareAPI: IWeiboShareAPI
+    lateinit var wxAPI: IWXAPI
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -127,6 +130,7 @@ class MainActivity : BaseActivity() {
         setContentView(R.layout.activity_main)
         arrowDrawable = ContextCompat.getDrawable(this@MainActivity, R.drawable.ms__arrow)
         registerWeibo(savedInstanceState)
+        registerWeiXin()
         loadingDialog = ZLoadingDialog(this)
                 .setLoadingBuilder(Z_TYPE.DOUBLE_CIRCLE)
                 .setHintText(getString(R.string.hint_dialog_update_cache))
@@ -732,7 +736,7 @@ class MainActivity : BaseActivity() {
 
     private fun registerWeibo(savedInstanceState: Bundle?) {
         // 创建微博分享接口实例
-        mWeiboShareAPI = WeiboShareSDK.createWeiboAPI(this, "2170085314")
+        mWeiboShareAPI = WeiboShareSDK.createWeiboAPI(this, Constant.WEIBO_API_KEY, false)
 
         // 注册第三方应用到微博客户端中，注册成功后该应用将显示在微博的应用列表中。
         // 但该附件栏集成分享权限需要合作申请，详情请查看 Demo 提示
@@ -748,6 +752,13 @@ class MainActivity : BaseActivity() {
                 Logs.i(TAG, "registerWeibo: $it")
             }
         }
+    }
+
+    private fun registerWeiXin() {
+        // 通过WXAPIFactory工厂，获取IWXAPI的实例
+        wxAPI = WXAPIFactory.createWXAPI(CondomContext.wrap(this, "weixin"), Constant.WEIXIN_API_KEY, false)
+        // 将该app注册到微信
+        wxAPI.registerApp(Constant.WEIXIN_API_KEY)
     }
 
     override fun onNewIntent(intent: Intent?) {

@@ -8,6 +8,9 @@
 package com.weilylab.xhuschedule.util
 
 object Constant {
+    const val WEIBO_API_KEY = "2170085314"
+    const val WEIXIN_API_KEY = ""
+
     const val IS_FIRST_RUN = "isFirstRun"
     const val FIRST_WEEK_OF_TERM = "firstWeekOfTerm"
     const val IS_SHOW_NOT = "isShowNot"
