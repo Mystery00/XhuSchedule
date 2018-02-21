@@ -31,7 +31,8 @@
             android:theme="@style/SplashTheme"
             android:windowSoftInputMode="adjustResize|stateHidden">
             <intent-filter>
-                <!--集成调用微博-->
+
+                <!-- 集成调用微博 -->
                 <action android:name="com.sina.weibo.sdk.action.ACTION_SDK_REQ_ACTIVITY" />
                 <action android:name="android.intent.action.MAIN" />
 
@@ -173,13 +174,13 @@
                 android:resource="@xml/exam_widget_info" />
         </receiver>
 
-        <!--禁用FirebaseInitProvider-->
+        <!-- 禁用FirebaseInitProvider -->
         <provider
             android:name="com.google.firebase.provider.FirebaseInitProvider"
             android:authorities="${applicationId}.firebaseinitprovider"
             tools:node="remove" />
 
-        <!--腾讯开放平台-->
+        <!-- 腾讯开放平台 -->
         <activity
             android:name="com.tencent.tauth.AuthActivity"
             android:launchMode="singleTask"
@@ -197,8 +198,7 @@
             android:name="com.tencent.connect.common.AssistActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-        <!--腾讯开放平台-->
-
+        <!-- 腾讯开放平台 -->
     </application>
 
 </manifest>

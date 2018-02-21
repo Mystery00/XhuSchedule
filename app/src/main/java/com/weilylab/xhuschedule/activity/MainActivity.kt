@@ -714,7 +714,7 @@ class MainActivity : BaseActivity() {
 
     override fun onBackPressed() {
         val press = Calendar.getInstance().timeInMillis
-        if (press - lastPressBack <= 1000) {
+        if (press - lastPressBack <= 2000) {
             super.onBackPressed()
         } else {
             lastPressBack = press
