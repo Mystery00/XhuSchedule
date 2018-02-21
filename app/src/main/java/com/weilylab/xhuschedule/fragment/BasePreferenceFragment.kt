@@ -36,7 +36,13 @@ package com.weilylab.xhuschedule.fragment
 import android.preference.Preference
 import android.preference.PreferenceFragment
 import android.support.annotation.StringRes
+import android.media.RingtoneManager
+import android.net.Uri
+
 
 open class BasePreferenceFragment : PreferenceFragment() {
-    fun findPreference(@StringRes id: Int): Preference = findPreference(getString(id))
+    fun findPreferenceById(@StringRes id: Int): Preference = findPreference(getString(id))
+
+    // 获取提示音名称
+    fun getRingtoneName(uri: Uri): String = RingtoneManager.getRingtone(activity, uri).getTitle(activity)
 }

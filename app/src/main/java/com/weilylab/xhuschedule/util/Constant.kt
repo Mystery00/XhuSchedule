@@ -34,7 +34,7 @@
 package com.weilylab.xhuschedule.util
 
 object Constant {
-    const val QQ_API_KEY="1106663023"
+    const val QQ_API_KEY = "1106663023"
     const val WEIBO_API_KEY = "2170085314"
     const val WEIXIN_API_KEY = ""
 
@@ -57,5 +57,6 @@ object Constant {
     const val IS_AUTO_SELECT = "isAutoSelect"
     const val IGNORE_UPDATE = "ignoreUpdate"
     const val SHOW_NOTICE_ID = "shownNoticeID"
-    const val DEBUG_MODE = "debugMode"
+    const val NOTIFICATION_SOUND = "notificationSound"
+    const val NOTIFICATION_VIBRATE = "notificationVibrate"
 }

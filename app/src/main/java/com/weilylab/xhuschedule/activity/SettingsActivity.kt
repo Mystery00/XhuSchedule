@@ -88,6 +88,7 @@ class SettingsActivity : AppCompatPreferenceActivity() {
         ClassSettingsFragment::class.java.name -> true
         AccountSettingsFragment::class.java.name -> true
         UISettingsFragment::class.java.name -> true
+        NotificationFragment::class.java.name -> true
         DeveloperFragment::class.java.name -> true
         InfoSettingsFragment::class.java.name -> true
         else -> false

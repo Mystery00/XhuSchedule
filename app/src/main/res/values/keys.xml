@@ -9,12 +9,14 @@
     <string name="screen_category_class">课程设置</string>
     <string name="screen_category_account">账号管理</string>
     <string name="screen_category_ui">界面设置</string>
-    <string name="screen_category_thanks">鸣谢</string>
+    <string name="screen_category_developer">鸣谢</string>
     <string name="category_custom">自定义项</string>
     <string name="screen_category_about">关于</string>
     <string name="screen_category_about_developer">更多应用</string>
     <string name="screen_category_about_version">版本关于</string>
     <string name="screen_category_about_application">应用关于</string>
+    <string name="screen_category_notification">消息设置</string>
+    <string name="screen_category_notification_settings">通知设置</string>
 
     <string name="key_first_day" translatable="false">key_first_day</string>
     <string name="key_show_not" translatable="false">key_show_not</string>
@@ -42,6 +44,8 @@
     <string name="key_check_update" translatable="false">key_check_update</string>
     <string name="key_version_name" translatable="false">key_version_name</string>
     <string name="key_version_code" translatable="false">key_version_code</string>
+    <string name="key_notification_sound" translatable="false">key_notification_sound</string>
+    <string name="key_notification_vibrate" translatable="false">key_notification_vibrate</string>
 
     <string name="title_icon_ui">图标以及界面设计</string>
     <string name="title_back">数据提供</string>
@@ -80,6 +84,8 @@
     <string name="title_update_log">更新日志</string>
     <string name="title_check_update">检查更新</string>
     <string name="title_version_name">版本名称</string>
+    <string name="title_notification_sound">通知声音</string>
+    <string name="title_notification_vibrate">震动</string>
 
     <string name="summary_enable_multi_user_mode">注意：如果多个用户的课表存在冲突的情况，表格可能会变得很乱，请确定您开启这个模式的意义！</string>
     <string name="summary_icon" translatable="false">\@爱吃饭的越越</string>
@@ -99,6 +105,7 @@
     <string name="summary_feedback">请发送邮件到mystery0dyl520@gmail.com并注明APP名称</string>
     <string name="summary_more_app_coolapk">酷安</string>
     <string name="summary_weixin">可以在微信小程序页面直接搜索“西瓜课表”即可使用</string>
+    <string name="summary_notification_sound">当前铃声为 %1$s</string>
 
     <string name="link_developer" translatable="false">https://mystery0.vip/</string>
     <string name="link_login_img" translatable="false">http://www.jianshu.com/u/de99e3e9e332</string>

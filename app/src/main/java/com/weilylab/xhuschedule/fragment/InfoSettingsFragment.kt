@@ -89,12 +89,12 @@ class InfoSettingsFragment : BasePreferenceFragment() {
                 .setCanceledOnTouchOutside(false)
                 .setLoadingColor(ContextCompat.getColor(activity, R.color.colorAccent))
                 .setHintTextColor(ContextCompat.getColor(activity, R.color.colorAccent))
-        autoCheckUpdatePreference = findPreference(R.string.key_auto_check_update) as SwitchPreference
-        autoCheckLogPreference = findPreference(R.string.key_auto_check_log) as SwitchPreference
-        feedbackPreference = findPreference(R.string.key_feedback)
-        weixinPreference = findPreference(R.string.key_weixin)
-        updateLogPreference = findPreference(R.string.key_update_log)
-        checkUpdatePreference = findPreference(R.string.key_check_update)
+        autoCheckUpdatePreference = findPreferenceById(R.string.key_auto_check_update) as SwitchPreference
+        autoCheckLogPreference = findPreferenceById(R.string.key_auto_check_log) as SwitchPreference
+        feedbackPreference = findPreferenceById(R.string.key_feedback)
+        weixinPreference = findPreferenceById(R.string.key_weixin)
+        updateLogPreference = findPreferenceById(R.string.key_update_log)
+        checkUpdatePreference = findPreferenceById(R.string.key_check_update)
         autoCheckUpdatePreference.isChecked = Settings.autoCheckUpdate
         autoCheckLogPreference.isChecked = Settings.autoCheckLog
         autoCheckUpdatePreference.setOnPreferenceChangeListener { _, _ ->

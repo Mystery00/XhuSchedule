@@ -14,10 +14,6 @@
         android:title="@string/title_user_img" />
 
     <Preference
-        android:key="@string/key_header_img"
-        android:title="@string/title_header_img" />
-
-    <Preference
         android:key="@string/key_background_img"
         android:title="@string/title_background_img" />
 

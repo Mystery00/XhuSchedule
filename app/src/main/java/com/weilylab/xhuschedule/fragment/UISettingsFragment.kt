@@ -49,8 +49,6 @@ import android.support.constraint.ConstraintLayout
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.CardView
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
@@ -63,7 +61,6 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.jrummyapps.android.colorpicker.ColorPreference
 import com.weilylab.xhuschedule.R
-import com.weilylab.xhuschedule.adapter.HeaderAdapter
 import com.weilylab.xhuschedule.classes.baseClass.Course
 import com.weilylab.xhuschedule.interfaces.PhpService
 import com.weilylab.xhuschedule.util.*
@@ -86,16 +83,13 @@ class UISettingsFragment : BasePreferenceFragment() {
         private const val TAG = "UISettingsFragment"
         private const val PERMISSION_REQUEST_CODE = 1
         private const val PROFILE_REQUEST_CODE = 2
-        private const val HEADER_REQUEST_CODE = 3
         private const val BACKGROUND_REQUEST_CODE = 4
         private const val PROFILE_CROP_REQUEST_CODE = 5
-        private const val HEADER_CROP_REQUEST_CODE = 6
         private const val BACKGROUND_CROP_REQUEST_CODE = 7
     }
 
     private var requestType = 0
     private lateinit var userImgPreference: Preference
-    private lateinit var headerImgPreference: Preference
     private lateinit var backgroundImgPreference: Preference
     private lateinit var customTodayOpacityPreference: Preference
     private lateinit var customTableOpacityPreference: Preference
@@ -111,43 +105,18 @@ class UISettingsFragment : BasePreferenceFragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        userImgPreference = findPreference(R.string.key_user_img)
-        headerImgPreference = findPreference(R.string.key_header_img)
-        backgroundImgPreference = findPreference(R.string.key_background_img)
-        customTodayOpacityPreference = findPreference(R.string.key_custom_today_opacity)
-        customTableOpacityPreference = findPreference(R.string.key_custom_table_opacity)
-        customTodayTextColorPreference = findPreference(R.string.key_custom_today_text_color) as ColorPreference
-        customTableTextColorPreference = findPreference(R.string.key_custom_table_text_color) as ColorPreference
-        customTextSizePreference = findPreference(R.string.key_custom_text_size)
-        customTextHeightPreference = findPreference(R.string.key_custom_text_height)
-        resetPreference = findPreference(R.string.key_reset)
+        userImgPreference = findPreferenceById(R.string.key_user_img)
+        backgroundImgPreference = findPreferenceById(R.string.key_background_img)
+        customTodayOpacityPreference = findPreferenceById(R.string.key_custom_today_opacity)
+        customTableOpacityPreference = findPreferenceById(R.string.key_custom_table_opacity)
+        customTodayTextColorPreference = findPreferenceById(R.string.key_custom_today_text_color) as ColorPreference
+        customTableTextColorPreference = findPreferenceById(R.string.key_custom_table_text_color) as ColorPreference
+        customTextSizePreference = findPreferenceById(R.string.key_custom_text_size)
+        customTextHeightPreference = findPreferenceById(R.string.key_custom_text_height)
+        resetPreference = findPreferenceById(R.string.key_reset)
         userImgPreference.setOnPreferenceClickListener {
             requestType = PROFILE_REQUEST_CODE
             requestPermission()
-            true
-        }
-        headerImgPreference.setOnPreferenceClickListener {
-            val view = View.inflate(activity, R.layout.dialog_choose_img_header, null)
-            val recyclerView: RecyclerView = view.findViewById(R.id.recyclerView)
-            recyclerView.layoutManager = LinearLayoutManager(activity)
-            val adapter = HeaderAdapter(activity)
-            recyclerView.adapter = adapter
-            val dialog = AlertDialog.Builder(activity)
-                    .setTitle(getString(R.string.title_header_img))
-                    .setView(view)
-                    .setPositiveButton(android.R.string.cancel, null)
-                    .setNegativeButton("从相册选择", { _, _ ->
-                        requestType = HEADER_REQUEST_CODE
-                        requestPermission()
-                    })
-                    .create()
-            dialog.show()
-            adapter.listener = object : HeaderAdapter.ItemSelectedListener {
-                override fun onChecked(link: String, position: Int) {
-                    dialog.dismiss()
-                    downloadImg(link.substring(link.lastIndexOf('/') + 1), "header")
-                }
-            }
             true
         }
         backgroundImgPreference.setOnPreferenceClickListener {
@@ -424,22 +393,12 @@ class UISettingsFragment : BasePreferenceFragment() {
                     activity.windowManager.defaultDisplay.getSize(size)
                     cropImg(data.data, BACKGROUND_CROP_REQUEST_CODE, size.x, size.y)
                 }
-                HEADER_REQUEST_CODE -> {
-                    cropImg(data.data, HEADER_CROP_REQUEST_CODE, 320, 176)
-                }
                 PROFILE_REQUEST_CODE -> {
                     cropImg(data.data, PROFILE_CROP_REQUEST_CODE, 500, 500)
                 }
                 BACKGROUND_CROP_REQUEST_CODE -> {
                     val saveFile = File(File(activity.filesDir, "CropImg"), "background")
                     Settings.customBackgroundImg = saveFile.absolutePath
-                    ScheduleHelper.isImageChange = true
-                    Toast.makeText(activity, R.string.hint_custom_img, Toast.LENGTH_SHORT)
-                            .show()
-                }
-                HEADER_CROP_REQUEST_CODE -> {
-                    val saveFile = File(File(activity.filesDir, "CropImg"), "header")
-                    Settings.customHeaderImg = saveFile.absolutePath
                     ScheduleHelper.isImageChange = true
                     Toast.makeText(activity, R.string.hint_custom_img, Toast.LENGTH_SHORT)
                             .show()
@@ -491,7 +450,6 @@ class UISettingsFragment : BasePreferenceFragment() {
 
     private fun cropImg(uri: Uri, cropCode: Int, width: Int, height: Int) {
         val savedFile = File(File(activity.filesDir, "CropImg"), when (cropCode) {
-            HEADER_CROP_REQUEST_CODE -> "header"
             BACKGROUND_CROP_REQUEST_CODE -> "background"
             PROFILE_CROP_REQUEST_CODE -> "user_img"
             else -> throw NullPointerException("裁剪图片请求码错误")
@@ -528,11 +486,6 @@ class UISettingsFragment : BasePreferenceFragment() {
                                 val saveFile = File(File(activity.filesDir, "CropImg"), "background")
                                 XhuFileUtil.saveFile(inputStream, saveFile)
                                 Settings.customBackgroundImg = saveFile.absolutePath
-                            }
-                            "header" -> {
-                                val saveFile = File(activity.cacheDir, "temp")
-                                XhuFileUtil.saveFile(inputStream, saveFile)
-                                cropImg(Uri.fromFile(saveFile), HEADER_CROP_REQUEST_CODE, 320, 176)
                             }
                             "user_img" -> {
                                 val saveFile = File(File(activity.filesDir, "CropImg"), "user_img")

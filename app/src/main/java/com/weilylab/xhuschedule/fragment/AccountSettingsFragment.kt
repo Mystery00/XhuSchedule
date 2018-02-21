@@ -71,11 +71,11 @@ class AccountSettingsFragment : BasePreferenceFragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        currentAccountCategory = findPreference(R.string.key_current_account) as PreferenceCategory
-        addAccountPreference = findPreference(R.string.key_add_account)
-        delAccountPreference = findPreference(R.string.key_del_account)
-        setMainAccountPreference = findPreference(R.string.key_set_main_account)
-        multiUserModePreference = findPreference(R.string.key_enable_multi_user_mode) as SwitchPreference
+        currentAccountCategory = findPreferenceById(R.string.key_current_account) as PreferenceCategory
+        addAccountPreference = findPreferenceById(R.string.key_add_account)
+        delAccountPreference = findPreferenceById(R.string.key_del_account)
+        setMainAccountPreference = findPreferenceById(R.string.key_set_main_account)
+        multiUserModePreference = findPreferenceById(R.string.key_enable_multi_user_mode) as SwitchPreference
         val userFile = File(activity.filesDir.absolutePath + File.separator + "data" + File.separator + "user")
         val studentList = XhuFileUtil.getArrayListFromFile(userFile, Student::class.java)
         updateCategory(studentList)

@@ -85,9 +85,4 @@
         <item>https://mystery0.vip/img/interface/c.png</item>
         <item>https://mystery0.vip/img/interface/d.png</item>
     </string-array>
-
-    <string-array name="header_img">
-        <item>https://mystery0.vip/img/interface/header1.jpg</item>
-        <item>https://mystery0.vip/img/interface/header2.jpg</item>
-    </string-array>
 </resources>

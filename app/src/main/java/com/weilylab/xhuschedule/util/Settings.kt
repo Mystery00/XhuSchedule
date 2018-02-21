@@ -99,7 +99,10 @@ object Settings {
     var shownNoticeID: String//查看过的公告id
         set(value) = sharedPreference.edit().putString(Constant.SHOW_NOTICE_ID, value).apply()
         get() = sharedPreference.getString(Constant.SHOW_NOTICE_ID, "")
-    var debugMode: Boolean//调试模式
-        set(value) = sharedPreference.edit().putBoolean(Constant.DEBUG_MODE, value).apply()
-        get() = sharedPreference.getBoolean(Constant.DEBUG_MODE, false)
+    var notificationSound: String//通知铃声
+        set(value) = sharedPreference.edit().putString(Constant.NOTIFICATION_SOUND, value).apply()
+        get() = sharedPreference.getString(Constant.NOTIFICATION_SOUND, "content://settings/system/notification_sound")
+    var notificationVibrate: Boolean//是否震动
+        set(value) = sharedPreference.edit().putBoolean(Constant.NOTIFICATION_VIBRATE, value).apply()
+        get() = sharedPreference.getBoolean(Constant.NOTIFICATION_VIBRATE, true)
 }
