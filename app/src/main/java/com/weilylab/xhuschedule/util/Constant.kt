@@ -8,6 +8,7 @@
 package com.weilylab.xhuschedule.util
 
 object Constant {
+    const val QQ_API_KEY="1106663023"
     const val WEIBO_API_KEY = "2170085314"
     const val WEIXIN_API_KEY = ""
 
