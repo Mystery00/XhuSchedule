@@ -88,12 +88,12 @@ class OperationAdapter(private val context: Context) : RecyclerView.Adapter<Oper
                 R.string.operation_share
         )
         val imgArray = arrayOf(
-                R.mipmap.ic_notice,
-                R.mipmap.ic_bookstore,
-                R.mipmap.ic_exam,
-                R.mipmap.ic_list,
-                R.mipmap.ic_feedback,
-                R.mipmap.ic_share
+                R.mipmap.ic_operation_notice,
+                R.mipmap.ic_operation_classes,
+                R.mipmap.ic_operation_exam,
+                R.mipmap.ic_operation_score,
+                R.mipmap.ic_operation_feedback,
+                R.mipmap.ic_operation_share
         )
         for (i in 0 until titleArray.size) {
             val map = HashMap<String, Int>()
