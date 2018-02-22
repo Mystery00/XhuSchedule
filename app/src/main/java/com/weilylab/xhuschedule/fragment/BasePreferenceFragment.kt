@@ -39,7 +39,7 @@ import android.support.annotation.StringRes
 import android.media.RingtoneManager
 import android.net.Uri
 import com.weilylab.xhuschedule.R
-import com.weilylab.xhuschedule.util.Constant
+import com.weilylab.xhuschedule.util.Constants
 
 
 open class BasePreferenceFragment : PreferenceFragment() {
@@ -49,7 +49,7 @@ open class BasePreferenceFragment : PreferenceFragment() {
     fun getRingtoneName(uriString: String): String {
         return when (uriString) {
             "" -> getString(R.string.hint_notification_none)
-            Constant.NOTIFICATION_SYSTEM_SOUND -> getString(R.string.hint_notification_system)
+            Constants.NOTIFICATION_SYSTEM_SOUND -> getString(R.string.hint_notification_system)
             else -> RingtoneManager.getRingtone(activity, Uri.parse(uriString)).getTitle(activity)
         }
     }

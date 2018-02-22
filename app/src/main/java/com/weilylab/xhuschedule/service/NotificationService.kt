@@ -36,11 +36,14 @@ package com.weilylab.xhuschedule.service
 import android.app.Service
 import android.content.Intent
 import android.os.IBinder
+import com.weilylab.xhuschedule.util.Settings
 
 class NotificationService : Service() {
 
     override fun onCreate() {
         super.onCreate()
+        if (!Settings.isNotificationTomorrowEnable)
+            stopSelf()
     }
 
     override fun onBind(intent: Intent): IBinder? {

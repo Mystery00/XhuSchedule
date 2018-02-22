@@ -33,6 +33,7 @@
 
 package com.weilylab.xhuschedule.activity
 
+import android.animation.ObjectAnimator
 import android.content.res.Configuration
 import android.os.Build
 import android.os.Bundle
@@ -45,6 +46,8 @@ import android.view.MenuInflater
 import android.view.View
 import android.view.ViewGroup
 import com.weilylab.xhuschedule.R
+import com.weilylab.xhuschedule.util.APPActivityManager
+import kotlinx.android.synthetic.main.activity_main.*
 
 /**
  * A [android.preference.PreferenceActivity] which implements and proxies the necessary calls
@@ -109,6 +112,11 @@ abstract class AppCompatPreferenceActivity : PreferenceActivity() {
         super.finish()
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP)
             overridePendingTransition(R.anim.animation_settings_out_enter, R.anim.animation_settings_out_exit)
+        else {
+            val lastActivity=APPActivityManager.appManager.lastLastActivity()
+            if (lastActivity!=null&&lastActivity is MainActivity)
+                ObjectAnimator.ofFloat(lastActivity.action_settings, "rotation", 360F, 0F).start()
+        }
     }
 
     override fun onStop() {

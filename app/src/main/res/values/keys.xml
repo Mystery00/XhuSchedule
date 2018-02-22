@@ -48,6 +48,7 @@
     <string name="key_notification_sound" translatable="false">key_notification_sound</string>
     <string name="key_notification_vibrate" translatable="false">key_notification_vibrate</string>
     <string name="key_notification_for_tomorrow_enable" translatable="false">key_notification_for_tomorrow_enable</string>
+    <string name="key_notification_for_tomorrow_type" translatable="false">key_notification_for_tomorrow_type</string>
     <string name="key_notification_for_tomorrow_time" translatable="false">key_notification_for_tomorrow_time</string>
 
     <string name="title_icon_ui">图标以及界面设计</string>
@@ -90,6 +91,7 @@
     <string name="title_notification_sound">通知声音</string>
     <string name="title_notification_vibrate">震动</string>
     <string name="title_notification_for_tomorrow_enable">启用提醒</string>
+    <string name="title_notification_for_tomorrow_type">提醒类型</string>
     <string name="title_notification_for_tomorrow_time">提醒时间</string>
 
     <string name="summary_enable_multi_user_mode">注意：如果多个用户的课表存在冲突的情况，表格可能会变得很乱，请确定您开启这个模式的意义！</string>
@@ -111,6 +113,7 @@
     <string name="summary_more_app_coolapk">酷安</string>
     <string name="summary_weixin">可以在微信小程序页面直接搜索“西瓜课表”即可使用</string>
     <string name="summary_notification_sound">当前铃声为 %1$s</string>
+    <string name="summary_notification_for_tomorrow_type">将会提醒您%1$s的课程</string>
     <string name="summary_notification_for_tomorrow_time">将会在每天的 %1$s 提醒您明天的课程</string>
 
     <string name="link_developer" translatable="false">https://mystery0.vip/</string>

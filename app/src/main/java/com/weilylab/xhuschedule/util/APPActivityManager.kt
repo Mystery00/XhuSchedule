@@ -57,6 +57,16 @@ class APPActivityManager private constructor() {
     }
 
     /**
+     * 获取倒数第二个Activity
+     */
+    fun lastLastActivity(): Activity? {
+        if (activityStack.size <= 2)
+            return null
+        else
+            return activityStack[activityStack.size - 2]
+    }
+
+    /**
      * 结束当前Activity（堆栈中最后一个压入的）
      */
     fun finishActivity() {

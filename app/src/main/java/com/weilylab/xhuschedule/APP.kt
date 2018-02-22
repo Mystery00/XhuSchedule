@@ -46,7 +46,7 @@ import com.tencent.tauth.Tencent
 import com.weilylab.xhuschedule.activity.ErrorActivity
 import com.weilylab.xhuschedule.classes.baseClass.XhuScheduleError
 import com.weilylab.xhuschedule.listener.EmptyTencentListener
-import com.weilylab.xhuschedule.util.Constant
+import com.weilylab.xhuschedule.util.Constants
 import vip.mystery0.tools.crashHandler.CatchExceptionListener
 import vip.mystery0.tools.crashHandler.CrashHandler
 import vip.mystery0.tools.logs.Logs
@@ -80,7 +80,7 @@ class APP : Application() {
         })
         mFirebaseApp = FirebaseApp.initializeApp(condom)
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(condom)
-        tencent = Tencent.createInstance(Constant.QQ_API_KEY, CondomContext.wrap(applicationContext, "Tencent"))
+        tencent = Tencent.createInstance(Constants.QQ_API_KEY, CondomContext.wrap(applicationContext, "Tencent"))
         Logs.setLevel(Logs.Debug)
         if (!cacheDir.exists())
             cacheDir.mkdirs()

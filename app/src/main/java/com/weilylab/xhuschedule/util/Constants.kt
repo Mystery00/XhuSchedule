@@ -33,7 +33,7 @@
 
 package com.weilylab.xhuschedule.util
 
-object Constant {
+object Constants {
     const val QQ_API_KEY = "1106663023"
     const val WEIBO_API_KEY = "2170085314"
     const val WEIXIN_API_KEY = ""
@@ -44,7 +44,6 @@ object Constant {
     const val FIRST_WEEK_OF_TERM = "firstWeekOfTerm"
     const val IS_SHOW_NOT = "isShowNot"
     const val USER_IMG = "userImg"
-    const val CUSTOM_HEADER_IMG = "customHeaderImg"
     const val CUSTOM_BACKGROUND_IMG = "customBackgroundImg"
     const val CUSTOM_TABLE_OPACITY = "customTableOpacity"
     const val CUSTOM_TODAY_OPACITY = "customTodayOpacity"
@@ -62,5 +61,6 @@ object Constant {
     const val NOTIFICATION_SOUND = "notificationSound"
     const val NOTIFICATION_VIBRATE = "notificationVibrate"
     const val NOTIFICATION_TOMORROW_ENABLE="isNotificationTomorrowEnable"
+    const val NOTIFICATION_TOMORROW_TYPE="isNotificationTomorrowType"
     const val NOTIFICATION_TOMORROW_TIME="notificationTomorrowTime"
 }

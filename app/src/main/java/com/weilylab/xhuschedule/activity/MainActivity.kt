@@ -33,6 +33,7 @@
 
 package com.weilylab.xhuschedule.activity
 
+import android.animation.Animator
 import android.animation.ObjectAnimator
 import android.app.Activity
 import android.app.Dialog
@@ -57,7 +58,6 @@ import com.google.gson.Gson
 import com.oasisfeng.condom.CondomContext
 import com.sina.weibo.sdk.api.share.IWeiboShareAPI
 import com.sina.weibo.sdk.api.share.WeiboShareSDK
-import com.tencent.connect.common.Constants
 import com.tencent.mm.opensdk.openapi.IWXAPI
 import com.tencent.mm.opensdk.openapi.WXAPIFactory
 import com.tencent.tauth.Tencent
@@ -244,6 +244,9 @@ class MainActivity : BaseActivity() {
         layout_week_recycler_view.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         layout_week_recycler_view.adapter = weekAdapter
         layout_week_recycler_view.scrollToPosition(0)
+        layout_week_recycler_view_internal.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+        layout_week_recycler_view_internal.adapter = weekAdapter
+        layout_week_recycler_view_internal.scrollToPosition(0)
 
         if (Settings.customBackgroundImg != "") {
             todayFragment.setBackground()
@@ -341,6 +344,7 @@ class MainActivity : BaseActivity() {
                         swipeLayout(bottomNavigationView.menu.getItem(viewpager.currentItem).itemId)
                         weekAdapter.setWeekIndex(ScheduleHelper.weekIndex)
                         layout_week_recycler_view.scrollToPosition(ScheduleHelper.weekIndex - 1)
+                        layout_week_recycler_view_internal.scrollToPosition(ScheduleHelper.weekIndex - 1)
                         if (ScheduleHelper.isCookieAvailable) {
                             if (!Settings.isEnableMultiUserMode)
                                 when (todayList.size) {
@@ -604,47 +608,74 @@ class MainActivity : BaseActivity() {
     private fun showWeekAnim(isShow: Boolean, isShowArrow: Boolean) {
         if (isAnimShow)
             return
-        val trueHeight = DensityUtil.dip2px(this, 60F)
-        layout_week_recycler_view.post {
-            val height = layout_week_recycler_view.measuredHeight
-            val barLayoutParams = appBar.layoutParams
-            Observable.create<Int> { subscriber ->
-                val showDistanceArray = Array(31, { i -> (height / 30F) * i })
-                if (!isShow)
-                    showDistanceArray.reverse()
-                showDistanceArray.forEach {
-                    subscriber.onNext(it.toInt())
-                    Thread.sleep(8)
-                }
-                subscriber.onComplete()
+        titleTextView.setCompoundDrawablesWithIntrinsicBounds(null, null, if (isShowArrow) arrowDrawable else null, null)
+        val animator = if (isShow)
+            ObjectAnimator.ofFloat(layout_week_recycler_view, "translationY", 0F, DensityUtil.dip2px(this, 56F).toFloat())
+        else
+            ObjectAnimator.ofFloat(layout_week_recycler_view, "translationY", DensityUtil.dip2px(this, 56F).toFloat(), 0F)
+        animator.addListener(object : Animator.AnimatorListener {
+            override fun onAnimationRepeat(animation: Animator?) {
             }
-                    .subscribeOn(Schedulers.newThread())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(object : Observer<Int> {
-                        override fun onSubscribe(d: Disposable) {
-                            isAnimShow = true
-                            val start = if (isShow) 0 else 10000
-                            val end = if (isShow) 10000 else 0
-                            ObjectAnimator.ofInt(arrowDrawable!!, "level", start, end).setDuration(240).start()
-                        }
 
-                        override fun onComplete() {
-                            isWeekShow = isShow
-                            titleTextView.setCompoundDrawablesWithIntrinsicBounds(null, null, if (isShowArrow) arrowDrawable else null, null)
-                            isAnimShow = false
-                        }
+            override fun onAnimationEnd(animation: Animator?) {
+                if (!isShow && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+                    layout_week_recycler_view.elevation = 0F
+            }
 
-                        override fun onError(e: Throwable) {
-                            e.printStackTrace()
-                            isAnimShow = false
-                        }
+            override fun onAnimationCancel(animation: Animator?) {
+            }
 
-                        override fun onNext(t: Int) {
-                            barLayoutParams.height = trueHeight + t
-                            appBar.layoutParams = barLayoutParams
-                        }
-                    })
-        }
+            override fun onAnimationStart(animation: Animator?) {
+                if (isShow && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+                    layout_week_recycler_view.elevation = 8F
+            }
+        })
+        animator.start()
+        val start = if (isShow) 0 else 10000
+        val end = if (isShow) 10000 else 0
+        ObjectAnimator.ofInt(arrowDrawable!!, "level", start, end).start()
+        isWeekShow = isShow
+//        val trueHeight = DensityUtil.dip2px(this, 60F)
+//        layout_week_recycler_view_internal.post {
+//            val height = layout_week_recycler_view_internal.measuredHeight
+//            val barLayoutParams = appBar.layoutParams
+//            Observable.create<Int> { subscriber ->
+//                val showDistanceArray = Array(31, { i -> (height / 30F) * i })
+//                if (!isShow)
+//                    showDistanceArray.reverse()
+//                showDistanceArray.forEach {
+//                    subscriber.onNext(it.toInt())
+//                    Thread.sleep(8)
+//                }
+//                subscriber.onComplete()
+//            }
+//                    .subscribeOn(Schedulers.newThread())
+//                    .observeOn(AndroidSchedulers.mainThread())
+//                    .subscribe(object : Observer<Int> {
+//                        override fun onSubscribe(d: Disposable) {
+//                            isAnimShow = true
+//                            val start = if (isShow) 0 else 10000
+//                            val end = if (isShow) 10000 else 0
+//                            ObjectAnimator.ofInt(arrowDrawable!!, "level", start, end).setDuration(240).start()
+//                        }
+//
+//                        override fun onComplete() {
+//                            isWeekShow = isShow
+//                            titleTextView.setCompoundDrawablesWithIntrinsicBounds(null, null, if (isShowArrow) arrowDrawable else null, null)
+//                            isAnimShow = false
+//                        }
+//
+//                        override fun onError(e: Throwable) {
+//                            e.printStackTrace()
+//                            isAnimShow = false
+//                        }
+//
+//                        override fun onNext(t: Int) {
+//                            barLayoutParams.height = trueHeight + t
+//                            appBar.layoutParams = barLayoutParams
+//                        }
+//                    })
+//        }
     }
 
     private fun swipeLayout(itemId: Int) {
@@ -734,7 +765,7 @@ class MainActivity : BaseActivity() {
         when {
             requestCode == ADD_ACCOUNT_CODE && resultCode == Activity.RESULT_OK ->
                 updateAllData()
-            requestCode == Constants.REQUEST_QQ_SHARE ->
+            requestCode == com.tencent.connect.common.Constants.REQUEST_QQ_SHARE ->
                 Tencent.onActivityResultData(requestCode, resultCode, data, APP.tencentListener)
             else ->
                 finish()
@@ -744,7 +775,7 @@ class MainActivity : BaseActivity() {
 
     private fun registerWeibo(savedInstanceState: Bundle?) {
         // 创建微博分享接口实例
-        mWeiboShareAPI = WeiboShareSDK.createWeiboAPI(this, Constant.WEIBO_API_KEY, false)
+        mWeiboShareAPI = WeiboShareSDK.createWeiboAPI(this, Constants.WEIBO_API_KEY, false)
 
         // 注册第三方应用到微博客户端中，注册成功后该应用将显示在微博的应用列表中。
         // 但该附件栏集成分享权限需要合作申请，详情请查看 Demo 提示
@@ -764,9 +795,9 @@ class MainActivity : BaseActivity() {
 
     private fun registerWeiXin() {
         // 通过WXAPIFactory工厂，获取IWXAPI的实例
-        wxAPI = WXAPIFactory.createWXAPI(CondomContext.wrap(this, "weixin"), Constant.WEIXIN_API_KEY, false)
+        wxAPI = WXAPIFactory.createWXAPI(CondomContext.wrap(this, "weixin"), Constants.WEIXIN_API_KEY, false)
         // 将该app注册到微信
-        wxAPI.registerApp(Constant.WEIXIN_API_KEY)
+        wxAPI.registerApp(Constants.WEIXIN_API_KEY)
     }
 
     override fun onNewIntent(intent: Intent?) {

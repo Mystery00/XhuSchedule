@@ -23,6 +23,11 @@
             android:key="@string/key_notification_for_tomorrow_enable"
             android:title="@string/title_notification_for_tomorrow_enable" />
 
+        <ListPreference
+            android:key="@string/key_notification_for_tomorrow_type"
+            android:summary="@string/summary_notification_for_tomorrow_type"
+            android:title="@string/title_notification_for_tomorrow_type" />
+
         <Preference
             android:key="@string/key_notification_for_tomorrow_time"
             android:summary="@string/summary_notification_for_tomorrow_time"
