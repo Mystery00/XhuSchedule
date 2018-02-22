@@ -19,7 +19,7 @@
         android:background="@color/colorAccent"
         android:gravity="center"
         android:padding="@dimen/course_padding"
-        android:text="@string/title_dialog_date"
+        android:text="@string/title_dialog_time"
         android:textColor="#FFFFFF"
         android:textSize="24sp"
         android:textStyle="bold"
@@ -27,8 +27,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
 
-    <com.weilylab.xhuschedule.view.CustomDatePicker
-        android:id="@+id/datePicker"
+    <TimePicker
+        android:id="@+id/timerPicker"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"

@@ -44,6 +44,11 @@
         <item>#0000FF</item>
     </string-array>
 
+    <string-array name="notification_tomorrow_type">
+        <item>提醒今天的课程</item>
+        <item>提醒明天的课程</item>
+    </string-array>
+
     <string-array name="start_time">
         <item>08:00</item>
         <item>08:55</item>

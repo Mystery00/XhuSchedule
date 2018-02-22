@@ -195,7 +195,8 @@
     <string name="showcase_sync">点击这里，可以从教务系统重新同步数据</string>
     <string name="showcase_swipe_refresh">您可以通过下拉来随时刷新缓存</string>
 
-    <string name="title_dialog_time">请选择本学期开始时间</string>
+    <string name="title_dialog_date">请选择本学期开始时间</string>
+    <string name="title_dialog_time">请选择通知时间</string>
     <string name="title_dialog_select">请选择需要查询的信息</string>
     <string name="title_dialog_share_with_friends">分享给朋友们</string>
 

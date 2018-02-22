@@ -108,7 +108,7 @@ object Settings {
     var notificationTomorrowType: Int//提醒消息类型
         set(value) = sharedPreference.edit().putInt(Constants.NOTIFICATION_TOMORROW_TYPE, value).apply()
         get() = sharedPreference.getInt(Constants.NOTIFICATION_TOMORROW_TYPE, 0)
-    var notificationTomorrowTime: Boolean//提醒明天课程时间
-        set(value) = sharedPreference.edit().putBoolean(Constants.NOTIFICATION_TOMORROW_TIME, value).apply()
-        get() = sharedPreference.getBoolean(Constants.NOTIFICATION_TOMORROW_TIME, true)
+    var notificationTomorrowTime: String//提醒明天课程时间
+        set(value) = sharedPreference.edit().putString(Constants.NOTIFICATION_TOMORROW_TIME, value).apply()
+        get() = sharedPreference.getString(Constants.NOTIFICATION_TOMORROW_TIME, "")
 }

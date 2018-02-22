@@ -114,7 +114,7 @@
     <string name="summary_weixin">可以在微信小程序页面直接搜索“西瓜课表”即可使用</string>
     <string name="summary_notification_sound">当前铃声为 %1$s</string>
     <string name="summary_notification_for_tomorrow_type">将会提醒您%1$s的课程</string>
-    <string name="summary_notification_for_tomorrow_time">将会在每天的 %1$s 提醒您明天的课程</string>
+    <string name="summary_notification_for_tomorrow_time">将会在每天的 %1$s 提醒您课程</string>
 
     <string name="link_developer" translatable="false">https://mystery0.vip/</string>
     <string name="link_login_img" translatable="false">http://www.jianshu.com/u/de99e3e9e332</string>

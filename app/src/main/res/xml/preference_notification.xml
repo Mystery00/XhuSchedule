@@ -24,6 +24,8 @@
             android:title="@string/title_notification_for_tomorrow_enable" />
 
         <ListPreference
+            android:entries="@array/notification_tomorrow_type"
+            android:entryValues="@array/notification_tomorrow_type"
             android:key="@string/key_notification_for_tomorrow_type"
             android:summary="@string/summary_notification_for_tomorrow_type"
             android:title="@string/title_notification_for_tomorrow_type" />
