@@ -33,11 +33,10 @@
 
 package com.weilylab.xhuschedule.fragment
 
-import android.net.Uri
 import android.os.Bundle
+import android.preference.Preference
 import android.preference.RingtonePreference
 import android.preference.SwitchPreference
-import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -52,6 +51,8 @@ class NotificationFragment : BasePreferenceFragment() {
     private val TAG = "NotificationFragment"
     private lateinit var notificationSoundPreference: RingtonePreference
     private lateinit var notificationVibratePreference: SwitchPreference
+    private lateinit var notificationTomorrowEnablePreference: SwitchPreference
+    private lateinit var notificationTomorrowTimePreference: Preference
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -61,19 +62,28 @@ class NotificationFragment : BasePreferenceFragment() {
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View {
         notificationSoundPreference = findPreferenceById(R.string.key_notification_sound) as RingtonePreference
         notificationVibratePreference = findPreferenceById(R.string.key_notification_vibrate) as SwitchPreference
+        notificationTomorrowEnablePreference = findPreferenceById(R.string.key_notification_for_tomorrow_enable) as SwitchPreference
+        notificationTomorrowTimePreference = findPreferenceById(R.string.key_notification_for_tomorrow_time)
 
         notificationSoundPreference.setDefaultValue(Settings.notificationSound)
-        notificationSoundPreference.summary = getString(R.string.summary_notification_sound, getRingtoneName(Uri.parse(Settings.notificationSound)))
+        notificationSoundPreference.summary = getString(R.string.summary_notification_sound, getRingtoneName(Settings.notificationSound))
         notificationVibratePreference.isChecked = Settings.notificationVibrate
         notificationVibratePreference.setOnPreferenceChangeListener { _, _ ->
             Settings.notificationVibrate = !notificationVibratePreference.isChecked
             true
         }
+        notificationTomorrowEnablePreference.isChecked = Settings.isNotificationTomorrowEnable
+        notificationTomorrowTimePreference.isEnabled = Settings.isNotificationTomorrowEnable
 
         notificationSoundPreference.setOnPreferenceChangeListener { _, newValue ->
-            notificationSoundPreference.summary = getString(R.string.summary_notification_sound, getRingtoneName(Uri.parse(newValue.toString())))
+            notificationSoundPreference.summary = getString(R.string.summary_notification_sound, getRingtoneName(newValue.toString()))
             Settings.notificationSound = newValue.toString()
             Logs.i(TAG, "onCreateView: $newValue")
+            true
+        }
+        notificationTomorrowEnablePreference.setOnPreferenceChangeListener { _, _ ->
+            Settings.isNotificationTomorrowEnable = !notificationTomorrowEnablePreference.isChecked
+            notificationTomorrowTimePreference.isEnabled = Settings.isNotificationTomorrowEnable
             true
         }
         return super.onCreateView(inflater, container, savedInstanceState)

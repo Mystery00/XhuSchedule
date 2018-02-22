@@ -32,8 +32,8 @@
 
     <!-- popup window 动画 -->
     <style name="Animation">
-        <item name="android:windowEnterAnimation">@anim/enter_animation</item>
-        <item name="android:windowExitAnimation">@anim/out_animation</item>
+        <item name="android:windowEnterAnimation">@anim/animation_share_list_enter</item>
+        <item name="android:windowExitAnimation">@anim/animation_share_list_out</item>
     </style>
 
     <style name="LoginButton" parent="Widget.AppCompat.Button.Colored">

@@ -43,6 +43,7 @@ import android.support.v7.widget.Toolbar
 import android.view.MenuInflater
 import android.view.View
 import android.view.ViewGroup
+import com.weilylab.xhuschedule.R
 
 /**
  * A [android.preference.PreferenceActivity] which implements and proxies the necessary calls
@@ -101,6 +102,11 @@ abstract class AppCompatPreferenceActivity : PreferenceActivity() {
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
         delegate.onConfigurationChanged(newConfig)
+    }
+
+    override fun finish() {
+        super.finish()
+        overridePendingTransition(R.anim.animation_settings_out_enter,R.anim.animation_settings_out_exit)
     }
 
     override fun onStop() {

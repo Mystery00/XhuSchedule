@@ -38,6 +38,8 @@ object Constant {
     const val WEIBO_API_KEY = "2170085314"
     const val WEIXIN_API_KEY = ""
 
+    const val NOTIFICATION_SYSTEM_SOUND = "content://settings/system/notification_sound"
+
     const val IS_FIRST_RUN = "isFirstRun"
     const val FIRST_WEEK_OF_TERM = "firstWeekOfTerm"
     const val IS_SHOW_NOT = "isShowNot"
@@ -59,4 +61,6 @@ object Constant {
     const val SHOW_NOTICE_ID = "shownNoticeID"
     const val NOTIFICATION_SOUND = "notificationSound"
     const val NOTIFICATION_VIBRATE = "notificationVibrate"
+    const val NOTIFICATION_TOMORROW_ENABLE="isNotificationTomorrowEnable"
+    const val NOTIFICATION_TOMORROW_TIME="notificationTomorrowTime"
 }

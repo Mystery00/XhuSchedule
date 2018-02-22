@@ -54,9 +54,6 @@ object Settings {
     var userImg: String//用户头像路径
         set(value) = sharedPreference.edit().putString(Constant.USER_IMG, value).apply()
         get() = sharedPreference.getString(Constant.USER_IMG, "")
-    var customHeaderImg: String//头部图片路径
-        set(value) = sharedPreference.edit().putString(Constant.CUSTOM_HEADER_IMG, value).apply()
-        get() = sharedPreference.getString(Constant.CUSTOM_HEADER_IMG, "")
     var customBackgroundImg: String//背景图片路径
         set(value) = sharedPreference.edit().putString(Constant.CUSTOM_BACKGROUND_IMG, value).apply()
         get() = sharedPreference.getString(Constant.CUSTOM_BACKGROUND_IMG, "")
@@ -105,4 +102,10 @@ object Settings {
     var notificationVibrate: Boolean//是否震动
         set(value) = sharedPreference.edit().putBoolean(Constant.NOTIFICATION_VIBRATE, value).apply()
         get() = sharedPreference.getBoolean(Constant.NOTIFICATION_VIBRATE, true)
+    var isNotificationTomorrowEnable: Boolean//是否提醒明天课程
+        set(value) = sharedPreference.edit().putBoolean(Constant.NOTIFICATION_TOMORROW_ENABLE, value).apply()
+        get() = sharedPreference.getBoolean(Constant.NOTIFICATION_TOMORROW_ENABLE, true)
+    var notificationTomorrowTime: Boolean//提醒明天课程时间
+        set(value) = sharedPreference.edit().putBoolean(Constant.NOTIFICATION_TOMORROW_TIME, value).apply()
+        get() = sharedPreference.getBoolean(Constant.NOTIFICATION_TOMORROW_TIME, true)
 }

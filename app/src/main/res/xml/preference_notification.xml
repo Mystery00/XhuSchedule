@@ -17,4 +17,17 @@
 
     </PreferenceCategory>
 
+    <PreferenceCategory android:title="@string/screen_category_notification_for_tomorrow">
+
+        <SwitchPreference
+            android:key="@string/key_notification_for_tomorrow_enable"
+            android:title="@string/title_notification_for_tomorrow_enable" />
+
+        <Preference
+            android:key="@string/key_notification_for_tomorrow_time"
+            android:summary="@string/summary_notification_for_tomorrow_time"
+            android:title="@string/title_notification_for_tomorrow_time" />
+
+    </PreferenceCategory>
+
 </PreferenceScreen>

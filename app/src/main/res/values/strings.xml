@@ -95,6 +95,8 @@
     <string name="hint_feedback_email">联系方式</string>
     <string name="hint_feedback_text">建议</string>
     <string name="hint_share_message">嗨，我正在使用西瓜课表2.0查课程哦~ 除了查课表，还可以查考试，查成绩。 下载链接：https://www.coolapk.com/apk/com.weilylab.xhuschedule</string>
+    <string name="hint_notification_system">默认铃声</string>
+    <string name="hint_notification_none">静音</string>
 
     <string name="warning_enable_multi_user_mode">
         请确保您是双学位的学生或者有同时查看多个账号课表的需求。\n\n
@@ -112,7 +114,6 @@
     <string name="error_time_after">选择的时间不能在当前时间之后</string>
     <string name="error_download">下载失败</string>
     <string name="error_custom_img">自定义图片设置失败！</string>
-    <string name="error_real_time_database_null">云端数据异常，请联系开发者并等待修复！</string>
 
     <string name="success_login">登陆成功，欢迎使用%1$s！</string>
     <string name="course_time_format">%1$s - %2$s</string>

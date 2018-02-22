@@ -281,6 +281,7 @@ class MainActivity : BaseActivity() {
         }
         action_settings.setOnClickListener {
             startActivity(Intent(this, SettingsActivity::class.java))
+            overridePendingTransition(R.anim.animation_settings_in_enter, R.anim.animation_settings_in_exit)
         }
         titleLayout.setOnClickListener {
             //占位，在上层处理点击事件
@@ -643,7 +644,7 @@ class MainActivity : BaseActivity() {
         when (itemId) {
             R.id.bottom_nav_today -> {
                 if (lastIndex == 2)
-                    setListenerRefresh()
+                    setRefresh()
                 lastIndex = viewpager.currentItem
                 if (isWeekShow)
                     showWeekAnim(false, false)
@@ -653,7 +654,7 @@ class MainActivity : BaseActivity() {
             }
             R.id.bottom_nav_week -> {
                 if (lastIndex == 2)
-                    setListenerRefresh()
+                    setRefresh()
                 lastIndex = viewpager.currentItem
                 titleTextView.setOnClickListener {
                     showWeekAnim(!isWeekShow, true)
@@ -663,7 +664,7 @@ class MainActivity : BaseActivity() {
             }
             R.id.bottom_nav_profile -> {
                 if (lastIndex != 2)
-                    setListenerSettings()
+                    setSettings()
                 lastIndex = viewpager.currentItem
                 if (isWeekShow)
                     showWeekAnim(false, false)
@@ -692,7 +693,7 @@ class MainActivity : BaseActivity() {
         }
     }
 
-    private fun setListenerRefresh() {
+    private fun setRefresh() {
         animatorList.forEach { it.cancel() }
         animatorList.clear()
         animatorList.add(ObjectAnimator.ofFloat(action_sync, "rotation", 360F, 0F).setDuration(ANIMATION_DURATION))
@@ -702,7 +703,7 @@ class MainActivity : BaseActivity() {
         animatorList.forEach { it.start() }
     }
 
-    private fun setListenerSettings() {
+    private fun setSettings() {
         animatorList.forEach { it.cancel() }
         animatorList.clear()
         animatorList.add(ObjectAnimator.ofFloat(action_sync, "rotation", 0F, 360F).setDuration(ANIMATION_DURATION))
