@@ -40,8 +40,10 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Point
 import android.graphics.drawable.Drawable
+import android.os.Build
 import android.os.Bundle
 import android.support.design.widget.Snackbar
+import android.support.v4.app.ActivityOptionsCompat
 import android.support.v4.content.ContextCompat
 import android.support.v4.view.ViewPager
 import android.support.v7.app.AlertDialog
@@ -280,8 +282,13 @@ class MainActivity : BaseActivity() {
             updateAllData()
         }
         action_settings.setOnClickListener {
-            startActivity(Intent(this, SettingsActivity::class.java))
-            overridePendingTransition(R.anim.animation_settings_in_enter, R.anim.animation_settings_in_exit)
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+                startActivity(Intent(this, SettingsActivity::class.java))
+                overridePendingTransition(R.anim.animation_settings_in_enter, R.anim.animation_settings_in_exit)
+            } else {
+                ObjectAnimator.ofFloat(action_settings, "rotation", 0F, 360F).start()
+                startActivity(Intent(this, SettingsActivity::class.java), ActivityOptionsCompat.makeSceneTransitionAnimation(this).toBundle())
+            }
         }
         titleLayout.setOnClickListener {
             //占位，在上层处理点击事件

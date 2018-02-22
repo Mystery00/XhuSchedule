@@ -34,6 +34,7 @@
 package com.weilylab.xhuschedule.activity
 
 import android.content.res.Configuration
+import android.os.Build
 import android.os.Bundle
 import android.preference.PreferenceActivity
 import android.support.annotation.LayoutRes
@@ -106,7 +107,8 @@ abstract class AppCompatPreferenceActivity : PreferenceActivity() {
 
     override fun finish() {
         super.finish()
-        overridePendingTransition(R.anim.animation_settings_out_enter,R.anim.animation_settings_out_exit)
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP)
+            overridePendingTransition(R.anim.animation_settings_out_enter, R.anim.animation_settings_out_exit)
     }
 
     override fun onStop() {

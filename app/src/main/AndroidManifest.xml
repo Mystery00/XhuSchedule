@@ -83,7 +83,7 @@
             android:name=".activity.SettingsActivity"
             android:label="@string/title_activity_settings"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/AppTheme.Settings" />
         <activity
             android:name=".activity.shortcut.RefreshWidgetActivity"
             android:theme="@android:style/Theme.NoDisplay" />
