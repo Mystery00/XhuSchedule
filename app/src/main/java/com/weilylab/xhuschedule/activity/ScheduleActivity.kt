@@ -133,7 +133,7 @@ class ScheduleActivity : BaseActivity() {
             (tableNav.getChildAt(i) as TextView).setTextColor(Settings.customTableTextColor)
         }
         studentList.clear()
-        studentList.addAll(XhuFileUtil.getArrayFromFile(File(filesDir.absolutePath + File.separator + "data" + File.separator + "user"), Student::class.java))
+        studentList.addAll(XhuFileUtil.getArrayFromFile(XhuFileUtil.getStudentListFile(this), Student::class.java))
         initInfo()
     }
 
@@ -153,7 +153,7 @@ class ScheduleActivity : BaseActivity() {
                 .subscribe(object : DisposableObserver<GetCourseRT>() {
                     private lateinit var getCourseRT: GetCourseRT
                     override fun onComplete() {
-                        val parentFile = File(filesDir.absolutePath + File.separator + "courses/")
+                        val parentFile = XhuFileUtil.getCourseParentFile(this@ScheduleActivity)
                         if (!parentFile.exists())
                             parentFile.mkdirs()
                         val base64Name = XhuFileUtil.filterString(Base64.encodeToString(student.username.toByteArray(), Base64.DEFAULT))
@@ -201,7 +201,7 @@ class ScheduleActivity : BaseActivity() {
         if (student == null)
             return
         Observable.create<Boolean> { subscriber ->
-            val parentFile = File(filesDir.absolutePath + File.separator + "courses/")
+            val parentFile = XhuFileUtil.getCourseParentFile(this)
             if (!parentFile.exists())
                 parentFile.mkdirs()
             val base64Name = XhuFileUtil.filterString(Base64.encodeToString(student.username.toByteArray(), Base64.DEFAULT))

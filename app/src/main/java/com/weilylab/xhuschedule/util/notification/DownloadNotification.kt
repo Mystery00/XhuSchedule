@@ -39,6 +39,7 @@ import android.content.Context
 import android.support.v4.app.NotificationCompat
 
 import com.weilylab.xhuschedule.R
+import com.weilylab.xhuschedule.util.Constants
 import com.weilylab.xhuschedule.util.download.Download
 import vip.mystery0.tools.fileUtil.FileUtil
 
@@ -48,7 +49,7 @@ object DownloadNotification {
     private lateinit var notificationBuilder: NotificationCompat.Builder
 
     fun notify(context: Context, fileName: String) {
-        notificationBuilder = NotificationCompat.Builder(context, "Xhu Schedule")
+        notificationBuilder = NotificationCompat.Builder(context, Constants.NOTIFICATION_CHANNEL_ID_DOWNLOAD)
                 .setSound(null)
                 .setVibrate(null)
                 .setSmallIcon(R.drawable.ic_stat_update)

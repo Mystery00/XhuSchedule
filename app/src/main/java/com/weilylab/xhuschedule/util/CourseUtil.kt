@@ -35,13 +35,15 @@ package com.weilylab.xhuschedule.util
 
 import com.weilylab.xhuschedule.classes.baseClass.Course
 import com.weilylab.xhuschedule.classes.baseClass.CourseTimeInfo
+import java.util.*
 import kotlin.collections.ArrayList
 
 /**
  * Created by myste.
  */
 object CourseUtil {
-    fun getAllCourses(courses: Array<Course>): ArrayList<ArrayList<ArrayList<Course>>> {val array = Array(11, { Array<ArrayList<Course>>(7, { ArrayList() }) })
+    fun getAllCourses(courses: Array<Course>): ArrayList<ArrayList<ArrayList<Course>>> {
+        val array = Array(11, { Array<ArrayList<Course>>(7, { ArrayList() }) })
         courses.forEach {
             try {//尝试解析时间
                 val timeArray = it.time.split('-')
@@ -154,17 +156,17 @@ object CourseUtil {
                 false
             }
         }.forEach {
-            val timeArray = it.time.split('-')
-            val startTime = timeArray[0].toInt() - 1
-            var flag = false
-            for (temp in array[startTime][it.day.toInt() - 1]) {
-                flag = temp.with(it)
-                if (flag)
-                    break
-            }
-            if (!flag)
-                array[startTime][it.day.toInt() - 1].add(it)
-        }
+                    val timeArray = it.time.split('-')
+                    val startTime = timeArray[0].toInt() - 1
+                    var flag = false
+                    for (temp in array[startTime][it.day.toInt() - 1]) {
+                        flag = temp.with(it)
+                        if (flag)
+                            break
+                    }
+                    if (!flag)
+                        array[startTime][it.day.toInt() - 1].add(it)
+                }
         val list = ArrayList<ArrayList<ArrayList<Course>>>()
         for (i in 0 until array.size) {
             list.add(ArrayList())
@@ -215,6 +217,11 @@ object CourseUtil {
                     list.add(it)
                 }
         return list
+    }
+
+    fun getTomorrowCourses(): ArrayList<Course> {
+        val calendar = Calendar.getInstance()
+        return ArrayList()
     }
 
     fun splitInfo(course: Course): Array<CourseTimeInfo> {

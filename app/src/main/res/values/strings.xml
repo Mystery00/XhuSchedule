@@ -176,10 +176,6 @@
     <string name="download_notification_title_download">%1$s/%2$s</string>
     <string name="download_notification_text">已下载%1$d%%</string>
 
-    <string name="notification_channel_id" translatable="false">Xhu Schedule</string>
-    <string name="notification_channel_name" translatable="false">WeiLy Studio</string>
-    <string name="notification_channel_description" translatable="false">微力实验室</string>
-
     <string name="dialog_edit_teacher">任课教师</string>
     <string name="dialog_edit_time">上课时间</string>
     <string name="dialog_edit_location">上课地点</string>
@@ -222,4 +218,8 @@
     <string name="test_course_current_progress_trans">当前不透明度为%1$f%%</string>
     <string name="test_course_current_progress_text_size">当前文字大小为%1$dsp</string>
     <string name="test_course_current_progress_text_height">当前高度为%1$ddp</string>
+
+    <string name="tomorrow_info_notification_title">您明天有%1$d门课要上哦~</string>
+
+    <string name="tomorrow_info_notification_placeholder_text_template">展开可查看详细信息</string>
 </resources>

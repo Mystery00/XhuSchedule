@@ -40,19 +40,23 @@ import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.widget.Toast
 import com.google.firebase.analytics.FirebaseAnalytics
+import com.weilylab.xhuschedule.APP
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.classes.baseClass.XhuScheduleError
 import com.weilylab.xhuschedule.listener.UploadLogListener
 import com.weilylab.xhuschedule.service.UpdateService
 import com.weilylab.xhuschedule.util.CalendarUtil
+import com.weilylab.xhuschedule.util.ScheduleHelper
 import com.weilylab.xhuschedule.util.Settings
 import com.weilylab.xhuschedule.util.XhuFileUtil
+import com.weilylab.xhuschedule.util.notification.TomorrowInfoNotification
 import com.zyao89.view.zloading.ZLoadingDialog
 import com.zyao89.view.zloading.Z_TYPE
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.observers.DisposableObserver
 import io.reactivex.schedulers.Schedulers
+import vip.mystery0.tools.logs.Logs
 import java.io.File
 import java.util.*
 import kotlin.math.max
@@ -66,6 +70,9 @@ class SplashActivity : BaseActivity() {
         val params = Bundle()
         params.putString(FirebaseAnalytics.Param.START_DATE, Calendar.getInstance().time.toString())
         mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.APP_OPEN, params)
+        Logs.i("tag", "onCreate: initChannelID")
+        ScheduleHelper.initChannelID(APP.getContext())//初始化NotificationChannelID
+        TomorrowInfoNotification.notify(this)
         if (Settings.autoCheckUpdate)
             startService(Intent(this, UpdateService::class.java))
         if (Settings.autoCheckLog) {

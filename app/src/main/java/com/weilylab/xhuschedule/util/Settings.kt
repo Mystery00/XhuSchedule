@@ -102,13 +102,19 @@ object Settings {
     var notificationVibrate: Boolean//是否震动
         set(value) = sharedPreference.edit().putBoolean(Constants.NOTIFICATION_VIBRATE, value).apply()
         get() = sharedPreference.getBoolean(Constants.NOTIFICATION_VIBRATE, true)
+    var notificationTime: String//提醒明天课程时间
+        set(value) = sharedPreference.edit().putString(Constants.NOTIFICATION_TIME, value).apply()
+        get() = sharedPreference.getString(Constants.NOTIFICATION_TIME, "06:00")
+    var notificationExactTime: Boolean//准时提醒
+        set(value) = sharedPreference.edit().putBoolean(Constants.NOTIFICATION_EXACT_TIME, value).apply()
+        get() = sharedPreference.getBoolean(Constants.NOTIFICATION_EXACT_TIME, false)
     var isNotificationTomorrowEnable: Boolean//是否提醒明天课程
         set(value) = sharedPreference.edit().putBoolean(Constants.NOTIFICATION_TOMORROW_ENABLE, value).apply()
         get() = sharedPreference.getBoolean(Constants.NOTIFICATION_TOMORROW_ENABLE, true)
+    var isNotificationExamEnable: Boolean//是否提醒考试
+        set(value) = sharedPreference.edit().putBoolean(Constants.NOTIFICATION_EXAM_ENABLE, value).apply()
+        get() = sharedPreference.getBoolean(Constants.NOTIFICATION_EXAM_ENABLE, true)
     var notificationTomorrowType: Int//提醒消息类型
         set(value) = sharedPreference.edit().putInt(Constants.NOTIFICATION_TOMORROW_TYPE, value).apply()
         get() = sharedPreference.getInt(Constants.NOTIFICATION_TOMORROW_TYPE, 0)
-    var notificationTomorrowTime: String//提醒明天课程时间
-        set(value) = sharedPreference.edit().putString(Constants.NOTIFICATION_TOMORROW_TIME, value).apply()
-        get() = sharedPreference.getString(Constants.NOTIFICATION_TOMORROW_TIME, "")
 }

@@ -49,7 +49,6 @@ import com.google.firebase.analytics.FirebaseAnalytics
 import com.weilylab.xhuschedule.classes.baseClass.Student
 import com.weilylab.xhuschedule.listener.LoginListener
 import com.weilylab.xhuschedule.util.XhuFileUtil
-import java.io.File
 
 class LoginActivity : BaseActivity() {
 
@@ -121,15 +120,14 @@ class LoginActivity : BaseActivity() {
 
             override fun loginDone() {
                 ScheduleHelper.isLogin = true
-                val userFile = File(filesDir.absolutePath + File.separator + "data" + File.separator + "user")
-                val userList = XhuFileUtil.getArrayListFromFile(userFile, Student::class.java)
+                val userList = XhuFileUtil.getArrayListFromFile(XhuFileUtil.getStudentListFile(this@LoginActivity), Student::class.java)
                 var result = false
                 userList.forEach {
                     result = result || it.username == student.username
                 }
                 if (!result)
                     userList.add(student)
-                XhuFileUtil.saveObjectToFile(userList, userFile)
+                XhuFileUtil.saveObjectToFile(userList, XhuFileUtil.getStudentListFile(this@LoginActivity))
                 loginDialog.dismiss()
                 Toast.makeText(this@LoginActivity, getString(R.string.success_login, getString(R.string.app_name)), Toast.LENGTH_SHORT)
                         .show()

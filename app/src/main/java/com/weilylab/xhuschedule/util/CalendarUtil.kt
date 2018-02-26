@@ -37,6 +37,7 @@ import android.content.Context
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.classes.baseClass.Exam
 import com.weilylab.xhuschedule.util.widget.WidgetHelper
+import vip.mystery0.tools.logs.Logs
 import java.util.*
 
 /**
@@ -139,14 +140,26 @@ object CalendarUtil {
         }
     }
 
-    const val FIRST_TERM = 1
-    const val SECOND_TERM = 2
+    private const val FIRST_TERM = 1
+    private const val SECOND_TERM = 2
 
-    fun getTermType():Int {
+    fun getTermType(): Int {
         val calendar = Calendar.getInstance()
         return when (calendar.get(Calendar.MONTH) + 1) {
             in 3 until 9 -> SECOND_TERM
             else -> FIRST_TERM
         }
+    }
+
+    fun getNotificationTriggerTime(): Long {
+        val TAG = "CalendarUtil"
+        val now = Calendar.getInstance()
+        val calendar = Calendar.getInstance()
+        val setTime = Settings.notificationTime.split(':')
+        calendar.set(now.get(Calendar.YEAR), now.get(Calendar.MONTH), now.get(Calendar.DATE), setTime[0].toInt(), setTime[1].toInt(), 0)
+        if (calendar.timeInMillis < now.timeInMillis)
+            calendar.add(Calendar.DATE, 1)
+        Logs.i(TAG, "getNotificationTriggerTime: ${calendar.time}")
+        return calendar.timeInMillis
     }
 }

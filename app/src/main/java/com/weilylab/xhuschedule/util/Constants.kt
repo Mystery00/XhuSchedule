@@ -40,6 +40,17 @@ object Constants {
 
     const val NOTIFICATION_SYSTEM_SOUND = "content://settings/system/notification_sound"
 
+    const val NOTIFICATION_CHANNEL_ID_DEFAULT = "XhuSchedule-Default"
+    const val NOTIFICATION_CHANNEL_NAME_DEFAULT = "默认"
+    const val NOTIFICATION_CHANNEL_ID_DOWNLOAD = "XhuSchedule-Download"
+    const val NOTIFICATION_CHANNEL_NAME_DOWNLOAD = "下载"
+    const val NOTIFICATION_CHANNEL_DESCRIPTION_DOWNLOAD = "用于应用内更新下载"
+    const val NOTIFICATION_CHANNEL_ID_TOMORROW = "XhuSchedule-Tomorrow"
+    const val NOTIFICATION_CHANNEL_NAME_TOMORROW = "课程提醒"
+    const val NOTIFICATION_CHANNEL_DESCRIPTION_TOMORROW = "每日提醒课程或考试"
+
+    const val NOTIFICATION_INTENT_ACTION = "notificationIntentAction"
+
     const val IS_FIRST_RUN = "isFirstRun"
     const val FIRST_WEEK_OF_TERM = "firstWeekOfTerm"
     const val IS_SHOW_NOT = "isShowNot"
@@ -60,7 +71,9 @@ object Constants {
     const val SHOW_NOTICE_ID = "shownNoticeID"
     const val NOTIFICATION_SOUND = "notificationSound"
     const val NOTIFICATION_VIBRATE = "notificationVibrate"
-    const val NOTIFICATION_TOMORROW_ENABLE="isNotificationTomorrowEnable"
-    const val NOTIFICATION_TOMORROW_TYPE="isNotificationTomorrowType"
-    const val NOTIFICATION_TOMORROW_TIME="notificationTomorrowTime"
+    const val NOTIFICATION_TIME = "notificationTime"
+    const val NOTIFICATION_EXACT_TIME = "notificationExactTime"
+    const val NOTIFICATION_TOMORROW_ENABLE = "isNotificationTomorrowEnable"
+    const val NOTIFICATION_EXAM_ENABLE = "isNotificationExamEnable"
+    const val NOTIFICATION_TOMORROW_TYPE = "isNotificationTomorrowType"
 }

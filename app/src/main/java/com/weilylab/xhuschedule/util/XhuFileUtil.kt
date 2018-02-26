@@ -51,6 +51,14 @@ import java.util.regex.Pattern
 object XhuFileUtil {
     private val TAG = "XhuFileUtil"
 
+    fun getStudentListFile(context: Context): File {
+        return File(context.filesDir.absolutePath + File.separator + "data" + File.separator + "user")
+    }
+
+    fun getCourseParentFile(context: Context):File{
+        return File(context.filesDir.absolutePath + File.separator + "courses/")
+    }
+
     fun filterString(name: String): String {
         val regEx = "[^a-zA-Z0-9]"
         val pattern = Pattern.compile(regEx)

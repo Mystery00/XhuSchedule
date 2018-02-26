@@ -15,6 +15,16 @@
             android:key="@string/key_notification_vibrate"
             android:title="@string/title_notification_vibrate" />
 
+        <Preference
+            android:key="@string/key_notification_time"
+            android:summary="@string/summary_notification_time"
+            android:title="@string/title_notification_time" />
+
+        <SwitchPreference
+            android:key="@string/key_notification_exact_time"
+            android:summary="@string/summary_notification_exact_time"
+            android:title="@string/title_notification_exact_time" />
+
     </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/screen_category_notification_for_tomorrow">
@@ -30,10 +40,13 @@
             android:summary="@string/summary_notification_for_tomorrow_type"
             android:title="@string/title_notification_for_tomorrow_type" />
 
-        <Preference
-            android:key="@string/key_notification_for_tomorrow_time"
-            android:summary="@string/summary_notification_for_tomorrow_time"
-            android:title="@string/title_notification_for_tomorrow_time" />
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/screen_category_notification_for_exam">
+
+        <SwitchPreference
+            android:key="@string/key_notification_for_exam_enable"
+            android:title="@string/title_notification_for_exam_enable" />
 
     </PreferenceCategory>
 

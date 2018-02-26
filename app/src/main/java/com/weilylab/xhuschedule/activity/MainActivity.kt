@@ -230,7 +230,7 @@ class MainActivity : BaseActivity() {
         viewpager.adapter = viewPagerAdapter
 
         studentList.clear()
-        studentList.addAll(XhuFileUtil.getArrayFromFile(File(filesDir.absolutePath + File.separator + "data" + File.separator + "user"), Student::class.java))
+        studentList.addAll(XhuFileUtil.getArrayFromFile(XhuFileUtil.getStudentListFile(this), Student::class.java))
 
         weekAdapter = WeekAdapter(this, 1)
         weekAdapter.setWeekChangeListener(object : WeekChangeListener {
@@ -306,7 +306,7 @@ class MainActivity : BaseActivity() {
     fun updateAllView(week: Int) {
         ScheduleHelper.isAnalysisError = false
         studentList.clear()
-        studentList.addAll(XhuFileUtil.getArrayFromFile(File(filesDir.absolutePath + File.separator + "data" + File.separator + "user"), Student::class.java))
+        studentList.addAll(XhuFileUtil.getArrayFromFile(XhuFileUtil.getStudentListFile(this), Student::class.java))
         if (studentList.size == 0) {
             ScheduleHelper.isLogin = false
             startActivityForResult(Intent(this, LoginActivity::class.java), ADD_ACCOUNT_CODE)
@@ -430,7 +430,7 @@ class MainActivity : BaseActivity() {
         loadingDialog.show()
         ObjectAnimator.ofFloat(action_sync, "rotation", 0F, 360F).setDuration(1000).start()
         studentList.clear()
-        studentList.addAll(XhuFileUtil.getArrayFromFile(File(filesDir.absolutePath + File.separator + "data" + File.separator + "user"), Student::class.java))
+        studentList.addAll(XhuFileUtil.getArrayFromFile(XhuFileUtil.getStudentListFile(this), Student::class.java))
         if (studentList.size == 0) {
             ScheduleHelper.isLogin = false
             startActivityForResult(Intent(this, LoginActivity::class.java), ADD_ACCOUNT_CODE)
@@ -635,47 +635,6 @@ class MainActivity : BaseActivity() {
         val end = if (isShow) 10000 else 0
         ObjectAnimator.ofInt(arrowDrawable!!, "level", start, end).start()
         isWeekShow = isShow
-//        val trueHeight = DensityUtil.dip2px(this, 60F)
-//        layout_week_recycler_view_internal.post {
-//            val height = layout_week_recycler_view_internal.measuredHeight
-//            val barLayoutParams = appBar.layoutParams
-//            Observable.create<Int> { subscriber ->
-//                val showDistanceArray = Array(31, { i -> (height / 30F) * i })
-//                if (!isShow)
-//                    showDistanceArray.reverse()
-//                showDistanceArray.forEach {
-//                    subscriber.onNext(it.toInt())
-//                    Thread.sleep(8)
-//                }
-//                subscriber.onComplete()
-//            }
-//                    .subscribeOn(Schedulers.newThread())
-//                    .observeOn(AndroidSchedulers.mainThread())
-//                    .subscribe(object : Observer<Int> {
-//                        override fun onSubscribe(d: Disposable) {
-//                            isAnimShow = true
-//                            val start = if (isShow) 0 else 10000
-//                            val end = if (isShow) 10000 else 0
-//                            ObjectAnimator.ofInt(arrowDrawable!!, "level", start, end).setDuration(240).start()
-//                        }
-//
-//                        override fun onComplete() {
-//                            isWeekShow = isShow
-//                            titleTextView.setCompoundDrawablesWithIntrinsicBounds(null, null, if (isShowArrow) arrowDrawable else null, null)
-//                            isAnimShow = false
-//                        }
-//
-//                        override fun onError(e: Throwable) {
-//                            e.printStackTrace()
-//                            isAnimShow = false
-//                        }
-//
-//                        override fun onNext(t: Int) {
-//                            barLayoutParams.height = trueHeight + t
-//                            appBar.layoutParams = barLayoutParams
-//                        }
-//                    })
-//        }
     }
 
     private fun swipeLayout(itemId: Int) {
@@ -721,7 +680,7 @@ class MainActivity : BaseActivity() {
 
                         override fun got(profile: Profile) {
                             updateProfileDialog.dismiss()
-                            XhuFileUtil.saveObjectToFile(studentList, File(filesDir.absolutePath + File.separator + "data" + File.separator + "user"))
+                            XhuFileUtil.saveObjectToFile(studentList, XhuFileUtil.getStudentListFile(this@MainActivity))
                             profileFragment.setProfile(profile)
                         }
                     })
