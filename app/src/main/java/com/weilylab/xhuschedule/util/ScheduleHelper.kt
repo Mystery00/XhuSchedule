@@ -53,8 +53,6 @@ import java.util.concurrent.TimeUnit
  * Created by myste.
  */
 object ScheduleHelper {
-    var isLogin = false
-    var isCookieAvailable = false
     var isImageChange = false
     var isUIChange = false
     var isAnalysisError = false

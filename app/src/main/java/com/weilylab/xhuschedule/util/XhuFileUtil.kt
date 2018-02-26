@@ -75,7 +75,7 @@ object XhuFileUtil {
     /**
      * 获取存储Score信息的File对象
      */
-    fun getScoreParentFile(context: Context):File{
+    fun getScoreParentFile(context: Context): File {
         return File(context.filesDir.absolutePath + File.separator + "score/")
     }
 
@@ -84,6 +84,10 @@ object XhuFileUtil {
      */
     fun getExpScoreParentFile(context: Context): File {
         return File(context.filesDir.absolutePath + File.separator + "expScore/")
+    }
+
+    fun getCourseCacheParentFile(context: Context): File {
+        return File(context.filesDir.absolutePath + File.separator + "caches/")
     }
 
     fun filterString(name: String): String {

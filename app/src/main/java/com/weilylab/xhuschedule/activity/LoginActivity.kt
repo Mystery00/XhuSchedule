@@ -38,7 +38,6 @@ import android.text.TextUtils
 import android.view.View
 import android.widget.Toast
 import com.weilylab.xhuschedule.R
-import com.weilylab.xhuschedule.util.ScheduleHelper
 import com.zyao89.view.zloading.ZLoadingDialog
 import com.zyao89.view.zloading.Z_TYPE
 import kotlinx.android.synthetic.main.activity_login.*
@@ -119,7 +118,6 @@ class LoginActivity : BaseActivity() {
             }
 
             override fun loginDone() {
-                ScheduleHelper.isLogin = true
                 val userList = XhuFileUtil.getArrayListFromFile(XhuFileUtil.getStudentListFile(this@LoginActivity), Student::class.java)
                 var result = false
                 userList.forEach {

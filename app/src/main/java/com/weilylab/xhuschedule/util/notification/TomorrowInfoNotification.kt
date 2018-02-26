@@ -35,9 +35,9 @@ package com.weilylab.xhuschedule.util.notification
 
 import android.app.Notification
 import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.Context
 import android.support.v4.app.NotificationCompat
-import android.graphics.Color
 import android.support.v4.content.ContextCompat
 import android.text.SpannableStringBuilder
 import android.text.style.ForegroundColorSpan
@@ -58,7 +58,7 @@ object TomorrowInfoNotification {
     /**
      * The unique identifier for this type of notification.
      */
-    private val NOTIFICATION_TAG = "TomorrowInfo"
+    private const val NOTIFICATION_TAG = "TomorrowInfo"
 
     /**
      * Shows the notification, or updates a previously shown notification of
@@ -77,51 +77,51 @@ object TomorrowInfoNotification {
      *
      * @see .cancel
      */
-    fun notify(context: Context, courseList: ArrayList<Course>) {
+    fun notify(context: Context, id: Int, courseList: ArrayList<Course>) {
         val res = context.resources
-        val courseItem = SpannableStringBuilder()
-        courseItem.append("Dummy")
-        courseItem.setSpan(ForegroundColorSpan(ContextCompat.getColor(context, R.color.colorPrimary)), 0, courseItem.length, 0)
-        courseItem.append("   Example content")
 
         val title = res.getString(
-                R.string.tomorrow_info_notification_title, 1)
-
+                R.string.tomorrow_info_notification_title, courseList.size)
         val builder = NotificationCompat.Builder(context, Constants.NOTIFICATION_CHANNEL_ID_TOMORROW)
                 .setDefaults(Notification.DEFAULT_ALL)
                 .setSmallIcon(R.mipmap.ic_launcher)
                 .setContentTitle(title)
                 .setContentText(context.getString(R.string.tomorrow_info_notification_placeholder_text_template))
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-//                .setContentIntent(
-//                        PendingIntent.getActivity(
-//                                context,
-//                                0,
-//                                Intent(Intent.ACTION_VIEW, Uri.parse("http://www.google.com")),
-//                                PendingIntent.FLAG_UPDATE_CURRENT))
-                .setStyle(NotificationCompat.InboxStyle()
-                        .addLine(courseItem)
-                        .addLine(courseItem)
-                        .addLine(courseItem)
-                        .setBigContentTitle(title))
+                .setContentIntent(
+                        PendingIntent.getActivity(
+                                context,
+                                0,
+                                context.packageManager.getLaunchIntentForPackage(context.packageName),
+                                PendingIntent.FLAG_UPDATE_CURRENT))
                 .setAutoCancel(true)
+        val style = NotificationCompat.InboxStyle()
+                .setBigContentTitle(title)
+        courseList.forEach {
+            val courseItem = SpannableStringBuilder()
+            courseItem.append(it.name)
+            courseItem.setSpan(ForegroundColorSpan(ContextCompat.getColor(context, R.color.colorPrimary)), 0, courseItem.length, 0)
+            courseItem.append("上课时间：${it.time} 上课地点：${it.location}")
+            style.addLine(courseItem)
+        }
+        builder.setStyle(style)
 
-        notify(context, builder.build())
+        notify(context, id, builder.build())
     }
 
-    private fun notify(context: Context, notification: Notification) {
+    private fun notify(context: Context, id: Int, notification: Notification) {
         val nm = context
                 .getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        nm.notify(NOTIFICATION_TAG, 0, notification)
+        nm.notify(NOTIFICATION_TAG, id, notification)
     }
 
     /**
      * Cancels any notifications of this type previously shown using
      * [.notify].
      */
-    fun cancel(context: Context) {
+    fun cancel(context: Context, id: Int) {
         val nm = context
                 .getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        nm.cancel(NOTIFICATION_TAG, 0)
+        nm.cancel(NOTIFICATION_TAG, id)
     }
 }

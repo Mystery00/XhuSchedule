@@ -40,7 +40,6 @@ import com.weilylab.xhuschedule.classes.baseClass.Exam
 import com.weilylab.xhuschedule.classes.baseClass.Student
 import com.weilylab.xhuschedule.util.CalendarUtil
 import com.weilylab.xhuschedule.util.CourseUtil
-import com.weilylab.xhuschedule.util.ScheduleHelper
 import com.weilylab.xhuschedule.util.XhuFileUtil
 import java.io.File
 
@@ -104,7 +103,6 @@ object WidgetHelper {
         if (!oldFile.exists()) {
             return
         }
-        ScheduleHelper.isCookieAvailable = true
         showTodayCourses.addAll(CourseUtil.getTodayCourses(XhuFileUtil.getCoursesFromFile(context, oldFile), dayIndex))
     }
 
@@ -134,7 +132,6 @@ object WidgetHelper {
         if (!oldFile.exists()) {
             return
         }
-        ScheduleHelper.isCookieAvailable = true
         showScheduleCourses.addAll(CourseUtil.getWeekCourses(XhuFileUtil.getCoursesFromFile(context, oldFile)))
     }
 
@@ -163,7 +160,6 @@ object WidgetHelper {
         if (!oldFile.exists()) {
             return
         }
-        ScheduleHelper.isCookieAvailable = true
         getExamList(XhuFileUtil.getArrayListFromFile(oldFile, Exam::class.java))
     }
 
