@@ -78,13 +78,10 @@ object TomorrowInfoNotification {
      * @see .cancel
      */
     fun notify(context: Context, id: Int, courseList: ArrayList<Course>) {
-        val res = context.resources
-
-        val title = res.getString(
-                R.string.tomorrow_info_notification_title, courseList.size)
+        val title = context.getString(R.string.tomorrow_info_notification_title, courseList.size)
         val builder = NotificationCompat.Builder(context, Constants.NOTIFICATION_CHANNEL_ID_TOMORROW)
                 .setDefaults(Notification.DEFAULT_ALL)
-                .setSmallIcon(R.mipmap.ic_launcher)
+                .setSmallIcon(R.drawable.ic_stat_tomorrow)
                 .setContentTitle(title)
                 .setContentText(context.getString(R.string.tomorrow_info_notification_placeholder_text_template))
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
@@ -101,7 +98,7 @@ object TomorrowInfoNotification {
             val courseItem = SpannableStringBuilder()
             courseItem.append(it.name)
             courseItem.setSpan(ForegroundColorSpan(ContextCompat.getColor(context, R.color.colorPrimary)), 0, courseItem.length, 0)
-            courseItem.append("上课时间：${it.time} 上课地点：${it.location}")
+            courseItem.append("\t上课时间：${it.time} 上课地点：${it.location}")
             style.addLine(courseItem)
         }
         builder.setStyle(style)
