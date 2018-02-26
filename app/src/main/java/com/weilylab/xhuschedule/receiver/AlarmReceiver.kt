@@ -36,6 +36,7 @@ package com.weilylab.xhuschedule.receiver
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import com.weilylab.xhuschedule.service.ShowNotificationService
 import vip.mystery0.tools.logs.Logs
 
 class AlarmReceiver : BroadcastReceiver() {
@@ -43,5 +44,6 @@ class AlarmReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context, intent: Intent) {
         Logs.i(TAG, "onReceive: ")
+        context.startService(Intent(context, ShowNotificationService::class.java))
     }
 }

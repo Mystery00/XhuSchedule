@@ -36,10 +36,10 @@ package com.weilylab.xhuschedule.fragment
 import android.app.TimePickerDialog
 import android.content.Intent
 import android.os.Bundle
-import android.preference.ListPreference
 import android.preference.Preference
 import android.preference.RingtonePreference
 import android.preference.SwitchPreference
+import android.support.v7.app.AlertDialog
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -59,7 +59,7 @@ class NotificationFragment : BasePreferenceFragment() {
     private lateinit var notificationExactTimePreference: SwitchPreference
     private lateinit var notificationTomorrowEnablePreference: SwitchPreference
     private lateinit var notificationExamEnablePreference: SwitchPreference
-    private lateinit var notificationTomorrowTypePreference: ListPreference
+    private lateinit var notificationTomorrowTypePreference: Preference
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -73,7 +73,7 @@ class NotificationFragment : BasePreferenceFragment() {
         notificationExactTimePreference = findPreferenceById(R.string.key_notification_exact_time) as SwitchPreference
         notificationTomorrowEnablePreference = findPreferenceById(R.string.key_notification_for_tomorrow_enable) as SwitchPreference
         notificationExamEnablePreference = findPreferenceById(R.string.key_notification_for_exam_enable) as SwitchPreference
-        notificationTomorrowTypePreference = findPreferenceById(R.string.key_notification_for_tomorrow_type) as ListPreference
+        notificationTomorrowTypePreference = findPreferenceById(R.string.key_notification_for_tomorrow_type)
 
         notificationSoundPreference.setDefaultValue(Settings.notificationSound)
         notificationSoundPreference.summary = getString(R.string.summary_notification_sound, getRingtoneName(Settings.notificationSound))
@@ -136,14 +136,22 @@ class NotificationFragment : BasePreferenceFragment() {
                 activity.startService(Intent(activity, NotificationService::class.java))
             true
         }
-        notificationTomorrowTypePreference.setOnPreferenceChangeListener { _, newValue ->
-            val index = resources.getStringArray(R.array.notification_tomorrow_type).indexOfFirst { it == newValue }
-            Settings.notificationTomorrowType = index
-            notificationTomorrowTypePreference.summary = getString(R.string.summary_notification_for_tomorrow_type, when (Settings.notificationTomorrowType) {
-                0 -> "今日"
-                1 -> "明日"
-                else -> throw NullPointerException("Type error!")
-            })
+        notificationTomorrowTypePreference.setOnPreferenceClickListener {
+            var selected = Settings.notificationTomorrowType
+            AlertDialog.Builder(activity)
+                    .setTitle(R.string.title_notification_for_tomorrow_type)
+                    .setSingleChoiceItems(R.array.notification_tomorrow_type, selected, { _, which ->
+                        selected = which
+                    })
+                    .setPositiveButton(android.R.string.ok, { _, _ ->
+                        Settings.notificationTomorrowType = selected
+                        notificationTomorrowTypePreference.summary = getString(R.string.summary_notification_for_tomorrow_type, when (Settings.notificationTomorrowType) {
+                            0 -> "今日"
+                            1 -> "明日"
+                            else -> throw NullPointerException("Type error!")
+                        })
+                    })
+                    .show()
             true
         }
         return super.onCreateView(inflater, container, savedInstanceState)

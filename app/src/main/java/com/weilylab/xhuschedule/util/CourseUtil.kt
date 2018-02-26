@@ -219,9 +219,15 @@ object CourseUtil {
         return list
     }
 
-    fun getTomorrowCourses(): ArrayList<Course> {
-        val calendar = Calendar.getInstance()
-        return ArrayList()
+    fun getTomorrowCourses(courses: Array<Course>): ArrayList<Course> {
+        var weekIndex = CalendarUtil.getWeekIndex()//周数
+        var dayIndex = CalendarUtil.getWeekIndex()//星期几
+        dayIndex++
+        if (dayIndex > 7) {
+            weekIndex++
+            dayIndex %= 7
+        }
+        return getTodayCourses(courses, weekIndex, dayIndex)
     }
 
     fun splitInfo(course: Course): Array<CourseTimeInfo> {

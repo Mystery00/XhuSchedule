@@ -39,8 +39,8 @@ import android.os.IBinder
 import android.util.Base64
 import com.weilylab.xhuschedule.classes.baseClass.CourseNotificationWithID
 import com.weilylab.xhuschedule.classes.baseClass.Student
-import com.weilylab.xhuschedule.util.CalendarUtil
 import com.weilylab.xhuschedule.util.CourseUtil
+import com.weilylab.xhuschedule.util.Settings
 import com.weilylab.xhuschedule.util.XhuFileUtil
 import com.weilylab.xhuschedule.util.notification.TomorrowInfoNotification
 import io.reactivex.Observable
@@ -57,8 +57,6 @@ class ShowNotificationService : Service() {
         super.onCreate()
         Observable.create<CourseNotificationWithID> {
             val studentList = XhuFileUtil.getArrayFromFile(XhuFileUtil.getStudentListFile(this), Student::class.java)
-            val weekIndex = CalendarUtil.getWeekIndex()//周数
-            val dayIndex = CalendarUtil.getWeekIndex()//星期几
             for (i in studentList.indices) {
                 val student = studentList[i]
                 val parentFile = XhuFileUtil.getCourseCacheParentFile(this)
@@ -75,7 +73,10 @@ class ShowNotificationService : Service() {
                 val courses = XhuFileUtil.getCoursesFromFile(this, oldFile)
                 if (courses.isEmpty())
                     continue
-                val showCourses = CourseUtil.getTodayCourses(courses)
+                val showCourses = if (Settings.notificationTomorrowType == 0)//今天
+                    CourseUtil.getTodayCourses(courses)
+                else//明天
+                    CourseUtil.getTomorrowCourses(courses)
                 if (showCourses.isNotEmpty())
                     it.onNext(CourseNotificationWithID(i, showCourses))
             }
@@ -87,6 +88,7 @@ class ShowNotificationService : Service() {
                 .subscribe(object : DisposableObserver<CourseNotificationWithID>() {
                     override fun onComplete() {
                         Logs.i(TAG, "onComplete: ")
+                        startService(Intent(this@ShowNotificationService, NotificationService::class.java))
                         stopSelf()
                     }
 
