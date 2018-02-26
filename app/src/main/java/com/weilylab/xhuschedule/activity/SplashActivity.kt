@@ -49,7 +49,6 @@ import com.weilylab.xhuschedule.util.CalendarUtil
 import com.weilylab.xhuschedule.util.ScheduleHelper
 import com.weilylab.xhuschedule.util.Settings
 import com.weilylab.xhuschedule.util.XhuFileUtil
-import com.weilylab.xhuschedule.util.notification.TomorrowInfoNotification
 import com.zyao89.view.zloading.ZLoadingDialog
 import com.zyao89.view.zloading.Z_TYPE
 import io.reactivex.Observable
@@ -72,7 +71,7 @@ class SplashActivity : BaseActivity() {
         mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.APP_OPEN, params)
         Logs.i("tag", "onCreate: initChannelID")
         ScheduleHelper.initChannelID(APP.getContext())//初始化NotificationChannelID
-        TomorrowInfoNotification.notify(this)
+//        TomorrowInfoNotification.notify(this)
         if (Settings.autoCheckUpdate)
             startService(Intent(this, UpdateService::class.java))
         if (Settings.autoCheckLog) {

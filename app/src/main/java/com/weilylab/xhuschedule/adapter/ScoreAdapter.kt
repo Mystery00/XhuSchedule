@@ -33,6 +33,7 @@
 
 package com.weilylab.xhuschedule.adapter
 
+import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
 import android.content.Context
 import android.support.graphics.drawable.VectorDrawableCompat
@@ -78,14 +79,14 @@ class ScoreAdapter(private val context: Context,
                         context.getString(R.string.score_credit, score.credit) + "\n\n" +
                         context.getString(R.string.score_gpa, score.gpa)
                 holder.detailsTextView.text = text
+                holder.imageView.setImageDrawable(drawable)
+                holder.imageView.alpha = 0F
+
                 //没有动画的展开伸缩
-                if (currentIndex == holder.itemView.tag) {
+                if (currentIndex == holder.itemView.tag)
                     holder.detailsTextView.maxLines = Int.MAX_VALUE
-                    holder.imageView.setImageDrawable(drawable)
-                } else {
+                else
                     holder.detailsTextView.maxLines = 1
-                    holder.imageView.setImageDrawable(null)
-                }
                 holder.itemView.setOnClickListener {
                     Logs.i(TAG, "onBindViewHolder: 点击事件")
                     valueAnimator?.cancel()
@@ -94,14 +95,14 @@ class ScoreAdapter(private val context: Context,
                         -1 -> {
                             Logs.i(TAG, "onBindViewHolder: 没有条目被选中")
                             valueAnimator = TextViewUtils.setMaxLinesWithAnimation(holder.detailsTextView, Int.MAX_VALUE)
-                            holder.imageView.setImageDrawable(drawable)
+                            ObjectAnimator.ofFloat(holder.imageView, "alpha", 0F, 1F).start()
                             currentIndex = holder.adapterPosition
                             openedHolder = holder
                         }
                         holder.adapterPosition -> {
                             Logs.i(TAG, "onBindViewHolder: 选中的是当前条目")
                             valueAnimator = TextViewUtils.setMaxLinesWithAnimation(holder.detailsTextView, 1)
-                            holder.imageView.setImageDrawable(null)
+                            ObjectAnimator.ofFloat(holder.imageView, "alpha", 1F, 0F).start()
                             currentIndex = -1
                             openedHolder = null
                         }
@@ -109,10 +110,10 @@ class ScoreAdapter(private val context: Context,
                             Logs.i(TAG, "onBindViewHolder: 选中的其他条目")
                             if (openedHolder != null) {
                                 valueAnimator = TextViewUtils.setMaxLinesWithAnimation(openedHolder!!.detailsTextView, 1)
-                                openedHolder!!.imageView.setImageDrawable(null)
+                                ObjectAnimator.ofFloat(openedHolder!!.imageView, "alpha", 1F, 0F).start()
                             }
                             valueAnimator = TextViewUtils.setMaxLinesWithAnimation(holder.detailsTextView, Int.MAX_VALUE)
-                            holder.imageView.setImageDrawable(drawable)
+                            ObjectAnimator.ofFloat(holder.imageView, "alpha", 0F, 1F).start()
                             currentIndex = holder.adapterPosition
                             openedHolder = holder
                         }

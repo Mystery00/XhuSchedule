@@ -109,7 +109,7 @@ class ExpScoreActivity : BaseActivity() {
         recycler_view.layoutManager = LinearLayoutManager(this)
         recycler_view.adapter = adapter
         studentList.clear()
-        studentList.addAll(XhuFileUtil.getArrayFromFile(File(filesDir.absolutePath + File.separator + "data" + File.separator + "user"), Student::class.java))
+        studentList.addAll(XhuFileUtil.getArrayFromFile(XhuFileUtil.getStudentListFile(this), Student::class.java))
         initInfo()
         floatingActionButton.setOnClickListener {
             getExpScores(currentStudent, year, term)
@@ -120,7 +120,7 @@ class ExpScoreActivity : BaseActivity() {
         if (student == null || year == null || term == null)
             return
         Observable.create<Boolean> { subscriber ->
-            val parentFile = File(filesDir.absolutePath + File.separator + "expScore/")
+            val parentFile = XhuFileUtil.getExpScoreParentFile(this)
             if (!parentFile.exists())
                 parentFile.mkdirs()
             val base64Name = XhuFileUtil.filterString(Base64.encodeToString(student.username.toByteArray(), Base64.DEFAULT))
@@ -156,7 +156,7 @@ class ExpScoreActivity : BaseActivity() {
                 scoreList.clear()
                 scoreList.addAll(array)
                 adapter.notifyDataSetChanged()
-                val parentFile = File(filesDir.absolutePath + File.separator + "expScore/")
+                val parentFile = XhuFileUtil.getExpScoreParentFile(this@ExpScoreActivity)
                 if (!parentFile.exists())
                     parentFile.mkdirs()
                 val base64Name = XhuFileUtil.filterString(Base64.encodeToString(student.username.toByteArray(), Base64.DEFAULT))
@@ -224,7 +224,7 @@ class ExpScoreActivity : BaseActivity() {
         val yearList = ArrayList<String>()
         //初始化入学年份
         Observable.create<Any> {
-            userList.addAll(XhuFileUtil.getArrayFromFile(File(filesDir.absolutePath + File.separator + "data" + File.separator + "user"), Student::class.java))
+            userList.addAll(XhuFileUtil.getArrayFromFile(XhuFileUtil.getStudentListFile(this), Student::class.java))
             val selectedStudent = userList.firstOrNull { it.username == username }
             if (selectedStudent == null) {
                 it.onComplete()

@@ -51,12 +51,39 @@ import java.util.regex.Pattern
 object XhuFileUtil {
     private val TAG = "XhuFileUtil"
 
+    /**
+     * 获取存储Student信息的File对象
+     */
     fun getStudentListFile(context: Context): File {
         return File(context.filesDir.absolutePath + File.separator + "data" + File.separator + "user")
     }
 
-    fun getCourseParentFile(context: Context):File{
+    /**
+     * 获取存储Course信息的File对象
+     */
+    fun getCourseParentFile(context: Context): File {
         return File(context.filesDir.absolutePath + File.separator + "courses/")
+    }
+
+    /**
+     * 获取存储Exam信息的File对象
+     */
+    fun getExamParentFile(context: Context): File {
+        return File(context.filesDir.absolutePath + File.separator + "exam/")
+    }
+
+    /**
+     * 获取存储Score信息的File对象
+     */
+    fun getScoreParentFile(context: Context):File{
+        return File(context.filesDir.absolutePath + File.separator + "score/")
+    }
+
+    /**
+     * 获取存储ExpScore信息得File对象
+     */
+    fun getExpScoreParentFile(context: Context): File {
+        return File(context.filesDir.absolutePath + File.separator + "expScore/")
     }
 
     fun filterString(name: String): String {

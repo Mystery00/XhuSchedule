@@ -39,7 +39,6 @@ import android.support.design.widget.Snackbar
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Base64
-import android.view.Menu
 import android.view.MenuItem
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.weilylab.xhuschedule.R
@@ -47,6 +46,7 @@ import com.weilylab.xhuschedule.adapter.ExamAdapter
 import com.weilylab.xhuschedule.classes.baseClass.Exam
 import com.weilylab.xhuschedule.classes.baseClass.Student
 import com.weilylab.xhuschedule.listener.GetArrayListener
+import com.weilylab.xhuschedule.util.Constants
 import com.weilylab.xhuschedule.util.XhuFileUtil
 import com.weilylab.xhuschedule.util.widget.WidgetHelper
 import com.zyao89.view.zloading.ZLoadingDialog
@@ -92,7 +92,7 @@ class ExamActivity : BaseActivity() {
         recycler_view.layoutManager = LinearLayoutManager(this)
         recycler_view.adapter = adapter
         studentList.clear()
-        studentList.addAll(XhuFileUtil.getArrayFromFile(File(filesDir.absolutePath + File.separator + "data" + File.separator + "user"), Student::class.java))
+        studentList.addAll(XhuFileUtil.getArrayFromFile(XhuFileUtil.getStudentListFile(this), Student::class.java))
         initInfo()
     }
 
@@ -144,14 +144,14 @@ class ExamActivity : BaseActivity() {
                     override fun onComplete() {
                         loadingDialog.dismiss()
                         adapter.notifyDataSetChanged()
-                        val parentFile = File(filesDir.absolutePath + File.separator + "exam/")
+                        val parentFile = XhuFileUtil.getExamParentFile(this@ExamActivity)
                         if (!parentFile.exists())
                             parentFile.mkdirs()
                         val base64Name = XhuFileUtil.filterString(Base64.encodeToString(username!!.toByteArray(), Base64.DEFAULT))
                         val savedFile = File(parentFile, base64Name)
                         savedFile.createNewFile()
                         XhuFileUtil.saveObjectToFile(testList, savedFile)
-                        sendBroadcast(Intent("android.appwidget.action.APPWIDGET_UPDATE")
+                        sendBroadcast(Intent(Constants.WIDGET_UPDATE_BROADCAST)
                                 .putExtra("TAG", WidgetHelper.ALL_TAG))
                     }
 

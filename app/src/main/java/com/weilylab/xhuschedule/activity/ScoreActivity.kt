@@ -123,7 +123,7 @@ class ScoreActivity : BaseActivity() {
         if (student == null || year == null || term == null)
             return
         Observable.create<Boolean> { subscriber ->
-            val parentFile = File(filesDir.absolutePath + File.separator + "score/")
+            val parentFile = XhuFileUtil.getScoreParentFile(this)
             if (!parentFile.exists())
                 parentFile.mkdirs()
             val base64Name = XhuFileUtil.filterString(Base64.encodeToString(student.username.toByteArray(), Base64.DEFAULT))
@@ -164,7 +164,7 @@ class ScoreActivity : BaseActivity() {
                 scoreList.clear()
                 scoreList.addAll(array)
                 adapter.notifyDataSetChanged()
-                val parentFile = File(filesDir.absolutePath + File.separator + "score/")
+                val parentFile = XhuFileUtil.getScoreParentFile(this@ScoreActivity)
                 if (!parentFile.exists())
                     parentFile.mkdirs()
                 val base64Name = XhuFileUtil.filterString(Base64.encodeToString(student.username.toByteArray(), Base64.DEFAULT))
@@ -244,7 +244,7 @@ class ScoreActivity : BaseActivity() {
         val yearList = ArrayList<String>()
         //初始化入学年份
         Observable.create<Any> {
-            userList.addAll(XhuFileUtil.getArrayFromFile(File(filesDir.absolutePath + File.separator + "data" + File.separator + "user"), Student::class.java))
+            userList.addAll(XhuFileUtil.getArrayFromFile(XhuFileUtil.getStudentListFile(this), Student::class.java))
             val selectedStudent = userList.firstOrNull { it.username == username }
             if (selectedStudent == null) {
                 it.onComplete()
