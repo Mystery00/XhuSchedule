@@ -470,7 +470,7 @@ class MainActivity : BaseActivity() {
                             return
                         }
                         isRefreshData = false
-                        sendBroadcast(Intent(Constants.WIDGET_UPDATE_BROADCAST)
+                        sendBroadcast(Intent(Constants.ACTION_WIDGET_UPDATE_BROADCAST)
                                 .putExtra("TAG", WidgetHelper.ALL_TAG))
                         updateAllView()
                     }

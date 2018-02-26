@@ -1,5 +1,5 @@
 /*
- * Created by Mystery0 on 18-2-21 下午9:12.
+ * Created by Mystery0 on 18-2-27 上午2:40.
  * Copyright (c) 2018. All Rights reserved.
  *
  *                    =====================================================
@@ -28,7 +28,7 @@
  *                    =                                                   =
  *                    =====================================================
  *
- * Last modified 18-2-21 下午9:11
+ * Last modified 18-2-27 上午2:40
  */
 
 package com.weilylab.xhuschedule.service
@@ -40,15 +40,10 @@ import android.support.v4.app.NotificationCompat
 import android.support.v4.app.NotificationManagerCompat
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.util.Constants
-import com.weilylab.xhuschedule.util.widget.WidgetHelper
 
-class WidgetInitService : Service() {
+class BootInitService : Service() {
     companion object {
         private const val NOTIFICATION_ID = 0
-    }
-
-    override fun onBind(intent: Intent): IBinder? {
-        return null
     }
 
     override fun onCreate() {
@@ -60,19 +55,16 @@ class WidgetInitService : Service() {
                 .setPriority(NotificationManagerCompat.IMPORTANCE_NONE)
                 .build()
         startForeground(NOTIFICATION_ID, notification)
-        Thread(Runnable {
-            WidgetHelper.refreshWeekCourses(this)
-            WidgetHelper.syncDayIndex()
-            WidgetHelper.refreshTodayCourses(this)
-            WidgetHelper.refreshExamList(this)
-            sendBroadcast(Intent(Constants.ACTION_WIDGET_UPDATE_BROADCAST)
-                    .putExtra("TAG", WidgetHelper.ALL_TAG))
-            stopSelf()
-        }).start()
+        startService(Intent(this, NotificationService::class.java))
+        stopSelf()
+    }
+
+    override fun onBind(intent: Intent): IBinder? {
+        return null
     }
 
     override fun onDestroy() {
-        stopForeground(true)
         super.onDestroy()
+        stopForeground(true)
     }
 }

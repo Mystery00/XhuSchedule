@@ -1,5 +1,5 @@
 /*
- * Created by Mystery0 on 18-2-21 下午9:12.
+ * Created by Mystery0 on 18-2-27 上午2:26.
  * Copyright (c) 2018. All Rights reserved.
  *
  *                    =====================================================
@@ -28,51 +28,24 @@
  *                    =                                                   =
  *                    =====================================================
  *
- * Last modified 18-2-21 下午9:11
+ * Last modified 18-2-27 上午2:26
  */
 
-package com.weilylab.xhuschedule.service
+package com.weilylab.xhuschedule.receiver
 
-import android.app.Service
+import android.content.BroadcastReceiver
+import android.content.Context
 import android.content.Intent
-import android.os.IBinder
-import android.support.v4.app.NotificationCompat
-import android.support.v4.app.NotificationManagerCompat
-import com.weilylab.xhuschedule.R
+import com.weilylab.xhuschedule.service.BootInitService
 import com.weilylab.xhuschedule.util.Constants
-import com.weilylab.xhuschedule.util.widget.WidgetHelper
+import vip.mystery0.tools.logs.Logs
 
-class WidgetInitService : Service() {
-    companion object {
-        private const val NOTIFICATION_ID = 0
-    }
+class BootCompletedReceiver : BroadcastReceiver() {
+    private val TAG = "BootCompletedReceiver"
 
-    override fun onBind(intent: Intent): IBinder? {
-        return null
-    }
-
-    override fun onCreate() {
-        super.onCreate()
-        val notification = NotificationCompat.Builder(this, Constants.NOTIFICATION_CHANNEL_ID_DEFAULT)
-                .setSmallIcon(R.mipmap.ic_launcher)
-                .setContentText("正在初始化数据")
-                .setAutoCancel(true)
-                .setPriority(NotificationManagerCompat.IMPORTANCE_NONE)
-                .build()
-        startForeground(NOTIFICATION_ID, notification)
-        Thread(Runnable {
-            WidgetHelper.refreshWeekCourses(this)
-            WidgetHelper.syncDayIndex()
-            WidgetHelper.refreshTodayCourses(this)
-            WidgetHelper.refreshExamList(this)
-            sendBroadcast(Intent(Constants.ACTION_WIDGET_UPDATE_BROADCAST)
-                    .putExtra("TAG", WidgetHelper.ALL_TAG))
-            stopSelf()
-        }).start()
-    }
-
-    override fun onDestroy() {
-        stopForeground(true)
-        super.onDestroy()
+    override fun onReceive(context: Context, intent: Intent) {
+        Logs.i(TAG, "onReceive: ")
+        if (intent.action == Constants.ACTION_BOOT_COMPLETED)
+            context.startService(Intent(context, BootInitService::class.java))
     }
 }

@@ -151,7 +151,7 @@ class ExamActivity : BaseActivity() {
                         val savedFile = File(parentFile, base64Name)
                         savedFile.createNewFile()
                         XhuFileUtil.saveObjectToFile(testList, savedFile)
-                        sendBroadcast(Intent(Constants.WIDGET_UPDATE_BROADCAST)
+                        sendBroadcast(Intent(Constants.ACTION_WIDGET_UPDATE_BROADCAST)
                                 .putExtra("TAG", WidgetHelper.ALL_TAG))
                     }
 

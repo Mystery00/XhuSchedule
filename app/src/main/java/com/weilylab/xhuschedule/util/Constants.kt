@@ -40,7 +40,8 @@ object Constants {
 
     const val NOTIFICATION_SYSTEM_SOUND = "content://settings/system/notification_sound"
 
-    const val WIDGET_UPDATE_BROADCAST = "android.appwidget.action.APPWIDGET_UPDATE"
+    const val ACTION_WIDGET_UPDATE_BROADCAST = "android.appwidget.action.APPWIDGET_UPDATE"
+    const val ACTION_BOOT_COMPLETED="android.intent.action.BOOT_COMPLETED"
 
     const val NOTIFICATION_CHANNEL_ID_DEFAULT = "XhuSchedule-Default"
     const val NOTIFICATION_CHANNEL_NAME_DEFAULT = "默认"
