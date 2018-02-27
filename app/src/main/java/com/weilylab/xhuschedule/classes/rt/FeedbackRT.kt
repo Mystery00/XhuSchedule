@@ -33,5 +33,4 @@
 
 package com.weilylab.xhuschedule.classes.rt
 
-class FeedbackRT :RT() {
-}
+class FeedbackRT :RT()
