@@ -40,22 +40,19 @@ import android.support.v4.app.NotificationCompat
 import android.support.v4.app.NotificationManagerCompat
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.util.Constants
+import com.weilylab.xhuschedule.util.ScheduleHelper
 
 class BootInitService : Service() {
-    companion object {
-        private const val NOTIFICATION_ID = 0
-    }
 
     override fun onCreate() {
         super.onCreate()
         val notification = NotificationCompat.Builder(this, Constants.NOTIFICATION_CHANNEL_ID_DEFAULT)
-                .setSmallIcon(R.mipmap.ic_launcher)
+                .setSmallIcon(R.drawable.ic_stat_foreground)
                 .setContentText("正在初始化数据")
                 .setAutoCancel(true)
-                .setPriority(NotificationManagerCompat.IMPORTANCE_NONE)
                 .build()
-        startForeground(NOTIFICATION_ID, notification)
-        startService(Intent(this, NotificationService::class.java))
+        startForeground(Constants.NOTIFICATION_ID_FOREGROUND_BOOT_COMPLETE, notification)
+        ScheduleHelper.setTrigger(this)
         stopSelf()
     }
 
@@ -64,7 +61,7 @@ class BootInitService : Service() {
     }
 
     override fun onDestroy() {
-        super.onDestroy()
         stopForeground(true)
+        super.onDestroy()
     }
 }

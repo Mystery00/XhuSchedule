@@ -34,7 +34,6 @@
 package com.weilylab.xhuschedule.fragment
 
 import android.app.TimePickerDialog
-import android.content.Intent
 import android.os.Bundle
 import android.preference.Preference
 import android.preference.RingtonePreference
@@ -44,15 +43,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.weilylab.xhuschedule.R
-import com.weilylab.xhuschedule.service.NotificationService
+import com.weilylab.xhuschedule.util.ScheduleHelper
 import com.weilylab.xhuschedule.util.Settings
+import vip.mystery0.tools.logs.Logs
 import java.util.*
 
 /**
  * Created by myste.
  */
 class NotificationFragment : BasePreferenceFragment() {
-    private val TAG = "NotificationFragment"
     private lateinit var notificationSoundPreference: RingtonePreference
     private lateinit var notificationVibratePreference: SwitchPreference
     private lateinit var notificationTimePreference: Preference
@@ -116,6 +115,7 @@ class NotificationFragment : BasePreferenceFragment() {
                 val newTime = "$newHourString:$newMinuteString"
                 Settings.notificationTime = newTime
                 notificationTimePreference.summary = getString(R.string.summary_notification_time, Settings.notificationTime)
+                ScheduleHelper.setTrigger(activity)
             }, hour, minute, true).show()
             true
         }
@@ -126,14 +126,12 @@ class NotificationFragment : BasePreferenceFragment() {
         notificationTomorrowEnablePreference.setOnPreferenceChangeListener { _, _ ->
             Settings.isNotificationTomorrowEnable = !notificationTomorrowEnablePreference.isChecked
             notificationTomorrowTypePreference.isEnabled = Settings.isNotificationTomorrowEnable
-            if (Settings.isNotificationTomorrowEnable)
-                activity.startService(Intent(activity, NotificationService::class.java))
+            ScheduleHelper.setTrigger(activity)
             true
         }
         notificationExamEnablePreference.setOnPreferenceChangeListener { _, _ ->
             Settings.isNotificationExamEnable = !notificationExamEnablePreference.isChecked
-            if (Settings.isNotificationExamEnable)
-                activity.startService(Intent(activity, NotificationService::class.java))
+            ScheduleHelper.setTrigger(activity)
             true
         }
         notificationTomorrowTypePreference.setOnPreferenceClickListener {

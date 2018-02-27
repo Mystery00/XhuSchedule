@@ -36,12 +36,12 @@ package com.weilylab.xhuschedule.service
 import android.app.Service
 import android.content.Intent
 import android.os.IBinder
+import android.support.v4.app.NotificationCompat
 import android.util.Base64
+import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.classes.baseClass.CourseNotificationWithID
 import com.weilylab.xhuschedule.classes.baseClass.Student
-import com.weilylab.xhuschedule.util.CourseUtil
-import com.weilylab.xhuschedule.util.Settings
-import com.weilylab.xhuschedule.util.XhuFileUtil
+import com.weilylab.xhuschedule.util.*
 import com.weilylab.xhuschedule.util.notification.TomorrowInfoNotification
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -55,6 +55,12 @@ class ShowNotificationService : Service() {
 
     override fun onCreate() {
         super.onCreate()
+        val notification = NotificationCompat.Builder(this, Constants.NOTIFICATION_CHANNEL_ID_DEFAULT)
+                .setSmallIcon(R.drawable.ic_stat_foreground)
+                .setContentText("正在初始化数据")
+                .setAutoCancel(true)
+                .build()
+        startForeground(Constants.NOTIFICATION_ID_FOREGROUND_ALARM, notification)
         Observable.create<CourseNotificationWithID> {
             val studentList = XhuFileUtil.getArrayFromFile(XhuFileUtil.getStudentListFile(this), Student::class.java)
             for (i in studentList.indices) {
@@ -78,8 +84,9 @@ class ShowNotificationService : Service() {
                 else//明天
                     CourseUtil.getTomorrowCourses(courses)
                 if (showCourses.isNotEmpty())
-                    it.onNext(CourseNotificationWithID(i, showCourses))
+                    it.onNext(CourseNotificationWithID(i + Constants.NOTIFICATION_ID_COURSE_START_INDEX, showCourses))
             }
+            Thread.sleep(1000)
             it.onComplete()
         }
                 .subscribeOn(Schedulers.newThread())
@@ -87,8 +94,7 @@ class ShowNotificationService : Service() {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(object : DisposableObserver<CourseNotificationWithID>() {
                     override fun onComplete() {
-                        Logs.i(TAG, "onComplete: ")
-                        startService(Intent(this@ShowNotificationService, NotificationService::class.java))
+                        ScheduleHelper.setTrigger(this@ShowNotificationService)
                         stopSelf()
                     }
 

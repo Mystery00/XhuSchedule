@@ -35,12 +35,15 @@ package com.weilylab.xhuschedule.service
 
 import android.app.IntentService
 import android.content.Intent
+import android.support.v4.app.NotificationCompat
+import android.support.v4.app.NotificationManagerCompat
 import android.support.v7.app.AlertDialog
 import com.google.gson.Gson
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.classes.baseClass.Version
 import com.weilylab.xhuschedule.interfaces.PhpService
 import com.weilylab.xhuschedule.util.APPActivityManager
+import com.weilylab.xhuschedule.util.Constants
 import com.weilylab.xhuschedule.util.ScheduleHelper
 import com.weilylab.xhuschedule.util.Settings
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -50,6 +53,16 @@ import vip.mystery0.tools.fileUtil.FileUtil
 import java.io.InputStreamReader
 
 class UpdateService : IntentService("PhpService") {
+    override fun onCreate() {
+        super.onCreate()
+        val notification = NotificationCompat.Builder(this, Constants.NOTIFICATION_CHANNEL_ID_DEFAULT)
+                .setSmallIcon(R.mipmap.ic_launcher)
+                .setContentText("正在初始化数据")
+                .setAutoCancel(true)
+                .setPriority(NotificationManagerCompat.IMPORTANCE_NONE)
+                .build()
+        startForeground(0, notification)
+    }
     override fun onHandleIntent(intent: Intent?) {
         ScheduleHelper.phpRetrofit
                 .create(PhpService::class.java)

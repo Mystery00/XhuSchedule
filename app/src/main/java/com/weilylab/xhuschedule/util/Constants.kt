@@ -41,7 +41,7 @@ object Constants {
     const val NOTIFICATION_SYSTEM_SOUND = "content://settings/system/notification_sound"
 
     const val ACTION_WIDGET_UPDATE_BROADCAST = "android.appwidget.action.APPWIDGET_UPDATE"
-    const val ACTION_BOOT_COMPLETED="android.intent.action.BOOT_COMPLETED"
+    const val ACTION_BOOT_COMPLETED = "android.intent.action.BOOT_COMPLETED"
 
     const val NOTIFICATION_CHANNEL_ID_DEFAULT = "XhuSchedule-Default"
     const val NOTIFICATION_CHANNEL_NAME_DEFAULT = "默认"
@@ -52,7 +52,10 @@ object Constants {
     const val NOTIFICATION_CHANNEL_NAME_TOMORROW = "课程提醒"
     const val NOTIFICATION_CHANNEL_DESCRIPTION_TOMORROW = "每日提醒课程或考试"
 
-    const val NOTIFICATION_INTENT_ACTION = "notificationIntentAction"
+    const val NOTIFICATION_ID_FOREGROUND_ALARM = 20
+    const val NOTIFICATION_ID_FOREGROUND_WIDGET = 21
+    const val NOTIFICATION_ID_FOREGROUND_BOOT_COMPLETE = 22
+    const val NOTIFICATION_ID_COURSE_START_INDEX = 100
 
     const val IS_FIRST_RUN = "isFirstRun"
     const val FIRST_WEEK_OF_TERM = "firstWeekOfTerm"

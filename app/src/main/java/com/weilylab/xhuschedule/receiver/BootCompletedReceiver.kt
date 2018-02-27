@@ -36,6 +36,7 @@ package com.weilylab.xhuschedule.receiver
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.support.v4.content.ContextCompat
 import com.weilylab.xhuschedule.service.BootInitService
 import com.weilylab.xhuschedule.util.Constants
 import vip.mystery0.tools.logs.Logs
@@ -46,6 +47,6 @@ class BootCompletedReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
         Logs.i(TAG, "onReceive: ")
         if (intent.action == Constants.ACTION_BOOT_COMPLETED)
-            context.startService(Intent(context, BootInitService::class.java))
+            ContextCompat.startForegroundService(context, Intent(context, BootInitService::class.java))
     }
 }

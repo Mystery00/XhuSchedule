@@ -34,16 +34,21 @@
 package com.weilylab.xhuschedule.util
 
 import android.annotation.TargetApi
+import android.app.AlarmManager
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.Context
+import android.content.Intent
 import android.graphics.Color
 import android.os.Build
+import com.weilylab.xhuschedule.receiver.AlarmReceiver
 import com.weilylab.xhuschedule.util.cookie.LoadCookiesInterceptor
 import com.weilylab.xhuschedule.util.cookie.SaveCookiesInterceptor
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
+import vip.mystery0.tools.logs.Logs
 import java.math.BigInteger
 import java.security.MessageDigest
 import java.util.*
@@ -115,19 +120,18 @@ object ScheduleHelper {
         return "ERROR"
     }
 
-    @TargetApi(Build.VERSION_CODES.O)
     fun initChannelID(context: Context) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             notificationManager.createNotificationChannel(createDefaultChannel())
-            notificationManager.createNotificationChannel(createChannel(Constants.NOTIFICATION_CHANNEL_ID_DOWNLOAD, Constants.NOTIFICATION_CHANNEL_NAME_DOWNLOAD, Constants.NOTIFICATION_CHANNEL_DESCRIPTION_DOWNLOAD, NotificationManager.IMPORTANCE_NONE))
+            notificationManager.createNotificationChannel(createChannel(Constants.NOTIFICATION_CHANNEL_ID_DOWNLOAD, Constants.NOTIFICATION_CHANNEL_NAME_DOWNLOAD, Constants.NOTIFICATION_CHANNEL_DESCRIPTION_DOWNLOAD, NotificationManager.IMPORTANCE_LOW))
             notificationManager.createNotificationChannel(createChannel(Constants.NOTIFICATION_CHANNEL_ID_TOMORROW, Constants.NOTIFICATION_CHANNEL_NAME_TOMORROW, Constants.NOTIFICATION_CHANNEL_DESCRIPTION_TOMORROW, NotificationManager.IMPORTANCE_HIGH))
         }
     }
 
     @TargetApi(Build.VERSION_CODES.O)
     private fun createDefaultChannel(): NotificationChannel {
-        return createChannel(Constants.NOTIFICATION_CHANNEL_ID_DEFAULT, Constants.NOTIFICATION_CHANNEL_NAME_DEFAULT, null, NotificationManager.IMPORTANCE_NONE)
+        return createChannel(Constants.NOTIFICATION_CHANNEL_ID_DEFAULT, Constants.NOTIFICATION_CHANNEL_NAME_DEFAULT, null, NotificationManager.IMPORTANCE_LOW)
     }
 
     @TargetApi(Build.VERSION_CODES.O)
@@ -137,5 +141,20 @@ object ScheduleHelper {
         channel.description = channelDescription
         channel.lightColor = Color.GREEN
         return channel
+    }
+
+    fun setTrigger(context: Context){
+        val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        val alarmIntent = Intent(context, AlarmReceiver::class.java)
+        val pendingIntent = PendingIntent.getBroadcast(context, 0, alarmIntent, 0)
+        alarmManager.cancel(pendingIntent)//关闭定时器
+        if (!Settings.isNotificationTomorrowEnable && Settings.isNotificationExamEnable)
+            return
+        //设置定时器
+        val triggerAtTime = CalendarUtil.getNotificationTriggerTime()
+        if (Settings.notificationExactTime)
+            alarmManager.setExact(AlarmManager.RTC_WAKEUP, triggerAtTime, pendingIntent)
+        else
+            alarmManager.set(AlarmManager.RTC_WAKEUP, triggerAtTime, pendingIntent)
     }
 }

@@ -44,7 +44,6 @@ import com.weilylab.xhuschedule.APP
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.classes.baseClass.XhuScheduleError
 import com.weilylab.xhuschedule.listener.UploadLogListener
-import com.weilylab.xhuschedule.service.NotificationService
 import com.weilylab.xhuschedule.service.UpdateService
 import com.weilylab.xhuschedule.util.CalendarUtil
 import com.weilylab.xhuschedule.util.ScheduleHelper
@@ -65,6 +64,7 @@ import kotlin.math.max
  * Created by mystery0.
  */
 class SplashActivity : BaseActivity() {
+    private val TAG = "SplashActivity"
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val params = Bundle()
@@ -72,7 +72,7 @@ class SplashActivity : BaseActivity() {
         mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.APP_OPEN, params)
         Logs.i("tag", "onCreate: initChannelID")
         ScheduleHelper.initChannelID(APP.getContext())//初始化NotificationChannelID
-        startService(Intent(this, NotificationService::class.java))
+        ScheduleHelper.setTrigger(this)
         if (Settings.autoCheckUpdate)
             startService(Intent(this, UpdateService::class.java))
         if (Settings.autoCheckLog) {

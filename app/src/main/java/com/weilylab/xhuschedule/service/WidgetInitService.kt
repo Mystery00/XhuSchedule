@@ -43,9 +43,6 @@ import com.weilylab.xhuschedule.util.Constants
 import com.weilylab.xhuschedule.util.widget.WidgetHelper
 
 class WidgetInitService : Service() {
-    companion object {
-        private const val NOTIFICATION_ID = 0
-    }
 
     override fun onBind(intent: Intent): IBinder? {
         return null
@@ -54,12 +51,11 @@ class WidgetInitService : Service() {
     override fun onCreate() {
         super.onCreate()
         val notification = NotificationCompat.Builder(this, Constants.NOTIFICATION_CHANNEL_ID_DEFAULT)
-                .setSmallIcon(R.mipmap.ic_launcher)
+                .setSmallIcon(R.drawable.ic_stat_foreground)
                 .setContentText("正在初始化数据")
                 .setAutoCancel(true)
-                .setPriority(NotificationManagerCompat.IMPORTANCE_NONE)
                 .build()
-        startForeground(NOTIFICATION_ID, notification)
+        startForeground(Constants.NOTIFICATION_ID_FOREGROUND_WIDGET, notification)
         Thread(Runnable {
             WidgetHelper.refreshWeekCourses(this)
             WidgetHelper.syncDayIndex()
