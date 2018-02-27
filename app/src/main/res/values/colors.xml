@@ -18,7 +18,8 @@
     <color name="colorWhite">#FFFFFF</color>
     <color name="colorRed">#ff0000</color>
 
-    <color name="login_color">#bfbfbf</color>
+    <color name="login_color">#646464</color>
+    <color name="schedule_text_color">#646464</color>
 
     <color name="color1">#039BDA</color>
     <color name="color2">#F5703C</color>

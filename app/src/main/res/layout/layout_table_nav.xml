@@ -8,8 +8,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPrimary"
-    android:orientation="vertical">
+    android:divider="@drawable/lines"
+    android:orientation="vertical"
+    android:showDividers="middle">
 
     <TextView
         android:id="@+id/textView1"
@@ -17,7 +18,7 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:text="@string/table_nav1"
-        android:textColor="@color/colorWhite"
+        android:textColor="@color/schedule_text_color"
         android:textStyle="bold" />
 
     <TextView
@@ -26,7 +27,7 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:text="@string/table_nav2"
-        android:textColor="@color/colorWhite"
+        android:textColor="@color/schedule_text_color"
         android:textStyle="bold" />
 
     <TextView
@@ -35,7 +36,7 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:text="@string/table_nav3"
-        android:textColor="@color/colorWhite"
+        android:textColor="@color/schedule_text_color"
         android:textStyle="bold" />
 
     <TextView
@@ -44,7 +45,7 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:text="@string/table_nav4"
-        android:textColor="@color/colorWhite"
+        android:textColor="@color/schedule_text_color"
         android:textStyle="bold" />
 
     <TextView
@@ -53,7 +54,7 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:text="@string/table_nav5"
-        android:textColor="@color/colorWhite"
+        android:textColor="@color/schedule_text_color"
         android:textStyle="bold" />
 
     <TextView
@@ -62,7 +63,7 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:text="@string/table_nav6"
-        android:textColor="@color/colorWhite"
+        android:textColor="@color/schedule_text_color"
         android:textStyle="bold" />
 
     <TextView
@@ -71,7 +72,7 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:text="@string/table_nav7"
-        android:textColor="@color/colorWhite"
+        android:textColor="@color/schedule_text_color"
         android:textStyle="bold" />
 
     <TextView
@@ -80,7 +81,7 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:text="@string/table_nav8"
-        android:textColor="@color/colorWhite"
+        android:textColor="@color/schedule_text_color"
         android:textStyle="bold" />
 
     <TextView
@@ -89,7 +90,7 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:text="@string/table_nav9"
-        android:textColor="@color/colorWhite"
+        android:textColor="@color/schedule_text_color"
         android:textStyle="bold" />
 
     <TextView
@@ -98,7 +99,7 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:text="@string/table_nav10"
-        android:textColor="@color/colorWhite"
+        android:textColor="@color/schedule_text_color"
         android:textStyle="bold" />
 
     <TextView
@@ -107,7 +108,7 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:text="@string/table_nav11"
-        android:textColor="@color/colorWhite"
+        android:textColor="@color/schedule_text_color"
         android:textStyle="bold" />
 
 </LinearLayout>

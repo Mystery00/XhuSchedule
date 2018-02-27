@@ -45,78 +45,54 @@
                     app:layout_constraintTop_toTopOf="parent"
                     app:popupTheme="@style/AppTheme.PopupOverlay" />
 
-                <TextView
-                    android:id="@+id/title_username"
-                    android:layout_width="wrap_content"
-                    android:layout_height="0dp"
-                    android:layout_marginStart="@dimen/material_margin"
-                    android:gravity="center_vertical"
-                    android:text="@string/title_item_username"
-                    android:textColor="@color/colorWhite"
-                    app:layout_constraintBottom_toBottomOf="@id/spinner_username"
-                    app:layout_constraintEnd_toStartOf="@id/spinner_username"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="@id/spinner_username" />
-
                 <com.jaredrummler.materialspinner.MaterialSpinner
                     android:id="@+id/spinner_username"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="@dimen/material_margin"
+                    android:paddingEnd="@dimen/material_margin"
+                    android:paddingStart="@dimen/material_margin"
                     app:layout_constraintBottom_toTopOf="@id/spinner_year"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/title_username"
+                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/toolbar"
                     app:ms_background_color="@color/colorPrimary"
                     app:ms_hint="@string/hint_popup_view_student" />
-
-                <TextView
-                    android:id="@+id/title_year"
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:layout_marginStart="@dimen/material_margin"
-                    android:gravity="center_vertical"
-                    android:text="@string/title_item_year"
-                    android:textColor="@color/colorWhite"
-                    app:layout_constraintBottom_toBottomOf="@id/spinner_year"
-                    app:layout_constraintEnd_toEndOf="@id/title_username"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="@id/spinner_year" />
 
                 <com.jaredrummler.materialspinner.MaterialSpinner
                     android:id="@+id/spinner_year"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:paddingEnd="0dp"
+                    android:paddingStart="@dimen/material_margin"
+                    app:layout_constraintBottom_toTopOf="@id/lineVertical"
                     app:layout_constraintEnd_toStartOf="@+id/guideline"
-                    app:layout_constraintStart_toEndOf="@id/title_year"
+                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/spinner_username"
                     app:ms_background_color="@color/colorPrimary"
                     app:ms_hint="@string/hint_popup_view_year" />
-
-                <TextView
-                    android:id="@+id/title_term"
-                    android:layout_width="wrap_content"
-                    android:layout_height="0dp"
-                    android:gravity="center_vertical"
-                    android:text="@string/title_item_term"
-                    android:textColor="@color/colorWhite"
-                    app:layout_constraintBottom_toBottomOf="@id/spinner_year"
-                    app:layout_constraintEnd_toStartOf="@id/spinner_term"
-                    app:layout_constraintStart_toStartOf="@id/guideline"
-                    app:layout_constraintTop_toTopOf="@id/spinner_year" />
 
                 <com.jaredrummler.materialspinner.MaterialSpinner
                     android:id="@+id/spinner_term"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
-                    android:layout_marginEnd="@dimen/material_margin"
+                    android:paddingEnd="@dimen/material_margin"
+                    android:paddingStart="0dp"
                     app:layout_constraintBottom_toBottomOf="@id/spinner_year"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/title_term"
+                    app:layout_constraintStart_toEndOf="@id/guideline"
                     app:layout_constraintTop_toTopOf="@id/spinner_year"
                     app:ms_background_color="@color/colorPrimary"
                     app:ms_hint="@string/hint_popup_view_term" />
+
+                <View
+                    android:id="@+id/lineVertical"
+                    android:layout_width="0dp"
+                    android:layout_height="0.1dp"
+                    android:background="@color/colorWhite"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/spinner_year" />
 
             </android.support.constraint.ConstraintLayout>
 

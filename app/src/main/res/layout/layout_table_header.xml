@@ -14,63 +14,56 @@
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:background="@color/colorPrimary"
         android:gravity="center"
         android:text="@string/table_header1"
-        android:textColor="@color/colorWhite" />
+        android:textColor="@color/schedule_text_color" />
 
     <TextView
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:background="@color/colorPrimary"
         android:gravity="center"
         android:text="@string/table_header2"
-        android:textColor="@color/colorWhite" />
+        android:textColor="@color/schedule_text_color" />
 
     <TextView
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:background="@color/colorPrimary"
         android:gravity="center"
         android:text="@string/table_header3"
-        android:textColor="@color/colorWhite" />
+        android:textColor="@color/schedule_text_color" />
 
     <TextView
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:background="@color/colorPrimary"
         android:gravity="center"
         android:text="@string/table_header4"
-        android:textColor="@color/colorWhite" />
+        android:textColor="@color/schedule_text_color" />
 
     <TextView
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:background="@color/colorPrimary"
         android:gravity="center"
         android:text="@string/table_header5"
-        android:textColor="@color/colorWhite" />
+        android:textColor="@color/schedule_text_color" />
 
     <TextView
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:background="@color/colorPrimary"
         android:gravity="center"
         android:text="@string/table_header6"
-        android:textColor="@color/colorWhite" />
+        android:textColor="@color/schedule_text_color" />
 
     <TextView
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:background="@color/colorPrimary"
         android:gravity="center"
         android:text="@string/table_header7"
-        android:textColor="@color/colorWhite" />
+        android:textColor="@color/schedule_text_color" />
 
 </LinearLayout>

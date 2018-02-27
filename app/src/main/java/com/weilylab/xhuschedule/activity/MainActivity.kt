@@ -498,6 +498,7 @@ class MainActivity : BaseActivity() {
                                         }
                                         .show()
                             }
+                            ConstantsCode.ERROR_NOT_LOGIN -> Logs.i(TAG, "updateAllData: onNext: 未登录")
                             else -> {
                                 Logs.i(TAG, "updateAllData: onNext: ${getCourseRT.rt} ${getCourseRT.msg}")
                                 Snackbar.make(coordinatorLayoutView, getCourseRT.msg, Snackbar.LENGTH_LONG)

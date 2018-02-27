@@ -91,7 +91,7 @@ class TableFragment : Fragment() {
             rootView = inflater.inflate(R.layout.fragment_table, container, false)
             val monthView: TextView = rootView!!.findViewById(R.id.view)
             val tableHeader: LinearLayout = rootView!!.findViewById(R.id.table_header)
-            tableHeader.getChildAt(CalendarUtil.getWeekIndex() - 1).setBackgroundColor(ContextCompat.getColor(activity!!, R.color.colorWeekPrimary))
+            (tableHeader.getChildAt(CalendarUtil.getWeekIndex() - 1) as TextView).setTextColor(ContextCompat.getColor(activity!!, R.color.colorWeekPrimary))
             val calendar = Calendar.getInstance()
             val dayWeek = calendar.get(Calendar.DAY_OF_WEEK)
             if (dayWeek == Calendar.SUNDAY)
@@ -195,7 +195,7 @@ class TableFragment : Fragment() {
     }
 
     private fun formatView() {
-        val itemHeight = DensityUtil.dip2px(activity!!, Settings.customTextHeight.toFloat())
+        val itemHeight = DensityUtil.dip2px(activity!!, Settings.customTextHeight.toFloat() + 0.4F)
         val firstWeekOfTerm = Settings.firstWeekOfTerm
         val date = firstWeekOfTerm.split('-')
         val calendar = Calendar.getInstance()
@@ -218,9 +218,7 @@ class TableFragment : Fragment() {
                 "${headerArray[day]}\n${calendar.get(Calendar.DAY_OF_MONTH)}日"
             headerTextView.text = text
             if (CalendarUtil.getWeekIndex() - 1 == day)
-                headerTextView.setBackgroundColor(ContextCompat.getColor(activity!!, R.color.colorWeekIndex))
-            else
-                headerTextView.setBackgroundColor(ContextCompat.getColor(activity!!, R.color.colorWeekNotIndex))
+                headerTextView.setTextColor(ContextCompat.getColor(activity!!, R.color.colorWeekIndex))
             calendar.add(Calendar.DAY_OF_MONTH, 1)
             val layoutList = ArrayList<TableLayoutHelper>()
             val temp = resources.getIdentifier("table_schedule" + (day + 1), "id", "com.weilylab.xhuschedule")
@@ -290,7 +288,7 @@ class TableFragment : Fragment() {
     }
 
     private fun getItemView(course: Course, startTime: Int): View {
-        val itemHeight = DensityUtil.dip2px(activity!!, Settings.customTextHeight.toFloat())
+        val itemHeight = DensityUtil.dip2px(activity!!, Settings.customTextHeight.toFloat() + 0.4F)
         val itemView = View.inflate(activity, R.layout.item_widget_table, null)
         val imageView: ImageView = itemView.findViewById(R.id.imageView)
         val textViewName: TextView = itemView.findViewById(R.id.textView_name)
@@ -323,7 +321,8 @@ class TableFragment : Fragment() {
             else -> gradientDrawable.setColor(color)
         }
         val timeArray = course.time.split('-')
-        val height = (timeArray[1].toInt() - timeArray[0].toInt() + 1) * itemHeight
+        val num = timeArray[1].toInt() - timeArray[0].toInt() + 1
+        val height = num * itemHeight
         val linearLayoutParams = LinearLayout.LayoutParams(0, height, 1F)
         linearLayoutParams.topMargin = (timeArray[0].toInt() - startTime - 1) * itemHeight
         itemView.layoutParams = linearLayoutParams

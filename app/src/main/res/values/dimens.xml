@@ -61,4 +61,5 @@
     <dimen name="dialog_share_text_margin">16dp</dimen>
 
     <dimen name="widget_margin">8dp</dimen>
+    <dimen name="divider_size">0.4dp</dimen>
 </resources>

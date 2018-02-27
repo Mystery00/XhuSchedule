@@ -131,7 +131,7 @@ object Constants {
 
     const val DEFAULT_TERM_START_DATE = "2017-8-4"
     const val DEFAULT_OPACITY = 154
-    const val DEFAULT_COLOR_TEXT_HEADER = -1
+    const val DEFAULT_COLOR_TEXT_HEADER = -10197916
     const val DEFAULT_COLOR_TEXT_TODAY = -11184811
     const val DEFAULT_SIZE_TEXT = 12
     const val DEFAULT_SIZE_HEIGHT = 72
