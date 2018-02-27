@@ -33,22 +33,28 @@
 
 package com.weilylab.xhuschedule.activity
 
+import android.animation.ObjectAnimator
+import android.animation.ValueAnimator
 import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.Snackbar
+import android.support.graphics.drawable.VectorDrawableCompat
 import android.support.v4.content.ContextCompat
-import android.support.v7.widget.LinearLayoutManager
 import android.util.Base64
 import android.view.MenuItem
+import android.widget.ImageView
+import android.widget.TextView
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.weilylab.xhuschedule.R
-import com.weilylab.xhuschedule.adapter.ExamAdapter
+import com.weilylab.xhuschedule.adapter.CustomMaterialSpinnerAdapter
 import com.weilylab.xhuschedule.classes.baseClass.Exam
 import com.weilylab.xhuschedule.classes.baseClass.Student
 import com.weilylab.xhuschedule.listener.GetArrayListener
 import com.weilylab.xhuschedule.util.Constants
+import com.weilylab.xhuschedule.util.ViewUtil
 import com.weilylab.xhuschedule.util.XhuFileUtil
 import com.weilylab.xhuschedule.util.widget.WidgetHelper
+import com.weilylab.xhuschedule.view.TextViewUtils
 import com.zyao89.view.zloading.ZLoadingDialog
 import com.zyao89.view.zloading.Z_TYPE
 import io.reactivex.Observable
@@ -67,13 +73,18 @@ class ExamActivity : BaseActivity() {
     private lateinit var loadingDialog: ZLoadingDialog
     private val studentList = ArrayList<Student>()
     private val testList = ArrayList<Exam>()
-    private lateinit var adapter: ExamAdapter
+    private var valueAnimator: ValueAnimator? = null
+    private var currentIndex = -1
+    private lateinit var pointDrawable: VectorDrawableCompat
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val params = Bundle()
         params.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "exam")
         mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, params)
+        pointDrawable = VectorDrawableCompat.create(resources, R.drawable.ic_point, null)!!
+        pointDrawable.setBounds(0, 0, pointDrawable.minimumWidth, pointDrawable.minimumHeight)
+        pointDrawable.setTint(ContextCompat.getColor(this, R.color.colorAccent))
         setContentView(R.layout.activity_exam)
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -88,9 +99,6 @@ class ExamActivity : BaseActivity() {
                 .setCanceledOnTouchOutside(false)
                 .setLoadingColor(ContextCompat.getColor(this, R.color.colorAccent))
                 .setHintTextColor(ContextCompat.getColor(this, R.color.colorAccent))
-        adapter = ExamAdapter(this, testList)
-        recycler_view.layoutManager = LinearLayoutManager(this)
-        recycler_view.adapter = adapter
         studentList.clear()
         studentList.addAll(XhuFileUtil.getArrayFromFile(XhuFileUtil.getStudentListFile(this), Student::class.java))
         initInfo()
@@ -107,14 +115,15 @@ class ExamActivity : BaseActivity() {
     }
 
     private fun initInfo() {
-        val studentArray = Array(studentList.size, { i -> studentList[i].username })
-        spinner_username.setItems(studentArray.toList())
+        val studentShowList = Array(studentList.size, { i -> studentList[i].username }).toMutableList()
+        studentShowList.add(getString(R.string.hint_popup_view_student))
+        spinner_username.setAdapter(CustomMaterialSpinnerAdapter(this, studentShowList))
         spinner_username.setOnItemSelectedListener { _, _, _, username ->
             setUsername(username.toString())
         }
+        spinner_username.selectedIndex = studentShowList.size - 1
         if (studentList.size == 1) {
-            spinner_username.selectedIndex = 0
-            setUsername(studentArray[0])
+            setUsername(studentShowList[0])
         }
     }
 
@@ -143,7 +152,47 @@ class ExamActivity : BaseActivity() {
                 .subscribe(object : Observer<Any> {
                     override fun onComplete() {
                         loadingDialog.dismiss()
-                        adapter.notifyDataSetChanged()
+                        currentIndex = -1
+                        linearLayout.removeAllViews()
+                        for (i in testList.indices) {
+                            val exam = testList[i]
+                            val itemView = ViewUtil.buildExamItem(this@ExamActivity, exam, pointDrawable)
+                            val imageView: ImageView = itemView.findViewById(R.id.imageView)
+                            val detailsTextView: TextView = itemView.findViewById(R.id.textView_details)
+                            itemView.setOnClickListener {
+                                Logs.i(TAG, "onBindViewHolder: 点击事件")
+                                valueAnimator?.cancel()
+                                //带动画的展开收缩
+                                when (currentIndex) {
+                                    -1 -> {
+                                        Logs.i(TAG, "onBindViewHolder: 没有条目被选中")
+                                        valueAnimator = TextViewUtils.setMaxLinesWithAnimation(detailsTextView, Int.MAX_VALUE)
+                                        ObjectAnimator.ofFloat(imageView, Constants.ANIMATION_ALPHA, 0F, 1F).start()
+                                        currentIndex = i
+                                    }
+                                    i -> {
+                                        Logs.i(TAG, "onBindViewHolder: 选中的是当前条目")
+                                        valueAnimator = TextViewUtils.setMaxLinesWithAnimation(detailsTextView, 1)
+                                        ObjectAnimator.ofFloat(imageView, Constants.ANIMATION_ALPHA, 1F, 0F).start()
+                                        currentIndex = -1
+                                    }
+                                    else -> {
+                                        Logs.i(TAG, "onBindViewHolder: 选中的其他条目")
+                                        val openedView = linearLayout.getChildAt(currentIndex)
+                                        val openedImageView: ImageView = openedView.findViewById(R.id.imageView)
+                                        val openedDetailsTextView: TextView = openedView.findViewById(R.id.textView_details)
+                                        valueAnimator = TextViewUtils.setMaxLinesWithAnimation(openedDetailsTextView, 1)
+                                        ObjectAnimator.ofFloat(openedImageView, Constants.ANIMATION_ALPHA, 1F, 0F).start()
+
+                                        valueAnimator = TextViewUtils.setMaxLinesWithAnimation(detailsTextView, Int.MAX_VALUE)
+                                        ObjectAnimator.ofFloat(imageView, Constants.ANIMATION_ALPHA, 0F, 1F).start()
+                                        currentIndex = i
+                                    }
+                                }
+                            }
+                            linearLayout.addView(itemView)
+                        }
+
                         val parentFile = XhuFileUtil.getExamParentFile(this@ExamActivity)
                         if (!parentFile.exists())
                             parentFile.mkdirs()

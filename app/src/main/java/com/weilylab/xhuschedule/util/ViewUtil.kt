@@ -33,6 +33,7 @@
 
 package com.weilylab.xhuschedule.util
 
+import android.animation.ObjectAnimator
 import android.content.Context
 import android.graphics.*
 import android.support.design.widget.FloatingActionButton
@@ -47,7 +48,11 @@ import com.weilylab.xhuschedule.listener.ColorPickerChangeListener
 import com.weilylab.xhuschedule.listener.InfoChangeListener
 import android.graphics.Bitmap
 import android.content.Intent
+import android.support.constraint.ConstraintLayout
+import android.support.graphics.drawable.VectorDrawableCompat
+import android.view.LayoutInflater
 import android.widget.*
+import com.weilylab.xhuschedule.classes.baseClass.Exam
 
 /**
  * Created by myste.
@@ -124,5 +129,28 @@ object ViewUtil {
         }
         canvas.drawCircle(100F, 100F, 100F, paint)
         return bitmap
+    }
+
+    fun buildExamItem(context: Context, exam: Exam, pointDrawable: VectorDrawableCompat): View {
+        val itemView = LayoutInflater.from(context).inflate(R.layout.item_exam, ConstraintLayout(context), false)
+        val imageView: ImageView = itemView.findViewById(R.id.imageView)
+        val examNameTextView: TextView = itemView.findViewById(R.id.textView_exam_name)
+        val examDateTextView: TextView = itemView.findViewById(R.id.textView_exam_date)
+        val examTestNoTextView: TextView = itemView.findViewById(R.id.textView_exam_testno)
+        val detailsTextView: TextView = itemView.findViewById(R.id.textView_details)
+
+        examNameTextView.text = exam.name
+        examDateTextView.text = exam.date
+        examTestNoTextView.text = exam.testno
+        val text = "\n" + context.getString(R.string.exam_no, exam.no) + "\n\n" +
+                context.getString(R.string.exam_sname, exam.sname) + "\n\n" +
+                context.getString(R.string.exam_location, exam.location) + "\n\n" +
+                context.getString(R.string.exam_time, exam.time) + "\n\n" +
+                context.getString(R.string.exam_testtype, exam.testtype) + "\n\n" +
+                context.getString(R.string.exam_region, exam.region)
+        detailsTextView.text = text
+        imageView.setImageDrawable(pointDrawable)
+        imageView.alpha = 0F
+        return itemView
     }
 }

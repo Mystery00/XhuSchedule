@@ -39,31 +39,6 @@
                     app:layout_constraintTop_toTopOf="parent"
                     app:popupTheme="@style/AppTheme.PopupOverlay" />
 
-                <TextView
-                    android:id="@+id/title_username"
-                    android:layout_width="wrap_content"
-                    android:layout_height="0dp"
-                    android:layout_marginStart="@dimen/material_margin"
-                    android:gravity="center_vertical"
-                    android:text="@string/title_item_username"
-                    android:textColor="@color/colorWhite"
-                    app:layout_constraintBottom_toBottomOf="@id/spinner_username"
-                    app:layout_constraintEnd_toStartOf="@id/spinner_username"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="@id/spinner_username" />
-
-                <com.jaredrummler.materialspinner.MaterialSpinner
-                    android:id="@+id/spinner_username"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="@dimen/material_margin"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/title_username"
-                    app:layout_constraintTop_toBottomOf="@id/toolbar"
-                    app:ms_background_color="@color/colorPrimary"
-                    app:ms_hint="@string/hint_popup_view_student" />
-
             </android.support.constraint.ConstraintLayout>
 
         </android.support.design.widget.CollapsingToolbarLayout>
