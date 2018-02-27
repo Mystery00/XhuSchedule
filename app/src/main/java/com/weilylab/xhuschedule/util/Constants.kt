@@ -56,6 +56,7 @@ object Constants {
     const val NOTIFICATION_ID_FOREGROUND_WIDGET = 21
     const val NOTIFICATION_ID_FOREGROUND_BOOT_COMPLETE = 22
     const val NOTIFICATION_ID_COURSE_START_INDEX = 100
+    const val NOTIFICATION_ID_EXAM_START_INDEX = 200
 
     const val IS_FIRST_RUN = "isFirstRun"
     const val FIRST_WEEK_OF_TERM = "firstWeekOfTerm"

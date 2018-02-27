@@ -219,7 +219,8 @@
     <string name="test_course_current_progress_text_size">当前文字大小为%1$dsp</string>
     <string name="test_course_current_progress_text_height">当前高度为%1$ddp</string>
 
-    <string name="tomorrow_info_notification_title">您明天有%1$d门课要上哦~</string>
+    <string name="tomorrow_course_notification_title">您明天有%1$d门课要上哦~</string>
+    <string name="tomorrow_exam_notification_title">您明天有%1$d门考试哦~</string>
 
-    <string name="tomorrow_info_notification_placeholder_text_template">展开可查看详细信息</string>
+    <string name="tomorrow_info_notification_placeholder_text">展开可查看详细信息</string>
 </resources>

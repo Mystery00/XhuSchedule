@@ -1,5 +1,5 @@
 /*
- * Created by Mystery0 on 18-2-21 下午9:12.
+ * Created by Mystery0 on 18-2-27 下午5:31.
  * Copyright (c) 2018. All Rights reserved.
  *
  *                    =====================================================
@@ -28,12 +28,9 @@
  *                    =                                                   =
  *                    =====================================================
  *
- * Last modified 18-2-21 下午9:11
+ * Last modified 18-2-27 下午5:31
  */
 
-package com.weilylab.xhuschedule.util
+package com.weilylab.xhuschedule.classes.baseClass
 
-object FirebaseConstant {
-    const val LATEST_VERSION="latest_version"
-    const val TEST="test"
-}
+data class ExamNotificationWithID(val id: Int, val exams: ArrayList<Exam>)

@@ -98,6 +98,7 @@
     <string name="title_notification_for_tomorrow_enable">启用提醒</string>
     <string name="title_notification_for_exam_enable">启用提醒</string>
     <string name="title_notification_for_tomorrow_type">提醒类型</string>
+    <string name="title_notification_for_exam_hint">请确保已经查询过考试列表</string>
 
     <string name="summary_enable_multi_user_mode">注意：如果多个用户的课表存在冲突的情况，表格可能会变得很乱，请确定您开启这个模式的意义！</string>
     <string name="summary_icon" translatable="false">\@爱吃饭的越越</string>
@@ -121,6 +122,7 @@
     <string name="summary_notification_time">将会在每天的 %1$s 提醒您</string>
     <string name="summary_notification_for_tomorrow_type">将会提醒您%1$s的课程</string>
     <string name="summary_notification_exact_time">开启这项之后，将会使通知准时显示，可能会增加系统的耗电；不开启此项，通知可能会有一定的延时（120s内）。这是由于系统在耗电方面进行的优化，系统会自动监测并将触发时间相近的几个任务会放在一起执行，这可以有效延长电池的使用时间。</string>
+    <string name="summary_notification_for_exam_hint">为了节省流量并且提高效率，在您查询考试的时候，软件已经将数据离线到本地，提醒考试和课程的数据均来自本地</string>
 
     <string name="link_developer" translatable="false">https://mystery0.vip/</string>
     <string name="link_login_img" translatable="false">http://www.jianshu.com/u/de99e3e9e332</string>

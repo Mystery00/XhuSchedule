@@ -1,5 +1,5 @@
 /*
- * Created by Mystery0 on 18-2-26 下午4:40.
+ * Created by Mystery0 on 18-2-27 下午5:26.
  * Copyright (c) 2018. All Rights reserved.
  *
  *                    =====================================================
@@ -28,7 +28,7 @@
  *                    =                                                   =
  *                    =====================================================
  *
- * Last modified 18-2-26 下午4:40
+ * Last modified 18-2-27 上午1:57
  */
 
 package com.weilylab.xhuschedule.util.notification
@@ -43,47 +43,19 @@ import android.text.SpannableStringBuilder
 import android.text.style.ForegroundColorSpan
 
 import com.weilylab.xhuschedule.R
-import com.weilylab.xhuschedule.classes.baseClass.Course
+import com.weilylab.xhuschedule.classes.baseClass.Exam
 import com.weilylab.xhuschedule.util.Constants
 
-/**
- * Helper class for showing and canceling tomorrow info
- * notifications.
- *
- *
- * This class makes heavy use of the [NotificationCompat.Builder] helper
- * class to create notifications in a backward-compatible way.
- */
-object TomorrowInfoNotification {
-    /**
-     * The unique identifier for this type of notification.
-     */
-    private const val NOTIFICATION_TAG = "TomorrowInfo"
+object TomorrowExamNotification {
+    private const val NOTIFICATION_TAG = "TomorrowExam"
 
-    /**
-     * Shows the notification, or updates a previously shown notification of
-     * this type, with the given parameters.
-     *
-     *
-     * TODO: Customize this method's arguments to present relevant content in
-     * the notification.
-     *
-     *
-     * TODO: Customize the contents of this method to tweak the behavior and
-     * presentation of tomorrow info notifications. Make
-     * sure to follow the
-     * [
- * Notification design guidelines](https://developer.android.com/design/patterns/notifications.html) when doing so.
-     *
-     * @see .cancel
-     */
-    fun notify(context: Context, id: Int, courseList: ArrayList<Course>) {
-        val title = context.getString(R.string.tomorrow_info_notification_title, courseList.size)
+    fun notify(context: Context, id: Int, examList: ArrayList<Exam>) {
+        val title = context.getString(R.string.tomorrow_exam_notification_title, examList.size)
         val builder = NotificationCompat.Builder(context, Constants.NOTIFICATION_CHANNEL_ID_TOMORROW)
                 .setDefaults(Notification.DEFAULT_ALL)
                 .setSmallIcon(R.drawable.ic_stat_tomorrow)
                 .setContentTitle(title)
-                .setContentText(context.getString(R.string.tomorrow_info_notification_placeholder_text_template))
+                .setContentText(context.getString(R.string.tomorrow_info_notification_placeholder_text))
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setContentIntent(
                         PendingIntent.getActivity(
@@ -94,11 +66,11 @@ object TomorrowInfoNotification {
                 .setAutoCancel(true)
         val style = NotificationCompat.InboxStyle()
                 .setBigContentTitle(title)
-        courseList.forEach {
+        examList.forEach {
             val courseItem = SpannableStringBuilder()
             courseItem.append(it.name)
             courseItem.setSpan(ForegroundColorSpan(ContextCompat.getColor(context, R.color.colorPrimary)), 0, courseItem.length, 0)
-            courseItem.append("\t上课时间：${it.time} 上课地点：${it.location}")
+            courseItem.append("\t考试时间：${it.time} 考试地点：${it.location}")
             style.addLine(courseItem)
         }
         builder.setStyle(style)
@@ -107,18 +79,14 @@ object TomorrowInfoNotification {
     }
 
     private fun notify(context: Context, id: Int, notification: Notification) {
-        val nm = context
+        val notificationManager = context
                 .getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        nm.notify(NOTIFICATION_TAG, id, notification)
+        notificationManager.notify(NOTIFICATION_TAG, id, notification)
     }
 
-    /**
-     * Cancels any notifications of this type previously shown using
-     * [.notify].
-     */
     fun cancel(context: Context, id: Int) {
-        val nm = context
+        val notificationManager = context
                 .getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        nm.cancel(NOTIFICATION_TAG, id)
+        notificationManager.cancel(NOTIFICATION_TAG, id)
     }
 }

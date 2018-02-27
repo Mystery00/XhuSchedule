@@ -46,6 +46,10 @@
             android:key="@string/key_notification_for_exam_enable"
             android:title="@string/title_notification_for_exam_enable" />
 
+        <Preference
+            android:summary="@string/summary_notification_for_exam_hint"
+            android:title="@string/title_notification_for_exam_hint" />
+
     </PreferenceCategory>
 
 </PreferenceScreen>
