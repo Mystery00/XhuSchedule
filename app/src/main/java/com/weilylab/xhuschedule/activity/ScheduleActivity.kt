@@ -130,13 +130,12 @@ class ScheduleActivity : BaseActivity() {
             val layoutParams = tableNav.getChildAt(i).layoutParams
             layoutParams.height = DensityUtil.dip2px(this, Settings.customTextHeight.toFloat())
             tableNav.getChildAt(i).layoutParams = layoutParams
-            (tableNav.getChildAt(i) as TextView).setTextColor(Settings.customTableTextColor)
+            (tableNav.getChildAt(i) as TextView).setTextColor(ContextCompat.getColor(this, R.color.schedule_head_text_color))
         }
         studentList.clear()
         studentList.addAll(XhuFileUtil.getArrayFromFile(XhuFileUtil.getStudentListFile(this), Student::class.java))
         initInfo()
     }
-
 
     private fun getCourses(student: Student?, year: String?, term: Int?) {
         if (student == null)

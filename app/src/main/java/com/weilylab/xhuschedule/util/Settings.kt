@@ -65,7 +65,7 @@ object Settings {
         get() = sharedPreference.getInt(Constants.CUSTOM_TODAY_OPACITY, Constants.DEFAULT_OPACITY)
     var customTableTextColor: Int//表头文字颜色
         set(value) = sharedPreference.edit().putInt(Constants.CUSTOM_TABLE_TEXT_COLOR, value).apply()
-        get() = sharedPreference.getInt(Constants.CUSTOM_TABLE_TEXT_COLOR, Constants.DEFAULT_COLOR_TEXT_HEADER)
+        get() = sharedPreference.getInt(Constants.CUSTOM_TABLE_TEXT_COLOR, Constants.DEFAULT_COLOR_TEXT_TABLE)
     var customTodayTextColor: Int//今日课程文字颜色
         set(value) = sharedPreference.edit().putInt(Constants.CUSTOM_TODAY_TEXT_COLOR, value).apply()
         get() = sharedPreference.getInt(Constants.CUSTOM_TODAY_TEXT_COLOR, Constants.DEFAULT_COLOR_TEXT_TODAY)

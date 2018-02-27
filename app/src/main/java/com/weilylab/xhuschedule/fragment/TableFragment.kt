@@ -174,7 +174,7 @@ class TableFragment : Fragment() {
                                 val layoutParams = tableNav.getChildAt(i).layoutParams
                                 layoutParams.height = DensityUtil.dip2px(activity!!, Settings.customTextHeight.toFloat())
                                 tableNav.getChildAt(i).layoutParams = layoutParams
-                                (tableNav.getChildAt(i) as TextView).setTextColor(Settings.customTableTextColor)
+                                (tableNav.getChildAt(i) as TextView).setTextColor(ContextCompat.getColor(activity!!, R.color.schedule_head_text_color))
                             }
                         }
                         formatView()

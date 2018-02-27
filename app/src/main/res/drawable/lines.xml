@@ -5,7 +5,7 @@
   ~ Last modified 18-2-16 上午10:58
   -->
 <shape xmlns:android="http://schemas.android.com/apk/res/android">
-    <solid android:color="#646464" />
+    <solid android:color="@color/line_color" />
     <size
         android:width="@dimen/divider_size"
         android:height="@dimen/divider_size" />
