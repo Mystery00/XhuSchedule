@@ -74,8 +74,7 @@ class UpdateService : IntentService("PhpService") {
                 .subscribe(object : DisposableObserver<Version>() {
                     private lateinit var version: Version
                     override fun onComplete() {
-//                        if (version.versionCode > getString(R.string.app_version_code).toInt()) {
-                        if (version.versionCode > 0) {
+                        if (version.versionCode > getString(R.string.app_version_code).toInt()) {
                             val title = getString(R.string.dialog_update_title, getString(R.string.app_version_name), version.versionName)
                             val text = getString(R.string.dialog_update_text, version.updateLog)
                             val builder = AlertDialog.Builder(APPActivityManager.appManager.currentActivity())

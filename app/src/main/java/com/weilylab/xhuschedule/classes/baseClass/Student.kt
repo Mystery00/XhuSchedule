@@ -42,6 +42,7 @@ import com.weilylab.xhuschedule.interfaces.CommonService
 import com.weilylab.xhuschedule.interfaces.StudentService
 import com.weilylab.xhuschedule.interfaces.UserService
 import com.weilylab.xhuschedule.listener.*
+import com.weilylab.xhuschedule.util.ConstantsCode
 import com.weilylab.xhuschedule.util.ScheduleHelper
 import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -115,11 +116,11 @@ class Student : Serializable {
                     override fun onComplete() {
                         Logs.i(tag, "onComplete: " + getInfoRT?.rt)
                         when (getInfoRT?.rt) {
-                            "0" -> {
+                            ConstantsCode.DONE -> {
                                 profile = Profile().map(getInfoRT!!)
                                 listener.got(profile!!)
                             }
-                            "405" -> {
+                            ConstantsCode.ERROR_NOT_LOGIN -> {
                                 login(object : LoginListener {
                                     override fun loginDone() {
                                         getInfo(listener)
@@ -164,8 +165,8 @@ class Student : Serializable {
                     override fun onComplete() {
                         Logs.i(tag, "onComplete: " + getTestsRT?.rt)
                         when (getTestsRT?.rt) {
-                            "0" -> listener.got(getTestsRT!!.tests)
-                            "405" -> {
+                            ConstantsCode.DONE -> listener.got(getTestsRT!!.tests)
+                            ConstantsCode.ERROR_NOT_LOGIN -> {
                                 login(object : LoginListener {
                                     override fun loginDone() {
                                         getTests(listener)
@@ -210,8 +211,8 @@ class Student : Serializable {
                     override fun onComplete() {
                         Logs.i(tag, "onComplete: " + getScoresRT?.rt)
                         when (getScoresRT?.rt) {
-                            "0" -> listener.got(getScoresRT!!.scores, getScoresRT!!.failscores)
-                            "405" -> {
+                            ConstantsCode.DONE -> listener.got(getScoresRT!!.scores, getScoresRT!!.failscores)
+                            ConstantsCode.ERROR_NOT_LOGIN -> {
                                 login(object : LoginListener {
                                     override fun loginDone() {
                                         getScores(year, term, listener)
@@ -256,8 +257,8 @@ class Student : Serializable {
                     override fun onComplete() {
                         Logs.i(tag, "onComplete: " + getExpScoresRT?.rt)
                         when (getExpScoresRT?.rt) {
-                            "0" -> listener.got(getExpScoresRT!!.expscores)
-                            "405" -> {
+                            ConstantsCode.DONE -> listener.got(getExpScoresRT!!.expscores)
+                            ConstantsCode.ERROR_NOT_LOGIN -> {
                                 login(object : LoginListener {
                                     override fun loginDone() {
                                         getExpScores(year, term, listener)
@@ -308,8 +309,8 @@ class Student : Serializable {
                     override fun onComplete() {
                         Logs.i(tag, "onComplete: " + feedbackRT?.rt)
                         when (feedbackRT?.rt) {
-                            "0" -> listener.done(1)
-                            "405" -> {
+                            ConstantsCode.DONE -> listener.done(1)
+                            ConstantsCode.ERROR_NOT_LOGIN -> {
                                 login(object : LoginListener {
                                     override fun loginDone() {
                                         feedback(context, message, emailAddress, listener)
