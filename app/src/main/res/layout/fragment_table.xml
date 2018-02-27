@@ -37,11 +37,10 @@
     <include
         android:id="@+id/table_header"
         layout="@layout/layout_table_header"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/view"
-        app:layout_constraintTop_toTopOf="@id/view" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <View
         android:id="@+id/lineVertical"
@@ -52,51 +51,48 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/table_header" />
 
-    <android.support.v4.widget.NestedScrollView
-        android:id="@+id/nestedScrollView"
+    <include
+        android:id="@+id/table_nav"
+        layout="@layout/layout_table_nav"
+        android:layout_width="32dp"
+        android:layout_height="0dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/lineVertical" />
+
+    <View
+        android:id="@+id/lineHorizontal"
+        android:layout_width="@dimen/divider_size"
+        android:layout_height="0dp"
+        android:background="@drawable/lines"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@id/table_nav"
+        app:layout_constraintTop_toBottomOf="@id/lineVertical" />
+
+    <com.weilylab.xhuschedule.view.ContentHorizontalScrollView
+        android:id="@+id/contentHorizontalScrollView"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:fillViewport="true"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@id/lineHorizontal"
         app:layout_constraintTop_toBottomOf="@id/lineVertical">
 
-        <android.support.constraint.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
-
-            <include
-                android:id="@+id/table_nav"
-                layout="@layout/layout_table_nav"
-                android:layout_width="32dp"
-                android:layout_height="wrap_content"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <View
-                android:id="@+id/lineHorizontal"
-                android:layout_width="@dimen/divider_size"
-                android:layout_height="0dp"
-                android:background="@drawable/lines"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@id/table_nav"
-                app:layout_constraintTop_toTopOf="parent" />
+        <com.weilylab.xhuschedule.view.ContentVerticalScrollView
+            android:id="@+id/contentVerticalScrollView"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:fillViewport="true">
 
             <include
                 android:id="@+id/table_schedule"
                 layout="@layout/layout_table_schedule"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/lineHorizontal"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
 
-        </android.support.constraint.ConstraintLayout>
+        </com.weilylab.xhuschedule.view.ContentVerticalScrollView>
 
-    </android.support.v4.widget.NestedScrollView>
+    </com.weilylab.xhuschedule.view.ContentHorizontalScrollView>
 
 </android.support.constraint.ConstraintLayout>

@@ -53,6 +53,8 @@ import com.weilylab.xhuschedule.classes.baseClass.Course
 import com.weilylab.xhuschedule.classes.baseClass.TableLayoutHelper
 import com.weilylab.xhuschedule.listener.InfoChangeListener
 import com.weilylab.xhuschedule.util.*
+import com.weilylab.xhuschedule.view.ContentHorizontalScrollView
+import com.weilylab.xhuschedule.view.ContentVerticalScrollView
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.observers.DisposableObserver
@@ -91,6 +93,14 @@ class TableFragment : Fragment() {
             rootView = inflater.inflate(R.layout.fragment_table, container, false)
             val monthView: TextView = rootView!!.findViewById(R.id.view)
             val tableHeader: LinearLayout = rootView!!.findViewById(R.id.table_header)
+            val tabLayoutParams = tableHeader.layoutParams
+            tabLayoutParams.width = DensityUtil.dip2px(activity!!, 700F)
+            tableHeader.layoutParams = tabLayoutParams
+            for (i in 0 until tableHeader.childCount) {
+                val layoutParams = tableHeader.getChildAt(i).layoutParams
+                layoutParams.width = DensityUtil.dip2px(activity!!, 100F)
+                tableHeader.getChildAt(i).layoutParams = layoutParams
+            }
             (tableHeader.getChildAt(CalendarUtil.getWeekIndex() - 1) as TextView).setTextColor(ContextCompat.getColor(activity!!, R.color.colorWeekPrimary))
             val calendar = Calendar.getInstance()
             val dayWeek = calendar.get(Calendar.DAY_OF_WEEK)
@@ -110,16 +120,24 @@ class TableFragment : Fragment() {
                 textView.text = text
                 calendar.add(Calendar.DAY_OF_MONTH, 1)
             }
-            val linearLayout: LinearLayout = rootView!!.findViewById(R.id.table_nav)
-            for (i in 0 until linearLayout.childCount) {
-                val layoutParams = linearLayout.getChildAt(i).layoutParams
+            val tableNav: LinearLayout = rootView!!.findViewById(R.id.table_nav)
+            for (i in 0 until tableNav.childCount) {
+                val layoutParams = tableNav.getChildAt(i).layoutParams
                 layoutParams.height = DensityUtil.dip2px(activity!!, Settings.customTextHeight.toFloat())
-                linearLayout.getChildAt(i).layoutParams = layoutParams
+                tableNav.getChildAt(i).layoutParams = layoutParams
             }
             val scheduleView: View = rootView!!.findViewById(R.id.table_schedule)
             val layoutParams = scheduleView.layoutParams
+            layoutParams.width = DensityUtil.dip2px(activity!!, 700F)
             layoutParams.height = DensityUtil.dip2px(activity!!, Settings.customTextHeight.toFloat() * 11)
             scheduleView.layoutParams = layoutParams
+            //滑动联动
+            val contentHorizontalScrollView: ContentHorizontalScrollView = rootView!!.findViewById(R.id.contentHorizontalScrollView)
+            val contentVerticalScrollView: ContentVerticalScrollView = rootView!!.findViewById(R.id.contentVerticalScrollView)
+            contentHorizontalScrollView.isHorizontalScrollBarEnabled = false
+            contentVerticalScrollView.isVerticalScrollBarEnabled = false
+            contentHorizontalScrollView.view = tableHeader
+            contentVerticalScrollView.view = tableNav
             isReady = true
         }
         return rootView
@@ -232,6 +250,7 @@ class TableFragment : Fragment() {
                     val textView = LayoutInflater.from(activity).inflate(R.layout.layout_text_view, null)
                     linearLayout.addView(textView)
                     val params = textView.layoutParams
+                    params.width = DensityUtil.dip2px(activity!!, 100F)
                     params.height = itemHeight
                     textView.layoutParams = params
                     continue
@@ -272,6 +291,7 @@ class TableFragment : Fragment() {
                     layoutList.add(tableHelper)//将这个布局添加进list
                     linearLayout.addView(viewGroup)
                     val params = viewGroup.layoutParams
+                    params.width = DensityUtil.dip2px(activity!!, 100F)
                     params.height = maxHeight
                     viewGroup.layoutParams = params
                 }
