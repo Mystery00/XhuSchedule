@@ -68,7 +68,7 @@ class TableFragment : Fragment() {
     companion object {
         fun newInstance(list: ArrayList<ArrayList<ArrayList<Course>>>): TableFragment {
             val bundle = Bundle()
-            bundle.putSerializable("list", list)
+            bundle.putSerializable(Constants.INTENT_TAG_NAME_LIST, list)
             val fragment = TableFragment()
             fragment.arguments = bundle
             return fragment
@@ -82,7 +82,7 @@ class TableFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         @Suppress("UNCHECKED_CAST")
-        list = arguments?.getSerializable("list") as ArrayList<ArrayList<ArrayList<Course>>>
+        list = arguments?.getSerializable(Constants.INTENT_TAG_NAME_LIST) as ArrayList<ArrayList<ArrayList<Course>>>
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -99,7 +99,7 @@ class TableFragment : Fragment() {
             calendar.firstDayOfWeek = Calendar.MONDAY
             val day = calendar.get(Calendar.DAY_OF_WEEK)
             calendar.add(Calendar.DATE, calendar.firstDayOfWeek - day)
-            val month = (calendar.get(Calendar.MONTH) + 1).toString() + "\n月"
+            val month = "${calendar.get(Calendar.MONTH) + 1}\n月"
             monthView.text = month
             for (i in 0 until tableHeader.childCount) {
                 val textView = tableHeader.getChildAt(i) as TextView
@@ -208,7 +208,7 @@ class TableFragment : Fragment() {
         val dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK)
         calendar.add(Calendar.DATE, calendar.firstDayOfWeek - dayOfWeek)
         val headerArray = context!!.resources.getStringArray(R.array.table_header)
-        val month = (calendar.get(Calendar.MONTH) + 1).toString() + "\n月"
+        val month = "${calendar.get(Calendar.MONTH) + 1}\n月"
         (rootView!!.findViewById(R.id.view) as TextView).text = month
         for (day in 0 until 7) {
             val headerTextView = (rootView!!.findViewById(R.id.table_header) as LinearLayout).getChildAt(day) as TextView
@@ -313,8 +313,8 @@ class TableFragment : Fragment() {
         }
         val gradientDrawable = imageView.background as GradientDrawable
         when (course.type) {
-            "-1" -> gradientDrawable.setColor(Color.RED)
-            "not" -> {
+            Constants.COURSE_TYPE_ERROR -> gradientDrawable.setColor(Color.RED)
+            Constants.COURSE_TYPE_NOT -> {
                 textViewName.setTextColor(Color.GRAY)
                 textViewTeacher.setTextColor(Color.GRAY)
                 textViewLocation.setTextColor(Color.GRAY)

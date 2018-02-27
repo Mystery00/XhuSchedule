@@ -45,17 +45,13 @@ import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.classes.baseClass.XhuScheduleError
 import com.weilylab.xhuschedule.listener.UploadLogListener
 import com.weilylab.xhuschedule.service.UpdateService
-import com.weilylab.xhuschedule.util.CalendarUtil
-import com.weilylab.xhuschedule.util.ScheduleHelper
-import com.weilylab.xhuschedule.util.Settings
-import com.weilylab.xhuschedule.util.XhuFileUtil
+import com.weilylab.xhuschedule.util.*
 import com.zyao89.view.zloading.ZLoadingDialog
 import com.zyao89.view.zloading.Z_TYPE
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.observers.DisposableObserver
 import io.reactivex.schedulers.Schedulers
-import vip.mystery0.tools.logs.Logs
 import java.io.File
 import java.util.*
 import kotlin.math.max
@@ -64,13 +60,11 @@ import kotlin.math.max
  * Created by mystery0.
  */
 class SplashActivity : BaseActivity() {
-    private val TAG = "SplashActivity"
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val params = Bundle()
         params.putString(FirebaseAnalytics.Param.START_DATE, Calendar.getInstance().time.toString())
         mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.APP_OPEN, params)
-        Logs.i("tag", "onCreate: initChannelID")
         ScheduleHelper.initChannelID(APP.getContext())//初始化NotificationChannelID
         ScheduleHelper.setTrigger(this)
         if (Settings.autoCheckUpdate)
@@ -86,9 +80,9 @@ class SplashActivity : BaseActivity() {
                     .create()
             var latestLog: File? = null
             var error: XhuScheduleError? = null
-            val sharedPreference = getSharedPreferences("updateData", Context.MODE_PRIVATE)
+            val sharedPreference = getSharedPreferences(Constants.SHARED_PREFERENCE_UPDATE_DATA, Context.MODE_PRIVATE)
             Observable.create<Boolean> { subscriber ->
-                val colorSharedPreference = getSharedPreferences("course_color", MODE_PRIVATE)
+                val colorSharedPreference = getSharedPreferences(Constants.SHARED_PREFERENCE_COURSE_COLOR, MODE_PRIVATE)
                 /**
                  * =============================================
                  * 为了兼容旧版本，在这里将旧版本的数据做一次清理
@@ -101,14 +95,10 @@ class SplashActivity : BaseActivity() {
                 /**
                  * ==============================================
                  */
-                //log文件前缀名
-                val fileNamePrefix = "crash"
-                //log文件的扩展名
-                val fileNameSuffix = "txt"
                 var modified = 0L
                 cacheDir.listFiles()
                         .filter {
-                            it.name.startsWith(fileNamePrefix, true) && it.name.endsWith(fileNameSuffix, true)
+                            it.name.startsWith(Constants.LOG_FILE_PREFIX, true) && it.name.endsWith(Constants.LOG_FILE_SUFFIX, true)
                         }
                         .forEach {
                             if (modified < it.lastModified()) {
@@ -121,7 +111,7 @@ class SplashActivity : BaseActivity() {
                     subscriber.onComplete()
                     return@create
                 }
-                val saveFile = sharedPreference.getString("saveFile", "")
+                val saveFile = sharedPreference.getString(Constants.SAVE_FILE, "")
                 error = XhuFileUtil.parseLog(latestLog!!)
                 subscriber.onNext(saveFile != latestLog!!.name)
                 subscriber.onComplete()
@@ -141,7 +131,7 @@ class SplashActivity : BaseActivity() {
 
                         override fun onNext(t: Boolean) {
                             if (t) {
-                                sharedPreference.edit().putString("saveFile", latestLog!!.name).apply()
+                                sharedPreference.edit().putString(Constants.SAVE_FILE, latestLog!!.name).apply()
                                 AlertDialog.Builder(this@SplashActivity)
                                         .setTitle(" ")
                                         .setMessage(getString(R.string.hint_check_log, latestLog!!.name, latestLog!!.absolutePath, CalendarUtil.showDate(latestLog!!.lastModified())))

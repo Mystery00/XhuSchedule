@@ -40,9 +40,12 @@ import android.net.Uri
 import android.os.Build
 import android.os.Environment
 import android.support.v4.content.FileProvider
-import com.weilylab.xhuschedule.interfaces.PhpService
+import android.text.TextUtils
+import com.weilylab.xhuschedule.R
+import com.weilylab.xhuschedule.interfaces.QiniuService
 import com.weilylab.xhuschedule.listener.DownloadProgressListener
 import com.weilylab.xhuschedule.util.BsPatch
+import com.weilylab.xhuschedule.util.Constants
 import com.weilylab.xhuschedule.util.notification.DownloadNotification
 import com.weilylab.xhuschedule.util.XhuFileUtil
 import com.weilylab.xhuschedule.util.download.Download
@@ -67,26 +70,26 @@ import java.util.concurrent.TimeUnit
 class DownloadService : IntentService(TAG) {
 
     companion object {
-        private val TAG = "DownloadService"
+        private const val TAG = "DownloadService"
     }
 
     private lateinit var retrofit: Retrofit
 
     override fun onHandleIntent(intent: Intent?) {
         Logs.i(TAG, "onHandleIntent: ")
-        val type = intent?.getStringExtra("type")
-        val fileName = intent?.getStringExtra("fileName")
-        val file = File(getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS).absolutePath + File.separator + type + File.separator + fileName)
+        val type = intent?.getStringExtra(Constants.INTENT_TAG_NAME_TYPE)
+        val qiniuPath = intent?.getStringExtra(Constants.INTENT_TAG_NAME_QINIU_PATH)
+        val file = File(getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS).absolutePath + File.separator + qiniuPath)
         if (!file.parentFile.exists())
             file.parentFile.mkdirs()
-        if (type == null || type == "" || fileName == null || fileName == "") {
+        if (TextUtils.isEmpty(type) || TextUtils.isEmpty(qiniuPath)) {
             Logs.i(TAG, "onHandleIntent: 格式错误")
             return
         }
         Logs.i(TAG, "onStartCommand: type: " + type)
-        Logs.i(TAG, "onStartCommand: fileName: " + fileName)
+        Logs.i(TAG, "onStartCommand: qiniuPath: " + qiniuPath)
         Logs.i(TAG, "onStartCommand: " + file.absolutePath)
-        download(this, type, fileName, file)
+        download(this, type!!, qiniuPath!!, file)
     }
 
     override fun onCreate() {
@@ -112,21 +115,21 @@ class DownloadService : IntentService(TAG) {
                 .connectTimeout(15, TimeUnit.SECONDS)
                 .build()
         retrofit = Retrofit.Builder()
-                .baseUrl("http://tomcat.weilylab.com:9783")
+                .baseUrl("http://download.xhuschedule.mostpan.com")
                 .client(client)
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .build()
     }
 
-    private fun download(context: Context, type: String, fileName: String, file: File) {
-        Logs.i(TAG, "download: " + fileName)
+    private fun download(context: Context, type: String, qiniuPath: String, file: File) {
+        Logs.i(TAG, "download: " + qiniuPath)
 //        val params = Bundle()
 //        params.putString(FirebaseUtil.VERSION_NAME, context.getString(R.string.app_version_name))
 //        params.putString(FirebaseUtil.VERSION_CODE, context.getString(R.string.app_version_code))
 //        params.putString(FirebaseUtil.TYPE, type)
 //        APP.getFirebaseAnalytics().logEvent(FirebaseUtil.DOWNLOAD_APK, params)
-        retrofit.create(PhpService::class.java)
-                .download(type, fileName)
+        retrofit.create(QiniuService::class.java)
+                .download(qiniuPath)
                 .subscribeOn(Schedulers.newThread())
                 .unsubscribeOn(Schedulers.newThread())
                 .map({ responseBody -> responseBody.byteStream() })
@@ -134,10 +137,10 @@ class DownloadService : IntentService(TAG) {
                 .doOnNext { inputStream ->
                     try {
                         XhuFileUtil.saveFile(inputStream, file)
-                        if (type == "patch") {
+                        if (type == Constants.DOWNLOAD_TYPE_PATCH) {
                             val applicationInfo = applicationContext.applicationInfo
                             Logs.i(TAG, "patchAPK: " + applicationInfo.sourceDir)
-                            val newApkPath = getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS).absolutePath + File.separator + "apk" + File.separator + fileName + ".apk"
+                            val newApkPath = getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS).absolutePath + File.separator + "apk" + File.separator + qiniuPath + ".apk"
                             val newAPK = File(newApkPath)
                             if (!newAPK.parentFile.exists())
                                 newAPK.parentFile.mkdirs()
@@ -153,19 +156,19 @@ class DownloadService : IntentService(TAG) {
                 .subscribe(object : Observer<InputStream> {
                     override fun onSubscribe(d: Disposable) {
                         Logs.i(TAG, "onSubscribe: ")
-                        DownloadNotification.notify(context, fileName)
+                        DownloadNotification.notify(context, qiniuPath)
                     }
 
                     override fun onComplete() {
                         val installIntent = Intent(Intent.ACTION_VIEW)
                         installIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
                         installIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
-                        val installFile = if (type == "patch")
-                            File(getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS).absolutePath + File.separator + "apk" + File.separator + fileName + ".apk")
+                        val installFile = if (type == Constants.DOWNLOAD_TYPE_PATCH)
+                            File(getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS).absolutePath + File.separator + "apk" + File.separator + qiniuPath + ".apk")
                         else
                             file
                         val uri = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
-                            FileProvider.getUriForFile(context, "com.weilylab.xhuschedule", installFile)
+                            FileProvider.getUriForFile(context, getString(R.string.uri_authority), installFile)
                         else
                             Uri.fromFile(installFile)
                         Logs.i(TAG, "onComplete: " + installFile.absolutePath)

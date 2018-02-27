@@ -47,6 +47,7 @@ import com.bumptech.glide.signature.MediaStoreSignature
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.adapter.TodayAdapter
 import com.weilylab.xhuschedule.classes.baseClass.Course
+import com.weilylab.xhuschedule.util.Constants
 import com.weilylab.xhuschedule.util.Settings
 import io.reactivex.Observable
 import io.reactivex.Observer
@@ -64,7 +65,7 @@ class TodayFragment : Fragment() {
 
         fun newInstance(list: ArrayList<Course>): TodayFragment {
             val bundle = Bundle()
-            bundle.putSerializable("list", list)
+            bundle.putSerializable(Constants.INTENT_TAG_NAME_LIST, list)
             val fragment = TodayFragment()
             fragment.arguments = bundle
             return fragment
@@ -79,7 +80,7 @@ class TodayFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         @Suppress("UNCHECKED_CAST")
-        list = arguments?.getSerializable("list") as ArrayList<Course>
+        list = arguments?.getSerializable(Constants.INTENT_TAG_NAME_LIST) as ArrayList<Course>
         adapter = TodayAdapter(activity!!, list)
     }
 

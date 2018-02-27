@@ -42,10 +42,7 @@ import com.weilylab.xhuschedule.util.Constants
 import vip.mystery0.tools.logs.Logs
 
 class BootCompletedReceiver : BroadcastReceiver() {
-    private val TAG = "BootCompletedReceiver"
-
     override fun onReceive(context: Context, intent: Intent) {
-        Logs.i(TAG, "onReceive: ")
         if (intent.action == Constants.ACTION_BOOT_COMPLETED)
             ContextCompat.startForegroundService(context, Intent(context, BootInitService::class.java))
     }

@@ -37,7 +37,7 @@ import android.content.Context
 import com.weilylab.xhuschedule.APP
 
 object CookieManger {
-    private val COOKIE_PREFS = "cookies"
+    private const val COOKIE_PREFS = "cookies"
     private val cookiePreferences = APP.getContext().getSharedPreferences(COOKIE_PREFS, Context.MODE_PRIVATE)
 
     fun putCookie(username: String, host: String, cookie: String?) {

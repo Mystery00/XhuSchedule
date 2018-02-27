@@ -54,8 +54,4 @@ interface CommonService {
 
     @GET("/Common/getNotices")
     fun getNotices(@Query("platform") platform: String?): Observable<ResponseBody>
-
-    @Streaming
-    @GET
-    fun downloadFile(@Url url: String):Observable<ResponseBody>
 }

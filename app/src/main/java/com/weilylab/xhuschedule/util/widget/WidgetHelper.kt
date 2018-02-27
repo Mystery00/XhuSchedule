@@ -39,6 +39,7 @@ import com.weilylab.xhuschedule.classes.baseClass.Course
 import com.weilylab.xhuschedule.classes.baseClass.Exam
 import com.weilylab.xhuschedule.classes.baseClass.Student
 import com.weilylab.xhuschedule.util.CalendarUtil
+import com.weilylab.xhuschedule.util.Constants
 import com.weilylab.xhuschedule.util.CourseUtil
 import com.weilylab.xhuschedule.util.XhuFileUtil
 import java.io.File
@@ -176,7 +177,7 @@ object WidgetHelper {
      * 将小部件id集合保存起来
      */
     fun saveWidgetIds(context: Context, name: String, appWidgetIds: IntArray) {
-        val sharedPreference = context.getSharedPreferences("ids", Context.MODE_PRIVATE)
+        val sharedPreference = context.getSharedPreferences(Constants.SHARED_PREFERENCE_IDS, Context.MODE_PRIVATE)
         sharedPreference.edit().putStringSet(name, appWidgetIds.map { it.toString() }.toSet()).apply()
     }
 
@@ -184,7 +185,7 @@ object WidgetHelper {
      * 从文件中获取小部件id集合
      */
     fun getWidgetIds(context: Context, name: String): IntArray {
-        val sharedPreference = context.getSharedPreferences("ids", Context.MODE_PRIVATE)
+        val sharedPreference = context.getSharedPreferences(Constants.SHARED_PREFERENCE_IDS, Context.MODE_PRIVATE)
         return sharedPreference.getStringSet(name, HashSet<String>()).map { it.toInt() }.toIntArray()
     }
 }

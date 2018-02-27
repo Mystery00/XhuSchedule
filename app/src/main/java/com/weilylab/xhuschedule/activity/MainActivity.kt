@@ -159,8 +159,8 @@ class MainActivity : BaseActivity() {
     }
 
     private fun showUpdateLog() {
-        val sharedPreference = getSharedPreferences("updateData", Context.MODE_PRIVATE)
-        if (sharedPreference.getInt("updateVersion", 0) < getString(R.string.app_version_code).toInt()) {
+        val sharedPreference = getSharedPreferences(Constants.SHARED_PREFERENCE_UPDATE_DATA, Context.MODE_PRIVATE)
+        if (sharedPreference.getInt(Constants.UPDATE_VERSION, 0) < getString(R.string.app_version_code).toInt()) {
             var message = ""
             resources.getStringArray(R.array.update_list)
                     .forEach { message += it + '\n' }
@@ -170,7 +170,7 @@ class MainActivity : BaseActivity() {
                     .setCancelable(false)
                     .setPositiveButton(android.R.string.ok, null)
                     .setOnDismissListener {
-                        sharedPreference.edit().putInt("updateVersion", getString(R.string.app_version_code).toInt()).apply()
+                        sharedPreference.edit().putInt(Constants.UPDATE_VERSION, getString(R.string.app_version_code).toInt()).apply()
                     }
                     .create()
             if (APPActivityManager.appManager.currentActivity() == this)
@@ -291,7 +291,7 @@ class MainActivity : BaseActivity() {
                 startActivity(Intent(this, SettingsActivity::class.java))
                 overridePendingTransition(R.anim.animation_settings_in_enter, R.anim.animation_settings_in_exit)
             } else {
-                ObjectAnimator.ofFloat(action_settings, "rotation", 0F, 360F).start()
+                ObjectAnimator.ofFloat(action_settings, Constants.ANIMATION_ROTATION, 0F, 360F).start()
                 startActivity(Intent(this, SettingsActivity::class.java), ActivityOptionsCompat.makeSceneTransitionAnimation(this).toBundle())
             }
         }
@@ -423,7 +423,7 @@ class MainActivity : BaseActivity() {
     private fun updateAllData() {
         Logs.i(TAG, "updateAllData: ")
         loadingDialog.show()
-        ObjectAnimator.ofFloat(action_sync, "rotation", 0F, 360F).setDuration(1000).start()
+        ObjectAnimator.ofFloat(action_sync, Constants.ANIMATION_ROTATION, 0F, 360F).setDuration(1000).start()
         studentList.clear()
         studentList.addAll(XhuFileUtil.getArrayFromFile(XhuFileUtil.getStudentListFile(this), Student::class.java))
         if (studentList.size == 0) {
@@ -471,15 +471,15 @@ class MainActivity : BaseActivity() {
                         }
                         isRefreshData = false
                         sendBroadcast(Intent(Constants.ACTION_WIDGET_UPDATE_BROADCAST)
-                                .putExtra("TAG", WidgetHelper.ALL_TAG))
+                                .putExtra(Constants.INTENT_TAG_NAME_TAG, WidgetHelper.ALL_TAG))
                         updateAllView()
                     }
 
                     override fun onNext(getCourseRT: GetCourseRT) {
                         Logs.i(TAG, "updateAllData: onNext: " + getCourseRT.rt)
                         when (getCourseRT.rt) {
-                            "0", "202" -> {
-                                if (getCourseRT.rt == "202")
+                            ConstantsCode.DONE, ConstantsCode.SERVER_COURSE_ANALYZE_ERROR -> {
+                                if (getCourseRT.rt == ConstantsCode.SERVER_COURSE_ANALYZE_ERROR)
                                     Snackbar.make(coordinatorLayoutView, R.string.hint_update_data_error, Snackbar.LENGTH_LONG).show()
                                 else {
                                     if (ScheduleHelper.isAnalysisError) {
@@ -490,7 +490,7 @@ class MainActivity : BaseActivity() {
                                         Snackbar.make(coordinatorLayoutView, R.string.hint_update_data, Snackbar.LENGTH_SHORT).show()
                                 }
                             }
-                            "401", "402" -> {//前端信息错误
+                            ConstantsCode.ERROR_USERNAME, ConstantsCode.ERROR_PASSWORD -> {//前端信息错误
                                 isRefreshData = false
                                 Snackbar.make(coordinatorLayoutView, getString(R.string.hint_try_refresh_data_error, getCourseRT.msg), Snackbar.LENGTH_LONG)
                                         .setAction(android.R.string.ok) {
@@ -521,7 +521,7 @@ class MainActivity : BaseActivity() {
                         parentFile.mkdirs()
                     val base64Name = XhuFileUtil.filterString(Base64.encodeToString(student.username.toByteArray(), Base64.DEFAULT))
                     when (getCourseRT.rt) {
-                        "0", "202" -> {//请求成功或者数据存在问题
+                        ConstantsCode.DONE, ConstantsCode.SERVER_COURSE_ANALYZE_ERROR -> {//请求成功或者数据存在问题
                             val newFile = File(parentFile, base64Name + ".temp")
                             newFile.createNewFile()
                             XhuFileUtil.saveObjectToFile(getCourseRT.courses, newFile)
@@ -541,7 +541,7 @@ class MainActivity : BaseActivity() {
                                 false
                             }
                         }
-                        "405" -> {//未登录
+                        ConstantsCode.ERROR_NOT_LOGIN -> {//未登录
                             needLoginStudents.add(student)
                         }
                     }
@@ -571,7 +571,7 @@ class MainActivity : BaseActivity() {
 
                     override fun onNext(autoLoginRT: AutoLoginRT) {
                         Logs.i(TAG, "onNext: rt: ${autoLoginRT.rt}")
-                        if (autoLoginRT.rt != "0") {
+                        if (autoLoginRT.rt != ConstantsCode.DONE) {
                             val snackBar = Snackbar.make(coordinatorLayoutView, autoLoginRT.msg, Snackbar.LENGTH_LONG)
                             if (autoLoginRT.rt.startsWith('4'))
                                 snackBar.setAction(android.R.string.ok) {
@@ -648,7 +648,7 @@ class MainActivity : BaseActivity() {
         animator.start()
         val start = if (isShow) 0 else 10000
         val end = if (isShow) 10000 else 0
-        ObjectAnimator.ofInt(arrowDrawable!!, "level", start, end).start()
+        ObjectAnimator.ofInt(arrowDrawable!!, Constants.ANIMATION_LEVEL, start, end).start()
         isWeekShow = isShow
     }
 
@@ -708,20 +708,20 @@ class MainActivity : BaseActivity() {
     private fun setRefresh() {
         animatorList.forEach { it.cancel() }
         animatorList.clear()
-        animatorList.add(ObjectAnimator.ofFloat(action_sync, "rotation", 360F, 0F).setDuration(ANIMATION_DURATION))
-        animatorList.add(ObjectAnimator.ofFloat(action_sync, "translationX", DensityUtil.dip2px(this, 68F).toFloat(), 0F).setDuration(ANIMATION_DURATION))
-        animatorList.add(ObjectAnimator.ofFloat(action_settings, "rotation", 0F, 360F).setDuration(ANIMATION_DURATION))
-        animatorList.add(ObjectAnimator.ofFloat(action_settings, "translationX", -DensityUtil.dip2px(this, 68F).toFloat(), 0F).setDuration(ANIMATION_DURATION))
+        animatorList.add(ObjectAnimator.ofFloat(action_sync, Constants.ANIMATION_ROTATION, 360F, 0F).setDuration(ANIMATION_DURATION))
+        animatorList.add(ObjectAnimator.ofFloat(action_sync, Constants.ANIMATION_TRANSLATION_X, DensityUtil.dip2px(this, 68F).toFloat(), 0F).setDuration(ANIMATION_DURATION))
+        animatorList.add(ObjectAnimator.ofFloat(action_settings, Constants.ANIMATION_ROTATION, 0F, 360F).setDuration(ANIMATION_DURATION))
+        animatorList.add(ObjectAnimator.ofFloat(action_settings, Constants.ANIMATION_TRANSLATION_X, -DensityUtil.dip2px(this, 68F).toFloat(), 0F).setDuration(ANIMATION_DURATION))
         animatorList.forEach { it.start() }
     }
 
     private fun setSettings() {
         animatorList.forEach { it.cancel() }
         animatorList.clear()
-        animatorList.add(ObjectAnimator.ofFloat(action_sync, "rotation", 0F, 360F).setDuration(ANIMATION_DURATION))
-        animatorList.add(ObjectAnimator.ofFloat(action_sync, "translationX", 0F, DensityUtil.dip2px(this, 68F).toFloat()).setDuration(ANIMATION_DURATION))
-        animatorList.add(ObjectAnimator.ofFloat(action_settings, "rotation", 360F, 0F).setDuration(ANIMATION_DURATION))
-        animatorList.add(ObjectAnimator.ofFloat(action_settings, "translationX", 0F, -DensityUtil.dip2px(this, 68F).toFloat()).setDuration(ANIMATION_DURATION))
+        animatorList.add(ObjectAnimator.ofFloat(action_sync, Constants.ANIMATION_ROTATION, 0F, 360F).setDuration(ANIMATION_DURATION))
+        animatorList.add(ObjectAnimator.ofFloat(action_sync, Constants.ANIMATION_TRANSLATION_X, 0F, DensityUtil.dip2px(this, 68F).toFloat()).setDuration(ANIMATION_DURATION))
+        animatorList.add(ObjectAnimator.ofFloat(action_settings, Constants.ANIMATION_ROTATION, 360F, 0F).setDuration(ANIMATION_DURATION))
+        animatorList.add(ObjectAnimator.ofFloat(action_settings, Constants.ANIMATION_TRANSLATION_X, 0F, -DensityUtil.dip2px(this, 68F).toFloat()).setDuration(ANIMATION_DURATION))
         animatorList.forEach { it.start() }
     }
 
@@ -731,7 +731,7 @@ class MainActivity : BaseActivity() {
             super.onBackPressed()
         } else {
             lastPressBack = press
-            Toast.makeText(this, "再按一次退出", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, R.string.hint_twice_press_exit, Toast.LENGTH_SHORT).show()
         }
     }
 

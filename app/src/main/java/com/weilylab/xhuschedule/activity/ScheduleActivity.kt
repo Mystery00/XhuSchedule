@@ -158,18 +158,18 @@ class ScheduleActivity : BaseActivity() {
                             parentFile.mkdirs()
                         val base64Name = XhuFileUtil.filterString(Base64.encodeToString(student.username.toByteArray(), Base64.DEFAULT))
                         when (getCourseRT.rt) {
-                            "0", "202" -> {
+                            ConstantsCode.DONE, ConstantsCode.SERVER_COURSE_ANALYZE_ERROR -> {
                                 val newFile = File(parentFile, "$base64Name-$year-$term")
                                 newFile.createNewFile()
                                 XhuFileUtil.saveObjectToFile(getCourseRT.courses, newFile)
                                 showCourses(student)
                             }
-                            "401", "402" -> {
+                            ConstantsCode.ERROR_USERNAME, ConstantsCode.ERROR_PASSWORD -> {
                                 loadingDialog.dismiss()
                                 Snackbar.make(coordinatorLayout, getString(R.string.hint_try_refresh_data_error, getCourseRT.msg), Snackbar.LENGTH_LONG)
                                         .show()
                             }
-                            "405" -> {
+                            ConstantsCode.ERROR_NOT_LOGIN -> {
                                 login(student, year, term)
                             }
                             else -> {
@@ -335,8 +335,8 @@ class ScheduleActivity : BaseActivity() {
         }
         val gradientDrawable = imageView.background as GradientDrawable
         when (course.type) {
-            "-1" -> gradientDrawable.setColor(Color.RED)
-            "not" -> {
+            Constants.COURSE_TYPE_ERROR -> gradientDrawable.setColor(Color.RED)
+            Constants.COURSE_TYPE_NOT -> {
                 textViewName.setTextColor(Color.GRAY)
                 textViewTeacher.setTextColor(Color.GRAY)
                 textViewLocation.setTextColor(Color.GRAY)

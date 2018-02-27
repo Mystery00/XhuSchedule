@@ -49,6 +49,7 @@ import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.service.ExamWidgetService
 import com.weilylab.xhuschedule.service.WidgetInitService
 import com.weilylab.xhuschedule.util.CalendarUtil
+import com.weilylab.xhuschedule.util.Constants
 
 /**
  * Implementation of App Widget functionality.
@@ -65,7 +66,7 @@ class ExamWidget : AppWidgetProvider() {
 
     override fun onReceive(context: Context, intent: Intent) {
         super.onReceive(context, intent)
-        if (intent.action == "android.appwidget.action.APPWIDGET_UPDATE" && (intent.getStringExtra("TAG") == WidgetHelper.EXAM_TAG || intent.getStringExtra("TAG") == WidgetHelper.ALL_TAG)) {
+        if (intent.action == Constants.ACTION_WIDGET_UPDATE_BROADCAST && (intent.getStringExtra(Constants.INTENT_TAG_NAME_TAG) == WidgetHelper.EXAM_TAG || intent.getStringExtra(Constants.INTENT_TAG_NAME_TAG) == WidgetHelper.ALL_TAG)) {
             val appWidgetIds = WidgetHelper.getWidgetIds(context, WidgetHelper.EXAM_TAG)
             for (appWidgetId in appWidgetIds) {
                 updateAppWidget(context, appWidgetId)

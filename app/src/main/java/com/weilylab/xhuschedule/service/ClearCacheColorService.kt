@@ -36,6 +36,7 @@ package com.weilylab.xhuschedule.service
 import android.app.Service
 import android.content.Intent
 import android.os.IBinder
+import com.weilylab.xhuschedule.util.Constants
 
 class ClearCacheColorService : Service() {
 
@@ -45,7 +46,7 @@ class ClearCacheColorService : Service() {
 
     override fun onCreate() {
         super.onCreate()
-        val colorSharedPreference = getSharedPreferences("course_color", MODE_PRIVATE)
+        val colorSharedPreference = getSharedPreferences(Constants.SHARED_PREFERENCE_COURSE_COLOR, MODE_PRIVATE)
         colorSharedPreference.all.keys.forEach {
             colorSharedPreference.edit().remove(it).apply()
         }

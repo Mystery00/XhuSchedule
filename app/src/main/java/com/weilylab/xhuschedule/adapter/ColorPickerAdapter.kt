@@ -52,9 +52,6 @@ import vip.mystery0.tools.logs.Logs
  */
 class ColorPickerAdapter(var color: String,
                          private val context: Context) : RecyclerView.Adapter<ColorPickerAdapter.ViewHolder>() {
-    companion object {
-        private val TAG = "ColorPickerAdapter"
-    }
 
     private var isChecked = false
     private val arrayOfBitmaps = Array<Bitmap?>(12, { null })

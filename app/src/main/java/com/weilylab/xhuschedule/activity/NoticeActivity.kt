@@ -44,6 +44,8 @@ import com.weilylab.xhuschedule.adapter.NoticeAdapter
 import com.weilylab.xhuschedule.classes.baseClass.Notice
 import com.weilylab.xhuschedule.classes.rt.GetNoticesRT
 import com.weilylab.xhuschedule.interfaces.CommonService
+import com.weilylab.xhuschedule.util.Constants
+import com.weilylab.xhuschedule.util.ConstantsCode
 import com.weilylab.xhuschedule.util.ScheduleHelper
 import com.weilylab.xhuschedule.util.Settings
 import io.reactivex.Observer
@@ -88,7 +90,7 @@ class NoticeActivity : BaseActivity() {
     private fun refresh() {
         ScheduleHelper.tomcatRetrofit
                 .create(CommonService::class.java)
-                .getNotices("Android")
+                .getNotices(Constants.NOTICE_PLATFORM)
                 .subscribeOn(Schedulers.newThread())
                 .unsubscribeOn(Schedulers.newThread())
                 .map { responseBody -> Gson().fromJson(InputStreamReader(responseBody.byteStream()), GetNoticesRT::class.java) }
@@ -112,7 +114,7 @@ class NoticeActivity : BaseActivity() {
                         swipeRefreshLayout.isRefreshing = false
                         if (getNoticeRT != null)
                             when (getNoticeRT!!.rt) {
-                                "0" -> {
+                                ConstantsCode.DONE -> {
                                     list.clear()
                                     list.addAll(getNoticeRT!!.notices)
                                     adapter?.notifyDataSetChanged()

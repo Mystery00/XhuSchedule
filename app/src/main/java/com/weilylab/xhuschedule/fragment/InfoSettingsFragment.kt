@@ -51,6 +51,7 @@ import com.weilylab.xhuschedule.classes.baseClass.Version
 import com.weilylab.xhuschedule.interfaces.PhpService
 import com.weilylab.xhuschedule.listener.FeedBackListener
 import com.weilylab.xhuschedule.service.DownloadService
+import com.weilylab.xhuschedule.util.Constants
 import com.weilylab.xhuschedule.util.ScheduleHelper
 import com.weilylab.xhuschedule.util.Settings
 import com.weilylab.xhuschedule.util.XhuFileUtil
@@ -208,15 +209,15 @@ class InfoSettingsFragment : BasePreferenceFragment() {
                                         .setMessage(text)
                                         .setPositiveButton(R.string.action_download_apk, { _, _ ->
                                             val downloadAPKIntent = Intent(activity, DownloadService::class.java)
-                                            downloadAPKIntent.putExtra("type", "apk")
-                                            downloadAPKIntent.putExtra("fileName", version.apkDownloadUrl)
+                                            downloadAPKIntent.putExtra(Constants.INTENT_TAG_NAME_TYPE, Constants.DOWNLOAD_TYPE_APK)
+                                            downloadAPKIntent.putExtra(Constants.INTENT_TAG_NAME_QINIU_PATH, version.apkQiniuPath)
                                             activity.startService(downloadAPKIntent)
                                         })
                                 if (version.lastVersionCode == activity.getString(R.string.app_version_code).toInt())
                                     builder.setNegativeButton(R.string.action_download_patch, { _, _ ->
                                         val downloadPatchIntent = Intent(activity, DownloadService::class.java)
-                                        downloadPatchIntent.putExtra("type", "patch")
-                                        downloadPatchIntent.putExtra("fileName", version.patchDownloadUrl)
+                                        downloadPatchIntent.putExtra(Constants.INTENT_TAG_NAME_TYPE, Constants.DOWNLOAD_TYPE_PATCH)
+                                        downloadPatchIntent.putExtra(Constants.INTENT_TAG_NAME_QINIU_PATH, version.patchQiniuPath)
                                         activity.startService(downloadPatchIntent)
                                     })
                                 builder.show()

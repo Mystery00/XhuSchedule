@@ -1,5 +1,5 @@
 /*
- * Created by Mystery0 on 18-2-21 下午9:12.
+ * Created by Mystery0 on 18-2-27 下午6:59.
  * Copyright (c) 2018. All Rights reserved.
  *
  *                    =====================================================
@@ -28,14 +28,30 @@
  *                    =                                                   =
  *                    =====================================================
  *
- * Last modified 18-2-21 下午9:11
+ * Last modified 18-2-27 下午6:59
  */
 
 package com.weilylab.xhuschedule.util
 
-import android.content.Context
-import com.weilylab.xhuschedule.APP
+object ConstantsCode {
+    const val DONE="0"
 
-object TempSharedPreferenceUtil {
-    private val sharedPreference = APP.getContext().getSharedPreferences(Constants.SHARED_PREFERENCE_TEMP, Context.MODE_PRIVATE)
+    const val JWC_TIMEOUT = "101"
+    const val JWC_BUSY = "102"
+    const val JWC_NEED_RATE = "103"
+
+    const val SERVER_WRONG = "201"
+    const val SERVER_COURSE_ANALYZE_ERROR = "202"
+    const val SERVER_EXAM_ANALYZE_ERROR = "203"
+    const val SERVER_SCORE_ANALYZE_ERROR = "204"
+    const val SERVER_PROFILE_ANALYZE_ERROR = "205"
+
+    const val VERIFY_SERVER_TIMEOUT = "301"
+    const val VERIFY_SERVER_ANAYLYZE_ERROR = "302"
+
+    const val ERROR_USERNAME = "401"
+    const val ERROR_PASSWORD = "402"
+    const val ERROR_VERIFY_CODE = "403"
+    const val ERROR_NOT_LOGIN = "405"
+    const val ERROR_API = "406"
 }

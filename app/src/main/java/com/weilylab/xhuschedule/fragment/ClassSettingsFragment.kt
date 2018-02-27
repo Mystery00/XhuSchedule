@@ -43,6 +43,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.weilylab.xhuschedule.R
+import com.weilylab.xhuschedule.util.Constants
 import com.weilylab.xhuschedule.util.ScheduleHelper
 import com.weilylab.xhuschedule.util.Settings
 import com.weilylab.xhuschedule.view.CustomDatePicker
@@ -94,7 +95,7 @@ class ClassSettingsFragment : BasePreferenceFragment() {
                             Settings.firstWeekOfTerm = calendar.get(Calendar.YEAR).toString() + '-' + calendar.get(Calendar.MONTH).toString() + '-' + calendar.get(Calendar.DAY_OF_MONTH).toString()
                             firstDayPreference.summary = calendar.get(Calendar.YEAR).toString() + '-' + (calendar.get(Calendar.MONTH) + 1).toString() + '-' + calendar.get(Calendar.DAY_OF_MONTH).toString()
                             //更新小部件
-                            activity.sendBroadcast(Intent("android.appwidget.action.APPWIDGET_UPDATE"))
+                            activity.sendBroadcast(Intent(Constants.ACTION_WIDGET_UPDATE_BROADCAST))
                             dialog.dismiss()
                         }
                     }

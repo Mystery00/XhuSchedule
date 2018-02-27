@@ -78,16 +78,16 @@
     </string-array>
 
     <string-array name="thumbnail_background_img">
-        <item>https://mystery0.vip/img/interface/thumbnail_a.png</item>
-        <item>https://mystery0.vip/img/interface/thumbnail_b.png</item>
-        <item>https://mystery0.vip/img/interface/thumbnail_c.png</item>
-        <item>https://mystery0.vip/img/interface/thumbnail_d.png</item>
+        <item>http://download.xhuschedule.mostpan.com/image/a.png?imageMogr2/thumbnail/270x480/blur/1x0/quality/50</item>
+        <item>http://download.xhuschedule.mostpan.com/image/b.png?imageMogr2/thumbnail/270x480/blur/1x0/quality/50</item>
+        <item>http://download.xhuschedule.mostpan.com/image/c.png?imageMogr2/thumbnail/270x480/blur/1x0/quality/50</item>
+        <item>http://download.xhuschedule.mostpan.com/image/d.png?imageMogr2/thumbnail/270x480/blur/1x0/quality/50</item>
     </string-array>
 
     <string-array name="background_img">
-        <item>https://mystery0.vip/img/interface/a.png</item>
-        <item>https://mystery0.vip/img/interface/b.png</item>
-        <item>https://mystery0.vip/img/interface/c.png</item>
-        <item>https://mystery0.vip/img/interface/d.png</item>
+        <item>http://download.xhuschedule.mostpan.com/image/a.png</item>
+        <item>http://download.xhuschedule.mostpan.com/image/b.png</item>
+        <item>http://download.xhuschedule.mostpan.com/image/c.png</item>
+        <item>http://download.xhuschedule.mostpan.com/image/d.png</item>
     </string-array>
 </resources>

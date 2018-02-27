@@ -152,7 +152,7 @@ class ExamActivity : BaseActivity() {
                         savedFile.createNewFile()
                         XhuFileUtil.saveObjectToFile(testList, savedFile)
                         sendBroadcast(Intent(Constants.ACTION_WIDGET_UPDATE_BROADCAST)
-                                .putExtra("TAG", WidgetHelper.ALL_TAG))
+                                .putExtra(Constants.INTENT_TAG_NAME_TAG, WidgetHelper.ALL_TAG))
                     }
 
                     override fun onSubscribe(d: Disposable) {

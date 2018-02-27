@@ -1,5 +1,5 @@
 /*
- * Created by Mystery0 on 18-2-21 下午9:12.
+ * Created by Mystery0 on 18-2-27 下午6:22.
  * Copyright (c) 2018. All Rights reserved.
  *
  *                    =====================================================
@@ -28,14 +28,22 @@
  *                    =                                                   =
  *                    =====================================================
  *
- * Last modified 18-2-21 下午9:11
+ * Last modified 18-2-27 下午6:22
  */
 
-package com.weilylab.xhuschedule.util
+package com.weilylab.xhuschedule.interfaces
 
-import android.content.Context
-import com.weilylab.xhuschedule.APP
+import io.reactivex.Observable
+import okhttp3.ResponseBody
+import retrofit2.http.GET
+import retrofit2.http.Path
+import retrofit2.http.Streaming
 
-object TempSharedPreferenceUtil {
-    private val sharedPreference = APP.getContext().getSharedPreferences(Constants.SHARED_PREFERENCE_TEMP, Context.MODE_PRIVATE)
+interface QiniuService {
+    @GET("/image/{fileName}")
+    fun downloadImg(@Path("fileName") fileName: String): Observable<ResponseBody>
+
+    @Streaming
+    @GET("/{path}")
+    fun download(@Path("path") path: String): Observable<ResponseBody>
 }

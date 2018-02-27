@@ -43,23 +43,12 @@ import retrofit2.http.*
  * Created by myste.
  */
 interface PhpService {
-    @Streaming
-    @FormUrlEncoded
-    @POST("/interface/checkUpdate.php")
-    fun checkUpdateCall(@Field("currentVersion") currentVersion: Int): Observable<ResponseBody>
 
     @Streaming
     @GET("/interface/checkVersion.php")
     fun checkVersion(): Observable<ResponseBody>
 
-    @Streaming
-    @GET("/{type}/{fileName}")
-    fun download(@Path("type") type: String, @Path("fileName") fileName: String): Observable<ResponseBody>
-
     @Multipart
     @POST("/interface/upload_log.php")
     fun uploadLog(@PartMap partMap: MutableMap<String, RequestBody>, @Part logFile: MultipartBody.Part): Observable<ResponseBody>
-
-    @GET("/{fileName}")
-    fun downloadImg(@Path("fileName") fileName: String): Observable<ResponseBody>
 }

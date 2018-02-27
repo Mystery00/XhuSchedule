@@ -62,7 +62,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.jrummyapps.android.colorpicker.ColorPreference
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.classes.baseClass.Course
-import com.weilylab.xhuschedule.interfaces.PhpService
+import com.weilylab.xhuschedule.interfaces.QiniuService
 import com.weilylab.xhuschedule.util.*
 import com.yalantis.ucrop.UCrop
 import com.zyao89.view.zloading.ZLoadingDialog
@@ -72,7 +72,6 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import vip.mystery0.tools.logs.Logs
-import java.io.File
 import java.io.InputStream
 
 /**
@@ -146,22 +145,22 @@ class UISettingsFragment : BasePreferenceFragment() {
             image1.setOnClickListener {
                 val link = list[0]
                 dialog.dismiss()
-                downloadImg(link.substring(link.lastIndexOf('/') + 1), "background")
+                downloadImg(link.substring(link.lastIndexOf('/') + 1), XhuFileUtil.UI_IMAGE_BACKGROUND)
             }
             image2.setOnClickListener {
                 val link = list[1]
                 dialog.dismiss()
-                downloadImg(link.substring(link.lastIndexOf('/') + 1), "background")
+                downloadImg(link.substring(link.lastIndexOf('/') + 1), XhuFileUtil.UI_IMAGE_BACKGROUND)
             }
             image3.setOnClickListener {
                 val link = list[2]
                 dialog.dismiss()
-                downloadImg(link.substring(link.lastIndexOf('/') + 1), "background")
+                downloadImg(link.substring(link.lastIndexOf('/') + 1), XhuFileUtil.UI_IMAGE_BACKGROUND)
             }
             image4.setOnClickListener {
                 val link = list[3]
                 dialog.dismiss()
-                downloadImg(link.substring(link.lastIndexOf('/') + 1), "background")
+                downloadImg(link.substring(link.lastIndexOf('/') + 1), XhuFileUtil.UI_IMAGE_BACKGROUND)
             }
             true
         }
@@ -365,16 +364,15 @@ class UISettingsFragment : BasePreferenceFragment() {
             true
         }
         resetPreference.setOnPreferenceClickListener {
-            val sharedPreference = activity.getSharedPreferences("settings", Context.MODE_PRIVATE)
+            val sharedPreference = activity.getSharedPreferences(Constants.SHARED_PREFERENCE_SETTINGS, Context.MODE_PRIVATE)
             sharedPreference.edit()
-                    .remove("customHeaderImg")
-                    .remove("customBackgroundImg")
-                    .remove("customTableOpacity")
-                    .remove("customTodayOpacity")
-                    .remove("customTableTextColor")
-                    .remove("customTodayTextColor")
-                    .remove("customTextSize")
-                    .remove("customTextHeight")
+                    .remove(Constants.CUSTOM_BACKGROUND_IMG)
+                    .remove(Constants.CUSTOM_TABLE_OPACITY)
+                    .remove(Constants.CUSTOM_TODAY_OPACITY)
+                    .remove(Constants.CUSTOM_TABLE_TEXT_COLOR)
+                    .remove(Constants.CUSTOM_TODAY_TEXT_COLOR)
+                    .remove(Constants.CUSTOM_TEXT_SIZE)
+                    .remove(Constants.CUSTOM_HEIGHT_SIZE)
                     .apply()
             ScheduleHelper.isImageChange = true
             ScheduleHelper.isUIChange = true
@@ -397,14 +395,14 @@ class UISettingsFragment : BasePreferenceFragment() {
                     cropImg(data.data, PROFILE_CROP_REQUEST_CODE, 500, 500)
                 }
                 BACKGROUND_CROP_REQUEST_CODE -> {
-                    val saveFile = File(File(activity.filesDir, "CropImg"), "background")
+                    val saveFile = XhuFileUtil.getUIImageFile(activity, XhuFileUtil.UI_IMAGE_BACKGROUND)
                     Settings.customBackgroundImg = saveFile.absolutePath
                     ScheduleHelper.isImageChange = true
                     Toast.makeText(activity, R.string.hint_custom_img, Toast.LENGTH_SHORT)
                             .show()
                 }
                 PROFILE_CROP_REQUEST_CODE -> {
-                    val saveFile = File(File(activity.filesDir, "CropImg"), "user_img")
+                    val saveFile = XhuFileUtil.getUIImageFile(activity, XhuFileUtil.UI_IMAGE_USER_IMG)
                     Settings.userImg = saveFile.absolutePath
                     ScheduleHelper.isImageChange = true
                     Toast.makeText(activity, R.string.hint_custom_img, Toast.LENGTH_SHORT)
@@ -449,9 +447,9 @@ class UISettingsFragment : BasePreferenceFragment() {
     }
 
     private fun cropImg(uri: Uri, cropCode: Int, width: Int, height: Int) {
-        val savedFile = File(File(activity.filesDir, "CropImg"), when (cropCode) {
-            BACKGROUND_CROP_REQUEST_CODE -> "background"
-            PROFILE_CROP_REQUEST_CODE -> "user_img"
+        val savedFile = XhuFileUtil.getUIImageFile(activity, when (cropCode) {
+            BACKGROUND_CROP_REQUEST_CODE -> XhuFileUtil.UI_IMAGE_BACKGROUND
+            PROFILE_CROP_REQUEST_CODE -> XhuFileUtil.UI_IMAGE_USER_IMG
             else -> throw NullPointerException("裁剪图片请求码错误")
         })
         if (!savedFile.parentFile.exists())
@@ -473,7 +471,7 @@ class UISettingsFragment : BasePreferenceFragment() {
                 .setHintTextColor(ContextCompat.getColor(activity, R.color.colorAccent))
                 .create()
         loadingDialog.show()
-        ScheduleHelper.imgRetrofit.create(PhpService::class.java)
+        ScheduleHelper.imgRetrofit.create(QiniuService::class.java)
                 .downloadImg(fileName)
                 .subscribeOn(Schedulers.newThread())
                 .unsubscribeOn(Schedulers.newThread())
@@ -481,15 +479,13 @@ class UISettingsFragment : BasePreferenceFragment() {
                 .observeOn(Schedulers.io())
                 .doOnNext { inputStream ->
                     try {
+                        val saveFile = XhuFileUtil.getUIImageFile(activity, saveType)
+                        XhuFileUtil.saveFile(inputStream, saveFile)
                         when (saveType) {
-                            "background" -> {
-                                val saveFile = File(File(activity.filesDir, "CropImg"), "background")
-                                XhuFileUtil.saveFile(inputStream, saveFile)
+                            XhuFileUtil.UI_IMAGE_BACKGROUND -> {
                                 Settings.customBackgroundImg = saveFile.absolutePath
                             }
-                            "user_img" -> {
-                                val saveFile = File(File(activity.filesDir, "CropImg"), "user_img")
-                                XhuFileUtil.saveFile(inputStream, saveFile)
+                            XhuFileUtil.UI_IMAGE_USER_IMG -> {
                                 Settings.userImg = saveFile.absolutePath
                             }
                         }
@@ -507,7 +503,7 @@ class UISettingsFragment : BasePreferenceFragment() {
                     }
 
                     override fun onError(e: Throwable) {
-                        e.printStackTrace()
+                        Logs.wtf(TAG, "onError: ", e)
                         loadingDialog.dismiss()
                         Toast.makeText(activity, R.string.error_custom_img, Toast.LENGTH_SHORT)
                                 .show()

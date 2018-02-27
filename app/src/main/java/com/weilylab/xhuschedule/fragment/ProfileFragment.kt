@@ -59,7 +59,9 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.signature.MediaStoreSignature
 import com.weilylab.xhuschedule.activity.LoginActivity
+import com.weilylab.xhuschedule.util.Constants
 import com.weilylab.xhuschedule.util.Settings
+import com.weilylab.xhuschedule.util.XhuFileUtil
 import java.io.File
 import java.util.*
 
@@ -70,7 +72,7 @@ class ProfileFragment : Fragment() {
     companion object {
         fun newInstance(profile: Profile): ProfileFragment {
             val bundle = Bundle()
-            bundle.putSerializable("profile", profile)
+            bundle.putSerializable(Constants.INTENT_TAG_NAME_PROFILE, profile)
             val fragment = ProfileFragment()
             fragment.arguments = bundle
             return fragment
@@ -84,7 +86,7 @@ class ProfileFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        profile = arguments?.getSerializable("profile") as Profile
+        profile = arguments?.getSerializable(Constants.INTENT_TAG_NAME_PROFILE) as Profile
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -104,7 +106,7 @@ class ProfileFragment : Fragment() {
                         .setTitle(R.string.hint_logout_title)
                         .setMessage(R.string.hint_logout_content)
                         .setPositiveButton(android.R.string.ok, { _, _ ->
-                            val file = File(activity!!.filesDir.absolutePath + File.separator + "data" + File.separator)
+                            val file = XhuFileUtil.getStudentListFile(activity!!)
                             if (file.exists())
                                 file.listFiles()
                                         .forEach {

@@ -50,6 +50,7 @@ import com.weilylab.xhuschedule.service.WidgetInitService
 import com.weilylab.xhuschedule.service.WidgetLastActionService
 import com.weilylab.xhuschedule.service.WidgetNextActionService
 import com.weilylab.xhuschedule.util.CalendarUtil
+import com.weilylab.xhuschedule.util.Constants
 
 /**
  * Implementation of App Widget functionality.
@@ -66,7 +67,7 @@ class TodayCourseWidget : AppWidgetProvider() {
 
     override fun onReceive(context: Context, intent: Intent) {
         super.onReceive(context, intent)
-        if (intent.action == "android.appwidget.action.APPWIDGET_UPDATE" && (intent.getStringExtra("TAG") == WidgetHelper.TODAY_TAG || intent.getStringExtra("TAG") == WidgetHelper.ALL_TAG)) {
+        if (intent.action == Constants.ACTION_WIDGET_UPDATE_BROADCAST && (intent.getStringExtra(Constants.INTENT_TAG_NAME_TAG) == WidgetHelper.TODAY_TAG || intent.getStringExtra(Constants.INTENT_TAG_NAME_TAG) == WidgetHelper.ALL_TAG)) {
             val appWidgetIds = WidgetHelper.getWidgetIds(context, WidgetHelper.TODAY_TAG)
             for (appWidgetId in appWidgetIds) {
                 updateAppWidget(context, appWidgetId)
@@ -79,11 +80,11 @@ class TodayCourseWidget : AppWidgetProvider() {
         internal fun updateAppWidget(context: Context, appWidgetId: Int) {
             val remoteViews = RemoteViews(context.packageName, R.layout.layout_widget_course_today)
             val lastIntentClick = Intent(context, WidgetLastActionService::class.java)
-            lastIntentClick.putExtra("TAG", WidgetHelper.TODAY_TAG)
+            lastIntentClick.putExtra(Constants.INTENT_TAG_NAME_TAG, WidgetHelper.TODAY_TAG)
             val lastPendingIntent = PendingIntent.getService(context, 0, lastIntentClick, PendingIntent.FLAG_UPDATE_CURRENT)
             remoteViews.setOnClickPendingIntent(R.id.lastDay, lastPendingIntent)
             val nextIntentClick = Intent(context, WidgetNextActionService::class.java)
-            nextIntentClick.putExtra("TAG", WidgetHelper.TODAY_TAG)
+            nextIntentClick.putExtra(Constants.INTENT_TAG_NAME_TAG, WidgetHelper.TODAY_TAG)
             val nextPendingIntent = PendingIntent.getService(context, 0, nextIntentClick, PendingIntent.FLAG_UPDATE_CURRENT)
             remoteViews.setOnClickPendingIntent(R.id.nextDay, nextPendingIntent)
             val refreshIntent = Intent(context, WidgetInitService::class.java)

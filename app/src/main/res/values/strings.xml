@@ -8,6 +8,8 @@
 <resources>
     <string name="app_name">西瓜课表</string>
 
+    <string name="uri_authority">com.weilylab.xhuschedule</string>
+
     <string name="exception_time">崩溃时间：%1$s</string>
     <string name="exception_version">崩溃版本：%1$s_%2$d</string>
     <string name="exception_sdk">SDK：%1$s_%2$d</string>
@@ -61,6 +63,7 @@
     <string name="hint_dialog_download_img">图片下载中……</string>
     <string name="hint_dialog_feedback">正在提交中……</string>
     <string name="hint_dialog_debug_firebase">正在调试Firebase……</string>
+    <string name="hint_twice_press_exit">再按一次退出</string>
     <string name="hint_invalid_cookie">登陆信息已过期，是否重新登录？</string>
     <string name="hint_try_refresh_data_error">%1$s，是否重新登录？</string>
     <string name="hint_update_data">信息同步成功！</string>
@@ -97,6 +100,9 @@
     <string name="hint_share_message">嗨，我正在使用西瓜课表2.0查课程哦~ 除了查课表，还可以查考试，查成绩。 下载链接：https://www.coolapk.com/apk/com.weilylab.xhuschedule</string>
     <string name="hint_notification_system">默认铃声</string>
     <string name="hint_notification_none">静音</string>
+    <string name="hint_no_weixin">微信未安装！</string>
+    <string name="hint_no_weibo">微博未安装！</string>
+    <string name="hint_foreground_notification">正在初始化数据</string>
 
     <string name="warning_enable_multi_user_mode">
         请确保您是双学位的学生或者有同时查看多个账号课表的需求。\n\n

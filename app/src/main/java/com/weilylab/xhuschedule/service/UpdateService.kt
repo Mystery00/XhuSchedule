@@ -57,7 +57,7 @@ class UpdateService : IntentService("PhpService") {
         super.onCreate()
         val notification = NotificationCompat.Builder(this, Constants.NOTIFICATION_CHANNEL_ID_DEFAULT)
                 .setSmallIcon(R.mipmap.ic_launcher)
-                .setContentText("正在初始化数据")
+                .setContentText(getString(R.string.hint_foreground_notification))
                 .setAutoCancel(true)
                 .setPriority(NotificationManagerCompat.IMPORTANCE_NONE)
                 .build()
@@ -74,7 +74,8 @@ class UpdateService : IntentService("PhpService") {
                 .subscribe(object : DisposableObserver<Version>() {
                     private lateinit var version: Version
                     override fun onComplete() {
-                        if (version.versionCode > getString(R.string.app_version_code).toInt()) {
+//                        if (version.versionCode > getString(R.string.app_version_code).toInt()) {
+                        if (version.versionCode > 0) {
                             val title = getString(R.string.dialog_update_title, getString(R.string.app_version_name), version.versionName)
                             val text = getString(R.string.dialog_update_text, version.updateLog)
                             val builder = AlertDialog.Builder(APPActivityManager.appManager.currentActivity())
@@ -82,15 +83,15 @@ class UpdateService : IntentService("PhpService") {
                                     .setMessage(text)
                                     .setPositiveButton("${getString(R.string.action_download_apk)}(${FileUtil.formatFileSize(version.apkSize)})", { _, _ ->
                                         val downloadAPKIntent = Intent(this@UpdateService, DownloadService::class.java)
-                                        downloadAPKIntent.putExtra("type", "apk")
-                                        downloadAPKIntent.putExtra("url", version.apkDownloadUrl)
+                                        downloadAPKIntent.putExtra(Constants.INTENT_TAG_NAME_TYPE, Constants.DOWNLOAD_TYPE_APK)
+                                        downloadAPKIntent.putExtra(Constants.INTENT_TAG_NAME_QINIU_PATH, version.apkQiniuPath)
                                         startService(downloadAPKIntent)
                                     })
                             if (version.lastVersionCode == getString(R.string.app_version_code).toInt())
                                 builder.setNegativeButton("${getString(R.string.action_download_patch)}(${FileUtil.formatFileSize(version.patchSize)})", { _, _ ->
                                     val downloadPatchIntent = Intent(this@UpdateService, DownloadService::class.java)
-                                    downloadPatchIntent.putExtra("type", "patch")
-                                    downloadPatchIntent.putExtra("url", version.patchDownloadUrl)
+                                    downloadPatchIntent.putExtra(Constants.INTENT_TAG_NAME_TYPE, Constants.DOWNLOAD_TYPE_PATCH)
+                                    downloadPatchIntent.putExtra(Constants.INTENT_TAG_NAME_QINIU_PATH, version.patchQiniuPath)
                                     startService(downloadPatchIntent)
                                 })
                             if (version.must)

@@ -40,11 +40,11 @@ import com.weilylab.xhuschedule.APP
  * Created by myste.
  */
 object Settings {
-    private val sharedPreference = APP.getContext().getSharedPreferences("settings", Context.MODE_PRIVATE)
+    private val sharedPreference = APP.getContext().getSharedPreferences(Constants.SHARED_PREFERENCE_SETTINGS, Context.MODE_PRIVATE)
 
     var firstWeekOfTerm: String//开学时间
         set(value) = sharedPreference.edit().putString(Constants.FIRST_WEEK_OF_TERM, value).apply()
-        get() = sharedPreference.getString(Constants.FIRST_WEEK_OF_TERM, "2017-8-4")
+        get() = sharedPreference.getString(Constants.FIRST_WEEK_OF_TERM, Constants.DEFAULT_TERM_START_DATE)
     var isShowNot: Boolean//是否显示非本周课程
         set(value) = sharedPreference.edit().putBoolean(Constants.IS_SHOW_NOT, value).apply()
         get() = sharedPreference.getBoolean(Constants.IS_SHOW_NOT, false)
@@ -59,22 +59,22 @@ object Settings {
         get() = sharedPreference.getString(Constants.CUSTOM_BACKGROUND_IMG, "")
     var customTableOpacity: Int//表格不透明度
         set(value) = sharedPreference.edit().putInt(Constants.CUSTOM_TABLE_OPACITY, value).apply()
-        get() = sharedPreference.getInt(Constants.CUSTOM_TABLE_OPACITY, 154)
+        get() = sharedPreference.getInt(Constants.CUSTOM_TABLE_OPACITY, Constants.DEFAULT_OPACITY)
     var customTodayOpacity: Int//当天课程不透明度
         set(value) = sharedPreference.edit().putInt(Constants.CUSTOM_TODAY_OPACITY, value).apply()
-        get() = sharedPreference.getInt(Constants.CUSTOM_TODAY_OPACITY, 154)
+        get() = sharedPreference.getInt(Constants.CUSTOM_TODAY_OPACITY, Constants.DEFAULT_OPACITY)
     var customTableTextColor: Int//表头文字颜色
         set(value) = sharedPreference.edit().putInt(Constants.CUSTOM_TABLE_TEXT_COLOR, value).apply()
-        get() = sharedPreference.getInt(Constants.CUSTOM_TABLE_TEXT_COLOR, -1)
+        get() = sharedPreference.getInt(Constants.CUSTOM_TABLE_TEXT_COLOR, Constants.DEFAULT_COLOR_TEXT_HEADER)
     var customTodayTextColor: Int//今日课程文字颜色
         set(value) = sharedPreference.edit().putInt(Constants.CUSTOM_TODAY_TEXT_COLOR, value).apply()
-        get() = sharedPreference.getInt(Constants.CUSTOM_TODAY_TEXT_COLOR, -11184811)
+        get() = sharedPreference.getInt(Constants.CUSTOM_TODAY_TEXT_COLOR, Constants.DEFAULT_COLOR_TEXT_TODAY)
     var customTextSize: Int//文字大小
         set(value) = sharedPreference.edit().putInt(Constants.CUSTOM_TEXT_SIZE, value).apply()
-        get() = sharedPreference.getInt(Constants.CUSTOM_TEXT_SIZE, 12)
+        get() = sharedPreference.getInt(Constants.CUSTOM_TEXT_SIZE, Constants.DEFAULT_SIZE_TEXT)
     var customTextHeight: Int//课程格子高度
         set(value) = sharedPreference.edit().putInt(Constants.CUSTOM_HEIGHT_SIZE, value).apply()
-        get() = sharedPreference.getInt(Constants.CUSTOM_HEIGHT_SIZE, 72)
+        get() = sharedPreference.getInt(Constants.CUSTOM_HEIGHT_SIZE, Constants.DEFAULT_SIZE_HEIGHT)
     var autoCheckUpdate: Boolean//自动检查更新
         set(value) = sharedPreference.edit().putBoolean(Constants.AUTO_CHECK_UPDATE, value).apply()
         get() = sharedPreference.getBoolean(Constants.AUTO_CHECK_UPDATE, true)
@@ -98,13 +98,13 @@ object Settings {
         get() = sharedPreference.getString(Constants.SHOW_NOTICE_ID, "")
     var notificationSound: String//通知铃声
         set(value) = sharedPreference.edit().putString(Constants.NOTIFICATION_SOUND, value).apply()
-        get() = sharedPreference.getString(Constants.NOTIFICATION_SOUND, "content://settings/system/notification_sound")
+        get() = sharedPreference.getString(Constants.NOTIFICATION_SOUND, Constants.DEFAULT_NOTIFICATION_SOUND)
     var notificationVibrate: Boolean//是否震动
         set(value) = sharedPreference.edit().putBoolean(Constants.NOTIFICATION_VIBRATE, value).apply()
         get() = sharedPreference.getBoolean(Constants.NOTIFICATION_VIBRATE, true)
     var notificationTime: String//提醒明天课程时间
         set(value) = sharedPreference.edit().putString(Constants.NOTIFICATION_TIME, value).apply()
-        get() = sharedPreference.getString(Constants.NOTIFICATION_TIME, "06:00")
+        get() = sharedPreference.getString(Constants.NOTIFICATION_TIME, Constants.DEFAULT_NOTIFICATION_TIME)
     var notificationExactTime: Boolean//准时提醒
         set(value) = sharedPreference.edit().putBoolean(Constants.NOTIFICATION_EXACT_TIME, value).apply()
         get() = sharedPreference.getBoolean(Constants.NOTIFICATION_EXACT_TIME, false)

@@ -35,7 +35,6 @@ package com.weilylab.xhuschedule.util
 
 import com.weilylab.xhuschedule.classes.baseClass.Course
 import com.weilylab.xhuschedule.classes.baseClass.CourseTimeInfo
-import java.util.*
 import kotlin.collections.ArrayList
 
 /**
@@ -84,10 +83,10 @@ object CourseUtil {
             try {//尝试解析周数
                 var other = false
                 when (it.type) {
-                    "-1", "0" -> other = true
-                    "1" -> if (weekIndex % 2 == 1)
+                    Constants.COURSE_TYPE_ERROR, Constants.COURSE_TYPE_ALL -> other = true
+                    Constants.COURSE_TYPE_SINGLE -> if (weekIndex % 2 == 1)
                         other = true
-                    "2" -> if (weekIndex % 2 == 0)
+                    Constants.COURSE_TYPE_DOUBLE -> if (weekIndex % 2 == 0)
                         other = true
                     else -> other = false
                 }
@@ -95,7 +94,7 @@ object CourseUtil {
                 val startWeek = weekArray[0].toInt()
                 val endWeek = weekArray[1].toInt()
                 if ((weekIndex !in startWeek..endWeek) || !other)
-                    it.type = "not"
+                    it.type = Constants.COURSE_TYPE_NOT
             } catch (e: Exception) {
                 e.printStackTrace()
                 ScheduleHelper.isAnalysisError = true
@@ -141,10 +140,10 @@ object CourseUtil {
             try {
                 var other = false
                 when (it.type) {
-                    "-1", "0" -> other = true
-                    "1" -> if (weekIndex % 2 == 1)
+                    Constants.COURSE_TYPE_ERROR, Constants.COURSE_TYPE_ALL -> other = true
+                    Constants.COURSE_TYPE_SINGLE -> if (weekIndex % 2 == 1)
                         other = true
-                    "2" -> if (weekIndex % 2 == 0)
+                    Constants.COURSE_TYPE_DOUBLE -> if (weekIndex % 2 == 0)
                         other = true
                     else -> other = false
                 }
@@ -201,10 +200,10 @@ object CourseUtil {
                 val endWeek = weekArray[1].toInt()
                 var other = false
                 when (it.type) {
-                    "-1", "0" -> other = true
-                    "1" -> if (currentWeek % 2 == 1)
+                    Constants.COURSE_TYPE_ERROR, Constants.COURSE_TYPE_ALL -> other = true
+                    Constants.COURSE_TYPE_SINGLE -> if (weekIndex % 2 == 1)
                         other = true
-                    "2" -> if (currentWeek % 2 == 0)
+                    Constants.COURSE_TYPE_DOUBLE -> if (weekIndex % 2 == 0)
                         other = true
                     else -> other = false
                 }
@@ -257,12 +256,12 @@ object CourseUtil {
     }
 
     fun typeMerge(type1: String, type2: String): String {
-        if (type1 == "not")
+        if (type1 == Constants.COURSE_TYPE_NOT)
             return type2
-        if (type2 == "not")
+        if (type2 == Constants.COURSE_TYPE_NOT)
             return type1
-        if (type1 == "-1" || type2 == "-1")
-            return "-1"
+        if (type1 == Constants.COURSE_TYPE_ERROR || type2 == Constants.COURSE_TYPE_ERROR)
+            return Constants.COURSE_TYPE_ERROR
         return type1
     }
 }

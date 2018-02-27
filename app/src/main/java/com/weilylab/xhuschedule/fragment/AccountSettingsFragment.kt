@@ -76,7 +76,7 @@ class AccountSettingsFragment : BasePreferenceFragment() {
         delAccountPreference = findPreferenceById(R.string.key_del_account)
         setMainAccountPreference = findPreferenceById(R.string.key_set_main_account)
         multiUserModePreference = findPreferenceById(R.string.key_enable_multi_user_mode) as SwitchPreference
-        val userFile = File(activity.filesDir.absolutePath + File.separator + "data" + File.separator + "user")
+        val userFile = XhuFileUtil.getStudentListFile(activity)
         val studentList = XhuFileUtil.getArrayListFromFile(userFile, Student::class.java)
         updateCategory(studentList)
         multiUserModePreference.isChecked = Settings.isEnableMultiUserMode
@@ -101,7 +101,7 @@ class AccountSettingsFragment : BasePreferenceFragment() {
                             if (b)
                                 temp.add(studentList[index])
                         }
-                        val showFile = File(activity.filesDir.absolutePath + File.separator + "data" + File.separator + "show_user")
+                        val showFile = XhuFileUtil.getShowStudentListFile(activity)
                         val showList = XhuFileUtil.getArrayListFromFile(showFile, Student::class.java)
                         val studentIterator = studentList.iterator()
                         while (studentIterator.hasNext()) {
@@ -188,7 +188,7 @@ class AccountSettingsFragment : BasePreferenceFragment() {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == ADD_ACCOUNT_CODE && resultCode == Activity.RESULT_OK) {
             ScheduleHelper.isUIChange = true
-            val userFile = File(activity.filesDir.absolutePath + File.separator + "data" + File.separator + "user")
+            val userFile = XhuFileUtil.getStudentListFile(activity)
             updateCategory(XhuFileUtil.getArrayListFromFile(userFile, Student::class.java))
         }
     }

@@ -46,6 +46,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.classes.baseClass.Score
+import com.weilylab.xhuschedule.util.Constants
 import com.weilylab.xhuschedule.view.TextViewUtils
 import vip.mystery0.tools.logs.Logs
 
@@ -95,14 +96,14 @@ class ScoreAdapter(private val context: Context,
                         -1 -> {
                             Logs.i(TAG, "onBindViewHolder: 没有条目被选中")
                             valueAnimator = TextViewUtils.setMaxLinesWithAnimation(holder.detailsTextView, Int.MAX_VALUE)
-                            ObjectAnimator.ofFloat(holder.imageView, "alpha", 0F, 1F).start()
+                            ObjectAnimator.ofFloat(holder.imageView, Constants.ANIMATION_ALPHA, 0F, 1F).start()
                             currentIndex = holder.adapterPosition
                             openedHolder = holder
                         }
                         holder.adapterPosition -> {
                             Logs.i(TAG, "onBindViewHolder: 选中的是当前条目")
                             valueAnimator = TextViewUtils.setMaxLinesWithAnimation(holder.detailsTextView, 1)
-                            ObjectAnimator.ofFloat(holder.imageView, "alpha", 1F, 0F).start()
+                            ObjectAnimator.ofFloat(holder.imageView, Constants.ANIMATION_ALPHA, 1F, 0F).start()
                             currentIndex = -1
                             openedHolder = null
                         }
@@ -110,10 +111,10 @@ class ScoreAdapter(private val context: Context,
                             Logs.i(TAG, "onBindViewHolder: 选中的其他条目")
                             if (openedHolder != null) {
                                 valueAnimator = TextViewUtils.setMaxLinesWithAnimation(openedHolder!!.detailsTextView, 1)
-                                ObjectAnimator.ofFloat(openedHolder!!.imageView, "alpha", 1F, 0F).start()
+                                ObjectAnimator.ofFloat(openedHolder!!.imageView, Constants.ANIMATION_ALPHA, 1F, 0F).start()
                             }
                             valueAnimator = TextViewUtils.setMaxLinesWithAnimation(holder.detailsTextView, Int.MAX_VALUE)
-                            ObjectAnimator.ofFloat(holder.imageView, "alpha", 0F, 1F).start()
+                            ObjectAnimator.ofFloat(holder.imageView, Constants.ANIMATION_ALPHA, 0F, 1F).start()
                             currentIndex = holder.adapterPosition
                             openedHolder = holder
                         }

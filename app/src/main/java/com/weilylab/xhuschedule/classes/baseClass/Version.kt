@@ -37,11 +37,11 @@ package com.weilylab.xhuschedule.classes.baseClass
  * Created by myste.
  */
 class Version {
-    lateinit var apkDownloadUrl: String
+    lateinit var apkQiniuPath: String
     var apkSize = -1L
     var must = false//是否强制更新
     var lastVersionCode = -1
-    lateinit var patchDownloadUrl: String
+    lateinit var patchQiniuPath: String
     var patchSize = -1L
     lateinit var updateLog: String
     var versionCode = -1

@@ -56,9 +56,7 @@ import com.weilylab.xhuschedule.classes.baseClass.Student
 import com.weilylab.xhuschedule.classes.rt.GetNoticesRT
 import com.weilylab.xhuschedule.interfaces.CommonService
 import com.weilylab.xhuschedule.listener.FeedBackListener
-import com.weilylab.xhuschedule.util.ScheduleHelper
-import com.weilylab.xhuschedule.util.Settings
-import com.weilylab.xhuschedule.util.XhuFileUtil
+import com.weilylab.xhuschedule.util.*
 import com.zyao89.view.zloading.ZLoadingDialog
 import com.zyao89.view.zloading.Z_TYPE
 import io.reactivex.Observer
@@ -110,7 +108,7 @@ class OperationAdapter(private val context: Context) : RecyclerView.Adapter<Oper
         if (position == 0) {
             ScheduleHelper.tomcatRetrofit
                     .create(CommonService::class.java)
-                    .getNotices("Android")
+                    .getNotices(Constants.NOTICE_PLATFORM)
                     .subscribeOn(Schedulers.newThread())
                     .unsubscribeOn(Schedulers.newThread())
                     .map { responseBody -> Gson().fromJson(InputStreamReader(responseBody.byteStream()), GetNoticesRT::class.java) }
@@ -131,7 +129,7 @@ class OperationAdapter(private val context: Context) : RecyclerView.Adapter<Oper
                         override fun onComplete() {
                             if (getNoticeRT != null)
                                 when (getNoticeRT!!.rt) {
-                                    "0" -> {
+                                    ConstantsCode.DONE -> {
                                         val notices = getNoticeRT!!.notices
                                         var isNotice = false
                                         val shownNoticeID = Settings.shownNoticeID.split('|')

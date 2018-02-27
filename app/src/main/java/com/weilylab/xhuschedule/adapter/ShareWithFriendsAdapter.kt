@@ -57,6 +57,7 @@ import com.tencent.mm.opensdk.modelmsg.WXMediaMessage
 import com.weilylab.xhuschedule.APP
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.activity.MainActivity
+import com.weilylab.xhuschedule.util.Constants
 
 class ShareWithFriendsAdapter(private val context: Context) : RecyclerView.Adapter<ShareWithFriendsAdapter.ViewHolder>() {
     private val list = ArrayList<HashMap<String, Int>>()
@@ -96,21 +97,21 @@ class ShareWithFriendsAdapter(private val context: Context) : RecyclerView.Adapt
                 0 -> {//分享到qq
                     val params = Bundle()
                     params.putInt(QQShare.SHARE_TO_QQ_KEY_TYPE, QQShare.SHARE_TO_QQ_TYPE_APP)
-                    params.putString(QQShare.SHARE_TO_QQ_TITLE, "西瓜课表")
+                    params.putString(QQShare.SHARE_TO_QQ_TITLE, context.getString(R.string.app_name))
                     params.putString(QQShare.SHARE_TO_QQ_SUMMARY, context.getString(R.string.hint_share_message))
-                    params.putString(QQShare.SHARE_TO_QQ_TARGET_URL, "https://www.coolapk.com/apk/com.weilylab.xhuschedule")
-                    params.putString(QQShare.SHARE_TO_QQ_IMAGE_URL, "http://image.coolapk.com/apk_logo/2017/1127/ic_launcher-web-168930-o_1bvsva94q1dlcmg319lo1gvu1f5iq-uid-631231@512x512.png")
-                    params.putString(QQShare.SHARE_TO_QQ_APP_NAME, "西瓜课表")
+                    params.putString(QQShare.SHARE_TO_QQ_TARGET_URL, Constants.SHARE_TARGET_URL)
+                    params.putString(QQShare.SHARE_TO_QQ_IMAGE_URL, Constants.SHARE_IMAGE_URL)
+                    params.putString(QQShare.SHARE_TO_QQ_APP_NAME, context.getString(R.string.app_name))
                     APP.tencent.shareToQQ(context as Activity, params, APP.tencentListener)
                 }
                 1 -> {//分享到空间
                     val params = Bundle()
                     params.putInt(QQShare.SHARE_TO_QQ_KEY_TYPE, QQShare.SHARE_TO_QQ_TYPE_APP)
-                    params.putString(QQShare.SHARE_TO_QQ_TITLE, "西瓜课表")
+                    params.putString(QQShare.SHARE_TO_QQ_TITLE, context.getString(R.string.app_name))
                     params.putString(QQShare.SHARE_TO_QQ_SUMMARY, context.getString(R.string.hint_share_message))
-                    params.putString(QQShare.SHARE_TO_QQ_TARGET_URL, "https://www.coolapk.com/apk/com.weilylab.xhuschedule")
-                    params.putString(QQShare.SHARE_TO_QQ_IMAGE_URL, "http://image.coolapk.com/apk_logo/2017/1127/ic_launcher-web-168930-o_1bvsva94q1dlcmg319lo1gvu1f5iq-uid-631231@512x512.png")
-                    params.putString(QQShare.SHARE_TO_QQ_APP_NAME, "西瓜课表")
+                    params.putString(QQShare.SHARE_TO_QQ_TARGET_URL, Constants.SHARE_TARGET_URL)
+                    params.putString(QQShare.SHARE_TO_QQ_IMAGE_URL, Constants.SHARE_IMAGE_URL)
+                    params.putString(QQShare.SHARE_TO_QQ_APP_NAME, context.getString(R.string.app_name))
                     params.putInt(QQShare.SHARE_TO_QQ_EXT_INT, QQShare.SHARE_TO_QQ_FLAG_QZONE_AUTO_OPEN)
                     APP.tencent.shareToQQ(context as Activity, params, APP.tencentListener)
                 }
@@ -129,7 +130,7 @@ class ShareWithFriendsAdapter(private val context: Context) : RecyclerView.Adapt
                         request.multiMessage = weiboMultiMessage
                         weiboShareAPI.sendRequest(request)
                     } else {
-                        Toast.makeText(context, "未安装微博！", Toast.LENGTH_SHORT)
+                        Toast.makeText(context, R.string.hint_no_weibo, Toast.LENGTH_SHORT)
                                 .show()
                     }
                 }
@@ -146,7 +147,7 @@ class ShareWithFriendsAdapter(private val context: Context) : RecyclerView.Adapt
                         request.scene = SendMessageToWX.Req.WXSceneSession
                         wxAPI.sendReq(request)
                     } else {
-                        Toast.makeText(context, "未安装微信！", Toast.LENGTH_SHORT)
+                        Toast.makeText(context, R.string.hint_no_weixin, Toast.LENGTH_SHORT)
                                 .show()
                     }
                 }
@@ -163,7 +164,7 @@ class ShareWithFriendsAdapter(private val context: Context) : RecyclerView.Adapt
                         req.scene = SendMessageToWX.Req.WXSceneTimeline
                         wxAPI.sendReq(req)
                     } else {
-                        Toast.makeText(context, "未安装微信！", Toast.LENGTH_SHORT)
+                        Toast.makeText(context, R.string.hint_no_weixin, Toast.LENGTH_SHORT)
                                 .show()
                     }
                 }

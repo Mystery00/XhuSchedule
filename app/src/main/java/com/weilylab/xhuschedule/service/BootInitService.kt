@@ -47,7 +47,7 @@ class BootInitService : Service() {
         super.onCreate()
         val notification = NotificationCompat.Builder(this, Constants.NOTIFICATION_CHANNEL_ID_DEFAULT)
                 .setSmallIcon(R.drawable.ic_stat_foreground)
-                .setContentText("正在初始化数据")
+                .setContentText(getString(R.string.hint_foreground_notification))
                 .setAutoCancel(true)
                 .build()
         startForeground(Constants.NOTIFICATION_ID_FOREGROUND_BOOT_COMPLETE, notification)

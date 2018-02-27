@@ -50,12 +50,21 @@ import java.util.regex.Pattern
  */
 object XhuFileUtil {
     private val TAG = "XhuFileUtil"
+    const val UI_IMAGE_BACKGROUND = Constants.FILE_NAME_IMG_BACKGROUND
+    const val UI_IMAGE_USER_IMG = Constants.FILE_NAME_IMG_PROFILE
 
     /**
      * 获取存储Student信息的File对象
      */
     fun getStudentListFile(context: Context): File {
         return File(context.filesDir.absolutePath + File.separator + "data" + File.separator + "user")
+    }
+
+    /**
+     * 获取存储显示Student信息的File对象
+     */
+    fun getShowStudentListFile(context: Context): File {
+        return File(context.filesDir.absolutePath + File.separator + "data" + File.separator + "show_user")
     }
 
     /**
@@ -80,14 +89,21 @@ object XhuFileUtil {
     }
 
     /**
-     * 获取存储ExpScore信息得File对象
+     * 获取存储ExpScore信息的File对象
      */
     fun getExpScoreParentFile(context: Context): File {
         return File(context.filesDir.absolutePath + File.separator + "expScore/")
     }
 
+    /**
+     * 获取存储Course临时信息的File对象
+     */
     fun getCourseCacheParentFile(context: Context): File {
         return File(context.filesDir.absolutePath + File.separator + "caches/")
+    }
+
+    fun getUIImageFile(context: Context, fileName: String): File {
+        return File(File(context.filesDir, "CropImg"), fileName)
     }
 
     fun filterString(name: String): String {

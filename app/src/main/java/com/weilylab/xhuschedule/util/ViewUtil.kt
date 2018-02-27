@@ -45,21 +45,9 @@ import com.weilylab.xhuschedule.adapter.ColorPickerAdapter
 import com.weilylab.xhuschedule.classes.baseClass.Course
 import com.weilylab.xhuschedule.listener.ColorPickerChangeListener
 import com.weilylab.xhuschedule.listener.InfoChangeListener
-import android.graphics.drawable.BitmapDrawable
 import android.graphics.Bitmap
-import android.renderscript.Allocation
-import android.renderscript.RenderScript
-import android.renderscript.ScriptIntrinsicBlur
 import android.content.Intent
-import android.support.v4.content.ContextCompat
-import android.support.v7.app.ActionBar
 import android.widget.*
-import com.jaredrummler.materialspinner.MaterialSpinnerAdapter
-import com.weilylab.xhuschedule.classes.baseClass.Student
-import com.weilylab.xhuschedule.listener.InitProfileListener
-import com.zyao89.view.zloading.ZLoadingDialog
-import com.zyao89.view.zloading.Z_TYPE
-import java.util.*
 
 /**
  * Created by myste.
@@ -84,7 +72,7 @@ object ViewUtil {
             }
         }
         colorChooser.adapter = adapter
-        val text = course.name + if (course.type == "not") "(非本周)" else ""
+        val text = course.name + if (course.type == Constants.COURSE_TYPE_NOT) "(非本周)" else ""
         textView.text = text
         textView.setBackgroundColor(Color.parseColor(course.color))
         editTeacherLayout.text = course.teacher
@@ -107,7 +95,7 @@ object ViewUtil {
                 .setView(view)
                 .create()
         floatingActionButton.setOnClickListener {
-            val colorSharedPreference = context.getSharedPreferences("course_color", Context.MODE_PRIVATE)
+            val colorSharedPreference = context.getSharedPreferences(Constants.SHARED_PREFERENCE_COURSE_COLOR, Context.MODE_PRIVATE)
             val md5 = ScheduleHelper.getMD5(course.name)
             colorSharedPreference.edit()
                     .putString(md5, course.color)
@@ -125,69 +113,6 @@ object ViewUtil {
         dialog.show()
     }
 
-    fun setPopupView(context: Context, array: Array<String>, textView: TextView, listener: (position: Int) -> Unit) = setPopupView(context, array, textView, DensityUtil.getScreenWidth(context), listener)
-
-    fun setPopupView(context: Context, array: Array<String>, textView: TextView, width: Int, listener: (position: Int) -> Unit) {
-//        val arrayAdapter = ArrayAdapter<String>(context, R.layout.item_popup_view, array)
-        val arrayAdapter = MaterialSpinnerAdapter<String>(context, array.toList())
-        val listView = ListView(context)
-//        listView.setBackgroundResource(R.drawable.ms__selector)
-        val popupWindow = PopupWindow(listView, width, ActionBar.LayoutParams.WRAP_CONTENT, true)
-        popupWindow.isOutsideTouchable = true
-        popupWindow.setOnDismissListener {
-            popupWindow.dismiss()
-        }
-        listView.adapter = arrayAdapter
-        listView.setOnItemClickListener { _, _, position, _ ->
-            if (textView.text.toString() != array[position]) {
-                textView.text = array[position]
-                listener(position)
-            }
-            popupWindow.dismiss()
-        }
-        textView.setOnClickListener {
-            if (!popupWindow.isShowing)
-                popupWindow.showAsDropDown(textView, 0, 10)
-        }
-    }
-
-    fun initProfile(context: Context, student: Student, textViewYear: TextView, listener: InitProfileListener) = initProfile(context, student, textViewYear, DensityUtil.getScreenWidth(context), listener)
-
-    fun initProfile(context: Context, student: Student, textViewYear: TextView, width: Int, listener: InitProfileListener) {
-        val initDialog = ZLoadingDialog(context)
-                .setLoadingBuilder(Z_TYPE.SNAKE_CIRCLE)
-                .setHintText(context.getString(R.string.hint_dialog_init))
-                .setHintTextSize(16F)
-                .setCanceledOnTouchOutside(false)
-                .setLoadingColor(ContextCompat.getColor(context, R.color.colorAccent))
-                .setHintTextColor(ContextCompat.getColor(context, R.color.colorAccent))
-                .create()
-        initDialog.show()
-        if (student.profile != null) {
-            try {
-                val start = student.profile!!.grade.toInt()//进校年份
-                val calendar = Calendar.getInstance()
-                val end = when (calendar.get(Calendar.MONTH) + 1) {
-                    in 1 until 9 -> calendar.get(Calendar.YEAR)
-                    in 9 until 13 -> calendar.get(Calendar.YEAR) + 1
-                    else -> 0
-                }
-                val yearArray = Array(end - start, { i -> "${start + i}-${start + i + 1}" })
-                setPopupView(context, yearArray, textViewYear, width, { position ->
-                    listener.done(position, yearArray[position])
-                })
-                textViewYear.text = yearArray[yearArray.size - 1]
-                listener.done(yearArray.size - 1, yearArray[yearArray.size - 1])
-                initDialog.dismiss()
-            } catch (e: Exception) {
-                e.printStackTrace()
-                listener.error(initDialog)
-            }
-        } else {
-            listener.error(initDialog)
-        }
-    }
-
     fun drawImg(course: Course): Bitmap {
         val bitmap = Bitmap.createBitmap(200, 200, Bitmap.Config.ARGB_8888)
         val canvas = Canvas(bitmap)
@@ -199,48 +124,5 @@ object ViewUtil {
         }
         canvas.drawCircle(100F, 100F, 100F, paint)
         return bitmap
-    }
-
-    fun blur(context: Context, bkg: Bitmap, view: View) {
-        val radius = 20f
-        val overlay = Bitmap.createBitmap(view.measuredWidth,
-                view.measuredHeight, Bitmap.Config.ARGB_8888)
-
-        val canvas = Canvas(overlay)
-        canvas.translate(-view.left.toFloat(), -view.top.toFloat())
-        canvas.drawBitmap(bkg, 0F, 0F, null)
-
-        val rs = RenderScript.create(context)
-
-        val overlayAlloc = Allocation.createFromBitmap(rs, overlay)
-        val blur = ScriptIntrinsicBlur.create(rs, overlayAlloc.element)
-        blur.setInput(overlayAlloc)
-        blur.setRadius(radius)
-        blur.forEach(overlayAlloc)
-        overlayAlloc.copyTo(overlay)
-        view.background = BitmapDrawable(context.resources, overlay)
-        rs.destroy()
-    }
-
-    fun getLight(bitmap: Bitmap, width: Int, height: Int): Int {
-        var r: Int
-        var g: Int
-        var b: Int
-        var number = 0
-        var bright = 0.0
-        var localTemp: Int?
-        val x = arrayOf(0.27 * width, 0.36 * width, 0.5 * width, 0.65 * width, 0.75 * width)
-        val y = arrayOf(0.82 * height, 0.94 * height)
-        for (i in x.indices)
-            for (j in y.indices) {
-                number++
-                localTemp = bitmap.getPixel(x[i].toInt(), y[j].toInt())
-                r = localTemp or -0xff0001 shr 16 and 0x00ff
-                g = localTemp or -0xff01 shr 8 and 0x0000ff
-                b = localTemp or -0x100 and 0x0000ff
-
-                bright += 0.299 * r + 0.587 * g + 0.114 * b
-            }
-        return (bright / number).toInt()
     }
 }

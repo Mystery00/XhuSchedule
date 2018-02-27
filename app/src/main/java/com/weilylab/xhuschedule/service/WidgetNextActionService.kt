@@ -36,6 +36,7 @@ package com.weilylab.xhuschedule.service
 import android.app.Service
 import android.content.Intent
 import android.os.IBinder
+import com.weilylab.xhuschedule.util.Constants
 import com.weilylab.xhuschedule.util.widget.WidgetHelper
 
 class WidgetNextActionService : Service() {
@@ -50,14 +51,14 @@ class WidgetNextActionService : Service() {
             return super.onStartCommand(intent, flags, startId)
         Thread(Runnable {
             isRun = true
-            val tag = intent.getStringExtra("TAG")
+            val tag = intent.getStringExtra(Constants.INTENT_TAG_NAME_TAG)
             when (tag) {
                 WidgetHelper.TODAY_TAG -> {
                     if (WidgetHelper.dayIndex < 140)
                         WidgetHelper.dayIndex++
                     WidgetHelper.refreshTodayCourses(this)
-                    sendBroadcast(Intent("android.appwidget.action.APPWIDGET_UPDATE")
-                            .putExtra("TAG", tag))
+                    sendBroadcast(Intent(Constants.ACTION_WIDGET_UPDATE_BROADCAST)
+                            .putExtra(Constants.INTENT_TAG_NAME_TAG, tag))
                 }
             }
             stopSelf()
