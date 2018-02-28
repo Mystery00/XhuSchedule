@@ -12,23 +12,36 @@
     <TextView
         android:id="@+id/empty"
         android:layout_width="36dp"
+        android:layout_height="28dp" />
+
+    <TextView
+        android:id="@+id/lineVertical"
+        android:layout_width="@dimen/divider_size"
         android:layout_height="28dp"
-        android:background="@color/colorPrimary" />
+        android:layout_toEndOf="@id/empty"
+        android:background="@drawable/lines" />
+
+    <TextView
+        android:id="@+id/lineHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/divider_size"
+        android:layout_below="@id/empty"
+        android:background="@drawable/lines" />
 
     <include
         android:id="@+id/headerLayout"
         layout="@layout/layout_table_header"
         android:layout_width="match_parent"
         android:layout_height="28dp"
-        android:layout_toEndOf="@id/empty"
-        android:background="@color/colorPrimary" />
+        android:layout_toEndOf="@id/lineVertical" />
 
     <ListView
         android:id="@+id/listView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/headerLayout"
-        android:divider="@null"
+        android:layout_below="@id/lineHorizontal"
+        android:divider="@drawable/lines"
+        android:dividerHeight="@dimen/divider_size"
         android:gravity="center" />
 
 </RelativeLayout>

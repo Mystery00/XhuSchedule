@@ -16,9 +16,13 @@
         android:layout_width="36dp"
         android:layout_height="match_parent"
         android:layout_gravity="center"
-        android:background="@color/colorPrimary"
         android:gravity="center"
-        android:textColor="@color/colorWhite" />
+        android:textColor="@color/schedule_head_text_color" />
+
+    <TextView
+        android:layout_width="@dimen/divider_size"
+        android:layout_height="match_parent"
+        android:background="@drawable/lines" />
 
     <LinearLayout
         android:id="@+id/linearLayout1"
@@ -27,12 +31,22 @@
         android:layout_weight="1"
         android:orientation="horizontal" />
 
+    <TextView
+        android:layout_width="@dimen/divider_size"
+        android:layout_height="match_parent"
+        android:background="@drawable/lines" />
+
     <LinearLayout
         android:id="@+id/linearLayout2"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:orientation="horizontal" />
+
+    <TextView
+        android:layout_width="@dimen/divider_size"
+        android:layout_height="match_parent"
+        android:background="@drawable/lines" />
 
     <LinearLayout
         android:id="@+id/linearLayout3"
@@ -41,12 +55,22 @@
         android:layout_weight="1"
         android:orientation="horizontal" />
 
+    <TextView
+        android:layout_width="@dimen/divider_size"
+        android:layout_height="match_parent"
+        android:background="@drawable/lines" />
+
     <LinearLayout
         android:id="@+id/linearLayout4"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:orientation="horizontal" />
+
+    <TextView
+        android:layout_width="@dimen/divider_size"
+        android:layout_height="match_parent"
+        android:background="@drawable/lines" />
 
     <LinearLayout
         android:id="@+id/linearLayout5"
@@ -55,6 +79,11 @@
         android:layout_weight="1"
         android:orientation="horizontal" />
 
+    <TextView
+        android:layout_width="@dimen/divider_size"
+        android:layout_height="match_parent"
+        android:background="@drawable/lines" />
+
     <LinearLayout
         android:id="@+id/linearLayout6"
         android:layout_width="0dp"
@@ -62,11 +91,21 @@
         android:layout_weight="1"
         android:orientation="horizontal" />
 
+    <TextView
+        android:layout_width="@dimen/divider_size"
+        android:layout_height="match_parent"
+        android:background="@drawable/lines" />
+
     <LinearLayout
         android:id="@+id/linearLayout7"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:orientation="horizontal" />
+
+    <TextView
+        android:layout_width="@dimen/divider_size"
+        android:layout_height="match_parent"
+        android:background="@drawable/lines" />
 
 </LinearLayout>
