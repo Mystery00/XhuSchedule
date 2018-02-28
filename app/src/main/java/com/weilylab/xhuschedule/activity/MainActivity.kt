@@ -655,7 +655,6 @@ class MainActivity : BaseActivity() {
     private fun swipeLayout(itemId: Int) {
         when (itemId) {
             R.id.bottom_nav_today -> {
-                viewpager.setScroll(true)
                 if (lastIndex == 2)
                     setRefresh()
                 lastIndex = viewpager.currentItem
@@ -666,7 +665,6 @@ class MainActivity : BaseActivity() {
                 titleTextView.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null)
             }
             R.id.bottom_nav_week -> {
-                viewpager.setScroll(false)
                 if (lastIndex == 2)
                     setRefresh()
                 lastIndex = viewpager.currentItem
@@ -677,7 +675,6 @@ class MainActivity : BaseActivity() {
                 titleTextView.setCompoundDrawablesWithIntrinsicBounds(null, null, arrowDrawable, null)
             }
             R.id.bottom_nav_profile -> {
-                viewpager.setScroll(true)
                 if (lastIndex != 2)
                     setSettings()
                 lastIndex = viewpager.currentItem

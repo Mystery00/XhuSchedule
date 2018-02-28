@@ -59,6 +59,7 @@ import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.observers.DisposableObserver
 import io.reactivex.schedulers.Schedulers
+import kotlinx.android.synthetic.main.content_main.*
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.math.max
@@ -138,6 +139,7 @@ class TableFragment : Fragment() {
             contentVerticalScrollView.isVerticalScrollBarEnabled = false
             contentHorizontalScrollView.view = tableHeader
             contentVerticalScrollView.view = tableNav
+            contentHorizontalScrollView.parentScrollView = (activity as MainActivity).viewpager
             isReady = true
         }
         return rootView
