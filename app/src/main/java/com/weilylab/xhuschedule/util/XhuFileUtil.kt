@@ -36,6 +36,7 @@ package com.weilylab.xhuschedule.util
 import android.content.Context
 import com.google.gson.Gson
 import com.google.gson.JsonParser
+import com.weilylab.xhuschedule.APP
 import com.weilylab.xhuschedule.classes.baseClass.Course
 import com.weilylab.xhuschedule.classes.baseClass.XhuScheduleError
 import vip.mystery0.tools.logs.Logs
@@ -272,5 +273,24 @@ object XhuFileUtil {
             temp = bufferedReader.readLine()
         }
         return XhuScheduleError(time, appVersionName, appVersionCode, androidVersion, sdk, vendor, model, ex)
+    }
+
+    fun removeSavedPreference(sharedPreferenceName: String, keys: Array<String>) {
+        removeSavedPreference(sharedPreferenceName, keys.toList())
+    }
+
+    fun removeSavedPreference(sharedPreferenceName: String, keys: List<String>) {
+        val sharedPreference = APP.getContext().getSharedPreferences(sharedPreferenceName, Context.MODE_PRIVATE)
+        val editor = sharedPreference.edit()
+        for (key in keys)
+            editor.remove(key)
+        editor.apply()
+    }
+
+    fun removeSavedPreference(sharedPreferenceName: String, key: String) {
+        val sharedPreference = APP.getContext().getSharedPreferences(sharedPreferenceName, Context.MODE_PRIVATE)
+        sharedPreference.edit()
+                .remove(key)
+                .apply()
     }
 }

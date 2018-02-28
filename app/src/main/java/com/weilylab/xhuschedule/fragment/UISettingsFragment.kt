@@ -35,7 +35,6 @@ package com.weilylab.xhuschedule.fragment
 
 import android.Manifest
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
@@ -96,6 +95,7 @@ class UISettingsFragment : BasePreferenceFragment() {
     private lateinit var customTableTextColorPreference: ColorPreference
     private lateinit var customTextSizePreference: Preference
     private lateinit var customTextHeightPreference: Preference
+    private lateinit var customTableItemWidthPreference: Preference
     private lateinit var resetPreference: Preference
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -112,6 +112,7 @@ class UISettingsFragment : BasePreferenceFragment() {
         customTableTextColorPreference = findPreferenceById(R.string.key_custom_table_text_color) as ColorPreference
         customTextSizePreference = findPreferenceById(R.string.key_custom_text_size)
         customTextHeightPreference = findPreferenceById(R.string.key_custom_text_height)
+        customTableItemWidthPreference = findPreferenceById(R.string.key_custom_table_item_width)
         resetPreference = findPreferenceById(R.string.key_reset)
         userImgPreference.setOnPreferenceClickListener {
             requestType = PROFILE_REQUEST_CODE
@@ -213,6 +214,10 @@ class UISettingsFragment : BasePreferenceFragment() {
                         Settings.customTableOpacity = currentProgress
                     })
                     .setNegativeButton(android.R.string.cancel, null)
+                    .setNeutralButton(R.string.action_default, { _, _ ->
+                        XhuFileUtil.removeSavedPreference(Constants.SHARED_PREFERENCE_SETTINGS, Constants.CUSTOM_TABLE_OPACITY)
+                        ScheduleHelper.isUIChange = true
+                    })
                     .show()
             true
         }
@@ -254,6 +259,10 @@ class UISettingsFragment : BasePreferenceFragment() {
                         Settings.customTodayOpacity = currentProgress
                     })
                     .setNegativeButton(android.R.string.cancel, null)
+                    .setNeutralButton(R.string.action_default, { _, _ ->
+                        XhuFileUtil.removeSavedPreference(Constants.SHARED_PREFERENCE_SETTINGS, Constants.CUSTOM_TODAY_OPACITY)
+                        ScheduleHelper.isUIChange = true
+                    })
                     .show()
             true
         }
@@ -270,7 +279,7 @@ class UISettingsFragment : BasePreferenceFragment() {
         customTextSizePreference.setOnPreferenceClickListener {
             val color = ScheduleHelper.getRandomColor()
             var currentProgress = Settings.customTextSize - 4
-            val view = View.inflate(activity, R.layout.dialog_custom_text_size, null)
+            val view = View.inflate(activity, R.layout.dialog_custom_table_item, null)
             val testCourseLayout: ConstraintLayout = view.findViewById(R.id.test_course_layout)
             val textViewName: TextView = view.findViewById(R.id.textView_name)
             val textViewTeacher: TextView = view.findViewById(R.id.textView_teacher)
@@ -283,6 +292,7 @@ class UISettingsFragment : BasePreferenceFragment() {
             layoutParams.height = DensityUtil.dip2px(activity, 144F)
             testCourseLayout.layoutParams = layoutParams
             testCourseLayout.setBackgroundColor(Color.parseColor('#' + color))
+            seekBar.max = 45
             seekBar.progress = currentProgress
             textViewName.setTextSize(TypedValue.COMPLEX_UNIT_SP, (currentProgress + 4).toFloat())
             textViewTeacher.setTextSize(TypedValue.COMPLEX_UNIT_SP, (currentProgress + 4).toFloat())
@@ -312,13 +322,17 @@ class UISettingsFragment : BasePreferenceFragment() {
                         Settings.customTextSize = currentProgress + 4
                     })
                     .setNegativeButton(android.R.string.cancel, null)
+                    .setNeutralButton(R.string.action_default, { _, _ ->
+                        XhuFileUtil.removeSavedPreference(Constants.SHARED_PREFERENCE_SETTINGS, Constants.CUSTOM_TEXT_SIZE)
+                        ScheduleHelper.isUIChange = true
+                    })
                     .show()
             true
         }
         customTextHeightPreference.setOnPreferenceClickListener {
             val color = ScheduleHelper.getRandomColor()
-            var currentProgress = Settings.customTextHeight
-            val view = View.inflate(activity, R.layout.dialog_custom_text_height, null)
+            var currentProgress = Settings.customTableItemHeight
+            val view = View.inflate(activity, R.layout.dialog_custom_table_item, null)
             val testCourseLayout: ConstraintLayout = view.findViewById(R.id.test_course_layout)
             val textViewName: TextView = view.findViewById(R.id.textView_name)
             val textViewTeacher: TextView = view.findViewById(R.id.textView_teacher)
@@ -331,12 +345,13 @@ class UISettingsFragment : BasePreferenceFragment() {
             layoutParams.height = DensityUtil.dip2px(activity, currentProgress.toFloat())
             testCourseLayout.layoutParams = layoutParams
             testCourseLayout.setBackgroundColor(Color.parseColor('#' + color))
+            seekBar.max = 300
             seekBar.progress = currentProgress
             val textSize = Settings.customTextSize
             textViewName.setTextSize(TypedValue.COMPLEX_UNIT_SP, (textSize + 4).toFloat())
             textViewTeacher.setTextSize(TypedValue.COMPLEX_UNIT_SP, (textSize + 4).toFloat())
             textViewLocation.setTextSize(TypedValue.COMPLEX_UNIT_SP, (textSize + 4).toFloat())
-            textView.text = getString(R.string.test_course_current_progress_text_size, currentProgress)
+            textView.text = getString(R.string.test_course_current_progress_text_height, currentProgress)
             seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
                 override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                     currentProgress = progress
@@ -355,25 +370,83 @@ class UISettingsFragment : BasePreferenceFragment() {
                     .setTitle(" ")
                     .setView(view)
                     .setPositiveButton(android.R.string.ok, { _, _ ->
-                        if (currentProgress != Settings.customTextHeight)
+                        if (currentProgress != Settings.customTableItemHeight)
                             ScheduleHelper.isUIChange = true
-                        Settings.customTextHeight = currentProgress
+                        Settings.customTableItemHeight = currentProgress
                     })
                     .setNegativeButton(android.R.string.cancel, null)
+                    .setNeutralButton(R.string.action_default, { _, _ ->
+                        XhuFileUtil.removeSavedPreference(Constants.SHARED_PREFERENCE_SETTINGS, Constants.CUSTOM_HEIGHT_SIZE)
+                        ScheduleHelper.isUIChange = true
+                    })
+                    .show()
+            true
+        }
+        customTableItemWidthPreference.setOnPreferenceClickListener {
+            val navWidth = resources.getDimensionPixelSize(R.dimen.nav_width)
+            val lineWidth = resources.getDimensionPixelSize(R.dimen.divider_size)
+            val minWidthInDP = DensityUtil.px2dip(activity, (DensityUtil.getScreenWidth(activity) - navWidth - lineWidth) / 7F)
+            val color = ScheduleHelper.getRandomColor()
+            var currentProgress = if (Settings.customTableItemWidth == -1) minWidthInDP + 10 else Settings.customTableItemWidth
+            val view = View.inflate(activity, R.layout.dialog_custom_table_item, null)
+            val testCourseLayout: ConstraintLayout = view.findViewById(R.id.test_course_layout)
+            val textViewName: TextView = view.findViewById(R.id.textView_name)
+            val textViewTeacher: TextView = view.findViewById(R.id.textView_teacher)
+            val textViewLocation: TextView = view.findViewById(R.id.textView_location)
+            val seekBar: SeekBar = view.findViewById(R.id.seekBar)
+            val textView: TextView = view.findViewById(R.id.textView)
+            val layoutParams = testCourseLayout.layoutParams
+            layoutParams.width = DensityUtil.dip2px(activity, currentProgress.toFloat())
+            layoutParams.height = DensityUtil.dip2px(activity, Settings.customTableItemHeight.toFloat())
+            testCourseLayout.layoutParams = layoutParams
+            testCourseLayout.setBackgroundColor(Color.parseColor('#' + color))
+            seekBar.progress = currentProgress - minWidthInDP - 10
+            seekBar.max = 100
+            val textSize = Settings.customTextSize
+            textViewName.setTextSize(TypedValue.COMPLEX_UNIT_SP, (textSize + 4).toFloat())
+            textViewTeacher.setTextSize(TypedValue.COMPLEX_UNIT_SP, (textSize + 4).toFloat())
+            textViewLocation.setTextSize(TypedValue.COMPLEX_UNIT_SP, (textSize + 4).toFloat())
+            textView.text = getString(R.string.test_course_current_progress_table_item_width, currentProgress)
+            seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+                override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                    currentProgress = progress + minWidthInDP + 10
+                    layoutParams.width = DensityUtil.dip2px(activity, currentProgress.toFloat())
+                    testCourseLayout.layoutParams = layoutParams
+                    textView.text = getString(R.string.test_course_current_progress_table_item_width, currentProgress)
+                }
+
+                override fun onStartTrackingTouch(seekBar: SeekBar?) {
+                }
+
+                override fun onStopTrackingTouch(seekBar: SeekBar?) {
+                }
+            })
+            AlertDialog.Builder(activity)
+                    .setTitle(" ")
+                    .setView(view)
+                    .setPositiveButton(android.R.string.ok, { _, _ ->
+                        if (currentProgress != Settings.customTableItemWidth)
+                            ScheduleHelper.isTableLayoutChange = true
+                        Settings.customTableItemWidth = currentProgress
+                    })
+                    .setNegativeButton(android.R.string.cancel, null)
+                    .setNeutralButton(R.string.action_default, { _, _ ->
+                        XhuFileUtil.removeSavedPreference(Constants.SHARED_PREFERENCE_SETTINGS, Constants.CUSTOM_TABLE_ITEM_WIDTH)
+                        ScheduleHelper.isTableLayoutChange = true
+                    })
                     .show()
             true
         }
         resetPreference.setOnPreferenceClickListener {
-            val sharedPreference = activity.getSharedPreferences(Constants.SHARED_PREFERENCE_SETTINGS, Context.MODE_PRIVATE)
-            sharedPreference.edit()
-                    .remove(Constants.CUSTOM_BACKGROUND_IMG)
-                    .remove(Constants.CUSTOM_TABLE_OPACITY)
-                    .remove(Constants.CUSTOM_TODAY_OPACITY)
-                    .remove(Constants.CUSTOM_TABLE_TEXT_COLOR)
-                    .remove(Constants.CUSTOM_TODAY_TEXT_COLOR)
-                    .remove(Constants.CUSTOM_TEXT_SIZE)
-                    .remove(Constants.CUSTOM_HEIGHT_SIZE)
-                    .apply()
+            val array = arrayOf(Constants.CUSTOM_BACKGROUND_IMG,
+                    Constants.CUSTOM_TABLE_OPACITY,
+                    Constants.CUSTOM_TODAY_OPACITY,
+                    Constants.CUSTOM_TABLE_TEXT_COLOR,
+                    Constants.CUSTOM_TODAY_TEXT_COLOR,
+                    Constants.CUSTOM_TEXT_SIZE,
+                    Constants.CUSTOM_HEIGHT_SIZE,
+                    Constants.CUSTOM_TABLE_ITEM_WIDTH)
+            XhuFileUtil.removeSavedPreference(Constants.SHARED_PREFERENCE_SETTINGS, array)
             ScheduleHelper.isImageChange = true
             ScheduleHelper.isUIChange = true
             Toast.makeText(activity, R.string.hint_reset, Toast.LENGTH_SHORT)

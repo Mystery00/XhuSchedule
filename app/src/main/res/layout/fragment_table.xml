@@ -25,21 +25,13 @@
 
     <TextView
         android:id="@+id/view"
-        android:layout_width="32dp"
+        android:layout_width="@dimen/nav_width"
         android:layout_height="0dp"
         android:gravity="center"
         android:textColor="@color/schedule_head_text_color"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@id/table_header"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <include
-        android:id="@+id/table_header"
-        layout="@layout/layout_table_header"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintStart_toEndOf="@id/view"
         app:layout_constraintTop_toTopOf="parent" />
 
     <View
@@ -51,21 +43,30 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/table_header" />
 
-    <include
-        android:id="@+id/table_nav"
-        layout="@layout/layout_table_nav"
-        android:layout_width="32dp"
-        android:layout_height="0dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/lineVertical" />
-
     <View
         android:id="@+id/lineHorizontal"
         android:layout_width="@dimen/divider_size"
         android:layout_height="0dp"
         android:background="@drawable/lines"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@id/table_nav"
+        app:layout_constraintStart_toEndOf="@id/view"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <include
+        android:id="@+id/table_header"
+        layout="@layout/layout_table_header"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toEndOf="@id/lineHorizontal"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <include
+        android:id="@+id/table_nav"
+        layout="@layout/layout_table_nav"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="@id/view"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/lineVertical" />
 
     <com.weilylab.xhuschedule.view.ContentHorizontalScrollView
@@ -73,7 +74,6 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:fillViewport="true"
-        android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/lineHorizontal"

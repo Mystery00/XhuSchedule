@@ -72,9 +72,12 @@ object Settings {
     var customTextSize: Int//文字大小
         set(value) = sharedPreference.edit().putInt(Constants.CUSTOM_TEXT_SIZE, value).apply()
         get() = sharedPreference.getInt(Constants.CUSTOM_TEXT_SIZE, Constants.DEFAULT_SIZE_TEXT)
-    var customTextHeight: Int//课程格子高度
+    var customTableItemHeight: Int//课程格子高度
         set(value) = sharedPreference.edit().putInt(Constants.CUSTOM_HEIGHT_SIZE, value).apply()
         get() = sharedPreference.getInt(Constants.CUSTOM_HEIGHT_SIZE, Constants.DEFAULT_SIZE_HEIGHT)
+    var customTableItemWidth: Int//格子宽度，-1表示自适应
+        set(value) = sharedPreference.edit().putInt(Constants.CUSTOM_TABLE_ITEM_WIDTH, value).apply()
+        get() = sharedPreference.getInt(Constants.CUSTOM_TABLE_ITEM_WIDTH, -1)
     var autoCheckUpdate: Boolean//自动检查更新
         set(value) = sharedPreference.edit().putBoolean(Constants.AUTO_CHECK_UPDATE, value).apply()
         get() = sharedPreference.getBoolean(Constants.AUTO_CHECK_UPDATE, true)

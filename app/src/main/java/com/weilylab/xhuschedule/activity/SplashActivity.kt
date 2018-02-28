@@ -67,6 +67,7 @@ class SplashActivity : BaseActivity() {
         mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.APP_OPEN, params)
         ScheduleHelper.initChannelID(APP.getContext())//初始化NotificationChannelID
         ScheduleHelper.setTrigger(this)
+        ScheduleHelper.checkScreenWidth(this)
         if (Settings.autoCheckUpdate)
             startService(Intent(this, UpdateService::class.java))
         if (Settings.autoCheckLog) {

@@ -128,7 +128,7 @@ class ScheduleActivity : BaseActivity() {
         val tableNav = table_nav as LinearLayout
         for (i in 0 until tableNav.childCount) {
             val layoutParams = tableNav.getChildAt(i).layoutParams
-            layoutParams.height = DensityUtil.dip2px(this, Settings.customTextHeight.toFloat())
+            layoutParams.height = DensityUtil.dip2px(this, Settings.customTableItemHeight.toFloat())
             tableNav.getChildAt(i).layoutParams = layoutParams
             (tableNav.getChildAt(i) as TextView).setTextColor(ContextCompat.getColor(this, R.color.schedule_head_text_color))
         }
@@ -241,7 +241,7 @@ class ScheduleActivity : BaseActivity() {
                     .forEach { hasData = true }
         if (!hasData)
             return
-        val itemHeight = DensityUtil.dip2px(this, Settings.customTextHeight.toFloat())
+        val itemHeight = DensityUtil.dip2px(this, Settings.customTableItemHeight.toFloat())
         for (day in 0 until 7) {
             val layoutList = ArrayList<TableLayoutHelper>()
             val temp = resources.getIdentifier("table_schedule" + (day + 1), "id", "com.weilylab.xhuschedule")
@@ -311,7 +311,7 @@ class ScheduleActivity : BaseActivity() {
     }
 
     private fun getItemView(course: Course, startTime: Int): View {
-        val itemHeight = DensityUtil.dip2px(this, Settings.customTextHeight.toFloat())
+        val itemHeight = DensityUtil.dip2px(this, Settings.customTableItemHeight.toFloat())
         val itemView = View.inflate(this, R.layout.item_widget_table, null)
         val imageView: ImageView = itemView.findViewById(R.id.imageView)
         val textViewName: TextView = itemView.findViewById(R.id.textView_name)

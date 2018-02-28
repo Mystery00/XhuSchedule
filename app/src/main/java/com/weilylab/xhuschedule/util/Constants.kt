@@ -114,6 +114,7 @@ object Constants {
     const val CUSTOM_TODAY_TEXT_COLOR = "customTodayTextColor"
     const val CUSTOM_TEXT_SIZE = "customTextSize"
     const val CUSTOM_HEIGHT_SIZE = "customHeightSize"
+    const val CUSTOM_TABLE_ITEM_WIDTH = "customTableItemWidth"
     const val AUTO_CHECK_UPDATE = "autoCheckUpdate"
     const val AUTO_CHECK_LOG = "autoCheckLog"
     const val IS_ENABLE_MULTI_USER_MODE = "isEnableMultiUserMode"

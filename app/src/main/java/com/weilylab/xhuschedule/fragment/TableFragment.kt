@@ -95,11 +95,10 @@ class TableFragment : Fragment() {
             val monthView: TextView = rootView!!.findViewById(R.id.view)
             val tableHeader: LinearLayout = rootView!!.findViewById(R.id.table_header)
             val tabLayoutParams = tableHeader.layoutParams
-            tabLayoutParams.width = DensityUtil.dip2px(activity!!, 700F)
+            tabLayoutParams.width = ScheduleHelper.scheduleItemWidth * 7
             tableHeader.layoutParams = tabLayoutParams
             for (i in 0 until tableHeader.childCount) {
                 val layoutParams = tableHeader.getChildAt(i).layoutParams
-                layoutParams.width = DensityUtil.dip2px(activity!!, 100F)
                 tableHeader.getChildAt(i).layoutParams = layoutParams
             }
             (tableHeader.getChildAt(CalendarUtil.getWeekIndex() - 1) as TextView).setTextColor(ContextCompat.getColor(activity!!, R.color.colorWeekPrimary))
@@ -123,15 +122,15 @@ class TableFragment : Fragment() {
             }
             val tableNav: LinearLayout = rootView!!.findViewById(R.id.table_nav)
             for (i in 0 until tableNav.childCount) {
-                val layoutParams = tableNav.getChildAt(i).layoutParams
-                layoutParams.height = DensityUtil.dip2px(activity!!, Settings.customTextHeight.toFloat())
-                tableNav.getChildAt(i).layoutParams = layoutParams
+                val itemLayoutParams = tableNav.getChildAt(i).layoutParams
+                itemLayoutParams.height = DensityUtil.dip2px(activity!!, Settings.customTableItemHeight.toFloat())
+                tableNav.getChildAt(i).layoutParams = itemLayoutParams
             }
             val scheduleView: View = rootView!!.findViewById(R.id.table_schedule)
-            val layoutParams = scheduleView.layoutParams
-            layoutParams.width = DensityUtil.dip2px(activity!!, 700F)
-            layoutParams.height = DensityUtil.dip2px(activity!!, Settings.customTextHeight.toFloat() * 11)
-            scheduleView.layoutParams = layoutParams
+            val scheduleLayoutParams = scheduleView.layoutParams
+            scheduleLayoutParams.width = ScheduleHelper.scheduleItemWidth * 7
+            scheduleLayoutParams.height = DensityUtil.dip2px(activity!!, Settings.customTableItemHeight.toFloat() * 11)
+            scheduleView.layoutParams = scheduleLayoutParams
             //滑动联动
             val contentHorizontalScrollView: ContentHorizontalScrollView = rootView!!.findViewById(R.id.contentHorizontalScrollView)
             val contentVerticalScrollView: ContentVerticalScrollView = rootView!!.findViewById(R.id.contentVerticalScrollView)
@@ -140,9 +139,24 @@ class TableFragment : Fragment() {
             contentHorizontalScrollView.view = tableHeader
             contentVerticalScrollView.view = tableNav
             contentHorizontalScrollView.parentScrollView = (activity as MainActivity).viewpager
+            contentHorizontalScrollView.setScroll(Settings.customTableItemWidth != -1)
             isReady = true
         }
         return rootView
+    }
+
+    fun updateTableLayout(canScroll: Boolean) {
+        ScheduleHelper.checkScreenWidth(activity!!)
+        val tableHeader: LinearLayout = rootView!!.findViewById(R.id.table_header)
+        val scheduleView: View = rootView!!.findViewById(R.id.table_schedule)
+        val contentHorizontalScrollView: ContentHorizontalScrollView = rootView!!.findViewById(R.id.contentHorizontalScrollView)
+        val tabHeaderLayoutParams = tableHeader.layoutParams
+        tabHeaderLayoutParams.width = ScheduleHelper.scheduleItemWidth * 7
+        tableHeader.layoutParams = tabHeaderLayoutParams
+        val scheduleLayoutParams = scheduleView.layoutParams
+        scheduleLayoutParams.width = ScheduleHelper.scheduleItemWidth * 7
+        scheduleView.layoutParams = scheduleLayoutParams
+        contentHorizontalScrollView.setScroll(canScroll)
     }
 
     fun setBackground() {
@@ -191,9 +205,9 @@ class TableFragment : Fragment() {
                         if (rootView != null) {
                             val tableNav: LinearLayout = rootView!!.findViewById(R.id.table_nav)
                             for (i in 0 until tableNav.childCount) {
-                                val layoutParams = tableNav.getChildAt(i).layoutParams
-                                layoutParams.height = DensityUtil.dip2px(activity!!, Settings.customTextHeight.toFloat())
-                                tableNav.getChildAt(i).layoutParams = layoutParams
+                                val tableNavLayoutParams = tableNav.getChildAt(i).layoutParams
+                                tableNavLayoutParams.height = DensityUtil.dip2px(activity!!, Settings.customTableItemHeight.toFloat())
+                                tableNav.getChildAt(i).layoutParams = tableNavLayoutParams
                                 (tableNav.getChildAt(i) as TextView).setTextColor(ContextCompat.getColor(activity!!, R.color.schedule_head_text_color))
                             }
                         }
@@ -215,7 +229,7 @@ class TableFragment : Fragment() {
     }
 
     private fun formatView() {
-        val itemHeight = DensityUtil.dip2px(activity!!, Settings.customTextHeight.toFloat() + 0.4F)
+        val itemHeight = DensityUtil.dip2px(activity!!, Settings.customTableItemHeight.toFloat() + 0.4F)
         val firstWeekOfTerm = Settings.firstWeekOfTerm
         val date = firstWeekOfTerm.split('-')
         val calendar = Calendar.getInstance()
@@ -252,7 +266,6 @@ class TableFragment : Fragment() {
                     val textView = LayoutInflater.from(activity).inflate(R.layout.layout_text_view, null)
                     linearLayout.addView(textView)
                     val params = textView.layoutParams
-                    params.width = DensityUtil.dip2px(activity!!, 100F)
                     params.height = itemHeight
                     textView.layoutParams = params
                     continue
@@ -293,7 +306,6 @@ class TableFragment : Fragment() {
                     layoutList.add(tableHelper)//将这个布局添加进list
                     linearLayout.addView(viewGroup)
                     val params = viewGroup.layoutParams
-                    params.width = DensityUtil.dip2px(activity!!, 100F)
                     params.height = maxHeight
                     viewGroup.layoutParams = params
                 }
@@ -310,7 +322,7 @@ class TableFragment : Fragment() {
     }
 
     private fun getItemView(course: Course, startTime: Int): View {
-        val itemHeight = DensityUtil.dip2px(activity!!, Settings.customTextHeight.toFloat() + 0.4F)
+        val itemHeight = DensityUtil.dip2px(activity!!, Settings.customTableItemHeight.toFloat() + 0.4F)
         val itemView = View.inflate(activity, R.layout.item_widget_table, null)
         val imageView: ImageView = itemView.findViewById(R.id.imageView)
         val textViewName: TextView = itemView.findViewById(R.id.textView_name)

@@ -44,10 +44,10 @@ class ScrollViewPager : ParallaxViewPager {
     constructor(context: Context) : super(context)
     constructor(context: Context, attrs: AttributeSet?) : super(context, attrs)
 
-    override fun onInterceptTouchEvent(ev: MotionEvent?): Boolean {
-        return if (ev?.action == MotionEvent.ACTION_DOWN)
-            super.onInterceptTouchEvent(ev)
-        else
-            true
-    }
+//    override fun onInterceptTouchEvent(ev: MotionEvent?): Boolean {
+//        return if (ev?.action == MotionEvent.ACTION_DOWN)
+//            super.onInterceptTouchEvent(ev)
+//        else
+//            true
+//    }
 }

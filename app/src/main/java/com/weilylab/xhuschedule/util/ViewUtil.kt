@@ -33,7 +33,6 @@
 
 package com.weilylab.xhuschedule.util
 
-import android.animation.ObjectAnimator
 import android.content.Context
 import android.graphics.*
 import android.support.design.widget.FloatingActionButton

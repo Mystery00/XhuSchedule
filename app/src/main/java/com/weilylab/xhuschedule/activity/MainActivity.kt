@@ -215,11 +215,14 @@ class MainActivity : BaseActivity() {
             studentList.addAll(XhuFileUtil.getArrayFromFile(File(filesDir.absolutePath + File.separator + "data" + File.separator + "user"), Student::class.java))
             updateAllView()
         }
+        if (ScheduleHelper.isTableLayoutChange)
+            weekFragment.updateTableLayout(Settings.customTableItemWidth != -1)
         if (bottomNavigationView.menu.getItem(2).isChecked) {//刷新小红点状态
             profileFragment.updateNoticeBadge()
         }
         ScheduleHelper.isImageChange = false
         ScheduleHelper.isUIChange = false
+        ScheduleHelper.isTableLayoutChange = false
     }
 
     private fun initView() {

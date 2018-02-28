@@ -42,6 +42,7 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.os.Build
+import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.receiver.AlarmReceiver
 import com.weilylab.xhuschedule.util.cookie.LoadCookiesInterceptor
 import com.weilylab.xhuschedule.util.cookie.SaveCookiesInterceptor
@@ -61,8 +62,10 @@ object ScheduleHelper {
     private const val TAG = "ScheduleHelper"
     var isImageChange = false
     var isUIChange = false
+    var isTableLayoutChange = false
     var isAnalysisError = false
     var weekIndex = 0
+    var scheduleItemWidth = -1
 
     private val client = OkHttpClient.Builder()
             .retryOnConnectionFailure(true)
@@ -145,7 +148,7 @@ object ScheduleHelper {
         return channel
     }
 
-    fun setTrigger(context: Context){
+    fun setTrigger(context: Context) {
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val alarmIntent = Intent(context, AlarmReceiver::class.java)
         val pendingIntent = PendingIntent.getBroadcast(context, 0, alarmIntent, 0)
@@ -158,5 +161,15 @@ object ScheduleHelper {
             alarmManager.setExact(AlarmManager.RTC_WAKEUP, triggerAtTime, pendingIntent)
         else
             alarmManager.set(AlarmManager.RTC_WAKEUP, triggerAtTime, pendingIntent)
+    }
+
+    fun checkScreenWidth(context: Context) {
+        if (Settings.customTableItemWidth != -1)
+            scheduleItemWidth = DensityUtil.dip2px(context, Settings.customTableItemWidth.toFloat())
+        else {
+            val navWidth = context.resources.getDimensionPixelSize(R.dimen.nav_width)
+            val lineWidth = context.resources.getDimensionPixelSize(R.dimen.divider_size)
+            scheduleItemWidth = (DensityUtil.getScreenWidth(context) - navWidth - lineWidth) / 7
+        }
     }
 }
