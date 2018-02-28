@@ -1,5 +1,5 @@
 /*
- * Created by Mystery0 on 18-2-21 下午9:12.
+ * Created by Mystery0 on 18-2-28 下午10:16.
  * Copyright (c) 2018. All Rights reserved.
  *
  *                    =====================================================
@@ -28,35 +28,13 @@
  *                    =                                                   =
  *                    =====================================================
  *
- * Last modified 18-2-21 下午9:11
+ * Last modified 18-2-28 下午10:16
  */
 
-package com.weilylab.xhuschedule.interfaces
+package com.weilylab.xhuschedule.listener
 
-import io.reactivex.Observable
-import okhttp3.ResponseBody
-import retrofit2.http.*
+import android.graphics.Bitmap
 
-interface StudentService {
-    @FormUrlEncoded
-    @POST("/Course/getCourses")
-    fun getCourses(@Field("username") username: String, @Field("year") year: String?, @Field("term") term: Int?): Observable<ResponseBody>
-
-    @FormUrlEncoded
-    @POST("/Test/getTests")
-    fun getTests(@Field("username") username: String): Observable<ResponseBody>
-
-    @FormUrlEncoded
-    @POST("/Score/getCetScore")
-    fun getScores(@Field("username") username: String, @Field("year") year: String?, @Field("term") term: Int?): Observable<ResponseBody>
-
-    @FormUrlEncoded
-    @POST("/Score/getExpScores")
-    fun getExpScores(@Field("username") username: String, @Field("year") year: String?, @Field("term") term: Int?): Observable<ResponseBody>
-
-    @GET("/Score/getCETVCode")
-    fun getCETVCode(@Query("username") username: String, @Query("id") id: String, @Query("type") type: String?): Observable<ResponseBody>
-
-    @GET("/Score/getCETScores")
-    fun getCETScores(@Query("username") username: String, @Query("id") id: String, @Query("name") name: String, @Query("vcode") vcode: String): Observable<ResponseBody>
+interface GetCETVCodeListener : BaseListener {
+    fun got(bitmap: Bitmap?)
 }

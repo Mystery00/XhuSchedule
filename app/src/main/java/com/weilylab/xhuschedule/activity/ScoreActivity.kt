@@ -83,7 +83,7 @@ class ScoreActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val params = Bundle()
-        params.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "scores")
+        params.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "cetScore")
         mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, params)
         setContentView(R.layout.activity_score)
         setSupportActionBar(toolbar)
@@ -155,7 +155,7 @@ class ScoreActivity : BaseActivity() {
     }
 
     private fun getScores(student: Student?, year: String?, term: Int?) {
-        Logs.i(TAG, "getScores: year: $year term: $term")
+        Logs.i(TAG, "getCetScore: year: $year term: $term")
         if (student == null)
             return
         loadingDialog.show()

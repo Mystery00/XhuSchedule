@@ -33,8 +33,10 @@
 
 package com.weilylab.xhuschedule.adapter
 
+import android.app.Dialog
 import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
 import android.graphics.drawable.ColorDrawable
 import android.support.design.widget.TextInputLayout
 import android.support.v4.content.ContextCompat
@@ -45,17 +47,18 @@ import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.PopupWindow
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
+import com.bumptech.glide.Glide
 import com.google.gson.Gson
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.activity.*
+import com.weilylab.xhuschedule.classes.baseClass.CETScore
 import com.weilylab.xhuschedule.classes.baseClass.Student
 import com.weilylab.xhuschedule.classes.rt.GetNoticesRT
 import com.weilylab.xhuschedule.interfaces.CommonService
 import com.weilylab.xhuschedule.listener.FeedBackListener
+import com.weilylab.xhuschedule.listener.GetCETScoresListener
+import com.weilylab.xhuschedule.listener.GetCETVCodeListener
 import com.weilylab.xhuschedule.util.*
 import com.zyao89.view.zloading.ZLoadingDialog
 import com.zyao89.view.zloading.Z_TYPE
@@ -64,10 +67,12 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.content_main.*
+import vip.mystery0.tools.logs.Logs
 import java.io.File
 import java.io.InputStreamReader
 
 class OperationAdapter(private val context: Context) : RecyclerView.Adapter<OperationAdapter.ViewHolder>() {
+    private val TAG = "OperationAdapter"
     private val list = ArrayList<HashMap<String, Int>>()
     private val dialogView = View.inflate(context, R.layout.dialog_share_with_friends, null)
     private val recyclerView = dialogView.findViewById<RecyclerView>(R.id.recyclerView)
@@ -82,6 +87,7 @@ class OperationAdapter(private val context: Context) : RecyclerView.Adapter<Oper
                 R.string.operation_schedule,
                 R.string.operation_exam,
                 R.string.operation_score,
+                R.string.operation_score_cet,
                 R.string.operation_feedback,
                 R.string.operation_share
         )
@@ -89,6 +95,7 @@ class OperationAdapter(private val context: Context) : RecyclerView.Adapter<Oper
                 R.mipmap.ic_operation_notice,
                 R.mipmap.ic_operation_classes,
                 R.mipmap.ic_operation_exam,
+                R.mipmap.ic_operation_score,
                 R.mipmap.ic_operation_score,
                 R.mipmap.ic_operation_feedback,
                 R.mipmap.ic_operation_share
@@ -119,7 +126,7 @@ class OperationAdapter(private val context: Context) : RecyclerView.Adapter<Oper
                         }
 
                         override fun onError(e: Throwable) {
-                            e.printStackTrace()
+                            Logs.wtf(TAG, "onError: ", e)
                         }
 
                         override fun onNext(t: GetNoticesRT) {
@@ -159,6 +166,69 @@ class OperationAdapter(private val context: Context) : RecyclerView.Adapter<Oper
                             .setLoadingColor(ContextCompat.getColor(context, R.color.colorAccent))
                             .setHintTextColor(ContextCompat.getColor(context, R.color.colorAccent))
                             .create()
+                    val studentList = XhuFileUtil.getArrayFromFile(File(context.filesDir.absolutePath + File.separator + "data" + File.separator + "user"), Student::class.java)
+                    var mainStudent: Student? = (0 until studentList.size)
+                            .firstOrNull { studentList[it].isMain }
+                            ?.let { studentList[it] }
+                    if (mainStudent == null)
+                        mainStudent = studentList[0]
+                    val layout = View.inflate(context, R.layout.dialog_get_cet_scores, null)
+                    val idInput: TextInputLayout = layout.findViewById(R.id.input_id)
+                    val nameInput: TextInputLayout = layout.findViewById(R.id.input_name)
+                    nameInput.editText!!.setText(mainStudent.profile?.name)
+                    val dialog = AlertDialog.Builder(context)
+                            .setTitle(R.string.operation_score_cet)
+                            .setView(layout)
+                            .setPositiveButton(android.R.string.ok, null)
+                            .setNegativeButton(android.R.string.cancel, null)
+                            .create()
+                    dialog.show()
+                    dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
+                        if (idInput.editText!!.text.toString().isEmpty() || nameInput.editText!!.text.toString().isEmpty()) {
+                            Toast.makeText(context, R.string.hint_cet_empty, Toast.LENGTH_SHORT)
+                                    .show()
+                        } else {
+                            loadingDialog.show()
+                            val view = View.inflate(context, R.layout.dialog_vcode, null)
+                            val imageView: ImageView = view.findViewById(R.id.imageView)
+                            val editText: EditText = view.findViewById(R.id.editText)
+                            imageView.setOnClickListener {
+                                showVCode(mainStudent!!, idInput.editText!!.text.toString(), view, loadingDialog)
+                            }
+                            showVCode(mainStudent!!, idInput.editText!!.text.toString(), view, loadingDialog)
+                            AlertDialog.Builder(context)
+                                    .setTitle(" ")
+                                    .setView(view)
+                                    .setPositiveButton(android.R.string.ok, { _, _ ->
+                                        mainStudent!!.getCETScores(idInput.editText!!.text.toString(), nameInput.editText!!.text.toString(), editText.text.toString(), object : GetCETScoresListener {
+                                            override fun error(rt: Int, e: Throwable) {
+                                                Logs.wtf(TAG, "error: ", e)
+                                                loadingDialog.dismiss()
+                                                Toast.makeText(context, e.message, Toast.LENGTH_SHORT)
+                                                        .show()
+                                            }
+
+                                            override fun got(cetScore: CETScore) {
+                                                loadingDialog.dismiss()
+                                                cetScore.showInView(context)
+                                            }
+                                        })
+                                    })
+                                    .setNegativeButton(android.R.string.cancel, null)
+                                    .show()
+
+                        }
+                    }
+                }
+                5 -> {
+                    val loadingDialog = ZLoadingDialog(context)
+                            .setLoadingBuilder(Z_TYPE.DOUBLE_CIRCLE)
+                            .setHintText(context.getString(R.string.hint_dialog_feedback))
+                            .setHintTextSize(16F)
+                            .setCanceledOnTouchOutside(false)
+                            .setLoadingColor(ContextCompat.getColor(context, R.color.colorAccent))
+                            .setHintTextColor(ContextCompat.getColor(context, R.color.colorAccent))
+                            .create()
                     val layout = View.inflate(context, R.layout.dialog_feedback, null)
                     val emailInput: TextInputLayout = layout.findViewById(R.id.input_email)
                     val textInput: TextInputLayout = layout.findViewById(R.id.input_text)
@@ -181,9 +251,9 @@ class OperationAdapter(private val context: Context) : RecyclerView.Adapter<Oper
                                     ?.let { studentList[it] }
                             if (mainStudent == null)
                                 mainStudent = studentList[0]
-                            mainStudent.feedback(context, emailInput.editText!!.text.toString(), textInput.editText!!.text.toString(), object : FeedBackListener {
+                            mainStudent!!.feedback(context, emailInput.editText!!.text.toString(), textInput.editText!!.text.toString(), object : FeedBackListener {
                                 override fun error(rt: Int, e: Throwable) {
-                                    e.printStackTrace()
+                                    Logs.wtf(TAG, "error: ", e)
                                     loadingDialog.dismiss()
                                     Toast.makeText(context, context.getString(R.string.hint_feedback_error, rt, e.message), Toast.LENGTH_LONG)
                                             .show()
@@ -199,7 +269,7 @@ class OperationAdapter(private val context: Context) : RecyclerView.Adapter<Oper
                         }
                     }
                 }
-                5 -> {
+                6 -> {
                     val shareView = PopupWindow(dialogView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
                     shareView.isOutsideTouchable = true
                     shareView.isFocusable = true
@@ -217,6 +287,25 @@ class OperationAdapter(private val context: Context) : RecyclerView.Adapter<Oper
                 }
             }
         }
+    }
+
+    private fun showVCode(student: Student, id: String, vcodeView: View, loadingDialog: Dialog) {
+        student.getCETVCode(id, object : GetCETVCodeListener {
+            override fun error(rt: Int, e: Throwable) {
+                e.printStackTrace()
+                loadingDialog.dismiss()
+                Toast.makeText(context, R.string.hint_cet_vcode_error, Toast.LENGTH_SHORT)
+                        .show()
+            }
+
+            override fun got(bitmap: Bitmap?) {
+                val imageView: ImageView = vcodeView.findViewById(R.id.imageView)
+                Glide.with(context)
+                        .load(bitmap)
+                        .into(imageView)
+                loadingDialog.dismiss()
+            }
+        })
     }
 
     private fun setWindowAlpha(alpha: Float) {

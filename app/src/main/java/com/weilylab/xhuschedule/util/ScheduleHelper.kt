@@ -47,10 +47,14 @@ import com.weilylab.xhuschedule.receiver.AlarmReceiver
 import com.weilylab.xhuschedule.util.cookie.LoadCookiesInterceptor
 import com.weilylab.xhuschedule.util.cookie.SaveCookiesInterceptor
 import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import vip.mystery0.tools.logs.Logs
+import java.io.UnsupportedEncodingException
 import java.math.BigInteger
+import java.net.URLDecoder
+import java.net.URLEncoder
 import java.security.MessageDigest
 import java.util.*
 import java.util.concurrent.TimeUnit
@@ -164,12 +168,12 @@ object ScheduleHelper {
     }
 
     fun checkScreenWidth(context: Context) {
-        if (Settings.customTableItemWidth != -1)
-            scheduleItemWidth = DensityUtil.dip2px(context, Settings.customTableItemWidth.toFloat())
+        scheduleItemWidth = if (Settings.customTableItemWidth != -1)
+            DensityUtil.dip2px(context, Settings.customTableItemWidth.toFloat())
         else {
             val navWidth = context.resources.getDimensionPixelSize(R.dimen.nav_width)
             val lineWidth = context.resources.getDimensionPixelSize(R.dimen.divider_size)
-            scheduleItemWidth = (DensityUtil.getScreenWidth(context) - navWidth - lineWidth) / 7
+            (DensityUtil.getScreenWidth(context) - navWidth - lineWidth) / 7
         }
     }
 }

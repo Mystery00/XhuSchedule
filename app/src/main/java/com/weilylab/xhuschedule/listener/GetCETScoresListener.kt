@@ -1,5 +1,5 @@
 /*
- * Created by Mystery0 on 18-2-21 下午9:12.
+ * Created by Mystery0 on 18-2-28 下午9:57.
  * Copyright (c) 2018. All Rights reserved.
  *
  *                    =====================================================
@@ -28,14 +28,13 @@
  *                    =                                                   =
  *                    =====================================================
  *
- * Last modified 18-2-21 下午9:11
+ * Last modified 18-2-28 下午9:57
  */
 
 package com.weilylab.xhuschedule.listener
 
-import android.app.Dialog
+import com.weilylab.xhuschedule.classes.baseClass.CETScore
 
-interface InitProfileListener {
-    fun done(position: Int, year: String)
-    fun error(dialog: Dialog)
+interface GetCETScoresListener :BaseListener {
+    fun got(cetScore: CETScore)
 }

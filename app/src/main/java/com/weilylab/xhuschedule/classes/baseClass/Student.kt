@@ -52,6 +52,9 @@ import vip.mystery0.tools.logs.Logs
 import java.io.InputStreamReader
 import java.io.Serializable
 import kotlin.collections.ArrayList
+import android.graphics.BitmapFactory
+import android.util.Base64
+
 
 class Student : Serializable {
     lateinit var username: String
@@ -69,7 +72,7 @@ class Student : Serializable {
                 .autoLogin(username, password)
                 .subscribeOn(Schedulers.newThread())
                 .unsubscribeOn(Schedulers.newThread())
-                .map({ responseBody -> Gson().fromJson(InputStreamReader(responseBody.byteStream()), AutoLoginRT::class.java) })
+                .map({ Gson().fromJson(InputStreamReader(it.byteStream()), AutoLoginRT::class.java) })
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(object : Observer<AutoLoginRT> {
                     private var autoLoginRT: AutoLoginRT? = null
@@ -104,7 +107,7 @@ class Student : Serializable {
                 .getInfo(username)
                 .subscribeOn(Schedulers.newThread())
                 .unsubscribeOn(Schedulers.newThread())
-                .map { responseBody -> Gson().fromJson(InputStreamReader(responseBody.byteStream()), GetInfoRT::class.java) }
+                .map { Gson().fromJson(InputStreamReader(it.byteStream()), GetInfoRT::class.java) }
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(object : Observer<GetInfoRT> {
                     private var getInfoRT: GetInfoRT? = null
@@ -153,7 +156,7 @@ class Student : Serializable {
                 .getTests(username)
                 .subscribeOn(Schedulers.newThread())
                 .unsubscribeOn(Schedulers.newThread())
-                .map { responseBody -> Gson().fromJson(InputStreamReader(responseBody.byteStream()), GetTestsRT::class.java) }
+                .map { Gson().fromJson(InputStreamReader(it.byteStream()), GetTestsRT::class.java) }
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(object : Observer<GetTestsRT> {
                     private var getTestsRT: GetTestsRT? = null
@@ -199,7 +202,7 @@ class Student : Serializable {
                 .getScores(username, year, term)
                 .subscribeOn(Schedulers.newThread())
                 .unsubscribeOn(Schedulers.newThread())
-                .map { responseBody -> Gson().fromJson(InputStreamReader(responseBody.byteStream()), GetScoresRT::class.java) }
+                .map { Gson().fromJson(InputStreamReader(it.byteStream()), GetScoresRT::class.java) }
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(object : Observer<GetScoresRT> {
                     private var getScoresRT: GetScoresRT? = null
@@ -245,7 +248,7 @@ class Student : Serializable {
                 .getExpScores(username, year, term)
                 .subscribeOn(Schedulers.newThread())
                 .unsubscribeOn(Schedulers.newThread())
-                .map { responseBody -> Gson().fromJson(InputStreamReader(responseBody.byteStream()), GetExpScoresRT::class.java) }
+                .map { Gson().fromJson(InputStreamReader(it.byteStream()), GetExpScoresRT::class.java) }
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(object : Observer<GetExpScoresRT> {
                     private var getExpScoresRT: GetExpScoresRT? = null
@@ -297,7 +300,7 @@ class Student : Serializable {
                         message)
                 .subscribeOn(Schedulers.newThread())
                 .unsubscribeOn(Schedulers.newThread())
-                .map { responseBody -> Gson().fromJson(InputStreamReader(responseBody.byteStream()), FeedbackRT::class.java) }
+                .map { Gson().fromJson(InputStreamReader(it.byteStream()), FeedbackRT::class.java) }
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(object : Observer<FeedbackRT> {
                     private var feedbackRT: FeedbackRT? = null
@@ -332,6 +335,99 @@ class Student : Serializable {
 
                     override fun onSubscribe(d: Disposable) {
                         Logs.i(tag, "onSubscribe: ")
+                    }
+                })
+    }
+
+    fun getCETVCode(id: String, listener: GetCETVCodeListener) {
+        val tag = "student_get_cet_vcode"
+        ScheduleHelper.tomcatRetrofit.create(StudentService::class.java)
+                .getCETVCode(username, id, null)
+                .subscribeOn(Schedulers.newThread())
+                .unsubscribeOn(Schedulers.newThread())
+                .map { Gson().fromJson(InputStreamReader(it.byteStream()), GetCETVCodeRT::class.java) }
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(object : Observer<GetCETVCodeRT> {
+                    private var getCETVCodeRT: GetCETVCodeRT? = null
+                    override fun onComplete() {
+                        Logs.i(tag, "onComplete: ${getCETVCodeRT?.rt}")
+                        when (getCETVCodeRT?.rt) {
+                            ConstantsCode.DONE -> {
+                                val bytes = Base64.decode(getCETVCodeRT!!.vcode.substring(getCETVCodeRT!!.vcode.indexOfFirst { it == ',' } + 1), Base64.DEFAULT)
+                                listener.got(BitmapFactory.decodeByteArray(bytes, 0, bytes.size))
+                            }
+                            ConstantsCode.ERROR_NOT_LOGIN -> {
+                                login(object : LoginListener {
+                                    override fun loginDone() {
+                                        getCETVCode(id, listener)
+                                    }
+
+                                    override fun error(rt: Int, e: Throwable) {
+                                        listener.error(rt, e)
+                                    }
+                                })
+                            }
+                            else -> listener.error(getCETVCodeRT!!.rt.toInt(), Exception(getCETVCodeRT?.msg))
+                        }
+                    }
+
+                    override fun onSubscribe(d: Disposable) {
+                        Logs.i(tag, "onSubscribe: ")
+                    }
+
+                    override fun onNext(t: GetCETVCodeRT) {
+                        Logs.i(tag, "onNext: ")
+                        getCETVCodeRT = t
+                    }
+
+                    override fun onError(e: Throwable) {
+                        Logs.i(tag, "onError: ")
+                        listener.error(-1, e)
+                    }
+                })
+    }
+
+    fun getCETScores(id: String, name: String, vcode: String, listener: GetCETScoresListener) {
+        val tag = "student_get_cet_scores"
+        ScheduleHelper.tomcatRetrofit.create(StudentService::class.java)
+                .getCETScores(username, id, name, vcode)
+                .subscribeOn(Schedulers.newThread())
+                .unsubscribeOn(Schedulers.newThread())
+                .map { Gson().fromJson(InputStreamReader(it.byteStream()), GetCETScoresRT::class.java) }
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(object : Observer<GetCETScoresRT> {
+                    private var getCETScoresRT: GetCETScoresRT? = null
+                    override fun onComplete() {
+                        Logs.i(tag, "onComplete: ${getCETScoresRT?.rt}")
+                        when (getCETScoresRT?.rt) {
+                            ConstantsCode.DONE -> listener.got(getCETScoresRT!!.cetScore)
+                            ConstantsCode.ERROR_NOT_LOGIN -> {
+                                login(object : LoginListener {
+                                    override fun loginDone() {
+                                        getCETScores(id, name, vcode, listener)
+                                    }
+
+                                    override fun error(rt: Int, e: Throwable) {
+                                        listener.error(rt, e)
+                                    }
+                                })
+                            }
+                            else -> listener.error(getCETScoresRT!!.rt.toInt(), Exception(getCETScoresRT?.msg))
+                        }
+                    }
+
+                    override fun onSubscribe(d: Disposable) {
+                        Logs.i(tag, "onSubscribe: ")
+                    }
+
+                    override fun onNext(t: GetCETScoresRT) {
+                        Logs.i(tag, "onNext: ")
+                        getCETScoresRT = t
+                    }
+
+                    override fun onError(e: Throwable) {
+                        Logs.i(tag, "onError: ")
+                        listener.error(-1, e)
                     }
                 })
     }

@@ -34,6 +34,7 @@
     <string name="action_experiment">实验项目成绩查询</string>
     <string name="action_cancel">取消</string>
     <string name="action_default">恢复默认</string>
+    <string name="action_screenshot">截图</string>
 
     <string name="prompt_username">用户名</string>
     <string name="prompt_password">密码</string>
@@ -42,6 +43,7 @@
     <string name="operation_schedule">课程查询</string>
     <string name="operation_exam">考试查询</string>
     <string name="operation_score">成绩查询</string>
+    <string name="operation_score_cet">四六级成绩查询</string>
     <string name="operation_feedback">意见反馈</string>
     <string name="operation_share">分享应用</string>
 
@@ -104,6 +106,11 @@
     <string name="hint_no_weixin">微信未安装！</string>
     <string name="hint_no_weibo">微博未安装！</string>
     <string name="hint_foreground_notification">正在初始化数据</string>
+    <string name="hint_cet_score_name">考生姓名</string>
+    <string name="hint_cet_score_id">准考证号</string>
+    <string name="hint_cet_vcode">请输入验证码</string>
+    <string name="hint_cet_empty">参数不能为空</string>
+    <string name="hint_cet_vcode_error">验证码获取失败</string>
 
     <string name="warning_enable_multi_user_mode">
         请确保您是双学位的学生或者有同时查看多个账号课表的需求。\n\n

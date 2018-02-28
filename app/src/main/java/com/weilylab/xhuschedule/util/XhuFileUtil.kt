@@ -34,6 +34,7 @@
 package com.weilylab.xhuschedule.util
 
 import android.content.Context
+import android.graphics.Bitmap
 import com.google.gson.Gson
 import com.google.gson.JsonParser
 import com.weilylab.xhuschedule.APP
@@ -137,12 +138,28 @@ object XhuFileUtil {
         }
     }
 
-    fun saveObjectToFile(obj: Any, file: File): Boolean {
-        return try {
-            if (file.exists())
-                file.delete()
+    fun saveBitmapToFile(bitmap: Bitmap?, file: File) {
+        try {
+            if (bitmap == null)
+                return
             if (!file.parentFile.exists())
                 file.parentFile.mkdirs()
+            if (file.exists())
+                file.delete()
+            val fileOutputStream = FileOutputStream(file)
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fileOutputStream)
+            fileOutputStream.close()
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
+    fun saveObjectToFile(obj: Any, file: File): Boolean {
+        return try {
+            if (!file.parentFile.exists())
+                file.parentFile.mkdirs()
+            if (file.exists())
+                file.delete()
             val gson = Gson()
             val fileOutputStream = FileOutputStream(file)
             fileOutputStream.write(gson.toJson(obj).toByteArray())
