@@ -145,6 +145,8 @@ class ExpScoreActivity : BaseActivity() {
                     override fun onComplete() {
                         if (scoreList.size == 0 && Settings.isAutoSelect)
                             getExpScores(currentStudent, year, term)
+                        else
+                            setLayout()
                     }
 
                     override fun onError(e: Throwable) {
@@ -182,49 +184,7 @@ class ExpScoreActivity : BaseActivity() {
                         if (student == null)
                             return
 
-                        currentIndex = -1
-                        linearLayout.removeAllViews()
-                        if (scoreList.size == 0)
-                            linearLayout.addView(ViewUtil.buildNoDataView(this@ExpScoreActivity, getString(R.string.hint_data_empty)))
-                        else
-                            for (i in scoreList.indices) {
-                                val expScore = scoreList[i]
-                                val itemView = ViewUtil.buildExpScoreItem(this@ExpScoreActivity, expScore, pointDrawable)
-                                val imageView: ImageView = itemView.findViewById(R.id.imageView)
-                                val detailsTextView: TextView = itemView.findViewById(R.id.textView_details)
-                                itemView.setOnClickListener {
-                                    Logs.i(TAG, "onBindViewHolder: 点击事件")
-                                    valueAnimator?.cancel()
-                                    //带动画的展开收缩
-                                    when (currentIndex) {
-                                        -1 -> {
-                                            Logs.i(TAG, "onBindViewHolder: 没有条目被选中")
-                                            valueAnimator = TextViewUtils.setMaxLinesWithAnimation(detailsTextView, Int.MAX_VALUE)
-                                            ObjectAnimator.ofFloat(imageView, Constants.ANIMATION_ALPHA, 0F, 1F).start()
-                                            currentIndex = i
-                                        }
-                                        i -> {
-                                            Logs.i(TAG, "onBindViewHolder: 选中的是当前条目")
-                                            valueAnimator = TextViewUtils.setMaxLinesWithAnimation(detailsTextView, 1)
-                                            ObjectAnimator.ofFloat(imageView, Constants.ANIMATION_ALPHA, 1F, 0F).start()
-                                            currentIndex = -1
-                                        }
-                                        else -> {
-                                            Logs.i(TAG, "onBindViewHolder: 选中的其他条目")
-                                            val openedView = linearLayout.getChildAt(currentIndex)
-                                            val openedImageView: ImageView = openedView.findViewById(R.id.imageView)
-                                            val openedDetailsTextView: TextView = openedView.findViewById(R.id.textView_details)
-                                            valueAnimator = TextViewUtils.setMaxLinesWithAnimation(openedDetailsTextView, 1)
-                                            ObjectAnimator.ofFloat(openedImageView, Constants.ANIMATION_ALPHA, 1F, 0F).start()
-
-                                            valueAnimator = TextViewUtils.setMaxLinesWithAnimation(detailsTextView, Int.MAX_VALUE)
-                                            ObjectAnimator.ofFloat(imageView, Constants.ANIMATION_ALPHA, 0F, 1F).start()
-                                            currentIndex = i
-                                        }
-                                    }
-                                }
-                                linearLayout.addView(itemView)
-                            }
+                        setLayout()
 
                         val parentFile = XhuFileUtil.getExpScoreParentFile(this@ExpScoreActivity)
                         if (!parentFile.exists())
@@ -393,5 +353,51 @@ class ExpScoreActivity : BaseActivity() {
                                 .show()
                     }
                 })
+    }
+
+    private fun setLayout(){
+        currentIndex = -1
+        linearLayout.removeAllViews()
+        if (scoreList.size == 0)
+            linearLayout.addView(ViewUtil.buildNoDataView(this@ExpScoreActivity, getString(R.string.hint_data_empty)))
+        else
+            for (i in scoreList.indices) {
+                val expScore = scoreList[i]
+                val itemView = ViewUtil.buildExpScoreItem(this@ExpScoreActivity, expScore, pointDrawable)
+                val imageView: ImageView = itemView.findViewById(R.id.imageView)
+                val detailsTextView: TextView = itemView.findViewById(R.id.textView_details)
+                itemView.setOnClickListener {
+                    Logs.i(TAG, "onBindViewHolder: 点击事件")
+                    valueAnimator?.cancel()
+                    //带动画的展开收缩
+                    when (currentIndex) {
+                        -1 -> {
+                            Logs.i(TAG, "onBindViewHolder: 没有条目被选中")
+                            valueAnimator = TextViewUtils.setMaxLinesWithAnimation(detailsTextView, Int.MAX_VALUE)
+                            ObjectAnimator.ofFloat(imageView, Constants.ANIMATION_ALPHA, 0F, 1F).start()
+                            currentIndex = i
+                        }
+                        i -> {
+                            Logs.i(TAG, "onBindViewHolder: 选中的是当前条目")
+                            valueAnimator = TextViewUtils.setMaxLinesWithAnimation(detailsTextView, 1)
+                            ObjectAnimator.ofFloat(imageView, Constants.ANIMATION_ALPHA, 1F, 0F).start()
+                            currentIndex = -1
+                        }
+                        else -> {
+                            Logs.i(TAG, "onBindViewHolder: 选中的其他条目")
+                            val openedView = linearLayout.getChildAt(currentIndex)
+                            val openedImageView: ImageView = openedView.findViewById(R.id.imageView)
+                            val openedDetailsTextView: TextView = openedView.findViewById(R.id.textView_details)
+                            valueAnimator = TextViewUtils.setMaxLinesWithAnimation(openedDetailsTextView, 1)
+                            ObjectAnimator.ofFloat(openedImageView, Constants.ANIMATION_ALPHA, 1F, 0F).start()
+
+                            valueAnimator = TextViewUtils.setMaxLinesWithAnimation(detailsTextView, Int.MAX_VALUE)
+                            ObjectAnimator.ofFloat(imageView, Constants.ANIMATION_ALPHA, 0F, 1F).start()
+                            currentIndex = i
+                        }
+                    }
+                }
+                linearLayout.addView(itemView)
+            }
     }
 }

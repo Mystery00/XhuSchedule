@@ -152,6 +152,8 @@ class ScoreActivity : BaseActivity() {
                     override fun onComplete() {
                         if (scoreList.size == 0 && Settings.isAutoSelect)
                             getScores(currentStudent, year, term)
+                        else
+                            setLayout()
                     }
 
                     override fun onError(e: Throwable) {
@@ -190,46 +192,7 @@ class ScoreActivity : BaseActivity() {
                         loadingDialog.dismiss()
                         if (student == null)
                             return
-
-                        currentIndex = -1
-                        linearLayout.removeAllViews()
-                        if (scoreList.size == 0)
-                            linearLayout.addView(ViewUtil.buildNoDataView(this@ScoreActivity, getString(R.string.hint_data_empty)))
-                        else
-                            for (i in scoreList.indices) {
-                                val score = scoreList[i]
-                                val itemView = ViewUtil.buildScoreItem(this@ScoreActivity, score, pointDrawable)
-                                val imageView: ImageView = itemView.findViewById(R.id.imageView)
-                                val detailsTextView: TextView = itemView.findViewById(R.id.textView_details)
-                                itemView.setOnClickListener {
-                                    valueAnimator?.cancel()
-                                    //带动画的展开收缩
-                                    when (currentIndex) {
-                                        -1 -> {
-                                            valueAnimator = TextViewUtils.setMaxLinesWithAnimation(detailsTextView, Int.MAX_VALUE)
-                                            ObjectAnimator.ofFloat(imageView, Constants.ANIMATION_ALPHA, 0F, 1F).start()
-                                            currentIndex = i
-                                        }
-                                        i -> {
-                                            valueAnimator = TextViewUtils.setMaxLinesWithAnimation(detailsTextView, 1)
-                                            ObjectAnimator.ofFloat(imageView, Constants.ANIMATION_ALPHA, 1F, 0F).start()
-                                            currentIndex = -1
-                                        }
-                                        else -> {
-                                            val openedView = linearLayout.getChildAt(currentIndex)
-                                            val openedImageView: ImageView = openedView.findViewById(R.id.imageView)
-                                            val openedDetailsTextView: TextView = openedView.findViewById(R.id.textView_details)
-                                            valueAnimator = TextViewUtils.setMaxLinesWithAnimation(openedDetailsTextView, 1)
-                                            ObjectAnimator.ofFloat(openedImageView, Constants.ANIMATION_ALPHA, 1F, 0F).start()
-
-                                            valueAnimator = TextViewUtils.setMaxLinesWithAnimation(detailsTextView, Int.MAX_VALUE)
-                                            ObjectAnimator.ofFloat(imageView, Constants.ANIMATION_ALPHA, 0F, 1F).start()
-                                            currentIndex = i
-                                        }
-                                    }
-                                }
-                                linearLayout.addView(itemView)
-                            }
+                        setLayout()
 
                         val parentFile = XhuFileUtil.getScoreParentFile(this@ScoreActivity)
                         if (!parentFile.exists())
@@ -410,5 +373,47 @@ class ScoreActivity : BaseActivity() {
                                 .show()
                     }
                 })
+    }
+
+    private fun setLayout(){
+        currentIndex = -1
+        linearLayout.removeAllViews()
+        if (scoreList.size == 0)
+            linearLayout.addView(ViewUtil.buildNoDataView(this@ScoreActivity, getString(R.string.hint_data_empty)))
+        else
+            for (i in scoreList.indices) {
+                val score = scoreList[i]
+                val itemView = ViewUtil.buildScoreItem(this@ScoreActivity, score, pointDrawable)
+                val imageView: ImageView = itemView.findViewById(R.id.imageView)
+                val detailsTextView: TextView = itemView.findViewById(R.id.textView_details)
+                itemView.setOnClickListener {
+                    valueAnimator?.cancel()
+                    //带动画的展开收缩
+                    when (currentIndex) {
+                        -1 -> {
+                            valueAnimator = TextViewUtils.setMaxLinesWithAnimation(detailsTextView, Int.MAX_VALUE)
+                            ObjectAnimator.ofFloat(imageView, Constants.ANIMATION_ALPHA, 0F, 1F).start()
+                            currentIndex = i
+                        }
+                        i -> {
+                            valueAnimator = TextViewUtils.setMaxLinesWithAnimation(detailsTextView, 1)
+                            ObjectAnimator.ofFloat(imageView, Constants.ANIMATION_ALPHA, 1F, 0F).start()
+                            currentIndex = -1
+                        }
+                        else -> {
+                            val openedView = linearLayout.getChildAt(currentIndex)
+                            val openedImageView: ImageView = openedView.findViewById(R.id.imageView)
+                            val openedDetailsTextView: TextView = openedView.findViewById(R.id.textView_details)
+                            valueAnimator = TextViewUtils.setMaxLinesWithAnimation(openedDetailsTextView, 1)
+                            ObjectAnimator.ofFloat(openedImageView, Constants.ANIMATION_ALPHA, 1F, 0F).start()
+
+                            valueAnimator = TextViewUtils.setMaxLinesWithAnimation(detailsTextView, Int.MAX_VALUE)
+                            ObjectAnimator.ofFloat(imageView, Constants.ANIMATION_ALPHA, 0F, 1F).start()
+                            currentIndex = i
+                        }
+                    }
+                }
+                linearLayout.addView(itemView)
+            }
     }
 }
