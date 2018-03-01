@@ -128,7 +128,7 @@
     <string name="error_network">网络似乎有点问题哦~</string>
     <string name="error_other">其他错误</string>
     <string name="error_time_not_monday">选择的时间不是周一，选择无效</string>
-    <string name="error_time_after">选择的时间不能在当前时间之后</string>
+    <string name="error_time_after">请注意您选择的时间在当前时间之后哦~</string>
     <string name="error_download">下载失败</string>
     <string name="error_custom_img">自定义图片设置失败！</string>
 

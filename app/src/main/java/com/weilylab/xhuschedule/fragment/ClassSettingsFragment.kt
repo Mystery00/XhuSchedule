@@ -68,6 +68,7 @@ class ClassSettingsFragment : BasePreferenceFragment() {
         firstDayPreference.summary = date[0] + '-' + (date[1].toInt() + 1) + '-' + date[2]
         showNotPreference.isChecked = Settings.isShowNot
         firstDayPreference.setOnPreferenceClickListener {
+            var isAlert = false
             val calendar = Calendar.getInstance(Locale.CHINA)
             calendar.set(date[0].toInt(), date[1].toInt(), date[2].toInt(), 0, 0, 0)
             val view = View.inflate(activity, R.layout.dialog_date_picker, null)
@@ -83,8 +84,11 @@ class ClassSettingsFragment : BasePreferenceFragment() {
                 dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
                     calendar.set(datePicker.year, datePicker.month, datePicker.dayOfMonth, 0, 0, 0)
                     when {
-                        calendar.after(Calendar.getInstance()) -> Snackbar.make(datePicker, R.string.error_time_after, Snackbar.LENGTH_SHORT)
-                                .show()
+                        !isAlert && calendar.after(Calendar.getInstance()) -> {
+                            Snackbar.make(datePicker, R.string.error_time_after, Snackbar.LENGTH_SHORT)
+                                    .show()
+                            isAlert = true
+                        }
                         else -> {
                             val dayWeek = calendar.get(Calendar.DAY_OF_WEEK)
                             if (dayWeek == Calendar.SUNDAY)
