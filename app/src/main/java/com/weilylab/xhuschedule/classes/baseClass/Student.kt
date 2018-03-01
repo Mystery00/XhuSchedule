@@ -101,6 +101,10 @@ class Student : Serializable {
     }
 
     fun getInfo(listener: ProfileListener) {
+        getInfo(0, listener)
+    }
+
+    private fun getInfo(index: Int, listener: ProfileListener) {
         val tag = "student_get_info"
         ScheduleHelper.tomcatRetrofit
                 .create(UserService::class.java)
@@ -124,9 +128,13 @@ class Student : Serializable {
                                 listener.got(profile!!)
                             }
                             ConstantsCode.ERROR_NOT_LOGIN -> {
+                                if (index == 2) {
+                                    listener.error(-2, Exception("频繁操作！"))
+                                    return
+                                }
                                 login(object : LoginListener {
                                     override fun loginDone() {
-                                        getInfo(listener)
+                                        getInfo(index + 1, listener)
                                     }
 
                                     override fun error(rt: Int, e: Throwable) {
@@ -150,6 +158,10 @@ class Student : Serializable {
     }
 
     fun getTests(listener: GetArrayListener<Exam>) {
+        getTests(0, listener)
+    }
+
+    private fun getTests(index: Int, listener: GetArrayListener<Exam>) {
         val tag = "student_get_tests"
         ScheduleHelper.tomcatRetrofit
                 .create(StudentService::class.java)
@@ -170,6 +182,10 @@ class Student : Serializable {
                         when (getTestsRT?.rt) {
                             ConstantsCode.DONE -> listener.got(getTestsRT!!.tests)
                             ConstantsCode.ERROR_NOT_LOGIN -> {
+                                if (index == 2) {
+                                    listener.error(-2, Exception("频繁操作！"))
+                                    return
+                                }
                                 login(object : LoginListener {
                                     override fun loginDone() {
                                         getTests(listener)
@@ -196,6 +212,10 @@ class Student : Serializable {
     }
 
     fun getScores(year: String?, term: Int?, listener: GetScoreListener) {
+        getScores(0, year, term, listener)
+    }
+
+    private fun getScores(index: Int, year: String?, term: Int?, listener: GetScoreListener) {
         val tag = "student_get_scores"
         ScheduleHelper.tomcatRetrofit
                 .create(StudentService::class.java)
@@ -216,6 +236,10 @@ class Student : Serializable {
                         when (getScoresRT?.rt) {
                             ConstantsCode.DONE -> listener.got(getScoresRT!!.scores, getScoresRT!!.failscores)
                             ConstantsCode.ERROR_NOT_LOGIN -> {
+                                if (index == 2) {
+                                    listener.error(-2, Exception("频繁操作！"))
+                                    return
+                                }
                                 login(object : LoginListener {
                                     override fun loginDone() {
                                         getScores(year, term, listener)
@@ -242,6 +266,10 @@ class Student : Serializable {
     }
 
     fun getExpScores(year: String?, term: Int?, listener: GetExpScoreListener) {
+        getExpScores(0, year, term, listener)
+    }
+
+    private fun getExpScores(index: Int, year: String?, term: Int?, listener: GetExpScoreListener) {
         val tag = "student_get_exp_scores"
         ScheduleHelper.tomcatRetrofit
                 .create(StudentService::class.java)
@@ -262,6 +290,10 @@ class Student : Serializable {
                         when (getExpScoresRT?.rt) {
                             ConstantsCode.DONE -> listener.got(getExpScoresRT!!.expscores)
                             ConstantsCode.ERROR_NOT_LOGIN -> {
+                                if (index == 2) {
+                                    listener.error(-2, Exception("频繁操作！"))
+                                    return
+                                }
                                 login(object : LoginListener {
                                     override fun loginDone() {
                                         getExpScores(year, term, listener)
@@ -288,6 +320,10 @@ class Student : Serializable {
     }
 
     fun feedback(context: Context, emailAddress: String, message: String, listener: FeedBackListener) {
+        feedback(0, context, emailAddress, message, listener)
+    }
+
+    private fun feedback(index: Int, context: Context, emailAddress: String, message: String, listener: FeedBackListener) {
         val tag = "student_feedback"
         ScheduleHelper.tomcatRetrofit.create(CommonService::class.java)
                 .feedback(username,
@@ -314,6 +350,10 @@ class Student : Serializable {
                         when (feedbackRT?.rt) {
                             ConstantsCode.DONE -> listener.done(1)
                             ConstantsCode.ERROR_NOT_LOGIN -> {
+                                if (index == 2) {
+                                    listener.error(-2, Exception("频繁操作！"))
+                                    return
+                                }
                                 login(object : LoginListener {
                                     override fun loginDone() {
                                         feedback(context, message, emailAddress, listener)
@@ -340,6 +380,10 @@ class Student : Serializable {
     }
 
     fun getCETVCode(id: String, listener: GetCETVCodeListener) {
+        getCETVCode(0, id, listener)
+    }
+
+    private fun getCETVCode(index: Int, id: String, listener: GetCETVCodeListener) {
         val tag = "student_get_cet_vcode"
         ScheduleHelper.tomcatRetrofit.create(StudentService::class.java)
                 .getCETVCode(username, id, null)
@@ -357,6 +401,10 @@ class Student : Serializable {
                                 listener.got(BitmapFactory.decodeByteArray(bytes, 0, bytes.size))
                             }
                             ConstantsCode.ERROR_NOT_LOGIN -> {
+                                if (index == 2) {
+                                    listener.error(-2, Exception("频繁操作！"))
+                                    return
+                                }
                                 login(object : LoginListener {
                                     override fun loginDone() {
                                         getCETVCode(id, listener)
@@ -388,6 +436,10 @@ class Student : Serializable {
     }
 
     fun getCETScores(id: String, name: String, vcode: String, listener: GetCETScoresListener) {
+        getCETScores(0, id, name, vcode, listener)
+    }
+
+    private fun getCETScores(index: Int, id: String, name: String, vcode: String, listener: GetCETScoresListener) {
         val tag = "student_get_cet_scores"
         ScheduleHelper.tomcatRetrofit.create(StudentService::class.java)
                 .getCETScores(username, id, name, vcode)
@@ -402,6 +454,10 @@ class Student : Serializable {
                         when (getCETScoresRT?.rt) {
                             ConstantsCode.DONE -> listener.got(getCETScoresRT!!.cetScore)
                             ConstantsCode.ERROR_NOT_LOGIN -> {
+                                if (index == 2) {
+                                    listener.error(-2, Exception("频繁操作！"))
+                                    return
+                                }
                                 login(object : LoginListener {
                                     override fun loginDone() {
                                         getCETScores(id, name, vcode, listener)
