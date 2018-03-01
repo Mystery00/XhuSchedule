@@ -772,7 +772,7 @@ class MainActivity : BaseActivity() {
 
     private fun registerWeiXin() {
         // 通过WXAPIFactory工厂，获取IWXAPI的实例
-        wxAPI = WXAPIFactory.createWXAPI(CondomContext.wrap(this, "weixin"), Constants.WEIXIN_API_KEY, false)
+        wxAPI = WXAPIFactory.createWXAPI(this, Constants.WEIXIN_API_KEY, false)
         // 将该app注册到微信
         wxAPI.registerApp(Constants.WEIXIN_API_KEY)
     }
