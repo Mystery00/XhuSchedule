@@ -47,7 +47,7 @@ interface StudentService {
     fun getTests(@Field("username") username: String): Observable<ResponseBody>
 
     @FormUrlEncoded
-    @POST("/Score/getCetScore")
+    @POST("/Score/getScore")
     fun getScores(@Field("username") username: String, @Field("year") year: String?, @Field("term") term: Int?): Observable<ResponseBody>
 
     @FormUrlEncoded

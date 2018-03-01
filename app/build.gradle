@@ -62,6 +62,9 @@ android {
         // Enabling multi dex support.
         multiDexEnabled true
     }
+    dependencies {
+        compile 'com.android.support:multidex:1.0.2'
+    }
     buildTypes {
         debug {
             resValue "string", "app_version_name", autoVersion.name

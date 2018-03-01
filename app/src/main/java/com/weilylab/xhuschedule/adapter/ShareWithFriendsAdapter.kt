@@ -122,7 +122,7 @@ class ShareWithFriendsAdapter(private val context: Context) : RecyclerView.Adapt
                     if (weiboShareAPI.isWeiboAppInstalled) {
                         val weiboMultiMessage = WeiboMultiMessage()
                         val imageObject = ImageObject()
-                        imageObject.setImageObject(BitmapFactory.decodeResource(context.resources, R.mipmap.ic_launcher))
+                        imageObject.setImageObject(BitmapFactory.decodeResource(context.resources, R.mipmap.share_launcher))
                         weiboMultiMessage.mediaObject = imageObject
                         val textObject = TextObject()
                         textObject.text = context.getString(R.string.hint_share_message)
@@ -139,7 +139,7 @@ class ShareWithFriendsAdapter(private val context: Context) : RecyclerView.Adapt
                 3 -> {//分享到微信
                     val wxAPI = (context as MainActivity).wxAPI
                     if (wxAPI.isWXAppInstalled) {
-                        val bitmap = BitmapFactory.decodeResource(context.resources, R.mipmap.ic_launcher)
+                        val bitmap = BitmapFactory.decodeResource(context.resources, R.mipmap.share_launcher)
                         val wxImageObject = WXImageObject(bitmap)
 
                         val wxMediaMessage = WXMediaMessage()
@@ -162,7 +162,7 @@ class ShareWithFriendsAdapter(private val context: Context) : RecyclerView.Adapt
                 4 -> {//分享到朋友圈
                     val wxAPI = (context as MainActivity).wxAPI
                     if (wxAPI.isWXAppInstalled) {
-                        val bitmap = BitmapFactory.decodeResource(context.resources, R.mipmap.ic_launcher)
+                        val bitmap = BitmapFactory.decodeResource(context.resources, R.mipmap.share_launcher)
                         val wxImageObject = WXImageObject(bitmap)
 
                         val wxMediaMessage = WXMediaMessage()

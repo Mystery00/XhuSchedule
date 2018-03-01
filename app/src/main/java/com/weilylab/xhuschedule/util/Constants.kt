@@ -36,7 +36,7 @@ package com.weilylab.xhuschedule.util
 object Constants {
     const val QQ_API_KEY = "1106663023"
     const val WEIBO_API_KEY = "2170085314"
-    const val WEIXIN_API_KEY = "f89cf8f34ba248c1b5b703b02d387cb7"//API Secret
+    const val WEIXIN_API_KEY = "wx41799887957cbba8"
 
     const val NOTICE_PLATFORM = "Android"
 
@@ -76,7 +76,6 @@ object Constants {
     const val INTENT_TAG_NAME_FILE = "file"
     const val INTENT_TAG_NAME_TAG = "TAG"
     const val INTENT_TAG_NAME_TYPE = "type"
-    const val INTENT_TAG_NAME_FILE_NAME = "fileName"
     const val INTENT_TAG_NAME_QINIU_PATH = "qiniuPath"
     const val INTENT_TAG_NAME_PROFILE="profile"
     const val INTENT_TAG_NAME_LIST="list"

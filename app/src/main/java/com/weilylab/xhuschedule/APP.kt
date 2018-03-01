@@ -34,10 +34,10 @@
 package com.weilylab.xhuschedule
 
 import android.annotation.SuppressLint
-import android.app.Application
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.support.multidex.MultiDexApplication
 import com.google.firebase.FirebaseApp
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.oasisfeng.condom.CondomContext
@@ -55,7 +55,7 @@ import java.io.File
 /**
  * Created by myste.
  */
-class APP : Application() {
+class APP : MultiDexApplication() {
     companion object {
         private var app: APP? = null
         private var mFirebaseAnalytics: FirebaseAnalytics? = null
