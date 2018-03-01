@@ -105,7 +105,7 @@ class Student : Serializable {
     }
 
     private fun getInfo(index: Int, listener: ProfileListener) {
-        val tag = "student_get_info"
+        val tag = "student_get_info-$index"
         ScheduleHelper.tomcatRetrofit
                 .create(UserService::class.java)
                 .getInfo(username)
@@ -162,7 +162,7 @@ class Student : Serializable {
     }
 
     private fun getTests(index: Int, listener: GetArrayListener<Exam>) {
-        val tag = "student_get_tests"
+        val tag = "student_get_tests-$index"
         ScheduleHelper.tomcatRetrofit
                 .create(StudentService::class.java)
                 .getTests(username)
@@ -216,7 +216,7 @@ class Student : Serializable {
     }
 
     private fun getScores(index: Int, year: String?, term: Int?, listener: GetScoreListener) {
-        val tag = "student_get_scores"
+        val tag = "student_get_scores-$index"
         ScheduleHelper.tomcatRetrofit
                 .create(StudentService::class.java)
                 .getScores(username, year, term)
@@ -270,7 +270,7 @@ class Student : Serializable {
     }
 
     private fun getExpScores(index: Int, year: String?, term: Int?, listener: GetExpScoreListener) {
-        val tag = "student_get_exp_scores"
+        val tag = "student_get_exp_scores-$index"
         ScheduleHelper.tomcatRetrofit
                 .create(StudentService::class.java)
                 .getExpScores(username, year, term)
@@ -324,7 +324,7 @@ class Student : Serializable {
     }
 
     private fun feedback(index: Int, context: Context, emailAddress: String, message: String, listener: FeedBackListener) {
-        val tag = "student_feedback"
+        val tag = "student_feedback-$index"
         ScheduleHelper.tomcatRetrofit.create(CommonService::class.java)
                 .feedback(username,
                         context.getString(R.string.app_version_name) + "-" + context.getString(R.string.app_version_code),
@@ -384,7 +384,7 @@ class Student : Serializable {
     }
 
     private fun getCETVCode(index: Int, id: String, listener: GetCETVCodeListener) {
-        val tag = "student_get_cet_vcode"
+        val tag = "student_get_cet_vcode-$index"
         ScheduleHelper.tomcatRetrofit.create(StudentService::class.java)
                 .getCETVCode(username, id, null)
                 .subscribeOn(Schedulers.newThread())
@@ -440,7 +440,7 @@ class Student : Serializable {
     }
 
     private fun getCETScores(index: Int, id: String, name: String, vcode: String, listener: GetCETScoresListener) {
-        val tag = "student_get_cet_scores"
+        val tag = "student_get_cet_scores-$index"
         ScheduleHelper.tomcatRetrofit.create(StudentService::class.java)
                 .getCETScores(username, id, name, vcode)
                 .subscribeOn(Schedulers.newThread())

@@ -636,7 +636,7 @@ class MainActivity : BaseActivity() {
 
             override fun onAnimationEnd(animation: Animator?) {
                 if (!isShow && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
-                    layout_week_recycler_view.elevation = 8F
+                    layout_week_recycler_view.elevation = 6F
             }
 
             override fun onAnimationCancel(animation: Animator?) {
@@ -644,7 +644,7 @@ class MainActivity : BaseActivity() {
 
             override fun onAnimationStart(animation: Animator?) {
                 if (isShow && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
-                    layout_week_recycler_view.elevation = 12F
+                    layout_week_recycler_view.elevation = 0F
             }
         })
         weekAnimator?.start()

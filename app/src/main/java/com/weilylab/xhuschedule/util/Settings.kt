@@ -51,6 +51,9 @@ object Settings {
     var isFirstRun: Boolean//是否是第一次运行
         set(value) = sharedPreference.edit().putBoolean(Constants.IS_FIRST_RUN, value).apply()
         get() = sharedPreference.getBoolean(Constants.IS_FIRST_RUN, true)
+    var isFirstEnter: Boolean//是否是第一次运行2.0
+        set(value) = sharedPreference.edit().putBoolean(Constants.IS_FIRST_ENTER, value).apply()
+        get() = sharedPreference.getBoolean(Constants.IS_FIRST_ENTER, true)
     var userImg: String//用户头像路径
         set(value) = sharedPreference.edit().putString(Constants.USER_IMG, value).apply()
         get() = sharedPreference.getString(Constants.USER_IMG, "")

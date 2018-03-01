@@ -123,8 +123,7 @@ class SplashActivity : BaseActivity() {
                     .subscribe(object : DisposableObserver<Boolean>() {
                         override fun onError(e: Throwable) {
                             e.printStackTrace()
-                            startActivity(Intent(this@SplashActivity, MainActivity::class.java))
-                            finish()
+                            go()
                         }
 
                         override fun onComplete() {
@@ -143,16 +142,14 @@ class SplashActivity : BaseActivity() {
                                                     e.printStackTrace()
                                                     Toast.makeText(this@SplashActivity, e.message + "\n请将这个信息反馈给开发者", Toast.LENGTH_LONG).show()
                                                     loadingDialog.dismiss()
-                                                    startActivity(Intent(this@SplashActivity, MainActivity::class.java))
-                                                    finish()
+                                                    go()
                                                 }
 
                                                 override fun done(code: Int, message: String) {
                                                     Toast.makeText(this@SplashActivity, message, Toast.LENGTH_SHORT)
                                                             .show()
                                                     loadingDialog.dismiss()
-                                                    startActivity(Intent(this@SplashActivity, MainActivity::class.java))
-                                                    finish()
+                                                    go()
                                                 }
 
                                                 override fun ready() {
@@ -160,19 +157,23 @@ class SplashActivity : BaseActivity() {
                                             })
                                         })
                                         .setNegativeButton(android.R.string.cancel, { _, _ ->
-                                            startActivity(Intent(this@SplashActivity, MainActivity::class.java))
-                                            finish()
+                                            go()
                                         })
                                         .show()
                             } else {
-                                startActivity(Intent(this@SplashActivity, MainActivity::class.java))
-                                finish()
+                                go()
                             }
                         }
                     })
-        } else {
+        } else
+            go()
+    }
+
+    private fun go() {
+        if (Settings.isFirstEnter)
+            startActivity(Intent(this, WelcomeActivity::class.java))
+        else
             startActivity(Intent(this, MainActivity::class.java))
-            finish()
-        }
+        finish()
     }
 }

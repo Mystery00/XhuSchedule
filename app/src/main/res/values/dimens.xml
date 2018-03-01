@@ -63,4 +63,5 @@
     <dimen name="widget_margin">8dp</dimen>
     <dimen name="divider_size">0.4dp</dimen>
     <dimen name="nav_width">32dp</dimen>
+    <dimen name="appbar_padding_top">8dp</dimen>
 </resources>

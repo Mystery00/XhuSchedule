@@ -45,6 +45,9 @@
                 android:resource="@xml/shortcuts" />
         </activity>
         <activity
+            android:name=".activity.WelcomeActivity"
+            android:theme="@style/AppTheme.NoActionBar.FullScreen"/>
+        <activity
             android:name=".activity.MainActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
@@ -129,6 +132,7 @@
         <receiver android:name=".receiver.BootCompletedReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
+
                 <category android:name="android.intent.category.HOME" />
             </intent-filter>
         </receiver>
