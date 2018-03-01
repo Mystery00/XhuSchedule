@@ -56,8 +56,8 @@ object CalendarUtil {
     }
 
     fun getWeek(dayIndex: Int): Int {
-        //获取当前第几周
-        return dayIndex / 7 + 1
+        val days = if (dayIndex < 0) -7 else dayIndex
+        return days / 7 + 1
     }
 
     fun getDay(): Int {
@@ -91,8 +91,10 @@ object CalendarUtil {
     }
 
     private fun getTodayInfo(context: Context, dayIndex: Int): String {
-        val week = getWeek(dayIndex)
-        val day = dayIndex % 7 + 1
+        val week = getWeek(if (dayIndex < 0) -7 else dayIndex)
+        var day = dayIndex % 7 + 1
+        if (day <= 0)
+            day += 7
         val weekArray = context.resources.getStringArray(R.array.table_header)
         return context.getString(R.string.course_today_info, week, weekArray[day - 1])
     }

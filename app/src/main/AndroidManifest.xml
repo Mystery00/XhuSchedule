@@ -104,7 +104,6 @@
         <service android:name=".service.WidgetNextActionService" />
         <service android:name=".service.WidgetInitService" />
         <service android:name=".service.ClearCacheColorService" />
-        <service android:name=".service.NotificationService" />
         <service android:name=".service.ShowNotificationService" />
         <service android:name=".service.BootInitService" />
         <service

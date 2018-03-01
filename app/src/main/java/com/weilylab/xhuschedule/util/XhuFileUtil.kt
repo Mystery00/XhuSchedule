@@ -35,6 +35,7 @@ package com.weilylab.xhuschedule.util
 
 import android.content.Context
 import android.graphics.Bitmap
+import android.os.Environment
 import com.google.gson.Gson
 import com.google.gson.JsonParser
 import com.weilylab.xhuschedule.APP
@@ -46,6 +47,12 @@ import java.math.BigInteger
 import java.nio.channels.FileChannel
 import java.security.MessageDigest
 import java.util.regex.Pattern
+import android.graphics.Bitmap.CompressFormat
+import android.content.Intent
+import android.content.pm.ResolveInfo
+import android.content.pm.PackageManager
+import android.net.Uri
+
 
 /**
  * Created by myste.
@@ -104,8 +111,18 @@ object XhuFileUtil {
         return File(context.filesDir.absolutePath + File.separator + "caches/")
     }
 
+    /**
+     * 获取存储的图片文件的File对象
+     */
     fun getUIImageFile(context: Context, fileName: String): File {
         return File(File(context.filesDir, "CropImg"), fileName)
+    }
+
+    /**
+     * 获取存储四六级成绩的File对象
+     */
+    fun getCETImageFile(fileName: String): File {
+        return File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), fileName)
     }
 
     fun filterString(name: String): String {
@@ -138,10 +155,10 @@ object XhuFileUtil {
         }
     }
 
-    fun saveBitmapToFile(bitmap: Bitmap?, file: File) {
-        try {
+    fun saveBitmapToFile(bitmap: Bitmap?, file: File): Boolean {
+        return try {
             if (bitmap == null)
-                return
+                return false
             if (!file.parentFile.exists())
                 file.parentFile.mkdirs()
             if (file.exists())
@@ -149,8 +166,10 @@ object XhuFileUtil {
             val fileOutputStream = FileOutputStream(file)
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fileOutputStream)
             fileOutputStream.close()
+            true
         } catch (e: Exception) {
             e.printStackTrace()
+            false
         }
     }
 
@@ -309,5 +328,33 @@ object XhuFileUtil {
         sharedPreference.edit()
                 .remove(key)
                 .apply()
+    }
+
+    fun bmpToByteArray(bmp: Bitmap, needRecycle: Boolean): ByteArray {
+        val output = ByteArrayOutputStream()
+        bmp.compress(CompressFormat.PNG, 100, output)
+        if (needRecycle) {
+            bmp.recycle()
+        }
+        val result = output.toByteArray()
+        try {
+            output.close()
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+        return result
+    }
+
+    /**
+     * intent分享的uri授权
+     *
+     * @param context Context
+     * @param intent  分享的intent
+     * @param uri     分享的uri
+     */
+    fun grantUriPermission(context: Context, intent: Intent, uri: Uri) {
+        val list = context.packageManager.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY)
+        for (resolveInfo in list)
+            context.grantUriPermission(resolveInfo.activityInfo.packageName, uri, Intent.FLAG_GRANT_READ_URI_PERMISSION)
     }
 }

@@ -80,7 +80,6 @@ object Constants {
     const val INTENT_TAG_NAME_QINIU_PATH = "qiniuPath"
     const val INTENT_TAG_NAME_PROFILE="profile"
     const val INTENT_TAG_NAME_LIST="list"
-    const val INTENT_TAG_NAME_URL="url"
 
     const val DOWNLOAD_TYPE_APK="apk"
     const val DOWNLOAD_TYPE_PATCH="patch"
@@ -130,7 +129,7 @@ object Constants {
     const val NOTIFICATION_EXAM_ENABLE = "isNotificationExamEnable"
     const val NOTIFICATION_TOMORROW_TYPE = "isNotificationTomorrowType"
 
-    const val DEFAULT_TERM_START_DATE = "2017-8-4"
+    const val DEFAULT_TERM_START_DATE = "2018-2-5"
     const val DEFAULT_OPACITY = 154
     const val DEFAULT_COLOR_TEXT_TABLE = -1
     const val DEFAULT_COLOR_TEXT_TODAY = -11184811

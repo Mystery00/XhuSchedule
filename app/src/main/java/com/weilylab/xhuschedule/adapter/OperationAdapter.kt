@@ -160,7 +160,7 @@ class OperationAdapter(private val context: Context) : RecyclerView.Adapter<Oper
                 4 -> {
                     val loadingDialog = ZLoadingDialog(context)
                             .setLoadingBuilder(Z_TYPE.DOUBLE_CIRCLE)
-                            .setHintText(context.getString(R.string.hint_dialog_feedback))
+                            .setHintText(context.getString(R.string.hint_dialog_cet))
                             .setHintTextSize(16F)
                             .setCanceledOnTouchOutside(false)
                             .setLoadingColor(ContextCompat.getColor(context, R.color.colorAccent))
