@@ -1,11 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--
-  ~ Created by Mystery0 on 17-12-21 上午3:41.
-  ~ Copyright (c) 2017. All Rights reserved.
-  ~
-  ~ Last modified 17-11-27 上午3:50
-  -->
-
 <adaptive-icon xmlns:android="http://schemas.android.com/apk/res/android">
     <background android:drawable="@mipmap/ic_launcher_background"/>
     <foreground android:drawable="@mipmap/ic_launcher_foreground"/>
