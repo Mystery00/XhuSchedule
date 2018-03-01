@@ -57,6 +57,7 @@ interface StudentService {
     @GET("/Score/getCETVCode")
     fun getCETVCode(@Query("username") username: String, @Query("id") id: String, @Query("type") type: String?): Observable<ResponseBody>
 
-    @GET("/Score/getCETScores")
-    fun getCETScores(@Query("username") username: String, @Query("id") id: String, @Query("name") name: String, @Query("vcode") vcode: String): Observable<ResponseBody>
+    @FormUrlEncoded
+    @POST("/Score/getCETScores")
+    fun getCETScores(@Field("username") username: String, @Field("id") id: String, @Field("name") name: String, @Field("vcode") vcode: String): Observable<ResponseBody>
 }

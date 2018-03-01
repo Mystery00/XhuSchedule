@@ -96,7 +96,7 @@ class OperationAdapter(private val context: Context) : RecyclerView.Adapter<Oper
                 R.mipmap.ic_operation_classes,
                 R.mipmap.ic_operation_exam,
                 R.mipmap.ic_operation_score,
-                R.mipmap.ic_operation_score,
+                R.mipmap.ic_operation_cet,
                 R.mipmap.ic_operation_feedback,
                 R.mipmap.ic_operation_share
         )
