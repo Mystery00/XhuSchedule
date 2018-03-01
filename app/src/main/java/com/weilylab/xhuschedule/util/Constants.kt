@@ -90,6 +90,7 @@ object Constants {
     const val ANIMATION_ROTATION = "rotation"
     const val ANIMATION_LEVEL = "level"
     const val ANIMATION_TRANSLATION_X = "translationX"
+    const val ANIMATION_TRANSLATION_Y = "translationY"
     const val ANIMATION_ALPHA = "alpha"
 
     const val SHARE_TARGET_URL = "https://www.coolapk.com/apk/com.weilylab.xhuschedule"

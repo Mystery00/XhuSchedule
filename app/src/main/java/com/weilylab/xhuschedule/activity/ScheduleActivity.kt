@@ -41,10 +41,7 @@ import android.support.design.widget.Snackbar
 import android.support.v4.content.ContextCompat
 import android.util.Base64
 import android.util.TypedValue
-import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuItem
-import android.view.View
+import android.view.*
 import android.widget.*
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
@@ -53,6 +50,7 @@ import com.bumptech.glide.signature.MediaStoreSignature
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.gson.Gson
 import com.weilylab.xhuschedule.R
+import com.weilylab.xhuschedule.adapter.CustomMaterialSpinnerAdapter
 import com.weilylab.xhuschedule.classes.baseClass.Course
 import com.weilylab.xhuschedule.classes.baseClass.Profile
 import com.weilylab.xhuschedule.classes.baseClass.Student
@@ -88,6 +86,7 @@ class ScheduleActivity : BaseActivity() {
     private var currentStudent: Student? = null
     private var year: String? = null
     private var term: Int? = null
+    private val dropMaxHeight = 999
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -366,23 +365,39 @@ class ScheduleActivity : BaseActivity() {
     }
 
     private fun initInfo() {
-        val studentArray = Array(studentList.size, { i -> studentList[i].username })
-        spinner_username.setItems(studentArray.toList())
-        spinner_term.setItems(1, 2, 3)
+        val studentShowList = Array(studentList.size, { i -> studentList[i].username }).toMutableList()
+        studentShowList.add(getString(R.string.hint_popup_view_student))
+        spinner_username.setAdapter(CustomMaterialSpinnerAdapter(this, studentShowList))
+        val yearShowList = arrayListOf(getString(R.string.hint_popup_view_year))
+        spinner_year.setAdapter(CustomMaterialSpinnerAdapter(this, yearShowList))
+        val termShowList = arrayListOf("1", "2", "3", getString(R.string.hint_popup_view_term))
+        spinner_term.setAdapter(CustomMaterialSpinnerAdapter(this, termShowList))
         spinner_username.setOnItemSelectedListener { _, _, _, username ->
+            spinner_username.setDropdownMaxHeight(dropMaxHeight)
+            spinner_year.setDropdownMaxHeight(dropMaxHeight)
+            spinner_term.setDropdownMaxHeight(dropMaxHeight)
             setUsername(username.toString(), true)
         }
         spinner_year.setOnItemSelectedListener { _, _, _, year ->
+            spinner_username.setDropdownMaxHeight(dropMaxHeight)
+            spinner_year.setDropdownMaxHeight(dropMaxHeight)
+            spinner_term.setDropdownMaxHeight(dropMaxHeight)
             this.year = year.toString()
             showCourses(currentStudent)
         }
         spinner_term.setOnItemSelectedListener { _, _, _, term ->
-            this.term = term as Int
+            spinner_username.setDropdownMaxHeight(dropMaxHeight)
+            spinner_year.setDropdownMaxHeight(dropMaxHeight)
+            spinner_term.setDropdownMaxHeight(dropMaxHeight)
+            this.term = Integer.parseInt(term.toString())
             showCourses(currentStudent)
         }
-        if (studentArray.size == 1) {
+        spinner_username.selectedIndex = studentShowList.size - 1
+        spinner_year.selectedIndex = 0
+        spinner_term.selectedIndex = termShowList.size - 1
+        if (studentList.size == 1) {
             spinner_username.selectedIndex = 0
-            setUsername(studentArray[0], true)
+            setUsername(studentShowList[0], true)
         }
     }
 
@@ -438,14 +453,19 @@ class ScheduleActivity : BaseActivity() {
                 .subscribe(object : Observer<Any> {
                     override fun onComplete() {
                         initDialog.dismiss()
-                        spinner_year.setItems(yearList)
+                        yearList.add(getString(R.string.hint_popup_view_year))
+                        spinner_year.setAdapter(CustomMaterialSpinnerAdapter(this@ScheduleActivity, yearList))
+                        spinner_year.selectedIndex = yearList.size - 1
                         if (isAutoSelect) {
                             val term = CalendarUtil.getTermType()
-                            spinner_year.selectedIndex = yearList.size - 1//自动选择最后一年
+                            spinner_year.selectedIndex = yearList.size - 2//自动选择最后一年
                             spinner_term.selectedIndex = term - 1//自动选择学期
-                            year = yearList[yearList.size - 1]
+                            year = yearList[yearList.size - 2]
                             this@ScheduleActivity.term = term
                         }
+                        spinner_username.setDropdownMaxHeight(dropMaxHeight)
+                        spinner_year.setDropdownMaxHeight(dropMaxHeight)
+                        spinner_term.setDropdownMaxHeight(dropMaxHeight)
                         showCourses(currentStudent)
                     }
 

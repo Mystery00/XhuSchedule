@@ -107,11 +107,11 @@ class MainActivity : BaseActivity() {
     private lateinit var updateProfileDialog: Dialog
     private lateinit var weekAdapter: WeekAdapter
     private lateinit var mainStudent: Student
+    private var weekAnimator: ObjectAnimator? = null
     private var arrowDrawable: Drawable? = null
     private var isTryRefreshData = false
     private var isRefreshData = false
     private var isWeekShow = false
-    private var isAnimShow = false
     private var isDataNew = false
     private var lastPressBack = 0L
     private var studentList = ArrayList<Student>()
@@ -624,20 +624,19 @@ class MainActivity : BaseActivity() {
     }
 
     private fun showWeekAnim(isShow: Boolean, isShowArrow: Boolean) {
-        if (isAnimShow)
-            return
         titleTextView.setCompoundDrawablesWithIntrinsicBounds(null, null, if (isShowArrow) arrowDrawable else null, null)
-        val animator = if (isShow)
-            ObjectAnimator.ofFloat(layout_week_recycler_view, "translationY", 0F, DensityUtil.dip2px(this, 56F).toFloat())
+        weekAnimator?.cancel()
+        weekAnimator = if (isShow)
+            ObjectAnimator.ofFloat(layout_week_recycler_view, Constants.ANIMATION_TRANSLATION_Y, 0F, DensityUtil.dip2px(this, 56F).toFloat())
         else
-            ObjectAnimator.ofFloat(layout_week_recycler_view, "translationY", DensityUtil.dip2px(this, 56F).toFloat(), 0F)
-        animator.addListener(object : Animator.AnimatorListener {
+            ObjectAnimator.ofFloat(layout_week_recycler_view, Constants.ANIMATION_TRANSLATION_Y, DensityUtil.dip2px(this, 56F).toFloat(), 0F)
+        weekAnimator?.addListener(object : Animator.AnimatorListener {
             override fun onAnimationRepeat(animation: Animator?) {
             }
 
             override fun onAnimationEnd(animation: Animator?) {
                 if (!isShow && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
-                    layout_week_recycler_view.elevation = 0F
+                    layout_week_recycler_view.elevation = 8F
             }
 
             override fun onAnimationCancel(animation: Animator?) {
@@ -645,10 +644,10 @@ class MainActivity : BaseActivity() {
 
             override fun onAnimationStart(animation: Animator?) {
                 if (isShow && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
-                    layout_week_recycler_view.elevation = 8F
+                    layout_week_recycler_view.elevation = 12F
             }
         })
-        animator.start()
+        weekAnimator?.start()
         val start = if (isShow) 0 else 10000
         val end = if (isShow) 10000 else 0
         ObjectAnimator.ofInt(arrowDrawable!!, Constants.ANIMATION_LEVEL, start, end).start()

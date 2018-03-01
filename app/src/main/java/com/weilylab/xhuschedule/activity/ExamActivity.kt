@@ -73,6 +73,7 @@ class ExamActivity : BaseActivity() {
     private lateinit var loadingDialog: ZLoadingDialog
     private val studentList = ArrayList<Student>()
     private val testList = ArrayList<Exam>()
+    private val dropMaxHeight = 999
     private var valueAnimator: ValueAnimator? = null
     private var currentIndex = -1
     private lateinit var pointDrawable: VectorDrawableCompat
@@ -119,10 +120,12 @@ class ExamActivity : BaseActivity() {
         studentShowList.add(getString(R.string.hint_popup_view_student))
         spinner_username.setAdapter(CustomMaterialSpinnerAdapter(this, studentShowList))
         spinner_username.setOnItemSelectedListener { _, _, _, username ->
+            spinner_username.setDropdownMaxHeight(dropMaxHeight)
             setUsername(username.toString())
         }
         spinner_username.selectedIndex = studentShowList.size - 1
         if (studentList.size == 1) {
+            spinner_username.selectedIndex = 0
             setUsername(studentShowList[0])
         }
     }
@@ -154,44 +157,43 @@ class ExamActivity : BaseActivity() {
                         loadingDialog.dismiss()
                         currentIndex = -1
                         linearLayout.removeAllViews()
-                        for (i in testList.indices) {
-                            val exam = testList[i]
-                            val itemView = ViewUtil.buildExamItem(this@ExamActivity, exam, pointDrawable)
-                            val imageView: ImageView = itemView.findViewById(R.id.imageView)
-                            val detailsTextView: TextView = itemView.findViewById(R.id.textView_details)
-                            itemView.setOnClickListener {
-                                Logs.i(TAG, "onBindViewHolder: 点击事件")
-                                valueAnimator?.cancel()
-                                //带动画的展开收缩
-                                when (currentIndex) {
-                                    -1 -> {
-                                        Logs.i(TAG, "onBindViewHolder: 没有条目被选中")
-                                        valueAnimator = TextViewUtils.setMaxLinesWithAnimation(detailsTextView, Int.MAX_VALUE)
-                                        ObjectAnimator.ofFloat(imageView, Constants.ANIMATION_ALPHA, 0F, 1F).start()
-                                        currentIndex = i
-                                    }
-                                    i -> {
-                                        Logs.i(TAG, "onBindViewHolder: 选中的是当前条目")
-                                        valueAnimator = TextViewUtils.setMaxLinesWithAnimation(detailsTextView, 1)
-                                        ObjectAnimator.ofFloat(imageView, Constants.ANIMATION_ALPHA, 1F, 0F).start()
-                                        currentIndex = -1
-                                    }
-                                    else -> {
-                                        Logs.i(TAG, "onBindViewHolder: 选中的其他条目")
-                                        val openedView = linearLayout.getChildAt(currentIndex)
-                                        val openedImageView: ImageView = openedView.findViewById(R.id.imageView)
-                                        val openedDetailsTextView: TextView = openedView.findViewById(R.id.textView_details)
-                                        valueAnimator = TextViewUtils.setMaxLinesWithAnimation(openedDetailsTextView, 1)
-                                        ObjectAnimator.ofFloat(openedImageView, Constants.ANIMATION_ALPHA, 1F, 0F).start()
+                        if (testList.size == 0)
+                            linearLayout.addView(ViewUtil.buildNoDataView(this@ExamActivity, getString(R.string.hint_data_empty)))
+                        else
+                            for (i in testList.indices) {
+                                val exam = testList[i]
+                                val itemView = ViewUtil.buildExamItem(this@ExamActivity, exam, pointDrawable)
+                                val imageView: ImageView = itemView.findViewById(R.id.imageView)
+                                val detailsTextView: TextView = itemView.findViewById(R.id.textView_details)
+                                itemView.setOnClickListener {
+                                    valueAnimator?.cancel()
+                                    //带动画的展开收缩
+                                    when (currentIndex) {
+                                        -1 -> {
+                                            valueAnimator = TextViewUtils.setMaxLinesWithAnimation(detailsTextView, Int.MAX_VALUE)
+                                            ObjectAnimator.ofFloat(imageView, Constants.ANIMATION_ALPHA, 0F, 1F).start()
+                                            currentIndex = i
+                                        }
+                                        i -> {
+                                            valueAnimator = TextViewUtils.setMaxLinesWithAnimation(detailsTextView, 1)
+                                            ObjectAnimator.ofFloat(imageView, Constants.ANIMATION_ALPHA, 1F, 0F).start()
+                                            currentIndex = -1
+                                        }
+                                        else -> {
+                                            val openedView = linearLayout.getChildAt(currentIndex)
+                                            val openedImageView: ImageView = openedView.findViewById(R.id.imageView)
+                                            val openedDetailsTextView: TextView = openedView.findViewById(R.id.textView_details)
+                                            valueAnimator = TextViewUtils.setMaxLinesWithAnimation(openedDetailsTextView, 1)
+                                            ObjectAnimator.ofFloat(openedImageView, Constants.ANIMATION_ALPHA, 1F, 0F).start()
 
-                                        valueAnimator = TextViewUtils.setMaxLinesWithAnimation(detailsTextView, Int.MAX_VALUE)
-                                        ObjectAnimator.ofFloat(imageView, Constants.ANIMATION_ALPHA, 0F, 1F).start()
-                                        currentIndex = i
+                                            valueAnimator = TextViewUtils.setMaxLinesWithAnimation(detailsTextView, Int.MAX_VALUE)
+                                            ObjectAnimator.ofFloat(imageView, Constants.ANIMATION_ALPHA, 0F, 1F).start()
+                                            currentIndex = i
+                                        }
                                     }
                                 }
+                                linearLayout.addView(itemView)
                             }
-                            linearLayout.addView(itemView)
-                        }
 
                         val parentFile = XhuFileUtil.getExamParentFile(this@ExamActivity)
                         if (!parentFile.exists())

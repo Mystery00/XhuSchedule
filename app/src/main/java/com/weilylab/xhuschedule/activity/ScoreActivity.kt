@@ -33,26 +33,29 @@
 
 package com.weilylab.xhuschedule.activity
 
+import android.animation.ObjectAnimator
+import android.animation.ValueAnimator
 import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.Snackbar
+import android.support.graphics.drawable.VectorDrawableCompat
 import android.support.v4.content.ContextCompat
-import android.support.v7.widget.LinearLayoutManager
 import android.util.Base64
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.ImageView
+import android.widget.TextView
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.weilylab.xhuschedule.R
-import com.weilylab.xhuschedule.adapter.ScoreAdapter
+import com.weilylab.xhuschedule.adapter.CustomMaterialSpinnerAdapter
 import com.weilylab.xhuschedule.classes.baseClass.Profile
 import com.weilylab.xhuschedule.classes.baseClass.Score
 import com.weilylab.xhuschedule.classes.baseClass.Student
 import com.weilylab.xhuschedule.listener.GetScoreListener
 import com.weilylab.xhuschedule.listener.ProfileListener
-import com.weilylab.xhuschedule.util.CalendarUtil
-import com.weilylab.xhuschedule.util.Settings
-import com.weilylab.xhuschedule.util.XhuFileUtil
+import com.weilylab.xhuschedule.util.*
+import com.weilylab.xhuschedule.view.TextViewUtils
 import com.zyao89.view.zloading.ZLoadingDialog
 import com.zyao89.view.zloading.Z_TYPE
 import io.reactivex.Observable
@@ -75,8 +78,12 @@ class ScoreActivity : BaseActivity() {
     private lateinit var loadingDialog: Dialog
     private val studentList = ArrayList<Student>()
     private val scoreList = ArrayList<Score>()
-    private lateinit var adapter: ScoreAdapter
+    private val failedList = ArrayList<Score>()
+    private val dropMaxHeight = 999
+    private var valueAnimator: ValueAnimator? = null
     private var currentStudent: Student? = null
+    private var currentIndex = -1
+    private lateinit var pointDrawable: VectorDrawableCompat
     private var year: String? = null
     private var term: Int? = null
 
@@ -85,6 +92,9 @@ class ScoreActivity : BaseActivity() {
         val params = Bundle()
         params.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "cetScore")
         mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, params)
+        pointDrawable = VectorDrawableCompat.create(resources, R.drawable.ic_point, null)!!
+        pointDrawable.setBounds(0, 0, pointDrawable.minimumWidth, pointDrawable.minimumHeight)
+        pointDrawable.setTint(ContextCompat.getColor(this, R.color.colorAccent))
         setContentView(R.layout.activity_score)
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -108,11 +118,8 @@ class ScoreActivity : BaseActivity() {
                 .setLoadingColor(ContextCompat.getColor(this, R.color.colorAccent))
                 .setHintTextColor(ContextCompat.getColor(this, R.color.colorAccent))
                 .create()
-        adapter = ScoreAdapter(this, scoreList)
-        recycler_view.layoutManager = LinearLayoutManager(this)
-        recycler_view.adapter = adapter
         studentList.clear()
-        studentList.addAll(XhuFileUtil.getArrayFromFile(File(filesDir.absolutePath + File.separator + "data" + File.separator + "user"), Student::class.java))
+        studentList.addAll(XhuFileUtil.getArrayFromFile(XhuFileUtil.getStudentListFile(this), Student::class.java))
         initInfo()
         floatingActionButton.setOnClickListener {
             getScores(currentStudent, year, term)
@@ -143,7 +150,6 @@ class ScoreActivity : BaseActivity() {
                     }
 
                     override fun onComplete() {
-                        adapter.notifyDataSetChanged()
                         if (scoreList.size == 0 && Settings.isAutoSelect)
                             getScores(currentStudent, year, term)
                     }
@@ -156,34 +162,101 @@ class ScoreActivity : BaseActivity() {
 
     private fun getScores(student: Student?, year: String?, term: Int?) {
         Logs.i(TAG, "getScore: year: $year term: $term")
-        if (student == null)
-            return
         loadingDialog.show()
-        student.getScores(year, term, object : GetScoreListener {
-            override fun got(array: Array<Score>, failedArray: Array<Score>) {
-                scoreList.clear()
-                scoreList.addAll(array)
-                adapter.notifyDataSetChanged()
-                val parentFile = XhuFileUtil.getScoreParentFile(this@ScoreActivity)
-                if (!parentFile.exists())
-                    parentFile.mkdirs()
-                val base64Name = XhuFileUtil.filterString(Base64.encodeToString(student.username.toByteArray(), Base64.DEFAULT))
-                val savedFile = File(parentFile, "$base64Name-$year-$term")
-                val savedFailedFile = File(parentFile, "$base64Name-$year-$term-failed")
-                savedFile.createNewFile()
-                savedFailedFile.createNewFile()
-                XhuFileUtil.saveObjectToFile(scoreList, savedFile)
-                XhuFileUtil.saveObjectToFile(failedArray.toList(), savedFailedFile)
-                loadingDialog.dismiss()
+        Observable.create<Any> {
+            if (student == null) {
+                it.onComplete()
+                return@create
             }
+            student.getScores(year, term, object : GetScoreListener {
+                override fun error(rt: Int, e: Throwable) {
+                    it.onError(e)
+                }
 
-            override fun error(rt: Int, e: Throwable) {
-                loadingDialog.dismiss()
-                e.printStackTrace()
-                Snackbar.make(coordinatorLayout, e.message!!, Snackbar.LENGTH_SHORT)
-                        .show()
-            }
-        })
+                override fun got(array: Array<Score>, failedArray: Array<Score>) {
+                    scoreList.clear()
+                    scoreList.addAll(array)
+                    failedList.clear()
+                    failedList.addAll(failedArray)
+                    it.onComplete()
+                }
+            })
+        }
+                .subscribeOn(Schedulers.newThread())
+                .unsubscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(object : Observer<Any> {
+                    override fun onComplete() {
+                        loadingDialog.dismiss()
+                        if (student == null)
+                            return
+
+                        currentIndex = -1
+                        linearLayout.removeAllViews()
+                        if (scoreList.size == 0)
+                            linearLayout.addView(ViewUtil.buildNoDataView(this@ScoreActivity, getString(R.string.hint_data_empty)))
+                        else
+                            for (i in scoreList.indices) {
+                                val score = scoreList[i]
+                                val itemView = ViewUtil.buildScoreItem(this@ScoreActivity, score, pointDrawable)
+                                val imageView: ImageView = itemView.findViewById(R.id.imageView)
+                                val detailsTextView: TextView = itemView.findViewById(R.id.textView_details)
+                                itemView.setOnClickListener {
+                                    valueAnimator?.cancel()
+                                    //带动画的展开收缩
+                                    when (currentIndex) {
+                                        -1 -> {
+                                            valueAnimator = TextViewUtils.setMaxLinesWithAnimation(detailsTextView, Int.MAX_VALUE)
+                                            ObjectAnimator.ofFloat(imageView, Constants.ANIMATION_ALPHA, 0F, 1F).start()
+                                            currentIndex = i
+                                        }
+                                        i -> {
+                                            valueAnimator = TextViewUtils.setMaxLinesWithAnimation(detailsTextView, 1)
+                                            ObjectAnimator.ofFloat(imageView, Constants.ANIMATION_ALPHA, 1F, 0F).start()
+                                            currentIndex = -1
+                                        }
+                                        else -> {
+                                            val openedView = linearLayout.getChildAt(currentIndex)
+                                            val openedImageView: ImageView = openedView.findViewById(R.id.imageView)
+                                            val openedDetailsTextView: TextView = openedView.findViewById(R.id.textView_details)
+                                            valueAnimator = TextViewUtils.setMaxLinesWithAnimation(openedDetailsTextView, 1)
+                                            ObjectAnimator.ofFloat(openedImageView, Constants.ANIMATION_ALPHA, 1F, 0F).start()
+
+                                            valueAnimator = TextViewUtils.setMaxLinesWithAnimation(detailsTextView, Int.MAX_VALUE)
+                                            ObjectAnimator.ofFloat(imageView, Constants.ANIMATION_ALPHA, 0F, 1F).start()
+                                            currentIndex = i
+                                        }
+                                    }
+                                }
+                                linearLayout.addView(itemView)
+                            }
+
+                        val parentFile = XhuFileUtil.getScoreParentFile(this@ScoreActivity)
+                        if (!parentFile.exists())
+                            parentFile.mkdirs()
+                        val base64Name = XhuFileUtil.filterString(Base64.encodeToString(student.username.toByteArray(), Base64.DEFAULT))
+                        val savedFile = File(parentFile, "$base64Name-$year-$term")
+                        val savedFailedFile = File(parentFile, "$base64Name-$year-$term-failed")
+                        savedFile.createNewFile()
+                        savedFailedFile.createNewFile()
+                        XhuFileUtil.saveObjectToFile(scoreList, savedFile)
+                        XhuFileUtil.saveObjectToFile(failedList, savedFailedFile)
+                    }
+
+                    override fun onSubscribe(d: Disposable) {
+                        loadingDialog.show()
+                    }
+
+                    override fun onNext(t: Any) {
+                    }
+
+                    override fun onError(e: Throwable) {
+                        loadingDialog.dismiss()
+                        Logs.wtf(TAG, "onError: ", e)
+                        Snackbar.make(coordinatorLayout, e.message.toString(), Snackbar.LENGTH_SHORT)
+                                .show()
+                    }
+                })
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -219,23 +292,39 @@ class ScoreActivity : BaseActivity() {
     }
 
     private fun initInfo() {
-        val studentArray = Array(studentList.size, { i -> studentList[i].username })
-        spinner_username.setItems(studentArray.toList())
-        spinner_term.setItems(1, 2, 3)
+        val studentShowList = Array(studentList.size, { i -> studentList[i].username }).toMutableList()
+        studentShowList.add(getString(R.string.hint_popup_view_student))
+        spinner_username.setAdapter(CustomMaterialSpinnerAdapter(this, studentShowList))
+        val yearShowList = arrayListOf(getString(R.string.hint_popup_view_year))
+        spinner_year.setAdapter(CustomMaterialSpinnerAdapter(this, yearShowList))
+        val termShowList = arrayListOf("1", "2", "3", getString(R.string.hint_popup_view_term))
+        spinner_term.setAdapter(CustomMaterialSpinnerAdapter(this, termShowList))
         spinner_username.setOnItemSelectedListener { _, _, _, username ->
+            spinner_username.setDropdownMaxHeight(dropMaxHeight)
+            spinner_year.setDropdownMaxHeight(dropMaxHeight)
+            spinner_term.setDropdownMaxHeight(dropMaxHeight)
             setUsername(username.toString(), true)
         }
         spinner_year.setOnItemSelectedListener { _, _, _, year ->
+            spinner_username.setDropdownMaxHeight(dropMaxHeight)
+            spinner_year.setDropdownMaxHeight(dropMaxHeight)
+            spinner_term.setDropdownMaxHeight(dropMaxHeight)
             this.year = year.toString()
             initScores(currentStudent)
         }
         spinner_term.setOnItemSelectedListener { _, _, _, term ->
-            this.term = term as Int
+            spinner_username.setDropdownMaxHeight(dropMaxHeight)
+            spinner_year.setDropdownMaxHeight(dropMaxHeight)
+            spinner_term.setDropdownMaxHeight(dropMaxHeight)
+            this.term = Integer.parseInt(term.toString())
             initScores(currentStudent)
         }
-        if (studentArray.size == 1) {
+        spinner_username.selectedIndex = studentShowList.size - 1
+        spinner_year.selectedIndex = 0
+        spinner_term.selectedIndex = termShowList.size - 1
+        if (studentList.size == 1) {
             spinner_username.selectedIndex = 0
-            setUsername(studentArray[0], true)
+            setUsername(studentShowList[0], true)
         }
     }
 
@@ -291,14 +380,19 @@ class ScoreActivity : BaseActivity() {
                 .subscribe(object : Observer<Any> {
                     override fun onComplete() {
                         initDialog.dismiss()
-                        spinner_year.setItems(yearList)
+                        yearList.add(getString(R.string.hint_popup_view_year))
+                        spinner_year.setAdapter(CustomMaterialSpinnerAdapter(this@ScoreActivity, yearList))
+                        spinner_year.selectedIndex = yearList.size - 1
                         if (isAutoSelect) {
                             val term = CalendarUtil.getTermType()
-                            spinner_year.selectedIndex = yearList.size - 1//自动选择最后一年
+                            spinner_year.selectedIndex = yearList.size - 2//自动选择最后一年
                             spinner_term.selectedIndex = term - 1//自动选择学期
-                            year = yearList[yearList.size - 1]
+                            year = yearList[yearList.size - 2]
                             this@ScoreActivity.term = term
                         }
+                        spinner_username.setDropdownMaxHeight(dropMaxHeight)
+                        spinner_year.setDropdownMaxHeight(dropMaxHeight)
+                        spinner_term.setDropdownMaxHeight(dropMaxHeight)
                         initScores(currentStudent)
                     }
 

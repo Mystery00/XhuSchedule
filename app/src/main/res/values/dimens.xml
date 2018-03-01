@@ -57,7 +57,7 @@
     <dimen name="operation_margin">16dp</dimen>
     <dimen name="exam_padding">16dp</dimen>
     <dimen name="popup_view_margin">4dp</dimen>
-    <dimen name="material_margin">16dp</dimen>
+    <dimen name="material_margin">12dp</dimen>
     <dimen name="dialog_share_text_margin">16dp</dimen>
 
     <dimen name="widget_margin">8dp</dimen>

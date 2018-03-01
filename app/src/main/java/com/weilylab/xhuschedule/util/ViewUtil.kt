@@ -52,6 +52,8 @@ import android.support.graphics.drawable.VectorDrawableCompat
 import android.view.LayoutInflater
 import android.widget.*
 import com.weilylab.xhuschedule.classes.baseClass.Exam
+import com.weilylab.xhuschedule.classes.baseClass.ExpScore
+import com.weilylab.xhuschedule.classes.baseClass.Score
 
 
 /**
@@ -131,6 +133,13 @@ object ViewUtil {
         return bitmap
     }
 
+    fun buildNoDataView(context: Context, message: String): View {
+        val itemView = LayoutInflater.from(context).inflate(R.layout.item_data_empty, ConstraintLayout(context), false)
+        val textView: TextView = itemView.findViewById(R.id.textView)
+        textView.text = message
+        return itemView
+    }
+
     fun buildExamItem(context: Context, exam: Exam, pointDrawable: VectorDrawableCompat): View {
         val itemView = LayoutInflater.from(context).inflate(R.layout.item_exam, ConstraintLayout(context), false)
         val imageView: ImageView = itemView.findViewById(R.id.imageView)
@@ -148,6 +157,44 @@ object ViewUtil {
                 context.getString(R.string.exam_time, exam.time) + "\n\n" +
                 context.getString(R.string.exam_testtype, exam.testtype) + "\n\n" +
                 context.getString(R.string.exam_region, exam.region)
+        detailsTextView.text = text
+        imageView.setImageDrawable(pointDrawable)
+        imageView.alpha = 0F
+        return itemView
+    }
+
+    fun buildScoreItem(context: Context, score: Score, pointDrawable: VectorDrawableCompat): View {
+        val itemView = LayoutInflater.from(context).inflate(R.layout.item_score, ConstraintLayout(context), false)
+        val imageView: ImageView = itemView.findViewById(R.id.imageView)
+        val scoreNameTextView: TextView = itemView.findViewById(R.id.textView_score_name)
+        val scoreScoreTextView: TextView = itemView.findViewById(R.id.textView_score_score)
+        val detailsTextView: TextView = itemView.findViewById(R.id.textView_details)
+
+        scoreNameTextView.text = score.name
+        scoreScoreTextView.text = score.score
+        val text = "\n" + context.getString(R.string.score_no, score.no) + "\n\n" +
+                context.getString(R.string.score_coursetype, score.coursetype) + "\n\n" +
+                context.getString(R.string.score_credit, score.credit) + "\n\n" +
+                context.getString(R.string.score_gpa, score.gpa)
+        detailsTextView.text = text
+        imageView.setImageDrawable(pointDrawable)
+        imageView.alpha = 0F
+        return itemView
+    }
+
+    fun buildExpScoreItem(context: Context, score: ExpScore, pointDrawable: VectorDrawableCompat): View {
+        val itemView = LayoutInflater.from(context).inflate(R.layout.item_score, ConstraintLayout(context), false)
+        val imageView: ImageView = itemView.findViewById(R.id.imageView)
+        val scoreNameTextView: TextView = itemView.findViewById(R.id.textView_score_name)
+        val scoreScoreTextView: TextView = itemView.findViewById(R.id.textView_score_score)
+        val detailsTextView: TextView = itemView.findViewById(R.id.textView_details)
+
+        scoreNameTextView.text = score.name
+        scoreScoreTextView.text = score.score
+        val text = "\n" + context.getString(R.string.score_no, score.no) + "\n\n" +
+                context.getString(R.string.expscore_exptype, score.exptype) + "\n\n" +
+                context.getString(R.string.score_credit, score.credit) + "\n\n" +
+                context.getString(R.string.expscore_coursename, score.coursename)
         detailsTextView.text = text
         imageView.setImageDrawable(pointDrawable)
         imageView.alpha = 0F
