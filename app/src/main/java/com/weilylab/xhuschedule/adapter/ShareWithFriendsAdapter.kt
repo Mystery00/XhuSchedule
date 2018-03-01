@@ -36,6 +36,7 @@ package com.weilylab.xhuschedule.adapter
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.support.v7.widget.RecyclerView
@@ -58,6 +59,7 @@ import com.weilylab.xhuschedule.APP
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.activity.MainActivity
 import com.weilylab.xhuschedule.util.Constants
+import com.weilylab.xhuschedule.util.XhuFileUtil
 
 class ShareWithFriendsAdapter(private val context: Context) : RecyclerView.Adapter<ShareWithFriendsAdapter.ViewHolder>() {
     private val list = ArrayList<HashMap<String, Int>>()
@@ -137,10 +139,16 @@ class ShareWithFriendsAdapter(private val context: Context) : RecyclerView.Adapt
                 3 -> {//分享到微信
                     val wxAPI = (context as MainActivity).wxAPI
                     if (wxAPI.isWXAppInstalled) {
+                        val bitmap = BitmapFactory.decodeResource(context.resources, R.mipmap.ic_launcher)
+                        val wxImageObject = WXImageObject(bitmap)
+
                         val wxMediaMessage = WXMediaMessage()
-                        val wxImageObject = WXImageObject(BitmapFactory.decodeResource(context.resources, R.mipmap.ic_launcher))
                         wxMediaMessage.mediaObject = wxImageObject
                         wxMediaMessage.description = context.getString(R.string.hint_share_message)
+                        val thumbBmp = Bitmap.createScaledBitmap(bitmap, 100, 100, true)
+                        bitmap.recycle()
+                        wxMediaMessage.thumbData = XhuFileUtil.bmpToByteArray(thumbBmp, true)
+
                         val request = SendMessageToWX.Req()
                         request.transaction = "ShareWithWeiXin${System.currentTimeMillis()}"
                         request.message = wxMediaMessage
@@ -154,10 +162,16 @@ class ShareWithFriendsAdapter(private val context: Context) : RecyclerView.Adapt
                 4 -> {//分享到朋友圈
                     val wxAPI = (context as MainActivity).wxAPI
                     if (wxAPI.isWXAppInstalled) {
+                        val bitmap = BitmapFactory.decodeResource(context.resources, R.mipmap.ic_launcher)
+                        val wxImageObject = WXImageObject(bitmap)
+
                         val wxMediaMessage = WXMediaMessage()
-                        val wxImageObject = WXImageObject(BitmapFactory.decodeResource(context.resources, R.mipmap.ic_launcher))
                         wxMediaMessage.mediaObject = wxImageObject
                         wxMediaMessage.description = context.getString(R.string.hint_share_message)
+                        val thumbBmp = Bitmap.createScaledBitmap(bitmap, 100, 100, true)
+                        bitmap.recycle()
+                        wxMediaMessage.thumbData = XhuFileUtil.bmpToByteArray(thumbBmp, true)
+
                         val req = SendMessageToWX.Req()
                         req.transaction = "ShareWithFriends${System.currentTimeMillis()}"
                         req.message = wxMediaMessage

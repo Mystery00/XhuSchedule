@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Created by Mystery0 on 17-12-21 上午3:41.
   ~ Copyright (c) 2017. All Rights reserved.
   ~
@@ -8,9 +7,12 @@
 
 <paths>
     <external-files-path
-        name="external"
-        path="/"/>
+        name="externalFiles"
+        path="/" />
     <files-path
         name="crop"
-        path="CropImg"/>
+        path="CropImg" />
+    <external-path
+        name="external"
+        path="/" />
 </paths>

@@ -55,7 +55,6 @@ import com.getkeepsafe.taptargetview.TapTarget
 import com.getkeepsafe.taptargetview.TapTargetSequence
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.gson.Gson
-import com.oasisfeng.condom.CondomContext
 import com.sina.weibo.sdk.api.share.IWeiboShareAPI
 import com.sina.weibo.sdk.api.share.WeiboShareSDK
 import com.tencent.mm.opensdk.openapi.IWXAPI
@@ -103,6 +102,7 @@ class MainActivity : BaseActivity() {
         private const val ANIMATION_DURATION = 480L
     }
 
+    val permissionWriteExternalCode = 20
     private lateinit var loadingDialog: Dialog
     private lateinit var updateProfileDialog: Dialog
     private lateinit var weekAdapter: WeekAdapter
@@ -774,7 +774,7 @@ class MainActivity : BaseActivity() {
         // 通过WXAPIFactory工厂，获取IWXAPI的实例
         wxAPI = WXAPIFactory.createWXAPI(this, Constants.WEIXIN_API_KEY, false)
         // 将该app注册到微信
-        wxAPI.registerApp(Constants.WEIXIN_API_KEY)
+//        wxAPI.registerApp(Constants.WEIXIN_API_KEY)
     }
 
     override fun onNewIntent(intent: Intent?) {
