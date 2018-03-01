@@ -53,8 +53,8 @@ import com.sina.weibo.sdk.api.WeiboMultiMessage
 import com.sina.weibo.sdk.api.share.SendMultiMessageToWeiboRequest
 import com.tencent.connect.share.QQShare
 import com.tencent.mm.opensdk.modelmsg.SendMessageToWX
-import com.tencent.mm.opensdk.modelmsg.WXImageObject
 import com.tencent.mm.opensdk.modelmsg.WXMediaMessage
+import com.tencent.mm.opensdk.modelmsg.WXWebpageObject
 import com.weilylab.xhuschedule.APP
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.activity.MainActivity
@@ -140,10 +140,11 @@ class ShareWithFriendsAdapter(private val context: Context) : RecyclerView.Adapt
                     val wxAPI = (context as MainActivity).wxAPI
                     if (wxAPI.isWXAppInstalled) {
                         val bitmap = BitmapFactory.decodeResource(context.resources, R.mipmap.share_launcher)
-                        val wxImageObject = WXImageObject(bitmap)
+                        val wxWebpageObject=WXWebpageObject()
+                        wxWebpageObject.webpageUrl=Constants.SHARE_TARGET_URL
 
-                        val wxMediaMessage = WXMediaMessage()
-                        wxMediaMessage.mediaObject = wxImageObject
+                        val wxMediaMessage = WXMediaMessage(wxWebpageObject)
+                        wxMediaMessage.title = context.getString(R.string.app_name)
                         wxMediaMessage.description = context.getString(R.string.hint_share_message)
                         val thumbBmp = Bitmap.createScaledBitmap(bitmap, 100, 100, true)
                         bitmap.recycle()
@@ -163,10 +164,11 @@ class ShareWithFriendsAdapter(private val context: Context) : RecyclerView.Adapt
                     val wxAPI = (context as MainActivity).wxAPI
                     if (wxAPI.isWXAppInstalled) {
                         val bitmap = BitmapFactory.decodeResource(context.resources, R.mipmap.share_launcher)
-                        val wxImageObject = WXImageObject(bitmap)
+                        val wxWebpageObject=WXWebpageObject()
+                        wxWebpageObject.webpageUrl=Constants.SHARE_TARGET_URL
 
-                        val wxMediaMessage = WXMediaMessage()
-                        wxMediaMessage.mediaObject = wxImageObject
+                        val wxMediaMessage = WXMediaMessage(wxWebpageObject)
+                        wxMediaMessage.title = context.getString(R.string.app_name)
                         wxMediaMessage.description = context.getString(R.string.hint_share_message)
                         val thumbBmp = Bitmap.createScaledBitmap(bitmap, 100, 100, true)
                         bitmap.recycle()

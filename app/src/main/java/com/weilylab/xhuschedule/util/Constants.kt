@@ -38,6 +38,10 @@ object Constants {
     const val WEIBO_API_KEY = "2170085314"
     const val WEIXIN_API_KEY = "wx41799887957cbba8"
 
+    const val WEIXIN_PACKAGE_NAME ="com.tencent.mm"
+    const val WEIXIN_FRIEND_ACTION="com.tencent.mm.ui.tools.ShareImgUI"
+    const val WEIXIN_TIMELINE_ACTION="com.tencent.mm.ui.tools.ShareToTimeLineUI"
+
     const val NOTICE_PLATFORM = "Android"
 
     const val FILE_NAME_IMG_BACKGROUND = "background"

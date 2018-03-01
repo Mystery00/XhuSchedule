@@ -357,4 +357,24 @@ object XhuFileUtil {
         for (resolveInfo in list)
             context.grantUriPermission(resolveInfo.activityInfo.packageName, uri, Intent.FLAG_GRANT_READ_URI_PERMISSION)
     }
+
+    /**
+     * 检查对应包名的APP是否安装
+     *
+     * @param context Context
+     * @param packageName 包名
+     *
+     * @return 结果
+     */
+    fun checkAPPInstall(context: Context, packageName: String): Boolean {
+        val packageManager = context.packageManager
+        try {
+            val packageInfo = packageManager.getPackageInfo(packageName, PackageManager.COMPONENT_ENABLED_STATE_DEFAULT)
+            if (packageInfo != null)
+                return true
+        } catch (e: PackageManager.NameNotFoundException) {
+            e.printStackTrace()
+        }
+        return false
+    }
 }

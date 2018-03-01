@@ -155,7 +155,7 @@ class ScoreActivity : BaseActivity() {
     }
 
     private fun getScores(student: Student?, year: String?, term: Int?) {
-        Logs.i(TAG, "getCetScore: year: $year term: $term")
+        Logs.i(TAG, "getScore: year: $year term: $term")
         if (student == null)
             return
         loadingDialog.show()

@@ -774,7 +774,7 @@ class MainActivity : BaseActivity() {
         // 通过WXAPIFactory工厂，获取IWXAPI的实例
         wxAPI = WXAPIFactory.createWXAPI(this, Constants.WEIXIN_API_KEY, false)
         // 将该app注册到微信
-//        wxAPI.registerApp(Constants.WEIXIN_API_KEY)
+        wxAPI.registerApp(Constants.WEIXIN_API_KEY)
     }
 
     override fun onNewIntent(intent: Intent?) {

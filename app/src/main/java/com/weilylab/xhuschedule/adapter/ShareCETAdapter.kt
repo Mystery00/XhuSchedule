@@ -57,6 +57,7 @@ import com.tencent.connect.share.QQShare
 import com.weilylab.xhuschedule.APP
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.activity.MainActivity
+import com.weilylab.xhuschedule.util.Constants
 import com.weilylab.xhuschedule.util.XhuFileUtil
 
 class ShareCETAdapter(private val context: Context) : RecyclerView.Adapter<ShareCETAdapter.ViewHolder>() {
@@ -127,72 +128,40 @@ class ShareCETAdapter(private val context: Context) : RecyclerView.Adapter<Share
                     }
                 }
                 3 -> {//分享到微信
-                    val uri = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
-                        FileProvider.getUriForFile(context, context.getString(R.string.uri_authority), XhuFileUtil.getCETImageFile(fileName))
-                    else
-                        Uri.fromFile(XhuFileUtil.getCETImageFile(fileName))
-                    val shareIntent = Intent(Intent.ACTION_SEND)
-                    val componentName = ComponentName("com.tencent.mm", "com.tencent.mm.ui.tools.ShareImgUI")
-                    shareIntent.putExtra(Intent.EXTRA_STREAM, uri)
-                    shareIntent.component = componentName
-                    shareIntent.type = "image/*"
-                    XhuFileUtil.grantUriPermission(context, shareIntent, uri)
-                    //设置分享列表的标题，并且每次都显示分享列表
-                    context.startActivity(Intent.createChooser(shareIntent, "分享到"))
-//                    val wxAPI = (context as MainActivity).wxAPI
-//                    if (wxAPI.isWXAppInstalled) {
-//                        val shareBitmap = BitmapFactory.decodeFile(XhuFileUtil.getCETImageFile(fileName).absolutePath)
-//                        val wxImageObject = WXImageObject(shareBitmap)
-//
-//                        val wxMediaMessage = WXMediaMessage()
-//                        wxMediaMessage.mediaObject = wxImageObject
-//                        val thumbBmp = Bitmap.createScaledBitmap(shareBitmap, 100, 100, true)
-//                        shareBitmap.recycle()
-//                        wxMediaMessage.thumbData = XhuFileUtil.bmpToByteArray(thumbBmp, true)
-//
-//                        val request = SendMessageToWX.Req()
-//                        request.transaction = "img${System.currentTimeMillis()}"
-//                        request.message = wxMediaMessage
-//                        request.scene = SendMessageToWX.Req.WXSceneSession
-//                        wxAPI.sendReq(request)
-//                    } else {
-//                        Toast.makeText(context, R.string.hint_no_weixin, Toast.LENGTH_SHORT)
-//                                .show()
-//                    }
+                    if (XhuFileUtil.checkAPPInstall(context, Constants.WEIXIN_PACKAGE_NAME)) {
+                        val uri = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+                            FileProvider.getUriForFile(context, context.getString(R.string.uri_authority), XhuFileUtil.getCETImageFile(fileName))
+                        else
+                            Uri.fromFile(XhuFileUtil.getCETImageFile(fileName))
+                        val shareIntent = Intent(Intent.ACTION_SEND)
+                        val componentName = ComponentName(Constants.WEIXIN_PACKAGE_NAME, Constants.WEIXIN_FRIEND_ACTION)
+                        shareIntent.putExtra(Intent.EXTRA_STREAM, uri)
+                        shareIntent.component = componentName
+                        shareIntent.type = "image/*"
+                        XhuFileUtil.grantUriPermission(context, shareIntent, uri)
+                        //设置分享列表的标题，并且每次都显示分享列表
+                        context.startActivity(Intent.createChooser(shareIntent, "分享到"))
+                    } else
+                        Toast.makeText(context, R.string.hint_no_weixin, Toast.LENGTH_SHORT)
+                                .show()
                 }
                 4 -> {//分享到朋友圈
-                    val uri = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
-                        FileProvider.getUriForFile(context, context.getString(R.string.uri_authority), XhuFileUtil.getCETImageFile(fileName))
-                    else
-                        Uri.fromFile(XhuFileUtil.getCETImageFile(fileName))
-                    val shareIntent = Intent(Intent.ACTION_SEND)
-                    val componentName = ComponentName("com.tencent.mm", "com.tencent.mm.ui.tools.ShareToTimeLineUI")
-                    shareIntent.putExtra(Intent.EXTRA_STREAM, uri)
-                    shareIntent.component = componentName
-                    shareIntent.type = "image/*"
-                    XhuFileUtil.grantUriPermission(context, shareIntent, uri)
-                    //设置分享列表的标题，并且每次都显示分享列表
-                    context.startActivity(Intent.createChooser(shareIntent, "分享到"))
-//                    val wxAPI = (context as MainActivity).wxAPI
-//                    if (wxAPI.isWXAppInstalled) {
-//                        val shareBitmap = BitmapFactory.decodeFile(XhuFileUtil.getCETImageFile(fileName).absolutePath)
-//                        val wxImageObject = WXImageObject(shareBitmap)
-//
-//                        val wxMediaMessage = WXMediaMessage()
-//                        wxMediaMessage.mediaObject = wxImageObject
-//                        val thumbBmp = Bitmap.createScaledBitmap(shareBitmap, 100, 100, true)
-//                        shareBitmap.recycle()
-//                        wxMediaMessage.thumbData = XhuFileUtil.bmpToByteArray(thumbBmp, true)
-//
-//                        val request = SendMessageToWX.Req()
-//                        request.transaction = "img${System.currentTimeMillis()}"
-//                        request.message = wxMediaMessage
-//                        request.scene = SendMessageToWX.Req.WXSceneTimeline
-//                        wxAPI.sendReq(request)
-//                    } else {
-//                        Toast.makeText(context, R.string.hint_no_weixin, Toast.LENGTH_SHORT)
-//                                .show()
-//                    }
+                    if (XhuFileUtil.checkAPPInstall(context, Constants.WEIXIN_PACKAGE_NAME)) {
+                        val uri = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+                            FileProvider.getUriForFile(context, context.getString(R.string.uri_authority), XhuFileUtil.getCETImageFile(fileName))
+                        else
+                            Uri.fromFile(XhuFileUtil.getCETImageFile(fileName))
+                        val shareIntent = Intent(Intent.ACTION_SEND)
+                        val componentName = ComponentName(Constants.WEIXIN_PACKAGE_NAME, Constants.WEIXIN_TIMELINE_ACTION)
+                        shareIntent.putExtra(Intent.EXTRA_STREAM, uri)
+                        shareIntent.component = componentName
+                        shareIntent.type = "image/*"
+                        XhuFileUtil.grantUriPermission(context, shareIntent, uri)
+                        //设置分享列表的标题，并且每次都显示分享列表
+                        context.startActivity(Intent.createChooser(shareIntent, "分享到"))
+                    } else
+                        Toast.makeText(context, R.string.hint_no_weixin, Toast.LENGTH_SHORT)
+                                .show()
                 }
                 5 -> {//系统分享
                     val uri = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
