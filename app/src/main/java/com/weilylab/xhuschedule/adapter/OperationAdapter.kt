@@ -290,6 +290,8 @@ class OperationAdapter(private val context: Context) : RecyclerView.Adapter<Oper
     }
 
     private fun showVCode(student: Student, id: String, vcodeView: View, loadingDialog: Dialog) {
+        val progressBar: ProgressBar = vcodeView.findViewById(R.id.progressBar)
+        progressBar.visibility = View.VISIBLE
         student.getCETVCode(id, object : GetCETVCodeListener {
             override fun error(rt: Int, e: Throwable) {
                 e.printStackTrace()
@@ -300,6 +302,7 @@ class OperationAdapter(private val context: Context) : RecyclerView.Adapter<Oper
 
             override fun got(bitmap: Bitmap?) {
                 val imageView: ImageView = vcodeView.findViewById(R.id.imageView)
+                progressBar.visibility = View.GONE
                 Glide.with(context)
                         .load(bitmap)
                         .into(imageView)

@@ -8,6 +8,12 @@
 <resources>
     <string name="dialog_title_update_log">%1$s版的更新日志</string>
     <string-array name="update_list">
+        <item>修复上一个版本存在的问题：</item>
+        <item>个人页面无法注销</item>
+        <item>查询实验考试成绩时选择学期崩溃</item>
+        <item>部分设备启动时崩溃</item>
+        <item>四六级成绩界面错乱</item>
+        <item> </item>
         <item>全新版本——2.0 正式版发布</item>
         <item> </item>
         <item>全新图标：新的一年，新的面貌</item>
