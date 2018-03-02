@@ -107,10 +107,7 @@ class ProfileFragment : Fragment() {
                         .setPositiveButton(android.R.string.ok, { _, _ ->
                             val file = XhuFileUtil.getStudentListFile(activity!!)
                             if (file.exists())
-                                file.listFiles()
-                                        .forEach {
-                                            it.delete()
-                                        }
+                                file.delete()
                             startActivity(Intent(context, LoginActivity::class.java))
                         })
                         .setNegativeButton(android.R.string.cancel, null)
