@@ -94,7 +94,7 @@ object Constants {
     const val ANIMATION_ALPHA = "alpha"
 
     const val SHARE_TARGET_URL = "https://www.coolapk.com/apk/com.weilylab.xhuschedule"
-    const val SHARE_IMAGE_URL = "http://image.coolapk.com/apk_logo/2017/1127/ic_launcher-web-168930-o_1bvsva94q1dlcmg319lo1gvu1f5iq-uid-631231@512x512.png"
+    const val SHARE_IMAGE_URL = "http://image.coolapk.com/apk_logo/2018/0302/ic_launcher-168930-o_1c7i548l61b4k1p091q5l9tk15bj1b-uid-631231@192x192.png"
 
     const val SHARED_PREFERENCE_SETTINGS = "settings"
     const val SHARED_PREFERENCE_TEMP = "temp"
