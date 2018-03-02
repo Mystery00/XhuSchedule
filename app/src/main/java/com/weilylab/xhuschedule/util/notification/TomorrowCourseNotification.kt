@@ -37,6 +37,7 @@ import android.app.Notification
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
+import android.net.Uri
 import android.support.v4.app.NotificationCompat
 import android.support.v4.content.ContextCompat
 import android.text.SpannableStringBuilder
@@ -45,6 +46,7 @@ import android.text.style.ForegroundColorSpan
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.classes.baseClass.Course
 import com.weilylab.xhuschedule.util.Constants
+import com.weilylab.xhuschedule.util.Settings
 
 object TomorrowCourseNotification {
     private const val NOTIFICATION_TAG = "TomorrowCourse"
@@ -52,6 +54,7 @@ object TomorrowCourseNotification {
     fun notify(context: Context, id: Int, courseList: ArrayList<Course>) {
         val title = context.getString(R.string.tomorrow_course_notification_title, courseList.size)
         val builder = NotificationCompat.Builder(context, Constants.NOTIFICATION_CHANNEL_ID_TOMORROW)
+                .setSound(Uri.parse(Settings.notificationSound))
                 .setDefaults(Notification.DEFAULT_ALL)
                 .setSmallIcon(R.drawable.ic_stat_tomorrow)
                 .setContentTitle(title)
@@ -64,6 +67,10 @@ object TomorrowCourseNotification {
                                 context.packageManager.getLaunchIntentForPackage(context.packageName),
                                 PendingIntent.FLAG_UPDATE_CURRENT))
                 .setAutoCancel(true)
+        if (Settings.notificationVibrate) {
+            val vibrate = longArrayOf(0, 1000)
+            builder.setVibrate(vibrate)
+        }
         val style = NotificationCompat.InboxStyle()
                 .setBigContentTitle(title)
         courseList.forEach {

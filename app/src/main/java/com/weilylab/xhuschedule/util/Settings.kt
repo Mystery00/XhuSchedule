@@ -122,5 +122,5 @@ object Settings {
         get() = sharedPreference.getBoolean(Constants.NOTIFICATION_EXAM_ENABLE, true)
     var notificationTomorrowType: Int//提醒消息类型
         set(value) = sharedPreference.edit().putInt(Constants.NOTIFICATION_TOMORROW_TYPE, value).apply()
-        get() = sharedPreference.getInt(Constants.NOTIFICATION_TOMORROW_TYPE, 0)
+        get() = sharedPreference.getInt(Constants.NOTIFICATION_TOMORROW_TYPE, 1)
 }

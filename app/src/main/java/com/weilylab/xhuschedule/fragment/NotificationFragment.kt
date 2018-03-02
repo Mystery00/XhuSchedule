@@ -45,7 +45,6 @@ import android.view.ViewGroup
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.util.ScheduleHelper
 import com.weilylab.xhuschedule.util.Settings
-import vip.mystery0.tools.logs.Logs
 import java.util.*
 
 /**
