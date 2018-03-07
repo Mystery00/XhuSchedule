@@ -52,7 +52,7 @@ class NoticeAdapter(private val context: Context, private val list: ArrayList<No
 
     override fun getItemCount(): Int = list.size
 
-    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ViewHolder = ViewHolder(LayoutInflater.from(context).inflate(R.layout.item_notice, parent, false))
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder = ViewHolder(LayoutInflater.from(context).inflate(R.layout.item_notice, parent, false))
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var noticeTitle: TextView = itemView.findViewById(R.id.notice_title)

@@ -60,6 +60,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.observers.DisposableObserver
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.content_main.*
+import vip.mystery0.tools.logs.Logs
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.math.max
@@ -69,6 +70,8 @@ import kotlin.math.max
  */
 class TableFragment : Fragment() {
     companion object {
+        private const val TAG = "TableFragment"
+
         fun newInstance(list: ArrayList<ArrayList<ArrayList<Course>>>): TableFragment {
             val bundle = Bundle()
             bundle.putSerializable(Constants.INTENT_TAG_NAME_LIST, list)
@@ -259,55 +262,59 @@ class TableFragment : Fragment() {
             val linearLayout: LinearLayout = rootView!!.findViewById(temp)
             linearLayout.removeAllViews()
             for (time in 0 until 11) {
-                val linkedList = list[time][day]
-                if (linkedList.isEmpty()) {//如果这个位置没有课
-                    if (isShowInLayout(layoutList, time))//如果格子被占用，直接继续循环
+                try {
+                    val linkedList = list[time][day]
+                    if (linkedList.isEmpty()) {//如果这个位置没有课
+                        if (isShowInLayout(layoutList, time))//如果格子被占用，直接继续循环
+                            continue
+                        val textView = LayoutInflater.from(activity).inflate(R.layout.layout_text_view, null)
+                        linearLayout.addView(textView)
+                        val params = textView.layoutParams
+                        params.height = itemHeight
+                        textView.layoutParams = params
                         continue
-                    val textView = LayoutInflater.from(activity).inflate(R.layout.layout_text_view, null)
-                    linearLayout.addView(textView)
-                    val params = textView.layoutParams
-                    params.height = itemHeight
-                    textView.layoutParams = params
-                    continue
-                }
-                //该位置有课
-                //判断这个格子是否被占用
-                if (isShowInLayout(layoutList, time)) {
-                    var tableHelper = TableLayoutHelper()
-                    for (i in 0 until layoutList.size) {
-                        if (time in layoutList[i].start..layoutList[i].end) {
-                            tableHelper = layoutList[i]
-                            break
+                    }
+                    //该位置有课
+                    //判断这个格子是否被占用
+                    if (isShowInLayout(layoutList, time)) {
+                        var tableHelper = TableLayoutHelper()
+                        for (i in 0 until layoutList.size) {
+                            if (time in layoutList[i].start..layoutList[i].end) {
+                                tableHelper = layoutList[i]
+                                break
+                            }
                         }
+                        linkedList.forEach { course ->
+                            val timeArray = course.time.split('-')
+                            tableHelper.end = max(tableHelper.end, timeArray[1].toInt() - 1)
+                            tableHelper.viewGroup.addView(getItemView(course, tableHelper.start))
+                        }
+                        val params = tableHelper.viewGroup.layoutParams
+                        params.height = (tableHelper.end - tableHelper.start + 1) * itemHeight
+                        tableHelper.viewGroup.layoutParams = params
+                    } else {//这个格子没有被占用
+                        val view = LayoutInflater.from(activity).inflate(R.layout.item_linear_layout, null)
+                        val viewGroup: LinearLayout = view.findViewById(R.id.linearLayout)
+                        var maxHeight = 0
+                        linkedList.forEach { course ->
+                            //循环确定这个格子的高度
+                            val timeArray = course.time.split('-')
+                            val courseTime = timeArray[1].toInt() - timeArray[0].toInt() + 1//计算这节课长度
+                            maxHeight = max(maxHeight, courseTime * itemHeight)
+                            viewGroup.addView(getItemView(course, time))
+                        }
+                        val tableHelper = TableLayoutHelper()
+                        tableHelper.start = time
+                        tableHelper.end = maxHeight / itemHeight + time - 1
+                        tableHelper.viewGroup = viewGroup
+                        layoutList.add(tableHelper)//将这个布局添加进list
+                        linearLayout.addView(viewGroup)
+                        val params = viewGroup.layoutParams
+                        params.height = maxHeight
+                        viewGroup.layoutParams = params
                     }
-                    linkedList.forEach { course ->
-                        val timeArray = course.time.split('-')
-                        tableHelper.end = max(tableHelper.end, timeArray[1].toInt() - 1)
-                        tableHelper.viewGroup.addView(getItemView(course, tableHelper.start))
-                    }
-                    val params = tableHelper.viewGroup.layoutParams
-                    params.height = (tableHelper.end - tableHelper.start + 1) * itemHeight
-                    tableHelper.viewGroup.layoutParams = params
-                } else {//这个格子没有被占用
-                    val view = LayoutInflater.from(activity).inflate(R.layout.item_linear_layout, null)
-                    val viewGroup: LinearLayout = view.findViewById(R.id.linearLayout)
-                    var maxHeight = 0
-                    linkedList.forEach { course ->
-                        //循环确定这个格子的高度
-                        val timeArray = course.time.split('-')
-                        val courseTime = timeArray[1].toInt() - timeArray[0].toInt() + 1//计算这节课长度
-                        maxHeight = max(maxHeight, courseTime * itemHeight)
-                        viewGroup.addView(getItemView(course, time))
-                    }
-                    val tableHelper = TableLayoutHelper()
-                    tableHelper.start = time
-                    tableHelper.end = maxHeight / itemHeight + time - 1
-                    tableHelper.viewGroup = viewGroup
-                    layoutList.add(tableHelper)//将这个布局添加进list
-                    linearLayout.addView(viewGroup)
-                    val params = viewGroup.layoutParams
-                    params.height = maxHeight
-                    viewGroup.layoutParams = params
+                }catch (e:Exception){
+                    Logs.wtf(TAG, "formatView: ", e)
                 }
             }
         }

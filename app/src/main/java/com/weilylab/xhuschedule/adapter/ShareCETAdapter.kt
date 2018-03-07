@@ -180,7 +180,7 @@ class ShareCETAdapter(private val context: Context) : RecyclerView.Adapter<Share
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(context).inflate(R.layout.item_share, parent, false)
         return ViewHolder(view)
     }

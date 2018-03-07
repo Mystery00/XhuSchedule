@@ -101,7 +101,7 @@ class ColorPickerAdapter(var color: String,
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup?,
+    override fun onCreateViewHolder(parent: ViewGroup,
                                     viewType: Int): ViewHolder = ViewHolder(LayoutInflater.from(context).inflate(R.layout.item_color_picker, parent, false))
 
     override fun getItemCount(): Int = 12
