@@ -45,12 +45,11 @@ import com.jrummyapps.android.colorpicker.ColorPickerDialog
 import com.jrummyapps.android.colorpicker.ColorPickerDialogListener
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.listener.ColorPickerChangeListener
-import vip.mystery0.tools.logs.Logs
 
 /**
  * Created by myste.
  */
-class ColorPickerAdapter(var color: String,
+class ColorPickerAdapter(var color: Int,
                          private val context: Context) : RecyclerView.Adapter<ColorPickerAdapter.ViewHolder>() {
 
     private var isChecked = false
@@ -76,10 +75,10 @@ class ColorPickerAdapter(var color: String,
                     }
 
                     override fun onColorSelected(dialogId: Int, color: Int) {
-                        this@ColorPickerAdapter.color = '#' + Integer.toHexString(color).toUpperCase().substring(2)
+                        this@ColorPickerAdapter.color = color
                         notifyDataSetChanged()
                         if (colorPickerChangeListener != null)
-                            colorPickerChangeListener!!.onColorChanged('#' + Integer.toHexString(color).toUpperCase().substring(2))
+                            colorPickerChangeListener!!.onColorChanged(color)
                     }
                 })
                 colorPickerDialog.show((context as Activity).fragmentManager, "color-picker-dialog")
@@ -88,16 +87,16 @@ class ColorPickerAdapter(var color: String,
         }
         val color = context.resources.getStringArray(R.array.color_array)[position]
         arrayOfBitmaps[position] = drawCircle(color)
-        if (color == this.color) {
+        if (Color.parseColor(color) == this.color) {
             holder.imageView.setImageBitmap(drawCircleStroke(color, arrayOfBitmaps[position]))
             isChecked = true
         } else
             holder.imageView.setImageBitmap(arrayOfBitmaps[position])
         holder.imageView.setOnClickListener {
-            this.color = color
+            this.color = Color.parseColor(color)
             notifyDataSetChanged()
             if (colorPickerChangeListener != null)
-                colorPickerChangeListener!!.onColorChanged(color)
+                colorPickerChangeListener!!.onColorChanged(Color.parseColor(color))
         }
     }
 
