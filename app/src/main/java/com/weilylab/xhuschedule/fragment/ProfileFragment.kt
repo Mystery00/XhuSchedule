@@ -62,127 +62,151 @@ import com.weilylab.xhuschedule.activity.LoginActivity
 import com.weilylab.xhuschedule.util.Constants
 import com.weilylab.xhuschedule.util.Settings
 import com.weilylab.xhuschedule.util.XhuFileUtil
+import io.reactivex.Observer
+import io.reactivex.disposables.Disposable
 import java.util.*
 
 /**
  * Created by myste.
  */
 class ProfileFragment : Fragment() {
-    companion object {
-        fun newInstance(profile: Profile): ProfileFragment {
-            val bundle = Bundle()
-            bundle.putSerializable(Constants.INTENT_TAG_NAME_PROFILE, profile)
-            val fragment = ProfileFragment()
-            fragment.arguments = bundle
-            return fragment
-        }
-    }
+	companion object {
+		fun newInstance(profile: Profile): ProfileFragment {
+			val bundle = Bundle()
+			bundle.putSerializable(Constants.INTENT_TAG_NAME_PROFILE, profile)
+			val fragment = ProfileFragment()
+			fragment.arguments = bundle
+			return fragment
+		}
+	}
 
-    private var profile: Profile? = null
-    private var isReady = false
-    private var rootView: View? = null
-    private var adapter: OperationAdapter? = null
+	private var profile: Profile? = null
+	private var isReady = false
+	private var rootView: View? = null
+	private var adapter: OperationAdapter? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        profile = arguments?.getSerializable(Constants.INTENT_TAG_NAME_PROFILE) as Profile
-    }
+	override fun onCreate(savedInstanceState: Bundle?) {
+		super.onCreate(savedInstanceState)
+		profile = arguments?.getSerializable(Constants.INTENT_TAG_NAME_PROFILE) as Profile
+	}
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        if (rootView == null) {
-            rootView = inflater.inflate(R.layout.fragment_profile, container, false)
-            setProfileImg()
-            val recyclerView = rootView!!.findViewById<RecyclerView>(R.id.recycler_view)
-            val logoutButton = rootView!!.findViewById<Button>(R.id.button_logout)
-            recyclerView.layoutManager = LinearLayoutManager(activity)
-            val divider = DividerItemDecoration(activity, DividerItemDecoration.VERTICAL)
-            divider.setDrawable(ContextCompat.getDrawable(activity!!, R.drawable.lines)!!)
-            recyclerView.addItemDecoration(divider)
-            adapter = OperationAdapter(activity!!)
-            recyclerView.adapter = adapter
-            logoutButton.setOnClickListener {
-                AlertDialog.Builder(activity!!)
-                        .setTitle(R.string.hint_logout_title)
-                        .setMessage(R.string.hint_logout_content)
-                        .setPositiveButton(android.R.string.ok, { _, _ ->
-                            val file = XhuFileUtil.getStudentListFile(activity!!)
-                            if (file.exists())
-                                file.listFiles()
-                                        .forEach {
-                                            it.delete()
-                                        }
-                            startActivity(Intent(context, LoginActivity::class.java))
-                        })
-                        .setNegativeButton(android.R.string.cancel, null)
-                        .show()
-            }
-        }
-        isReady = true
-        return rootView
-    }
+	override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+		if (rootView == null) {
+			rootView = inflater.inflate(R.layout.fragment_profile, container, false)
+			setProfileImg()
+			val recyclerView = rootView!!.findViewById<RecyclerView>(R.id.recycler_view)
+			val logoutButton = rootView!!.findViewById<Button>(R.id.button_logout)
+			recyclerView.layoutManager = LinearLayoutManager(activity)
+			val divider = DividerItemDecoration(activity, DividerItemDecoration.VERTICAL)
+			divider.setDrawable(ContextCompat.getDrawable(activity!!, R.drawable.lines)!!)
+			recyclerView.addItemDecoration(divider)
+			adapter = OperationAdapter(activity!!)
+			recyclerView.adapter = adapter
+			logoutButton.setOnClickListener {
+				AlertDialog.Builder(activity!!)
+						.setTitle(R.string.hint_logout_title)
+						.setMessage(R.string.hint_logout_content)
+						.setPositiveButton(android.R.string.ok, { _, _ ->
+							val file = XhuFileUtil.getStudentListFile(activity!!)
+							if (file.exists())
+								file.listFiles()
+										.forEach {
+											it.delete()
+										}
+							startActivity(Intent(context, LoginActivity::class.java))
+						})
+						.setNegativeButton(android.R.string.cancel, null)
+						.show()
+			}
+		}
+		isReady = true
+		return rootView
+	}
 
-    fun setProfileImg() {
-        if (Settings.userImg != "") {
-            val options = RequestOptions()
-                    .signature(MediaStoreSignature("image/*", Calendar.getInstance().timeInMillis, 0))
-                    .diskCacheStrategy(DiskCacheStrategy.NONE)
-            Glide.with(this)
-                    .load(Settings.userImg)
-                    .apply(options)
-                    .into(rootView!!.findViewById(R.id.profile_img))
-        } else
-            rootView!!.findViewById<ImageView>(R.id.profile_img).setImageResource(R.mipmap.profile_img)
-    }
+	fun setProfileImg() {
+		Observable.create<Boolean> {
+			while (true) {
+				if (isReady)
+					break
+				Thread.sleep(200)
+			}
+			it.onComplete()
+		}
+				.subscribeOn(Schedulers.newThread())
+				.unsubscribeOn(Schedulers.newThread())
+				.observeOn(AndroidSchedulers.mainThread())
+				.subscribe(object : DisposableObserver<Boolean>() {
+					override fun onComplete() {
+						if (Settings.userImg != "") {
+							val options = RequestOptions()
+									.signature(MediaStoreSignature("image/*", Calendar.getInstance().timeInMillis, 0))
+									.diskCacheStrategy(DiskCacheStrategy.NONE)
+							Glide.with(activity!!)
+									.load(Settings.userImg)
+									.apply(options)
+									.into(rootView!!.findViewById(R.id.profile_img))
+						} else
+							rootView!!.findViewById<ImageView>(R.id.profile_img).setImageResource(R.mipmap.profile_img)
+					}
 
-    fun setProfile(profile: Profile) {
-        Observable.create<Boolean> { subscriber ->
-            while (true) {
-                if (isReady)
-                    break
-                Thread.sleep(200)
-            }
-            subscriber.onComplete()
-        }
-                .subscribeOn(Schedulers.newThread())
-                .unsubscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(object : DisposableObserver<Boolean>() {
-                    override fun onComplete() {
-                        rootView?.findViewById<TextView>(R.id.textView_title)?.text = getString(R.string.profile_title, profile.no, profile.name)
-                        rootView?.findViewById<TextView>(R.id.textView_title)?.setOnClickListener {
-                            val stringBuilder = StringBuilder()
-                                    .appendln(getString(R.string.profile_no, profile.no))
-                                    .appendln(getString(R.string.profile_name, profile.name))
-                                    .appendln(getString(R.string.profile_sex, profile.sex))
-                                    .appendln(getString(R.string.profile_grade, profile.grade))
-                                    .appendln(getString(R.string.profile_institute, profile.institute))
-                                    .appendln(getString(R.string.profile_professional, profile.profession))
-                                    .appendln(getString(R.string.profile_classname, profile.classname))
-                                    .appendln(getString(R.string.profile_direction, profile.direction))
-                            AlertDialog.Builder(activity!!)
-                                    .setTitle(" ")
-                                    .setMessage(stringBuilder.toString())
-                                    .setNegativeButton(android.R.string.ok, null)
-                                    .show()
-                        }
-                    }
+					override fun onNext(t: Boolean) {
+					}
 
-                    override fun onNext(t: Boolean) {
-                    }
+					override fun onError(e: Throwable) {
+						e.printStackTrace()
+					}
+				})
+	}
 
-                    override fun onError(e: Throwable) {
-                    }
-                })
-    }
+	fun setProfile(profile: Profile) {
+		Observable.create<Boolean> { subscriber ->
+			while (true) {
+				if (isReady)
+					break
+				Thread.sleep(200)
+			}
+			subscriber.onComplete()
+		}
+				.subscribeOn(Schedulers.newThread())
+				.unsubscribeOn(Schedulers.newThread())
+				.observeOn(AndroidSchedulers.mainThread())
+				.subscribe(object : DisposableObserver<Boolean>() {
+					override fun onComplete() {
+						rootView?.findViewById<TextView>(R.id.textView_title)?.text = getString(R.string.profile_title, profile.no, profile.name)
+						rootView?.findViewById<TextView>(R.id.textView_title)?.setOnClickListener {
+							val stringBuilder = StringBuilder()
+									.appendln(getString(R.string.profile_no, profile.no))
+									.appendln(getString(R.string.profile_name, profile.name))
+									.appendln(getString(R.string.profile_sex, profile.sex))
+									.appendln(getString(R.string.profile_grade, profile.grade))
+									.appendln(getString(R.string.profile_institute, profile.institute))
+									.appendln(getString(R.string.profile_professional, profile.profession))
+									.appendln(getString(R.string.profile_classname, profile.classname))
+									.appendln(getString(R.string.profile_direction, profile.direction))
+							AlertDialog.Builder(activity!!)
+									.setTitle(" ")
+									.setMessage(stringBuilder.toString())
+									.setNegativeButton(android.R.string.ok, null)
+									.show()
+						}
+					}
 
-    fun updateNoticeBadge() {
-        if (adapter != null)
-            adapter!!.notifyDataSetChanged()
-    }
+					override fun onNext(t: Boolean) {
+					}
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        if (rootView != null)
-            (rootView!!.parent as ViewGroup).removeView(rootView)
-    }
+					override fun onError(e: Throwable) {
+					}
+				})
+	}
+
+	fun updateNoticeBadge() {
+		if (adapter != null)
+			adapter!!.notifyDataSetChanged()
+	}
+
+	override fun onDestroyView() {
+		super.onDestroyView()
+		if (rootView != null)
+			(rootView!!.parent as ViewGroup).removeView(rootView)
+	}
 }
