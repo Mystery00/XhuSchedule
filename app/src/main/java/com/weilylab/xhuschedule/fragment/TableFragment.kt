@@ -148,16 +148,18 @@ class TableFragment : Fragment() {
 
 	fun updateTableLayout(canScroll: Boolean) {
 		ScheduleHelper.checkScreenWidth(activity!!)
-		val tableHeader: LinearLayout = rootView!!.findViewById(R.id.table_header)
-		val scheduleView: View = rootView!!.findViewById(R.id.table_schedule)
-		val contentHorizontalScrollView: ContentHorizontalScrollView = rootView!!.findViewById(R.id.contentHorizontalScrollView)
-		val tabHeaderLayoutParams = tableHeader.layoutParams
-		tabHeaderLayoutParams.width = ScheduleHelper.scheduleItemWidth * 7
-		tableHeader.layoutParams = tabHeaderLayoutParams
-		val scheduleLayoutParams = scheduleView.layoutParams
-		scheduleLayoutParams.width = ScheduleHelper.scheduleItemWidth * 7
-		scheduleView.layoutParams = scheduleLayoutParams
-		contentHorizontalScrollView.setScroll(canScroll)
+		if (rootView != null) {
+			val tableHeader: LinearLayout = rootView!!.findViewById(R.id.table_header)
+			val scheduleView: View = rootView!!.findViewById(R.id.table_schedule)
+			val contentHorizontalScrollView: ContentHorizontalScrollView = rootView!!.findViewById(R.id.contentHorizontalScrollView)
+			val tabHeaderLayoutParams = tableHeader.layoutParams
+			tabHeaderLayoutParams.width = ScheduleHelper.scheduleItemWidth * 7
+			tableHeader.layoutParams = tabHeaderLayoutParams
+			val scheduleLayoutParams = scheduleView.layoutParams
+			scheduleLayoutParams.width = ScheduleHelper.scheduleItemWidth * 7
+			scheduleView.layoutParams = scheduleLayoutParams
+			contentHorizontalScrollView.setScroll(canScroll)
+		}
 	}
 
 	fun setBackground() {
