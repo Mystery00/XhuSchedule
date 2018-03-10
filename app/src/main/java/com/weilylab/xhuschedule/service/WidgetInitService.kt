@@ -62,7 +62,7 @@ class WidgetInitService : Service() {
             WidgetHelper.refreshTodayCourses(this)
             WidgetHelper.refreshExamList(this)
             sendBroadcast(Intent(Constants.ACTION_WIDGET_UPDATE_BROADCAST)
-                    .putExtra("TAG", WidgetHelper.ALL_TAG))
+                    .putExtra(Constants.INTENT_TAG_NAME_TAG, WidgetHelper.ALL_TAG))
             stopSelf()
         }).start()
     }

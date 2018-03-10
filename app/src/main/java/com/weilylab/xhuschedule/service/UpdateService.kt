@@ -56,7 +56,7 @@ class UpdateService : IntentService("PhpService") {
 	override fun onCreate() {
 		super.onCreate()
 		val notification = NotificationCompat.Builder(this, Constants.NOTIFICATION_CHANNEL_ID_DEFAULT)
-				.setSmallIcon(R.mipmap.ic_launcher)
+				.setSmallIcon(R.drawable.ic_stat_foreground)
 				.setContentText(getString(R.string.hint_foreground_notification))
 				.setAutoCancel(true)
 				.setPriority(NotificationManagerCompat.IMPORTANCE_NONE)
