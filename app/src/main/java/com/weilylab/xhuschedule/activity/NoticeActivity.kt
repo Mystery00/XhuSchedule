@@ -55,92 +55,103 @@ import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_notice.*
 import java.io.InputStreamReader
 
-class NoticeActivity : BaseActivity() {
-    private val list = ArrayList<Notice>()
-    private var adapter: NoticeAdapter? = null
+class NoticeActivity : XhuBaseActivity() {
+	private val list = ArrayList<Notice>()
+	private var adapter: NoticeAdapter? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        val params = Bundle()
-        params.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "notice")
-        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, params)
-        setContentView(R.layout.activity_notice)
-        setSupportActionBar(toolbar)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        toolbar.setNavigationOnClickListener {
-            finish()
-        }
+	override fun initView() {
+		super.initView()
+		setContentView(R.layout.activity_notice)
+		setSupportActionBar(toolbar)
+		supportActionBar?.setDisplayHomeAsUpEnabled(true)
+	}
 
-        recyclerView.layoutManager = LinearLayoutManager(this)
-        adapter = NoticeAdapter(this, list)
-        recyclerView.adapter = adapter
-        recyclerView.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
-        swipeRefreshLayout.setColorSchemeResources(
-                android.R.color.holo_blue_light,
-                android.R.color.holo_green_light,
-                android.R.color.holo_orange_light,
-                android.R.color.holo_red_light)
-        swipeRefreshLayout.setOnRefreshListener {
-            refresh()
-        }
-        swipeRefreshLayout.isRefreshing = true
-        refresh()
-    }
+	override fun initData() {
+		super.initData()
+		val params = Bundle()
+		params.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "notice")
+		mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, params)
+		recyclerView.layoutManager = LinearLayoutManager(this)
+		adapter = NoticeAdapter(this, list)
+		recyclerView.adapter = adapter
+		recyclerView.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
+		swipeRefreshLayout.setColorSchemeResources(
+				android.R.color.holo_blue_light,
+				android.R.color.holo_green_light,
+				android.R.color.holo_orange_light,
+				android.R.color.holo_red_light)
+		swipeRefreshLayout.isRefreshing = true
+	}
 
-    private fun refresh() {
-        ScheduleHelper.tomcatRetrofit
-                .create(CommonService::class.java)
-                .getNotices(Constants.NOTICE_PLATFORM)
-                .subscribeOn(Schedulers.newThread())
-                .unsubscribeOn(Schedulers.newThread())
-                .map { responseBody -> Gson().fromJson(InputStreamReader(responseBody.byteStream()), GetNoticesRT::class.java) }
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(object : Observer<GetNoticesRT> {
-                    private var getNoticeRT: GetNoticesRT? = null
-                    override fun onSubscribe(d: Disposable) {
-                    }
+	override fun requestData() {
+		super.requestData()
+		refresh()
+	}
 
-                    override fun onError(e: Throwable) {
-                        swipeRefreshLayout.isRefreshing = false
-                        Snackbar.make(coordinatorLayout, e.message.toString(), Snackbar.LENGTH_SHORT)
-                                .show()
-                    }
+	override fun monitor() {
+		super.monitor()
+		toolbar.setNavigationOnClickListener {
+			finish()
+		}
+		swipeRefreshLayout.setOnRefreshListener {
+			refresh()
+		}
+	}
 
-                    override fun onNext(t: GetNoticesRT) {
-                        getNoticeRT = t
-                    }
+	private fun refresh() {
+		ScheduleHelper.tomcatRetrofit
+				.create(CommonService::class.java)
+				.getNotices(Constants.NOTICE_PLATFORM)
+				.subscribeOn(Schedulers.newThread())
+				.unsubscribeOn(Schedulers.newThread())
+				.map { responseBody -> Gson().fromJson(InputStreamReader(responseBody.byteStream()), GetNoticesRT::class.java) }
+				.observeOn(AndroidSchedulers.mainThread())
+				.subscribe(object : Observer<GetNoticesRT> {
+					private var getNoticeRT: GetNoticesRT? = null
+					override fun onSubscribe(d: Disposable) {
+					}
 
-                    override fun onComplete() {
-                        swipeRefreshLayout.isRefreshing = false
-                        if (getNoticeRT != null)
-                            when (getNoticeRT!!.rt) {
-                                ConstantsCode.DONE -> {
-                                    list.clear()
-                                    list.addAll(getNoticeRT!!.notices)
-                                    adapter?.notifyDataSetChanged()
-                                }
-                                else -> Snackbar.make(coordinatorLayout, getNoticeRT!!.msg, Snackbar.LENGTH_SHORT)
-                                        .show()
-                            }
-                    }
-                })
-    }
+					override fun onError(e: Throwable) {
+						swipeRefreshLayout.isRefreshing = false
+						Snackbar.make(coordinatorLayout, e.message.toString(), Snackbar.LENGTH_SHORT)
+								.show()
+					}
 
-    override fun onDestroy() {
-        val shownNoticeID = Settings.shownNoticeID.split('|')
-        val tempList = ArrayList<String>()
-        shownNoticeID.forEach {
-            tempList.add(it)
-        }
-        list.forEach {
-            if (!shownNoticeID.contains(it.id.toString()))
-                tempList.add(it.id.toString())
-        }
-        var value = ""
-        tempList.forEachIndexed { index, s ->
-            value += if (index == tempList.size - 1) s else "$s|"
-        }
-        Settings.shownNoticeID = value
-        super.onDestroy()
-    }
+					override fun onNext(t: GetNoticesRT) {
+						getNoticeRT = t
+					}
+
+					override fun onComplete() {
+						swipeRefreshLayout.isRefreshing = false
+						if (getNoticeRT != null)
+							when (getNoticeRT!!.rt) {
+								ConstantsCode.DONE -> {
+									list.clear()
+									list.addAll(getNoticeRT!!.notices)
+									adapter?.notifyDataSetChanged()
+								}
+								else -> Snackbar.make(coordinatorLayout, getNoticeRT!!.msg, Snackbar.LENGTH_SHORT)
+										.show()
+							}
+					}
+				})
+	}
+
+	override fun onDestroy() {
+		val shownNoticeID = Settings.shownNoticeID.split('|')
+		val tempList = ArrayList<String>()
+		shownNoticeID.forEach {
+			tempList.add(it)
+		}
+		list.forEach {
+			if (!shownNoticeID.contains(it.id.toString()))
+				tempList.add(it.id.toString())
+		}
+		var value = ""
+		tempList.forEachIndexed { index, s ->
+			value += if (index == tempList.size - 1) s else "$s|"
+		}
+		Settings.shownNoticeID = value
+		super.onDestroy()
+	}
 }

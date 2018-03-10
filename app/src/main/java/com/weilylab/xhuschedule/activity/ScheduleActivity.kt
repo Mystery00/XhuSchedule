@@ -71,14 +71,15 @@ import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_schedule.*
 import kotlinx.android.synthetic.main.content_schedule.*
 import vip.mystery0.tools.logs.Logs
+import vip.mystery0.tools.utils.Mystery0ColorUtil
+import vip.mystery0.tools.utils.Mystery0DensityUtil
 import java.io.File
 import java.io.InputStreamReader
 import java.net.UnknownHostException
 import java.util.*
 import kotlin.math.max
 
-class ScheduleActivity : BaseActivity() {
-	private val TAG = "ScheduleActivity"
+class ScheduleActivity : XhuBaseActivity() {
 	private lateinit var initDialog: Dialog
 	private lateinit var loadingDialog: Dialog
 	private val studentList = ArrayList<Student>()
@@ -88,18 +89,18 @@ class ScheduleActivity : BaseActivity() {
 	private var term: Int? = null
 	private val dropMaxHeight = 999
 
-	override fun onCreate(savedInstanceState: Bundle?) {
-		super.onCreate(savedInstanceState)
+	override fun initData() {
+		super.initData()
 		val params = Bundle()
 		params.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "schedule")
 		mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, params)
+	}
+
+	override fun initView() {
+		super.initView()
 		setContentView(R.layout.activity_schedule)
 		setSupportActionBar(toolbar)
 		supportActionBar?.setDisplayHomeAsUpEnabled(true)
-		initView()
-	}
-
-	private fun initView() {
 		initDialog = ZLoadingDialog(this)
 				.setLoadingBuilder(Z_TYPE.SNAKE_CIRCLE)
 				.setHintText(getString(R.string.hint_dialog_init))
@@ -127,7 +128,7 @@ class ScheduleActivity : BaseActivity() {
 		val tableNav = table_nav as LinearLayout
 		for (i in 0 until tableNav.childCount) {
 			val layoutParams = tableNav.getChildAt(i).layoutParams
-			layoutParams.height = DensityUtil.dip2px(this, Settings.customTableItemHeight.toFloat())
+			layoutParams.height = Mystery0DensityUtil.dip2px(this, Settings.customTableItemHeight.toFloat())
 			tableNav.getChildAt(i).layoutParams = layoutParams
 			(tableNav.getChildAt(i) as TextView).setTextColor(ContextCompat.getColor(this, R.color.schedule_head_text_color))
 		}
@@ -240,7 +241,7 @@ class ScheduleActivity : BaseActivity() {
 					.forEach { hasData = true }
 		if (!hasData)
 			return
-		val itemHeight = DensityUtil.dip2px(this, Settings.customTableItemHeight.toFloat())
+		val itemHeight = Mystery0DensityUtil.dip2px(this, Settings.customTableItemHeight.toFloat())
 		for (day in 0 until 7) {
 			val layoutList = ArrayList<TableLayoutHelper>()
 			val temp = resources.getIdentifier("table_schedule" + (day + 1), "id", "com.weilylab.xhuschedule")
@@ -310,7 +311,7 @@ class ScheduleActivity : BaseActivity() {
 	}
 
 	private fun getItemView(course: Course, startTime: Int): View {
-		val itemHeight = DensityUtil.dip2px(this, Settings.customTableItemHeight.toFloat())
+		val itemHeight = Mystery0DensityUtil.dip2px(this, Settings.customTableItemHeight.toFloat())
 		val itemView = View.inflate(this, R.layout.item_widget_table, null)
 		val imageView: ImageView = itemView.findViewById(R.id.imageView)
 		val textViewName: TextView = itemView.findViewById(R.id.textView_name)
@@ -335,7 +336,7 @@ class ScheduleActivity : BaseActivity() {
 				textViewLocation.setTextColor(Color.GRAY)
 				gradientDrawable.setColor(Color.parseColor("#9AEEEEEE"))
 			}
-			else -> gradientDrawable.setColor(if (course.color != 0) course.color else ColorUtil.getRandomColorAsInt())
+			else -> gradientDrawable.setColor(if (course.color != 0) course.color else Mystery0ColorUtil.getRandomColorAsInt())
 		}
 		val timeArray = course.time.split('-')
 		val height = (timeArray[1].toInt() - timeArray[0].toInt() + 1) * itemHeight

@@ -50,9 +50,9 @@ import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import vip.mystery0.tools.logs.Logs
+import vip.mystery0.tools.utils.Mystery0DensityUtil
 import java.math.BigInteger
 import java.security.MessageDigest
-import java.util.*
 import java.util.concurrent.TimeUnit
 
 /**
@@ -147,11 +147,11 @@ object ScheduleHelper {
 
 	fun checkScreenWidth(context: Context) {
 		scheduleItemWidth = if (Settings.customTableItemWidth != -1)
-			DensityUtil.dip2px(context, Settings.customTableItemWidth.toFloat())
+			Mystery0DensityUtil.dip2px(context, Settings.customTableItemWidth.toFloat())
 		else {
 			val navWidth = context.resources.getDimensionPixelSize(R.dimen.nav_width)
 			val lineWidth = context.resources.getDimensionPixelSize(R.dimen.divider_size)
-			(DensityUtil.getScreenWidth(context) - navWidth - lineWidth) / 7
+			(Mystery0DensityUtil.getScreenWidth(context) - navWidth - lineWidth) / 7
 		}
 	}
 }

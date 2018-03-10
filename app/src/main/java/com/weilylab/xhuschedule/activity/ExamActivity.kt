@@ -68,157 +68,156 @@ import kotlinx.android.synthetic.main.content_exam.*
 import vip.mystery0.tools.logs.Logs
 import java.io.File
 
-class ExamActivity : BaseActivity() {
-    private val TAG = "ExamActivity"
-    private lateinit var loadingDialog: ZLoadingDialog
-    private val studentList = ArrayList<Student>()
-    private val testList = ArrayList<Exam>()
-    private val dropMaxHeight = 999
-    private var valueAnimator: ValueAnimator? = null
-    private var currentIndex = -1
-    private lateinit var pointDrawable: VectorDrawableCompat
+class ExamActivity : XhuBaseActivity() {
+	private lateinit var loadingDialog: ZLoadingDialog
+	private val studentList = ArrayList<Student>()
+	private val testList = ArrayList<Exam>()
+	private val dropMaxHeight = 999
+	private var valueAnimator: ValueAnimator? = null
+	private var currentIndex = -1
+	private lateinit var pointDrawable: VectorDrawableCompat
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        val params = Bundle()
-        params.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "exam")
-        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, params)
-        pointDrawable = VectorDrawableCompat.create(resources, R.drawable.ic_point, null)!!
-        pointDrawable.setBounds(0, 0, pointDrawable.minimumWidth, pointDrawable.minimumHeight)
-        pointDrawable.setTint(ContextCompat.getColor(this, R.color.colorAccent))
-        setContentView(R.layout.activity_exam)
-        setSupportActionBar(toolbar)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        initView()
-    }
+	override fun initData() {
+		super.initData()
+		val params = Bundle()
+		params.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "exam")
+		mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, params)
+	}
 
-    private fun initView() {
-        loadingDialog = ZLoadingDialog(this)
-                .setLoadingBuilder(Z_TYPE.SINGLE_CIRCLE)
-                .setHintText(getString(R.string.hint_dialog_sync))
-                .setHintTextSize(16F)
-                .setCanceledOnTouchOutside(false)
-                .setLoadingColor(ContextCompat.getColor(this, R.color.colorAccent))
-                .setHintTextColor(ContextCompat.getColor(this, R.color.colorAccent))
-        studentList.clear()
-        studentList.addAll(XhuFileUtil.getArrayFromFile(XhuFileUtil.getStudentListFile(this), Student::class.java))
-        initInfo()
-    }
+	override fun initView() {
+		super.initView()
+		pointDrawable = VectorDrawableCompat.create(resources, R.drawable.ic_point, null)!!
+		pointDrawable.setBounds(0, 0, pointDrawable.minimumWidth, pointDrawable.minimumHeight)
+		pointDrawable.setTint(ContextCompat.getColor(this, R.color.colorAccent))
+		setContentView(R.layout.activity_exam)
+		setSupportActionBar(toolbar)
+		supportActionBar?.setDisplayHomeAsUpEnabled(true)
+		loadingDialog = ZLoadingDialog(this)
+				.setLoadingBuilder(Z_TYPE.SINGLE_CIRCLE)
+				.setHintText(getString(R.string.hint_dialog_sync))
+				.setHintTextSize(16F)
+				.setCanceledOnTouchOutside(false)
+				.setLoadingColor(ContextCompat.getColor(this, R.color.colorAccent))
+				.setHintTextColor(ContextCompat.getColor(this, R.color.colorAccent))
+		studentList.clear()
+		studentList.addAll(XhuFileUtil.getArrayFromFile(XhuFileUtil.getStudentListFile(this), Student::class.java))
+		initInfo()
+	}
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            android.R.id.home -> {
-                finish()
-                true
-            }
-            else -> super.onOptionsItemSelected(item)
-        }
-    }
+	override fun onOptionsItemSelected(item: MenuItem): Boolean {
+		return when (item.itemId) {
+			android.R.id.home -> {
+				finish()
+				true
+			}
+			else -> super.onOptionsItemSelected(item)
+		}
+	}
 
-    private fun initInfo() {
-        val studentShowList = Array(studentList.size, { i -> studentList[i].username }).toMutableList()
-        studentShowList.add(getString(R.string.hint_popup_view_student))
-        spinner_username.setAdapter(CustomMaterialSpinnerAdapter(this, studentShowList))
-        spinner_username.setOnItemSelectedListener { _, _, _, username ->
-            spinner_username.setDropdownMaxHeight(dropMaxHeight)
-            setUsername(username.toString())
-        }
-        spinner_username.selectedIndex = studentShowList.size - 1
-        if (studentList.size == 1) {
-            spinner_username.selectedIndex = 0
-            setUsername(studentShowList[0])
-        }
-    }
+	private fun initInfo() {
+		val studentShowList = Array(studentList.size, { i -> studentList[i].username }).toMutableList()
+		studentShowList.add(getString(R.string.hint_popup_view_student))
+		spinner_username.setAdapter(CustomMaterialSpinnerAdapter(this, studentShowList))
+		spinner_username.setOnItemSelectedListener { _, _, _, username ->
+			spinner_username.setDropdownMaxHeight(dropMaxHeight)
+			setUsername(username.toString())
+		}
+		spinner_username.selectedIndex = studentShowList.size - 1
+		if (studentList.size == 1) {
+			spinner_username.selectedIndex = 0
+			setUsername(studentShowList[0])
+		}
+	}
 
-    private fun setUsername(username: String?) {
-        Observable.create<Any> {
-            val selectedStudent = studentList.firstOrNull { it.username == username }
-            if (selectedStudent == null) {
-                it.onComplete()
-                return@create
-            }
-            selectedStudent.getTests(object : GetArrayListener<Exam> {
-                override fun error(rt: Int, e: Throwable) {
-                    it.onError(e)
-                }
+	private fun setUsername(username: String?) {
+		Observable.create<Any> {
+			val selectedStudent = studentList.firstOrNull { it.username == username }
+			if (selectedStudent == null) {
+				it.onComplete()
+				return@create
+			}
+			selectedStudent.getTests(object : GetArrayListener<Exam> {
+				override fun error(rt: Int, e: Throwable) {
+					it.onError(e)
+				}
 
-                override fun got(array: Array<Exam>) {
-                    testList.clear()
-                    testList.addAll(array)
-                    it.onComplete()
-                }
-            })
-        }
-                .subscribeOn(Schedulers.newThread())
-                .unsubscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(object : Observer<Any> {
-                    override fun onComplete() {
-                        loadingDialog.dismiss()
-                        currentIndex = -1
-                        linearLayout.removeAllViews()
-                        if (testList.size == 0)
-                            linearLayout.addView(ViewUtil.buildNoDataView(this@ExamActivity, getString(R.string.hint_data_empty)))
-                        else
-                            for (i in testList.indices) {
-                                val exam = testList[i]
-                                val itemView = ViewUtil.buildExamItem(this@ExamActivity, exam, pointDrawable)
-                                val imageView: ImageView = itemView.findViewById(R.id.imageView)
-                                val detailsTextView: TextView = itemView.findViewById(R.id.textView_details)
-                                itemView.setOnClickListener {
-                                    valueAnimator?.cancel()
-                                    //带动画的展开收缩
-                                    when (currentIndex) {
-                                        -1 -> {
-                                            valueAnimator = TextViewUtils.setMaxLinesWithAnimation(detailsTextView, Int.MAX_VALUE)
-                                            ObjectAnimator.ofFloat(imageView, Constants.ANIMATION_ALPHA, 0F, 1F).start()
-                                            currentIndex = i
-                                        }
-                                        i -> {
-                                            valueAnimator = TextViewUtils.setMaxLinesWithAnimation(detailsTextView, 1)
-                                            ObjectAnimator.ofFloat(imageView, Constants.ANIMATION_ALPHA, 1F, 0F).start()
-                                            currentIndex = -1
-                                        }
-                                        else -> {
-                                            val openedView = linearLayout.getChildAt(currentIndex)
-                                            val openedImageView: ImageView = openedView.findViewById(R.id.imageView)
-                                            val openedDetailsTextView: TextView = openedView.findViewById(R.id.textView_details)
-                                            valueAnimator = TextViewUtils.setMaxLinesWithAnimation(openedDetailsTextView, 1)
-                                            ObjectAnimator.ofFloat(openedImageView, Constants.ANIMATION_ALPHA, 1F, 0F).start()
+				override fun got(array: Array<Exam>) {
+					testList.clear()
+					testList.addAll(array)
+					it.onComplete()
+				}
+			})
+		}
+				.subscribeOn(Schedulers.newThread())
+				.unsubscribeOn(Schedulers.newThread())
+				.observeOn(AndroidSchedulers.mainThread())
+				.subscribe(object : Observer<Any> {
+					override fun onComplete() {
+						loadingDialog.dismiss()
+						currentIndex = -1
+						linearLayout.removeAllViews()
+						if (testList.size == 0)
+							linearLayout.addView(ViewUtil.buildNoDataView(this@ExamActivity, getString(R.string.hint_data_empty)))
+						else
+							for (i in testList.indices) {
+								val exam = testList[i]
+								val itemView = ViewUtil.buildExamItem(this@ExamActivity, exam, pointDrawable)
+								val imageView: ImageView = itemView.findViewById(R.id.imageView)
+								val detailsTextView: TextView = itemView.findViewById(R.id.textView_details)
+								itemView.setOnClickListener {
+									valueAnimator?.cancel()
+									//带动画的展开收缩
+									when (currentIndex) {
+										-1 -> {
+											valueAnimator = TextViewUtils.setMaxLinesWithAnimation(detailsTextView, Int.MAX_VALUE)
+											ObjectAnimator.ofFloat(imageView, Constants.ANIMATION_ALPHA, 0F, 1F).start()
+											currentIndex = i
+										}
+										i -> {
+											valueAnimator = TextViewUtils.setMaxLinesWithAnimation(detailsTextView, 1)
+											ObjectAnimator.ofFloat(imageView, Constants.ANIMATION_ALPHA, 1F, 0F).start()
+											currentIndex = -1
+										}
+										else -> {
+											val openedView = linearLayout.getChildAt(currentIndex)
+											val openedImageView: ImageView = openedView.findViewById(R.id.imageView)
+											val openedDetailsTextView: TextView = openedView.findViewById(R.id.textView_details)
+											valueAnimator = TextViewUtils.setMaxLinesWithAnimation(openedDetailsTextView, 1)
+											ObjectAnimator.ofFloat(openedImageView, Constants.ANIMATION_ALPHA, 1F, 0F).start()
 
-                                            valueAnimator = TextViewUtils.setMaxLinesWithAnimation(detailsTextView, Int.MAX_VALUE)
-                                            ObjectAnimator.ofFloat(imageView, Constants.ANIMATION_ALPHA, 0F, 1F).start()
-                                            currentIndex = i
-                                        }
-                                    }
-                                }
-                                linearLayout.addView(itemView)
-                            }
+											valueAnimator = TextViewUtils.setMaxLinesWithAnimation(detailsTextView, Int.MAX_VALUE)
+											ObjectAnimator.ofFloat(imageView, Constants.ANIMATION_ALPHA, 0F, 1F).start()
+											currentIndex = i
+										}
+									}
+								}
+								linearLayout.addView(itemView)
+							}
 
-                        val parentFile = XhuFileUtil.getExamParentFile(this@ExamActivity)
-                        if (!parentFile.exists())
-                            parentFile.mkdirs()
-                        val base64Name = XhuFileUtil.filterString(Base64.encodeToString(username!!.toByteArray(), Base64.DEFAULT))
-                        val savedFile = File(parentFile, base64Name)
-                        savedFile.createNewFile()
-                        XhuFileUtil.saveObjectToFile(testList, savedFile)
-                        sendBroadcast(Intent(Constants.ACTION_WIDGET_UPDATE_BROADCAST)
-                                .putExtra(Constants.INTENT_TAG_NAME_TAG, WidgetHelper.ALL_TAG))
-                    }
+						val parentFile = XhuFileUtil.getExamParentFile(this@ExamActivity)
+						if (!parentFile.exists())
+							parentFile.mkdirs()
+						val base64Name = XhuFileUtil.filterString(Base64.encodeToString(username!!.toByteArray(), Base64.DEFAULT))
+						val savedFile = File(parentFile, base64Name)
+						savedFile.createNewFile()
+						XhuFileUtil.saveObjectToFile(testList, savedFile)
+						sendBroadcast(Intent(Constants.ACTION_WIDGET_UPDATE_BROADCAST)
+								.putExtra(Constants.INTENT_TAG_NAME_TAG, WidgetHelper.ALL_TAG))
+					}
 
-                    override fun onSubscribe(d: Disposable) {
-                        loadingDialog.show()
-                    }
+					override fun onSubscribe(d: Disposable) {
+						loadingDialog.show()
+					}
 
-                    override fun onNext(t: Any) {
-                    }
+					override fun onNext(t: Any) {
+					}
 
-                    override fun onError(e: Throwable) {
-                        loadingDialog.dismiss()
-                        Logs.wtf(TAG, "onError: ", e)
-                        Snackbar.make(coordinatorLayout, e.message.toString(), Snackbar.LENGTH_SHORT)
-                                .show()
-                    }
-                })
-    }
+					override fun onError(e: Throwable) {
+						loadingDialog.dismiss()
+						Logs.wtf(TAG, "onError: ", e)
+						Snackbar.make(coordinatorLayout, e.message.toString(), Snackbar.LENGTH_SHORT)
+								.show()
+					}
+				})
+	}
 }

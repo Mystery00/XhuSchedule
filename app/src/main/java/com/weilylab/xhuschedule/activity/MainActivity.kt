@@ -89,15 +89,15 @@ import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
 import vip.mystery0.tools.logs.Logs
+import vip.mystery0.tools.utils.Mystery0DensityUtil
 import java.io.File
 import java.io.InputStreamReader
 import java.net.UnknownHostException
 import java.util.*
 import kotlin.collections.ArrayList
 
-class MainActivity : BaseActivity() {
+class MainActivity : XhuBaseActivity() {
 	companion object {
-		private val TAG = "MainActivity"
 		private const val ADD_ACCOUNT_CODE = 1
 		private const val ANIMATION_DURATION = 480L
 	}
@@ -126,36 +126,11 @@ class MainActivity : BaseActivity() {
 	lateinit var mWeiboShareAPI: IWeiboShareAPI
 	lateinit var wxAPI: IWXAPI
 
-	override fun onCreate(savedInstanceState: Bundle?) {
-		super.onCreate(savedInstanceState)
+	override fun initData() {
+		super.initData()
 		val params = Bundle()
 		params.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "main")
 		mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, params)
-		setContentView(R.layout.activity_main)
-		arrowDrawable = ContextCompat.getDrawable(this@MainActivity, R.drawable.ms__arrow)
-		registerWeibo(savedInstanceState)
-		registerWeiXin()
-		loadingDialog = ZLoadingDialog(this)
-				.setLoadingBuilder(Z_TYPE.DOUBLE_CIRCLE)
-				.setHintText(getString(R.string.hint_dialog_update_cache))
-				.setHintTextSize(16F)
-				.setCanceledOnTouchOutside(false)
-				.setLoadingColor(ContextCompat.getColor(this, R.color.colorAccent))
-				.setHintTextColor(ContextCompat.getColor(this, R.color.colorAccent))
-				.create()
-		updateProfileDialog = ZLoadingDialog(this)
-				.setLoadingBuilder(Z_TYPE.CIRCLE_CLOCK)
-				.setHintText(getString(R.string.hint_dialog_update_profile))
-				.setHintTextSize(16F)
-				.setCanceledOnTouchOutside(false)
-				.setLoadingColor(ContextCompat.getColor(this, R.color.colorAccent))
-				.setHintTextColor(ContextCompat.getColor(this, R.color.colorAccent))
-				.create()
-		initView()
-		updateAllView()
-		showUpdateLog()
-		if (Settings.isFirstRun)
-			showcase()
 	}
 
 	private fun showUpdateLog() {
@@ -223,7 +198,36 @@ class MainActivity : BaseActivity() {
 		ScheduleHelper.isTableLayoutChange = false
 	}
 
-	private fun initView() {
+	override fun initView() {
+		super.initView()
+		setContentView(R.layout.activity_main)
+		arrowDrawable = ContextCompat.getDrawable(this@MainActivity, R.drawable.ms__arrow)
+		registerWeibo()
+		registerWeiXin()
+		loadingDialog = ZLoadingDialog(this)
+				.setLoadingBuilder(Z_TYPE.DOUBLE_CIRCLE)
+				.setHintText(getString(R.string.hint_dialog_update_cache))
+				.setHintTextSize(16F)
+				.setCanceledOnTouchOutside(false)
+				.setLoadingColor(ContextCompat.getColor(this, R.color.colorAccent))
+				.setHintTextColor(ContextCompat.getColor(this, R.color.colorAccent))
+				.create()
+		updateProfileDialog = ZLoadingDialog(this)
+				.setLoadingBuilder(Z_TYPE.CIRCLE_CLOCK)
+				.setHintText(getString(R.string.hint_dialog_update_profile))
+				.setHintTextSize(16F)
+				.setCanceledOnTouchOutside(false)
+				.setLoadingColor(ContextCompat.getColor(this, R.color.colorAccent))
+				.setHintTextColor(ContextCompat.getColor(this, R.color.colorAccent))
+				.create()
+		initLayout()
+		updateAllView()
+		showUpdateLog()
+		if (Settings.isFirstRun)
+			showcase()
+	}
+
+	private fun initLayout(){
 		val viewPagerAdapter = ViewPagerAdapter(supportFragmentManager)
 		viewPagerAdapter.addFragment(todayFragment)
 		viewPagerAdapter.addFragment(weekFragment)
@@ -623,9 +627,9 @@ class MainActivity : BaseActivity() {
 		titleTextView.setCompoundDrawablesWithIntrinsicBounds(null, null, if (isShowArrow) arrowDrawable else null, null)
 		weekAnimator?.cancel()
 		weekAnimator = if (isShow)
-			ObjectAnimator.ofFloat(layout_week_recycler_view, Constants.ANIMATION_TRANSLATION_Y, 0F, DensityUtil.dip2px(this, 56F).toFloat())
+			ObjectAnimator.ofFloat(layout_week_recycler_view, Constants.ANIMATION_TRANSLATION_Y, 0F, Mystery0DensityUtil.dip2px(this, 56F).toFloat())
 		else
-			ObjectAnimator.ofFloat(layout_week_recycler_view, Constants.ANIMATION_TRANSLATION_Y, DensityUtil.dip2px(this, 56F).toFloat(), 0F)
+			ObjectAnimator.ofFloat(layout_week_recycler_view, Constants.ANIMATION_TRANSLATION_Y, Mystery0DensityUtil.dip2px(this, 56F).toFloat(), 0F)
 		weekAnimator?.addListener(object : Animator.AnimatorListener {
 			override fun onAnimationRepeat(animation: Animator?) {
 			}
@@ -707,9 +711,9 @@ class MainActivity : BaseActivity() {
 		animatorList.forEach { it.cancel() }
 		animatorList.clear()
 		animatorList.add(ObjectAnimator.ofFloat(action_sync, Constants.ANIMATION_ROTATION, 360F, 0F).setDuration(ANIMATION_DURATION))
-		animatorList.add(ObjectAnimator.ofFloat(action_sync, Constants.ANIMATION_TRANSLATION_X, DensityUtil.dip2px(this, 68F).toFloat(), 0F).setDuration(ANIMATION_DURATION))
+		animatorList.add(ObjectAnimator.ofFloat(action_sync, Constants.ANIMATION_TRANSLATION_X, Mystery0DensityUtil.dip2px(this, 68F).toFloat(), 0F).setDuration(ANIMATION_DURATION))
 		animatorList.add(ObjectAnimator.ofFloat(action_settings, Constants.ANIMATION_ROTATION, 0F, 360F).setDuration(ANIMATION_DURATION))
-		animatorList.add(ObjectAnimator.ofFloat(action_settings, Constants.ANIMATION_TRANSLATION_X, -DensityUtil.dip2px(this, 68F).toFloat(), 0F).setDuration(ANIMATION_DURATION))
+		animatorList.add(ObjectAnimator.ofFloat(action_settings, Constants.ANIMATION_TRANSLATION_X, -Mystery0DensityUtil.dip2px(this, 68F).toFloat(), 0F).setDuration(ANIMATION_DURATION))
 		animatorList.forEach { it.start() }
 	}
 
@@ -717,9 +721,9 @@ class MainActivity : BaseActivity() {
 		animatorList.forEach { it.cancel() }
 		animatorList.clear()
 		animatorList.add(ObjectAnimator.ofFloat(action_sync, Constants.ANIMATION_ROTATION, 0F, 360F).setDuration(ANIMATION_DURATION))
-		animatorList.add(ObjectAnimator.ofFloat(action_sync, Constants.ANIMATION_TRANSLATION_X, 0F, DensityUtil.dip2px(this, 68F).toFloat()).setDuration(ANIMATION_DURATION))
+		animatorList.add(ObjectAnimator.ofFloat(action_sync, Constants.ANIMATION_TRANSLATION_X, 0F, Mystery0DensityUtil.dip2px(this, 68F).toFloat()).setDuration(ANIMATION_DURATION))
 		animatorList.add(ObjectAnimator.ofFloat(action_settings, Constants.ANIMATION_ROTATION, 360F, 0F).setDuration(ANIMATION_DURATION))
-		animatorList.add(ObjectAnimator.ofFloat(action_settings, Constants.ANIMATION_TRANSLATION_X, 0F, -DensityUtil.dip2px(this, 68F).toFloat()).setDuration(ANIMATION_DURATION))
+		animatorList.add(ObjectAnimator.ofFloat(action_settings, Constants.ANIMATION_TRANSLATION_X, 0F, -Mystery0DensityUtil.dip2px(this, 68F).toFloat()).setDuration(ANIMATION_DURATION))
 		animatorList.forEach { it.start() }
 	}
 
@@ -745,24 +749,8 @@ class MainActivity : BaseActivity() {
 		super.onActivityResult(requestCode, resultCode, data)
 	}
 
-	private fun registerWeibo(savedInstanceState: Bundle?) {
-		// 创建微博分享接口实例
+	private fun registerWeibo() {
 		mWeiboShareAPI = WeiboShareSDK.createWeiboAPI(this, Constants.WEIBO_API_KEY, false)
-
-		// 注册第三方应用到微博客户端中，注册成功后该应用将显示在微博的应用列表中。
-		// 但该附件栏集成分享权限需要合作申请，详情请查看 Demo 提示
-		// NOTE：请务必提前注册，即界面初始化的时候或是应用程序初始化时，进行注册
-//        mWeiboShareAPI.registerApp()
-
-		// 当 Activity 被重新初始化时（该 Activity 处于后台时，可能会由于内存不足被杀掉了），
-		// 需要调用 {@link IWeiboShareAPI#handleWeiboResponse} 来接收微博客户端返回的数据。
-		// 执行成功，返回 true，并调用 {@link IWeiboHandler.Response#onResponse}；
-		// 失败返回 false，不调用上述回调
-		if (savedInstanceState != null) {
-			mWeiboShareAPI.handleWeiboResponse(intent) {
-				Logs.i(TAG, "registerWeibo: $it")
-			}
-		}
 	}
 
 	private fun registerWeiXin() {

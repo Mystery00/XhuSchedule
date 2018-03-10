@@ -62,8 +62,6 @@ import com.weilylab.xhuschedule.activity.LoginActivity
 import com.weilylab.xhuschedule.util.Constants
 import com.weilylab.xhuschedule.util.Settings
 import com.weilylab.xhuschedule.util.XhuFileUtil
-import io.reactivex.Observer
-import io.reactivex.disposables.Disposable
 import java.util.*
 
 /**

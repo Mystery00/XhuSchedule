@@ -31,26 +31,31 @@
  * Last modified 18-2-21 下午9:11
  */
 
-package com.weilylab.xhuschedule.util
+package com.weilylab.xhuschedule.activity
 
-import android.content.Context
+import android.support.v7.app.AppCompatDelegate
+import com.google.firebase.FirebaseApp
+import com.google.firebase.analytics.FirebaseAnalytics
+import com.oasisfeng.condom.CondomContext
+import com.oasisfeng.condom.CondomOptions
+import com.weilylab.xhuschedule.util.APPActivityManager
+import vip.mystery0.tools.base.BaseActivity
 
+abstract class XhuBaseActivity : BaseActivity() {
+	lateinit var mFirebaseAnalytics: FirebaseAnalytics
 
-/**
- * Created by myste.
- */
-object DensityUtil {
-    fun dip2px(context: Context,
-               dpValue: Float): Int = (dpValue * context.resources.displayMetrics.density + 0.5F).toInt()
+	override fun initView() {
+		AppCompatDelegate.setCompatVectorFromResourcesEnabled(true)
+		val condom = CondomContext.wrap(this, "Firebase", CondomOptions().setOutboundJudge { _, _, target_package ->
+			target_package == "com.google.android.gms"
+		})
+		FirebaseApp.initializeApp(condom)
+		mFirebaseAnalytics = FirebaseAnalytics.getInstance(condom)
+		APPActivityManager.appManager.addActivity(this)
+	}
 
-    fun px2dip(context: Context,
-               pxValue: Float): Int = (pxValue / context.resources.displayMetrics.density + 0.5F).toInt()
-
-    fun getScreenWidth(context: Context): Int {
-        return context.resources.displayMetrics.widthPixels
-    }
-
-    fun getWidth(context: Context, leftMarginDip: Float, rightMarginDip: Float): Int {
-        return getScreenWidth(context) - dip2px(context, leftMarginDip) - dip2px(context, rightMarginDip)
-    }
+	override fun onDestroy() {
+		super.onDestroy()
+		APPActivityManager.appManager.finishActivity(this)
+	}
 }

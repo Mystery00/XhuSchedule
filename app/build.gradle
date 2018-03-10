@@ -106,7 +106,7 @@ dependencies {
     api 'com.squareup.retrofit2:retrofit:2.3.0'
     api 'com.squareup.retrofit2:adapter-rxjava2:2.3.0'
     api 'com.squareup.retrofit2:converter-gson:2.3.0'
-    api 'com.github.Mystery00.ToolsDemo:tools:2.4.4'
+    api 'com.github.Mystery00.ToolsDemo:tools:2.4.5'
     api 'com.zyao89:zloading:1.0.8'
     api 'de.hdodenhof:circleimageview:2.2.0'
     api 'com.jrummyapps:colorpicker:2.1.6'
@@ -131,7 +131,7 @@ buildscript {
         maven { url 'https://jitpack.io' }
     }
     dependencies {
-        classpath 'com.github.Mystery00.ToolsDemo:autoversion:2.4.4'
+        classpath 'com.github.Mystery00.ToolsDemo:autoversion:2.4.5'
     }
 }
 apply plugin: 'com.google.gms.google-services'

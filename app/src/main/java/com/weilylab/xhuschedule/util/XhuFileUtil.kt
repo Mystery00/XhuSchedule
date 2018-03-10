@@ -39,7 +39,6 @@ import android.os.Environment
 import com.google.gson.Gson
 import com.google.gson.JsonParser
 import com.weilylab.xhuschedule.APP
-import com.weilylab.xhuschedule.classes.baseClass.Course
 import com.weilylab.xhuschedule.classes.baseClass.XhuScheduleError
 import vip.mystery0.tools.logs.Logs
 import java.io.*
@@ -49,7 +48,6 @@ import java.security.MessageDigest
 import java.util.regex.Pattern
 import android.graphics.Bitmap.CompressFormat
 import android.content.Intent
-import android.content.pm.ResolveInfo
 import android.content.pm.PackageManager
 import android.net.Uri
 

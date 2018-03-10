@@ -57,6 +57,8 @@ import io.reactivex.observers.DisposableObserver
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.content_main.*
 import vip.mystery0.tools.logs.Logs
+import vip.mystery0.tools.utils.Mystery0ColorUtil
+import vip.mystery0.tools.utils.Mystery0DensityUtil
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.math.max
@@ -122,13 +124,13 @@ class TableFragment : Fragment() {
 			val tableNav: LinearLayout = rootView!!.findViewById(R.id.table_nav)
 			for (i in 0 until tableNav.childCount) {
 				val itemLayoutParams = tableNav.getChildAt(i).layoutParams
-				itemLayoutParams.height = DensityUtil.dip2px(activity!!, Settings.customTableItemHeight.toFloat())
+				itemLayoutParams.height = Mystery0DensityUtil.dip2px(activity!!, Settings.customTableItemHeight.toFloat())
 				tableNav.getChildAt(i).layoutParams = itemLayoutParams
 			}
 			val scheduleView: View = rootView!!.findViewById(R.id.table_schedule)
 			val scheduleLayoutParams = scheduleView.layoutParams
 			scheduleLayoutParams.width = ScheduleHelper.scheduleItemWidth * 7
-			scheduleLayoutParams.height = DensityUtil.dip2px(activity!!, Settings.customTableItemHeight.toFloat() * 11)
+			scheduleLayoutParams.height = Mystery0DensityUtil.dip2px(activity!!, Settings.customTableItemHeight.toFloat() * 11)
 			scheduleView.layoutParams = scheduleLayoutParams
 			//滑动联动
 			val contentHorizontalScrollView: ContentHorizontalScrollView = rootView!!.findViewById(R.id.contentHorizontalScrollView)
@@ -199,7 +201,7 @@ class TableFragment : Fragment() {
 							val tableNav: LinearLayout = rootView!!.findViewById(R.id.table_nav)
 							for (i in 0 until tableNav.childCount) {
 								val tableNavLayoutParams = tableNav.getChildAt(i).layoutParams
-								tableNavLayoutParams.height = DensityUtil.dip2px(activity!!, Settings.customTableItemHeight.toFloat())
+								tableNavLayoutParams.height = Mystery0DensityUtil.dip2px(activity!!, Settings.customTableItemHeight.toFloat())
 								tableNav.getChildAt(i).layoutParams = tableNavLayoutParams
 								(tableNav.getChildAt(i) as TextView).setTextColor(ContextCompat.getColor(activity!!, R.color.schedule_head_text_color))
 							}
@@ -222,7 +224,7 @@ class TableFragment : Fragment() {
 	}
 
 	private fun formatView() {
-		val itemHeight = DensityUtil.dip2px(activity!!, Settings.customTableItemHeight.toFloat() + 0.4F)
+		val itemHeight = Mystery0DensityUtil.dip2px(activity!!, Settings.customTableItemHeight.toFloat() + 0.4F)
 		val firstWeekOfTerm = Settings.firstWeekOfTerm
 		val date = firstWeekOfTerm.split('-')
 		val calendar = Calendar.getInstance()
@@ -319,7 +321,7 @@ class TableFragment : Fragment() {
 	}
 
 	private fun getItemView(course: Course, startTime: Int): View {
-		val itemHeight = DensityUtil.dip2px(activity!!, Settings.customTableItemHeight.toFloat() + 0.4F)
+		val itemHeight = Mystery0DensityUtil.dip2px(activity!!, Settings.customTableItemHeight.toFloat() + 0.4F)
 		val itemView = View.inflate(activity, R.layout.item_widget_table, null)
 		val imageView: ImageView = itemView.findViewById(R.id.imageView)
 		val textViewName: TextView = itemView.findViewById(R.id.textView_name)
@@ -344,7 +346,7 @@ class TableFragment : Fragment() {
 				textViewLocation.setTextColor(Color.GRAY)
 				gradientDrawable.setColor(Color.parseColor("#9AEEEEEE"))
 			}
-			else -> gradientDrawable.setColor(ColorUtil.parseColor(course.color, Settings.customTableOpacity))
+			else -> gradientDrawable.setColor(Mystery0ColorUtil.parseColor(course.color, Settings.customTableOpacity))
 
 		}
 		val timeArray = course.time.split('-')

@@ -71,6 +71,8 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import vip.mystery0.tools.logs.Logs
+import vip.mystery0.tools.utils.Mystery0ColorUtil
+import vip.mystery0.tools.utils.Mystery0DensityUtil
 import java.io.InputStream
 
 /**
@@ -166,7 +168,7 @@ class UISettingsFragment : BasePreferenceFragment() {
 			true
 		}
 		customTodayOpacityPreference.setOnPreferenceClickListener {
-			val color = ColorUtil.getRandomColorAsInt()
+			val color = Mystery0ColorUtil.getRandomColorAsInt()
 			var currentProgress = Settings.customTableOpacity
 			val view = View.inflate(activity, R.layout.dialog_custom_today_opacity, null)
 			val cardCourseLayout: CardView = view.findViewById(R.id.cardView)
@@ -222,24 +224,24 @@ class UISettingsFragment : BasePreferenceFragment() {
 			true
 		}
 		customTableOpacityPreference.setOnPreferenceClickListener {
-			var color = ColorUtil.getRandomColorAsInt()
+			var color = Mystery0ColorUtil.getRandomColorAsInt()
 			var currentProgress = Settings.customTodayOpacity
 			val view = View.inflate(activity, R.layout.dialog_custom_table_opacity, null)
 			val testCourseLayout: ConstraintLayout = view.findViewById(R.id.test_course_layout)
 			val seekBar: SeekBar = view.findViewById(R.id.seekBar)
 			val textView: TextView = view.findViewById(R.id.textView)
 			testCourseLayout.setOnClickListener {
-				color = ColorUtil.getRandomColorAsInt()
-				testCourseLayout.setBackgroundColor(ColorUtil.getRandomColorAsInt(currentProgress))
+				color = Mystery0ColorUtil.getRandomColorAsInt()
+				testCourseLayout.setBackgroundColor(Mystery0ColorUtil.getRandomColorAsInt(currentProgress))
 			}
-			testCourseLayout.setBackgroundColor(ColorUtil.getRandomColorAsInt(currentProgress))
+			testCourseLayout.setBackgroundColor(Mystery0ColorUtil.getRandomColorAsInt(currentProgress))
 			seekBar.progress = currentProgress
 			textView.text = getString(R.string.test_course_current_progress_trans, currentProgress * 100 / 255F)
 			seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
 				override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
 					currentProgress = progress
 					textView.text = getString(R.string.test_course_current_progress_trans, currentProgress * 100 / 255F)
-					testCourseLayout.setBackgroundColor(ColorUtil.parseColor(color, currentProgress))
+					testCourseLayout.setBackgroundColor(Mystery0ColorUtil.parseColor(color, currentProgress))
 				}
 
 				override fun onStartTrackingTouch(seekBar: SeekBar?) {
@@ -275,7 +277,7 @@ class UISettingsFragment : BasePreferenceFragment() {
 			true
 		}
 		customTextSizePreference.setOnPreferenceClickListener {
-			val color = ColorUtil.getRandomColorAsInt()
+			val color = Mystery0ColorUtil.getRandomColorAsInt()
 			var currentProgress = Settings.customTextSize - 4
 			val view = View.inflate(activity, R.layout.dialog_custom_table_item, null)
 			val testCourseLayout: ConstraintLayout = view.findViewById(R.id.test_course_layout)
@@ -284,10 +286,10 @@ class UISettingsFragment : BasePreferenceFragment() {
 			val textViewLocation: TextView = view.findViewById(R.id.textView_location)
 			val seekBar: SeekBar = view.findViewById(R.id.seekBar)
 			val textView: TextView = view.findViewById(R.id.textView)
-			val width = (resources.displayMetrics.widthPixels - DensityUtil.dip2px(activity, 32F)) / 7
+			val width = (resources.displayMetrics.widthPixels - Mystery0DensityUtil.dip2px(activity, 32F)) / 7
 			val layoutParams = testCourseLayout.layoutParams
 			layoutParams.width = width
-			layoutParams.height = DensityUtil.dip2px(activity, 144F)
+			layoutParams.height = Mystery0DensityUtil.dip2px(activity, 144F)
 			testCourseLayout.layoutParams = layoutParams
 			testCourseLayout.setBackgroundColor(color)
 			seekBar.max = 45
@@ -328,7 +330,7 @@ class UISettingsFragment : BasePreferenceFragment() {
 			true
 		}
 		customTextHeightPreference.setOnPreferenceClickListener {
-			val color = ColorUtil.getRandomColorAsInt()
+			val color = Mystery0ColorUtil.getRandomColorAsInt()
 			var currentProgress = Settings.customTableItemHeight
 			val view = View.inflate(activity, R.layout.dialog_custom_table_item, null)
 			val testCourseLayout: ConstraintLayout = view.findViewById(R.id.test_course_layout)
@@ -337,10 +339,10 @@ class UISettingsFragment : BasePreferenceFragment() {
 			val textViewLocation: TextView = view.findViewById(R.id.textView_location)
 			val seekBar: SeekBar = view.findViewById(R.id.seekBar)
 			val textView: TextView = view.findViewById(R.id.textView)
-			val width = (resources.displayMetrics.widthPixels - DensityUtil.dip2px(activity, 32F)) / 7
+			val width = (resources.displayMetrics.widthPixels - Mystery0DensityUtil.dip2px(activity, 32F)) / 7
 			val layoutParams = testCourseLayout.layoutParams
 			layoutParams.width = width
-			layoutParams.height = DensityUtil.dip2px(activity, currentProgress.toFloat())
+			layoutParams.height = Mystery0DensityUtil.dip2px(activity, currentProgress.toFloat())
 			testCourseLayout.layoutParams = layoutParams
 			testCourseLayout.setBackgroundColor(color)
 			seekBar.max = 300
@@ -353,7 +355,7 @@ class UISettingsFragment : BasePreferenceFragment() {
 			seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
 				override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
 					currentProgress = progress
-					layoutParams.height = DensityUtil.dip2px(activity, progress.toFloat())
+					layoutParams.height = Mystery0DensityUtil.dip2px(activity, progress.toFloat())
 					testCourseLayout.layoutParams = layoutParams
 					textView.text = getString(R.string.test_course_current_progress_text_height, progress)
 				}
@@ -383,8 +385,8 @@ class UISettingsFragment : BasePreferenceFragment() {
 		customTableItemWidthPreference.setOnPreferenceClickListener {
 			val navWidth = resources.getDimensionPixelSize(R.dimen.nav_width)
 			val lineWidth = resources.getDimensionPixelSize(R.dimen.divider_size)
-			val minWidthInDP = DensityUtil.px2dip(activity, (DensityUtil.getScreenWidth(activity) - navWidth - lineWidth) / 7F)
-			val color = ColorUtil.getRandomColorAsInt()
+			val minWidthInDP = Mystery0DensityUtil.px2dip(activity, (Mystery0DensityUtil.getScreenWidth(activity) - navWidth - lineWidth) / 7F)
+			val color = Mystery0ColorUtil.getRandomColorAsInt()
 			var currentProgress = if (Settings.customTableItemWidth == -1) minWidthInDP + 10 else Settings.customTableItemWidth
 			val view = View.inflate(activity, R.layout.dialog_custom_table_item, null)
 			val testCourseLayout: ConstraintLayout = view.findViewById(R.id.test_course_layout)
@@ -394,8 +396,8 @@ class UISettingsFragment : BasePreferenceFragment() {
 			val seekBar: SeekBar = view.findViewById(R.id.seekBar)
 			val textView: TextView = view.findViewById(R.id.textView)
 			val layoutParams = testCourseLayout.layoutParams
-			layoutParams.width = DensityUtil.dip2px(activity, currentProgress.toFloat())
-			layoutParams.height = DensityUtil.dip2px(activity, Settings.customTableItemHeight.toFloat())
+			layoutParams.width = Mystery0DensityUtil.dip2px(activity, currentProgress.toFloat())
+			layoutParams.height = Mystery0DensityUtil.dip2px(activity, Settings.customTableItemHeight.toFloat())
 			testCourseLayout.layoutParams = layoutParams
 			testCourseLayout.setBackgroundColor(color)
 			seekBar.progress = currentProgress - minWidthInDP - 10
@@ -408,7 +410,7 @@ class UISettingsFragment : BasePreferenceFragment() {
 			seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
 				override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
 					currentProgress = progress + minWidthInDP + 10
-					layoutParams.width = DensityUtil.dip2px(activity, currentProgress.toFloat())
+					layoutParams.width = Mystery0DensityUtil.dip2px(activity, currentProgress.toFloat())
 					testCourseLayout.layoutParams = layoutParams
 					textView.text = getString(R.string.test_course_current_progress_table_item_width, currentProgress)
 				}

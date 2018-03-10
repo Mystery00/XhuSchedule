@@ -37,8 +37,8 @@ import android.content.Context
 import android.widget.RemoteViews
 import android.widget.RemoteViewsService
 import com.weilylab.xhuschedule.R
-import com.weilylab.xhuschedule.util.ColorUtil
 import com.weilylab.xhuschedule.util.Settings
+import vip.mystery0.tools.utils.Mystery0ColorUtil
 
 /**
  * Created by mystery0.
@@ -79,7 +79,7 @@ class CourseListRemotesViewsFactory(private val context: Context) : RemoteViewsS
 				e.printStackTrace()
 				remotesView.setTextViewText(R.id.course_time_location, "${course.time} at ${course.location}")
 			}
-			remotesView.setInt(R.id.background, "setBackgroundColor", ColorUtil.parseColor(course.color, Settings.customTodayOpacity))
+			remotesView.setInt(R.id.background, "setBackgroundColor", Mystery0ColorUtil.parseColor(course.color, Settings.customTodayOpacity))
 			remotesView
 		} else {
 			RemoteViews(context.packageName, R.layout.layout_widget_no_course)
