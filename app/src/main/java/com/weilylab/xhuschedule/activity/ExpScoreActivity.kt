@@ -258,7 +258,7 @@ class ExpScoreActivity : XhuBaseActivity() {
 			spinner_username.setDropdownMaxHeight(dropMaxHeight)
 			spinner_year.setDropdownMaxHeight(dropMaxHeight)
 			spinner_term.setDropdownMaxHeight(dropMaxHeight)
-			this.term = term as Int
+			this.term = Integer.parseInt(term.toString())
 			initScores(currentStudent)
 		}
 		spinner_username.selectedIndex = studentShowList.size - 1
