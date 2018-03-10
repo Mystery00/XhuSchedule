@@ -39,7 +39,6 @@ import android.os.Environment
 import com.google.gson.Gson
 import com.google.gson.JsonParser
 import com.weilylab.xhuschedule.APP
-import com.weilylab.xhuschedule.classes.baseClass.XhuScheduleError
 import vip.mystery0.tools.logs.Logs
 import java.io.*
 import java.math.BigInteger
@@ -245,45 +244,6 @@ object XhuFileUtil {
 			}
 		}
 		return value
-	}
-
-	fun parseLog(logFile: File): XhuScheduleError {
-		val bufferedReader = BufferedReader(InputStreamReader(FileInputStream(logFile)))
-
-		var time = ""
-		var appVersionName = ""
-		var appVersionCode = 0
-		var androidVersion = ""
-		var sdk = 0
-		var vendor = ""
-		var model = ""
-		val ex: Throwable = Exception("empty")
-
-		var index = 0
-		var temp = bufferedReader.readLine()
-		while (temp != "") {
-			when (index) {
-				0 -> time = temp
-				1 -> {
-					val tempArray = temp.substring(temp.indexOfFirst { it == ':' } + 2).split('_')
-					appVersionName = tempArray[0]
-					appVersionCode = tempArray[1].toInt()
-				}
-				2 -> {
-					val tempArray = temp.substring(temp.indexOfFirst { it == ':' } + 2).split('_')
-					androidVersion = tempArray[0]
-					sdk = tempArray[1].toInt()
-				}
-				3 -> vendor = temp
-				4 -> model = temp
-				else -> {
-					Logs.i(TAG, "parseLog: " + temp)
-				}
-			}
-			index++
-			temp = bufferedReader.readLine()
-		}
-		return XhuScheduleError(time, appVersionName, appVersionCode, androidVersion, sdk, vendor, model, ex)
 	}
 
 	fun removeSavedPreference(sharedPreferenceName: String, keys: Array<String>) {

@@ -61,9 +61,6 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".activity.ErrorActivity"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".activity.ExamActivity"
             android:label="@string/title_activity_exam"
             android:screenOrientation="portrait"
