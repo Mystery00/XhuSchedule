@@ -79,7 +79,6 @@ class ProfileFragment : Fragment() {
 	}
 
 	private var profile: Profile? = null
-	private var isReady = false
 	private var rootView: View? = null
 	private var adapter: OperationAdapter? = null
 
@@ -114,14 +113,13 @@ class ProfileFragment : Fragment() {
 						.show()
 			}
 		}
-		isReady = true
 		return rootView
 	}
 
 	fun setProfileImg() {
 		Observable.create<Boolean> {
 			while (true) {
-				if (isReady)
+				if (rootView != null)
 					break
 				Thread.sleep(200)
 			}
@@ -156,7 +154,7 @@ class ProfileFragment : Fragment() {
 	fun setProfile(profile: Profile) {
 		Observable.create<Boolean> { subscriber ->
 			while (true) {
-				if (isReady)
+				if (rootView != null)
 					break
 				Thread.sleep(200)
 			}
