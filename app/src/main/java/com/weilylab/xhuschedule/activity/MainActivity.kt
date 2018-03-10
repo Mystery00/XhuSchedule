@@ -222,12 +222,12 @@ class MainActivity : XhuBaseActivity() {
 				.create()
 		initLayout()
 		val todayInfoText = CalendarUtil.getTodayText()
-		if (todayInfoText == Settings.isFirstEnterToday) {
+		if (todayInfoText != Settings.isFirstEnterToday) {
 			Logs.i(TAG, "initView: 这是今天的第一次运行")
+			Settings.isFirstEnterToday = todayInfoText
 			updateAllData()
 		} else {
 			Logs.i(TAG, "initView: 这不是今天的第一次运行")
-			Settings.isFirstEnterToday = todayInfoText
 			updateAllView()
 		}
 		showUpdateLog()

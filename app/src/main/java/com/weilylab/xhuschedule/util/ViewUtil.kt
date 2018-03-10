@@ -133,16 +133,19 @@ object ViewUtil {
 
 	fun setBackground(context: Context, imageView: ImageView) {
 		Logs.i("TAG", "setBackground: ")
-		var options = RequestOptions()
-				.signature(MediaStoreSignature("image/*", Calendar.getInstance().timeInMillis, 0))
 		val imagePath: String
+		var options = RequestOptions()
 		if (Settings.customBackgroundImg == "" || !File(Settings.customBackgroundImg).exists()) {
+			options = options.diskCacheStrategy(DiskCacheStrategy.ALL)
 			val list = context.resources.getStringArray(R.array.background_img)
 			imagePath = list[CalendarUtil.getSeason()]
 		} else {
-			options = options.diskCacheStrategy(DiskCacheStrategy.NONE)
+			options = options
+					.signature(MediaStoreSignature("image/*", File(Settings.customBackgroundImg).lastModified(), 0))
+					.diskCacheStrategy(DiskCacheStrategy.NONE)
 			imagePath = Settings.customBackgroundImg
 		}
+
 		Glide.with(context)
 				.load(imagePath)
 				.apply(options)

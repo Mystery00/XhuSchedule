@@ -19,6 +19,10 @@
     <string name="screen_category_notification_settings">通知设置</string>
     <string name="screen_category_notification_for_tomorrow">明日课程提醒</string>
     <string name="screen_category_notification_for_exam">考试提醒</string>
+    <string name="screen_category_ui_today">今日界面</string>
+    <string name="screen_category_ui_table">表格界面</string>
+    <string name="screen_category_ui_profile">个人界面</string>
+    <string name="screen_category_ui_common">通用</string>
 
     <string name="key_first_day" translatable="false">key_first_day</string>
     <string name="key_show_not" translatable="false">key_show_not</string>

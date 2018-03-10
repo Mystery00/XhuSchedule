@@ -69,30 +69,36 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/lineVertical" />
 
-    <com.weilylab.xhuschedule.view.ContentHorizontalScrollView
-        android:id="@+id/contentHorizontalScrollView"
+    <FrameLayout
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:fillViewport="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/lineHorizontal"
         app:layout_constraintTop_toBottomOf="@id/lineVertical">
 
-        <com.weilylab.xhuschedule.view.ContentVerticalScrollView
-            android:id="@+id/contentVerticalScrollView"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+        <com.weilylab.xhuschedule.view.ContentHorizontalScrollView
+            android:id="@+id/contentHorizontalScrollView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:fillViewport="true">
 
-            <include
-                android:id="@+id/table_schedule"
-                layout="@layout/layout_table_schedule"
+            <com.weilylab.xhuschedule.view.ContentVerticalScrollView
+                android:id="@+id/contentVerticalScrollView"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="match_parent"
+                android:fillViewport="true">
 
-        </com.weilylab.xhuschedule.view.ContentVerticalScrollView>
+                <include
+                    android:id="@+id/table_schedule"
+                    layout="@layout/layout_table_schedule"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
 
-    </com.weilylab.xhuschedule.view.ContentHorizontalScrollView>
+            </com.weilylab.xhuschedule.view.ContentVerticalScrollView>
+
+        </com.weilylab.xhuschedule.view.ContentHorizontalScrollView>
+
+    </FrameLayout>
 
 </android.support.constraint.ConstraintLayout>
