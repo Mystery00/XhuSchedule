@@ -49,6 +49,7 @@ import com.weilylab.xhuschedule.adapter.TodayAdapter
 import com.weilylab.xhuschedule.classes.baseClass.Course
 import com.weilylab.xhuschedule.util.Constants
 import com.weilylab.xhuschedule.util.Settings
+import com.weilylab.xhuschedule.util.ViewUtil
 import io.reactivex.Observable
 import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -61,103 +62,97 @@ import java.util.*
  * Created by myste.
  */
 class TodayFragment : Fragment() {
-    companion object {
+	companion object {
 
-        fun newInstance(list: ArrayList<Course>): TodayFragment {
-            val bundle = Bundle()
-            bundle.putSerializable(Constants.INTENT_TAG_NAME_LIST, list)
-            val fragment = TodayFragment()
-            fragment.arguments = bundle
-            return fragment
-        }
-    }
+		fun newInstance(list: ArrayList<Course>): TodayFragment {
+			val bundle = Bundle()
+			bundle.putSerializable(Constants.INTENT_TAG_NAME_LIST, list)
+			val fragment = TodayFragment()
+			fragment.arguments = bundle
+			return fragment
+		}
+	}
 
-    private lateinit var list: ArrayList<Course>
-    private lateinit var adapter: TodayAdapter
-    private var isReady = false
-    private var rootView: View? = null
+	private lateinit var list: ArrayList<Course>
+	private lateinit var adapter: TodayAdapter
+	private var isReady = false
+	private var rootView: View? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        @Suppress("UNCHECKED_CAST")
-        list = arguments?.getSerializable(Constants.INTENT_TAG_NAME_LIST) as ArrayList<Course>
-        adapter = TodayAdapter(activity!!, list)
-    }
+	override fun onCreate(savedInstanceState: Bundle?) {
+		super.onCreate(savedInstanceState)
+		@Suppress("UNCHECKED_CAST")
+		list = arguments?.getSerializable(Constants.INTENT_TAG_NAME_LIST) as ArrayList<Course>
+		adapter = TodayAdapter(activity!!, list)
+	}
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
-        if (rootView == null) {
-            rootView = inflater.inflate(R.layout.fragment_today, container, false)
-            val recyclerView: RecyclerView = rootView!!.findViewById(R.id.recycler_view)
-            recyclerView.layoutManager = LinearLayoutManager(activity)
-            recyclerView.adapter = adapter
-            isReady = true
-        }
-        return rootView
-    }
+	override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
+							  savedInstanceState: Bundle?): View? {
+		if (rootView == null) {
+			rootView = inflater.inflate(R.layout.fragment_today, container, false)
+			val recyclerView: RecyclerView = rootView!!.findViewById(R.id.recycler_view)
+			recyclerView.layoutManager = LinearLayoutManager(activity)
+			recyclerView.adapter = adapter
+			isReady = true
+		}
+		return rootView
+	}
 
-    fun setBackground() {
-        Observable.create<Boolean> { subscriber->
-            while (true)
-                if (rootView!=null)
-                    break
-            subscriber.onComplete()
-        }
-                .subscribeOn(Schedulers.newThread())
-                .unsubscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(object : DisposableObserver<Boolean>(){
-                    override fun onError(e: Throwable) {
-                        e.printStackTrace()
-                    }
+	fun setBackground() {
+		Observable.create<Boolean> { subscriber ->
+			while (true)
+				if (rootView != null)
+					break
+			subscriber.onComplete()
+		}
+				.subscribeOn(Schedulers.newThread())
+				.unsubscribeOn(Schedulers.newThread())
+				.observeOn(AndroidSchedulers.mainThread())
+				.subscribe(object : DisposableObserver<Boolean>() {
+					override fun onError(e: Throwable) {
+						e.printStackTrace()
+					}
 
-                    override fun onNext(t: Boolean) {
-                    }
+					override fun onNext(t: Boolean) {
+					}
 
-                    override fun onComplete() {
-                        val options = RequestOptions()
-                                .signature(MediaStoreSignature("image/*", Calendar.getInstance().timeInMillis, 0))
-                                .diskCacheStrategy(DiskCacheStrategy.NONE)
-                        Glide.with(this@TodayFragment)
-                                .load(Settings.customBackgroundImg)
-                                .apply(options)
-                                .into(rootView!!.findViewById(R.id.background))
-                    }
-                })
-    }
+					override fun onComplete() {
+						ViewUtil.setBackground(activity!!, rootView!!.findViewById(R.id.background))
+					}
+				})
+	}
 
-    fun refreshData() {
-        val observer = object : Observer<Boolean> {
-            override fun onComplete() {
-                adapter.notifyDataSetChanged()
-            }
+	fun refreshData() {
+		val observer = object : Observer<Boolean> {
+			override fun onComplete() {
+				adapter.notifyDataSetChanged()
+			}
 
-            override fun onSubscribe(d: Disposable) {
-            }
+			override fun onSubscribe(d: Disposable) {
+			}
 
-            override fun onError(e: Throwable) {
-            }
+			override fun onError(e: Throwable) {
+			}
 
-            override fun onNext(t: Boolean) {
-            }
-        }
-        val observable = Observable.create<Boolean> { subscriber ->
-            while (true) {
-                if (isReady)
-                    break
-                Thread.sleep(200)
-            }
-            subscriber.onComplete()
-        }
+			override fun onNext(t: Boolean) {
+			}
+		}
+		val observable = Observable.create<Boolean> { subscriber ->
+			while (true) {
+				if (isReady)
+					break
+				Thread.sleep(200)
+			}
+			subscriber.onComplete()
+		}
 
-        observable.subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(observer)
-    }
+		observable.subscribeOn(Schedulers.io())
+				.observeOn(AndroidSchedulers.mainThread())
+				.subscribe(observer)
+	}
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        if (rootView != null)
-            (rootView!!.parent as ViewGroup).removeView(rootView)
-    }
+	override fun onDestroyView() {
+		super.onDestroyView()
+		if (rootView != null)
+			(rootView!!.parent as ViewGroup).removeView(rootView)
+	}
 }

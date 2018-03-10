@@ -1,5 +1,5 @@
 /*
- * Created by Mystery0 on 18-2-21 下午9:12.
+ * Created by Mystery0 on 18-3-9 下午8:30.
  * Copyright (c) 2018. All Rights reserved.
  *
  *                    =====================================================
@@ -28,36 +28,54 @@
  *                    =                                                   =
  *                    =====================================================
  *
- * Last modified 18-2-21 下午9:11
+ * Last modified 18-3-9 下午8:30
  */
 
-package com.weilylab.xhuschedule.activity
+package com.weilylab.xhuschedule.util
 
-import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
-import android.support.v7.app.AppCompatDelegate
-import com.google.firebase.FirebaseApp
-import com.google.firebase.analytics.FirebaseAnalytics
-import com.oasisfeng.condom.CondomContext
-import com.oasisfeng.condom.CondomOptions
-import com.weilylab.xhuschedule.util.APPActivityManager
+import android.content.Context
+import android.graphics.Color
+import androidx.content.edit
+import com.weilylab.xhuschedule.APP
+import com.weilylab.xhuschedule.classes.baseClass.Course
+import vip.mystery0.tools.utils.Mystery0ColorUtil
 
+object ColorUtil {
+	private val sharedPreference = APP.getContext().getSharedPreferences(Constants.SHARED_PREFERENCE_COLOR, Context.MODE_PRIVATE)
 
-abstract class BaseActivity : AppCompatActivity() {
-    lateinit var mFirebaseAnalytics: FirebaseAnalytics
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true)
-        val condom = CondomContext.wrap(this, "Firebase", CondomOptions().setOutboundJudge { _, _, target_package ->
-            target_package == "com.google.android.gms"
-        })
-        FirebaseApp.initializeApp(condom)
-        mFirebaseAnalytics = FirebaseAnalytics.getInstance(condom)
-        APPActivityManager.appManager.addActivity(this)
-    }
+	fun getCourseColor(keyName: String): Int {
+		var color = getColor(keyName)
+		if (color == 0) {
+			color = Mystery0ColorUtil.getRandomColorAsInt()
+			saveColor(keyName, color)
+		}
+		return color
+	}
 
-    override fun onDestroy() {
-        super.onDestroy()
-        APPActivityManager.appManager.finishActivity(this)
-    }
+	fun getColor(keyName: String): Int {
+		return sharedPreference.getInt(keyName, 0)
+	}
+
+	fun saveColor(keyName: String, color: Int) {
+		sharedPreference.edit {
+			putInt(keyName, color)
+		}
+	}
+
+	fun parseCouseTableColor(course: Course): Int {
+		return parseCourseColorWithAlpha(course, 255)
+	}
+
+	fun parseCourseColorWithAlpha(course: Course, alpha: Int): Int {
+		val color = StringBuilder()
+		color.append('#')
+		var opacityString = Integer.toHexString(alpha)
+		if (opacityString.length < 2)
+			opacityString = "0$opacityString"
+		color.append(opacityString)
+		color.append((course.color and 0xff0000) shr 16)
+		color.append((course.color and 0x00ff00) shr 8)
+		color.append(course.color and 0x0000ff)
+		return Color.parseColor(color.toString())
+	}
 }

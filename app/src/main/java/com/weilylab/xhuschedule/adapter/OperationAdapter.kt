@@ -317,7 +317,7 @@ class OperationAdapter(private val context: Context) : RecyclerView.Adapter<Oper
         context.window.attributes = layoutParams
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(context).inflate(R.layout.item_operation, parent, false)
         return ViewHolder(view)
     }

@@ -100,6 +100,7 @@ object Constants {
     const val SHARED_PREFERENCE_TEMP = "temp"
     const val SHARED_PREFERENCE_UPDATE_DATA = "updateData"
     const val SHARED_PREFERENCE_COURSE_COLOR = "course_color"
+    const val SHARED_PREFERENCE_COLOR = "color"
     const val SHARED_PREFERENCE_IDS="ids"
 
     const val UPDATE_VERSION = "updateVersion"

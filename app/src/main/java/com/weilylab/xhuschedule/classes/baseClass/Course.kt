@@ -47,7 +47,7 @@ class Course : Serializable {
     var time: String = ""
     var type: String = ""
     var day: String = ""
-    var color = ""
+    var color = 0
 
     fun with(course: Course): Boolean {
         if (course.name == name) {

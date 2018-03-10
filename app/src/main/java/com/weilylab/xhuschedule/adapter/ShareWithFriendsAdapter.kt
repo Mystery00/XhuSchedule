@@ -196,7 +196,7 @@ class ShareWithFriendsAdapter(private val context: Context) : RecyclerView.Adapt
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(context).inflate(R.layout.item_share, parent, false)
         return ViewHolder(view)
     }

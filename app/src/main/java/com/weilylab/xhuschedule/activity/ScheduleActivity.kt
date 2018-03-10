@@ -71,436 +71,432 @@ import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_schedule.*
 import kotlinx.android.synthetic.main.content_schedule.*
 import vip.mystery0.tools.logs.Logs
+import vip.mystery0.tools.utils.Mystery0ColorUtil
+import vip.mystery0.tools.utils.Mystery0DensityUtil
 import java.io.File
 import java.io.InputStreamReader
 import java.net.UnknownHostException
 import java.util.*
 import kotlin.math.max
 
-class ScheduleActivity : BaseActivity() {
-    private val TAG = "ScheduleActivity"
-    private lateinit var initDialog: Dialog
-    private lateinit var loadingDialog: Dialog
-    private val studentList = ArrayList<Student>()
-    private var weekList = ArrayList<ArrayList<ArrayList<Course>>>()
-    private var currentStudent: Student? = null
-    private var year: String? = null
-    private var term: Int? = null
-    private val dropMaxHeight = 999
+class ScheduleActivity : XhuBaseActivity() {
+	private lateinit var initDialog: Dialog
+	private lateinit var loadingDialog: Dialog
+	private val studentList = ArrayList<Student>()
+	private var weekList = ArrayList<ArrayList<ArrayList<Course>>>()
+	private var currentStudent: Student? = null
+	private var year: String? = null
+	private var term: Int? = null
+	private val dropMaxHeight = 999
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        val params = Bundle()
-        params.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "schedule")
-        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, params)
-        setContentView(R.layout.activity_schedule)
-        setSupportActionBar(toolbar)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        initView()
-    }
+	override fun initData() {
+		super.initData()
+		val params = Bundle()
+		params.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "schedule")
+		mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, params)
+	}
 
-    private fun initView() {
-        initDialog = ZLoadingDialog(this)
-                .setLoadingBuilder(Z_TYPE.SNAKE_CIRCLE)
-                .setHintText(getString(R.string.hint_dialog_init))
-                .setHintTextSize(16F)
-                .setCanceledOnTouchOutside(false)
-                .setLoadingColor(ContextCompat.getColor(this, R.color.colorAccent))
-                .setHintTextColor(ContextCompat.getColor(this, R.color.colorAccent))
-                .create()
-        loadingDialog = ZLoadingDialog(this)
-                .setLoadingBuilder(Z_TYPE.SINGLE_CIRCLE)
-                .setHintText(getString(R.string.hint_dialog_sync))
-                .setHintTextSize(16F)
-                .setCanceledOnTouchOutside(false)
-                .setLoadingColor(ContextCompat.getColor(this, R.color.colorAccent))
-                .setHintTextColor(ContextCompat.getColor(this, R.color.colorAccent))
-                .create()
-        val options = RequestOptions()
-                .signature(MediaStoreSignature("image/*", Calendar.getInstance().timeInMillis, 0))
-                .diskCacheStrategy(DiskCacheStrategy.NONE)
-        if (Settings.customBackgroundImg != "")
-            Glide.with(this)
-                    .load(Settings.customBackgroundImg)
-                    .apply(options)
-                    .into(background)
-        val tableNav = table_nav as LinearLayout
-        for (i in 0 until tableNav.childCount) {
-            val layoutParams = tableNav.getChildAt(i).layoutParams
-            layoutParams.height = DensityUtil.dip2px(this, Settings.customTableItemHeight.toFloat())
-            tableNav.getChildAt(i).layoutParams = layoutParams
-            (tableNav.getChildAt(i) as TextView).setTextColor(ContextCompat.getColor(this, R.color.schedule_head_text_color))
-        }
-        studentList.clear()
-        studentList.addAll(XhuFileUtil.getArrayFromFile(XhuFileUtil.getStudentListFile(this), Student::class.java))
-        initInfo()
-    }
+	override fun initView() {
+		super.initView()
+		setContentView(R.layout.activity_schedule)
+		setSupportActionBar(toolbar)
+		supportActionBar?.setDisplayHomeAsUpEnabled(true)
+		initDialog = ZLoadingDialog(this)
+				.setLoadingBuilder(Z_TYPE.SNAKE_CIRCLE)
+				.setHintText(getString(R.string.hint_dialog_init))
+				.setHintTextSize(16F)
+				.setCanceledOnTouchOutside(false)
+				.setLoadingColor(ContextCompat.getColor(this, R.color.colorAccent))
+				.setHintTextColor(ContextCompat.getColor(this, R.color.colorAccent))
+				.create()
+		loadingDialog = ZLoadingDialog(this)
+				.setLoadingBuilder(Z_TYPE.SINGLE_CIRCLE)
+				.setHintText(getString(R.string.hint_dialog_sync))
+				.setHintTextSize(16F)
+				.setCanceledOnTouchOutside(false)
+				.setLoadingColor(ContextCompat.getColor(this, R.color.colorAccent))
+				.setHintTextColor(ContextCompat.getColor(this, R.color.colorAccent))
+				.create()
+		val options = RequestOptions()
+				.signature(MediaStoreSignature("image/*", Calendar.getInstance().timeInMillis, 0))
+				.diskCacheStrategy(DiskCacheStrategy.NONE)
+		if (Settings.customBackgroundImg != "")
+			Glide.with(this)
+					.load(Settings.customBackgroundImg)
+					.apply(options)
+					.into(background)
+		val tableNav = table_nav as LinearLayout
+		for (i in 0 until tableNav.childCount) {
+			val layoutParams = tableNav.getChildAt(i).layoutParams
+			layoutParams.height = Mystery0DensityUtil.dip2px(this, Settings.customTableItemHeight.toFloat())
+			tableNav.getChildAt(i).layoutParams = layoutParams
+			(tableNav.getChildAt(i) as TextView).setTextColor(ContextCompat.getColor(this, R.color.schedule_head_text_color))
+		}
+		studentList.clear()
+		studentList.addAll(XhuFileUtil.getArrayFromFile(XhuFileUtil.getStudentListFile(this), Student::class.java))
+		initInfo()
+	}
 
-    private fun getCourses(student: Student?, year: String?, term: Int?) {
-        if (student == null)
-            return
-        loadingDialog.show()
-        ScheduleHelper.tomcatRetrofit
-                .create(StudentService::class.java)
-                .getCourses(student.username, year, term)
-                .subscribeOn(Schedulers.newThread())
-                .unsubscribeOn(Schedulers.newThread())
-                .map({ responseBody -> Gson().fromJson(InputStreamReader(responseBody.byteStream()), GetCourseRT::class.java) })
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(object : DisposableObserver<GetCourseRT>() {
-                    private lateinit var getCourseRT: GetCourseRT
-                    override fun onComplete() {
-                        val parentFile = XhuFileUtil.getCourseParentFile(this@ScheduleActivity)
-                        if (!parentFile.exists())
-                            parentFile.mkdirs()
-                        val base64Name = XhuFileUtil.filterString(Base64.encodeToString(student.username.toByteArray(), Base64.DEFAULT))
-                        when (getCourseRT.rt) {
-                            ConstantsCode.DONE, ConstantsCode.SERVER_COURSE_ANALYZE_ERROR -> {
-                                val newFile = File(parentFile, "$base64Name-$year-$term")
-                                newFile.createNewFile()
-                                XhuFileUtil.saveObjectToFile(getCourseRT.courses, newFile)
-                                showCourses(student)
-                            }
-                            ConstantsCode.ERROR_USERNAME, ConstantsCode.ERROR_PASSWORD -> {
-                                loadingDialog.dismiss()
-                                Snackbar.make(coordinatorLayout, getString(R.string.hint_try_refresh_data_error, getCourseRT.msg), Snackbar.LENGTH_LONG)
-                                        .show()
-                            }
-                            ConstantsCode.ERROR_NOT_LOGIN -> {
-                                login(student, year, term)
-                            }
-                            else -> {
-                                loadingDialog.dismiss()
-                                Snackbar.make(coordinatorLayout, getCourseRT.msg, Snackbar.LENGTH_LONG)
-                                        .show()
-                            }
-                        }
-                    }
+	private fun getCourses(student: Student?, year: String?, term: Int?) {
+		if (student == null)
+			return
+		loadingDialog.show()
+		ScheduleHelper.tomcatRetrofit
+				.create(StudentService::class.java)
+				.getCourses(student.username, year, term)
+				.subscribeOn(Schedulers.newThread())
+				.unsubscribeOn(Schedulers.newThread())
+				.map({ responseBody -> Gson().fromJson(InputStreamReader(responseBody.byteStream()), GetCourseRT::class.java) })
+				.subscribeOn(Schedulers.io())
+				.observeOn(AndroidSchedulers.mainThread())
+				.subscribe(object : DisposableObserver<GetCourseRT>() {
+					private lateinit var getCourseRT: GetCourseRT
+					override fun onComplete() {
+						val parentFile = XhuFileUtil.getCourseParentFile(this@ScheduleActivity)
+						if (!parentFile.exists())
+							parentFile.mkdirs()
+						val base64Name = XhuFileUtil.filterString(Base64.encodeToString(student.username.toByteArray(), Base64.DEFAULT))
+						when (getCourseRT.rt) {
+							ConstantsCode.DONE, ConstantsCode.SERVER_COURSE_ANALYZE_ERROR -> {
+								val newFile = File(parentFile, "$base64Name-$year-$term")
+								newFile.createNewFile()
+								XhuFileUtil.saveObjectToFile(getCourseRT.courses, newFile)
+								showCourses(student)
+							}
+							ConstantsCode.ERROR_USERNAME, ConstantsCode.ERROR_PASSWORD -> {
+								loadingDialog.dismiss()
+								Snackbar.make(coordinatorLayout, getString(R.string.hint_try_refresh_data_error, getCourseRT.msg), Snackbar.LENGTH_LONG)
+										.show()
+							}
+							ConstantsCode.ERROR_NOT_LOGIN -> {
+								login(student, year, term)
+							}
+							else -> {
+								loadingDialog.dismiss()
+								Snackbar.make(coordinatorLayout, getCourseRT.msg, Snackbar.LENGTH_LONG)
+										.show()
+							}
+						}
+					}
 
-                    override fun onNext(t: GetCourseRT) {
-                        getCourseRT = t
-                    }
+					override fun onNext(t: GetCourseRT) {
+						getCourseRT = t
+					}
 
-                    override fun onError(e: Throwable) {
-                        loadingDialog.dismiss()
-                        e.printStackTrace()
-                        if (e is UnknownHostException)
-                            Snackbar.make(coordinatorLayout, R.string.error_network, Snackbar.LENGTH_SHORT)
-                                    .show()
-                        else
-                            Snackbar.make(coordinatorLayout, "请求出错：" + e.message + "，请重试", Snackbar.LENGTH_SHORT)
-                                    .show()
-                    }
-                })
-    }
+					override fun onError(e: Throwable) {
+						loadingDialog.dismiss()
+						e.printStackTrace()
+						if (e is UnknownHostException)
+							Snackbar.make(coordinatorLayout, R.string.error_network, Snackbar.LENGTH_SHORT)
+									.show()
+						else
+							Snackbar.make(coordinatorLayout, "请求出错：" + e.message + "，请重试", Snackbar.LENGTH_SHORT)
+									.show()
+					}
+				})
+	}
 
-    private fun showCourses(student: Student?) {
-        if (student == null)
-            return
-        Observable.create<Boolean> { subscriber ->
-            val parentFile = XhuFileUtil.getCourseParentFile(this)
-            if (!parentFile.exists())
-                parentFile.mkdirs()
-            val base64Name = XhuFileUtil.filterString(Base64.encodeToString(student.username.toByteArray(), Base64.DEFAULT))
-            val savedFile = File(parentFile, "$base64Name-$year-$term")
-            val courses = XhuFileUtil.getCoursesFromFile(this@ScheduleActivity, savedFile)
-            if (courses.isEmpty()) {
-                subscriber.onComplete()
-                return@create
-            }
-            val tempArray = CourseUtil.getAllCourses(courses)
-            weekList.clear()
-            weekList.addAll(tempArray)
-            subscriber.onComplete()
-        }
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(object : DisposableObserver<Boolean>() {
-                    override fun onNext(t: Boolean) {
-                    }
+	private fun showCourses(student: Student?) {
+		if (student == null)
+			return
+		Observable.create<Boolean> { subscriber ->
+			val parentFile = XhuFileUtil.getCourseParentFile(this)
+			if (!parentFile.exists())
+				parentFile.mkdirs()
+			val base64Name = XhuFileUtil.filterString(Base64.encodeToString(student.username.toByteArray(), Base64.DEFAULT))
+			val savedFile = File(parentFile, "$base64Name-$year-$term")
+			val courses = CourseUtil.getCoursesFromFile(savedFile)
+			if (courses.isEmpty()) {
+				subscriber.onComplete()
+				return@create
+			}
+			val tempArray = CourseUtil.getAllCourses(courses)
+			weekList.clear()
+			weekList.addAll(tempArray)
+			subscriber.onComplete()
+		}
+				.subscribeOn(Schedulers.newThread())
+				.observeOn(AndroidSchedulers.mainThread())
+				.subscribe(object : DisposableObserver<Boolean>() {
+					override fun onNext(t: Boolean) {
+					}
 
-                    override fun onComplete() {
-                        formatView()
-                        loadingDialog.dismiss()
-                    }
+					override fun onComplete() {
+						formatView()
+						loadingDialog.dismiss()
+					}
 
-                    override fun onError(e: Throwable) {
-                        e.printStackTrace()
-                        loadingDialog.dismiss()
-                    }
-                })
-    }
+					override fun onError(e: Throwable) {
+						e.printStackTrace()
+						loadingDialog.dismiss()
+					}
+				})
+	}
 
-    private fun formatView() {
-        var hasData = false
-        for (i in 0 until weekList.size)
-            (0 until weekList[i].size)
-                    .filter { weekList[i][it].isNotEmpty() }
-                    .forEach { hasData = true }
-        if (!hasData)
-            return
-        val itemHeight = DensityUtil.dip2px(this, Settings.customTableItemHeight.toFloat())
-        for (day in 0 until 7) {
-            val layoutList = ArrayList<TableLayoutHelper>()
-            val temp = resources.getIdentifier("table_schedule" + (day + 1), "id", "com.weilylab.xhuschedule")
-            val linearLayout: LinearLayout = findViewById(temp)
-            linearLayout.removeAllViews()
-            for (time in 0 until 11) {
-                val linkedList = weekList[time][day]
-                if (linkedList.isEmpty()) {//如果这个位置没有课
-                    if (isShowInLayout(layoutList, time))//如果格子被占用，直接继续循环
-                        continue
-                    val textView = LayoutInflater.from(this).inflate(R.layout.layout_text_view, null)
-                    linearLayout.addView(textView)
-                    val params = textView.layoutParams
-                    params.height = itemHeight
-                    textView.layoutParams = params
-                    continue
-                }
-                //该位置有课
-                //判断这个格子是否被占用
-                if (isShowInLayout(layoutList, time)) {
-                    var tableHelper = TableLayoutHelper()
-                    for (i in 0 until layoutList.size) {
-                        if (time in layoutList[i].start..layoutList[i].end) {
-                            tableHelper = layoutList[i]
-                            break
-                        }
-                    }
-                    linkedList.forEach { course ->
-                        val timeArray = course.time.split('-')
-                        tableHelper.end = max(tableHelper.end, timeArray[1].toInt() - 1)
-                        tableHelper.viewGroup.addView(getItemView(course, tableHelper.start))
-                    }
-                    val params = tableHelper.viewGroup.layoutParams
-                    params.height = (tableHelper.end - tableHelper.start + 1) * itemHeight
-                    tableHelper.viewGroup.layoutParams = params
-                } else {//这个格子没有被占用
-                    val view = LayoutInflater.from(this).inflate(R.layout.item_linear_layout, null)
-                    val viewGroup: LinearLayout = view.findViewById(R.id.linearLayout)
-                    var maxHeight = 0
-                    linkedList.forEach { course ->
-                        //循环确定这个格子的高度
-                        val timeArray = course.time.split('-')
-                        val courseTime = timeArray[1].toInt() - timeArray[0].toInt() + 1//计算这节课长度
-                        maxHeight = max(maxHeight, courseTime * itemHeight)
-                        viewGroup.addView(getItemView(course, time))
-                    }
-                    val tableHelper = TableLayoutHelper()
-                    tableHelper.start = time
-                    tableHelper.end = maxHeight / itemHeight + time - 1
-                    tableHelper.viewGroup = viewGroup
-                    layoutList.add(tableHelper)//将这个布局添加进list
-                    linearLayout.addView(viewGroup)
-                    val params = viewGroup.layoutParams
-                    params.height = maxHeight
-                    viewGroup.layoutParams = params
-                }
-            }
-        }
-    }
+	private fun formatView() {
+		var hasData = false
+		for (i in 0 until weekList.size)
+			(0 until weekList[i].size)
+					.filter { weekList[i][it].isNotEmpty() }
+					.forEach { hasData = true }
+		if (!hasData)
+			return
+		val itemHeight = Mystery0DensityUtil.dip2px(this, Settings.customTableItemHeight.toFloat())
+		for (day in 0 until 7) {
+			val layoutList = ArrayList<TableLayoutHelper>()
+			val temp = resources.getIdentifier("table_schedule" + (day + 1), "id", "com.weilylab.xhuschedule")
+			val linearLayout: LinearLayout = findViewById(temp)
+			linearLayout.removeAllViews()
+			for (time in 0 until 11) {
+				val linkedList = weekList[time][day]
+				if (linkedList.isEmpty()) {//如果这个位置没有课
+					if (isShowInLayout(layoutList, time))//如果格子被占用，直接继续循环
+						continue
+					val textView = LayoutInflater.from(this).inflate(R.layout.layout_text_view, null)
+					linearLayout.addView(textView)
+					val params = textView.layoutParams
+					params.height = itemHeight
+					textView.layoutParams = params
+					continue
+				}
+				//该位置有课
+				//判断这个格子是否被占用
+				if (isShowInLayout(layoutList, time)) {
+					var tableHelper = TableLayoutHelper()
+					for (i in 0 until layoutList.size) {
+						if (time in layoutList[i].start..layoutList[i].end) {
+							tableHelper = layoutList[i]
+							break
+						}
+					}
+					linkedList.forEach { course ->
+						val timeArray = course.time.split('-')
+						tableHelper.end = max(tableHelper.end, timeArray[1].toInt() - 1)
+						tableHelper.viewGroup.addView(getItemView(course, tableHelper.start))
+					}
+					val params = tableHelper.viewGroup.layoutParams
+					params.height = (tableHelper.end - tableHelper.start + 1) * itemHeight
+					tableHelper.viewGroup.layoutParams = params
+				} else {//这个格子没有被占用
+					val view = LayoutInflater.from(this).inflate(R.layout.item_linear_layout, null)
+					val viewGroup: LinearLayout = view.findViewById(R.id.linearLayout)
+					var maxHeight = 0
+					linkedList.forEach { course ->
+						//循环确定这个格子的高度
+						val timeArray = course.time.split('-')
+						val courseTime = timeArray[1].toInt() - timeArray[0].toInt() + 1//计算这节课长度
+						maxHeight = max(maxHeight, courseTime * itemHeight)
+						viewGroup.addView(getItemView(course, time))
+					}
+					val tableHelper = TableLayoutHelper()
+					tableHelper.start = time
+					tableHelper.end = maxHeight / itemHeight + time - 1
+					tableHelper.viewGroup = viewGroup
+					layoutList.add(tableHelper)//将这个布局添加进list
+					linearLayout.addView(viewGroup)
+					val params = viewGroup.layoutParams
+					params.height = maxHeight
+					viewGroup.layoutParams = params
+				}
+			}
+		}
+	}
 
-    private fun isShowInLayout(list: ArrayList<TableLayoutHelper>, itemIndex: Int): Boolean {
-        list.forEach {
-            if (itemIndex in it.start..it.end)
-                return true
-        }
-        return false
-    }
+	private fun isShowInLayout(list: ArrayList<TableLayoutHelper>, itemIndex: Int): Boolean {
+		list.forEach {
+			if (itemIndex in it.start..it.end)
+				return true
+		}
+		return false
+	}
 
-    private fun getItemView(course: Course, startTime: Int): View {
-        val itemHeight = DensityUtil.dip2px(this, Settings.customTableItemHeight.toFloat())
-        val itemView = View.inflate(this, R.layout.item_widget_table, null)
-        val imageView: ImageView = itemView.findViewById(R.id.imageView)
-        val textViewName: TextView = itemView.findViewById(R.id.textView_name)
-        val textViewTeacher: TextView = itemView.findViewById(R.id.textView_teacher)
-        val textViewLocation: TextView = itemView.findViewById(R.id.textView_location)
-        val textSize = Settings.customTextSize
-        textViewName.setTextSize(TypedValue.COMPLEX_UNIT_SP, textSize.toFloat())
-        textViewTeacher.setTextSize(TypedValue.COMPLEX_UNIT_SP, textSize.toFloat())
-        textViewLocation.setTextSize(TypedValue.COMPLEX_UNIT_SP, textSize.toFloat())
-        textViewName.text = course.name
-        textViewTeacher.text = course.teacher
-        textViewLocation.text = course.location
-        textViewName.setTextColor(Settings.customTableTextColor)
-        textViewTeacher.setTextColor(Settings.customTableTextColor)
-        textViewLocation.setTextColor(Settings.customTableTextColor)
-        val color: Int = try {
-            Color.parseColor('#' + Integer.toHexString(Settings.customTableOpacity) + course.color.substring(1))
-        } catch (e: Exception) {
-            Color.parseColor('#' + Integer.toHexString(Settings.customTableOpacity) + ScheduleHelper.getRandomColor())
-        }
-        val gradientDrawable = imageView.background as GradientDrawable
-        when (course.type) {
-            Constants.COURSE_TYPE_ERROR -> gradientDrawable.setColor(Color.RED)
-            Constants.COURSE_TYPE_NOT -> {
-                textViewName.setTextColor(Color.GRAY)
-                textViewTeacher.setTextColor(Color.GRAY)
-                textViewLocation.setTextColor(Color.GRAY)
-                gradientDrawable.setColor(Color.parseColor("#9AEEEEEE"))
-            }
-            else -> gradientDrawable.setColor(color)
-        }
-        val timeArray = course.time.split('-')
-        val height = (timeArray[1].toInt() - timeArray[0].toInt() + 1) * itemHeight
-        val linearLayoutParams = LinearLayout.LayoutParams(0, height, 1F)
-        linearLayoutParams.topMargin = (timeArray[0].toInt() - startTime - 1) * itemHeight
-        itemView.layoutParams = linearLayoutParams
-        return itemView
-    }
+	private fun getItemView(course: Course, startTime: Int): View {
+		val itemHeight = Mystery0DensityUtil.dip2px(this, Settings.customTableItemHeight.toFloat())
+		val itemView = View.inflate(this, R.layout.item_widget_table, null)
+		val imageView: ImageView = itemView.findViewById(R.id.imageView)
+		val textViewName: TextView = itemView.findViewById(R.id.textView_name)
+		val textViewTeacher: TextView = itemView.findViewById(R.id.textView_teacher)
+		val textViewLocation: TextView = itemView.findViewById(R.id.textView_location)
+		val textSize = Settings.customTextSize
+		textViewName.setTextSize(TypedValue.COMPLEX_UNIT_SP, textSize.toFloat())
+		textViewTeacher.setTextSize(TypedValue.COMPLEX_UNIT_SP, textSize.toFloat())
+		textViewLocation.setTextSize(TypedValue.COMPLEX_UNIT_SP, textSize.toFloat())
+		textViewName.text = course.name
+		textViewTeacher.text = course.teacher
+		textViewLocation.text = course.location
+		textViewName.setTextColor(Settings.customTableTextColor)
+		textViewTeacher.setTextColor(Settings.customTableTextColor)
+		textViewLocation.setTextColor(Settings.customTableTextColor)
+		val gradientDrawable = imageView.background as GradientDrawable
+		when (course.type) {
+			Constants.COURSE_TYPE_ERROR -> gradientDrawable.setColor(Color.RED)
+			Constants.COURSE_TYPE_NOT -> {
+				textViewName.setTextColor(Color.GRAY)
+				textViewTeacher.setTextColor(Color.GRAY)
+				textViewLocation.setTextColor(Color.GRAY)
+				gradientDrawable.setColor(Color.parseColor("#9AEEEEEE"))
+			}
+			else -> gradientDrawable.setColor(if (course.color != 0) course.color else Mystery0ColorUtil.getRandomColorAsInt())
+		}
+		val timeArray = course.time.split('-')
+		val height = (timeArray[1].toInt() - timeArray[0].toInt() + 1) * itemHeight
+		val linearLayoutParams = LinearLayout.LayoutParams(0, height, 1F)
+		linearLayoutParams.topMargin = (timeArray[0].toInt() - startTime - 1) * itemHeight
+		itemView.layoutParams = linearLayoutParams
+		return itemView
+	}
 
-    private fun login(student: Student, year: String?, term: Int?) {
-        student.login(object : LoginListener {
-            override fun error(rt: Int, e: Throwable) {
-                loadingDialog.dismiss()
-                Snackbar.make(coordinatorLayout, e.message!!, Snackbar.LENGTH_LONG)
-                        .show()
-            }
+	private fun login(student: Student, year: String?, term: Int?) {
+		student.login(object : LoginListener {
+			override fun error(rt: Int, e: Throwable) {
+				loadingDialog.dismiss()
+				Snackbar.make(coordinatorLayout, e.message!!, Snackbar.LENGTH_LONG)
+						.show()
+			}
 
-            override fun loginDone() {
-                getCourses(student, year, term)
-            }
-        })
-    }
+			override fun loginDone() {
+				getCourses(student, year, term)
+			}
+		})
+	}
 
-    private fun initInfo() {
-        val studentShowList = Array(studentList.size, { i -> studentList[i].username }).toMutableList()
-        studentShowList.add(getString(R.string.hint_popup_view_student))
-        spinner_username.setAdapter(CustomMaterialSpinnerAdapter(this, studentShowList))
-        val yearShowList = arrayListOf(getString(R.string.hint_popup_view_year))
-        spinner_year.setAdapter(CustomMaterialSpinnerAdapter(this, yearShowList))
-        val termShowList = arrayListOf("1", "2", "3", getString(R.string.hint_popup_view_term))
-        spinner_term.setAdapter(CustomMaterialSpinnerAdapter(this, termShowList))
-        spinner_username.setOnItemSelectedListener { _, _, _, username ->
-            spinner_username.setDropdownMaxHeight(dropMaxHeight)
-            spinner_year.setDropdownMaxHeight(dropMaxHeight)
-            spinner_term.setDropdownMaxHeight(dropMaxHeight)
-            setUsername(username.toString(), true)
-        }
-        spinner_year.setOnItemSelectedListener { _, _, _, year ->
-            spinner_username.setDropdownMaxHeight(dropMaxHeight)
-            spinner_year.setDropdownMaxHeight(dropMaxHeight)
-            spinner_term.setDropdownMaxHeight(dropMaxHeight)
-            this.year = year.toString()
-            showCourses(currentStudent)
-        }
-        spinner_term.setOnItemSelectedListener { _, _, _, term ->
-            spinner_username.setDropdownMaxHeight(dropMaxHeight)
-            spinner_year.setDropdownMaxHeight(dropMaxHeight)
-            spinner_term.setDropdownMaxHeight(dropMaxHeight)
-            this.term = Integer.parseInt(term.toString())
-            showCourses(currentStudent)
-        }
-        spinner_username.selectedIndex = studentShowList.size - 1
-        spinner_year.selectedIndex = 0
-        spinner_term.selectedIndex = termShowList.size - 1
-        if (studentList.size == 1) {
-            spinner_username.selectedIndex = 0
-            setUsername(studentShowList[0], true)
-        }
-    }
+	private fun initInfo() {
+		val studentShowList = Array(studentList.size, { i -> studentList[i].username }).toMutableList()
+		studentShowList.add(getString(R.string.hint_popup_view_student))
+		spinner_username.setAdapter(CustomMaterialSpinnerAdapter(this, studentShowList))
+		val yearShowList = arrayListOf(getString(R.string.hint_popup_view_year))
+		spinner_year.setAdapter(CustomMaterialSpinnerAdapter(this, yearShowList))
+		val termShowList = arrayListOf("1", "2", "3", getString(R.string.hint_popup_view_term))
+		spinner_term.setAdapter(CustomMaterialSpinnerAdapter(this, termShowList))
+		spinner_username.setOnItemSelectedListener { _, _, _, username ->
+			spinner_username.setDropdownMaxHeight(dropMaxHeight)
+			spinner_year.setDropdownMaxHeight(dropMaxHeight)
+			spinner_term.setDropdownMaxHeight(dropMaxHeight)
+			setUsername(username.toString(), true)
+		}
+		spinner_year.setOnItemSelectedListener { _, _, _, year ->
+			spinner_username.setDropdownMaxHeight(dropMaxHeight)
+			spinner_year.setDropdownMaxHeight(dropMaxHeight)
+			spinner_term.setDropdownMaxHeight(dropMaxHeight)
+			this.year = year.toString()
+			showCourses(currentStudent)
+		}
+		spinner_term.setOnItemSelectedListener { _, _, _, term ->
+			spinner_username.setDropdownMaxHeight(dropMaxHeight)
+			spinner_year.setDropdownMaxHeight(dropMaxHeight)
+			spinner_term.setDropdownMaxHeight(dropMaxHeight)
+			this.term = Integer.parseInt(term.toString())
+			showCourses(currentStudent)
+		}
+		spinner_username.selectedIndex = studentShowList.size - 1
+		spinner_year.selectedIndex = 0
+		spinner_term.selectedIndex = termShowList.size - 1
+		if (studentList.size == 1) {
+			spinner_username.selectedIndex = 0
+			setUsername(studentShowList[0], true)
+		}
+	}
 
-    private fun setUsername(username: String?, isAutoSelect: Boolean) {
-        val userList = ArrayList<Student>()
-        val yearList = ArrayList<String>()
-        //初始化入学年份
-        Observable.create<Any> {
-            userList.addAll(XhuFileUtil.getArrayFromFile(File(filesDir.absolutePath + File.separator + "data" + File.separator + "user"), Student::class.java))
-            val selectedStudent = userList.firstOrNull { it.username == username }
-            if (selectedStudent == null) {
-                it.onComplete()
-                return@create
-            }
-            currentStudent = selectedStudent
-            if (selectedStudent.profile != null) {
-                val start = selectedStudent.profile!!.grade.toInt()//进校年份
-                val calendar = Calendar.getInstance()
-                val end = when (calendar.get(Calendar.MONTH) + 1) {
-                    in 1 until 9 -> calendar.get(Calendar.YEAR)
-                    in 9 until 13 -> calendar.get(Calendar.YEAR) + 1
-                    else -> 0
-                }
-                val yearArray = Array(end - start, { i -> "${start + i}-${start + i + 1}" })
-                yearList.clear()
-                yearList.addAll(yearArray)
-                it.onComplete()
-            } else {
-                selectedStudent.getInfo(object : ProfileListener {
-                    override fun error(rt: Int, e: Throwable) {
-                        it.onError(e)
-                    }
+	private fun setUsername(username: String?, isAutoSelect: Boolean) {
+		val userList = ArrayList<Student>()
+		val yearList = ArrayList<String>()
+		//初始化入学年份
+		Observable.create<Any> {
+			userList.addAll(XhuFileUtil.getArrayFromFile(File(filesDir.absolutePath + File.separator + "data" + File.separator + "user"), Student::class.java))
+			val selectedStudent = userList.firstOrNull { it.username == username }
+			if (selectedStudent == null) {
+				it.onComplete()
+				return@create
+			}
+			currentStudent = selectedStudent
+			if (selectedStudent.profile != null) {
+				val start = selectedStudent.profile!!.grade.toInt()//进校年份
+				val calendar = Calendar.getInstance()
+				val end = when (calendar.get(Calendar.MONTH) + 1) {
+					in 1 until 9 -> calendar.get(Calendar.YEAR)
+					in 9 until 13 -> calendar.get(Calendar.YEAR) + 1
+					else -> 0
+				}
+				val yearArray = Array(end - start, { i -> "${start + i}-${start + i + 1}" })
+				yearList.clear()
+				yearList.addAll(yearArray)
+				it.onComplete()
+			} else {
+				selectedStudent.getInfo(object : ProfileListener {
+					override fun error(rt: Int, e: Throwable) {
+						it.onError(e)
+					}
 
-                    override fun got(profile: Profile) {
-                        val start = profile.grade.toInt()//进校年份
-                        val calendar = Calendar.getInstance()
-                        val end = when (calendar.get(Calendar.MONTH) + 1) {
-                            in 1 until 9 -> calendar.get(Calendar.YEAR)
-                            in 9 until 13 -> calendar.get(Calendar.YEAR) + 1
-                            else -> 0
-                        }
-                        val yearArray = Array(end - start, { i -> "${start + i}-${start + i + 1}" })
-                        yearList.clear()
-                        yearList.addAll(yearArray)
-                        it.onComplete()
-                    }
-                })
-            }
-        }
-                .subscribeOn(Schedulers.newThread())
-                .unsubscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(object : Observer<Any> {
-                    override fun onComplete() {
-                        initDialog.dismiss()
-                        yearList.add(getString(R.string.hint_popup_view_year))
-                        spinner_year.setAdapter(CustomMaterialSpinnerAdapter(this@ScheduleActivity, yearList))
-                        spinner_year.selectedIndex = yearList.size - 1
-                        if (isAutoSelect) {
-                            val term = CalendarUtil.getTermType()
-                            spinner_year.selectedIndex = yearList.size - 2//自动选择最后一年
-                            spinner_term.selectedIndex = term - 1//自动选择学期
-                            year = yearList[yearList.size - 2]
-                            this@ScheduleActivity.term = term
-                        }
-                        spinner_username.setDropdownMaxHeight(dropMaxHeight)
-                        spinner_year.setDropdownMaxHeight(dropMaxHeight)
-                        spinner_term.setDropdownMaxHeight(dropMaxHeight)
-                        showCourses(currentStudent)
-                    }
+					override fun got(profile: Profile) {
+						val start = profile.grade.toInt()//进校年份
+						val calendar = Calendar.getInstance()
+						val end = when (calendar.get(Calendar.MONTH) + 1) {
+							in 1 until 9 -> calendar.get(Calendar.YEAR)
+							in 9 until 13 -> calendar.get(Calendar.YEAR) + 1
+							else -> 0
+						}
+						val yearArray = Array(end - start, { i -> "${start + i}-${start + i + 1}" })
+						yearList.clear()
+						yearList.addAll(yearArray)
+						it.onComplete()
+					}
+				})
+			}
+		}
+				.subscribeOn(Schedulers.newThread())
+				.unsubscribeOn(Schedulers.newThread())
+				.observeOn(AndroidSchedulers.mainThread())
+				.subscribe(object : Observer<Any> {
+					override fun onComplete() {
+						initDialog.dismiss()
+						yearList.add(getString(R.string.hint_popup_view_year))
+						spinner_year.setAdapter(CustomMaterialSpinnerAdapter(this@ScheduleActivity, yearList))
+						spinner_year.selectedIndex = yearList.size - 1
+						if (isAutoSelect) {
+							val term = CalendarUtil.getTermType()
+							spinner_year.selectedIndex = yearList.size - 2//自动选择最后一年
+							spinner_term.selectedIndex = term - 1//自动选择学期
+							year = yearList[yearList.size - 2]
+							this@ScheduleActivity.term = term
+						}
+						spinner_username.setDropdownMaxHeight(dropMaxHeight)
+						spinner_year.setDropdownMaxHeight(dropMaxHeight)
+						spinner_term.setDropdownMaxHeight(dropMaxHeight)
+						showCourses(currentStudent)
+					}
 
-                    override fun onSubscribe(d: Disposable) {
-                        initDialog.show()
-                    }
+					override fun onSubscribe(d: Disposable) {
+						initDialog.show()
+					}
 
-                    override fun onNext(t: Any) {
-                    }
+					override fun onNext(t: Any) {
+					}
 
-                    override fun onError(e: Throwable) {
-                        initDialog.dismiss()
-                        Logs.wtf(TAG, "onError: ", e)
-                        Snackbar.make(coordinatorLayout, e.message.toString(), Snackbar.LENGTH_LONG)
-                                .show()
-                    }
-                })
-    }
+					override fun onError(e: Throwable) {
+						initDialog.dismiss()
+						Logs.wtf(TAG, "onError: ", e)
+						Snackbar.make(coordinatorLayout, e.message.toString(), Snackbar.LENGTH_LONG)
+								.show()
+					}
+				})
+	}
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.menu_activity_schedule, menu)
-        return true
-    }
+	override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+		menuInflater.inflate(R.menu.menu_activity_schedule, menu)
+		return true
+	}
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            android.R.id.home -> {
-                finish()
-                true
-            }
-            R.id.action_sync -> {
-                getCourses(currentStudent, year, term)
-                true
-            }
-            else -> super.onOptionsItemSelected(item)
-        }
-    }
+	override fun onOptionsItemSelected(item: MenuItem): Boolean {
+		return when (item.itemId) {
+			android.R.id.home -> {
+				finish()
+				true
+			}
+			R.id.action_sync -> {
+				getCourses(currentStudent, year, term)
+				true
+			}
+			else -> super.onOptionsItemSelected(item)
+		}
+	}
 }
