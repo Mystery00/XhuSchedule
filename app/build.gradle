@@ -103,23 +103,23 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
-    compile 'com.squareup.retrofit2:retrofit:2.3.0'
-    compile 'com.squareup.retrofit2:adapter-rxjava2:2.3.0'
-    compile 'com.squareup.retrofit2:converter-gson:2.3.0'
-    compile 'com.github.Mystery00.ToolsDemo:tools:2.4.4'
-    compile 'com.zyao89:zloading:1.0.8'
-    compile 'de.hdodenhof:circleimageview:2.2.0'
-    compile 'com.jrummyapps:colorpicker:2.1.6'
-    compile 'com.getkeepsafe.taptargetview:taptargetview:1.11.0'
-    compile 'com.github.yalantis:ucrop:2.2.1'
-    compile 'com.github.ybq:parallaxviewpager:2.0.0'
-    compile 'com.oasisfeng.condom:library:2.2.0'
-    compile 'com.jaredrummler:material-spinner:1.2.4'
-    compile 'com.android.support:multidex:1.0.3'
-    compile('com.crashlytics.sdk.android:crashlytics:2.7.1@aar') {
+    api 'com.squareup.retrofit2:retrofit:2.3.0'
+    api 'com.squareup.retrofit2:adapter-rxjava2:2.3.0'
+    api 'com.squareup.retrofit2:converter-gson:2.3.0'
+    api 'com.github.Mystery00.ToolsDemo:tools:2.4.4'
+    api 'com.zyao89:zloading:1.0.8'
+    api 'de.hdodenhof:circleimageview:2.2.0'
+    api 'com.jrummyapps:colorpicker:2.1.6'
+    api 'com.getkeepsafe.taptargetview:taptargetview:1.11.0'
+    api 'com.github.yalantis:ucrop:2.2.1'
+    api 'com.github.ybq:parallaxviewpager:2.0.0'
+    api 'com.oasisfeng.condom:library:2.2.0'
+    api 'com.jaredrummler:material-spinner:1.2.4'
+    api 'com.android.support:multidex:1.0.3'
+    api('com.crashlytics.sdk.android:crashlytics:2.7.1@aar') {
         transitive = true
     }
-    compile 'com.tencent.mm.opensdk:wechat-sdk-android-without-mta:5.1.4'
+    api 'com.tencent.mm.opensdk:wechat-sdk-android-without-mta:5.1.4'
     implementation files('libs/tencent_sdk.jar')
     implementation files('libs/weibo_sdk.jar')
 }
