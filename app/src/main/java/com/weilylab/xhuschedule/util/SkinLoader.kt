@@ -1,5 +1,5 @@
 /*
- * Created by Mystery0 on 18-2-21 下午9:12.
+ * Created by Mystery0 on 18-3-10 下午5:13.
  * Copyright (c) 2018. All Rights reserved.
  *
  *                    =====================================================
@@ -28,63 +28,21 @@
  *                    =                                                   =
  *                    =====================================================
  *
- * Last modified 18-2-21 下午9:11
+ * Last modified 18-3-10 下午5:13
  */
 
-package com.weilylab.xhuschedule
+package com.weilylab.xhuschedule.util
 
-import android.annotation.SuppressLint
 import android.content.Context
-import android.support.multidex.MultiDexApplication
-import com.google.firebase.FirebaseApp
-import com.google.firebase.analytics.FirebaseAnalytics
-import com.oasisfeng.condom.CondomContext
-import com.oasisfeng.condom.CondomOptions
-import com.tencent.tauth.Tencent
-import com.weilylab.xhuschedule.listener.EmptyTencentListener
-import com.weilylab.xhuschedule.util.Constants
-import com.weilylab.xhuschedule.util.SkinLoader
-import skin.support.SkinCompatManager
-import skin.support.app.SkinCardViewInflater
-import skin.support.constraint.app.SkinConstraintViewInflater
-import skin.support.design.app.SkinMaterialViewInflater
-import vip.mystery0.tools.logs.Logs
+import skin.support.load.SkinSDCardLoader
 
-/**
- * Created by myste.
- */
-class APP : MultiDexApplication() {
-	companion object {
-		private var app: APP? = null
-		private var mFirebaseAnalytics: FirebaseAnalytics? = null
-		@SuppressLint("StaticFieldLeak")
-		private var mFirebaseApp: FirebaseApp? = null
-		lateinit var tencent: Tencent
-		val tencentListener = EmptyTencentListener()
+class SkinLoader : SkinSDCardLoader() {
 
-		fun getContext(): Context = app!!
-
-		fun getFirebaseAnalytics(): FirebaseAnalytics = mFirebaseAnalytics!!
+	override fun getType(): Int {
+		return Int.MAX_VALUE
 	}
 
-	init {
-		app = this
-	}
-
-	override fun onCreate() {
-		super.onCreate()
-		val condom = CondomContext.wrap(applicationContext, "Firebase", CondomOptions().setOutboundJudge { _, _, target_package ->
-			target_package == "com.google.android.gms"
-		})
-		mFirebaseApp = FirebaseApp.initializeApp(condom)
-		mFirebaseAnalytics = FirebaseAnalytics.getInstance(condom)
-		tencent = Tencent.createInstance(Constants.QQ_API_KEY, CondomContext.wrap(applicationContext, "Tencent"))
-		Logs.setLevel(Logs.Debug)
-		SkinCompatManager.withoutActivity(this)
-				.addStrategy(SkinLoader())
-				.addInflater(SkinMaterialViewInflater())
-				.addInflater(SkinConstraintViewInflater())
-				.addInflater(SkinCardViewInflater())
-				.loadSkin()
+	override fun getSkinPath(context: Context?, skinName: String?): String {
+		return XhuFileUtil.getSkinPath().absolutePath
 	}
 }

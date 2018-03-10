@@ -39,7 +39,6 @@ import android.os.Environment
 import com.google.gson.Gson
 import com.google.gson.JsonParser
 import com.weilylab.xhuschedule.APP
-import vip.mystery0.tools.logs.Logs
 import java.io.*
 import java.math.BigInteger
 import java.nio.channels.FileChannel
@@ -55,7 +54,6 @@ import android.net.Uri
  * Created by myste.
  */
 object XhuFileUtil {
-	private val TAG = "XhuFileUtil"
 	const val UI_IMAGE_BACKGROUND = Constants.FILE_NAME_IMG_BACKGROUND
 	const val UI_IMAGE_USER_IMG = Constants.FILE_NAME_IMG_PROFILE
 
@@ -120,6 +118,16 @@ object XhuFileUtil {
 	 */
 	fun getCETImageFile(fileName: String): File {
 		return File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), fileName)
+	}
+
+	/**
+	 * 获取存储的皮肤或目录
+	 */
+	fun getSkinPath(skinName: String = ""): File {
+		val dir = Environment.getExternalStoragePublicDirectory(Constants.SKIN_DIR_NAME)
+		if (!dir.exists())
+			dir.mkdirs()
+		return File(dir, skinName)
 	}
 
 	fun filterString(name: String): String {

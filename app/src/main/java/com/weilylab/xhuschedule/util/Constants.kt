@@ -47,9 +47,6 @@ object Constants {
 	const val FILE_NAME_IMG_BACKGROUND = "background"
 	const val FILE_NAME_IMG_PROFILE = "user_img"
 
-	const val LOG_FILE_PREFIX = "crash"
-	const val LOG_FILE_SUFFIX = "txt"
-
 	const val COURSE_TYPE_ERROR = "-1"
 	const val COURSE_TYPE_ALL = "0"
 	const val COURSE_TYPE_SINGLE = "1"
@@ -78,8 +75,6 @@ object Constants {
 	const val NOTIFICATION_ID_COURSE_START_INDEX = 100
 	const val NOTIFICATION_ID_EXAM_START_INDEX = 200
 
-	const val INTENT_TAG_NAME_ERROR = "error"
-	const val INTENT_TAG_NAME_FILE = "file"
 	const val INTENT_TAG_NAME_TAG = "TAG"
 	const val INTENT_TAG_NAME_TYPE = "type"
 	const val INTENT_TAG_NAME_QINIU_PATH = "qiniuPath"
@@ -107,7 +102,7 @@ object Constants {
 
 	const val UPDATE_VERSION = "updateVersion"
 
-	const val SAVE_FILE = "saveFile"
+	const val SKIN_DIR_NAME = "Skin"
 
 	const val IS_FIRST_RUN = "isFirstRun"
 	const val IS_FIRST_ENTER = "isFirstEnter"
