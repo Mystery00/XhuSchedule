@@ -176,4 +176,12 @@ object CalendarUtil {
 			else -> WINTER
 		}
 	}
+
+	fun getTodayText(): String {
+		val calendar = Calendar.getInstance()
+		val year = calendar.get(Calendar.YEAR)
+		val month = calendar.get(Calendar.MONTH)
+		val date = calendar.get(Calendar.DATE)
+		return "$year-$month-$date"
+	}
 }

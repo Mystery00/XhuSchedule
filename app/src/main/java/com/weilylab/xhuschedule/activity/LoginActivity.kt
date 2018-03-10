@@ -66,6 +66,7 @@ class LoginActivity : XhuBaseActivity() {
 
 	override fun monitor() {
 		super.monitor()
+		setContentView(R.layout.activity_login)
 		login_button.setOnClickListener { attemptLogin() }
 	}
 

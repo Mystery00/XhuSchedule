@@ -221,13 +221,21 @@ class MainActivity : XhuBaseActivity() {
 				.setHintTextColor(ContextCompat.getColor(this, R.color.colorAccent))
 				.create()
 		initLayout()
-		updateAllView()
+		val todayInfoText = CalendarUtil.getTodayText()
+		if (todayInfoText == Settings.isFirstEnterToday) {
+			Logs.i(TAG, "initView: 这是今天的第一次运行")
+			updateAllData()
+		} else {
+			Logs.i(TAG, "initView: 这不是今天的第一次运行")
+			Settings.isFirstEnterToday = todayInfoText
+			updateAllView()
+		}
 		showUpdateLog()
 		if (Settings.isFirstRun)
 			showcase()
 	}
 
-	private fun initLayout(){
+	private fun initLayout() {
 		val viewPagerAdapter = ViewPagerAdapter(supportFragmentManager)
 		viewPagerAdapter.addFragment(todayFragment)
 		viewPagerAdapter.addFragment(weekFragment)

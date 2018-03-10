@@ -63,6 +63,11 @@ object Settings {
 			sharedPreference.edit { putBoolean(Constants.IS_FIRST_ENTER, value) }
 		}
 		get() = sharedPreference.getBoolean(Constants.IS_FIRST_ENTER, true)
+	var isFirstEnterToday: String//是否是今天第一次运行
+		set(value) {
+			sharedPreference.edit { putString(Constants.IS_FIRST_ENTER_TODAY, value) }
+		}
+		get() = sharedPreference.getString(Constants.IS_FIRST_ENTER_TODAY, "")
 	var userImg: String//用户头像路径
 		set(value) {
 			sharedPreference.edit { putString(Constants.USER_IMG, value) }

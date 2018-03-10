@@ -111,6 +111,7 @@ object Constants {
 
 	const val IS_FIRST_RUN = "isFirstRun"
 	const val IS_FIRST_ENTER = "isFirstEnter"
+	const val IS_FIRST_ENTER_TODAY = "isFirstEnterToday"
 	const val FIRST_WEEK_OF_TERM = "firstWeekOfTerm"
 	const val IS_SHOW_NOT = "isShowNot"
 	const val USER_IMG = "userImg"
