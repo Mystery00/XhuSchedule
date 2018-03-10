@@ -38,100 +38,100 @@ apply plugin: 'vip.mystery0.autoversion'
 apply plugin: 'io.fabric'
 
 autoVersion {
-    major 2
-    minor 0
-    patch 0
-    beta 0
-    alpha 0
+	major 2
+	minor 0
+	patch 0
+	beta 0
+	alpha 0
 }
 
 android {
-    compileSdkVersion 27
-    defaultConfig {
-        applicationId "com.weilylab.xhuschedule"
-        minSdkVersion 19
-        targetSdkVersion 27
-        versionCode autoVersion.code
-        versionName autoVersion.name
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-        vectorDrawables.useSupportLibrary = true
-        setProperty("archivesBaseName", "XhuSchedule-$versionName-$versionCode-${autoVersion.branch}")
-        ndk {
-            moduleName = 'bspatch'
-        }
-        // Enabling multi dex support.
-        multiDexEnabled true
-    }
-    dependencies {
-        compile 'com.android.support:multidex:1.0.3'
-    }
-    buildTypes {
-        debug {
-            resValue "string", "app_version_name", autoVersion.name
-            resValue "string", "app_version_code", autoVersion.code + ''
-        }
-        release {
-            resValue "string", "app_version_name", autoVersion.name
-            resValue "string", "app_version_code", autoVersion.code + ''
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
-    }
-    externalNativeBuild {
-        cmake {
-            path 'src/main/jni/CMakeLists.txt'
-        }
-    }
+	compileSdkVersion 27
+	defaultConfig {
+		applicationId "com.weilylab.xhuschedule"
+		minSdkVersion 19
+		targetSdkVersion 27
+		versionCode autoVersion.code
+		versionName autoVersion.name
+		testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+		vectorDrawables.useSupportLibrary = true
+		setProperty("archivesBaseName", "XhuSchedule-$versionName-$versionCode-${autoVersion.branch}")
+		ndk {
+			moduleName = 'bspatch'
+		}
+		// Enabling multi dex support.
+		multiDexEnabled true
+	}
+	dependencies {
+		compile 'com.android.support:multidex:1.0.3'
+	}
+	buildTypes {
+		debug {
+			resValue "string", "app_version_name", autoVersion.name
+			resValue "string", "app_version_code", autoVersion.code + ''
+		}
+		release {
+			resValue "string", "app_version_name", autoVersion.name
+			resValue "string", "app_version_code", autoVersion.code + ''
+			minifyEnabled false
+			proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+		}
+	}
+	externalNativeBuild {
+		cmake {
+			path 'src/main/jni/CMakeLists.txt'
+		}
+	}
 }
 
 dependencies {
-    implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
-    implementation 'com.android.support:appcompat-v7:27.1.0'
-    implementation 'com.android.support:cardview-v7:27.1.0'
-    implementation 'com.android.support:design:27.1.0'
-    implementation 'com.android.support:support-v4:27.1.0'
-    implementation 'com.android.support:support-vector-drawable:27.1.0'
-    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
-    implementation 'com.google.firebase:firebase-core:11.8.0'
-    implementation 'com.github.bumptech.glide:glide:4.6.1'
-    implementation 'io.reactivex.rxjava2:rxandroid:2.0.2'
-    implementation 'io.reactivex.rxjava2:rxjava:2.1.10'
-    implementation 'com.squareup.okhttp3:okhttp:3.10.0'
-    implementation 'androidx.core:core-ktx:0.2'
-    annotationProcessor 'com.github.bumptech.glide:compiler:4.6.1'
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'com.android.support.test:runner:1.0.1'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
-    api 'com.squareup.retrofit2:retrofit:2.3.0'
-    api 'com.squareup.retrofit2:adapter-rxjava2:2.3.0'
-    api 'com.squareup.retrofit2:converter-gson:2.3.0'
-    api 'com.github.Mystery00.ToolsDemo:tools:2.4.5'
-    api 'com.zyao89:zloading:1.0.8'
-    api 'de.hdodenhof:circleimageview:2.2.0'
-    api 'com.jrummyapps:colorpicker:2.1.6'
-    api 'com.getkeepsafe.taptargetview:taptargetview:1.11.0'
-    api 'com.github.yalantis:ucrop:2.2.1'
-    api 'com.github.ybq:parallaxviewpager:2.0.0'
-    api 'com.oasisfeng.condom:library:2.2.0'
-    api 'com.jaredrummler:material-spinner:1.2.4'
-    api 'com.android.support:multidex:1.0.3'
-    api('com.crashlytics.sdk.android:crashlytics:2.7.1@aar') {
-        transitive = true
-    }
-    api 'com.tencent.mm.opensdk:wechat-sdk-android-without-mta:5.1.4'
-    implementation files('libs/tencent_sdk.jar')
-    implementation files('libs/weibo_sdk.jar')
+	implementation fileTree(include: ['*.jar'], dir: 'libs')
+	implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
+	implementation 'com.android.support:appcompat-v7:27.1.0'
+	implementation 'com.android.support:cardview-v7:27.1.0'
+	implementation 'com.android.support:design:27.1.0'
+	implementation 'com.android.support:support-v4:27.1.0'
+	implementation 'com.android.support:support-vector-drawable:27.1.0'
+	implementation 'com.android.support.constraint:constraint-layout:1.0.2'
+	implementation 'com.google.firebase:firebase-core:11.8.0'
+	implementation 'com.github.bumptech.glide:glide:4.6.1'
+	implementation 'io.reactivex.rxjava2:rxandroid:2.0.2'
+	implementation 'io.reactivex.rxjava2:rxjava:2.1.10'
+	implementation 'com.squareup.okhttp3:okhttp:3.10.0'
+	implementation 'androidx.core:core-ktx:0.2'
+	annotationProcessor 'com.github.bumptech.glide:compiler:4.6.1'
+	testImplementation 'junit:junit:4.12'
+	androidTestImplementation 'com.android.support.test:runner:1.0.1'
+	androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
+	api 'com.squareup.retrofit2:retrofit:2.3.0'
+	api 'com.squareup.retrofit2:adapter-rxjava2:2.3.0'
+	api 'com.squareup.retrofit2:converter-gson:2.3.0'
+	api 'com.github.Mystery00.ToolsDemo:tools:2.4.5'
+	api 'com.zyao89:zloading:1.0.8'
+	api 'de.hdodenhof:circleimageview:2.2.0'
+	api 'com.jrummyapps:colorpicker:2.1.6'
+	api 'com.getkeepsafe.taptargetview:taptargetview:1.11.0'
+	api 'com.github.yalantis:ucrop:2.2.1'
+	api 'com.github.ybq:parallaxviewpager:2.0.0'
+	api 'com.oasisfeng.condom:library:2.2.0'
+	api 'com.jaredrummler:material-spinner:1.2.4'
+	api 'com.android.support:multidex:1.0.3'
+	api('com.crashlytics.sdk.android:crashlytics:2.7.1@aar') {
+		transitive = true
+	}
+	api 'com.tencent.mm.opensdk:wechat-sdk-android-without-mta:5.1.4'
+	implementation files('libs/tencent_sdk.jar')
+	implementation files('libs/weibo_sdk.jar')
 }
 repositories {
-    mavenCentral()
+	mavenCentral()
 }
 buildscript {
-    repositories {
-        maven { url 'https://jitpack.io' }
-    }
-    dependencies {
-        classpath 'com.github.Mystery00.ToolsDemo:autoversion:2.4.5'
-    }
+	repositories {
+		maven { url 'https://jitpack.io' }
+	}
+	dependencies {
+		classpath 'com.github.Mystery00.ToolsDemo:autoversion:2.4.5'
+	}
 }
 apply plugin: 'com.google.gms.google-services'
