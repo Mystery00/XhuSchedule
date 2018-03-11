@@ -34,10 +34,8 @@
 package com.weilylab.xhuschedule.activity
 
 import android.support.v7.app.AppCompatDelegate
-import com.google.firebase.FirebaseApp
 import com.google.firebase.analytics.FirebaseAnalytics
-import com.oasisfeng.condom.CondomContext
-import com.oasisfeng.condom.CondomOptions
+import com.weilylab.xhuschedule.APP
 import com.weilylab.xhuschedule.util.APPActivityManager
 import vip.mystery0.tools.base.BaseActivity
 
@@ -45,12 +43,9 @@ abstract class XhuBaseActivity : BaseActivity() {
 	lateinit var mFirebaseAnalytics: FirebaseAnalytics
 
 	override fun initView() {
+		super.initView()
 		AppCompatDelegate.setCompatVectorFromResourcesEnabled(true)
-		val condom = CondomContext.wrap(this, "Firebase", CondomOptions().setOutboundJudge { _, _, target_package ->
-			target_package == "com.google.android.gms"
-		})
-		FirebaseApp.initializeApp(condom)
-		mFirebaseAnalytics = FirebaseAnalytics.getInstance(condom)
+		mFirebaseAnalytics = APP.getFirebaseAnalytics()
 		APPActivityManager.appManager.addActivity(this)
 	}
 
