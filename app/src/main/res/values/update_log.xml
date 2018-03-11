@@ -8,31 +8,6 @@
 <resources>
     <string name="dialog_title_update_log">%1$s版的更新日志</string>
     <string-array name="update_list">
-        <item>修复上一个版本存在的问题：</item>
-        <item>个人页面无法注销</item>
-        <item>查询实验考试成绩时选择学期崩溃</item>
-        <item>部分设备启动时崩溃</item>
-        <item>四六级成绩界面错乱</item>
-        <item> </item>
-        <item>全新版本——2.0 正式版发布</item>
-        <item> </item>
-        <item>全新图标：新的一年，新的面貌</item>
-        <item>界面改版：登录页面和个人页面改版，查询数据界面更新交互</item>
-        <item>表格改版：可滑动查看课程，请前往界面设置修改表格宽度（默认禁用）</item>
-        <item>动画改版：在原有基础上增加更多动画，优化交互体验</item>
-        <item>课程提醒：每日提醒课程和考试信息，不让你错过每一个课程</item>
-        <item>英语成绩：这次的四六级，您过了吗？</item>
-        <item>应用推荐：为常用应用做分享推荐，包括QQ，微信，微博……</item>
-        <item> </item>
-        <item>问题修复：</item>
-        <item>修复某些时候一直刷新无法停止</item>
-        <item>查询界面卡片有时候无法展开以及出现的多余空白</item>
-        <item>设置页面左上角按钮错误的事件响应</item>
-        <item>无法设置开学时间为未来</item>
-        <item>修复在Android 8.X上出现的后台服务以及通知问题</item>
-        <item>自定义背景推荐无法查看和下载</item>
-        <item> </item>
-        <item>版本说明：</item>
-        <item>由于更改了下载接口，所以将会停用以前的版本，请升级至2.0版本，届时低于2.0的版本将无法检测到之后的更新</item>
+        <item>该版本为测试版！</item>
     </string-array>
 </resources>
