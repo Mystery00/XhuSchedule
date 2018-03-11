@@ -82,9 +82,7 @@ import com.weilylab.xhuschedule.util.widget.WidgetHelper
 import com.zyao89.view.zloading.ZLoadingDialog
 import com.zyao89.view.zloading.Z_TYPE
 import io.reactivex.Observable
-import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.Disposable
 import io.reactivex.observers.DisposableObserver
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_main.*
@@ -151,28 +149,6 @@ class MainActivity : XhuBaseActivity() {
 					.create()
 			if (APPActivityManager.appManager.currentActivity() == this)
 				dialog.show()
-			Observable.create<Boolean> { subscriber ->
-				Thread.sleep(2000)
-				subscriber.onComplete()
-			}
-					.subscribeOn(Schedulers.newThread())
-					.unsubscribeOn(Schedulers.newThread())
-					.observeOn(AndroidSchedulers.mainThread())
-					.subscribe(object : Observer<Boolean> {
-						override fun onSubscribe(d: Disposable) {
-							dialog.getButton(AlertDialog.BUTTON_POSITIVE).isEnabled = false
-						}
-
-						override fun onError(e: Throwable) {
-						}
-
-						override fun onComplete() {
-							dialog.getButton(AlertDialog.BUTTON_POSITIVE).isEnabled = true
-						}
-
-						override fun onNext(t: Boolean) {
-						}
-					})
 		}
 	}
 
