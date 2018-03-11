@@ -48,6 +48,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.signature.MediaStoreSignature
 import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.perf.metrics.AddTrace
 import com.google.gson.Gson
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.adapter.CustomMaterialSpinnerAdapter
@@ -137,6 +138,7 @@ class ScheduleActivity : XhuBaseActivity() {
 		initInfo()
 	}
 
+	@AddTrace(name = "sync course data for other term trace", enabled = true)
 	private fun getCourses(student: Student?, year: String?, term: Int?) {
 		if (student == null)
 			return

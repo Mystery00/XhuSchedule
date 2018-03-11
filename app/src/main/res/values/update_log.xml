@@ -8,6 +8,15 @@
 <resources>
     <string name="dialog_title_update_log">%1$s版的更新日志</string>
     <string-array name="update_list">
-        <item>该版本为测试版！</item>
+        <item>新增：每天第一次打开课表自动同步数据</item>
+        <item> </item>
+        <item>修复：查询时更改学期导致崩溃</item>
+        <item>修复：注销用户时导致崩溃</item>
+        <item>修复：当高度小于屏幕高度的时候显示错乱</item>
+        <item>修复：当高度小于屏幕高度的时候显示错乱</item>
+        <item>修复：尝试修复在Android Oreo上后台服务初始化问题</item>
+        <item>修复：一些其他错误</item>
+        <item> </item>
+        <item>更改：移除日志记录以及上传</item>
     </string-array>
 </resources>

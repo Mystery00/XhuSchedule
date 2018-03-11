@@ -38,6 +38,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.perf.metrics.AddTrace
 import com.weilylab.xhuschedule.APP
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.classes.baseClass.Student

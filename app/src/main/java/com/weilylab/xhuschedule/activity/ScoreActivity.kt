@@ -47,6 +47,7 @@ import android.view.MenuItem
 import android.widget.ImageView
 import android.widget.TextView
 import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.perf.metrics.AddTrace
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.adapter.CustomMaterialSpinnerAdapter
 import com.weilylab.xhuschedule.classes.baseClass.Profile
@@ -161,6 +162,7 @@ class ScoreActivity : XhuBaseActivity() {
 				})
 	}
 
+	@AddTrace(name = "sync score data trace", enabled = true)
 	private fun getScores(student: Student?, year: String?, term: Int?) {
 		Logs.i(TAG, "getScore: year: $year term: $term")
 		loadingDialog.show()

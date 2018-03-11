@@ -54,6 +54,7 @@ import android.widget.Toast
 import com.getkeepsafe.taptargetview.TapTarget
 import com.getkeepsafe.taptargetview.TapTargetSequence
 import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.perf.metrics.AddTrace
 import com.google.gson.Gson
 import com.sina.weibo.sdk.api.share.IWeiboShareAPI
 import com.sina.weibo.sdk.api.share.WeiboShareSDK
@@ -230,7 +231,6 @@ class MainActivity : XhuBaseActivity() {
 			Logs.i(TAG, "initView: 这不是今天的第一次运行")
 			updateAllView()
 		}
-		showUpdateLog()
 		if (Settings.isFirstRun)
 			showcase()
 	}
@@ -381,12 +381,14 @@ class MainActivity : XhuBaseActivity() {
 						weekFragment.refreshData()
 						todayFragment.refreshData()
 						isRefreshData = false
+						showUpdateLog()
 					}
 
 					override fun onError(e: Throwable) {
 						e.printStackTrace()
 						isRefreshData = false
 						loadingDialog.dismiss()
+						showUpdateLog()
 					}
 
 					override fun onNext(student: Student) {
@@ -434,6 +436,7 @@ class MainActivity : XhuBaseActivity() {
 		}
 	}
 
+	@AddTrace(name = "sync course data trace", enabled = true)
 	private fun updateAllData() {
 		Logs.i(TAG, "updateAllData: ")
 		loadingDialog.show()

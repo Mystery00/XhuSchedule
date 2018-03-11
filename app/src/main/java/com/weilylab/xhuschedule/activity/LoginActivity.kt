@@ -45,6 +45,7 @@ import kotlinx.android.synthetic.main.activity_login.*
 import android.app.Activity
 import android.support.v4.content.ContextCompat
 import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.perf.metrics.AddTrace
 import com.weilylab.xhuschedule.classes.baseClass.Student
 import com.weilylab.xhuschedule.listener.LoginListener
 import com.weilylab.xhuschedule.util.XhuFileUtil
@@ -103,6 +104,7 @@ class LoginActivity : XhuBaseActivity() {
 		}
 	}
 
+	@AddTrace(name = "login trace", enabled = true)
 	private fun login() {
 		loginDialog.show()
 		val usernameStr = username.text.toString()

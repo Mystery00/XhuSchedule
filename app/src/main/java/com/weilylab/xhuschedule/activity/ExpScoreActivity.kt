@@ -46,6 +46,7 @@ import android.view.MenuItem
 import android.widget.ImageView
 import android.widget.TextView
 import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.perf.metrics.AddTrace
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.adapter.CustomMaterialSpinnerAdapter
 import com.weilylab.xhuschedule.classes.baseClass.ExpScore
@@ -154,6 +155,7 @@ class ExpScoreActivity : XhuBaseActivity() {
 				})
 	}
 
+	@AddTrace(name = "sync exp score data trace", enabled = true)
 	private fun getExpScores(student: Student?, year: String?, term: Int?) {
 		Logs.i(TAG, "getExpScores: year: $year term: $term")
 		loadingDialog.show()
