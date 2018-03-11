@@ -136,7 +136,7 @@ object Constants {
 	const val APPLIED_THEME="appliedTheme"
 
 	const val DEFAULT_TERM_START_DATE = "2018-2-5"
-	const val DEFAULT_OPACITY = 180
+	const val DEFAULT_OPACITY = 205
 	const val DEFAULT_COLOR_TEXT_TABLE = -1
 	const val DEFAULT_COLOR_TEXT_TODAY = -11184811
 	const val DEFAULT_SIZE_TEXT = 12
