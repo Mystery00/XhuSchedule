@@ -120,9 +120,13 @@ class LoginActivity : XhuBaseActivity() {
 			override fun loginDone() {
 				val userList = XhuFileUtil.getArrayListFromFile(XhuFileUtil.getStudentListFile(this@LoginActivity), Student::class.java)
 				var result = false
+				var hasMain = false
 				userList.forEach {
 					result = result || it.username == student.username
+					hasMain = hasMain || it.isMain
 				}
+				if (!hasMain)
+					student.isMain = true
 				if (!result)
 					userList.add(student)
 				XhuFileUtil.saveObjectToFile(userList, XhuFileUtil.getStudentListFile(this@LoginActivity))

@@ -88,7 +88,6 @@ import io.reactivex.observers.DisposableObserver
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
-import skin.support.SkinCompatManager
 import vip.mystery0.tools.logs.Logs
 import vip.mystery0.tools.utils.Mystery0DensityUtil
 import java.io.File
