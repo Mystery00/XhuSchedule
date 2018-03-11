@@ -67,6 +67,7 @@ class SplashActivity : XhuBaseActivity() {
 				.setHintText(getString(R.string.hint_dialog_do_update))
 				.setHintTextSize(16F)
 				.setCanceledOnTouchOutside(false)
+				.setCancelable(false)
 				.setLoadingColor(ContextCompat.getColor(this, R.color.colorAccent))
 				.setHintTextColor(ContextCompat.getColor(this, R.color.colorAccent))
 				.create()
