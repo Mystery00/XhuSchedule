@@ -131,6 +131,17 @@ object ViewUtil {
 		return bitmap
 	}
 
+	fun drawButtonDrawable(color: Int): Bitmap {
+		val bitmap = Bitmap.createBitmap(200, 100, Bitmap.Config.ARGB_8888)
+		val canvas = Canvas(bitmap)
+		val paint = Paint()
+		val rect = RectF(0F, 0F, 200F, 100F)
+		paint.color = color
+		paint.strokeWidth = 1F
+		canvas.drawRoundRect(rect, 5F, 5F, paint)
+		return bitmap
+	}
+
 	fun setBackground(context: Context, imageView: ImageView) {
 		Logs.i("TAG", "setBackground: ")
 		val imagePath: String

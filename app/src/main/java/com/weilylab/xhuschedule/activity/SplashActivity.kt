@@ -62,7 +62,7 @@ class SplashActivity : XhuBaseActivity() {
 	override fun initView() {
 		super.initView()
 		initDialog = ZLoadingDialog(this)
-				.setLoadingBuilder(Z_TYPE.CIRCLE_CLOCK)
+				.setLoadingBuilder(Z_TYPE.STAR_LOADING)
 				.setHintText(getString(R.string.hint_dialog_do_update))
 				.setHintTextSize(16F)
 				.setCanceledOnTouchOutside(false)
@@ -95,6 +95,7 @@ class SplashActivity : XhuBaseActivity() {
 					userList[0].isMain = true
 				//初始化颜色
 				XhuFileUtil.removeAllSavedPreference(this, Constants.SHARED_PREFERENCE_COURSE_COLOR)
+				it.onComplete()
 			}
 					.subscribeOn(Schedulers.newThread())
 					.unsubscribeOn(Schedulers.newThread())

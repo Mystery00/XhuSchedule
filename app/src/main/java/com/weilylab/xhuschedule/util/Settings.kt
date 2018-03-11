@@ -188,4 +188,9 @@ object Settings {
 			sharedPreference.edit { putInt(Constants.NOTIFICATION_TOMORROW_TYPE, value) }
 		}
 		get() = sharedPreference.getInt(Constants.NOTIFICATION_TOMORROW_TYPE, 1)
+	var currentTheme: String
+		set(value) {
+			sharedPreference.edit { putString(Constants.APPLIED_THEME, value) }
+		}
+		get() = sharedPreference.getString(Constants.APPLIED_THEME, "null")
 }

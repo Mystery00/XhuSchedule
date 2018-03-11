@@ -36,6 +36,8 @@
     <string name="action_default">恢复默认</string>
     <string name="action_save">保存</string>
     <string name="action_share">分享</string>
+    <string name="action_theme">使用</string>
+    <string name="action_use_theme">使用中</string>
 
     <string name="prompt_username">用户名</string>
     <string name="prompt_password">密码</string>
@@ -47,6 +49,7 @@
     <string name="operation_score_cet">四六级成绩查询</string>
     <string name="operation_feedback">意见反馈</string>
     <string name="operation_share">分享应用</string>
+    <string name="operation_theme">主题管理</string>
 
     <string name="share_qq">QQ</string>
     <string name="share_weixin">微信</string>
@@ -219,6 +222,7 @@
     <string name="title_activity_expscore">实验成绩查询</string>
     <string name="title_activity_notice">通知公告</string>
     <string name="title_activity_schedule">课程查询</string>
+    <string name="title_activity_theme">主题管理</string>
 
     <string name="title_item_username">用户名</string>
     <string name="title_item_year">学年</string>

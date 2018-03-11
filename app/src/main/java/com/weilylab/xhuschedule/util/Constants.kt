@@ -133,6 +133,7 @@ object Constants {
 	const val NOTIFICATION_TOMORROW_ENABLE = "isNotificationTomorrowEnable"
 	const val NOTIFICATION_EXAM_ENABLE = "isNotificationExamEnable"
 	const val NOTIFICATION_TOMORROW_TYPE = "isNotificationTomorrowType"
+	const val APPLIED_THEME="appliedTheme"
 
 	const val DEFAULT_TERM_START_DATE = "2018-2-5"
 	const val DEFAULT_OPACITY = 180

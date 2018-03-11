@@ -123,11 +123,6 @@ class DownloadService : IntentService(TAG) {
 
     private fun download(context: Context, type: String, qiniuPath: String, file: File) {
         Logs.i(TAG, "download: " + qiniuPath)
-//        val params = Bundle()
-//        params.putString(FirebaseUtil.VERSION_NAME, context.getString(R.string.app_version_name))
-//        params.putString(FirebaseUtil.VERSION_CODE, context.getString(R.string.app_version_code))
-//        params.putString(FirebaseUtil.TYPE, type)
-//        APP.getFirebaseAnalytics().logEvent(FirebaseUtil.DOWNLOAD_APK, params)
         retrofit.create(QiniuService::class.java)
                 .download(qiniuPath)
                 .subscribeOn(Schedulers.newThread())
