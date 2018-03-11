@@ -254,20 +254,30 @@ object XhuFileUtil {
 		return value
 	}
 
-	fun removeSavedPreference(sharedPreferenceName: String, keys: Array<String>) {
-		removeSavedPreference(sharedPreferenceName, keys.toList())
+	fun removeAllSavedPreference(context: Context, sharedPreferenceName: String) {
+		val sharedPreference = context.getSharedPreferences(sharedPreferenceName, Context.MODE_PRIVATE)
+		val keySet = sharedPreference.all.keys
+		val editor = sharedPreference.edit()
+		keySet.forEach {
+			editor.remove(it)
+		}
+		editor.apply()
 	}
 
-	fun removeSavedPreference(sharedPreferenceName: String, keys: List<String>) {
-		val sharedPreference = APP.getContext().getSharedPreferences(sharedPreferenceName, Context.MODE_PRIVATE)
+	fun removeSavedPreference(context: Context, sharedPreferenceName: String, keys: Array<String>) {
+		removeSavedPreference(context, sharedPreferenceName, keys.toList())
+	}
+
+	fun removeSavedPreference(context: Context, sharedPreferenceName: String, keys: List<String>) {
+		val sharedPreference = context.getSharedPreferences(sharedPreferenceName, Context.MODE_PRIVATE)
 		val editor = sharedPreference.edit()
 		for (key in keys)
 			editor.remove(key)
 		editor.apply()
 	}
 
-	fun removeSavedPreference(sharedPreferenceName: String, key: String) {
-		val sharedPreference = APP.getContext().getSharedPreferences(sharedPreferenceName, Context.MODE_PRIVATE)
+	fun removeSavedPreference(context: Context, sharedPreferenceName: String, key: String) {
+		val sharedPreference = context.getSharedPreferences(sharedPreferenceName, Context.MODE_PRIVATE)
 		sharedPreference.edit()
 				.remove(key)
 				.apply()

@@ -38,11 +38,11 @@ apply plugin: 'vip.mystery0.autoversion'
 apply plugin: 'io.fabric'
 
 autoVersion {
-    major 2
-    minor 0
-    patch 1
-    beta 0
-    alpha 0
+	major 2
+	minor 0
+	patch 1
+	beta 0
+	alpha 0
 }
 
 android {
@@ -121,9 +121,12 @@ dependencies {
 	}
 	api 'com.tencent.mm.opensdk:wechat-sdk-android-without-mta:5.1.4'
 	api 'skin.support:skin-support:2.2.3'                   // skin-support 基础控件支持
-	api 'skin.support:skin-support-design:2.2.3'            // skin-support-design material design 控件支持[可选]
-	api 'skin.support:skin-support-cardview:2.2.3'          // skin-support-cardview CardView 控件支持[可选]
-	api 'skin.support:skin-support-constraint-layout:2.2.3' // skin-support-constraint-layout ConstraintLayout 控件支持[可选]
+	api 'skin.support:skin-support-design:2.2.3'
+	// skin-support-design material design 控件支持[可选]
+	api 'skin.support:skin-support-cardview:2.2.3'
+	// skin-support-cardview CardView 控件支持[可选]
+	api 'skin.support:skin-support-constraint-layout:2.2.3'
+	// skin-support-constraint-layout ConstraintLayout 控件支持[可选]
 	implementation files('libs/tencent_sdk.jar')
 	implementation files('libs/weibo_sdk.jar')
 }

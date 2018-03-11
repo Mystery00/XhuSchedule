@@ -63,6 +63,11 @@ object Settings {
 			sharedPreference.edit { putBoolean(Constants.IS_FIRST_ENTER, value) }
 		}
 		get() = sharedPreference.getBoolean(Constants.IS_FIRST_ENTER, true)
+	var isFirstRun210: Boolean
+		set(value) {
+			sharedPreference.edit { putBoolean(Constants.IS_FIRST_RUN_210, value) }
+		}
+		get() = sharedPreference.getBoolean(Constants.IS_FIRST_RUN_210, true)
 	var isFirstEnterToday: String//是否是今天第一次运行
 		set(value) {
 			sharedPreference.edit { putString(Constants.IS_FIRST_ENTER_TODAY, value) }

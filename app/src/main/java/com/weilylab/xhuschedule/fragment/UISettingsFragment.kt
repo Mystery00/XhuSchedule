@@ -217,7 +217,7 @@ class UISettingsFragment : BasePreferenceFragment() {
 					})
 					.setNegativeButton(android.R.string.cancel, null)
 					.setNeutralButton(R.string.action_default, { _, _ ->
-						XhuFileUtil.removeSavedPreference(Constants.SHARED_PREFERENCE_SETTINGS, Constants.CUSTOM_TABLE_OPACITY)
+						XhuFileUtil.removeSavedPreference(activity, Constants.SHARED_PREFERENCE_SETTINGS, Constants.CUSTOM_TABLE_OPACITY)
 						ScheduleHelper.isUIChange = true
 					})
 					.show()
@@ -260,7 +260,7 @@ class UISettingsFragment : BasePreferenceFragment() {
 					})
 					.setNegativeButton(android.R.string.cancel, null)
 					.setNeutralButton(R.string.action_default, { _, _ ->
-						XhuFileUtil.removeSavedPreference(Constants.SHARED_PREFERENCE_SETTINGS, Constants.CUSTOM_TODAY_OPACITY)
+						XhuFileUtil.removeSavedPreference(activity, Constants.SHARED_PREFERENCE_SETTINGS, Constants.CUSTOM_TODAY_OPACITY)
 						ScheduleHelper.isUIChange = true
 					})
 					.show()
@@ -323,7 +323,7 @@ class UISettingsFragment : BasePreferenceFragment() {
 					})
 					.setNegativeButton(android.R.string.cancel, null)
 					.setNeutralButton(R.string.action_default, { _, _ ->
-						XhuFileUtil.removeSavedPreference(Constants.SHARED_PREFERENCE_SETTINGS, Constants.CUSTOM_TEXT_SIZE)
+						XhuFileUtil.removeSavedPreference(activity, Constants.SHARED_PREFERENCE_SETTINGS, Constants.CUSTOM_TEXT_SIZE)
 						ScheduleHelper.isUIChange = true
 					})
 					.show()
@@ -376,7 +376,7 @@ class UISettingsFragment : BasePreferenceFragment() {
 					})
 					.setNegativeButton(android.R.string.cancel, null)
 					.setNeutralButton(R.string.action_default, { _, _ ->
-						XhuFileUtil.removeSavedPreference(Constants.SHARED_PREFERENCE_SETTINGS, Constants.CUSTOM_HEIGHT_SIZE)
+						XhuFileUtil.removeSavedPreference(activity, Constants.SHARED_PREFERENCE_SETTINGS, Constants.CUSTOM_HEIGHT_SIZE)
 						ScheduleHelper.isUIChange = true
 					})
 					.show()
@@ -431,7 +431,7 @@ class UISettingsFragment : BasePreferenceFragment() {
 					})
 					.setNegativeButton(android.R.string.cancel, null)
 					.setNeutralButton(R.string.action_default, { _, _ ->
-						XhuFileUtil.removeSavedPreference(Constants.SHARED_PREFERENCE_SETTINGS, Constants.CUSTOM_TABLE_ITEM_WIDTH)
+						XhuFileUtil.removeSavedPreference(activity, Constants.SHARED_PREFERENCE_SETTINGS, Constants.CUSTOM_TABLE_ITEM_WIDTH)
 						ScheduleHelper.isTableLayoutChange = true
 					})
 					.show()
@@ -446,7 +446,7 @@ class UISettingsFragment : BasePreferenceFragment() {
 					Constants.CUSTOM_TEXT_SIZE,
 					Constants.CUSTOM_HEIGHT_SIZE,
 					Constants.CUSTOM_TABLE_ITEM_WIDTH)
-			XhuFileUtil.removeSavedPreference(Constants.SHARED_PREFERENCE_SETTINGS, array)
+			XhuFileUtil.removeSavedPreference(activity, Constants.SHARED_PREFERENCE_SETTINGS, array)
 			ScheduleHelper.isImageChange = true
 			ScheduleHelper.isUIChange = true
 			Toast.makeText(activity, R.string.hint_reset, Toast.LENGTH_SHORT)

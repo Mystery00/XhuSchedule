@@ -68,7 +68,7 @@
     <string name="hint_dialog_save_image">图片保存中……</string>
     <string name="hint_dialog_cet">正在获取数据……</string>
     <string name="hint_dialog_feedback">正在提交中……</string>
-    <string name="hint_dialog_debug_firebase">正在调试Firebase……</string>
+    <string name="hint_dialog_do_update">正在进行数据更新……</string>
     <string name="hint_twice_press_exit">再按一次退出</string>
     <string name="hint_invalid_cookie">登陆信息已过期，是否重新登录？</string>
     <string name="hint_try_refresh_data_error">%1$s，是否重新登录？</string>
