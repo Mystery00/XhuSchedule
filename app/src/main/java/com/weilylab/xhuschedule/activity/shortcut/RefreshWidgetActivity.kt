@@ -41,14 +41,14 @@ import android.widget.Toast
 import com.weilylab.xhuschedule.service.WidgetInitService
 
 class RefreshWidgetActivity : Activity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
-            startForegroundService(Intent(this, WidgetInitService::class.java))
-        else
-            startService(Intent(this, WidgetInitService::class.java))
-        Toast.makeText(this, "刷新成功", Toast.LENGTH_SHORT)
-                .show()
-        finish()
-    }
+	override fun onCreate(savedInstanceState: Bundle?) {
+		super.onCreate(savedInstanceState)
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+			startForegroundService(Intent(this, WidgetInitService::class.java))
+		else
+			startService(Intent(this, WidgetInitService::class.java))
+		Toast.makeText(this, "刷新成功", Toast.LENGTH_SHORT)
+				.show()
+		finish()
+	}
 }
