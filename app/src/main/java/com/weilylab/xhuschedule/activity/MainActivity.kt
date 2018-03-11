@@ -107,7 +107,7 @@ class MainActivity : XhuBaseActivity() {
 	private lateinit var loadingDialog: Dialog
 	private lateinit var updateProfileDialog: Dialog
 	private lateinit var weekAdapter: WeekAdapter
-	private lateinit var mainStudent: Student
+	private var mainStudent: Student?=null
 	private var weekAnimator: ObjectAnimator? = null
 	private var arrowDrawable: Drawable? = null
 	private var isTryRefreshData = false
@@ -703,9 +703,9 @@ class MainActivity : XhuBaseActivity() {
 				titleTextView.text = getString(R.string.course_profile_title)
 				titleTextView.setOnClickListener(null)
 				titleTextView.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null)
-				if (mainStudent.profile == null) {
+				if (mainStudent?.profile == null) {
 					updateProfileDialog.show()
-					mainStudent.getInfo(object : ProfileListener {
+					mainStudent?.getInfo(object : ProfileListener {
 						override fun error(rt: Int, e: Throwable) {
 							updateProfileDialog.dismiss()
 							Logs.e(TAG, "error: " + rt)
@@ -719,7 +719,7 @@ class MainActivity : XhuBaseActivity() {
 						}
 					})
 				} else
-					profileFragment.setProfile(mainStudent.profile!!)
+					profileFragment.setProfile(mainStudent?.profile!!)
 			}
 		}
 	}
