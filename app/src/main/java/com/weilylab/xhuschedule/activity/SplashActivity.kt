@@ -35,10 +35,7 @@ package com.weilylab.xhuschedule.activity
 
 import android.app.Dialog
 import android.content.Intent
-import android.os.Bundle
 import android.support.v4.content.ContextCompat
-import com.google.firebase.analytics.FirebaseAnalytics
-import com.google.firebase.perf.metrics.AddTrace
 import com.weilylab.xhuschedule.APP
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.classes.baseClass.Student
@@ -52,7 +49,6 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import vip.mystery0.tools.logs.Logs
-import java.util.*
 
 /**
  * Created by mystery0.
@@ -74,9 +70,6 @@ class SplashActivity : XhuBaseActivity() {
 
 	override fun initData() {
 		super.initData()
-		val params = Bundle()
-		params.putString(FirebaseAnalytics.Param.START_DATE, Calendar.getInstance().time.toString())
-		mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.APP_OPEN, params)
 		ScheduleHelper.initChannelID(APP.getContext())//初始化NotificationChannelID
 		ScheduleHelper.setTrigger(this)
 		ScheduleHelper.checkScreenWidth(this)

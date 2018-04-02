@@ -33,12 +33,9 @@
 
 package com.weilylab.xhuschedule.activity
 
-import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
-import com.google.firebase.analytics.FirebaseAnalytics
-import com.google.firebase.perf.metrics.AddTrace
 import com.google.gson.Gson
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.adapter.NoticeAdapter
@@ -69,9 +66,6 @@ class NoticeActivity : XhuBaseActivity() {
 
 	override fun initData() {
 		super.initData()
-		val params = Bundle()
-		params.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "notice")
-		mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, params)
 		recyclerView.layoutManager = LinearLayoutManager(this)
 		adapter = NoticeAdapter(this, list)
 		recyclerView.adapter = adapter
@@ -99,7 +93,6 @@ class NoticeActivity : XhuBaseActivity() {
 		}
 	}
 
-	@AddTrace(name = "view notice trace", enabled = true)
 	private fun refresh() {
 		ScheduleHelper.tomcatRetrofit
 				.create(CommonService::class.java)

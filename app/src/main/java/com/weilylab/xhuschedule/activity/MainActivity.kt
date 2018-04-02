@@ -42,7 +42,6 @@ import android.content.Intent
 import android.graphics.Point
 import android.graphics.drawable.Drawable
 import android.os.Build
-import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v4.app.ActivityOptionsCompat
 import android.support.v4.content.ContextCompat
@@ -53,8 +52,6 @@ import android.util.Base64
 import android.widget.Toast
 import com.getkeepsafe.taptargetview.TapTarget
 import com.getkeepsafe.taptargetview.TapTargetSequence
-import com.google.firebase.analytics.FirebaseAnalytics
-import com.google.firebase.perf.metrics.AddTrace
 import com.google.gson.Gson
 import com.sina.weibo.sdk.api.share.IWeiboShareAPI
 import com.sina.weibo.sdk.api.share.WeiboShareSDK
@@ -126,13 +123,6 @@ class MainActivity : XhuBaseActivity() {
 	private var lastIndex = 0
 	lateinit var mWeiboShareAPI: IWeiboShareAPI
 	lateinit var wxAPI: IWXAPI
-
-	override fun initData() {
-		super.initData()
-		val params = Bundle()
-		params.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "main")
-		mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, params)
-	}
 
 	private fun showUpdateLog() {
 		val sharedPreference = getSharedPreferences(Constants.SHARED_PREFERENCE_UPDATE_DATA, Context.MODE_PRIVATE)
@@ -436,7 +426,6 @@ class MainActivity : XhuBaseActivity() {
 		}
 	}
 
-	@AddTrace(name = "sync course data trace", enabled = true)
 	private fun updateAllData() {
 		Logs.i(TAG, "updateAllData: ")
 		loadingDialog.show()

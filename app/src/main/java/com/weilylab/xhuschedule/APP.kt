@@ -36,10 +36,8 @@ package com.weilylab.xhuschedule
 import android.annotation.SuppressLint
 import android.content.Context
 import android.support.multidex.MultiDexApplication
-import com.google.firebase.FirebaseApp
-import com.google.firebase.analytics.FirebaseAnalytics
 import com.oasisfeng.condom.CondomContext
-import com.oasisfeng.condom.CondomOptions
+import com.tencent.bugly.crashreport.CrashReport
 import com.tencent.tauth.Tencent
 import com.weilylab.xhuschedule.listener.EmptyTencentListener
 import com.weilylab.xhuschedule.util.Constants
@@ -56,15 +54,11 @@ import vip.mystery0.tools.logs.Logs
 class APP : MultiDexApplication() {
 	companion object {
 		private var app: APP? = null
-		private var mFirebaseAnalytics: FirebaseAnalytics? = null
 		@SuppressLint("StaticFieldLeak")
-		private var mFirebaseApp: FirebaseApp? = null
 		lateinit var tencent: Tencent
 		val tencentListener = EmptyTencentListener()
 
 		fun getContext(): Context = app!!
-
-		fun getFirebaseAnalytics(): FirebaseAnalytics = mFirebaseAnalytics!!
 	}
 
 	init {
@@ -73,11 +67,7 @@ class APP : MultiDexApplication() {
 
 	override fun onCreate() {
 		super.onCreate()
-		val condom = CondomContext.wrap(applicationContext, "Firebase", CondomOptions().setOutboundJudge { _, _, target_package ->
-			target_package == "com.google.android.gms"
-		})
-		mFirebaseApp = FirebaseApp.initializeApp(condom)
-		mFirebaseAnalytics = FirebaseAnalytics.getInstance(condom)
+//		CrashReport.initCrashReport(CondomContext.wrap(applicationContext, "Bugly"), Constants.BUGLY_API_KEY, true)
 		tencent = Tencent.createInstance(Constants.QQ_API_KEY, CondomContext.wrap(applicationContext, "Tencent"))
 		Logs.setLevel(Logs.Debug)
 		SkinCompatManager.withoutActivity(this)

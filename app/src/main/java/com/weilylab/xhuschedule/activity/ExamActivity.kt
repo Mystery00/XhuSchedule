@@ -36,7 +36,6 @@ package com.weilylab.xhuschedule.activity
 import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
 import android.content.Intent
-import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.graphics.drawable.VectorDrawableCompat
 import android.support.v4.content.ContextCompat
@@ -44,8 +43,6 @@ import android.util.Base64
 import android.view.MenuItem
 import android.widget.ImageView
 import android.widget.TextView
-import com.google.firebase.analytics.FirebaseAnalytics
-import com.google.firebase.perf.metrics.AddTrace
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.adapter.CustomMaterialSpinnerAdapter
 import com.weilylab.xhuschedule.classes.baseClass.Exam
@@ -77,13 +74,6 @@ class ExamActivity : XhuBaseActivity() {
 	private var valueAnimator: ValueAnimator? = null
 	private var currentIndex = -1
 	private lateinit var pointDrawable: VectorDrawableCompat
-
-	override fun initData() {
-		super.initData()
-		val params = Bundle()
-		params.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "exam")
-		mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, params)
-	}
 
 	override fun initView() {
 		super.initView()
@@ -130,7 +120,6 @@ class ExamActivity : XhuBaseActivity() {
 		}
 	}
 
-	@AddTrace(name = "sync exam data trace", enabled = true)
 	private fun setUsername(username: String?) {
 		Observable.create<Any> {
 			val selectedStudent = studentList.firstOrNull { it.username == username }

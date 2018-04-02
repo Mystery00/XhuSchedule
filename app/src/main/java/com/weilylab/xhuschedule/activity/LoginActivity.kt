@@ -33,7 +33,6 @@
 
 package com.weilylab.xhuschedule.activity
 
-import android.os.Bundle
 import android.text.TextUtils
 import android.view.View
 import android.widget.Toast
@@ -44,8 +43,6 @@ import kotlinx.android.synthetic.main.activity_login.*
 
 import android.app.Activity
 import android.support.v4.content.ContextCompat
-import com.google.firebase.analytics.FirebaseAnalytics
-import com.google.firebase.perf.metrics.AddTrace
 import com.weilylab.xhuschedule.classes.baseClass.Student
 import com.weilylab.xhuschedule.listener.LoginListener
 import com.weilylab.xhuschedule.util.XhuFileUtil
@@ -97,14 +94,10 @@ class LoginActivity : XhuBaseActivity() {
 		if (cancel) {
 			focusView?.requestFocus()
 		} else {
-			val params = Bundle()
-			params.putString(FirebaseAnalytics.Param.ITEM_NAME, usernameStr)
-			mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.LOGIN, params)
 			login()
 		}
 	}
 
-	@AddTrace(name = "login trace", enabled = true)
 	private fun login() {
 		loginDialog.show()
 		val usernameStr = username.text.toString()

@@ -36,7 +36,6 @@ package com.weilylab.xhuschedule.activity
 import android.app.Dialog
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
-import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v4.content.ContextCompat
 import android.util.Base64
@@ -47,8 +46,6 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.signature.MediaStoreSignature
-import com.google.firebase.analytics.FirebaseAnalytics
-import com.google.firebase.perf.metrics.AddTrace
 import com.google.gson.Gson
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.adapter.CustomMaterialSpinnerAdapter
@@ -89,13 +86,6 @@ class ScheduleActivity : XhuBaseActivity() {
 	private var year: String? = null
 	private var term: Int? = null
 	private val dropMaxHeight = 999
-
-	override fun initData() {
-		super.initData()
-		val params = Bundle()
-		params.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "schedule")
-		mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, params)
-	}
 
 	override fun initView() {
 		super.initView()
@@ -138,7 +128,6 @@ class ScheduleActivity : XhuBaseActivity() {
 		initInfo()
 	}
 
-	@AddTrace(name = "sync course data for other term trace", enabled = true)
 	private fun getCourses(student: Student?, year: String?, term: Int?) {
 		if (student == null)
 			return

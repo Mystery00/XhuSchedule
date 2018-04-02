@@ -5,199 +5,195 @@
   ~ Last modified 17-12-21 上午2:35
 -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    package="com.weilylab.xhuschedule">
+	xmlns:tools="http://schemas.android.com/tools"
+	package="com.weilylab.xhuschedule">
 
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission
-        android:name="android.permission.REQUEST_INSTALL_PACKAGES"
-        tools:ignore="ProtectedPermissions" />
-    <uses-permission android:name="android.permission.VIBRATE" />
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+	<uses-permission android:name="android.permission.INTERNET" />
+	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+	<uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+	<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+	<uses-permission android:name="android.permission.VIBRATE" />
+	<uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+	<uses-permission
+		android:name="android.permission.READ_LOGS"
+		tools:ignore="ProtectedPermissions" />
+	<uses-permission
+		android:name="android.permission.REQUEST_INSTALL_PACKAGES"
+		tools:ignore="ProtectedPermissions" />
 
-    <application
-        android:name=".APP"
-        android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
-        android:supportsRtl="true"
-        android:theme="@style/AppTheme">
-        <activity
-            android:name=".activity.SplashActivity"
-            android:label="@string/app_name"
-            android:screenOrientation="portrait"
-            android:theme="@style/SplashTheme"
-            android:windowSoftInputMode="adjustResize|stateHidden">
-            <intent-filter>
+	<application
+		android:name=".APP"
+		android:icon="@mipmap/ic_launcher"
+		android:label="@string/app_name"
+		android:roundIcon="@mipmap/ic_launcher_round"
+		android:supportsRtl="true"
+		android:theme="@style/AppTheme">
+		<activity
+			android:name=".activity.SplashActivity"
+			android:label="@string/app_name"
+			android:screenOrientation="portrait"
+			android:theme="@style/SplashTheme"
+			android:windowSoftInputMode="adjustResize|stateHidden">
+			<intent-filter>
 
-                <!-- 集成调用微博 -->
-                <action android:name="com.sina.weibo.sdk.action.ACTION_SDK_REQ_ACTIVITY" />
-                <action android:name="android.intent.action.MAIN" />
+				<!-- 集成调用微博 -->
+				<action android:name="com.sina.weibo.sdk.action.ACTION_SDK_REQ_ACTIVITY" />
+				<action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+				<category android:name="android.intent.category.LAUNCHER" />
+			</intent-filter>
 
-            <meta-data
-                android:name="android.app.shortcuts"
-                android:resource="@xml/shortcuts" />
-        </activity>
-        <activity
-            android:name=".activity.WelcomeActivity"
-            android:theme="@style/AppTheme.NoActionBar.FullScreen" />
-        <activity
-            android:name=".activity.MainActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".activity.LoginActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar.FullScreen"
-            android:windowSoftInputMode="adjustResize|stateHidden" />
-        <activity
-            android:name="com.yalantis.ucrop.UCropActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".activity.ExamActivity"
-            android:label="@string/title_activity_exam"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".activity.ScoreActivity"
-            android:label="@string/title_activity_score"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".activity.ExpScoreActivity"
-            android:label="@string/title_activity_expscore"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".activity.ScheduleActivity"
-            android:label="@string/title_activity_schedule"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".activity.SettingsActivity"
-            android:label="@string/title_activity_settings"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.Settings" />
-        <activity
-            android:name=".activity.shortcut.RefreshWidgetActivity"
-            android:theme="@android:style/Theme.NoDisplay" />
-        <activity
-            android:name=".activity.shortcut.RefreshColorActivity"
-            android:theme="@android:style/Theme.NoDisplay" />
-        <activity
-            android:name=".activity.NoticeActivity"
-            android:label="@string/title_activity_notice"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" />
+			<meta-data
+				android:name="android.app.shortcuts"
+				android:resource="@xml/shortcuts" />
+		</activity>
+		<activity
+			android:name=".activity.WelcomeActivity"
+			android:theme="@style/AppTheme.NoActionBar.FullScreen" />
+		<activity
+			android:name=".activity.MainActivity"
+			android:screenOrientation="portrait"
+			android:theme="@style/AppTheme.NoActionBar" />
+		<activity
+			android:name=".activity.LoginActivity"
+			android:screenOrientation="portrait"
+			android:theme="@style/AppTheme.NoActionBar.FullScreen"
+			android:windowSoftInputMode="adjustResize|stateHidden" />
+		<activity
+			android:name="com.yalantis.ucrop.UCropActivity"
+			android:screenOrientation="portrait"
+			android:theme="@style/AppTheme.NoActionBar" />
+		<activity
+			android:name=".activity.ExamActivity"
+			android:label="@string/title_activity_exam"
+			android:screenOrientation="portrait"
+			android:theme="@style/AppTheme.NoActionBar" />
+		<activity
+			android:name=".activity.ScoreActivity"
+			android:label="@string/title_activity_score"
+			android:screenOrientation="portrait"
+			android:theme="@style/AppTheme.NoActionBar" />
+		<activity
+			android:name=".activity.ExpScoreActivity"
+			android:label="@string/title_activity_expscore"
+			android:screenOrientation="portrait"
+			android:theme="@style/AppTheme.NoActionBar" />
+		<activity
+			android:name=".activity.ScheduleActivity"
+			android:label="@string/title_activity_schedule"
+			android:screenOrientation="portrait"
+			android:theme="@style/AppTheme.NoActionBar" />
+		<activity
+			android:name=".activity.SettingsActivity"
+			android:label="@string/title_activity_settings"
+			android:screenOrientation="portrait"
+			android:theme="@style/AppTheme.Settings" />
+		<activity
+			android:name=".activity.shortcut.RefreshWidgetActivity"
+			android:theme="@android:style/Theme.NoDisplay" />
+		<activity
+			android:name=".activity.shortcut.RefreshColorActivity"
+			android:theme="@android:style/Theme.NoDisplay" />
+		<activity
+			android:name=".activity.NoticeActivity"
+			android:label="@string/title_activity_notice"
+			android:screenOrientation="portrait"
+			android:theme="@style/AppTheme.NoActionBar" />
 
-        <service android:name=".service.UpdateService" />
-        <service android:name=".service.DownloadService" />
-        <service android:name=".service.WidgetLastActionService" />
-        <service android:name=".service.WidgetNextActionService" />
-        <service android:name=".service.WidgetInitService" />
-        <service android:name=".service.ClearCacheColorService" />
-        <service android:name=".service.ShowNotificationService" />
-        <service android:name=".service.BootInitService" />
-        <service
-            android:name=".service.GridWidgetService"
-            android:permission="android.permission.BIND_REMOTEVIEWS" />
-        <service
-            android:name=".service.TodayWidgetService"
-            android:permission="android.permission.BIND_REMOTEVIEWS" />
-        <service
-            android:name=".service.ExamWidgetService"
-            android:permission="android.permission.BIND_REMOTEVIEWS" />
+		<service android:name=".service.UpdateService" />
+		<service android:name=".service.DownloadService" />
+		<service android:name=".service.WidgetLastActionService" />
+		<service android:name=".service.WidgetNextActionService" />
+		<service android:name=".service.WidgetInitService" />
+		<service android:name=".service.ClearCacheColorService" />
+		<service android:name=".service.ShowNotificationService" />
+		<service android:name=".service.BootInitService" />
+		<service
+			android:name=".service.GridWidgetService"
+			android:permission="android.permission.BIND_REMOTEVIEWS" />
+		<service
+			android:name=".service.TodayWidgetService"
+			android:permission="android.permission.BIND_REMOTEVIEWS" />
+		<service
+			android:name=".service.ExamWidgetService"
+			android:permission="android.permission.BIND_REMOTEVIEWS" />
 
-        <provider
-            android:name="android.support.v4.content.FileProvider"
-            android:authorities="com.weilylab.xhuschedule"
-            android:exported="false"
-            android:grantUriPermissions="true">
-            <meta-data
-                android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/file_paths" />
-        </provider>
+		<provider
+			android:name="android.support.v4.content.FileProvider"
+			android:authorities="com.weilylab.xhuschedule"
+			android:exported="false"
+			android:grantUriPermissions="true">
+			<meta-data
+				android:name="android.support.FILE_PROVIDER_PATHS"
+				android:resource="@xml/file_paths" />
+		</provider>
 
-        <receiver android:name=".receiver.AlarmReceiver" />
-        <receiver android:name=".receiver.BootCompletedReceiver">
-            <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
+		<receiver android:name=".receiver.AlarmReceiver" />
+		<receiver android:name=".receiver.BootCompletedReceiver">
+			<intent-filter>
+				<action android:name="android.intent.action.BOOT_COMPLETED" />
 
-                <category android:name="android.intent.category.HOME" />
-            </intent-filter>
-        </receiver>
-        <receiver
-            android:name=".util.widget.ScheduleCourseWidget"
-            android:label="本周课表">
-            <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-            </intent-filter>
+				<category android:name="android.intent.category.HOME" />
+			</intent-filter>
+		</receiver>
+		<receiver
+			android:name=".util.widget.ScheduleCourseWidget"
+			android:label="本周课表">
+			<intent-filter>
+				<action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+			</intent-filter>
 
-            <meta-data
-                android:name="android.appwidget.provider"
-                android:resource="@xml/schedule_course_widget_info" />
-        </receiver>
-        <receiver
-            android:name=".util.widget.TodayCourseWidget"
-            android:label="今日课表">
-            <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-            </intent-filter>
+			<meta-data
+				android:name="android.appwidget.provider"
+				android:resource="@xml/schedule_course_widget_info" />
+		</receiver>
+		<receiver
+			android:name=".util.widget.TodayCourseWidget"
+			android:label="今日课表">
+			<intent-filter>
+				<action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+			</intent-filter>
 
-            <meta-data
-                android:name="android.appwidget.provider"
-                android:resource="@xml/today_course_widget_info" />
-        </receiver>
-        <receiver
-            android:name=".util.widget.ExamWidget"
-            android:label="考试查询">
-            <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-            </intent-filter>
+			<meta-data
+				android:name="android.appwidget.provider"
+				android:resource="@xml/today_course_widget_info" />
+		</receiver>
+		<receiver
+			android:name=".util.widget.ExamWidget"
+			android:label="考试查询">
+			<intent-filter>
+				<action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+			</intent-filter>
 
-            <meta-data
-                android:name="android.appwidget.provider"
-                android:resource="@xml/exam_widget_info" />
-        </receiver>
+			<meta-data
+				android:name="android.appwidget.provider"
+				android:resource="@xml/exam_widget_info" />
+		</receiver>
 
-        <!-- 禁用FirebaseInitProvider -->
-        <provider
-            android:name="com.google.firebase.provider.FirebaseInitProvider"
-            android:authorities="${applicationId}.firebaseinitprovider"
-            android:exported="false"
-            tools:node="remove" />
+		<!-- 腾讯开放平台 -->
+		<activity
+			android:name="com.tencent.tauth.AuthActivity"
+			android:launchMode="singleTask"
+			android:noHistory="true">
+			<intent-filter>
+				<action android:name="android.intent.action.VIEW" />
 
-        <!-- 腾讯开放平台 -->
-        <activity
-            android:name="com.tencent.tauth.AuthActivity"
-            android:launchMode="singleTask"
-            android:noHistory="true">
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
+				<category android:name="android.intent.category.DEFAULT" />
+				<category android:name="android.intent.category.BROWSABLE" />
 
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-
-                <data android:scheme="1106663023" />
-            </intent-filter>
-        </activity>
-        <activity
-            android:name="com.tencent.connect.common.AssistActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-        <!-- 腾讯开放平台 -->
-        <activity
-            android:name=".activity.ThemeActivity"
-            android:label="@string/title_activity_theme"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
-    </application>
+				<data android:scheme="1106663023" />
+			</intent-filter>
+		</activity>
+		<activity
+			android:name="com.tencent.connect.common.AssistActivity"
+			android:configChanges="orientation|keyboardHidden|screenSize"
+			android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+		<!-- 腾讯开放平台 -->
+		<activity
+			android:name=".activity.ThemeActivity"
+			android:label="@string/title_activity_theme"
+			android:theme="@style/AppTheme.NoActionBar"></activity>
+	</application>
 
 </manifest>

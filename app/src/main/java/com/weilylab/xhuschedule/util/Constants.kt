@@ -37,6 +37,7 @@ object Constants {
 	const val QQ_API_KEY = "1106663023"
 	const val WEIBO_API_KEY = "2170085314"
 	const val WEIXIN_API_KEY = "wx41799887957cbba8"
+	const val BUGLY_API_KEY = "7fe1820ab7"
 
 	const val WEIXIN_PACKAGE_NAME = "com.tencent.mm"
 	const val WEIXIN_FRIEND_ACTION = "com.tencent.mm.ui.tools.ShareImgUI"
@@ -134,7 +135,7 @@ object Constants {
 	const val NOTIFICATION_TOMORROW_ENABLE = "isNotificationTomorrowEnable"
 	const val NOTIFICATION_EXAM_ENABLE = "isNotificationExamEnable"
 	const val NOTIFICATION_TOMORROW_TYPE = "isNotificationTomorrowType"
-	const val APPLIED_THEME="appliedTheme"
+	const val APPLIED_THEME = "appliedTheme"
 
 	const val DEFAULT_TERM_START_DATE = "2018-2-5"
 	const val DEFAULT_OPACITY = 205
