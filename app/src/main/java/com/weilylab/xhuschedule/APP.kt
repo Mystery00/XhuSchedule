@@ -35,10 +35,12 @@ package com.weilylab.xhuschedule
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.os.Build
 import android.support.multidex.MultiDexApplication
+import com.avos.avoscloud.*
 import com.oasisfeng.condom.CondomContext
-import com.tencent.bugly.crashreport.CrashReport
 import com.tencent.tauth.Tencent
+import com.weilylab.xhuschedule.activity.NoticeActivity
 import com.weilylab.xhuschedule.listener.EmptyTencentListener
 import com.weilylab.xhuschedule.util.Constants
 import com.weilylab.xhuschedule.util.SkinLoader
@@ -53,6 +55,7 @@ import vip.mystery0.logs.Logs
  */
 class APP : MultiDexApplication() {
 	companion object {
+		private const val TAG = "APP"
 		private var app: APP? = null
 		@SuppressLint("StaticFieldLeak")
 		lateinit var tencent: Tencent
@@ -67,7 +70,14 @@ class APP : MultiDexApplication() {
 
 	override fun onCreate() {
 		super.onCreate()
-//		CrashReport.initCrashReport(CondomContext.wrap(applicationContext, "Bugly"), Constants.BUGLY_API_KEY, true)
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+			PushService.setDefaultChannelId(applicationContext, Constants.NOTIFICATION_CHANNEL_ID_DEFAULT)
+		}
+		AVOSCloud.initialize(applicationContext, Constants.LEANCLOUD_APP_ID, Constants.LEANCLOUD_APP_KEY)
+		AVInstallation.getCurrentInstallation().saveInBackground()
+		AVAnalytics.enableCrashReport(applicationContext, true)
+		AVOSCloud.setDebugLogEnabled(true)
+		PushService.setDefaultPushCallback(applicationContext, NoticeActivity::class.java)
 		tencent = Tencent.createInstance(Constants.QQ_API_KEY, CondomContext.wrap(applicationContext, "Tencent"))
 		Logs.setLevel(Logs.Level.DEBUG)
 		SkinCompatManager.withoutActivity(this)

@@ -39,7 +39,6 @@ import android.support.v4.content.ContextCompat
 import com.weilylab.xhuschedule.APP
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.classes.baseClass.Student
-import com.weilylab.xhuschedule.service.UpdateService
 import com.weilylab.xhuschedule.util.*
 import com.zyao89.view.zloading.ZLoadingDialog
 import com.zyao89.view.zloading.Z_TYPE
@@ -73,8 +72,6 @@ class SplashActivity : XhuBaseActivity() {
 		ScheduleHelper.initChannelID(APP.getContext())//初始化NotificationChannelID
 		ScheduleHelper.setTrigger(this)
 		ScheduleHelper.checkScreenWidth(this)
-		if (Settings.autoCheckUpdate)
-			startService(Intent(this, UpdateService::class.java))
 		if (Settings.isFirstRun210)
 			Observable.create<Any> {
 				//初始化主用户

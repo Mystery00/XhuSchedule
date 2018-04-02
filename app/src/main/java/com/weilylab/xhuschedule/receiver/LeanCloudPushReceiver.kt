@@ -1,5 +1,5 @@
 /*
- * Created by Mystery0 on 18-4-2 下午5:06.
+ * Created by Mystery0 on 4/3/18 1:03 AM.
  * Copyright (c) 2018. All Rights reserved.
  *
  *                    =====================================================
@@ -28,18 +28,22 @@
  *                    =                                                   =
  *                    =====================================================
  *
- * Last modified 18-4-2 下午5:06
+ * Last modified 4/3/18 1:03 AM
  */
 
 package com.weilylab.xhuschedule.receiver
 
+import android.content.BroadcastReceiver
 import android.content.Context
-import com.xiaomi.mipush.sdk.MiPushMessage
-import com.xiaomi.mipush.sdk.PushMessageReceiver
+import android.content.Intent
+import vip.mystery0.logs.Logs
 
-class MiPushMessageReceiver : PushMessageReceiver() {
-	override fun onReceivePassThroughMessage(context: Context?, miPushMessage: MiPushMessage?) {
-		super.onReceivePassThroughMessage(context, miPushMessage)
+class LeanCloudPushReceiver : BroadcastReceiver() {
+	private val TAG = "LeanCloudPushReceiver"
 
+	override fun onReceive(context: Context, intent: Intent) {
+		Logs.i(TAG, "onReceive: " + intent.action)
+		val message = intent.extras.getString("com.avos.avoscloud.Data")
+		Logs.i(TAG, "onReceive: " + message)
 	}
 }

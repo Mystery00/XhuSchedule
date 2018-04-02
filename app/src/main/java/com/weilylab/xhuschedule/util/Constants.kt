@@ -37,7 +37,8 @@ object Constants {
 	const val QQ_API_KEY = "1106663023"
 	const val WEIBO_API_KEY = "2170085314"
 	const val WEIXIN_API_KEY = "wx41799887957cbba8"
-	const val BUGLY_API_KEY = "7fe1820ab7"
+	const val LEANCLOUD_APP_ID="f939kTGhlyHAHVsCpccyWU6t-gzGzoHsz"
+	const val LEANCLOUD_APP_KEY="wVpJkuI4DLNxXHBfp19XGz3E"
 
 	const val WEIXIN_PACKAGE_NAME = "com.tencent.mm"
 	const val WEIXIN_FRIEND_ACTION = "com.tencent.mm.ui.tools.ShareImgUI"
@@ -58,6 +59,7 @@ object Constants {
 
 	const val ACTION_WIDGET_UPDATE_BROADCAST = "android.appwidget.action.APPWIDGET_UPDATE"
 	const val ACTION_BOOT_COMPLETED = "android.intent.action.BOOT_COMPLETED"
+	const val ACTION_CHECK_UPDATE = "com.weilylab.xhuschedule.CHECK_UPDATE"
 
 	const val NOTIFICATION_CHANNEL_ID_DEFAULT = "XhuSchedule-Default"
 	const val NOTIFICATION_CHANNEL_NAME_DEFAULT = "默认"
@@ -82,6 +84,7 @@ object Constants {
 	const val INTENT_TAG_NAME_QINIU_PATH = "qiniuPath"
 	const val INTENT_TAG_NAME_PROFILE = "profile"
 	const val INTENT_TAG_NAME_LIST = "list"
+	const val INTENT_TAG_NAME_VERSION = "version"
 
 	const val DOWNLOAD_TYPE_APK = "apk"
 	const val DOWNLOAD_TYPE_PATCH = "patch"
@@ -96,7 +99,6 @@ object Constants {
 	const val SHARE_IMAGE_URL = "http://image.coolapk.com/apk_logo/2018/0302/ic_launcher-168930-o_1c7i548l61b4k1p091q5l9tk15bj1b-uid-631231@192x192.png"
 
 	const val SHARED_PREFERENCE_SETTINGS = "settings"
-	const val SHARED_PREFERENCE_TEMP = "temp"
 	const val SHARED_PREFERENCE_UPDATE_DATA = "updateData"
 	const val SHARED_PREFERENCE_COURSE_COLOR = "course_color"
 	const val SHARED_PREFERENCE_COLOR = "color"

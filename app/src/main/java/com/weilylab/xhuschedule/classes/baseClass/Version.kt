@@ -33,10 +33,12 @@
 
 package com.weilylab.xhuschedule.classes.baseClass
 
+import java.io.Serializable
+
 /**
  * Created by myste.
  */
-class Version {
+class Version:Serializable {
     lateinit var apkQiniuPath: String
     var apkSize = -1L
     var must = false//是否强制更新

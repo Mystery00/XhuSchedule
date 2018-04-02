@@ -37,12 +37,8 @@ import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
 import android.content.Context
 import android.content.Intent
-import android.os.Build
-import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.widget.RemoteViews
-import com.google.firebase.analytics.FirebaseAnalytics
-import com.weilylab.xhuschedule.APP
 
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.service.GridWidgetService
@@ -55,7 +51,6 @@ import com.weilylab.xhuschedule.util.Constants
 class ScheduleCourseWidget : AppWidgetProvider() {
 
     override fun onUpdate(context: Context, appWidgetManager: AppWidgetManager, appWidgetIds: IntArray) {
-        APP.getFirebaseAnalytics().logEvent(FirebaseAnalytics.Event.VIEW_ITEM, Bundle())
         WidgetHelper.saveWidgetIds(context, WidgetHelper.TABLE_TAG, appWidgetIds)
         ContextCompat.startForegroundService(context, Intent(context, WidgetInitService::class.java))
         for (appWidgetId in appWidgetIds)

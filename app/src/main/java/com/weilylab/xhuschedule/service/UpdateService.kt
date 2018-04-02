@@ -33,27 +33,38 @@
 
 package com.weilylab.xhuschedule.service
 
-import android.app.IntentService
+import android.app.Service
 import android.content.Intent
+import android.content.IntentFilter
+import android.os.Bundle
+import android.os.IBinder
 import android.support.v4.app.NotificationCompat
 import android.support.v4.app.NotificationManagerCompat
-import android.support.v7.app.AlertDialog
+import android.support.v4.content.LocalBroadcastManager
 import com.google.gson.Gson
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.classes.baseClass.Version
 import com.weilylab.xhuschedule.interfaces.PhpService
-import com.weilylab.xhuschedule.util.APPActivityManager
+import com.weilylab.xhuschedule.receiver.CheckUpdateReceiver
 import com.weilylab.xhuschedule.util.Constants
 import com.weilylab.xhuschedule.util.ScheduleHelper
-import com.weilylab.xhuschedule.util.Settings
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.observers.DisposableObserver
 import io.reactivex.schedulers.Schedulers
-import vip.mystery0.tools.utils.FileTools
+import vip.mystery0.logs.Logs
 import java.io.InputStreamReader
 
-class UpdateService : IntentService("PhpService") {
+class UpdateService : Service() {
+	override fun onBind(intent: Intent?): IBinder? {
+		return null
+	}
+
+	private val TAG = "UpdateService"
+	private lateinit var localBroadcastManager: LocalBroadcastManager
+	private lateinit var checkUpdateReceiver: CheckUpdateReceiver
+
 	override fun onCreate() {
+		Logs.i(TAG, "onCreate: ")
 		super.onCreate()
 		val notification = NotificationCompat.Builder(this, Constants.NOTIFICATION_CHANNEL_ID_DEFAULT)
 				.setSmallIcon(R.drawable.ic_stat_foreground)
@@ -62,9 +73,14 @@ class UpdateService : IntentService("PhpService") {
 				.setPriority(NotificationManagerCompat.IMPORTANCE_NONE)
 				.build()
 		startForeground(0, notification)
+		localBroadcastManager = LocalBroadcastManager.getInstance(this)
+		val intentFilter = IntentFilter()
+		intentFilter.addAction(Constants.ACTION_CHECK_UPDATE)
+		checkUpdateReceiver = CheckUpdateReceiver()
+		localBroadcastManager.registerReceiver(checkUpdateReceiver, intentFilter)
 	}
 
-	override fun onHandleIntent(intent: Intent?) {
+	override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
 		ScheduleHelper.phpRetrofit
 				.create(PhpService::class.java)
 				.checkVersion()
@@ -76,40 +92,17 @@ class UpdateService : IntentService("PhpService") {
 					private lateinit var version: Version
 					override fun onComplete() {
 						if (version.versionCode > getString(R.string.app_version_code).toInt()) {
-							val title = getString(R.string.dialog_update_title, getString(R.string.app_version_name), version.versionName)
-							val text = getString(R.string.dialog_update_text, version.updateLog)
-							val currentActivity = APPActivityManager.appManager.currentActivity()
-							if (currentActivity == null) {
-								stopSelf()
-								return
-							}
-							val builder = AlertDialog.Builder(currentActivity)
-									.setTitle(title)
-									.setMessage(text)
-									.setPositiveButton("${getString(R.string.action_download_apk)}(${FileTools.formatFileSize(version.apkSize)})", { _, _ ->
-										val downloadAPKIntent = Intent(this@UpdateService, DownloadService::class.java)
-										downloadAPKIntent.putExtra(Constants.INTENT_TAG_NAME_TYPE, Constants.DOWNLOAD_TYPE_APK)
-										downloadAPKIntent.putExtra(Constants.INTENT_TAG_NAME_QINIU_PATH, version.apkQiniuPath)
-										startService(downloadAPKIntent)
-									})
-							if (version.lastVersionCode == getString(R.string.app_version_code).toInt())
-								builder.setNegativeButton("${getString(R.string.action_download_patch)}(${FileTools.formatFileSize(version.patchSize)})", { _, _ ->
-									val downloadPatchIntent = Intent(this@UpdateService, DownloadService::class.java)
-									downloadPatchIntent.putExtra(Constants.INTENT_TAG_NAME_TYPE, Constants.DOWNLOAD_TYPE_PATCH)
-									downloadPatchIntent.putExtra(Constants.INTENT_TAG_NAME_QINIU_PATH, version.patchQiniuPath)
-									startService(downloadPatchIntent)
-								})
-							if (version.must)
-								builder.setOnCancelListener {
-									APPActivityManager.appManager.finishAllActivity()
-								}
-							else
-								builder.setNeutralButton(R.string.action_download_cancel, { _, _ ->
-									Settings.ignoreUpdate = version.versionCode
-								})
-							builder.show()
+							Logs.i(TAG, "onComplete: ${version.versionCode}")
+							val versionIntent = Intent(Constants.ACTION_CHECK_UPDATE)
+							val bundle = Bundle()
+							bundle.putSerializable(Constants.INTENT_TAG_NAME_VERSION, version)
+							versionIntent.putExtra(Constants.INTENT_TAG_NAME_VERSION, bundle)
+							localBroadcastManager.sendBroadcast(versionIntent)
 						}
-						stopSelf()
+						Thread(Runnable {
+							Thread.sleep(10000)
+							stopSelf()
+						}).start()
 					}
 
 					override fun onNext(version: Version) {
@@ -120,5 +113,12 @@ class UpdateService : IntentService("PhpService") {
 						e.printStackTrace()
 					}
 				})
+		return super.onStartCommand(intent, flags, startId)
+	}
+
+	override fun onDestroy() {
+		Logs.i(TAG, "onDestroy: ")
+		super.onDestroy()
+		localBroadcastManager.unregisterReceiver(checkUpdateReceiver)
 	}
 }

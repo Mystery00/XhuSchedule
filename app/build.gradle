@@ -45,6 +45,11 @@ autoVersion {
 }
 
 android {
+	//为了解决部分第三方库重复打包了META-INF的问题
+	packagingOptions {
+		exclude 'META-INF/LICENSE.txt'
+		exclude 'META-INF/NOTICE.txt'
+	}
 	compileSdkVersion 27
 	defaultConfig {
 		applicationId "com.weilylab.xhuschedule"
@@ -97,9 +102,14 @@ dependencies {
 	implementation 'io.reactivex.rxjava2:rxjava:2.1.10'
 	implementation 'com.squareup.okhttp3:okhttp:3.10.0'
 	implementation 'androidx.core:core-ktx:0.2'
-	implementation 'com.tencent.bugly:crashreport:2.6.6'
 	implementation 'com.github.Mystery0Tools:Tools:1.0.1'
 	implementation 'com.github.Mystery0Tools:Logs:1.0.0'
+	// LeanCloud 基础包
+	implementation 'cn.leancloud.android:avoscloud-sdk:v4.6.4'
+	// LeanCloud 统计包
+	implementation 'cn.leancloud.android:avoscloud-statistics:v4.6.4'
+	// 推送与实时聊天需要的包
+	implementation('cn.leancloud.android:avoscloud-push:v4.6.4@aar') { transitive = true }
 	annotationProcessor 'com.github.bumptech.glide:compiler:4.6.1'
 	testImplementation 'junit:junit:4.12'
 	androidTestImplementation 'com.android.support.test:runner:1.0.1'
@@ -127,7 +137,6 @@ dependencies {
 	// skin-support-constraint-layout ConstraintLayout 控件支持[可选]
 	implementation files('libs/tencent_sdk.jar')
 	implementation files('libs/weibo_sdk.jar')
-	implementation files('libs/MiPush_SDK_Client_3_6_2.jar')
 }
 repositories {
 	mavenCentral()
