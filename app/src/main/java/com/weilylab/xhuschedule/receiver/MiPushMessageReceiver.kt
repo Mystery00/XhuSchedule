@@ -1,5 +1,5 @@
 /*
- * Created by Mystery0 on 18-2-21 下午9:12.
+ * Created by Mystery0 on 18-4-2 下午5:06.
  * Copyright (c) 2018. All Rights reserved.
  *
  *                    =====================================================
@@ -28,14 +28,18 @@
  *                    =                                                   =
  *                    =====================================================
  *
- * Last modified 18-2-21 下午9:11
+ * Last modified 18-4-2 下午5:06
  */
 
-package com.weilylab.xhuschedule.util
+package com.weilylab.xhuschedule.receiver
 
 import android.content.Context
-import com.weilylab.xhuschedule.APP
+import com.xiaomi.mipush.sdk.MiPushMessage
+import com.xiaomi.mipush.sdk.PushMessageReceiver
 
-object TempSharedPreferenceUtil {
-    private val sharedPreference = APP.getContext().getSharedPreferences(Constants.SHARED_PREFERENCE_TEMP, Context.MODE_PRIVATE)
+class MiPushMessageReceiver : PushMessageReceiver() {
+	override fun onReceivePassThroughMessage(context: Context?, miPushMessage: MiPushMessage?) {
+		super.onReceivePassThroughMessage(context, miPushMessage)
+
+	}
 }

@@ -64,7 +64,7 @@ import io.reactivex.observers.DisposableObserver
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_score.*
 import kotlinx.android.synthetic.main.content_score.*
-import vip.mystery0.tools.logs.Logs
+import vip.mystery0.logs.Logs
 
 import java.io.File
 import java.util.*

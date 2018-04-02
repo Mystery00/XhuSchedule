@@ -46,7 +46,7 @@ import skin.support.SkinCompatManager
 import skin.support.app.SkinCardViewInflater
 import skin.support.constraint.app.SkinConstraintViewInflater
 import skin.support.design.app.SkinMaterialViewInflater
-import vip.mystery0.tools.logs.Logs
+import vip.mystery0.logs.Logs
 
 /**
  * Created by myste.
@@ -69,7 +69,7 @@ class APP : MultiDexApplication() {
 		super.onCreate()
 //		CrashReport.initCrashReport(CondomContext.wrap(applicationContext, "Bugly"), Constants.BUGLY_API_KEY, true)
 		tencent = Tencent.createInstance(Constants.QQ_API_KEY, CondomContext.wrap(applicationContext, "Tencent"))
-		Logs.setLevel(Logs.Debug)
+		Logs.setLevel(Logs.Level.DEBUG)
 		SkinCompatManager.withoutActivity(this)
 				.addStrategy(SkinLoader())
 				.addInflater(SkinMaterialViewInflater())

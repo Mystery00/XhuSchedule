@@ -44,7 +44,6 @@ import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.activity.MainActivity
 import com.weilylab.xhuschedule.classes.baseClass.Course
 import com.weilylab.xhuschedule.listener.InfoChangeListener
-import com.weilylab.xhuschedule.util.ColorUtil
 import com.weilylab.xhuschedule.util.Settings
 import com.weilylab.xhuschedule.util.ViewUtil
 

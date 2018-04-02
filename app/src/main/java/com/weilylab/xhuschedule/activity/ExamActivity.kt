@@ -63,7 +63,7 @@ import io.reactivex.schedulers.Schedulers
 
 import kotlinx.android.synthetic.main.activity_exam.*
 import kotlinx.android.synthetic.main.content_exam.*
-import vip.mystery0.tools.logs.Logs
+import vip.mystery0.logs.Logs
 import java.io.File
 
 class ExamActivity : XhuBaseActivity() {

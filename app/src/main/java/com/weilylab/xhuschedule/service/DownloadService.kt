@@ -57,7 +57,7 @@ import io.reactivex.schedulers.Schedulers
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
-import vip.mystery0.tools.logs.Logs
+import vip.mystery0.logs.Logs
 import java.io.File
 import java.io.IOException
 import java.io.InputStream

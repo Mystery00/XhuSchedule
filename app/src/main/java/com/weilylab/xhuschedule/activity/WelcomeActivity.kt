@@ -54,7 +54,7 @@ import com.weilylab.xhuschedule.fragment.PlaceholderFragment
 import com.weilylab.xhuschedule.util.Constants
 import com.weilylab.xhuschedule.util.Settings
 import kotlinx.android.synthetic.main.activity_welcome.*
-import vip.mystery0.tools.utils.Mystery0DensityUtil
+import vip.mystery0.tools.utils.DensityTools
 
 class WelcomeActivity : XhuBaseActivity() {
 
@@ -72,7 +72,7 @@ class WelcomeActivity : XhuBaseActivity() {
 	override fun initData() {
 		super.initData()
 		gestureDetector = GestureDetector(this, GuideViewTouch())
-		flaggingWidth = Mystery0DensityUtil.getScreenWidth(this) / 3
+		flaggingWidth = DensityTools.getScreenWidth(this) / 3
 
 		grayPointDrawable = VectorDrawableCompat.create(resources, R.drawable.ic_point, null)!!
 		grayPointDrawable.setBounds(0, 0, 20, 20)

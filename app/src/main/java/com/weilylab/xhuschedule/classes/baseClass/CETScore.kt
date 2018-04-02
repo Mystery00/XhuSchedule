@@ -52,6 +52,7 @@ import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.activity.MainActivity
 import com.weilylab.xhuschedule.adapter.ShareCETAdapter
 import com.weilylab.xhuschedule.listener.SaveViewBitmapListener
+import com.weilylab.xhuschedule.util.ViewUtil
 import com.weilylab.xhuschedule.util.XhuFileUtil
 import com.zyao89.view.zloading.ZLoadingDialog
 import com.zyao89.view.zloading.Z_TYPE
@@ -60,8 +61,7 @@ import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
-import vip.mystery0.tools.logs.Logs
-import vip.mystery0.tools.utils.Mystery0ViewUtil
+import vip.mystery0.logs.Logs
 
 class CETScore {
     private val TAG = "CETScore"
@@ -172,7 +172,7 @@ class CETScore {
 
     private fun saveViewBitmap(view: View, fileName: String, listener: SaveViewBitmapListener) {
         Observable.create<Boolean> {
-            val bitmap = Mystery0ViewUtil.getViewBitmap(view)
+            val bitmap = ViewUtil.getViewBitmap(view)
             val result = XhuFileUtil.saveBitmapToFile(bitmap, XhuFileUtil.getCETImageFile(fileName))
             it.onNext(result)
             it.onComplete()

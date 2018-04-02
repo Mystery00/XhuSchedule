@@ -38,7 +38,6 @@ import android.content.Context
 import android.content.Intent
 import android.support.v4.content.ContextCompat
 import com.weilylab.xhuschedule.service.ShowNotificationService
-import vip.mystery0.tools.logs.Logs
 
 class AlarmReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {

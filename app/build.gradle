@@ -98,6 +98,8 @@ dependencies {
 	implementation 'com.squareup.okhttp3:okhttp:3.10.0'
 	implementation 'androidx.core:core-ktx:0.2'
 	implementation 'com.tencent.bugly:crashreport:2.6.6'
+	implementation 'com.github.Mystery0Tools:Tools:1.0.1'
+	implementation 'com.github.Mystery0Tools:Logs:1.0.0'
 	annotationProcessor 'com.github.bumptech.glide:compiler:4.6.1'
 	testImplementation 'junit:junit:4.12'
 	androidTestImplementation 'com.android.support.test:runner:1.0.1'
@@ -105,7 +107,6 @@ dependencies {
 	api 'com.squareup.retrofit2:retrofit:2.3.0'
 	api 'com.squareup.retrofit2:adapter-rxjava2:2.3.0'
 	api 'com.squareup.retrofit2:converter-gson:2.3.0'
-	api 'com.github.Mystery00.ToolsDemo:tools:2.4.5'
 	api 'com.zyao89:zloading:1.0.8'
 	api 'de.hdodenhof:circleimageview:2.2.0'
 	api 'com.jrummyapps:colorpicker:2.1.6'
@@ -130,12 +131,4 @@ dependencies {
 }
 repositories {
 	mavenCentral()
-}
-buildscript {
-	repositories {
-		maven { url 'https://jitpack.io' }
-	}
-	dependencies {
-		classpath 'com.github.Mystery00.ToolsDemo:autoversion:2.4.5'
-	}
 }

@@ -67,7 +67,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.content_main.*
-import vip.mystery0.tools.logs.Logs
+import vip.mystery0.logs.Logs
 import java.io.File
 import java.io.InputStreamReader
 

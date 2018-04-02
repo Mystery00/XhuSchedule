@@ -41,7 +41,7 @@ import android.support.v4.app.NotificationCompat
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.util.Constants
 import com.weilylab.xhuschedule.util.download.Download
-import vip.mystery0.tools.utils.Mystery0FileUtil
+import vip.mystery0.tools.utils.FileTools
 
 object DownloadNotification {
     private const val NOTIFICATION_TAG = "Download"
@@ -61,7 +61,7 @@ object DownloadNotification {
 
     fun updateProgress(context: Context, download: Download) {
         notificationBuilder.setProgress(100, download.progress, false)
-                .setContentText(context.getString(R.string.download_notification_title_download, Mystery0FileUtil.formatFileSize(download.currentFileSize), Mystery0FileUtil.formatFileSize(download.totalFileSize)))
+                .setContentText(context.getString(R.string.download_notification_title_download, FileTools.formatFileSize(download.currentFileSize), FileTools.formatFileSize(download.totalFileSize)))
                 .setSubText(context.getString(R.string.download_notification_text, download.progress))
         notify(context, notificationBuilder.build())
     }

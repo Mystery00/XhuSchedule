@@ -62,6 +62,7 @@ class Download : Parcelable {
     }
 
     companion object {
+		@JvmField
         val CREATOR: Parcelable.Creator<Download> = object : Parcelable.Creator<Download> {
             override fun createFromParcel(source: Parcel): Download = Download(source)
             override fun newArray(size: Int): Array<Download?> = arrayOfNulls(size)

@@ -40,15 +40,10 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.bumptech.glide.request.RequestOptions
-import com.bumptech.glide.signature.MediaStoreSignature
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.adapter.TodayAdapter
 import com.weilylab.xhuschedule.classes.baseClass.Course
 import com.weilylab.xhuschedule.util.Constants
-import com.weilylab.xhuschedule.util.Settings
 import com.weilylab.xhuschedule.util.ViewUtil
 import io.reactivex.Observable
 import io.reactivex.Observer

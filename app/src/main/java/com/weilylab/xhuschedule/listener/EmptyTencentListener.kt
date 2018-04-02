@@ -35,7 +35,7 @@ package com.weilylab.xhuschedule.listener
 
 import com.tencent.tauth.IUiListener
 import com.tencent.tauth.UiError
-import vip.mystery0.tools.logs.Logs
+import vip.mystery0.logs.Logs
 
 class EmptyTencentListener : IUiListener {
     private val tag = "EmptyTencentListener"

@@ -86,8 +86,8 @@ import io.reactivex.observers.DisposableObserver
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
-import vip.mystery0.tools.logs.Logs
-import vip.mystery0.tools.utils.Mystery0DensityUtil
+import vip.mystery0.logs.Logs
+import vip.mystery0.tools.utils.DensityTools
 import java.io.File
 import java.io.InputStreamReader
 import java.net.UnknownHostException
@@ -631,9 +631,9 @@ class MainActivity : XhuBaseActivity() {
 		titleTextView.setCompoundDrawablesWithIntrinsicBounds(null, null, if (isShowArrow) arrowDrawable else null, null)
 		weekAnimator?.cancel()
 		weekAnimator = if (isShow)
-			ObjectAnimator.ofFloat(layout_week_recycler_view, Constants.ANIMATION_TRANSLATION_Y, 0F, Mystery0DensityUtil.dip2px(this, 56F).toFloat())
+			ObjectAnimator.ofFloat(layout_week_recycler_view, Constants.ANIMATION_TRANSLATION_Y, 0F, DensityTools.dp2px(this, 56F).toFloat())
 		else
-			ObjectAnimator.ofFloat(layout_week_recycler_view, Constants.ANIMATION_TRANSLATION_Y, Mystery0DensityUtil.dip2px(this, 56F).toFloat(), 0F)
+			ObjectAnimator.ofFloat(layout_week_recycler_view, Constants.ANIMATION_TRANSLATION_Y, DensityTools.dp2px(this, 56F).toFloat(), 0F)
 		weekAnimator?.addListener(object : Animator.AnimatorListener {
 			override fun onAnimationRepeat(animation: Animator?) {
 			}
@@ -715,9 +715,9 @@ class MainActivity : XhuBaseActivity() {
 		animatorList.forEach { it.cancel() }
 		animatorList.clear()
 		animatorList.add(ObjectAnimator.ofFloat(action_sync, Constants.ANIMATION_ROTATION, 360F, 0F).setDuration(ANIMATION_DURATION))
-		animatorList.add(ObjectAnimator.ofFloat(action_sync, Constants.ANIMATION_TRANSLATION_X, Mystery0DensityUtil.dip2px(this, 68F).toFloat(), 0F).setDuration(ANIMATION_DURATION))
+		animatorList.add(ObjectAnimator.ofFloat(action_sync, Constants.ANIMATION_TRANSLATION_X, DensityTools.dp2px(this, 68F).toFloat(), 0F).setDuration(ANIMATION_DURATION))
 		animatorList.add(ObjectAnimator.ofFloat(action_settings, Constants.ANIMATION_ROTATION, 0F, 360F).setDuration(ANIMATION_DURATION))
-		animatorList.add(ObjectAnimator.ofFloat(action_settings, Constants.ANIMATION_TRANSLATION_X, -Mystery0DensityUtil.dip2px(this, 68F).toFloat(), 0F).setDuration(ANIMATION_DURATION))
+		animatorList.add(ObjectAnimator.ofFloat(action_settings, Constants.ANIMATION_TRANSLATION_X, -DensityTools.dp2px(this, 68F).toFloat(), 0F).setDuration(ANIMATION_DURATION))
 		animatorList.forEach { it.start() }
 	}
 
@@ -725,9 +725,9 @@ class MainActivity : XhuBaseActivity() {
 		animatorList.forEach { it.cancel() }
 		animatorList.clear()
 		animatorList.add(ObjectAnimator.ofFloat(action_sync, Constants.ANIMATION_ROTATION, 0F, 360F).setDuration(ANIMATION_DURATION))
-		animatorList.add(ObjectAnimator.ofFloat(action_sync, Constants.ANIMATION_TRANSLATION_X, 0F, Mystery0DensityUtil.dip2px(this, 68F).toFloat()).setDuration(ANIMATION_DURATION))
+		animatorList.add(ObjectAnimator.ofFloat(action_sync, Constants.ANIMATION_TRANSLATION_X, 0F, DensityTools.dp2px(this, 68F).toFloat()).setDuration(ANIMATION_DURATION))
 		animatorList.add(ObjectAnimator.ofFloat(action_settings, Constants.ANIMATION_ROTATION, 360F, 0F).setDuration(ANIMATION_DURATION))
-		animatorList.add(ObjectAnimator.ofFloat(action_settings, Constants.ANIMATION_TRANSLATION_X, 0F, -Mystery0DensityUtil.dip2px(this, 68F).toFloat()).setDuration(ANIMATION_DURATION))
+		animatorList.add(ObjectAnimator.ofFloat(action_settings, Constants.ANIMATION_TRANSLATION_X, 0F, -DensityTools.dp2px(this, 68F).toFloat()).setDuration(ANIMATION_DURATION))
 		animatorList.forEach { it.start() }
 	}
 

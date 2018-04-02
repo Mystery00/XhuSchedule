@@ -68,9 +68,8 @@ import io.reactivex.observers.DisposableObserver
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_schedule.*
 import kotlinx.android.synthetic.main.content_schedule.*
-import vip.mystery0.tools.logs.Logs
-import vip.mystery0.tools.utils.Mystery0ColorUtil
-import vip.mystery0.tools.utils.Mystery0DensityUtil
+import vip.mystery0.logs.Logs
+import vip.mystery0.tools.utils.DensityTools
 import java.io.File
 import java.io.InputStreamReader
 import java.net.UnknownHostException
@@ -119,7 +118,7 @@ class ScheduleActivity : XhuBaseActivity() {
 		val tableNav = table_nav as LinearLayout
 		for (i in 0 until tableNav.childCount) {
 			val layoutParams = tableNav.getChildAt(i).layoutParams
-			layoutParams.height = Mystery0DensityUtil.dip2px(this, Settings.customTableItemHeight.toFloat())
+			layoutParams.height = DensityTools.dp2px(this, Settings.customTableItemHeight.toFloat())
 			tableNav.getChildAt(i).layoutParams = layoutParams
 			(tableNav.getChildAt(i) as TextView).setTextColor(ContextCompat.getColor(this, R.color.schedule_head_text_color))
 		}
@@ -232,7 +231,7 @@ class ScheduleActivity : XhuBaseActivity() {
 					.forEach { hasData = true }
 		if (!hasData)
 			return
-		val itemHeight = Mystery0DensityUtil.dip2px(this, Settings.customTableItemHeight.toFloat())
+		val itemHeight = DensityTools.dp2px(this, Settings.customTableItemHeight.toFloat())
 		for (day in 0 until 7) {
 			val layoutList = ArrayList<TableLayoutHelper>()
 			val temp = resources.getIdentifier("table_schedule" + (day + 1), "id", "com.weilylab.xhuschedule")
@@ -302,7 +301,7 @@ class ScheduleActivity : XhuBaseActivity() {
 	}
 
 	private fun getItemView(course: Course, startTime: Int): View {
-		val itemHeight = Mystery0DensityUtil.dip2px(this, Settings.customTableItemHeight.toFloat())
+		val itemHeight = DensityTools.dp2px(this, Settings.customTableItemHeight.toFloat())
 		val itemView = View.inflate(this, R.layout.item_widget_table, null)
 		val imageView: ImageView = itemView.findViewById(R.id.imageView)
 		val textViewName: TextView = itemView.findViewById(R.id.textView_name)
@@ -327,7 +326,7 @@ class ScheduleActivity : XhuBaseActivity() {
 				textViewLocation.setTextColor(Color.GRAY)
 				gradientDrawable.setColor(Color.parseColor("#9AEEEEEE"))
 			}
-			else -> gradientDrawable.setColor(if (course.color != 0) course.color else Mystery0ColorUtil.getRandomColorAsInt())
+			else -> gradientDrawable.setColor(if (course.color != 0) course.color else ColorUtil.getRandomColorAsInt())
 		}
 		val timeArray = course.time.split('-')
 		val height = (timeArray[1].toInt() - timeArray[0].toInt() + 1) * itemHeight

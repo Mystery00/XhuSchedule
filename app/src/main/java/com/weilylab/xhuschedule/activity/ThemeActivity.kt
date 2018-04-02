@@ -40,7 +40,7 @@ import com.weilylab.xhuschedule.classes.baseClass.Theme
 
 import kotlinx.android.synthetic.main.activity_theme.*
 import kotlinx.android.synthetic.main.content_theme.*
-import vip.mystery0.tools.logs.Logs
+import vip.mystery0.logs.Logs
 
 class ThemeActivity : XhuBaseActivity() {
 	private val list = ArrayList<Theme>()

@@ -49,7 +49,7 @@ import com.weilylab.xhuschedule.util.Settings
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.observers.DisposableObserver
 import io.reactivex.schedulers.Schedulers
-import vip.mystery0.tools.utils.Mystery0FileUtil
+import vip.mystery0.tools.utils.FileTools
 import java.io.InputStreamReader
 
 class UpdateService : IntentService("PhpService") {
@@ -86,14 +86,14 @@ class UpdateService : IntentService("PhpService") {
 							val builder = AlertDialog.Builder(currentActivity)
 									.setTitle(title)
 									.setMessage(text)
-									.setPositiveButton("${getString(R.string.action_download_apk)}(${Mystery0FileUtil.formatFileSize(version.apkSize)})", { _, _ ->
+									.setPositiveButton("${getString(R.string.action_download_apk)}(${FileTools.formatFileSize(version.apkSize)})", { _, _ ->
 										val downloadAPKIntent = Intent(this@UpdateService, DownloadService::class.java)
 										downloadAPKIntent.putExtra(Constants.INTENT_TAG_NAME_TYPE, Constants.DOWNLOAD_TYPE_APK)
 										downloadAPKIntent.putExtra(Constants.INTENT_TAG_NAME_QINIU_PATH, version.apkQiniuPath)
 										startService(downloadAPKIntent)
 									})
 							if (version.lastVersionCode == getString(R.string.app_version_code).toInt())
-								builder.setNegativeButton("${getString(R.string.action_download_patch)}(${Mystery0FileUtil.formatFileSize(version.patchSize)})", { _, _ ->
+								builder.setNegativeButton("${getString(R.string.action_download_patch)}(${FileTools.formatFileSize(version.patchSize)})", { _, _ ->
 									val downloadPatchIntent = Intent(this@UpdateService, DownloadService::class.java)
 									downloadPatchIntent.putExtra(Constants.INTENT_TAG_NAME_TYPE, Constants.DOWNLOAD_TYPE_PATCH)
 									downloadPatchIntent.putExtra(Constants.INTENT_TAG_NAME_QINIU_PATH, version.patchQiniuPath)
