@@ -8,8 +8,14 @@
 <resources>
     <string name="dialog_title_update_log">%1$s版的更新日志</string>
     <string-array name="update_list">
+        <item>3.0.3更新内容：</item>
+        <item>修复：3.0.2上面错误的颜色显示问题</item>
+        <item>修复：显示更新日志崩溃</item>
+        <item> </item>
+        <item>3.0.2更新内容：</item>
         <item>新增：每天第一次打开课表自动同步数据</item>
         <item> </item>
+        <item>修复：部分情况下单双周课程不显示</item>
         <item>修复：查询时更改学期导致崩溃</item>
         <item>修复：注销用户时导致崩溃</item>
         <item>修复：当高度小于屏幕高度的时候显示错乱</item>

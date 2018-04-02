@@ -124,7 +124,6 @@ object Constants {
 	const val CUSTOM_HEIGHT_SIZE = "customHeightSize"
 	const val CUSTOM_TABLE_ITEM_WIDTH = "customTableItemWidth"
 	const val AUTO_CHECK_UPDATE = "autoCheckUpdate"
-	const val AUTO_CHECK_LOG = "autoCheckLog"
 	const val IS_ENABLE_MULTI_USER_MODE = "isEnableMultiUserMode"
 	const val IS_SHOW_FAILED = "isShowFailed"
 	const val IS_AUTO_SELECT = "isAutoSelect"

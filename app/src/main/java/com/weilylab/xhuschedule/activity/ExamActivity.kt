@@ -88,6 +88,7 @@ class ExamActivity : XhuBaseActivity() {
 				.setHintText(getString(R.string.hint_dialog_sync))
 				.setHintTextSize(16F)
 				.setCanceledOnTouchOutside(false)
+				.setCancelable(false)
 				.setLoadingColor(ContextCompat.getColor(this, R.color.colorAccent))
 				.setHintTextColor(ContextCompat.getColor(this, R.color.colorAccent))
 		studentList.clear()

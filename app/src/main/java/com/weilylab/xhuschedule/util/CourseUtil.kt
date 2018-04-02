@@ -246,9 +246,9 @@ object CourseUtil {
 				var other = false
 				when (it.type) {
 					Constants.COURSE_TYPE_ERROR, Constants.COURSE_TYPE_ALL -> other = true
-					Constants.COURSE_TYPE_SINGLE -> if (weekIndex % 2 == 1)
+					Constants.COURSE_TYPE_SINGLE -> if (currentWeek % 2 == 1)
 						other = true
-					Constants.COURSE_TYPE_DOUBLE -> if (weekIndex % 2 == 0)
+					Constants.COURSE_TYPE_DOUBLE -> if (currentWeek % 2 == 0)
 						other = true
 					else -> other = false
 				}

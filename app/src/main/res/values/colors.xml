@@ -10,16 +10,16 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
-    <color name="colorWeekAccent">#9E9E9E</color>
-    <color name="colorWeekPrimary">#757575</color>
-    <color name="colorWeekNotIndex">#9E9E9E</color>
-    <color name="colorWeekIndex">#424242</color>
+    <color name="colorWeekAccent">#3F51B5</color>
+    <color name="colorWeekPrimary">#303F9F</color>
+    <color name="colorWeekNotIndex">#3F51B5</color>
+    <color name="colorWeekIndex">#303F9F</color>
 
-    <color name="colorWhite">#FFFFFF</color>
-    <color name="colorRed">#ff0000</color>
+    <color name="schedule_head_text_color">#FFFFFF</color>
 
     <color name="login_color">#646464</color>
-    <color name="schedule_head_text_color">#646464</color>
+    <color name="colorWhite">#FFFFFF</color>
+    <color name="colorRed">#ff0000</color>
     <color name="line_color">#bfbfbf</color>
     <color name="not_theme_color">#8a8a8a</color>
 

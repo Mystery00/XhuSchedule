@@ -43,7 +43,6 @@
     <string name="key_custom_table_item_width" translatable="false">key_custom_table_item_width</string>
     <string name="key_reset" translatable="false">key_reset</string>
     <string name="key_auto_check_update" translatable="false">key_auto_check_update</string>
-    <string name="key_auto_check_log" translatable="false">key_auto_check_log</string>
     <string name="key_source_code" translatable="false">key_source_code</string>
     <string name="key_feedback" translatable="false">key_feedback</string>
     <string name="key_update_log" translatable="false">key_update_log</string>
@@ -86,7 +85,6 @@
     <string name="title_reset">界面重置</string>
     <string name="title_weily_product">微力实验室出品</string>
     <string name="title_auto_check_update">自动检查更新</string>
-    <string name="title_auto_check_log">启动时检查崩溃日志</string>
     <string name="title_source_code">开源地址</string>
     <string name="title_open_source_license">开源协议</string>
     <string name="title_feedback">意见反馈</string>
@@ -119,7 +117,6 @@
     <string name="summary_version_name" translatable="false">@string/app_version_name</string>
     <string name="summary_version_code" translatable="false">@string/app_version_code</string>
     <string name="summary_auto_check_update">在每一次启动时自动检查更新，注意，跳过某个版本将会无法使用增量更新</string>
-    <string name="summary_auto_check_log">在每一次启动时检查时候有崩溃日志，并提醒是否上传给开发者</string>
     <string name="summary_weily_product">点击进入实验室官网</string>
     <string name="summary_feedback">请发送邮件到mystery0dyl520@gmail.com并注明APP名称</string>
     <string name="summary_more_app_coolapk">酷安</string>

@@ -123,11 +123,6 @@ object Settings {
 			sharedPreference.edit { putBoolean(Constants.AUTO_CHECK_UPDATE, value) }
 		}
 		get() = sharedPreference.getBoolean(Constants.AUTO_CHECK_UPDATE, true)
-	var autoCheckLog: Boolean//自动检查崩溃日志
-		set(value) {
-			sharedPreference.edit { putBoolean(Constants.AUTO_CHECK_LOG, value) }
-		}
-		get() = sharedPreference.getBoolean(Constants.AUTO_CHECK_LOG, true)
 	var isEnableMultiUserMode: Boolean//是否启用多用户模式
 		set(value) {
 			sharedPreference.edit { putBoolean(Constants.IS_ENABLE_MULTI_USER_MODE, value) }
