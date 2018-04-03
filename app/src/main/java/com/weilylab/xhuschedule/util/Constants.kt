@@ -37,8 +37,8 @@ object Constants {
 	const val QQ_API_KEY = "1106663023"
 	const val WEIBO_API_KEY = "2170085314"
 	const val WEIXIN_API_KEY = "wx41799887957cbba8"
-	const val LEANCLOUD_APP_ID="f939kTGhlyHAHVsCpccyWU6t-gzGzoHsz"
-	const val LEANCLOUD_APP_KEY="wVpJkuI4DLNxXHBfp19XGz3E"
+	const val LEANCLOUD_APP_ID = "f939kTGhlyHAHVsCpccyWU6t-gzGzoHsz"
+	const val LEANCLOUD_APP_KEY = "wVpJkuI4DLNxXHBfp19XGz3E"
 
 	const val WEIXIN_PACKAGE_NAME = "com.tencent.mm"
 	const val WEIXIN_FRIEND_ACTION = "com.tencent.mm.ui.tools.ShareImgUI"
@@ -54,6 +54,8 @@ object Constants {
 	const val COURSE_TYPE_SINGLE = "1"
 	const val COURSE_TYPE_DOUBLE = "2"
 	const val COURSE_TYPE_NOT = "not"
+
+	const val TABLE_NAME_SPLASH = "Splash"
 
 	const val NOTIFICATION_SYSTEM_SOUND = "content://settings/system/notification_sound"
 
@@ -73,9 +75,10 @@ object Constants {
 	const val NOTIFICATION_ID_FOREGROUND_ALARM = 20
 	const val NOTIFICATION_ID_FOREGROUND_WIDGET = 21
 	const val NOTIFICATION_ID_FOREGROUND_BOOT_COMPLETE = 22
-	const val NOTIFICATION_ID_WIDGET_ACTION_NEXT = 23
-	const val NOTIFICATION_ID_WIDGET_ACTION_LAST = 24
-	const val NOTIFICATION_ID_SHORTCUT_CLEAR_COLOR = 25
+	const val NOTIFICATION_ID_FOREGROUND_DOWNLOAD_SPLASH = 23
+	const val NOTIFICATION_ID_WIDGET_ACTION_NEXT = 51
+	const val NOTIFICATION_ID_WIDGET_ACTION_LAST = 52
+	const val NOTIFICATION_ID_SHORTCUT_CLEAR_COLOR = 53
 	const val NOTIFICATION_ID_COURSE_START_INDEX = 100
 	const val NOTIFICATION_ID_EXAM_START_INDEX = 200
 

@@ -36,9 +36,14 @@ package com.weilylab.xhuschedule.activity
 import android.app.Dialog
 import android.content.Intent
 import android.support.v4.content.ContextCompat
+import com.avos.avoscloud.AVException
+import com.avos.avoscloud.AVObject
+import com.avos.avoscloud.AVQuery
+import com.avos.avoscloud.FindCallback
 import com.weilylab.xhuschedule.APP
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.classes.baseClass.Student
+import com.weilylab.xhuschedule.service.DownloadSplashIntentService
 import com.weilylab.xhuschedule.util.*
 import com.zyao89.view.zloading.ZLoadingDialog
 import com.zyao89.view.zloading.Z_TYPE
@@ -87,6 +92,26 @@ class SplashActivity : XhuBaseActivity() {
 					userList[0].isMain = true
 				//初始化颜色
 				XhuFileUtil.removeAllSavedPreference(this, Constants.SHARED_PREFERENCE_COURSE_COLOR)
+				//请求启动页图片
+				if (ScheduleHelper.isConnectInternet(this)) {
+					val avQuery = AVQuery<AVObject>(Constants.TABLE_NAME_SPLASH)
+					avQuery.orderByDescending("indexID")
+					avQuery.limit(1)
+					avQuery.findInBackground(object : FindCallback<AVObject>() {
+						override fun done(mutableList: MutableList<AVObject>?, avException: AVException?) {
+							if (avException == null) {
+								val avObject = mutableList!![0]
+								val splashUrl = avObject.getString("splashUrl")
+								Logs.i(TAG, "done: $splashUrl")
+								val intent = Intent(this@SplashActivity, DownloadSplashIntentService::class.java)
+								intent.putExtra(Constants.INTENT_TAG_NAME_QINIU_PATH, splashUrl)
+								startService(intent)
+							} else {
+								Logs.wtf(TAG, "done: ", avException)
+							}
+						}
+					})
+				}
 				it.onComplete()
 			}
 					.subscribeOn(Schedulers.newThread())

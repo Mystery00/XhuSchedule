@@ -86,8 +86,8 @@ class DownloadService : IntentService(TAG) {
             Logs.i(TAG, "onHandleIntent: 格式错误")
             return
         }
-        Logs.i(TAG, "onStartCommand: type: " + type)
-        Logs.i(TAG, "onStartCommand: qiniuPath: " + qiniuPath)
+        Logs.i(TAG, "onStartCommand: type: $type")
+        Logs.i(TAG, "onStartCommand: qiniuPath: $qiniuPath")
         Logs.i(TAG, "onStartCommand: " + file.absolutePath)
         download(this, type!!, qiniuPath!!, file)
     }
@@ -122,7 +122,7 @@ class DownloadService : IntentService(TAG) {
     }
 
     private fun download(context: Context, type: String, qiniuPath: String, file: File) {
-        Logs.i(TAG, "download: " + qiniuPath)
+        Logs.i(TAG, "download: $qiniuPath")
         retrofit.create(QiniuService::class.java)
                 .download(qiniuPath)
                 .subscribeOn(Schedulers.newThread())
@@ -167,7 +167,7 @@ class DownloadService : IntentService(TAG) {
                         else
                             Uri.fromFile(installFile)
                         Logs.i(TAG, "onComplete: " + installFile.absolutePath)
-                        Logs.i(TAG, "onComplete: " + uri)
+                        Logs.i(TAG, "onComplete: $uri")
                         installIntent.setDataAndType(uri, "application/vnd.android.package-archive")
                         startActivity(installIntent)
                         DownloadNotification.cancel(context)

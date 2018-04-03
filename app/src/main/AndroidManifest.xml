@@ -211,6 +211,15 @@
 				<action android:name="com.weilylab.xhuschedule.PUSH" />
 			</intent-filter>
 		</receiver>
+
+		<service
+			android:name=".service.ShowNotificationJobService"
+			android:enabled="true"
+			android:exported="false"
+			android:permission="android.permission.BIND_JOB_SERVICE" />
+		<service
+			android:name=".service.DownloadSplashIntentService"
+			android:exported="false"></service>
 	</application>
 
 </manifest>

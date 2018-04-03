@@ -41,6 +41,7 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
+import android.net.ConnectivityManager
 import android.os.Build
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.receiver.AlarmReceiver
@@ -153,5 +154,11 @@ object ScheduleHelper {
 			val lineWidth = context.resources.getDimensionPixelSize(R.dimen.divider_size)
 			(DensityTools.getScreenWidth(context) - navWidth - lineWidth) / 7
 		}
+	}
+
+	fun isConnectInternet(context: Context): Boolean {
+		val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+		val activeNetworkInfo = connectivityManager.activeNetworkInfo
+		return activeNetworkInfo != null && activeNetworkInfo.isConnected
 	}
 }
