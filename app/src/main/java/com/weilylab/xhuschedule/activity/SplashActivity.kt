@@ -94,23 +94,31 @@ class SplashActivity : XhuBaseActivity() {
 				XhuFileUtil.removeAllSavedPreference(this, Constants.SHARED_PREFERENCE_COURSE_COLOR)
 				//请求启动页图片
 				if (ScheduleHelper.isConnectInternet(this)) {
-					val avQuery = AVQuery<AVObject>(Constants.TABLE_NAME_SPLASH)
-					avQuery.orderByDescending("indexID")
-					avQuery.limit(1)
-					avQuery.findInBackground(object : FindCallback<AVObject>() {
-						override fun done(mutableList: MutableList<AVObject>?, avException: AVException?) {
-							if (avException == null) {
-								val avObject = mutableList!![0]
-								val splashUrl = avObject.getString("splashUrl")
-								Logs.i(TAG, "done: $splashUrl")
-								val intent = Intent(this@SplashActivity, DownloadSplashIntentService::class.java)
-								intent.putExtra(Constants.INTENT_TAG_NAME_QINIU_PATH, splashUrl)
-								startService(intent)
-							} else {
-								Logs.wtf(TAG, "done: ", avException)
+					try {
+						val avQuery = AVQuery<AVObject>(Constants.TABLE_NAME_SPLASH)
+						avQuery.orderByDescending("indexID")
+						avQuery.limit(1)
+						avQuery.findInBackground(object : FindCallback<AVObject>() {
+							override fun done(mutableList: MutableList<AVObject>?, avException: AVException?) {
+								if (avException == null) {
+									val avObject = mutableList!![0]
+									val isEnable = avObject.getBoolean("isEnable")
+									if (!isEnable)
+										return
+									val objectId = avObject.getString("objectId")
+									val splashUrl = avObject.getString("splashUrl")
+									Logs.i(TAG, "done: $splashUrl")
+									val intent = Intent(this@SplashActivity, DownloadSplashIntentService::class.java)
+									intent.putExtra(Constants.INTENT_TAG_NAME_QINIU_PATH, splashUrl)
+									startService(intent)
+								} else {
+									Logs.wtf(TAG, "done: ", avException)
+								}
 							}
-						}
-					})
+						})
+					} catch (e: Exception) {
+						Logs.wtf(TAG, "initData: ", e)
+					}
 				}
 				it.onComplete()
 			}

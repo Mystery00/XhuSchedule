@@ -62,12 +62,6 @@ class DownloadSplashIntentService : IntentService(TAG) {
 
 	override fun onCreate() {
 		super.onCreate()
-//		val notification = NotificationCompat.Builder(this, Constants.NOTIFICATION_CHANNEL_ID_DEFAULT)
-//				.setSmallIcon(R.drawable.ic_stat_foreground)
-//				.setContentText(getString(R.string.hint_foreground_notification))
-//				.setAutoCancel(true)
-//				.build()
-//		startForeground(Constants.NOTIFICATION_ID_FOREGROUND_DOWNLOAD_SPLASH, notification)
 		val client = OkHttpClient.Builder()
 				.retryOnConnectionFailure(true)
 				.connectTimeout(15, TimeUnit.SECONDS)
