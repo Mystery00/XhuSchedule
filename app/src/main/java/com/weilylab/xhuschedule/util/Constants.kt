@@ -87,6 +87,8 @@ object Constants {
 	const val INTENT_TAG_NAME_PROFILE = "profile"
 	const val INTENT_TAG_NAME_LIST = "list"
 	const val INTENT_TAG_NAME_VERSION = "version"
+	const val INTENT_TAG_NAME_SPLASH_FILE_NAME = "splashFileName"
+	const val INTENT_TAG_NAME_SPLASH_TIME = "splashTime"
 
 	const val DOWNLOAD_TYPE_APK = "apk"
 	const val DOWNLOAD_TYPE_PATCH = "patch"
@@ -138,6 +140,7 @@ object Constants {
 	const val NOTIFICATION_TOMORROW_ENABLE = "isNotificationTomorrowEnable"
 	const val NOTIFICATION_EXAM_ENABLE = "isNotificationExamEnable"
 	const val NOTIFICATION_TOMORROW_TYPE = "isNotificationTomorrowType"
+	const val SPLASH_IMAGE_FILE_NAME = "splashImageFileName"
 	const val APPLIED_THEME = "appliedTheme"
 
 	const val DEFAULT_TERM_START_DATE = "2018-2-5"

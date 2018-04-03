@@ -103,13 +103,23 @@ class SplashActivity : XhuBaseActivity() {
 								if (avException == null) {
 									val avObject = mutableList!![0]
 									val isEnable = avObject.getBoolean("isEnable")
-									if (!isEnable)
+									if (!isEnable) {
+										XhuFileUtil.removeSavedPreference(this@SplashActivity, Constants.SHARED_PREFERENCE_SETTINGS, Constants.SPLASH_IMAGE_FILE_NAME)
 										return
-									val objectId = avObject.getString("objectId")
+									}
+									val objectId = avObject.objectId
 									val splashUrl = avObject.getString("splashUrl")
+									val splashTime = avObject.getInt("splashTime")
+									Logs.i(TAG, "done: $objectId")
 									Logs.i(TAG, "done: $splashUrl")
+									Logs.i(TAG, "done: $splashTime")
+									val file = XhuFileUtil.getSplashImageFile(this@SplashActivity, objectId)
+									if (file == null || file.exists())
+										return
 									val intent = Intent(this@SplashActivity, DownloadSplashIntentService::class.java)
 									intent.putExtra(Constants.INTENT_TAG_NAME_QINIU_PATH, splashUrl)
+									intent.putExtra(Constants.INTENT_TAG_NAME_SPLASH_FILE_NAME, objectId)
+									intent.putExtra(Constants.INTENT_TAG_NAME_SPLASH_TIME, splashTime.toLong())
 									startService(intent)
 								} else {
 									Logs.wtf(TAG, "done: ", avException)
@@ -151,8 +161,18 @@ class SplashActivity : XhuBaseActivity() {
 	private fun go() {
 		if (Settings.isFirstEnter)
 			startActivity(Intent(this, WelcomeActivity::class.java))
-		else
-			startActivity(Intent(this, MainActivity::class.java))
+		else {
+			val splashImageFileName = Settings.splashImage
+			val file = XhuFileUtil.getSplashImageFile(this, splashImageFileName)
+			if (file == null || !file.exists()) {
+				startActivity(Intent(this, MainActivity::class.java))
+				finish()
+				return
+			}
+			val intent = Intent(this, SplashImageActivity::class.java)
+			intent.putExtra(Constants.INTENT_TAG_NAME_SPLASH_FILE_NAME, splashImageFileName)
+			startActivity(intent)
+		}
 		finish()
 	}
 }

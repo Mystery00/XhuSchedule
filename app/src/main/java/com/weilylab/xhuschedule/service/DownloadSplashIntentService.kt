@@ -35,11 +35,9 @@ package com.weilylab.xhuschedule.service
 
 import android.app.IntentService
 import android.content.Intent
-import android.os.Environment
-import android.support.v4.app.NotificationCompat
-import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.interfaces.QiniuService
 import com.weilylab.xhuschedule.util.Constants
+import com.weilylab.xhuschedule.util.Settings
 import com.weilylab.xhuschedule.util.XhuFileUtil
 import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -49,7 +47,6 @@ import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import vip.mystery0.logs.Logs
-import java.io.File
 import java.io.InputStream
 import java.util.concurrent.TimeUnit
 
@@ -75,7 +72,12 @@ class DownloadSplashIntentService : IntentService(TAG) {
 
 	override fun onHandleIntent(intent: Intent?) {
 		val qiniuPath = intent?.getStringExtra(Constants.INTENT_TAG_NAME_QINIU_PATH) ?: return
-		val file = File(getExternalFilesDir(Environment.DIRECTORY_PICTURES).absolutePath + File.separator + qiniuPath)
+		val objectId = intent.getStringExtra(Constants.INTENT_TAG_NAME_SPLASH_FILE_NAME)
+				?: return
+		val splashTime = intent.getLongExtra(Constants.INTENT_TAG_NAME_SPLASH_TIME, 3000)
+		val file = XhuFileUtil.getSplashImageFile(this, objectId) ?: return
+		Logs.i(TAG, "onHandleIntent: $objectId")
+		Logs.i(TAG, "onHandleIntent: ${file.absolutePath}")
 		if (!file.parentFile.exists())
 			file.parentFile.mkdirs()
 		retrofit.create(QiniuService::class.java)
@@ -91,6 +93,8 @@ class DownloadSplashIntentService : IntentService(TAG) {
 				.subscribe(object : Observer<InputStream> {
 					override fun onComplete() {
 						Logs.i(TAG, "onComplete: ")
+						Settings.splashImage = objectId
+						Settings.splashTime = splashTime
 					}
 
 					override fun onSubscribe(d: Disposable) {

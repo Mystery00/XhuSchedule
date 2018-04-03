@@ -50,6 +50,9 @@
 				android:resource="@xml/shortcuts" />
 		</activity>
 		<activity
+			android:name=".activity.SplashImageActivity"
+			android:theme="@style/AppTheme.NoActionBar.FullScreen" />
+		<activity
 			android:name=".activity.WelcomeActivity"
 			android:theme="@style/AppTheme.NoActionBar.FullScreen" />
 		<activity
@@ -219,7 +222,7 @@
 			android:permission="android.permission.BIND_JOB_SERVICE" />
 		<service
 			android:name=".service.DownloadSplashIntentService"
-			android:exported="false"></service>
+			android:exported="false" />
 	</application>
 
 </manifest>

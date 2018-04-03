@@ -183,7 +183,17 @@ object Settings {
 			sharedPreference.edit { putInt(Constants.NOTIFICATION_TOMORROW_TYPE, value) }
 		}
 		get() = sharedPreference.getInt(Constants.NOTIFICATION_TOMORROW_TYPE, 1)
-	var currentTheme: String
+	var splashImage: String//启动页图片
+		set(value) {
+			sharedPreference.edit { putString(Constants.SPLASH_IMAGE_FILE_NAME, value) }
+		}
+		get() = sharedPreference.getString(Constants.SPLASH_IMAGE_FILE_NAME, "")
+	var splashTime: Long//启动页显示时间
+		set(value) {
+			sharedPreference.edit { putLong(Constants.INTENT_TAG_NAME_SPLASH_TIME, value) }
+		}
+		get() = sharedPreference.getLong(Constants.INTENT_TAG_NAME_SPLASH_TIME, 3000)
+	var currentTheme: String//当前使用的主题
 		set(value) {
 			sharedPreference.edit { putString(Constants.APPLIED_THEME, value) }
 		}

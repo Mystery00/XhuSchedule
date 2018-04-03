@@ -48,6 +48,7 @@ import android.graphics.Bitmap.CompressFormat
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
+import android.text.TextUtils
 
 
 /**
@@ -111,6 +112,15 @@ object XhuFileUtil {
 	 */
 	fun getUIImageFile(context: Context, fileName: String): File {
 		return File(File(context.filesDir, "CropImg"), fileName)
+	}
+
+	/**
+	 * 获取存储的启动页图片的File对象
+	 */
+	fun getSplashImageFile(context: Context, objectId: String): File? {
+		if (TextUtils.isEmpty(objectId))
+			return null
+		return File(context.getExternalFilesDir(Environment.DIRECTORY_PICTURES).absolutePath + File.separator + "splash" + File.separator + objectId)
 	}
 
 	/**

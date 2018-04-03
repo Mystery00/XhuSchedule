@@ -6,86 +6,87 @@
   -->
 
 <resources>
-    <string name="app_name">西瓜课表</string>
+	<string name="app_name">西瓜课表</string>
 
-    <string name="uri_authority">com.weilylab.xhuschedule</string>
+	<string name="uri_authority">com.weilylab.xhuschedule</string>
 
-    <string name="exception_time">崩溃时间：%1$s</string>
-    <string name="exception_version">崩溃版本：%1$s_%2$d</string>
-    <string name="exception_sdk">SDK：%1$s_%2$d</string>
-    <string name="exception_vendor">Vendor：%1$s</string>
-    <string name="exception_model">Model：%1$s</string>
-    <string name="exception_message">崩溃详情：\n%1$s</string>
+	<string name="exception_time">崩溃时间：%1$s</string>
+	<string name="exception_version">崩溃版本：%1$s_%2$d</string>
+	<string name="exception_sdk">SDK：%1$s_%2$d</string>
+	<string name="exception_vendor">Vendor：%1$s</string>
+	<string name="exception_model">Model：%1$s</string>
+	<string name="exception_message">崩溃详情：\n%1$s</string>
 
-    <string name="action_login">登\t录</string>
-    <string name="action_users">当前登陆用户</string>
-    <string name="action_tools">工具</string>
-    <string name="action_settings">设置</string>
-    <string name="action_logout">注销</string>
-    <string name="action_sync">数据同步</string>
-    <string name="action_search">搜索</string>
-    <string name="action_download_apk">下载APK</string>
-    <string name="action_download_patch">下载增量包</string>
-    <string name="action_download_cancel">忽略这个版本</string>
-    <string name="action_feedback">反馈该信息</string>
-    <string name="action_open">开启</string>
-    <string name="action_show_failed">显示未通过成绩</string>
-    <string name="action_auto_select">自动查询数据</string>
-    <string name="action_experiment">实验项目成绩查询</string>
-    <string name="action_cancel">取消</string>
-    <string name="action_default">恢复默认</string>
-    <string name="action_save">保存</string>
-    <string name="action_share">分享</string>
-    <string name="action_theme">使用</string>
-    <string name="action_use_theme">使用中</string>
+	<string name="action_login">登\t录</string>
+	<string name="action_users">当前登陆用户</string>
+	<string name="action_tools">工具</string>
+	<string name="action_settings">设置</string>
+	<string name="action_logout">注销</string>
+	<string name="action_sync">数据同步</string>
+	<string name="action_search">搜索</string>
+	<string name="action_download_apk">下载APK</string>
+	<string name="action_download_patch">下载增量包</string>
+	<string name="action_download_cancel">忽略这个版本</string>
+	<string name="action_feedback">反馈该信息</string>
+	<string name="action_open">开启</string>
+	<string name="action_show_failed">显示未通过成绩</string>
+	<string name="action_auto_select">自动查询数据</string>
+	<string name="action_experiment">实验项目成绩查询</string>
+	<string name="action_cancel">取消</string>
+	<string name="action_default">恢复默认</string>
+	<string name="action_save">保存</string>
+	<string name="action_share">分享</string>
+	<string name="action_theme">使用</string>
+	<string name="action_use_theme">使用中</string>
+	<string name="action_bypass">跳过</string>
 
-    <string name="prompt_username">用户名</string>
-    <string name="prompt_password">密码</string>
+	<string name="prompt_username">用户名</string>
+	<string name="prompt_password">密码</string>
 
-    <string name="operation_notice">通知公告</string>
-    <string name="operation_schedule">课程查询</string>
-    <string name="operation_exam">考试查询</string>
-    <string name="operation_score">成绩查询</string>
-    <string name="operation_score_cet">四六级成绩查询</string>
-    <string name="operation_feedback">意见反馈</string>
-    <string name="operation_share">分享应用</string>
-    <string name="operation_theme">主题管理</string>
+	<string name="operation_notice">通知公告</string>
+	<string name="operation_schedule">课程查询</string>
+	<string name="operation_exam">考试查询</string>
+	<string name="operation_score">成绩查询</string>
+	<string name="operation_score_cet">四六级成绩查询</string>
+	<string name="operation_feedback">意见反馈</string>
+	<string name="operation_share">分享应用</string>
+	<string name="operation_theme">主题管理</string>
 
-    <string name="share_qq">QQ</string>
-    <string name="share_weixin">微信</string>
-    <string name="share_weibo">微博</string>
-    <string name="share_qzone">空间</string>
-    <string name="share_friends">朋友圈</string>
-    <string name="share_more">更多</string>
+	<string name="share_qq">QQ</string>
+	<string name="share_weixin">微信</string>
+	<string name="share_weibo">微博</string>
+	<string name="share_qzone">空间</string>
+	<string name="share_friends">朋友圈</string>
+	<string name="share_more">更多</string>
 
-    <string name="hint_dialog_update_vcode">获取验证码中……</string>
-    <string name="hint_dialog_login">登录中……</string>
-    <string name="hint_dialog_update_cache">更新缓存中……</string>
-    <string name="hint_dialog_update_profile">正在更新个人信息……</string>
-    <string name="hint_dialog_check_update">检查更新中……</string>
-    <string name="hint_dialog_check_update_latest">当前已是最新版本。</string>
-    <string name="hint_dialog_init">正在初始化……</string>
-    <string name="hint_dialog_sync">信息同步中……</string>
-    <string name="hint_dialog_upload_log">日志上传中……</string>
-    <string name="hint_dialog_download_img">图片下载中……</string>
-    <string name="hint_dialog_save_image">图片保存中……</string>
-    <string name="hint_dialog_cet">正在获取数据……</string>
-    <string name="hint_dialog_feedback">正在提交中……</string>
-    <string name="hint_dialog_do_update">正在进行数据更新……</string>
-    <string name="hint_twice_press_exit">再按一次退出</string>
-    <string name="hint_invalid_cookie">登陆信息已过期，是否重新登录？</string>
-    <string name="hint_try_refresh_data_error">%1$s，是否重新登录？</string>
-    <string name="hint_update_data">信息同步成功！</string>
-    <string name="hint_update_data_new">信息同步成功！和之前相比，数据有更新。</string>
-    <string name="hint_update_data_error">信息同步完成！但是部分数据存在错误。</string>
-    <string name="hint_analyze_error">信息同步完成！但是部分数据存在错误。请联系开发者以解决这个问题！</string>
-    <string name="hint_course_empty">啊啊啊，课程好像跟着风筝飞走了\nΣ(っ°Д°;)っ!!!</string>
-    <string name="hint_exam_empty">啊啊啊，考试好像也跟着风筝飞走了\nΣ(っ°Д°;)っ!!!</string>
-    <string name="hint_data_empty">暂时没有数据哦~</string>
-    <string name="hint_permission">读取SD卡文件为必要权限，请授予~</string>
-    <string name="hint_custom_img">自定义图片设置成功！</string>
-    <string name="hint_reset">界面设置已经恢复为默认设置</string>
-    <string name="hint_check_log">
+	<string name="hint_dialog_update_vcode">获取验证码中……</string>
+	<string name="hint_dialog_login">登录中……</string>
+	<string name="hint_dialog_update_cache">更新缓存中……</string>
+	<string name="hint_dialog_update_profile">正在更新个人信息……</string>
+	<string name="hint_dialog_check_update">检查更新中……</string>
+	<string name="hint_dialog_check_update_latest">当前已是最新版本。</string>
+	<string name="hint_dialog_init">正在初始化……</string>
+	<string name="hint_dialog_sync">信息同步中……</string>
+	<string name="hint_dialog_upload_log">日志上传中……</string>
+	<string name="hint_dialog_download_img">图片下载中……</string>
+	<string name="hint_dialog_save_image">图片保存中……</string>
+	<string name="hint_dialog_cet">正在获取数据……</string>
+	<string name="hint_dialog_feedback">正在提交中……</string>
+	<string name="hint_dialog_do_update">正在进行数据更新……</string>
+	<string name="hint_twice_press_exit">再按一次退出</string>
+	<string name="hint_invalid_cookie">登陆信息已过期，是否重新登录？</string>
+	<string name="hint_try_refresh_data_error">%1$s，是否重新登录？</string>
+	<string name="hint_update_data">信息同步成功！</string>
+	<string name="hint_update_data_new">信息同步成功！和之前相比，数据有更新。</string>
+	<string name="hint_update_data_error">信息同步完成！但是部分数据存在错误。</string>
+	<string name="hint_analyze_error">信息同步完成！但是部分数据存在错误。请联系开发者以解决这个问题！</string>
+	<string name="hint_course_empty">啊啊啊，课程好像跟着风筝飞走了\nΣ(っ°Д°;)っ!!!</string>
+	<string name="hint_exam_empty">啊啊啊，考试好像也跟着风筝飞走了\nΣ(っ°Д°;)っ!!!</string>
+	<string name="hint_data_empty">暂时没有数据哦~</string>
+	<string name="hint_permission">读取SD卡文件为必要权限，请授予~</string>
+	<string name="hint_custom_img">自定义图片设置成功！</string>
+	<string name="hint_reset">界面设置已经恢复为默认设置</string>
+	<string name="hint_check_log">
         检测到有崩溃日志没有提交：\n\n
         日志文件名：%1$s\n\n
         日志路径：%2$s\n\n
@@ -93,156 +94,156 @@
         是否提交此日志？\n\n
         （如果需要禁用该检测，请禁用：设置-关于-自动检测日志开关）
     </string>
-    <string name="hint_logout_title">确定要注销吗？</string>
-    <string name="hint_logout_content">注销后将会清空本帐号的数据，请问您确定要注销吗？</string>
-    <string name="hint_feedback">感谢您的建议，我们会尝试做得更好，祝您阖家幸福，生活愉快~</string>
-    <string name="hint_feedback_empty">联系方式不能为空</string>
-    <string name="hint_feedback_error">反馈失败，错误码：%1$d，错误信息：%2$s，请联系开发者</string>
-    <string name="hint_popup_view_student">请选择要查询的学生</string>
-    <string name="hint_popup_view_year">请选择要查询的学年</string>
-    <string name="hint_popup_view_term">请选择要查询的学期</string>
-    <string name="hint_exam_days">%1$d 天后</string>
-    <string name="hint_exam_days_hour">%1$d 小时后</string>
-    <string name="hint_exam_days_ago">已考过</string>
-    <string name="hint_feedback_email">联系方式</string>
-    <string name="hint_feedback_text">建议</string>
-    <string name="hint_share_message">嗨，我正在使用西瓜课表2.0查课程哦~ 除了查课表，还可以查考试，查成绩。 下载链接：https://www.coolapk.com/apk/com.weilylab.xhuschedule</string>
-    <string name="hint_notification_system">默认铃声</string>
-    <string name="hint_notification_none">静音</string>
-    <string name="hint_no_weixin">微信未安装！</string>
-    <string name="hint_no_weibo">微博未安装！</string>
-    <string name="hint_foreground_notification">正在初始化数据</string>
-    <string name="hint_cet_score_name">考生姓名</string>
-    <string name="hint_cet_score_id">准考证号</string>
-    <string name="hint_cet_vcode">请输入验证码</string>
-    <string name="hint_cet_empty">参数不能为空</string>
-    <string name="hint_cet_vcode_error">验证码获取失败</string>
+	<string name="hint_logout_title">确定要注销吗？</string>
+	<string name="hint_logout_content">注销后将会清空本帐号的数据，请问您确定要注销吗？</string>
+	<string name="hint_feedback">感谢您的建议，我们会尝试做得更好，祝您阖家幸福，生活愉快~</string>
+	<string name="hint_feedback_empty">联系方式不能为空</string>
+	<string name="hint_feedback_error">反馈失败，错误码：%1$d，错误信息：%2$s，请联系开发者</string>
+	<string name="hint_popup_view_student">请选择要查询的学生</string>
+	<string name="hint_popup_view_year">请选择要查询的学年</string>
+	<string name="hint_popup_view_term">请选择要查询的学期</string>
+	<string name="hint_exam_days">%1$d 天后</string>
+	<string name="hint_exam_days_hour">%1$d 小时后</string>
+	<string name="hint_exam_days_ago">已考过</string>
+	<string name="hint_feedback_email">联系方式</string>
+	<string name="hint_feedback_text">建议</string>
+	<string name="hint_share_message">嗨，我正在使用西瓜课表2.0查课程哦~ 除了查课表，还可以查考试，查成绩。 下载链接：https://www.coolapk.com/apk/com.weilylab.xhuschedule</string>
+	<string name="hint_notification_system">默认铃声</string>
+	<string name="hint_notification_none">静音</string>
+	<string name="hint_no_weixin">微信未安装！</string>
+	<string name="hint_no_weibo">微博未安装！</string>
+	<string name="hint_foreground_notification">正在初始化数据</string>
+	<string name="hint_cet_score_name">考生姓名</string>
+	<string name="hint_cet_score_id">准考证号</string>
+	<string name="hint_cet_vcode">请输入验证码</string>
+	<string name="hint_cet_empty">参数不能为空</string>
+	<string name="hint_cet_vcode_error">验证码获取失败</string>
 
-    <string name="warning_enable_multi_user_mode">
+	<string name="warning_enable_multi_user_mode">
         请确保您是双学位的学生或者有同时查看多个账号课表的需求。\n\n
         一般来说，普通学生或者用户没有这种需求，强行开启这个模式并不会导致什么问题，但是可能会使您的课表变得很乱或者很窄，所以，作为一名您的同学，我有必要在这里对您的这个操作进行警告。\n\n
         请确保您有这样的需求再开启这个开关！
     </string>
 
-    <string name="error_invalid_username">用户名无效</string>
-    <string name="error_invalid_password">密码无效</string>
-    <string name="error_field_required">参数不可为空</string>
-    <string name="error_timeout">请求超时</string>
-    <string name="error_network">网络似乎有点问题哦~</string>
-    <string name="error_other">其他错误</string>
-    <string name="error_time_not_monday">选择的时间不是周一，选择无效</string>
-    <string name="error_time_after">请注意您选择的时间在当前时间之后哦~</string>
-    <string name="error_download">下载失败</string>
-    <string name="error_custom_img">自定义图片设置失败！</string>
+	<string name="error_invalid_username">用户名无效</string>
+	<string name="error_invalid_password">密码无效</string>
+	<string name="error_field_required">参数不可为空</string>
+	<string name="error_timeout">请求超时</string>
+	<string name="error_network">网络似乎有点问题哦~</string>
+	<string name="error_other">其他错误</string>
+	<string name="error_time_not_monday">选择的时间不是周一，选择无效</string>
+	<string name="error_time_after">请注意您选择的时间在当前时间之后哦~</string>
+	<string name="error_download">下载失败</string>
+	<string name="error_custom_img">自定义图片设置失败！</string>
 
-    <string name="success_login">登陆成功，欢迎使用%1$s！</string>
-    <string name="course_time_format">%1$s - %2$s</string>
-    <string name="course_location_format">%1$s  %2$s</string>
-    <string name="course_week_index">第%1$d周</string>
-    <string name="course_today_info">第%1$d周  %2$s</string>
-    <string name="course_profile_title">个人中心</string>
+	<string name="success_login">登陆成功，欢迎使用%1$s！</string>
+	<string name="course_time_format">%1$s - %2$s</string>
+	<string name="course_location_format">%1$s  %2$s</string>
+	<string name="course_week_index">第%1$d周</string>
+	<string name="course_today_info">第%1$d周  %2$s</string>
+	<string name="course_profile_title">个人中心</string>
 
-    <string name="profile_title">%1$s(%2$s)</string>
-    <string name="profile_no">学号：%1$s</string>
-    <string name="profile_name">姓名：%1$s</string>
-    <string name="profile_professional">专业：%1$s</string>
-    <string name="profile_classname">班级：%1$s</string>
-    <string name="profile_sex">性别：%1$s</string>
-    <string name="profile_grade">年级：%1$s</string>
-    <string name="profile_institute">学院：%1$s</string>
-    <string name="profile_direction">方向：%1$s</string>
+	<string name="profile_title">%1$s(%2$s)</string>
+	<string name="profile_no">学号：%1$s</string>
+	<string name="profile_name">姓名：%1$s</string>
+	<string name="profile_professional">专业：%1$s</string>
+	<string name="profile_classname">班级：%1$s</string>
+	<string name="profile_sex">性别：%1$s</string>
+	<string name="profile_grade">年级：%1$s</string>
+	<string name="profile_institute">学院：%1$s</string>
+	<string name="profile_direction">方向：%1$s</string>
 
-    <string name="exam_no">选课课号：%1$s</string>
-    <string name="exam_sname">姓名：%1$s</string>
-    <string name="exam_location">考试地点：%1$s</string>
-    <string name="exam_time">考试时间：%1$s</string>
-    <string name="exam_testno">座位号：%1$s</string>
-    <string name="exam_testtype">考试形式：%1$s</string>
-    <string name="exam_region">校区：%1$s</string>
+	<string name="exam_no">选课课号：%1$s</string>
+	<string name="exam_sname">姓名：%1$s</string>
+	<string name="exam_location">考试地点：%1$s</string>
+	<string name="exam_time">考试时间：%1$s</string>
+	<string name="exam_testno">座位号：%1$s</string>
+	<string name="exam_testtype">考试形式：%1$s</string>
+	<string name="exam_region">校区：%1$s</string>
 
-    <string name="score_no">课程代码：%1$s</string>
-    <string name="score_coursetype">课程性质：%1$s</string>
-    <string name="score_credit">学分：%1$s</string>
-    <string name="score_gpa">绩点：%1$s</string>
-    <string name="expscore_exptype">项目性质：%1$s</string>
-    <string name="expscore_coursename">课程名称：%1$s</string>
-    <string name="expscore_name">项目名称</string>
+	<string name="score_no">课程代码：%1$s</string>
+	<string name="score_coursetype">课程性质：%1$s</string>
+	<string name="score_credit">学分：%1$s</string>
+	<string name="score_gpa">绩点：%1$s</string>
+	<string name="expscore_exptype">项目性质：%1$s</string>
+	<string name="expscore_coursename">课程名称：%1$s</string>
+	<string name="expscore_name">项目名称</string>
 
-    <string name="nav_today">今日</string>
-    <string name="nav_week">本周</string>
-    <string name="nav_profile">我的</string>
+	<string name="nav_today">今日</string>
+	<string name="nav_week">本周</string>
+	<string name="nav_profile">我的</string>
 
-    <string name="table_header1">周一</string>
-    <string name="table_header2">周二</string>
-    <string name="table_header3">周三</string>
-    <string name="table_header4">周四</string>
-    <string name="table_header5">周五</string>
-    <string name="table_header6">周六</string>
-    <string name="table_header7">周日</string>
+	<string name="table_header1">周一</string>
+	<string name="table_header2">周二</string>
+	<string name="table_header3">周三</string>
+	<string name="table_header4">周四</string>
+	<string name="table_header5">周五</string>
+	<string name="table_header6">周六</string>
+	<string name="table_header7">周日</string>
 
-    <string name="table_nav1" translatable="false">1</string>
-    <string name="table_nav2" translatable="false">2</string>
-    <string name="table_nav3" translatable="false">3</string>
-    <string name="table_nav4" translatable="false">4</string>
-    <string name="table_nav5" translatable="false">5</string>
-    <string name="table_nav6" translatable="false">6</string>
-    <string name="table_nav7" translatable="false">7</string>
-    <string name="table_nav8" translatable="false">8</string>
-    <string name="table_nav9" translatable="false">9</string>
-    <string name="table_nav10" translatable="false">10</string>
-    <string name="table_nav11" translatable="false">11</string>
+	<string name="table_nav1" translatable="false">1</string>
+	<string name="table_nav2" translatable="false">2</string>
+	<string name="table_nav3" translatable="false">3</string>
+	<string name="table_nav4" translatable="false">4</string>
+	<string name="table_nav5" translatable="false">5</string>
+	<string name="table_nav6" translatable="false">6</string>
+	<string name="table_nav7" translatable="false">7</string>
+	<string name="table_nav8" translatable="false">8</string>
+	<string name="table_nav9" translatable="false">9</string>
+	<string name="table_nav10" translatable="false">10</string>
+	<string name="table_nav11" translatable="false">11</string>
 
-    <string name="download_notification_title">正在下载：%1$s</string>
-    <string name="download_notification_title_download">%1$s/%2$s</string>
-    <string name="download_notification_text">已下载%1$d%%</string>
+	<string name="download_notification_title">正在下载：%1$s</string>
+	<string name="download_notification_title_download">%1$s/%2$s</string>
+	<string name="download_notification_text">已下载%1$d%%</string>
 
-    <string name="dialog_edit_teacher">任课教师</string>
-    <string name="dialog_edit_time">上课时间</string>
-    <string name="dialog_edit_location">上课地点</string>
-    <string name="dialog_edit_color_picker">选择颜色</string>
-    <string name="dialog_edit_item_location">地点</string>
+	<string name="dialog_edit_teacher">任课教师</string>
+	<string name="dialog_edit_time">上课时间</string>
+	<string name="dialog_edit_location">上课地点</string>
+	<string name="dialog_edit_color_picker">选择颜色</string>
+	<string name="dialog_edit_item_location">地点</string>
 
-    <string name="dialog_update_title">新版本更新 %1$s => %2$s</string>
-    <string name="dialog_update_content">本次更新包大小为%1$s,增量更新包大小为%2$s。\n点击通知下载安装包</string>
-    <string name="dialog_update_text">更新日志：\n %1$s</string>
+	<string name="dialog_update_title">新版本更新 %1$s => %2$s</string>
+	<string name="dialog_update_content">本次更新包大小为%1$s,增量更新包大小为%2$s。\n点击通知下载安装包</string>
+	<string name="dialog_update_text">更新日志：\n %1$s</string>
 
-    <string name="showcase_today">在这里，您可以查看当天的课程</string>
-    <string name="showcase_week">在这里，您可以查看本周的课程</string>
-    <string name="showcase_sync">点击这里，可以从教务系统重新同步数据</string>
-    <string name="showcase_swipe_refresh">您可以通过下拉来随时刷新缓存</string>
+	<string name="showcase_today">在这里，您可以查看当天的课程</string>
+	<string name="showcase_week">在这里，您可以查看本周的课程</string>
+	<string name="showcase_sync">点击这里，可以从教务系统重新同步数据</string>
+	<string name="showcase_swipe_refresh">您可以通过下拉来随时刷新缓存</string>
 
-    <string name="title_dialog_date">请选择本学期开始时间</string>
-    <string name="title_dialog_time">请选择通知时间</string>
-    <string name="title_dialog_select">请选择需要查询的信息</string>
-    <string name="title_dialog_share_with_friends">分享给朋友们</string>
+	<string name="title_dialog_date">请选择本学期开始时间</string>
+	<string name="title_dialog_time">请选择通知时间</string>
+	<string name="title_dialog_select">请选择需要查询的信息</string>
+	<string name="title_dialog_share_with_friends">分享给朋友们</string>
 
-    <string name="title_activity_settings">设置</string>
-    <string name="title_activity_exam">考试查询</string>
-    <string name="title_activity_score">成绩查询</string>
-    <string name="title_activity_expscore">实验成绩查询</string>
-    <string name="title_activity_notice">通知公告</string>
-    <string name="title_activity_schedule">课程查询</string>
-    <string name="title_activity_theme">主题管理</string>
+	<string name="title_activity_settings">设置</string>
+	<string name="title_activity_exam">考试查询</string>
+	<string name="title_activity_score">成绩查询</string>
+	<string name="title_activity_expscore">实验成绩查询</string>
+	<string name="title_activity_notice">通知公告</string>
+	<string name="title_activity_schedule">课程查询</string>
+	<string name="title_activity_theme">主题管理</string>
 
-    <string name="title_item_username">用户名</string>
-    <string name="title_item_year">学年</string>
-    <string name="title_item_term">学期</string>
+	<string name="title_item_username">用户名</string>
+	<string name="title_item_year">学年</string>
+	<string name="title_item_term">学期</string>
 
-    <string name="title_shortcuts_refresh_widget">刷新桌面小部件数据</string>
-    <string name="title_shortcuts_refresh_color">重新生成课程颜色</string>
+	<string name="title_shortcuts_refresh_widget">刷新桌面小部件数据</string>
+	<string name="title_shortcuts_refresh_color">重新生成课程颜色</string>
 
-    <string name="test_course_name">课程名称</string>
-    <string name="test_course_teacher">任课老师</string>
-    <string name="test_course_location">上课地点</string>
-    <string name="test_course_click">点击刷新颜色</string>
-    <string name="test_course_drag">拖动以查看效果</string>
-    <string name="test_course_current_progress_trans">当前不透明度为%1$f%%</string>
-    <string name="test_course_current_progress_text_size">当前文字大小为%1$dsp</string>
-    <string name="test_course_current_progress_text_height">当前高度为%1$ddp</string>
-    <string name="test_course_current_progress_table_item_width">当前宽度为%1$ddp</string>
+	<string name="test_course_name">课程名称</string>
+	<string name="test_course_teacher">任课老师</string>
+	<string name="test_course_location">上课地点</string>
+	<string name="test_course_click">点击刷新颜色</string>
+	<string name="test_course_drag">拖动以查看效果</string>
+	<string name="test_course_current_progress_trans">当前不透明度为%1$f%%</string>
+	<string name="test_course_current_progress_text_size">当前文字大小为%1$dsp</string>
+	<string name="test_course_current_progress_text_height">当前高度为%1$ddp</string>
+	<string name="test_course_current_progress_table_item_width">当前宽度为%1$ddp</string>
 
-    <string name="tomorrow_course_notification_title">您明天有%1$d门课要上哦~</string>
-    <string name="tomorrow_exam_notification_title">您明天有%1$d门考试哦~</string>
+	<string name="tomorrow_course_notification_title">您明天有%1$d门课要上哦~</string>
+	<string name="tomorrow_exam_notification_title">您明天有%1$d门考试哦~</string>
 
-    <string name="tomorrow_info_notification_placeholder_text">展开可查看详细信息</string>
+	<string name="tomorrow_info_notification_placeholder_text">展开可查看详细信息</string>
 </resources>
