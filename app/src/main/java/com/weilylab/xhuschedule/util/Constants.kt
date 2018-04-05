@@ -141,6 +141,8 @@ object Constants {
 	const val NOTIFICATION_EXAM_ENABLE = "isNotificationExamEnable"
 	const val NOTIFICATION_TOMORROW_TYPE = "isNotificationTomorrowType"
 	const val SPLASH_IMAGE_FILE_NAME = "splashImageFileName"
+	const val SPLASH_TIME="splashTime"
+	const val SPLASH_LOCATION_URL="splashLocationUrl"
 	const val APPLIED_THEME = "appliedTheme"
 
 	const val DEFAULT_TERM_START_DATE = "2018-2-5"

@@ -190,9 +190,14 @@ object Settings {
 		get() = sharedPreference.getString(Constants.SPLASH_IMAGE_FILE_NAME, "")
 	var splashTime: Long//启动页显示时间
 		set(value) {
-			sharedPreference.edit { putLong(Constants.INTENT_TAG_NAME_SPLASH_TIME, value) }
+			sharedPreference.edit { putLong(Constants.SPLASH_TIME, value) }
 		}
-		get() = sharedPreference.getLong(Constants.INTENT_TAG_NAME_SPLASH_TIME, 3000)
+		get() = sharedPreference.getLong(Constants.SPLASH_TIME, 3000)
+	var splashLocationUrl: String//启动页跳转的链接
+		set(value) {
+			sharedPreference.edit { putString(Constants.SPLASH_LOCATION_URL, value) }
+		}
+		get() = sharedPreference.getString(Constants.SPLASH_LOCATION_URL, "")
 	var currentTheme: String//当前使用的主题
 		set(value) {
 			sharedPreference.edit { putString(Constants.APPLIED_THEME, value) }

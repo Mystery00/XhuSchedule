@@ -34,6 +34,7 @@
 package com.weilylab.xhuschedule.activity
 
 import android.content.Intent
+import android.net.Uri
 import android.text.TextUtils
 import com.bumptech.glide.Glide
 import com.weilylab.xhuschedule.R
@@ -56,13 +57,17 @@ class SplashImageActivity : XhuBaseActivity() {
 		Glide.with(this)
 				.asBitmap()
 				.load(splashFile)
-				.into(findViewById(R.id.imageView))
+				.into(imageView)
 		val timer = Timer()
 		timer.schedule(object : TimerTask() {
 			override fun run() {
 				go()
 			}
 		}, Settings.splashTime)
+		imageView.setOnClickListener {
+			if (Settings.splashLocationUrl != "")
+				startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(Settings.splashLocationUrl)))
+		}
 		button.setOnClickListener {
 			go()
 			timer.cancel()

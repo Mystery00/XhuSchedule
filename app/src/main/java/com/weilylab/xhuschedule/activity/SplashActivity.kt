@@ -110,16 +110,19 @@ class SplashActivity : XhuBaseActivity() {
 									val objectId = avObject.objectId
 									val splashUrl = avObject.getString("splashUrl")
 									val splashTime = avObject.getInt("splashTime")
+									val locationUrl = avObject.getString("locationUrl")
 									Logs.i(TAG, "done: $objectId")
 									Logs.i(TAG, "done: $splashUrl")
 									Logs.i(TAG, "done: $splashTime")
+									Logs.i(TAG, "done: $locationUrl")
+									Settings.splashTime = splashTime.toLong()
+									Settings.splashLocationUrl = locationUrl
 									val file = XhuFileUtil.getSplashImageFile(this@SplashActivity, objectId)
 									if (file == null || file.exists())
 										return
 									val intent = Intent(this@SplashActivity, DownloadSplashIntentService::class.java)
 									intent.putExtra(Constants.INTENT_TAG_NAME_QINIU_PATH, splashUrl)
 									intent.putExtra(Constants.INTENT_TAG_NAME_SPLASH_FILE_NAME, objectId)
-									intent.putExtra(Constants.INTENT_TAG_NAME_SPLASH_TIME, splashTime.toLong())
 									startService(intent)
 								} else {
 									Logs.wtf(TAG, "done: ", avException)

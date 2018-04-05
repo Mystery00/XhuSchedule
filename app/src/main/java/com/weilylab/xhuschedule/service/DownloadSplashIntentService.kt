@@ -74,7 +74,6 @@ class DownloadSplashIntentService : IntentService(TAG) {
 		val qiniuPath = intent?.getStringExtra(Constants.INTENT_TAG_NAME_QINIU_PATH) ?: return
 		val objectId = intent.getStringExtra(Constants.INTENT_TAG_NAME_SPLASH_FILE_NAME)
 				?: return
-		val splashTime = intent.getLongExtra(Constants.INTENT_TAG_NAME_SPLASH_TIME, 3000)
 		val file = XhuFileUtil.getSplashImageFile(this, objectId) ?: return
 		Logs.i(TAG, "onHandleIntent: $objectId")
 		Logs.i(TAG, "onHandleIntent: ${file.absolutePath}")
@@ -94,7 +93,6 @@ class DownloadSplashIntentService : IntentService(TAG) {
 					override fun onComplete() {
 						Logs.i(TAG, "onComplete: ")
 						Settings.splashImage = objectId
-						Settings.splashTime = splashTime
 					}
 
 					override fun onSubscribe(d: Disposable) {
