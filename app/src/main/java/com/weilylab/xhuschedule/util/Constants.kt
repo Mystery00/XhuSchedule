@@ -88,7 +88,6 @@ object Constants {
 	const val INTENT_TAG_NAME_LIST = "list"
 	const val INTENT_TAG_NAME_VERSION = "version"
 	const val INTENT_TAG_NAME_SPLASH_FILE_NAME = "splashFileName"
-	const val INTENT_TAG_NAME_SPLASH_TIME = "splashTime"
 
 	const val DOWNLOAD_TYPE_APK = "apk"
 	const val DOWNLOAD_TYPE_PATCH = "patch"
@@ -154,6 +153,6 @@ object Constants {
 	const val DEFAULT_NOTIFICATION_SOUND = NOTIFICATION_SYSTEM_SOUND
 	const val DEFAULT_NOTIFICATION_TIME = "20:00"
 
-	const val RETRY_TIME_OUT = 300L
-	const val RETRY_TIME = 3
+	const val RETRY_TIME_OUT = 600L
+	const val RETRY_TIME = 1
 }

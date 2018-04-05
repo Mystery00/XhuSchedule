@@ -142,7 +142,6 @@ object ViewUtil {
 	}
 
 	fun setBackground(context: Context, imageView: ImageView) {
-		Logs.i("TAG", "setBackground: ")
 		val imagePath: String
 		var options = RequestOptions()
 		if (Settings.customBackgroundImg == "" || !File(Settings.customBackgroundImg).exists()) {
