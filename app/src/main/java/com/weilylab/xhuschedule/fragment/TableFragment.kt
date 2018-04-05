@@ -36,7 +36,6 @@ package com.weilylab.xhuschedule.fragment
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
-import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
 import android.util.TypedValue
 import android.view.LayoutInflater
@@ -51,10 +50,6 @@ import com.weilylab.xhuschedule.listener.InfoChangeListener
 import com.weilylab.xhuschedule.util.*
 import com.weilylab.xhuschedule.view.ContentHorizontalScrollView
 import com.weilylab.xhuschedule.view.ContentVerticalScrollView
-import io.reactivex.Observable
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.observers.DisposableObserver
-import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.content_main.*
 import vip.mystery0.logs.Logs
 import vip.mystery0.tools.utils.ColorTools
@@ -66,10 +61,8 @@ import kotlin.math.max
 /**
  * Created by myste.
  */
-class TableFragment : Fragment() {
+class TableFragment : XhuBaseFragment() {
 	companion object {
-		private const val TAG = "TableFragment"
-
 		fun newInstance(list: ArrayList<ArrayList<ArrayList<Course>>>): TableFragment {
 			val bundle = Bundle()
 			bundle.putSerializable(Constants.INTENT_TAG_NAME_LIST, list)
@@ -80,8 +73,14 @@ class TableFragment : Fragment() {
 	}
 
 	private lateinit var list: ArrayList<ArrayList<ArrayList<Course>>>
-	private var isReady = false
 	private var rootView: View? = null
+	private lateinit var backgroundImageView: ImageView
+	private lateinit var monthView: TextView
+	private lateinit var tableHeader: LinearLayout
+	private lateinit var tableNav: LinearLayout
+	private lateinit var contentHorizontalScrollView: ContentHorizontalScrollView
+	private lateinit var contentVerticalScrollView: ContentVerticalScrollView
+	private lateinit var scheduleView: View
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
@@ -93,65 +92,77 @@ class TableFragment : Fragment() {
 							  savedInstanceState: Bundle?): View? {
 		if (rootView == null) {
 			rootView = inflater.inflate(R.layout.fragment_table, container, false)
-			val monthView: TextView = rootView!!.findViewById(R.id.view)
-			val tableHeader: LinearLayout = rootView!!.findViewById(R.id.table_header)
-			val tabLayoutParams = tableHeader.layoutParams
-			tabLayoutParams.width = ScheduleHelper.scheduleItemWidth * 7
-			tableHeader.layoutParams = tabLayoutParams
-			for (i in 0 until tableHeader.childCount) {
-				val layoutParams = tableHeader.getChildAt(i).layoutParams
-				tableHeader.getChildAt(i).layoutParams = layoutParams
-			}
-			(tableHeader.getChildAt(CalendarUtil.getWeekIndex() - 1) as TextView).setTextColor(ContextCompat.getColor(activity!!, R.color.colorWeekPrimary))
-			val calendar = Calendar.getInstance()
-			val dayWeek = calendar.get(Calendar.DAY_OF_WEEK)
-			if (dayWeek == Calendar.SUNDAY)
-				calendar.add(Calendar.DAY_OF_MONTH, -1)
-			calendar.firstDayOfWeek = Calendar.MONDAY
-			val day = calendar.get(Calendar.DAY_OF_WEEK)
-			calendar.add(Calendar.DATE, calendar.firstDayOfWeek - day)
-			val month = "${calendar.get(Calendar.MONTH) + 1}\n月"
-			monthView.text = month
-			for (i in 0 until tableHeader.childCount) {
-				val textView = tableHeader.getChildAt(i) as TextView
-				val text = if (calendar.get(Calendar.DAY_OF_MONTH) == 1)
-					"${textView.text}\n${calendar.get(Calendar.MONTH) + 1}月"
-				else
-					"${textView.text}\n${calendar.get(Calendar.DAY_OF_MONTH)}日"
-				textView.text = text
-				calendar.add(Calendar.DAY_OF_MONTH, 1)
-			}
-			val tableNav: LinearLayout = rootView!!.findViewById(R.id.table_nav)
-			for (i in 0 until tableNav.childCount) {
-				val itemLayoutParams = tableNav.getChildAt(i).layoutParams
-				itemLayoutParams.height = DensityTools.dp2px(activity!!, Settings.customTableItemHeight.toFloat())
-				tableNav.getChildAt(i).layoutParams = itemLayoutParams
-			}
-			val scheduleView: View = rootView!!.findViewById(R.id.table_schedule)
-			val scheduleLayoutParams = scheduleView.layoutParams
-			scheduleLayoutParams.width = ScheduleHelper.scheduleItemWidth * 7
-			scheduleLayoutParams.height = DensityTools.dp2px(activity!!, Settings.customTableItemHeight.toFloat() * 11)
-			scheduleView.layoutParams = scheduleLayoutParams
-			//滑动联动
-			val contentHorizontalScrollView: ContentHorizontalScrollView = rootView!!.findViewById(R.id.contentHorizontalScrollView)
-			val contentVerticalScrollView: ContentVerticalScrollView = rootView!!.findViewById(R.id.contentVerticalScrollView)
-			contentHorizontalScrollView.isHorizontalScrollBarEnabled = false
-			contentVerticalScrollView.isVerticalScrollBarEnabled = false
-			contentHorizontalScrollView.view = tableHeader
-			contentVerticalScrollView.view = tableNav
-			contentHorizontalScrollView.parentScrollView = (activity as MainActivity).viewpager
-			contentHorizontalScrollView.setScroll(Settings.customTableItemWidth != -1)
-			isReady = true
+			backgroundImageView = rootView!!.findViewById(R.id.background)
+			monthView = rootView!!.findViewById(R.id.view)
+			tableHeader = rootView!!.findViewById(R.id.table_header)
+			tableNav = rootView!!.findViewById(R.id.table_nav)
+			contentHorizontalScrollView = rootView!!.findViewById(R.id.contentHorizontalScrollView)
+			contentVerticalScrollView = rootView!!.findViewById(R.id.contentVerticalScrollView)
+			scheduleView = rootView!!.findViewById(R.id.table_schedule)
 		}
 		return rootView
+	}
+
+	override fun onActivityCreated(savedInstanceState: Bundle?) {
+		super.onActivityCreated(savedInstanceState)
+		ViewUtil.setBackground(context!!, backgroundImageView)
+		val tabLayoutParams = tableHeader.layoutParams
+		tabLayoutParams.width = ScheduleHelper.scheduleItemWidth * 7
+		tableHeader.layoutParams = tabLayoutParams
+		for (i in 0 until tableHeader.childCount) {
+			val layoutParams = tableHeader.getChildAt(i).layoutParams
+			tableHeader.getChildAt(i).layoutParams = layoutParams
+		}
+		(tableHeader.getChildAt(CalendarUtil.getWeekIndex() - 1) as TextView).setTextColor(ContextCompat.getColor(activity!!, R.color.colorWeekPrimary))
+		val calendar = Calendar.getInstance()
+		val dayWeek = calendar.get(Calendar.DAY_OF_WEEK)
+		if (dayWeek == Calendar.SUNDAY)
+			calendar.add(Calendar.DAY_OF_MONTH, -1)
+		calendar.firstDayOfWeek = Calendar.MONDAY
+		val day = calendar.get(Calendar.DAY_OF_WEEK)
+		calendar.add(Calendar.DATE, calendar.firstDayOfWeek - day)
+		val month = "${calendar.get(Calendar.MONTH) + 1}\n月"
+		monthView.text = month
+		for (i in 0 until tableHeader.childCount) {
+			val textView = tableHeader.getChildAt(i) as TextView
+			val text = if (calendar.get(Calendar.DAY_OF_MONTH) == 1)
+				"${textView.text}\n${calendar.get(Calendar.MONTH) + 1}月"
+			else
+				"${textView.text}\n${calendar.get(Calendar.DAY_OF_MONTH)}日"
+			textView.text = text
+			calendar.add(Calendar.DAY_OF_MONTH, 1)
+		}
+		val tableNav: LinearLayout = rootView!!.findViewById(R.id.table_nav)
+		for (i in 0 until tableNav.childCount) {
+			val itemLayoutParams = tableNav.getChildAt(i).layoutParams
+			itemLayoutParams.height = DensityTools.dp2px(activity!!, Settings.customTableItemHeight.toFloat())
+			tableNav.getChildAt(i).layoutParams = itemLayoutParams
+		}
+		val scheduleView: View = rootView!!.findViewById(R.id.table_schedule)
+		val scheduleLayoutParams = scheduleView.layoutParams
+		scheduleLayoutParams.width = ScheduleHelper.scheduleItemWidth * 7
+		scheduleLayoutParams.height = DensityTools.dp2px(activity!!, Settings.customTableItemHeight.toFloat() * 11)
+		scheduleView.layoutParams = scheduleLayoutParams
+		//滑动联动
+		val contentHorizontalScrollView: ContentHorizontalScrollView = rootView!!.findViewById(R.id.contentHorizontalScrollView)
+		val contentVerticalScrollView: ContentVerticalScrollView = rootView!!.findViewById(R.id.contentVerticalScrollView)
+		contentHorizontalScrollView.isHorizontalScrollBarEnabled = false
+		contentVerticalScrollView.isVerticalScrollBarEnabled = false
+		contentHorizontalScrollView.view = tableHeader
+		contentVerticalScrollView.view = tableNav
+		contentHorizontalScrollView.parentScrollView = (activity as MainActivity).viewpager
+		contentHorizontalScrollView.setScroll(Settings.customTableItemWidth != -1)
+	}
+
+	override fun onDestroyView() {
+		super.onDestroyView()
+		if (rootView != null)
+			(rootView!!.parent as ViewGroup).removeView(rootView)
 	}
 
 	fun updateTableLayout(canScroll: Boolean) {
 		ScheduleHelper.checkScreenWidth(activity!!)
 		if (rootView != null) {
-			val tableHeader: LinearLayout = rootView!!.findViewById(R.id.table_header)
-			val scheduleView: View = rootView!!.findViewById(R.id.table_schedule)
-			val contentHorizontalScrollView: ContentHorizontalScrollView = rootView!!.findViewById(R.id.contentHorizontalScrollView)
 			val tabHeaderLayoutParams = tableHeader.layoutParams
 			tabHeaderLayoutParams.width = ScheduleHelper.scheduleItemWidth * 7
 			tableHeader.layoutParams = tabHeaderLayoutParams
@@ -163,66 +174,37 @@ class TableFragment : Fragment() {
 	}
 
 	fun setBackground() {
-		Observable.create<Boolean> { subscriber ->
-			while (true)
-				if (rootView != null)
-					break
-			subscriber.onComplete()
+		setBackground(0)
+	}
+
+	/**
+	 * 使用重试机制，每次延时400，重试5次
+	 * @param time 当前重试的次数
+	 */
+	private fun setBackground(time: Int) {
+		try {
+			ViewUtil.setBackground(context!!, backgroundImageView)
+		} catch (e: Exception) {
+			if (time > 5)
+				e.printStackTrace()
+			else {
+				Timer().schedule(object : TimerTask() {
+					override fun run() {
+						setBackground(time + 1)
+					}
+				}, 400)
+			}
 		}
-				.subscribeOn(Schedulers.newThread())
-				.unsubscribeOn(Schedulers.newThread())
-				.observeOn(AndroidSchedulers.mainThread())
-				.subscribe(object : DisposableObserver<Boolean>() {
-					override fun onError(e: Throwable) {
-						e.printStackTrace()
-					}
-
-					override fun onNext(t: Boolean) {
-					}
-
-					override fun onComplete() {
-						ViewUtil.setBackground(activity!!, rootView!!.findViewById(R.id.background))
-					}
-				})
 	}
 
 	fun refreshData() {
-		Observable.create<Boolean> { subscriber ->
-			while (true) {
-				if (isReady)
-					break
-				Thread.sleep(200)
-			}
-			subscriber.onComplete()
+		for (i in 0 until tableNav.childCount) {
+			val tableNavLayoutParams = tableNav.getChildAt(i).layoutParams
+			tableNavLayoutParams.height = DensityTools.dp2px(activity!!, Settings.customTableItemHeight.toFloat())
+			tableNav.getChildAt(i).layoutParams = tableNavLayoutParams
+			(tableNav.getChildAt(i) as TextView).setTextColor(ContextCompat.getColor(activity!!, R.color.schedule_head_text_color))
 		}
-				.subscribeOn(Schedulers.io())
-				.observeOn(AndroidSchedulers.mainThread())
-				.subscribe(object : DisposableObserver<Boolean>() {
-					override fun onComplete() {
-						if (rootView != null) {
-							val tableNav: LinearLayout = rootView!!.findViewById(R.id.table_nav)
-							for (i in 0 until tableNav.childCount) {
-								val tableNavLayoutParams = tableNav.getChildAt(i).layoutParams
-								tableNavLayoutParams.height = DensityTools.dp2px(activity!!, Settings.customTableItemHeight.toFloat())
-								tableNav.getChildAt(i).layoutParams = tableNavLayoutParams
-								(tableNav.getChildAt(i) as TextView).setTextColor(ContextCompat.getColor(activity!!, R.color.schedule_head_text_color))
-							}
-						}
-						formatView()
-					}
-
-					override fun onError(e: Throwable) {
-					}
-
-					override fun onNext(t: Boolean) {
-					}
-				})
-	}
-
-	override fun onDestroyView() {
-		super.onDestroyView()
-		if (rootView != null)
-			(rootView!!.parent as ViewGroup).removeView(rootView)
+		formatView()
 	}
 
 	private fun formatView() {
@@ -242,14 +224,14 @@ class TableFragment : Fragment() {
 		val month = "${calendar.get(Calendar.MONTH) + 1}\n月"
 		(rootView!!.findViewById(R.id.view) as TextView).text = month
 		for (day in 0 until 7) {
-			val headerTextView = (rootView!!.findViewById(R.id.table_header) as LinearLayout).getChildAt(day) as TextView
+			val headerTextView = tableHeader.getChildAt(day) as TextView
 			val text = if (calendar.get(Calendar.DAY_OF_MONTH) == 1)
 				"${headerArray[day]}\n${calendar.get(Calendar.MONTH) + 1}月"
 			else
 				"${headerArray[day]}\n${calendar.get(Calendar.DAY_OF_MONTH)}日"
 			headerTextView.text = text
 			if (CalendarUtil.getWeekIndex() - 1 == day)
-				headerTextView.setTextColor(ContextCompat.getColor(activity!!, R.color.colorWeekIndex))
+				headerTextView.setTextColor(ContextCompat.getColor(context!!, R.color.colorWeekIndex))
 			calendar.add(Calendar.DAY_OF_MONTH, 1)
 			val layoutList = ArrayList<TableLayoutHelper>()
 			val temp = resources.getIdentifier("table_schedule" + (day + 1), "id", "com.weilylab.xhuschedule")

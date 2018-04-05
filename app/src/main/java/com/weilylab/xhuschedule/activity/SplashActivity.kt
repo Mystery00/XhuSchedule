@@ -104,7 +104,8 @@ class SplashActivity : XhuBaseActivity() {
 									val avObject = mutableList!![0]
 									val isEnable = avObject.getBoolean("isEnable")
 									if (!isEnable) {
-										XhuFileUtil.removeSavedPreference(this@SplashActivity, Constants.SHARED_PREFERENCE_SETTINGS, Constants.SPLASH_IMAGE_FILE_NAME)
+										val preferenceList = arrayOf(Constants.SPLASH_IMAGE_FILE_NAME, Constants.SPLASH_LOCATION_URL, Constants.SPLASH_TIME)
+										XhuFileUtil.removeSavedPreference(this@SplashActivity, Constants.SHARED_PREFERENCE_SETTINGS, preferenceList)
 										return
 									}
 									val objectId = avObject.objectId
@@ -117,9 +118,6 @@ class SplashActivity : XhuBaseActivity() {
 									Logs.i(TAG, "done: $locationUrl")
 									Settings.splashTime = splashTime.toLong()
 									Settings.splashLocationUrl = locationUrl
-									val file = XhuFileUtil.getSplashImageFile(this@SplashActivity, objectId)
-									if (file == null || file.exists())
-										return
 									val intent = Intent(this@SplashActivity, DownloadSplashIntentService::class.java)
 									intent.putExtra(Constants.INTENT_TAG_NAME_QINIU_PATH, splashUrl)
 									intent.putExtra(Constants.INTENT_TAG_NAME_SPLASH_FILE_NAME, objectId)

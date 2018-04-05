@@ -76,7 +76,7 @@ class APP : MultiDexApplication() {
 		AVOSCloud.initialize(applicationContext, Constants.LEANCLOUD_APP_ID, Constants.LEANCLOUD_APP_KEY)
 		AVInstallation.getCurrentInstallation().saveInBackground()
 		AVAnalytics.enableCrashReport(applicationContext, true)
-		AVOSCloud.setDebugLogEnabled(true)
+//		AVOSCloud.setDebugLogEnabled(true)
 		PushService.setDefaultPushCallback(applicationContext, NoticeActivity::class.java)
 		tencent = Tencent.createInstance(Constants.QQ_API_KEY, CondomContext.wrap(applicationContext, "Tencent"))
 		Logs.setLevel(Logs.Level.DEBUG)

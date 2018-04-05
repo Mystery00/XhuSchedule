@@ -447,7 +447,7 @@ class UISettingsFragment : BasePreferenceFragment() {
 					Constants.CUSTOM_HEIGHT_SIZE,
 					Constants.CUSTOM_TABLE_ITEM_WIDTH)
 			XhuFileUtil.removeSavedPreference(activity, Constants.SHARED_PREFERENCE_SETTINGS, array)
-			ScheduleHelper.isImageChange = true
+			ScheduleHelper.isBackgroundChange = true
 			ScheduleHelper.isUIChange = true
 			Toast.makeText(activity, R.string.hint_reset, Toast.LENGTH_SHORT)
 					.show()
@@ -470,14 +470,14 @@ class UISettingsFragment : BasePreferenceFragment() {
 				BACKGROUND_CROP_REQUEST_CODE -> {
 					val saveFile = XhuFileUtil.getUIImageFile(activity, XhuFileUtil.UI_IMAGE_BACKGROUND)
 					Settings.customBackgroundImg = saveFile.absolutePath
-					ScheduleHelper.isImageChange = true
+					ScheduleHelper.isBackgroundChange = true
 					Toast.makeText(activity, R.string.hint_custom_img, Toast.LENGTH_SHORT)
 							.show()
 				}
 				PROFILE_CROP_REQUEST_CODE -> {
 					val saveFile = XhuFileUtil.getUIImageFile(activity, XhuFileUtil.UI_IMAGE_USER_IMG)
 					Settings.userImg = saveFile.absolutePath
-					ScheduleHelper.isImageChange = true
+					ScheduleHelper.isBackgroundChange = true
 					Toast.makeText(activity, R.string.hint_custom_img, Toast.LENGTH_SHORT)
 							.show()
 				}
@@ -562,7 +562,7 @@ class UISettingsFragment : BasePreferenceFragment() {
 								Settings.userImg = saveFile.absolutePath
 							}
 						}
-						ScheduleHelper.isImageChange = true
+						ScheduleHelper.isBackgroundChange = true
 					} catch (e: Exception) {
 						e.printStackTrace()
 					}

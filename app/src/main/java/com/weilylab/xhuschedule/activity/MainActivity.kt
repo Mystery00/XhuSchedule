@@ -103,7 +103,7 @@ class MainActivity : XhuBaseActivity() {
 	private lateinit var loadingDialog: Dialog
 	private lateinit var updateProfileDialog: Dialog
 	private lateinit var weekAdapter: WeekAdapter
-	private var mainStudent: Student?=null
+	private var mainStudent: Student? = null
 	private var weekAnimator: ObjectAnimator? = null
 	private var arrowDrawable: Drawable? = null
 	private var isTryRefreshData = false
@@ -145,9 +145,11 @@ class MainActivity : XhuBaseActivity() {
 
 	override fun onResume() {
 		super.onResume()
-		if (ScheduleHelper.isImageChange) {
+		if (ScheduleHelper.isBackgroundChange) {
 			todayFragment.setBackground()
 			weekFragment.setBackground()
+		}
+		if (ScheduleHelper.isAvatarChange) {
 			profileFragment.setProfileImg()
 		}
 		if (ScheduleHelper.isUIChange) {
@@ -161,7 +163,7 @@ class MainActivity : XhuBaseActivity() {
 		if (bottomNavigationView.menu.getItem(2).isChecked) {//刷新小红点状态
 			profileFragment.updateNoticeBadge()
 		}
-		ScheduleHelper.isImageChange = false
+		ScheduleHelper.isBackgroundChange = false
 		ScheduleHelper.isUIChange = false
 		ScheduleHelper.isTableLayoutChange = false
 	}
@@ -232,9 +234,6 @@ class MainActivity : XhuBaseActivity() {
 		layout_week_recycler_view_internal.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
 		layout_week_recycler_view_internal.adapter = weekAdapter
 		layout_week_recycler_view_internal.scrollToPosition(0)
-
-		todayFragment.setBackground()
-		weekFragment.setBackground()
 	}
 
 	override fun monitor() {

@@ -61,7 +61,8 @@ import java.util.concurrent.TimeUnit
  */
 object ScheduleHelper {
 	private const val TAG = "ScheduleHelper"
-	var isImageChange = false
+	var isBackgroundChange = false
+	var isAvatarChange = false
 	var isUIChange = false
 	var isTableLayoutChange = false
 	var isAnalysisError = false

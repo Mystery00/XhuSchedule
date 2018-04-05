@@ -79,32 +79,35 @@ class DownloadSplashIntentService : IntentService(TAG) {
 		Logs.i(TAG, "onHandleIntent: ${file.absolutePath}")
 		if (!file.parentFile.exists())
 			file.parentFile.mkdirs()
-		retrofit.create(QiniuService::class.java)
-				.download(qiniuPath)
-				.subscribeOn(Schedulers.newThread())
-				.unsubscribeOn(Schedulers.newThread())
-				.map({ responseBody -> responseBody.byteStream() })
-				.observeOn(Schedulers.io())
-				.doOnNext { inputStream ->
-					XhuFileUtil.saveFile(inputStream, file)
-				}
-				.observeOn(AndroidSchedulers.mainThread())
-				.subscribe(object : Observer<InputStream> {
-					override fun onComplete() {
-						Logs.i(TAG, "onComplete: ")
-						Settings.splashImage = objectId
+		if (file.exists())
+			Settings.splashImage = objectId
+		else
+			retrofit.create(QiniuService::class.java)
+					.download(qiniuPath)
+					.subscribeOn(Schedulers.newThread())
+					.unsubscribeOn(Schedulers.newThread())
+					.map({ responseBody -> responseBody.byteStream() })
+					.observeOn(Schedulers.io())
+					.doOnNext { inputStream ->
+						XhuFileUtil.saveFile(inputStream, file)
 					}
+					.observeOn(AndroidSchedulers.mainThread())
+					.subscribe(object : Observer<InputStream> {
+						override fun onComplete() {
+							Logs.i(TAG, "onComplete: ")
+							Settings.splashImage = objectId
+						}
 
-					override fun onSubscribe(d: Disposable) {
-						Logs.i(TAG, "onSubscribe: ")
-					}
+						override fun onSubscribe(d: Disposable) {
+							Logs.i(TAG, "onSubscribe: ")
+						}
 
-					override fun onNext(t: InputStream) {
-					}
+						override fun onNext(t: InputStream) {
+						}
 
-					override fun onError(e: Throwable) {
-						Logs.wtf(TAG, "onError: ", e)
-					}
-				})
+						override fun onError(e: Throwable) {
+							Logs.wtf(TAG, "onError: ", e)
+						}
+					})
 	}
 }
