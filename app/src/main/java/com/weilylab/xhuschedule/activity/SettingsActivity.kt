@@ -41,6 +41,7 @@ import android.preference.PreferenceFragment
 import android.view.MenuItem
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.fragment.*
+import com.weilylab.xhuschedule.fragment.settings.*
 import com.weilylab.xhuschedule.util.APPActivityManager
 
 /**

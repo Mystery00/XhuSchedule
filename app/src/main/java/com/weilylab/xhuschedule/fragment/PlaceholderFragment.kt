@@ -42,29 +42,37 @@ import android.widget.ImageView
 import com.weilylab.xhuschedule.R
 
 class PlaceholderFragment : Fragment() {
-    private var imageID: Int? = null
+	private var imageID: Int? = null
+	private var rootView: View? = null
+	private lateinit var imageView: ImageView
 
-    companion object {
-        fun newInstance(imageID: Int): PlaceholderFragment {
-            val fragment = PlaceholderFragment()
-            val args = Bundle()
-            args.putInt("image", imageID)
-            fragment.arguments = args
-            return fragment
-        }
-    }
+	companion object {
+		fun newInstance(imageID: Int): PlaceholderFragment {
+			val fragment = PlaceholderFragment()
+			val args = Bundle()
+			args.putInt("image", imageID)
+			fragment.arguments = args
+			return fragment
+		}
+	}
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        imageID = arguments?.getInt("image")
-    }
+	override fun onCreate(savedInstanceState: Bundle?) {
+		super.onCreate(savedInstanceState)
+		imageID = arguments?.getInt("image")
+	}
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
-        val rootView = inflater.inflate(R.layout.fragment_welcome, container, false)
-        val imageView: ImageView = rootView.findViewById(R.id.imageView)
-        if (imageID != null)
-            imageView.setImageResource(imageID!!)
-        return rootView
-    }
+	override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
+							  savedInstanceState: Bundle?): View? {
+		if (rootView == null) {
+			val rootView = inflater.inflate(R.layout.fragment_welcome, container, false)
+			imageView = rootView.findViewById(R.id.imageView)
+		}
+		return rootView
+	}
+
+	override fun onActivityCreated(savedInstanceState: Bundle?) {
+		super.onActivityCreated(savedInstanceState)
+		if (imageID != null)
+			imageView.setImageResource(imageID!!)
+	}
 }

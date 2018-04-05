@@ -34,29 +34,23 @@
 package com.weilylab.xhuschedule.fragment
 
 import android.os.Bundle
-import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.adapter.TodayAdapter
 import com.weilylab.xhuschedule.classes.baseClass.Course
 import com.weilylab.xhuschedule.util.Constants
 import com.weilylab.xhuschedule.util.ViewUtil
-import io.reactivex.Observable
-import io.reactivex.Observer
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.Disposable
-import io.reactivex.observers.DisposableObserver
-import io.reactivex.schedulers.Schedulers
 import java.util.*
 
 /**
  * Created by myste.
  */
-class TodayFragment : Fragment() {
+class TodayFragment : XhuBaseFragment() {
 	companion object {
 
 		fun newInstance(list: ArrayList<Course>): TodayFragment {
@@ -70,79 +64,60 @@ class TodayFragment : Fragment() {
 
 	private lateinit var list: ArrayList<Course>
 	private lateinit var adapter: TodayAdapter
-	private var isReady = false
 	private var rootView: View? = null
+	private lateinit var backgroundImageView: ImageView
+	private lateinit var recyclerView: RecyclerView
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 		@Suppress("UNCHECKED_CAST")
 		list = arguments?.getSerializable(Constants.INTENT_TAG_NAME_LIST) as ArrayList<Course>
-		adapter = TodayAdapter(activity!!, list)
 	}
 
 	override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
 							  savedInstanceState: Bundle?): View? {
 		if (rootView == null) {
 			rootView = inflater.inflate(R.layout.fragment_today, container, false)
-			val recyclerView: RecyclerView = rootView!!.findViewById(R.id.recycler_view)
-			recyclerView.layoutManager = LinearLayoutManager(activity)
-			recyclerView.adapter = adapter
-			isReady = true
+			backgroundImageView = rootView!!.findViewById(R.id.background)
+			recyclerView = rootView!!.findViewById(R.id.recycler_view)
 		}
 		return rootView
 	}
 
+	override fun onActivityCreated(savedInstanceState: Bundle?) {
+		super.onActivityCreated(savedInstanceState)
+		setBackground()
+		adapter = TodayAdapter(context!!, list)
+		recyclerView.layoutManager = LinearLayoutManager(context)
+		recyclerView.adapter = adapter
+	}
+
 	fun setBackground() {
-		Observable.create<Boolean> { subscriber ->
-			while (true)
-				if (rootView != null)
-					break
-			subscriber.onComplete()
+		setBackground(0)
+	}
+
+	/**
+	 * 使用重试机制，每次延时400，重试5次
+	 * @param time 当前重试的次数
+	 */
+	private fun setBackground(time: Int) {
+		try {
+			ViewUtil.setBackground(context!!, backgroundImageView)
+		} catch (e: Exception) {
+			if (time > 5)
+				e.printStackTrace()
+			else {
+				Timer().schedule(object : TimerTask() {
+					override fun run() {
+						setBackground(time + 1)
+					}
+				}, 400)
+			}
 		}
-				.subscribeOn(Schedulers.newThread())
-				.unsubscribeOn(Schedulers.newThread())
-				.observeOn(AndroidSchedulers.mainThread())
-				.subscribe(object : DisposableObserver<Boolean>() {
-					override fun onError(e: Throwable) {
-						e.printStackTrace()
-					}
-
-					override fun onNext(t: Boolean) {
-					}
-
-					override fun onComplete() {
-						ViewUtil.setBackground(activity!!, rootView!!.findViewById(R.id.background))
-					}
-				})
 	}
 
 	fun refreshData() {
-		val observer = object : Observer<Boolean> {
-			override fun onComplete() {
-				adapter.notifyDataSetChanged()
-			}
-
-			override fun onSubscribe(d: Disposable) {
-			}
-
-			override fun onError(e: Throwable) {
-			}
-
-			override fun onNext(t: Boolean) {
-			}
-		}
-		val observable = Observable.create<Boolean> { subscriber ->
-			while (true) {
-				if (isReady)
-					break
-				Thread.sleep(200)
-			}
-			subscriber.onComplete()
-		}
-
-		observable.subscribeOn(Schedulers.io())
-				.observeOn(AndroidSchedulers.mainThread())
-				.subscribe(observer)
+		adapter.notifyDataSetChanged()
 	}
 
 	override fun onDestroyView() {

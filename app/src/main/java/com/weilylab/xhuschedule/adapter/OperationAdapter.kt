@@ -148,6 +148,8 @@ class OperationAdapter(private val context: Context) : RecyclerView.Adapter<Oper
 										}
 										if (isNotice)
 											holder.badgeView.visibility = View.VISIBLE
+										else
+											holder.badgeView.visibility = View.GONE
 									}
 								}
 						}

@@ -8,12 +8,12 @@
 <preference-headers xmlns:android="http://schemas.android.com/apk/res/android">
 
     <header
-        android:fragment="com.weilylab.xhuschedule.fragment.ClassSettingsFragment"
+        android:fragment="com.weilylab.xhuschedule.fragment.settings.ClassSettingsFragment"
         android:icon="@drawable/ic_settings_class"
         android:title="@string/screen_category_class" />
 
     <header
-        android:fragment="com.weilylab.xhuschedule.fragment.AccountSettingsFragment"
+        android:fragment="com.weilylab.xhuschedule.fragment.settings.AccountSettingsFragment"
         android:icon="@drawable/ic_settings_account"
         android:title="@string/screen_category_account" />
 
@@ -23,17 +23,17 @@
         android:title="@string/screen_category_ui" />
 
     <header
-        android:fragment="com.weilylab.xhuschedule.fragment.NotificationFragment"
+        android:fragment="com.weilylab.xhuschedule.fragment.settings.NotificationFragment"
         android:icon="@drawable/ic_settings_notifications"
         android:title="@string/screen_category_notification"/>
 
     <header
-        android:fragment="com.weilylab.xhuschedule.fragment.DeveloperFragment"
+        android:fragment="com.weilylab.xhuschedule.fragment.settings.DeveloperFragment"
         android:icon="@drawable/ic_settings_developer"
         android:title="@string/screen_category_developer"/>
 
     <header
-        android:fragment="com.weilylab.xhuschedule.fragment.InfoSettingsFragment"
+        android:fragment="com.weilylab.xhuschedule.fragment.settings.InfoSettingsFragment"
         android:icon="@drawable/ic_settings_info"
         android:title="@string/screen_category_about" />
 

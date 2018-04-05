@@ -61,6 +61,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.jrummyapps.android.colorpicker.ColorPreference
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.classes.baseClass.Course
+import com.weilylab.xhuschedule.fragment.settings.BasePreferenceFragment
 import com.weilylab.xhuschedule.interfaces.QiniuService
 import com.weilylab.xhuschedule.util.*
 import com.yalantis.ucrop.UCrop

@@ -1,5 +1,5 @@
 /*
- * Created by Mystery0 on 18-2-21 下午9:12.
+ * Created by Mystery0 on 4/6/18 12:16 AM.
  * Copyright (c) 2018. All Rights reserved.
  *
  *                    =====================================================
@@ -28,10 +28,10 @@
  *                    =                                                   =
  *                    =====================================================
  *
- * Last modified 18-2-21 下午9:12
+ * Last modified 4/6/18 12:10 AM
  */
 
-package com.weilylab.xhuschedule.fragment
+package com.weilylab.xhuschedule.fragment.settings
 
 import android.preference.Preference
 import android.preference.PreferenceFragment
@@ -43,6 +43,8 @@ import com.weilylab.xhuschedule.util.Constants
 
 
 open class BasePreferenceFragment : PreferenceFragment() {
+	val TAG = javaClass.simpleName
+
     fun findPreferenceById(@StringRes id: Int): Preference = findPreference(getString(id))
 
     // 获取提示音名称

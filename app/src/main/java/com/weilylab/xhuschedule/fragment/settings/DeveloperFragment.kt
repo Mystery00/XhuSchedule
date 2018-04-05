@@ -1,5 +1,5 @@
 /*
- * Created by Mystery0 on 18-2-21 下午10:05.
+ * Created by Mystery0 on 4/6/18 12:10 AM.
  * Copyright (c) 2018. All Rights reserved.
  *
  *                    =====================================================
@@ -28,10 +28,10 @@
  *                    =                                                   =
  *                    =====================================================
  *
- * Last modified 18-2-21 下午9:12
+ * Last modified 3/25/18 2:37 PM
  */
 
-package com.weilylab.xhuschedule.fragment
+package com.weilylab.xhuschedule.fragment.settings
 
 import android.os.Bundle
 import com.weilylab.xhuschedule.R
