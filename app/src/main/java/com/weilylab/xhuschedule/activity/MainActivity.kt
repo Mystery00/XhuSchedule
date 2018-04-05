@@ -100,6 +100,7 @@ class MainActivity : XhuBaseActivity() {
 	}
 
 	val permissionWriteExternalCode = 20
+	val noticeActivityCode = 21
 	private lateinit var loadingDialog: Dialog
 	private lateinit var updateProfileDialog: Dialog
 	private lateinit var weekAdapter: WeekAdapter
@@ -160,9 +161,6 @@ class MainActivity : XhuBaseActivity() {
 		}
 		if (ScheduleHelper.isTableLayoutChange)
 			weekFragment.updateTableLayout(Settings.customTableItemWidth != -1)
-		if (bottomNavigationView.menu.getItem(2).isChecked) {//刷新小红点状态
-			profileFragment.updateNoticeBadge()
-		}
 		ScheduleHelper.isBackgroundChange = false
 		ScheduleHelper.isUIChange = false
 		ScheduleHelper.isTableLayoutChange = false
@@ -725,6 +723,8 @@ class MainActivity : XhuBaseActivity() {
 		when {
 			requestCode == ADD_ACCOUNT_CODE && resultCode == Activity.RESULT_OK ->
 				updateAllData()
+			requestCode == noticeActivityCode ->
+				profileFragment.updateNoticeBadge()
 			requestCode == com.tencent.connect.common.Constants.REQUEST_QQ_SHARE ->
 				Tencent.onActivityResultData(requestCode, resultCode, data, APP.tencentListener)
 			else ->

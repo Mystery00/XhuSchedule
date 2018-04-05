@@ -141,8 +141,8 @@ object Constants {
 	const val NOTIFICATION_EXAM_ENABLE = "isNotificationExamEnable"
 	const val NOTIFICATION_TOMORROW_TYPE = "isNotificationTomorrowType"
 	const val SPLASH_IMAGE_FILE_NAME = "splashImageFileName"
-	const val SPLASH_TIME="splashTime"
-	const val SPLASH_LOCATION_URL="splashLocationUrl"
+	const val SPLASH_TIME = "splashTime"
+	const val SPLASH_LOCATION_URL = "splashLocationUrl"
 	const val APPLIED_THEME = "appliedTheme"
 
 	const val DEFAULT_TERM_START_DATE = "2018-2-5"
@@ -153,4 +153,7 @@ object Constants {
 	const val DEFAULT_SIZE_HEIGHT = 72
 	const val DEFAULT_NOTIFICATION_SOUND = NOTIFICATION_SYSTEM_SOUND
 	const val DEFAULT_NOTIFICATION_TIME = "20:00"
+
+	const val RETRY_TIME_OUT = 300L
+	const val RETRY_TIME = 3
 }

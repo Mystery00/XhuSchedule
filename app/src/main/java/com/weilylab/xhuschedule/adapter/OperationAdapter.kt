@@ -33,6 +33,7 @@
 
 package com.weilylab.xhuschedule.adapter
 
+import android.app.Activity
 import android.app.Dialog
 import android.content.Context
 import android.content.Intent
@@ -157,7 +158,7 @@ class OperationAdapter(private val context: Context) : RecyclerView.Adapter<Oper
 		}
 		holder.itemView.setOnClickListener {
 			when (position) {
-				0 -> context.startActivity(Intent(context, NoticeActivity::class.java))
+				0 -> (context as MainActivity).startActivityForResult(Intent(context, NoticeActivity::class.java), context.noticeActivityCode)
 				1 -> context.startActivity(Intent(context, ScheduleActivity::class.java))
 				2 -> context.startActivity(Intent(context, ExamActivity::class.java))
 				3 -> context.startActivity(Intent(context, ScoreActivity::class.java))
