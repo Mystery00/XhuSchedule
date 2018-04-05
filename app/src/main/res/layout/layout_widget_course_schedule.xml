@@ -5,43 +5,43 @@
   ~ Last modified 17-12-20 下午5:18
   -->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/colorWhite">
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:background="@drawable/lines_out">
 
-    <TextView
-        android:id="@+id/empty"
-        android:layout_width="36dp"
-        android:layout_height="28dp" />
+	<TextView
+		android:id="@+id/empty"
+		android:layout_width="36dp"
+		android:layout_height="28dp" />
 
-    <TextView
-        android:id="@+id/lineVertical"
-        android:layout_width="@dimen/divider_size"
-        android:layout_height="28dp"
-        android:layout_toEndOf="@id/empty"
-        android:background="@drawable/lines" />
+	<TextView
+		android:id="@+id/lineVertical"
+		android:layout_width="@dimen/divider_size"
+		android:layout_height="28dp"
+		android:layout_toEndOf="@id/empty"
+		android:background="@drawable/lines" />
 
-    <TextView
-        android:id="@+id/lineHorizontal"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/divider_size"
-        android:layout_below="@id/empty"
-        android:background="@drawable/lines" />
+	<TextView
+		android:id="@+id/lineHorizontal"
+		android:layout_width="match_parent"
+		android:layout_height="@dimen/divider_size"
+		android:layout_below="@id/empty"
+		android:background="@drawable/lines" />
 
-    <include
-        android:id="@+id/headerLayout"
-        layout="@layout/layout_table_header"
-        android:layout_width="match_parent"
-        android:layout_height="28dp"
-        android:layout_toEndOf="@id/lineVertical" />
+	<include
+		android:id="@+id/headerLayout"
+		layout="@layout/layout_table_header"
+		android:layout_width="match_parent"
+		android:layout_height="28dp"
+		android:layout_toEndOf="@id/lineVertical" />
 
-    <ListView
-        android:id="@+id/listView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/lineHorizontal"
-        android:divider="@drawable/lines"
-        android:dividerHeight="@dimen/divider_size"
-        android:gravity="center" />
+	<ListView
+		android:id="@+id/listView"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:layout_below="@id/lineHorizontal"
+		android:divider="@drawable/lines"
+		android:dividerHeight="@dimen/divider_size"
+		android:gravity="center" />
 
 </RelativeLayout>
