@@ -43,6 +43,8 @@ import com.weilylab.xhuschedule.classes.baseClass.CourseNotificationWithID
 import com.weilylab.xhuschedule.classes.baseClass.Exam
 import com.weilylab.xhuschedule.classes.baseClass.ExamNotificationWithID
 import com.weilylab.xhuschedule.classes.baseClass.Student
+import com.weilylab.xhuschedule.classes.rt.GetCourseRT
+import com.weilylab.xhuschedule.listener.GetCourseListener
 import com.weilylab.xhuschedule.util.*
 import com.weilylab.xhuschedule.util.notification.TomorrowCourseNotification
 import com.weilylab.xhuschedule.util.notification.TomorrowExamNotification
@@ -57,7 +59,10 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 class ShowNotificationService : Service() {
-	private val TAG = "ShowNotificationService"
+	companion object {
+		private const val TAG = "ShowNotificationService"
+	}
+
 	private var queue = 0
 
 	override fun onCreate() {
@@ -68,9 +73,39 @@ class ShowNotificationService : Service() {
 				.setAutoCancel(true)
 				.build()
 		startForeground(Constants.NOTIFICATION_ID_FOREGROUND_ALARM, notification)
+		Thread(Runnable {
+			var isDone = false
+			val timer = Timer()
+			timer.schedule(object : TimerTask() {
+				override fun run() {
+					CourseUtil.getCoursesFromServer(this@ShowNotificationService, null, null, object : GetCourseListener {
+						override fun start() {
+							Logs.i(TAG, "start: ")
+						}
+
+						override fun got(studentList: ArrayList<Student>, rtList: ArrayList<GetCourseRT>) {
+							Logs.i(TAG, "got: ")
+							isDone = true
+							showNotification()
+						}
+
+						override fun error(rt: Int, e: Throwable) {
+							Logs.e(TAG, "rt: $rt error: $e")
+							isDone = true
+							showNotification()
+						}
+					})
+				}
+			}, 0)
+			Thread.sleep(5000)
+			if (!isDone) {
+				timer.cancel()
+				showNotification()
+			}
+		}).start()
 	}
 
-	private fun showNotification(){
+	private fun showNotification() {
 		if (Settings.isNotificationTomorrowEnable) {
 			queue++
 			Observable.create<CourseNotificationWithID> {

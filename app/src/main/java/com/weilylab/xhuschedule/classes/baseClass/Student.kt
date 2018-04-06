@@ -84,7 +84,7 @@ class Student : Serializable {
 					override fun onComplete() {
 						Logs.i(tag, "onComplete: " + autoLoginRT?.rt)
 						when (autoLoginRT?.rt) {
-							"0" -> listener.loginDone()
+							ConstantsCode.DONE -> listener.loginDone()
 							else -> listener.error(autoLoginRT!!.rt.toInt(), Exception(autoLoginRT?.msg))
 						}
 					}
