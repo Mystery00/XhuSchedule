@@ -44,6 +44,13 @@
 
 				<category android:name="android.intent.category.LAUNCHER" />
 			</intent-filter>
+			<intent-filter>
+				<action android:name="com.weilylab.xhuschedule.NOTIFICATION_VIEW"/>
+				<category android:name="android.intent.category.DEFAULT" />
+				<data
+					android:host="main"
+					android:scheme="xhuschedule" />
+			</intent-filter>
 
 			<meta-data
 				android:name="android.app.shortcuts"
@@ -103,7 +110,15 @@
 			android:name=".activity.NoticeActivity"
 			android:label="@string/title_activity_notice"
 			android:screenOrientation="portrait"
-			android:theme="@style/AppTheme.NoActionBar" />
+			android:theme="@style/AppTheme.NoActionBar">
+			<intent-filter>
+				<action android:name="com.weilylab.xhuschedule.NOTIFICATION_VIEW"/>
+				<category android:name="android.intent.category.DEFAULT" />
+				<data
+					android:host="notice"
+					android:scheme="xhuschedule" />
+			</intent-filter>
+		</activity>
 
 		<service android:name=".service.UpdateService" />
 		<service android:name=".service.DownloadService" />

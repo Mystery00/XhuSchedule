@@ -54,12 +54,6 @@ object PushMessageNotification {
 				.setContentTitle(leanCloudPush.title)
 				.setContentText(leanCloudPush.content)
 				.setPriority(NotificationCompat.PRIORITY_DEFAULT)
-				.setContentIntent(
-						PendingIntent.getActivity(
-								context,
-								0,
-								Intent(Intent.ACTION_VIEW, Uri.parse(leanCloudPush.link)),
-								PendingIntent.FLAG_UPDATE_CURRENT))
 				.setStyle(NotificationCompat.BigTextStyle()
 						.bigText(leanCloudPush.content)
 						.setBigContentTitle(leanCloudPush.title))
@@ -70,6 +64,20 @@ object PushMessageNotification {
 			LeanCloudPush.LEVEL_DEFAULT -> builder.setDefaults(Notification.DEFAULT_ALL).priority = NotificationCompat.PRIORITY_DEFAULT
 			LeanCloudPush.LEVEL_HIGH -> builder.setDefaults(Notification.DEFAULT_ALL).priority = NotificationCompat.PRIORITY_HIGH
 		}
+		if (leanCloudPush.link.startsWith("xhuschedule"))
+			builder.setContentIntent(
+					PendingIntent.getActivity(
+							context,
+							0,
+							Intent(Constants.ACTION_NOTIFICATION_VIEW, Uri.parse(leanCloudPush.link)),
+							PendingIntent.FLAG_UPDATE_CURRENT))
+		else
+			builder.setContentIntent(
+					PendingIntent.getActivity(
+							context,
+							0,
+							Intent(Intent.ACTION_VIEW, Uri.parse(leanCloudPush.link)),
+							PendingIntent.FLAG_UPDATE_CURRENT))
 		notify(context, builder.build())
 	}
 

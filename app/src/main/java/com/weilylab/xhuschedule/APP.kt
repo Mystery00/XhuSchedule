@@ -55,7 +55,6 @@ import vip.mystery0.logs.Logs
  */
 class APP : MultiDexApplication() {
 	companion object {
-		private const val TAG = "APP"
 		private var app: APP? = null
 		@SuppressLint("StaticFieldLeak")
 		lateinit var tencent: Tencent
@@ -75,7 +74,7 @@ class APP : MultiDexApplication() {
 		}
 		AVOSCloud.initialize(applicationContext, Constants.LEANCLOUD_APP_ID, Constants.LEANCLOUD_APP_KEY)
 		AVInstallation.getCurrentInstallation().saveInBackground()
-		AVAnalytics.enableCrashReport(applicationContext, true)
+		AVAnalytics.enableCrashReport(applicationContext, false)
 //		AVOSCloud.setDebugLogEnabled(true)
 		PushService.setDefaultPushCallback(applicationContext, NoticeActivity::class.java)
 		tencent = Tencent.createInstance(Constants.QQ_API_KEY, CondomContext.wrap(applicationContext, "Tencent"))

@@ -62,6 +62,7 @@ object Constants {
 	const val ACTION_WIDGET_UPDATE_BROADCAST = "android.appwidget.action.APPWIDGET_UPDATE"
 	const val ACTION_BOOT_COMPLETED = "android.intent.action.BOOT_COMPLETED"
 	const val ACTION_CHECK_UPDATE = "com.weilylab.xhuschedule.CHECK_UPDATE"
+	const val ACTION_NOTIFICATION_VIEW = "com.weilylab.xhuschedule.NOTIFICATION_VIEW"
 
 	const val NOTIFICATION_CHANNEL_ID_DEFAULT = "XhuSchedule-Default"
 	const val NOTIFICATION_CHANNEL_NAME_DEFAULT = "默认"
