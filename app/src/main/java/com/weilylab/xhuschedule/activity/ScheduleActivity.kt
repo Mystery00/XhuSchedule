@@ -74,6 +74,7 @@ import java.io.File
 import java.io.InputStreamReader
 import java.net.UnknownHostException
 import java.util.*
+import kotlin.collections.ArrayList
 import kotlin.math.max
 
 class ScheduleActivity : XhuBaseActivity() {
@@ -109,14 +110,7 @@ class ScheduleActivity : XhuBaseActivity() {
 				.setLoadingColor(ContextCompat.getColor(this, R.color.colorAccent))
 				.setHintTextColor(ContextCompat.getColor(this, R.color.colorAccent))
 				.create()
-		val options = RequestOptions()
-				.signature(MediaStoreSignature("image/*", Calendar.getInstance().timeInMillis, 0))
-				.diskCacheStrategy(DiskCacheStrategy.NONE)
-		if (Settings.customBackgroundImg != "")
-			Glide.with(this)
-					.load(Settings.customBackgroundImg)
-					.apply(options)
-					.into(background)
+		ViewUtil.setBackground(this, background)
 		val tableNav = table_nav as LinearLayout
 		for (i in 0 until tableNav.childCount) {
 			val layoutParams = tableNav.getChildAt(i).layoutParams
@@ -132,7 +126,6 @@ class ScheduleActivity : XhuBaseActivity() {
 	private fun getCourses(student: Student?, year: String?, term: Int?) {
 		if (student == null)
 			return
-		loadingDialog.show()
 		ScheduleHelper.tomcatRetrofit
 				.create(StudentService::class.java)
 				.getCourses(student.username, year, term)

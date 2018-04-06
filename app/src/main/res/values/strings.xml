@@ -85,14 +85,6 @@
 	<string name="hint_permission">读取SD卡文件为必要权限，请授予~</string>
 	<string name="hint_custom_img">自定义图片设置成功！</string>
 	<string name="hint_reset">界面设置已经恢复为默认设置</string>
-	<string name="hint_check_log">
-        检测到有崩溃日志没有提交：\n\n
-        日志文件名：%1$s\n\n
-        日志路径：%2$s\n\n
-        日志生成时间：%3$s\n\n
-        是否提交此日志？\n\n
-        （如果需要禁用该检测，请禁用：设置-关于-自动检测日志开关）
-    </string>
 	<string name="hint_logout_title">确定要注销吗？</string>
 	<string name="hint_logout_content">注销后将会清空本帐号的数据，请问您确定要注销吗？</string>
 	<string name="hint_feedback">感谢您的建议，我们会尝试做得更好，祝您阖家幸福，生活愉快~</string>
