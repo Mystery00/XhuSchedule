@@ -106,6 +106,7 @@ class ShowNotificationService : Service() {
 	}
 
 	private fun showNotification() {
+		Logs.i(TAG, "showNotification: ")
 		if (Settings.isNotificationTomorrowEnable) {
 			queue++
 			Observable.create<CourseNotificationWithID> {
