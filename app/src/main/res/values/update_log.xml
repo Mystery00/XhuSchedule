@@ -20,7 +20,7 @@
 		<item> </item>
 		<item>修改：取消FireBase（经分析可能是因为部分厂商阉割Google Play服务导致应用崩溃）</item>
 		<item> </item>
-		<item>2.0.2更新内容：</item>
+		<item>2.0.3更新内容：</item>
 		<item>修复：2.0.2上面错误的颜色显示问题</item>
 		<item>修复：显示更新日志崩溃</item>
 	</string-array>
