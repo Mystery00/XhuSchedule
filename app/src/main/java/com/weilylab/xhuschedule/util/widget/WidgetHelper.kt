@@ -38,10 +38,7 @@ import android.util.Base64
 import com.weilylab.xhuschedule.classes.baseClass.Course
 import com.weilylab.xhuschedule.classes.baseClass.Exam
 import com.weilylab.xhuschedule.classes.baseClass.Student
-import com.weilylab.xhuschedule.util.CalendarUtil
-import com.weilylab.xhuschedule.util.Constants
-import com.weilylab.xhuschedule.util.CourseUtil
-import com.weilylab.xhuschedule.util.XhuFileUtil
+import com.weilylab.xhuschedule.util.*
 import java.io.File
 
 /**
@@ -86,25 +83,36 @@ object WidgetHelper {
 		val studentList = XhuFileUtil.getArrayFromFile(XhuFileUtil.getStudentListFile(context), Student::class.java)
 		if (studentList.isEmpty())
 			return
-		var mainStudent: Student? = (0 until studentList.size)
-				.firstOrNull { studentList[it].isMain }
-				?.let { studentList[it] }
-		if (mainStudent == null)
-			mainStudent = studentList[0]
-		val parentFile = XhuFileUtil.getCourseCacheParentFile(context)
-		if (!parentFile.exists())
-			parentFile.mkdirs()
-		val base64Name = XhuFileUtil.filterString(Base64.encodeToString(mainStudent.username.toByteArray(), Base64.DEFAULT))
-		//判断是否有缓存
-		val cacheResult = parentFile.listFiles().filter { it.name == base64Name }.size == 1
-		if (!cacheResult) {
-			return
+		val updateList = ArrayList<Student>()
+		if (Settings.isEnableMultiUserMode) {
+			studentList.forEach {
+				updateList.add(it)
+			}
+		} else {
+			var mainStudent: Student? = (0 until studentList.size)
+					.firstOrNull { studentList[it].isMain }
+					?.let { studentList[it] }
+			if (mainStudent == null)
+				mainStudent = studentList[0]
+			updateList.add(mainStudent)
 		}
-		val oldFile = File(parentFile, base64Name)
-		if (!oldFile.exists()) {
-			return
+		showTodayCourses.clear()
+		for (student in updateList) {
+			val parentFile = XhuFileUtil.getCourseCacheParentFile(context)
+			if (!parentFile.exists())
+				parentFile.mkdirs()
+			val base64Name = XhuFileUtil.filterString(Base64.encodeToString(student.username.toByteArray(), Base64.DEFAULT))
+			//判断是否有缓存
+			val cacheResult = parentFile.listFiles().filter { it.name == base64Name }.size == 1
+			if (!cacheResult) {
+				continue
+			}
+			val oldFile = File(parentFile, base64Name)
+			if (!oldFile.exists()) {
+				continue
+			}
+			showTodayCourses.addAll(CourseUtil.getTodayCourses(CourseUtil.getCoursesFromFile(oldFile), dayIndex))
 		}
-		showTodayCourses.addAll(CourseUtil.getTodayCourses(CourseUtil.getCoursesFromFile(oldFile), dayIndex))
 	}
 
 	/**
@@ -115,25 +123,34 @@ object WidgetHelper {
 		val studentList = XhuFileUtil.getArrayFromFile(XhuFileUtil.getStudentListFile(context), Student::class.java)
 		if (studentList.isEmpty())
 			return
-		var mainStudent: Student? = (0 until studentList.size)
-				.firstOrNull { studentList[it].isMain }
-				?.let { studentList[it] }
-		if (mainStudent == null)
-			mainStudent = studentList[0]
-		val parentFile = XhuFileUtil.getCourseCacheParentFile(context)
-		if (!parentFile.exists())
-			parentFile.mkdirs()
-		val base64Name = XhuFileUtil.filterString(Base64.encodeToString(mainStudent.username.toByteArray(), Base64.DEFAULT))
-		//判断是否有缓存
-		val cacheResult = parentFile.listFiles().filter { it.name == base64Name }.size == 1
-		if (!cacheResult) {
-			return
+		val updateList = ArrayList<Student>()
+		if (Settings.isEnableMultiUserMode) {
+			studentList.forEach {
+				updateList.add(it)
+			}
+		} else {
+			var mainStudent: Student? = (0 until studentList.size)
+					.firstOrNull { studentList[it].isMain }
+					?.let { studentList[it] }
+			if (mainStudent == null)
+				mainStudent = studentList[0]
+			updateList.add(mainStudent)
 		}
-		val oldFile = File(parentFile, base64Name)
-		if (!oldFile.exists()) {
-			return
+		showScheduleCourses.clear()
+		for (student in updateList) {
+			val parentFile = XhuFileUtil.getCourseCacheParentFile(context)
+			if (!parentFile.exists())
+				parentFile.mkdirs()
+			val base64Name = XhuFileUtil.filterString(Base64.encodeToString(student.username.toByteArray(), Base64.DEFAULT))
+			//判断是否有缓存
+			val cacheResult = parentFile.listFiles().filter { it.name == base64Name }.size == 1
+			if (!cacheResult)
+				continue
+			val oldFile = File(parentFile, base64Name)
+			if (!oldFile.exists())
+				continue
+			showScheduleCourses.addAll(CourseUtil.mergeCourses(showScheduleCourses, CourseUtil.getWeekCourses(CourseUtil.getCoursesFromFile(oldFile))))
 		}
-		showScheduleCourses.addAll(CourseUtil.getWeekCourses(CourseUtil.getCoursesFromFile(oldFile)))
 	}
 
 	/**
@@ -143,25 +160,37 @@ object WidgetHelper {
 		val studentList = XhuFileUtil.getArrayFromFile(File(context.filesDir.absolutePath + File.separator + "data" + File.separator + "user"), Student::class.java)
 		if (studentList.isEmpty())
 			return
-		var mainStudent: Student? = (0 until studentList.size)
-				.firstOrNull { studentList[it].isMain }
-				?.let { studentList[it] }
-		if (mainStudent == null)
-			mainStudent = studentList[0]
-		val parentFile = XhuFileUtil.getExamParentFile(context)
-		if (!parentFile.exists())
-			parentFile.mkdirs()
-		val base64Name = XhuFileUtil.filterString(Base64.encodeToString(mainStudent.username.toByteArray(), Base64.DEFAULT))
-		//判断是否有缓存
-		val cacheResult = parentFile.listFiles().filter { it.name == base64Name }.size == 1
-		if (!cacheResult) {
-			return
+		val updateList = ArrayList<Student>()
+		if (Settings.isEnableMultiUserMode) {
+			studentList.forEach {
+				updateList.add(it)
+			}
+		} else {
+			var mainStudent: Student? = (0 until studentList.size)
+					.firstOrNull { studentList[it].isMain }
+					?.let { studentList[it] }
+			if (mainStudent == null)
+				mainStudent = studentList[0]
+			updateList.add(mainStudent)
 		}
-		val oldFile = File(parentFile, base64Name)
-		if (!oldFile.exists()) {
-			return
+		val examList = ArrayList<Exam>()
+		for (student in updateList) {
+			val parentFile = XhuFileUtil.getExamParentFile(context)
+			if (!parentFile.exists())
+				parentFile.mkdirs()
+			val base64Name = XhuFileUtil.filterString(Base64.encodeToString(student.username.toByteArray(), Base64.DEFAULT))
+			//判断是否有缓存
+			val cacheResult = parentFile.listFiles().filter { it.name == base64Name }.size == 1
+			if (!cacheResult) {
+				continue
+			}
+			val oldFile = File(parentFile, base64Name)
+			if (!oldFile.exists()) {
+				continue
+			}
+			examList.addAll(XhuFileUtil.getArrayListFromFile(oldFile, Exam::class.java))
 		}
-		getExamList(XhuFileUtil.getArrayListFromFile(oldFile, Exam::class.java))
+		getExamList(examList)
 	}
 
 	/**
