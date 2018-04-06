@@ -5,61 +5,62 @@
   ~ Last modified 17-12-3 上午11:26
   -->
 <android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/colorWhite"
-    android:fillViewport="true">
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:background="@color/colorWhite"
+	android:fillViewport="true">
 
-    <android.support.constraint.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+	<android.support.constraint.ConstraintLayout
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/profile_img"
-            android:layout_width="64dp"
-            android:layout_height="64dp"
-            android:layout_marginTop="@dimen/profile_img_margin_top"
-            android:src="@mipmap/profile_img"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+		<de.hdodenhof.circleimageview.CircleImageView
+			android:id="@+id/profile_img"
+			android:layout_width="64dp"
+			android:layout_height="64dp"
+			android:layout_marginTop="@dimen/profile_img_margin_top"
+			android:src="@mipmap/profile_img"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/textView_title"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/profile_text_margin_top"
-            android:gravity="center"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/profile_img" />
+		<TextView
+			android:id="@+id/textView_title"
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:layout_marginTop="@dimen/profile_text_margin_top"
+			android:gravity="center"
+			android:textSize="18sp"
+			android:textStyle="bold"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintTop_toBottomOf="@id/profile_img" />
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recycler_view"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_marginTop="@dimen/profile_margin_top"
-            app:layout_constraintBottom_toTopOf="@+id/button_logout"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/textView_title" />
+		<android.support.v7.widget.RecyclerView
+			android:id="@+id/recycler_view"
+			android:layout_width="0dp"
+			android:layout_height="0dp"
+			android:layout_marginTop="@dimen/profile_margin_top"
+			app:layout_constraintBottom_toTopOf="@+id/button_logout"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintTop_toBottomOf="@id/textView_title" />
 
-        <Button
-            android:id="@+id/button_logout"
-            style="@style/LogoutButton"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/profile_item_margin_horizontal"
-            android:layout_marginStart="@dimen/profile_item_margin_horizontal"
-            android:text="@string/action_logout"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+		<Button
+			android:id="@+id/button_logout"
+			style="@style/LogoutButton"
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:layout_marginEnd="@dimen/profile_item_margin_horizontal"
+			android:layout_marginStart="@dimen/profile_item_margin_horizontal"
+			android:text="@string/action_logout"
+			android:textColor="@color/colorWhite"
+			app:layout_constraintBottom_toBottomOf="parent"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintStart_toStartOf="parent" />
 
-    </android.support.constraint.ConstraintLayout>
+	</android.support.constraint.ConstraintLayout>
 
 </android.support.v4.widget.NestedScrollView>

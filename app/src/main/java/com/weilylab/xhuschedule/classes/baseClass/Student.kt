@@ -35,7 +35,6 @@ package com.weilylab.xhuschedule.classes.baseClass
 
 import android.content.Context
 import android.os.Build
-import com.google.gson.Gson
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.classes.rt.*
 import com.weilylab.xhuschedule.interfaces.CommonService
@@ -73,7 +72,7 @@ class Student : Serializable {
 				.autoLogin(username, password)
 				.subscribeOn(Schedulers.newThread())
 				.unsubscribeOn(Schedulers.newThread())
-				.map({ Gson().fromJson(InputStreamReader(it.byteStream()), AutoLoginRT::class.java) })
+				.map({ ScheduleHelper.gson.fromJson(InputStreamReader(it.byteStream()), AutoLoginRT::class.java) })
 				.observeOn(AndroidSchedulers.mainThread())
 				.subscribe(object : Observer<AutoLoginRT> {
 					private var autoLoginRT: AutoLoginRT? = null
@@ -105,14 +104,14 @@ class Student : Serializable {
 		getInfo(0, listener)
 	}
 
-	private fun getInfo(index: Int, listener: ProfileListener) {
+	fun getInfo(index: Int, listener: ProfileListener) {
 		val tag = "student_get_info-$index"
 		ScheduleHelper.tomcatRetrofit
 				.create(UserService::class.java)
 				.getInfo(username)
 				.subscribeOn(Schedulers.newThread())
 				.unsubscribeOn(Schedulers.newThread())
-				.map { Gson().fromJson(InputStreamReader(it.byteStream()), GetInfoRT::class.java) }
+				.map { ScheduleHelper.gson.fromJson(InputStreamReader(it.byteStream()), GetInfoRT::class.java) }
 				.observeOn(AndroidSchedulers.mainThread())
 				.subscribe(object : Observer<GetInfoRT> {
 					private var getInfoRT: GetInfoRT? = null
@@ -173,7 +172,7 @@ class Student : Serializable {
 				.getTests(username)
 				.subscribeOn(Schedulers.newThread())
 				.unsubscribeOn(Schedulers.newThread())
-				.map { Gson().fromJson(InputStreamReader(it.byteStream()), GetTestsRT::class.java) }
+				.map { ScheduleHelper.gson.fromJson(InputStreamReader(it.byteStream()), GetTestsRT::class.java) }
 				.observeOn(AndroidSchedulers.mainThread())
 				.subscribe(object : Observer<GetTestsRT> {
 					private var getTestsRT: GetTestsRT? = null
@@ -231,7 +230,7 @@ class Student : Serializable {
 				.getScores(username, year, term)
 				.subscribeOn(Schedulers.newThread())
 				.unsubscribeOn(Schedulers.newThread())
-				.map { Gson().fromJson(InputStreamReader(it.byteStream()), GetScoresRT::class.java) }
+				.map { ScheduleHelper.gson.fromJson(InputStreamReader(it.byteStream()), GetScoresRT::class.java) }
 				.observeOn(AndroidSchedulers.mainThread())
 				.subscribe(object : Observer<GetScoresRT> {
 					private var getScoresRT: GetScoresRT? = null
@@ -289,7 +288,7 @@ class Student : Serializable {
 				.getExpScores(username, year, term)
 				.subscribeOn(Schedulers.newThread())
 				.unsubscribeOn(Schedulers.newThread())
-				.map { Gson().fromJson(InputStreamReader(it.byteStream()), GetExpScoresRT::class.java) }
+				.map { ScheduleHelper.gson.fromJson(InputStreamReader(it.byteStream()), GetExpScoresRT::class.java) }
 				.observeOn(AndroidSchedulers.mainThread())
 				.subscribe(object : Observer<GetExpScoresRT> {
 					private var getExpScoresRT: GetExpScoresRT? = null
@@ -353,7 +352,7 @@ class Student : Serializable {
 						message)
 				.subscribeOn(Schedulers.newThread())
 				.unsubscribeOn(Schedulers.newThread())
-				.map { Gson().fromJson(InputStreamReader(it.byteStream()), FeedbackRT::class.java) }
+				.map { ScheduleHelper.gson.fromJson(InputStreamReader(it.byteStream()), FeedbackRT::class.java) }
 				.observeOn(AndroidSchedulers.mainThread())
 				.subscribe(object : Observer<FeedbackRT> {
 					private var feedbackRT: FeedbackRT? = null
@@ -410,7 +409,7 @@ class Student : Serializable {
 				.getCETVCode(username, id, null)
 				.subscribeOn(Schedulers.newThread())
 				.unsubscribeOn(Schedulers.newThread())
-				.map { Gson().fromJson(InputStreamReader(it.byteStream()), GetCETVCodeRT::class.java) }
+				.map { ScheduleHelper.gson.fromJson(InputStreamReader(it.byteStream()), GetCETVCodeRT::class.java) }
 				.observeOn(AndroidSchedulers.mainThread())
 				.subscribe(object : Observer<GetCETVCodeRT> {
 					private var getCETVCodeRT: GetCETVCodeRT? = null
@@ -470,7 +469,7 @@ class Student : Serializable {
 				.getCETScores(username, id, name, vcode)
 				.subscribeOn(Schedulers.newThread())
 				.unsubscribeOn(Schedulers.newThread())
-				.map { Gson().fromJson(InputStreamReader(it.byteStream()), GetCETScoresRT::class.java) }
+				.map { ScheduleHelper.gson.fromJson(InputStreamReader(it.byteStream()), GetCETScoresRT::class.java) }
 				.observeOn(AndroidSchedulers.mainThread())
 				.subscribe(object : Observer<GetCETScoresRT> {
 					private var getCETScoresRT: GetCETScoresRT? = null

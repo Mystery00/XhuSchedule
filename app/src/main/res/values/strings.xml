@@ -77,7 +77,6 @@
 	<string name="hint_invalid_cookie">登陆信息已过期，是否重新登录？</string>
 	<string name="hint_try_refresh_data_error">%1$s，是否重新登录？</string>
 	<string name="hint_update_data">信息同步成功！</string>
-	<string name="hint_update_data_new">信息同步成功！和之前相比，数据有更新。</string>
 	<string name="hint_update_data_error">信息同步完成！但是部分数据存在错误。</string>
 	<string name="hint_analyze_error">信息同步完成！但是部分数据存在错误。请联系开发者以解决这个问题！</string>
 	<string name="hint_course_empty">啊啊啊，课程好像跟着风筝飞走了\nΣ(っ°Д°;)っ!!!</string>

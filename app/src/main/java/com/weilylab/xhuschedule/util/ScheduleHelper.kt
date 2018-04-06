@@ -43,6 +43,7 @@ import android.content.Intent
 import android.graphics.Color
 import android.net.ConnectivityManager
 import android.os.Build
+import com.google.gson.Gson
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.receiver.AlarmReceiver
 import com.weilylab.xhuschedule.util.cookie.LoadCookiesInterceptor
@@ -68,6 +69,8 @@ object ScheduleHelper {
 	var isAnalysisError = false
 	var weekIndex = 0
 	var scheduleItemWidth = -1
+
+	val gson = Gson()
 
 	private val client = OkHttpClient.Builder()
 			.retryOnConnectionFailure(true)

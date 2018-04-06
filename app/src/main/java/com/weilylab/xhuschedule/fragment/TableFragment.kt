@@ -160,6 +160,10 @@ class TableFragment : XhuBaseFragment() {
 			(rootView!!.parent as ViewGroup).removeView(rootView)
 	}
 
+	fun isReady(): Boolean {
+		return rootView != null
+	}
+
 	fun updateTableLayout(canScroll: Boolean) {
 		ScheduleHelper.checkScreenWidth(activity!!)
 		if (rootView != null) {

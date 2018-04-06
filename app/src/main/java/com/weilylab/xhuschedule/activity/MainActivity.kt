@@ -52,7 +52,6 @@ import android.util.Base64
 import android.widget.Toast
 import com.getkeepsafe.taptargetview.TapTarget
 import com.getkeepsafe.taptargetview.TapTargetSequence
-import com.google.gson.Gson
 import com.sina.weibo.sdk.api.share.IWeiboShareAPI
 import com.sina.weibo.sdk.api.share.WeiboShareSDK
 import com.tencent.mm.opensdk.openapi.IWXAPI
@@ -65,13 +64,11 @@ import com.weilylab.xhuschedule.adapter.WeekAdapter
 import com.weilylab.xhuschedule.classes.baseClass.Course
 import com.weilylab.xhuschedule.classes.baseClass.Profile
 import com.weilylab.xhuschedule.classes.baseClass.Student
-import com.weilylab.xhuschedule.classes.rt.AutoLoginRT
 import com.weilylab.xhuschedule.classes.rt.GetCourseRT
 import com.weilylab.xhuschedule.fragment.ProfileFragment
 import com.weilylab.xhuschedule.fragment.TableFragment
 import com.weilylab.xhuschedule.fragment.TodayFragment
-import com.weilylab.xhuschedule.interfaces.StudentService
-import com.weilylab.xhuschedule.interfaces.UserService
+import com.weilylab.xhuschedule.listener.GetCourseListener
 import com.weilylab.xhuschedule.listener.ProfileListener
 import com.weilylab.xhuschedule.listener.WeekChangeListener
 import com.weilylab.xhuschedule.service.UpdateService
@@ -88,7 +85,6 @@ import kotlinx.android.synthetic.main.content_main.*
 import vip.mystery0.logs.Logs
 import vip.mystery0.tools.utils.DensityTools
 import java.io.File
-import java.io.InputStreamReader
 import java.net.UnknownHostException
 import java.util.*
 import kotlin.collections.ArrayList
@@ -110,13 +106,11 @@ class MainActivity : XhuBaseActivity() {
 	private var isTryRefreshData = false
 	private var isRefreshData = false
 	private var isWeekShow = false
-	private var isDataNew = false
 	private var lastPressBack = 0L
 	private var studentList = ArrayList<Student>()
 	private var weekList = ArrayList<ArrayList<ArrayList<Course>>>()
 	private val todayList = ArrayList<Course>()
 	private val animatorList = ArrayList<ObjectAnimator>()
-	private val needLoginStudents = ArrayList<Student>()
 	private val todayFragment = TodayFragment.newInstance(todayList)
 	private val weekFragment = TableFragment.newInstance(weekList)
 	private val profileFragment = ProfileFragment.newInstance(Profile())
@@ -283,11 +277,7 @@ class MainActivity : XhuBaseActivity() {
 		}
 	}
 
-	fun updateAllView() {
-		updateAllView(-1)
-	}
-
-	fun updateAllView(week: Int) {
+	fun updateAllView(week: Int = -1) {
 		ScheduleHelper.isAnalysisError = false
 		studentList.clear()
 		studentList.addAll(XhuFileUtil.getArrayFromFile(XhuFileUtil.getStudentListFile(this), Student::class.java))
@@ -322,10 +312,6 @@ class MainActivity : XhuBaseActivity() {
 				.observeOn(AndroidSchedulers.mainThread())
 				.subscribe(object : DisposableObserver<Student>() {
 					override fun onComplete() {
-						if (needLoginStudents.size != 0) {
-							login()
-							return
-						}
 						loadingDialog.dismiss()
 						swipeLayout(bottomNavigationView.menu.getItem(viewpager.currentItem).itemId)
 						weekAdapter.setWeekIndex(ScheduleHelper.weekIndex)
@@ -360,7 +346,6 @@ class MainActivity : XhuBaseActivity() {
 					}
 
 					override fun onNext(student: Student) {
-						needLoginStudents.add(student)
 					}
 				})
 	}
@@ -400,13 +385,17 @@ class MainActivity : XhuBaseActivity() {
 			student.todayCourses.clear()
 			student.todayCourses.addAll(todayArray)
 			student.isReady = true
+			while (true) {
+				if (weekFragment.isReady() && todayFragment.isReady())
+					break
+				Thread.sleep(200)
+			}
 			subscriber.onComplete()
 		}
 	}
 
 	private fun updateAllData() {
 		Logs.i(TAG, "updateAllData: ")
-		loadingDialog.show()
 		ObjectAnimator.ofFloat(action_sync, Constants.ANIMATION_ROTATION, 0F, 360F).setDuration(1000).start()
 		studentList.clear()
 		studentList.addAll(XhuFileUtil.getArrayFromFile(XhuFileUtil.getStudentListFile(this), Student::class.java))
@@ -414,171 +403,60 @@ class MainActivity : XhuBaseActivity() {
 			startActivityForResult(Intent(this, LoginActivity::class.java), ADD_ACCOUNT_CODE)
 			return
 		}
-		todayList.clear()
-		val array = ArrayList<Observable<GetCourseRT>>()
-		isRefreshData = true
-		val updateList = ArrayList<Student>()
-		if (Settings.isEnableMultiUserMode)
-			studentList.forEach {
-				array.add(updateData(it))
-				updateList.add(it)
+		CourseUtil.getCoursesFromServer(this, null, null, object : GetCourseListener {
+			override fun start() {
+				loadingDialog.show()
+				todayList.clear()
+				isRefreshData = true
 			}
-		else {
-			var mainStudent: Student? = (0 until studentList.size)
-					.firstOrNull { studentList[it].isMain }
-					?.let { studentList[it] }
-			if (mainStudent == null)
-				mainStudent = studentList[0]
-			array.add(updateData(mainStudent))
-			updateList.add(mainStudent)
-		}
-		Observable.merge(array)
-				.observeOn(AndroidSchedulers.mainThread())
-				.subscribe(object : DisposableObserver<GetCourseRT>() {
-					override fun onError(e: Throwable) {
-						loadingDialog.dismiss()
-						isRefreshData = false
-						e.printStackTrace()
-						if (e is UnknownHostException)
-							Snackbar.make(coordinatorLayoutView, R.string.error_network, Snackbar.LENGTH_SHORT)
+
+			override fun got(studentList: ArrayList<Student>, rtList: ArrayList<GetCourseRT>) {
+				isRefreshData = false
+				XhuFileUtil.saveObjectToFile(studentList, XhuFileUtil.getStudentListFile(this@MainActivity))
+				sendBroadcast(Intent(Constants.ACTION_WIDGET_UPDATE_BROADCAST)
+						.putExtra(Constants.INTENT_TAG_NAME_TAG, WidgetHelper.ALL_TAG))
+				for (getCourseRT in rtList) {
+					when (getCourseRT.rt) {ConstantsCode.DONE, ConstantsCode.SERVER_COURSE_ANALYZE_ERROR -> {
+						if (getCourseRT.rt == ConstantsCode.SERVER_COURSE_ANALYZE_ERROR)
+							Snackbar.make(coordinatorLayoutView, R.string.hint_update_data_error, Snackbar.LENGTH_LONG).show()
+						else {
+							if (ScheduleHelper.isAnalysisError) {
+								Snackbar.make(coordinatorLayoutView, R.string.hint_analyze_error, Snackbar.LENGTH_LONG).show()
+							} else
+								Snackbar.make(coordinatorLayoutView, R.string.hint_update_data, Snackbar.LENGTH_SHORT).show()
+						}
+					}
+						ConstantsCode.ERROR_USERNAME, ConstantsCode.ERROR_PASSWORD -> {//前端信息错误
+							isRefreshData = false
+							Snackbar.make(coordinatorLayoutView, getString(R.string.hint_try_refresh_data_error, getCourseRT.msg), Snackbar.LENGTH_LONG)
+									.setAction(android.R.string.ok) {
+										startActivityForResult(Intent(this@MainActivity, LoginActivity::class.java), ADD_ACCOUNT_CODE)
+									}
 									.show()
-						else
-							Snackbar.make(coordinatorLayoutView, "请求出错：${e.message.toString()}，请重试", Snackbar.LENGTH_SHORT)
+						}
+						ConstantsCode.ERROR_NOT_LOGIN -> Logs.i(TAG, "updateAllData: onNext: 未登录")
+						else -> {
+							Logs.i(TAG, "updateAllData: onNext: ${getCourseRT.rt} ${getCourseRT.msg}")
+							Snackbar.make(coordinatorLayoutView, getCourseRT.msg, Snackbar.LENGTH_LONG)
 									.show()
-					}
-
-					override fun onComplete() {
-						Logs.i(TAG, "updateAllData: onComplete: ")
-						if (needLoginStudents.size != 0) {
-							login()
-							return
-						}
-						isRefreshData = false
-						sendBroadcast(Intent(Constants.ACTION_WIDGET_UPDATE_BROADCAST)
-								.putExtra(Constants.INTENT_TAG_NAME_TAG, WidgetHelper.ALL_TAG))
-						updateAllView()
-					}
-
-					override fun onNext(getCourseRT: GetCourseRT) {
-						Logs.i(TAG, "updateAllData: onNext: " + getCourseRT.rt)
-						when (getCourseRT.rt) {
-							ConstantsCode.DONE, ConstantsCode.SERVER_COURSE_ANALYZE_ERROR -> {
-								if (getCourseRT.rt == ConstantsCode.SERVER_COURSE_ANALYZE_ERROR)
-									Snackbar.make(coordinatorLayoutView, R.string.hint_update_data_error, Snackbar.LENGTH_LONG).show()
-								else {
-									if (ScheduleHelper.isAnalysisError) {
-										Snackbar.make(coordinatorLayoutView, R.string.hint_analyze_error, Snackbar.LENGTH_LONG).show()
-									} else if (isDataNew && updateList.size == 1)
-										Snackbar.make(coordinatorLayoutView, R.string.hint_update_data_new, Snackbar.LENGTH_SHORT).show()
-									else
-										Snackbar.make(coordinatorLayoutView, R.string.hint_update_data, Snackbar.LENGTH_SHORT).show()
-								}
-							}
-							ConstantsCode.ERROR_USERNAME, ConstantsCode.ERROR_PASSWORD -> {//前端信息错误
-								isRefreshData = false
-								Snackbar.make(coordinatorLayoutView, getString(R.string.hint_try_refresh_data_error, getCourseRT.msg), Snackbar.LENGTH_LONG)
-										.setAction(android.R.string.ok) {
-											startActivityForResult(Intent(this@MainActivity, LoginActivity::class.java), ADD_ACCOUNT_CODE)
-										}
-										.show()
-							}
-							ConstantsCode.ERROR_NOT_LOGIN -> Logs.i(TAG, "updateAllData: onNext: 未登录")
-							else -> {
-								Logs.i(TAG, "updateAllData: onNext: ${getCourseRT.rt} ${getCourseRT.msg}")
-								Snackbar.make(coordinatorLayoutView, getCourseRT.msg, Snackbar.LENGTH_LONG)
-										.show()
-							}
 						}
 					}
-				})
-	}
+				}
+				updateAllView()
+			}
 
-	private fun updateData(student: Student): Observable<GetCourseRT> {
-		return ScheduleHelper.tomcatRetrofit
-				.create(StudentService::class.java)
-				.getCourses(student.username, null, null)
-				.subscribeOn(Schedulers.newThread())
-				.unsubscribeOn(Schedulers.newThread())
-				.map({ responseBody ->
-					val getCourseRT = Gson().fromJson(InputStreamReader(responseBody.byteStream()), GetCourseRT::class.java)
-					val parentFile = XhuFileUtil.getCourseCacheParentFile(this)
-					if (!parentFile.exists())
-						parentFile.mkdirs()
-					val base64Name = XhuFileUtil.filterString(Base64.encodeToString(student.username.toByteArray(), Base64.DEFAULT))
-					when (getCourseRT.rt) {
-						ConstantsCode.DONE, ConstantsCode.SERVER_COURSE_ANALYZE_ERROR -> {//请求成功或者数据存在问题
-							val newFile = File(parentFile, base64Name + ".temp")
-							newFile.createNewFile()
-							XhuFileUtil.saveObjectToFile(getCourseRT.courses, newFile)
-							val newMD5 = XhuFileUtil.getMD5(newFile)
-							val oldFile = File(parentFile, base64Name)
-							var oldMD5 = ""
-							if (oldFile.exists())
-								oldMD5 = XhuFileUtil.getMD5(oldFile)!!
-							isDataNew = if (newMD5 != oldMD5) {
-								oldFile.delete()
-								newFile.renameTo(oldFile)
-								Logs.i(TAG, "updateData: 数据更新")
-								true
-							} else {
-								newFile.delete()
-								Logs.i(TAG, "updateData: 数据未变")
-								false
-							}
-						}
-						ConstantsCode.ERROR_NOT_LOGIN -> {//未登录
-							needLoginStudents.add(student)
-						}
-					}
-					getCourseRT
-				})
-	}
-
-	private fun login() {
-		Logs.i(TAG, "login: needLogin: ${needLoginStudents.size}")
-		val array = ArrayList<Observable<AutoLoginRT>>()
-		needLoginStudents.forEach {
-			Logs.i(TAG, "login: add: ${it.username}")
-			array.add(ScheduleHelper.tomcatRetrofit
-					.create(UserService::class.java)
-					.autoLogin(it.username, it.password)
-					.subscribeOn(Schedulers.newThread())
-					.unsubscribeOn(Schedulers.newThread())
-					.map({ responseBody -> Gson().fromJson(InputStreamReader(responseBody.byteStream()), AutoLoginRT::class.java) }))
-		}
-		Observable.merge(array)
-				.observeOn(AndroidSchedulers.mainThread())
-				.subscribe(object : DisposableObserver<AutoLoginRT>() {
-					override fun onComplete() {
-						needLoginStudents.clear()
-						updateAllData()
-					}
-
-					override fun onNext(autoLoginRT: AutoLoginRT) {
-						Logs.i(TAG, "onNext: rt: ${autoLoginRT.rt}")
-						if (autoLoginRT.rt != ConstantsCode.DONE) {
-							val snackBar = Snackbar.make(coordinatorLayoutView, autoLoginRT.msg, Snackbar.LENGTH_LONG)
-							if (autoLoginRT.rt.startsWith('4'))
-								snackBar.setAction(android.R.string.ok) {
-									startActivityForResult(Intent(this@MainActivity, LoginActivity::class.java), ADD_ACCOUNT_CODE)
-								}
-							snackBar.show()
-						}
-					}
-
-					override fun onError(e: Throwable) {
-						loadingDialog.dismiss()
-						isRefreshData = false
-						needLoginStudents.clear()
-						e.printStackTrace()
-						if (e is UnknownHostException)
-							Snackbar.make(coordinatorLayoutView, R.string.error_network, Snackbar.LENGTH_SHORT)
-									.show()
-						else
-							Snackbar.make(coordinatorLayoutView, "请求出错：${e.message.toString()}，请重试", Snackbar.LENGTH_SHORT)
-									.show()
-					}
-				})
+			override fun error(rt: Int, e: Throwable) {
+				loadingDialog.dismiss()
+				isRefreshData = false
+				e.printStackTrace()
+				if (e is UnknownHostException)
+					Snackbar.make(coordinatorLayoutView, R.string.error_network, Snackbar.LENGTH_SHORT)
+							.show()
+				else
+					Snackbar.make(coordinatorLayoutView, "请求出错：${e.message.toString()}，请重试", Snackbar.LENGTH_SHORT)
+							.show()
+			}
+		})
 	}
 
 	private fun showcase() {
@@ -673,7 +551,7 @@ class MainActivity : XhuBaseActivity() {
 					mainStudent?.getInfo(object : ProfileListener {
 						override fun error(rt: Int, e: Throwable) {
 							updateProfileDialog.dismiss()
-							Logs.e(TAG, "error: " + rt)
+							Logs.e(TAG, "error: $rt")
 							e.printStackTrace()
 						}
 

@@ -68,6 +68,9 @@ class ShowNotificationService : Service() {
 				.setAutoCancel(true)
 				.build()
 		startForeground(Constants.NOTIFICATION_ID_FOREGROUND_ALARM, notification)
+	}
+
+	private fun showNotification(){
 		if (Settings.isNotificationTomorrowEnable) {
 			queue++
 			Observable.create<CourseNotificationWithID> {

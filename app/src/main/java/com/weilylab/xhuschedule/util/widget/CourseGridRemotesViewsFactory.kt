@@ -33,11 +33,14 @@
 
 package com.weilylab.xhuschedule.util.widget
 
+import android.app.PendingIntent
 import android.content.Context
+import android.content.Intent
 import android.widget.RemoteViews
 import android.widget.RemoteViewsService
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.classes.baseClass.Course
+import com.weilylab.xhuschedule.service.WidgetInitService
 
 class CourseGridRemotesViewsFactory(private val context: Context) : RemoteViewsService.RemoteViewsFactory {
 
@@ -78,6 +81,9 @@ class CourseGridRemotesViewsFactory(private val context: Context) : RemoteViewsS
 			} catch (e: Exception) {
 				e.printStackTrace()
 			}
+			val refreshIntent = Intent(context, WidgetInitService::class.java)
+			val refreshPendingIntent = PendingIntent.getService(context, 0, refreshIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+			remotesViews.setOnClickPendingIntent(R.id.linearLayout, refreshPendingIntent)
 			remotesViews
 		}
 	}

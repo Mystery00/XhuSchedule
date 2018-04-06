@@ -92,6 +92,10 @@ class TodayFragment : XhuBaseFragment() {
 		recyclerView.adapter = adapter
 	}
 
+	fun isReady(): Boolean {
+		return rootView != null
+	}
+
 	fun setBackground() {
 		setBackground(0)
 	}

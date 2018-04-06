@@ -1,5 +1,5 @@
 /*
- * Created by Mystery0 on 4/3/18 5:04 PM.
+ * Created by Mystery0 on 4/6/18 1:48 PM.
  * Copyright (c) 2018. All Rights reserved.
  *
  *                    =====================================================
@@ -28,24 +28,15 @@
  *                    =                                                   =
  *                    =====================================================
  *
- * Last modified 4/3/18 5:04 PM
+ * Last modified 4/6/18 1:48 PM
  */
 
-package com.weilylab.xhuschedule.service
+package com.weilylab.xhuschedule.listener
 
-import android.app.job.JobParameters
-import android.app.job.JobService
-import android.os.Build
-import android.support.annotation.RequiresApi
-import com.weilylab.xhuschedule.util.Settings
+import com.weilylab.xhuschedule.classes.baseClass.Student
+import com.weilylab.xhuschedule.classes.rt.GetCourseRT
 
-@RequiresApi(Build.VERSION_CODES.LOLLIPOP)
-class ShowNotificationJobService : JobService() {
-	override fun onStopJob(params: JobParameters?): Boolean {
-		return Settings.isNotificationTomorrowEnable || Settings.isNotificationExamEnable
-	}
-
-	override fun onStartJob(params: JobParameters?): Boolean {
-		return true
-	}
+interface GetCourseListener : BaseListener {
+	fun start()
+	fun got(studentList: ArrayList<Student>, rtList: ArrayList<GetCourseRT>)
 }
