@@ -1,5 +1,5 @@
 /*
- * Created by Mystery0 on 4/3/18 1:03 AM.
+ * Created by Mystery0 on 4/6/18 4:23 PM.
  * Copyright (c) 2018. All Rights reserved.
  *
  *                    =====================================================
@@ -28,27 +28,20 @@
  *                    =                                                   =
  *                    =====================================================
  *
- * Last modified 4/3/18 1:03 AM
+ * Last modified 4/6/18 4:23 PM
  */
 
-package com.weilylab.xhuschedule.receiver
+package com.weilylab.xhuschedule.classes.baseClass
 
-import android.content.BroadcastReceiver
-import android.content.Context
-import android.content.Intent
-import com.weilylab.xhuschedule.classes.baseClass.LeanCloudPush
-import com.weilylab.xhuschedule.util.ScheduleHelper
-import com.weilylab.xhuschedule.util.notification.PushMessageNotification
-import vip.mystery0.logs.Logs
-
-class LeanCloudPushReceiver : BroadcastReceiver() {
-	private val TAG = "LeanCloudPushReceiver"
-
-	override fun onReceive(context: Context, intent: Intent) {
-		Logs.i(TAG, "onReceive: " + intent.action)
-		val message = intent.extras.getString("com.avos.avoscloud.Data")
-		Logs.i(TAG, "onReceive: $message")
-		val leanCloudPush = ScheduleHelper.gson.fromJson(message, LeanCloudPush::class.java)
-		PushMessageNotification.notify(context, leanCloudPush)
+data class LeanCloudPush(
+		val title: String,//通知标题
+		val content: String,//通知内容
+		val link: String,//想要打开的链接(做好uri的判断)
+		val level: Int
+) {
+	companion object {
+		const val LEVEL_LOW = 1
+		const val LEVEL_DEFAULT = 2
+		const val LEVEL_HIGH = 3
 	}
 }

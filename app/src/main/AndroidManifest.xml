@@ -214,6 +214,7 @@
 				<action android:name="com.weilylab.xhuschedule.PUSH" />
 			</intent-filter>
 		</receiver>
+
 		<service
 			android:name=".service.DownloadSplashIntentService"
 			android:exported="false" />
