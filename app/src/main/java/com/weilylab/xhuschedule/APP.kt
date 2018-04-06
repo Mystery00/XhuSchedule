@@ -43,11 +43,6 @@ import com.tencent.tauth.Tencent
 import com.weilylab.xhuschedule.activity.NoticeActivity
 import com.weilylab.xhuschedule.listener.EmptyTencentListener
 import com.weilylab.xhuschedule.util.Constants
-import com.weilylab.xhuschedule.util.SkinLoader
-import skin.support.SkinCompatManager
-import skin.support.app.SkinCardViewInflater
-import skin.support.constraint.app.SkinConstraintViewInflater
-import skin.support.design.app.SkinMaterialViewInflater
 import vip.mystery0.logs.Logs
 
 /**
@@ -79,11 +74,5 @@ class APP : MultiDexApplication() {
 		PushService.setDefaultPushCallback(applicationContext, NoticeActivity::class.java)
 		tencent = Tencent.createInstance(Constants.QQ_API_KEY, CondomContext.wrap(applicationContext, "Tencent"))
 		Logs.setLevel(Logs.Level.DEBUG)
-		SkinCompatManager.withoutActivity(this)
-				.addStrategy(SkinLoader())
-				.addInflater(SkinMaterialViewInflater())
-				.addInflater(SkinConstraintViewInflater())
-				.addInflater(SkinCardViewInflater())
-				.loadSkin()
 	}
 }

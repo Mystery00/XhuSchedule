@@ -33,7 +33,6 @@
 
 package com.weilylab.xhuschedule.adapter
 
-import android.app.Activity
 import android.app.Dialog
 import android.content.Context
 import android.content.Intent
@@ -290,7 +289,7 @@ class OperationAdapter(private val context: Context) : RecyclerView.Adapter<Oper
 					shareView.showAtLocation((context as MainActivity).bottomNavigationView, Gravity.BOTTOM, 0, 0)
 					setWindowAlpha(0.6F)
 				}
-				7 -> context.startActivity(Intent(context, ThemeActivity::class.java))
+//				7 -> context.startActivity(Intent(context, ThemeActivity::class.java))
 			}
 		}
 	}

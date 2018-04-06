@@ -15,13 +15,8 @@
 	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 	<uses-permission android:name="android.permission.VIBRATE" />
 	<uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-	<uses-permission android:name="android.permission.READ_PHONE_STATE" />
-	<uses-permission
-		android:name="android.permission.READ_LOGS"
-		tools:ignore="ProtectedPermissions" />
-	<uses-permission
-		android:name="android.permission.REQUEST_INSTALL_PACKAGES"
-		tools:ignore="ProtectedPermissions" />
+	<uses-permission android:name="android.permission.READ_LOGS" />
+	<uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
 
 	<application
 		android:name=".APP"
@@ -213,10 +208,6 @@
 		<!-- 实时通信模块、推送都要使用 PushService -->
 		<service android:name="com.avos.avoscloud.PushService" />
 		<!-- 实时通信模块、推送 END -->
-		<activity
-			android:name=".activity.ThemeActivity"
-			android:label="@string/title_activity_theme"
-			android:theme="@style/AppTheme.NoActionBar" />
 
 		<receiver
 			android:name=".receiver.LeanCloudPushReceiver"

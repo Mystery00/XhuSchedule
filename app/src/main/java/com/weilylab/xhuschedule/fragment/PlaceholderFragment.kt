@@ -43,7 +43,6 @@ import com.weilylab.xhuschedule.R
 
 class PlaceholderFragment : Fragment() {
 	private var imageID: Int? = null
-	private var rootView: View? = null
 	private lateinit var imageView: ImageView
 
 	companion object {
@@ -63,10 +62,8 @@ class PlaceholderFragment : Fragment() {
 
 	override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
 							  savedInstanceState: Bundle?): View? {
-		if (rootView == null) {
-			val rootView = inflater.inflate(R.layout.fragment_welcome, container, false)
-			imageView = rootView.findViewById(R.id.imageView)
-		}
+		val rootView = inflater.inflate(R.layout.fragment_welcome, container, false)
+		imageView = rootView.findViewById(R.id.imageView)
 		return rootView
 	}
 
