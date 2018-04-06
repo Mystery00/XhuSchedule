@@ -34,18 +34,20 @@
 package com.weilylab.xhuschedule.util
 
 import android.annotation.TargetApi
-import android.app.AlarmManager
-import android.app.NotificationChannel
-import android.app.NotificationManager
-import android.app.PendingIntent
+import android.app.*
+import android.app.job.JobInfo
+import android.app.job.JobScheduler
+import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.net.ConnectivityManager
 import android.os.Build
+import android.support.annotation.RequiresApi
 import com.google.gson.Gson
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.receiver.AlarmReceiver
+import com.weilylab.xhuschedule.service.CheckJobService
 import com.weilylab.xhuschedule.util.cookie.LoadCookiesInterceptor
 import com.weilylab.xhuschedule.util.cookie.SaveCookiesInterceptor
 import okhttp3.OkHttpClient
@@ -165,5 +167,24 @@ object ScheduleHelper {
 		val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
 		val activeNetworkInfo = connectivityManager.activeNetworkInfo
 		return activeNetworkInfo != null && activeNetworkInfo.isConnected
+	}
+
+
+	@RequiresApi(Build.VERSION_CODES.LOLLIPOP)
+	fun scheduleJob(context: Context) {
+		Logs.i(TAG, "scheduleJob: ")
+		val jobScheduler = context.getSystemService(Context.JOB_SCHEDULER_SERVICE) as JobScheduler
+		jobScheduler.schedule(getJobInfo(context))
+	}
+
+	@RequiresApi(Build.VERSION_CODES.LOLLIPOP)
+	private fun getJobInfo(context: Context): JobInfo {
+		val builder = JobInfo.Builder(1, ComponentName(context, CheckJobService::class.java))
+		builder.setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY)
+		builder.setPersisted(true)
+		builder.setRequiresCharging(false)
+		builder.setRequiresDeviceIdle(false)
+		builder.setPeriodic(10000)
+		return builder.build()
 	}
 }

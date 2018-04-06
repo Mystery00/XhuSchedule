@@ -35,6 +35,7 @@ package com.weilylab.xhuschedule.activity
 
 import android.app.Dialog
 import android.content.Intent
+import android.os.Build
 import android.support.v4.content.ContextCompat
 import com.avos.avoscloud.AVException
 import com.avos.avoscloud.AVObject
@@ -78,6 +79,8 @@ class SplashActivity : XhuBaseActivity() {
 		ScheduleHelper.initChannelID(APP.getContext())//初始化NotificationChannelID
 		ScheduleHelper.setTrigger(this)
 		ScheduleHelper.checkScreenWidth(this)
+		if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP)
+			ScheduleHelper.scheduleJob(this)
 		if (Settings.isFirstRun210)
 			Observable.create<Any> {
 				//初始化主用户
