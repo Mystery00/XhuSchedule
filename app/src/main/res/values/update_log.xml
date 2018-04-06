@@ -6,23 +6,21 @@
   -->
 
 <resources>
-    <string name="dialog_title_update_log">%1$s版的更新日志</string>
-    <string-array name="update_list">
-        <item>3.0.3更新内容：</item>
-        <item>修复：3.0.2上面错误的颜色显示问题</item>
-        <item>修复：显示更新日志崩溃</item>
-        <item> </item>
-        <item>3.0.2更新内容：</item>
-        <item>新增：每天第一次打开课表自动同步数据</item>
-        <item> </item>
-        <item>修复：部分情况下单双周课程不显示</item>
-        <item>修复：查询时更改学期导致崩溃</item>
-        <item>修复：注销用户时导致崩溃</item>
-        <item>修复：当高度小于屏幕高度的时候显示错乱</item>
-        <item>修复：当高度小于屏幕高度的时候显示错乱</item>
-        <item>修复：尝试修复在Android Oreo上后台服务初始化问题</item>
-        <item>修复：一些其他错误</item>
-        <item> </item>
-        <item>更改：移除日志记录以及上传</item>
-    </string-array>
+	<string name="dialog_title_update_log">%1$s版的更新日志</string>
+	<string-array name="update_list">
+		<item>2.1.0更新内容：</item>
+		<item>公告：微力实验室招新了，我们在这里欢迎你的加入！</item>
+		<item> </item>
+		<item>修复：显示更新对话框时因为某些原因导致崩溃</item>
+		<item>修复：个人界面注销按钮不显示文字</item>
+		<item>修复：明日课程提醒之前先更新数据</item>
+		<item>修复：多账号模式下，小部件只显示一个用户的数据（未完成，如果多账号的课程存在冲突的情况不会显示额外的课程）</item>
+		<item>修复：取消本周课表的白色背景</item>
+		<item> </item>
+		<item>修改：取消FireBase（经分析可能是因为部分厂商阉割Google Play服务导致应用崩溃）</item>
+		<item> </item>
+		<item>2.0.2更新内容：</item>
+		<item>修复：2.0.2上面错误的颜色显示问题</item>
+		<item>修复：显示更新日志崩溃</item>
+	</string-array>
 </resources>

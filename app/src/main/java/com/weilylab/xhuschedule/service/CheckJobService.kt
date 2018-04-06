@@ -76,6 +76,7 @@ class CheckJobService : JobService() {
 			PushService.setDefaultPushCallback(this.applicationContext, NoticeActivity::class.java)
 		if (WidgetHelper.getWidgetIds(this, WidgetHelper.TODAY_TAG).isNotEmpty() || WidgetHelper.getWidgetIds(this, WidgetHelper.TABLE_TAG).isNotEmpty() || WidgetHelper.getWidgetIds(this, WidgetHelper.EXAM_TAG).isNotEmpty())
 			ContextCompat.startForegroundService(this, Intent(this, WidgetInitService::class.java))
+		ScheduleHelper.setTrigger(this)
 		return true
 	}
 
