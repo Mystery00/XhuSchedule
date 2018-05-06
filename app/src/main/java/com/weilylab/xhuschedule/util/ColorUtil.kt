@@ -35,7 +35,7 @@ package com.weilylab.xhuschedule.util
 
 import android.content.Context
 import android.graphics.Color
-import androidx.content.edit
+import androidx.core.content.edit
 import com.weilylab.xhuschedule.APP
 import com.weilylab.xhuschedule.classes.baseClass.Course
 import vip.mystery0.tools.utils.ColorTools

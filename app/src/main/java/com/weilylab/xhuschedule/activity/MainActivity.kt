@@ -185,15 +185,15 @@ class MainActivity : XhuBaseActivity() {
 				.setHintTextColor(ContextCompat.getColor(this, R.color.colorAccent))
 				.create()
 		initLayout()
-		val todayInfoText = CalendarUtil.getTodayText()
-		if (todayInfoText != Settings.isFirstEnterToday) {
-			Logs.i(TAG, "initView: 这是今天的第一次运行")
-			Settings.isFirstEnterToday = todayInfoText
-			updateAllData()
-		} else {
-			Logs.i(TAG, "initView: 这不是今天的第一次运行")
-			updateAllView()
-		}
+//		val todayInfoText = CalendarUtil.getTodayText()
+//		if (todayInfoText != Settings.isFirstEnterToday) {
+//			Logs.i(TAG, "initView: 这是今天的第一次运行")
+//			Settings.isFirstEnterToday = todayInfoText
+//			updateAllData()
+//		} else {
+//			Logs.i(TAG, "initView: 这不是今天的第一次运行")
+		updateAllView()
+//		}
 		if (Settings.isFirstRun)
 			showcase()
 		if (Settings.autoCheckUpdate)

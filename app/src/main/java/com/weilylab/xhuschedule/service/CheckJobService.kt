@@ -42,7 +42,6 @@ import android.content.Intent
 import android.os.Build
 import android.support.annotation.RequiresApi
 import android.support.v4.content.ContextCompat
-import com.avos.avoscloud.PushService
 import com.weilylab.xhuschedule.activity.NoticeActivity
 import com.weilylab.xhuschedule.util.ScheduleHelper
 import com.weilylab.xhuschedule.util.widget.WidgetHelper
@@ -72,22 +71,9 @@ class CheckJobService : JobService() {
 
 	override fun onStartJob(params: JobParameters?): Boolean {
 		Logs.i(TAG, "onStartJob: ")
-		if (!isServiceRunning(this, PushService::javaClass.name))
-			PushService.setDefaultPushCallback(this.applicationContext, NoticeActivity::class.java)
 		if (WidgetHelper.getWidgetIds(this, WidgetHelper.TODAY_TAG).isNotEmpty() || WidgetHelper.getWidgetIds(this, WidgetHelper.TABLE_TAG).isNotEmpty() || WidgetHelper.getWidgetIds(this, WidgetHelper.EXAM_TAG).isNotEmpty())
 			ContextCompat.startForegroundService(this, Intent(this, WidgetInitService::class.java))
 		ScheduleHelper.setTrigger(this)
 		return true
-	}
-
-	private fun isServiceRunning(context: Context, serviceName: String): Boolean {
-		var isRunning = false
-		val activityManager = context.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
-		for (info in activityManager.runningAppProcesses)
-			if (info.processName == serviceName) {
-				isRunning = true
-				break
-			}
-		return isRunning
 	}
 }

@@ -5,7 +5,6 @@
   ~ Last modified 17-12-21 上午2:35
 -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-	xmlns:tools="http://schemas.android.com/tools"
 	package="com.weilylab.xhuschedule">
 
 	<uses-permission android:name="android.permission.INTERNET" />
@@ -204,10 +203,6 @@
 			android:configChanges="orientation|keyboardHidden|screenSize"
 			android:theme="@android:style/Theme.Translucent.NoTitleBar" />
 		<!-- 腾讯开放平台 -->
-		<!-- 实时通信模块、推送（均需要加入以下声明） START -->
-		<!-- 实时通信模块、推送都要使用 PushService -->
-		<service android:name="com.avos.avoscloud.PushService" />
-		<!-- 实时通信模块、推送 END -->
 
 		<receiver
 			android:name=".receiver.LeanCloudPushReceiver"

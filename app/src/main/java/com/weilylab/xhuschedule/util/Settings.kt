@@ -34,7 +34,7 @@
 package com.weilylab.xhuschedule.util
 
 import android.content.Context
-import androidx.content.edit
+import androidx.core.content.edit
 import com.weilylab.xhuschedule.APP
 
 /**
