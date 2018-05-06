@@ -39,9 +39,9 @@ apply plugin: 'vip.mystery0.autoversion'
 autoVersion {
 	major 2
 	minor 1
-	patch 0
+	patch 1
 	beta 0
-	alpha 0
+	alpha 1
 }
 
 android {
