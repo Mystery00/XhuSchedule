@@ -41,7 +41,7 @@ autoVersion {
 	minor 1
 	patch 1
 	beta 0
-	alpha 1
+	alpha 2
 }
 
 android {
@@ -104,6 +104,7 @@ dependencies {
 	implementation 'androidx.core:core-ktx:0.3'
 	implementation 'com.github.Mystery0Tools:Tools:1.1.1'
 	implementation 'com.github.Mystery0Tools:Logs:1.0.0'
+	implementation 'com.github.Mystery0Tools:CrashHandler:1.0.0'
 	// LeanCloud 基础包
 	implementation 'cn.leancloud.android:avoscloud-sdk:v4.6.4'
 	// LeanCloud 统计包
@@ -112,19 +113,19 @@ dependencies {
 	testImplementation 'junit:junit:4.12'
 	androidTestImplementation 'com.android.support.test:runner:1.0.2'
 	androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
-	api 'com.squareup.retrofit2:retrofit:2.4.0'
-	api 'com.squareup.retrofit2:adapter-rxjava2:2.4.0'
-	api 'com.squareup.retrofit2:converter-gson:2.4.0'
-	api 'com.zyao89:zloading:1.1.2'
-	api 'de.hdodenhof:circleimageview:2.2.0'
-	api 'com.jrummyapps:colorpicker:2.1.6'
-	api 'com.getkeepsafe.taptargetview:taptargetview:1.11.0'
-	api 'com.github.yalantis:ucrop:2.2.1'
-	api 'com.github.ybq:parallaxviewpager:2.0.0'
-	api 'com.oasisfeng.condom:library:2.2.0'
-	api 'com.jaredrummler:material-spinner:1.2.4'
-	api 'com.android.support:multidex:1.0.3'
-	api 'com.tencent.mm.opensdk:wechat-sdk-android-without-mta:5.1.4'
+	implementation 'com.squareup.retrofit2:retrofit:2.4.0'
+	implementation 'com.squareup.retrofit2:adapter-rxjava2:2.4.0'
+	implementation 'com.squareup.retrofit2:converter-gson:2.4.0'
+	implementation 'com.zyao89:zloading:1.1.2'
+	implementation 'de.hdodenhof:circleimageview:2.2.0'
+	implementation 'com.jrummyapps:colorpicker:2.1.6'
+	implementation 'com.getkeepsafe.taptargetview:taptargetview:1.11.0'
+	implementation 'com.github.yalantis:ucrop:2.2.1'
+	implementation 'com.github.ybq:parallaxviewpager:2.0.0'
+	implementation 'com.oasisfeng.condom:library:2.2.0'
+	implementation 'com.jaredrummler:material-spinner:1.2.4'
+	implementation 'com.android.support:multidex:1.0.3'
+	implementation 'com.tencent.mm.opensdk:wechat-sdk-android-without-mta:5.1.4'
 	implementation files('libs/tencent_sdk.jar')
 	implementation files('libs/weibo_sdk.jar')
 }

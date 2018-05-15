@@ -41,6 +41,7 @@ import com.oasisfeng.condom.CondomContext
 import com.tencent.tauth.Tencent
 import com.weilylab.xhuschedule.listener.EmptyTencentListener
 import com.weilylab.xhuschedule.util.Constants
+import vip.mystery0.crashhandler.CrashHandler
 import vip.mystery0.logs.Logs
 
 /**
@@ -67,5 +68,10 @@ class APP : MultiDexApplication() {
 		AVOSCloud.setDebugLogEnabled(true)
 		tencent = Tencent.createInstance(Constants.QQ_API_KEY, CondomContext.wrap(applicationContext, "Tencent"))
 		Logs.setLevel(Logs.Level.DEBUG)
+		CrashHandler.getInstance(this)
+				.setDir(getExternalFilesDir("log"))
+				.setPrefix("log")
+				.setSuffix("txt")
+				.init()
 	}
 }
