@@ -8,7 +8,7 @@
 <resources>
 	<string name="dialog_title_update_log">%1$s版的更新日志</string>
 	<string-array name="update_list">
-		<item>2.1.1-alpha2更新内容：</item>
+		<item>2.1.1-alpha3更新内容：</item>
 		<item>该版本为预览版</item>
 		<!--<item>公告：微力实验室招新了，我们在这里欢迎你的加入！</item>-->
 		<!--<item> </item>-->
