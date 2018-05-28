@@ -45,10 +45,10 @@ class LeanCloudPushReceiver : BroadcastReceiver() {
 	private val TAG = "LeanCloudPushReceiver"
 
 	override fun onReceive(context: Context, intent: Intent) {
-		Logs.i(TAG, "onReceive: " + intent.action)
-		val message = intent.extras.getString("com.avos.avoscloud.Data")
-		Logs.i(TAG, "onReceive: $message")
-		val leanCloudPush = ScheduleHelper.gson.fromJson(message, LeanCloudPush::class.java)
-		PushMessageNotification.notify(context, leanCloudPush)
+//		Logs.i(TAG, "onReceive: " + intent.action)
+//		val message = intent.extras.getString("com.avos.avoscloud.Data")
+//		Logs.i(TAG, "onReceive: $message")
+//		val leanCloudPush = ScheduleHelper.gson.fromJson(message, LeanCloudPush::class.java)
+//		PushMessageNotification.notify(context, leanCloudPush)
 	}
 }
