@@ -36,13 +36,11 @@ package com.weilylab.xhuschedule
 import android.annotation.SuppressLint
 import android.content.Context
 import android.support.multidex.MultiDexApplication
-import com.avos.avoscloud.*
 import com.oasisfeng.condom.CondomContext
 import com.tencent.tauth.Tencent
 import com.weilylab.xhuschedule.listener.EmptyTencentListener
 import com.weilylab.xhuschedule.util.Constants
 import vip.mystery0.crashhandler.CrashHandler
-import vip.mystery0.logs.Logs
 
 /**
  * Created by myste.
@@ -63,11 +61,7 @@ class APP : MultiDexApplication() {
 
 	override fun onCreate() {
 		super.onCreate()
-		AVOSCloud.initialize(applicationContext, Constants.LEANCLOUD_APP_ID, Constants.LEANCLOUD_APP_KEY)
-		AVAnalytics.enableCrashReport(applicationContext, false)
-		AVOSCloud.setDebugLogEnabled(true)
 		tencent = Tencent.createInstance(Constants.QQ_API_KEY, CondomContext.wrap(applicationContext, "Tencent"))
-		Logs.setLevel(Logs.Level.DEBUG)
 		CrashHandler.getInstance(this)
 				.setDir(getExternalFilesDir("log"))
 				.setPrefix("log")
