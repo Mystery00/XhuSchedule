@@ -53,13 +53,12 @@ import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_notice.*
 import java.io.InputStreamReader
 
-class NoticeActivity : XhuBaseActivity() {
+class NoticeActivity : XhuBaseActivity(R.layout.activity_notice) {
 	private val list = ArrayList<Notice>()
 	private var adapter: NoticeAdapter? = null
 
 	override fun initView() {
 		super.initView()
-		setContentView(R.layout.activity_notice)
 		setSupportActionBar(toolbar)
 		supportActionBar?.setDisplayHomeAsUpEnabled(true)
 	}

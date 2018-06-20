@@ -67,7 +67,7 @@ import vip.mystery0.logs.Logs
 import java.io.File
 import java.util.*
 
-class ExpScoreActivity : XhuBaseActivity() {
+class ExpScoreActivity : XhuBaseActivity(R.layout.activity_experiment_score) {
 	private lateinit var initDialog: Dialog
 	private lateinit var loadingDialog: Dialog
 	private val studentList = ArrayList<Student>()
@@ -85,7 +85,6 @@ class ExpScoreActivity : XhuBaseActivity() {
 		pointDrawable = VectorDrawableCompat.create(resources, R.drawable.ic_point, null)!!
 		pointDrawable.setBounds(0, 0, pointDrawable.minimumWidth, pointDrawable.minimumHeight)
 		pointDrawable.setTint(ContextCompat.getColor(this, R.color.colorAccent))
-		setContentView(R.layout.activity_experiment_score)
 		setSupportActionBar(toolbar)
 		supportActionBar?.setDisplayHomeAsUpEnabled(true)
 		loadingDialog = ZLoadingDialog(this)
@@ -148,7 +147,7 @@ class ExpScoreActivity : XhuBaseActivity() {
 	}
 
 	private fun getExpScores(student: Student?, year: String?, term: Int?) {
-		Logs.i(TAG, "getExpScores: year: $year term: $term")
+		Logs.i("getExpScores: year: $year term: $term")
 		loadingDialog.show()
 		Observable.create<Any> {
 			if (student == null) {
@@ -196,7 +195,7 @@ class ExpScoreActivity : XhuBaseActivity() {
 
 					override fun onError(e: Throwable) {
 						loadingDialog.dismiss()
-						Logs.wtf(TAG, "onError: ", e)
+						Logs.wtf("onError: ", e)
 						Snackbar.make(coordinatorLayout, e.message.toString(), Snackbar.LENGTH_SHORT)
 								.show()
 					}
@@ -227,7 +226,7 @@ class ExpScoreActivity : XhuBaseActivity() {
 	}
 
 	private fun initInfo() {
-		val studentShowList = Array(studentList.size, { i -> studentList[i].username }).toMutableList()
+		val studentShowList = Array(studentList.size) { i -> studentList[i].username }.toMutableList()
 		studentShowList.add(getString(R.string.hint_popup_view_student))
 		spinner_username.setAdapter(CustomMaterialSpinnerAdapter(this, studentShowList))
 		val yearShowList = arrayListOf(getString(R.string.hint_popup_view_year))
@@ -340,7 +339,7 @@ class ExpScoreActivity : XhuBaseActivity() {
 
 					override fun onError(e: Throwable) {
 						initDialog.dismiss()
-						Logs.wtf(TAG, "onError: ", e)
+						Logs.wtf("onError: ", e)
 						Snackbar.make(coordinatorLayout, e.message.toString(), Snackbar.LENGTH_LONG)
 								.show()
 					}
@@ -359,24 +358,24 @@ class ExpScoreActivity : XhuBaseActivity() {
 				val imageView: ImageView = itemView.findViewById(R.id.imageView)
 				val detailsTextView: TextView = itemView.findViewById(R.id.textView_details)
 				itemView.setOnClickListener {
-					Logs.i(TAG, "onBindViewHolder: 点击事件")
+					Logs.i("onBindViewHolder: 点击事件")
 					valueAnimator?.cancel()
 					//带动画的展开收缩
 					when (currentIndex) {
 						-1 -> {
-							Logs.i(TAG, "onBindViewHolder: 没有条目被选中")
+							Logs.i("onBindViewHolder: 没有条目被选中")
 							valueAnimator = TextViewUtils.setMaxLinesWithAnimation(detailsTextView, Int.MAX_VALUE)
 							ObjectAnimator.ofFloat(imageView, Constants.ANIMATION_ALPHA, 0F, 1F).start()
 							currentIndex = i
 						}
 						i -> {
-							Logs.i(TAG, "onBindViewHolder: 选中的是当前条目")
+							Logs.i("onBindViewHolder: 选中的是当前条目")
 							valueAnimator = TextViewUtils.setMaxLinesWithAnimation(detailsTextView, 1)
 							ObjectAnimator.ofFloat(imageView, Constants.ANIMATION_ALPHA, 1F, 0F).start()
 							currentIndex = -1
 						}
 						else -> {
-							Logs.i(TAG, "onBindViewHolder: 选中的其他条目")
+							Logs.i("onBindViewHolder: 选中的其他条目")
 							val openedView = linearLayout.getChildAt(currentIndex)
 							val openedImageView: ImageView = openedView.findViewById(R.id.imageView)
 							val openedDetailsTextView: TextView = openedView.findViewById(R.id.textView_details)

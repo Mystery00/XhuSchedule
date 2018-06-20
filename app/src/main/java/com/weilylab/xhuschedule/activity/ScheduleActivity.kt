@@ -42,10 +42,6 @@ import android.util.Base64
 import android.util.TypedValue
 import android.view.*
 import android.widget.*
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.bumptech.glide.request.RequestOptions
-import com.bumptech.glide.signature.MediaStoreSignature
 import com.google.gson.Gson
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.adapter.CustomMaterialSpinnerAdapter
@@ -77,7 +73,7 @@ import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.math.max
 
-class ScheduleActivity : XhuBaseActivity() {
+class ScheduleActivity : XhuBaseActivity(R.layout.activity_schedule) {
 	private lateinit var initDialog: Dialog
 	private lateinit var loadingDialog: Dialog
 	private val studentList = ArrayList<Student>()
@@ -89,7 +85,6 @@ class ScheduleActivity : XhuBaseActivity() {
 
 	override fun initView() {
 		super.initView()
-		setContentView(R.layout.activity_schedule)
 		setSupportActionBar(toolbar)
 		supportActionBar?.setDisplayHomeAsUpEnabled(true)
 		initDialog = ZLoadingDialog(this)
@@ -459,7 +454,7 @@ class ScheduleActivity : XhuBaseActivity() {
 
 					override fun onError(e: Throwable) {
 						initDialog.dismiss()
-						Logs.wtf(TAG, "onError: ", e)
+						Logs.wtf("onError: ", e)
 						Snackbar.make(coordinatorLayout, e.message.toString(), Snackbar.LENGTH_LONG)
 								.show()
 					}

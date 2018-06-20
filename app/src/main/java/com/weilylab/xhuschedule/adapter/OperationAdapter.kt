@@ -72,7 +72,6 @@ import java.io.File
 import java.io.InputStreamReader
 
 class OperationAdapter(private val context: Context) : RecyclerView.Adapter<OperationAdapter.ViewHolder>() {
-	private val TAG = "OperationAdapter"
 	private val list = ArrayList<HashMap<String, Int>>()
 	private val dialogView = View.inflate(context, R.layout.dialog_share_with_friends, null)
 	private val recyclerView = dialogView.findViewById<RecyclerView>(R.id.recyclerView)
@@ -128,7 +127,7 @@ class OperationAdapter(private val context: Context) : RecyclerView.Adapter<Oper
 						}
 
 						override fun onError(e: Throwable) {
-							Logs.wtf(TAG, "onError: ", e)
+							Logs.wtf("onError: ", e)
 						}
 
 						override fun onNext(t: GetNoticesRT) {
@@ -203,10 +202,10 @@ class OperationAdapter(private val context: Context) : RecyclerView.Adapter<Oper
 							AlertDialog.Builder(context)
 									.setTitle(" ")
 									.setView(view)
-									.setPositiveButton(android.R.string.ok, { _, _ ->
+									.setPositiveButton(android.R.string.ok) { _, _ ->
 										mainStudent!!.getCETScores(idInput.editText!!.text.toString(), nameInput.editText!!.text.toString(), editText.text.toString(), object : GetCETScoresListener {
 											override fun error(rt: Int, e: Throwable) {
-												Logs.wtf(TAG, "error: ", e)
+												Logs.wtf("error: ", e)
 												loadingDialog.dismiss()
 												Toast.makeText(context, e.message, Toast.LENGTH_SHORT)
 														.show()
@@ -217,7 +216,7 @@ class OperationAdapter(private val context: Context) : RecyclerView.Adapter<Oper
 												cetScore.showInView(context)
 											}
 										})
-									})
+									}
 									.setNegativeButton(android.R.string.cancel, null)
 									.show()
 
@@ -257,7 +256,7 @@ class OperationAdapter(private val context: Context) : RecyclerView.Adapter<Oper
 								mainStudent = studentList[0]
 							mainStudent!!.feedback(context, emailInput.editText!!.text.toString(), textInput.editText!!.text.toString(), object : FeedBackListener {
 								override fun error(rt: Int, e: Throwable) {
-									Logs.wtf(TAG, "error: ", e)
+									Logs.wtf("error: ", e)
 									loadingDialog.dismiss()
 									Toast.makeText(context, context.getString(R.string.hint_feedback_error, rt, e.message), Toast.LENGTH_LONG)
 											.show()

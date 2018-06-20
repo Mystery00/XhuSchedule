@@ -45,12 +45,13 @@ import com.weilylab.xhuschedule.adapter.TodayAdapter
 import com.weilylab.xhuschedule.classes.baseClass.Course
 import com.weilylab.xhuschedule.util.Constants
 import com.weilylab.xhuschedule.util.ViewUtil
+import vip.mystery0.tools.base.BaseFragment
 import java.util.*
 
 /**
  * Created by myste.
  */
-class TodayFragment : XhuBaseFragment() {
+class TodayFragment : BaseFragment(R.layout.fragment_today) {
 	companion object {
 
 		fun newInstance(list: ArrayList<Course>): TodayFragment {
@@ -64,24 +65,20 @@ class TodayFragment : XhuBaseFragment() {
 
 	private lateinit var list: ArrayList<Course>
 	private lateinit var adapter: TodayAdapter
-	private var rootView: View? = null
 	private lateinit var backgroundImageView: ImageView
 	private lateinit var recyclerView: RecyclerView
+	private var isReady = false
+
+	override fun initView() {
+		isReady = true
+		backgroundImageView = findViewById(R.id.background)
+		recyclerView = findViewById(R.id.recycler_view)
+	}
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 		@Suppress("UNCHECKED_CAST")
 		list = arguments?.getSerializable(Constants.INTENT_TAG_NAME_LIST) as ArrayList<Course>
-	}
-
-	override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-							  savedInstanceState: Bundle?): View? {
-		if (rootView == null) {
-			rootView = inflater.inflate(R.layout.fragment_today, container, false)
-			backgroundImageView = rootView!!.findViewById(R.id.background)
-			recyclerView = rootView!!.findViewById(R.id.recycler_view)
-		}
-		return rootView
 	}
 
 	override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -93,7 +90,7 @@ class TodayFragment : XhuBaseFragment() {
 	}
 
 	fun isReady(): Boolean {
-		return rootView != null
+		return isReady
 	}
 
 	fun setBackground() {
@@ -122,11 +119,5 @@ class TodayFragment : XhuBaseFragment() {
 
 	fun refreshData() {
 		adapter.notifyDataSetChanged()
-	}
-
-	override fun onDestroyView() {
-		super.onDestroyView()
-		if (rootView != null)
-			(rootView!!.parent as ViewGroup).removeView(rootView)
 	}
 }

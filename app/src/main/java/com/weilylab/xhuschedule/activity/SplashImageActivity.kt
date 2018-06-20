@@ -44,7 +44,7 @@ import com.weilylab.xhuschedule.util.XhuFileUtil
 import kotlinx.android.synthetic.main.activity_splash_image.*
 import java.util.*
 
-class SplashImageActivity : XhuBaseActivity() {
+class SplashImageActivity : XhuBaseActivity(R.layout.activity_splash_image) {
 	override fun initView() {
 		super.initView()
 		val objectId = intent.getStringExtra(Constants.INTENT_TAG_NAME_SPLASH_FILE_NAME)
@@ -53,7 +53,6 @@ class SplashImageActivity : XhuBaseActivity() {
 			return
 		}
 		val splashFile = XhuFileUtil.getSplashImageFile(this, objectId)
-		setContentView(R.layout.activity_splash_image)
 		Glide.with(this)
 				.asBitmap()
 				.load(splashFile)

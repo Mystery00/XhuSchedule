@@ -89,7 +89,7 @@ import java.net.UnknownHostException
 import java.util.*
 import kotlin.collections.ArrayList
 
-class MainActivity : XhuBaseActivity() {
+class MainActivity : XhuBaseActivity(R.layout.activity_main) {
 	companion object {
 		private const val ADD_ACCOUNT_CODE = 1
 		private const val ANIMATION_DURATION = 480L
@@ -162,7 +162,6 @@ class MainActivity : XhuBaseActivity() {
 
 	override fun initView() {
 		super.initView()
-		setContentView(R.layout.activity_main)
 		arrowDrawable = ContextCompat.getDrawable(this@MainActivity, R.drawable.ms__arrow)
 		registerWeibo()
 		registerWeiXin()
@@ -187,11 +186,11 @@ class MainActivity : XhuBaseActivity() {
 		initLayout()
 //		val todayInfoText = CalendarUtil.getTodayText()
 //		if (todayInfoText != Settings.isFirstEnterToday) {
-//			Logs.i(TAG, "initView: 这是今天的第一次运行")
+//			Logs.i( "initView: 这是今天的第一次运行")
 //			Settings.isFirstEnterToday = todayInfoText
 //			updateAllData()
 //		} else {
-//			Logs.i(TAG, "initView: 这不是今天的第一次运行")
+//			Logs.i( "initView: 这不是今天的第一次运行")
 		updateAllView()
 //		}
 		if (Settings.isFirstRun)
@@ -273,7 +272,7 @@ class MainActivity : XhuBaseActivity() {
 		}
 		titleLayout.setOnClickListener {
 			//占位，在上层处理点击事件
-			Logs.i(TAG, "initView: titleLayout")
+			Logs.i("initView: titleLayout")
 		}
 	}
 
@@ -395,7 +394,7 @@ class MainActivity : XhuBaseActivity() {
 	}
 
 	private fun updateAllData() {
-		Logs.i(TAG, "updateAllData: ")
+		Logs.i("updateAllData: ")
 		ObjectAnimator.ofFloat(action_sync, Constants.ANIMATION_ROTATION, 0F, 360F).setDuration(1000).start()
 		studentList.clear()
 		studentList.addAll(XhuFileUtil.getArrayFromFile(XhuFileUtil.getStudentListFile(this), Student::class.java))
@@ -434,9 +433,9 @@ class MainActivity : XhuBaseActivity() {
 									}
 									.show()
 						}
-						ConstantsCode.ERROR_NOT_LOGIN -> Logs.i(TAG, "updateAllData: onNext: 未登录")
+						ConstantsCode.ERROR_NOT_LOGIN -> Logs.i("updateAllData: onNext: 未登录")
 						else -> {
-							Logs.i(TAG, "updateAllData: onNext: ${getCourseRT.rt} ${getCourseRT.msg}")
+							Logs.i("updateAllData: onNext: ${getCourseRT.rt} ${getCourseRT.msg}")
 							Snackbar.make(coordinatorLayoutView, getCourseRT.msg, Snackbar.LENGTH_LONG)
 									.show()
 						}
@@ -551,7 +550,7 @@ class MainActivity : XhuBaseActivity() {
 					mainStudent?.getInfo(object : ProfileListener {
 						override fun error(rt: Int, e: Throwable) {
 							updateProfileDialog.dismiss()
-							Logs.e(TAG, "error: $rt")
+							Logs.e("error: $rt")
 							e.printStackTrace()
 						}
 
@@ -628,7 +627,7 @@ class MainActivity : XhuBaseActivity() {
 		// 来接收微博客户端返回的数据；执行成功，返回 true，并调用
 		// {@link IWeiboHandler.Response#onResponse}；失败返回 false，不调用上述回调
 		mWeiboShareAPI.handleWeiboResponse(intent) {
-			Logs.i(TAG, "registerWeibo: $it")
+			Logs.i("registerWeibo: $it")
 		}
 	}
 }

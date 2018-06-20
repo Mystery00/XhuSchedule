@@ -38,10 +38,9 @@ import android.graphics.Color
 import androidx.core.content.edit
 import com.weilylab.xhuschedule.APP
 import com.weilylab.xhuschedule.classes.baseClass.Course
-import vip.mystery0.tools.utils.ColorTools
 import java.util.*
 
-object ColorUtil : ColorTools() {
+object ColorUtil {
 	private val sharedPreference = APP.getContext().getSharedPreferences(Constants.SHARED_PREFERENCE_COLOR, Context.MODE_PRIVATE)
 
 	fun getCourseColor(keyName: String): Int {

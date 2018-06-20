@@ -56,18 +56,13 @@ import com.weilylab.xhuschedule.util.Settings
 import kotlinx.android.synthetic.main.activity_welcome.*
 import vip.mystery0.tools.utils.DensityTools
 
-class WelcomeActivity : XhuBaseActivity() {
+class WelcomeActivity : XhuBaseActivity(R.layout.activity_welcome) {
 
 	private var mSectionsPagerAdapter: SectionsPagerAdapter? = null
 	private lateinit var grayPointDrawable: VectorDrawableCompat
 	private lateinit var gestureDetector: GestureDetector
 	private var distance = 0
 	private var flaggingWidth = 0
-
-	override fun initView() {
-		super.initView()
-		setContentView(R.layout.activity_welcome)
-	}
 
 	override fun initData() {
 		super.initData()

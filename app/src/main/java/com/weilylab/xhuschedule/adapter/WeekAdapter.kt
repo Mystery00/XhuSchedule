@@ -47,36 +47,35 @@ import com.weilylab.xhuschedule.listener.WeekChangeListener
  * Created by myste.
  */
 class WeekAdapter(private val context: Context,
-                  private var index: Int) : RecyclerView.Adapter<WeekAdapter.ViewHolder>() {
-    private var weekChangeListener: WeekChangeListener? = null
+				  private var index: Int) : RecyclerView.Adapter<WeekAdapter.ViewHolder>() {
+	private var weekChangeListener: WeekChangeListener? = null
 
-    override fun getItemCount(): Int = 20
+	override fun getItemCount(): Int = 20
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.textView.text = context.getString(R.string.course_week_index, position + 1)
-        holder.textView.setOnClickListener {
-            weekChangeListener?.onChange(position)
-        }
-        val gradientDrawable = holder.textView.background as GradientDrawable
-        if (position + 1 == index)
-            gradientDrawable.setColor(ContextCompat.getColor(context, R.color.colorWeekPrimary))
-        else
-            gradientDrawable.setColor(ContextCompat.getColor(context, R.color.colorWeekAccent))
-    }
+	override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+		holder.textView.text = context.getString(R.string.course_week_index, position + 1)
+		holder.textView.setOnClickListener {
+			weekChangeListener?.onChange(position)
+		}
+		val gradientDrawable = holder.textView.background as GradientDrawable
+		if (position + 1 == index)
+			gradientDrawable.setColor(ContextCompat.getColor(context, R.color.colorWeekPrimary))
+		else
+			gradientDrawable.setColor(ContextCompat.getColor(context, R.color.colorWeekAccent))
+	}
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder = ViewHolder(View.inflate(context, R.layout.item_week, null))
+	override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder = ViewHolder(View.inflate(context, R.layout.item_week, null))
 
-    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
-    {
-        var textView:TextView=itemView.findViewById(R.id.weekTextView)
-    }
+	class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+		var textView: TextView = itemView.findViewById(R.id.weekTextView)
+	}
 
-    fun setWeekIndex(weekIndex: Int) {
-        this.index = weekIndex
-        notifyDataSetChanged()
-    }
+	fun setWeekIndex(weekIndex: Int) {
+		this.index = weekIndex
+		notifyDataSetChanged()
+	}
 
-    fun setWeekChangeListener(weekChangeListener: WeekChangeListener) {
-        this.weekChangeListener = weekChangeListener
-    }
+	fun setWeekChangeListener(weekChangeListener: WeekChangeListener) {
+		this.weekChangeListener = weekChangeListener
+	}
 }

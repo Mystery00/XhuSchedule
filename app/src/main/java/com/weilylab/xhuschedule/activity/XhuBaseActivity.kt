@@ -38,24 +38,13 @@ import android.support.v7.app.AppCompatDelegate
 import com.weilylab.xhuschedule.util.APPActivityManager
 import vip.mystery0.tools.base.BaseActivity
 
-abstract class XhuBaseActivity : BaseActivity() {
+abstract class XhuBaseActivity(layoutId: Int?) : BaseActivity(layoutId) {
 
 	override fun onCreate(savedInstanceState: Bundle?) {
-		super.onCreate(savedInstanceState)
 		AppCompatDelegate.setCompatVectorFromResourcesEnabled(true)
 		APPActivityManager.appManager.addActivity(this)
-		initView()
-		initData()
-		loadDataToView()
-		requestData()
-		monitor()
+		super.onCreate(savedInstanceState)
 	}
-
-	open fun initView() {}
-	open fun initData() {}
-	open fun loadDataToView() {}
-	open fun requestData() {}
-	open fun monitor() {}
 
 	override fun onDestroy() {
 		super.onDestroy()

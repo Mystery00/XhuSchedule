@@ -110,12 +110,12 @@ class ProfileFragment : Fragment() {
 			AlertDialog.Builder(activity!!)
 					.setTitle(R.string.hint_logout_title)
 					.setMessage(R.string.hint_logout_content)
-					.setPositiveButton(android.R.string.ok, { _, _ ->
+					.setPositiveButton(android.R.string.ok) { _, _ ->
 						val file = XhuFileUtil.getStudentListFile(activity!!)
 						if (file.exists())
 							file.delete()
 						startActivity(Intent(context, LoginActivity::class.java))
-					})
+					}
 					.setNegativeButton(android.R.string.cancel, null)
 					.show()
 		}

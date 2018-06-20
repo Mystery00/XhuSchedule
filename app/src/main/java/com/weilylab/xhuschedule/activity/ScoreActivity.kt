@@ -70,7 +70,7 @@ import java.io.File
 import java.util.*
 import kotlin.collections.ArrayList
 
-class ScoreActivity : XhuBaseActivity() {
+class ScoreActivity : XhuBaseActivity(R.layout.activity_score) {
 	private lateinit var initDialog: Dialog
 	private lateinit var loadingDialog: Dialog
 	private val studentList = ArrayList<Student>()
@@ -84,16 +84,11 @@ class ScoreActivity : XhuBaseActivity() {
 	private var year: String? = null
 	private var term: Int? = null
 
-	override fun initData() {
-		super.initData()
-	}
-
 	override fun initView() {
 		super.initView()
 		pointDrawable = VectorDrawableCompat.create(resources, R.drawable.ic_point, null)!!
 		pointDrawable.setBounds(0, 0, pointDrawable.minimumWidth, pointDrawable.minimumHeight)
 		pointDrawable.setTint(ContextCompat.getColor(this, R.color.colorAccent))
-		setContentView(R.layout.activity_score)
 		setSupportActionBar(toolbar)
 		supportActionBar?.setDisplayHomeAsUpEnabled(true)
 		loadingDialog = ZLoadingDialog(this)
@@ -159,7 +154,7 @@ class ScoreActivity : XhuBaseActivity() {
 	}
 
 	private fun getScores(student: Student?, year: String?, term: Int?) {
-		Logs.i(TAG, "getScore: year: $year term: $term")
+		Logs.i("getScore: year: $year term: $term")
 		loadingDialog.show()
 		Observable.create<Any> {
 			if (student == null) {
@@ -211,7 +206,7 @@ class ScoreActivity : XhuBaseActivity() {
 
 					override fun onError(e: Throwable) {
 						loadingDialog.dismiss()
-						Logs.wtf(TAG, "onError: ", e)
+						Logs.wtf("onError: ", e)
 						Snackbar.make(coordinatorLayout, e.message.toString(), Snackbar.LENGTH_SHORT)
 								.show()
 					}
@@ -364,7 +359,7 @@ class ScoreActivity : XhuBaseActivity() {
 
 					override fun onError(e: Throwable) {
 						initDialog.dismiss()
-						Logs.wtf(TAG, "onError: ", e)
+						Logs.wtf("onError: ", e)
 						Snackbar.make(coordinatorLayout, e.message.toString(), Snackbar.LENGTH_LONG)
 								.show()
 					}

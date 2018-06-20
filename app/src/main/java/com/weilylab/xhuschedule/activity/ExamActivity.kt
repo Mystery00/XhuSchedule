@@ -66,7 +66,7 @@ import kotlinx.android.synthetic.main.content_exam.*
 import vip.mystery0.logs.Logs
 import java.io.File
 
-class ExamActivity : XhuBaseActivity() {
+class ExamActivity : XhuBaseActivity(R.layout.activity_exam) {
 	private lateinit var loadingDialog: ZLoadingDialog
 	private val studentList = ArrayList<Student>()
 	private val testList = ArrayList<Exam>()
@@ -80,7 +80,6 @@ class ExamActivity : XhuBaseActivity() {
 		pointDrawable = VectorDrawableCompat.create(resources, R.drawable.ic_point, null)!!
 		pointDrawable.setBounds(0, 0, pointDrawable.minimumWidth, pointDrawable.minimumHeight)
 		pointDrawable.setTint(ContextCompat.getColor(this, R.color.colorAccent))
-		setContentView(R.layout.activity_exam)
 		setSupportActionBar(toolbar)
 		supportActionBar?.setDisplayHomeAsUpEnabled(true)
 		loadingDialog = ZLoadingDialog(this)
@@ -206,7 +205,7 @@ class ExamActivity : XhuBaseActivity() {
 
 					override fun onError(e: Throwable) {
 						loadingDialog.dismiss()
-						Logs.wtf(TAG, "onError: ", e)
+						Logs.wtf("onError: ", e)
 						Snackbar.make(coordinatorLayout, e.message.toString(), Snackbar.LENGTH_SHORT)
 								.show()
 					}

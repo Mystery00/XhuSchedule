@@ -43,12 +43,11 @@ import kotlinx.android.synthetic.main.activity_login.*
 
 import android.app.Activity
 import android.support.v4.content.ContextCompat
-import com.avos.avoscloud.AVUser
 import com.weilylab.xhuschedule.classes.baseClass.Student
 import com.weilylab.xhuschedule.listener.LoginListener
 import com.weilylab.xhuschedule.util.XhuFileUtil
 
-class LoginActivity : XhuBaseActivity() {
+class LoginActivity : XhuBaseActivity(R.layout.activity_login) {
 
 	private lateinit var loginDialog: ZLoadingDialog
 
@@ -66,7 +65,6 @@ class LoginActivity : XhuBaseActivity() {
 
 	override fun monitor() {
 		super.monitor()
-		setContentView(R.layout.activity_login)
 		login_button.setOnClickListener { attemptLogin() }
 	}
 
