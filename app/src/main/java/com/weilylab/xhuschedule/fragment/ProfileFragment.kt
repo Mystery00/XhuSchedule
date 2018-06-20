@@ -196,8 +196,7 @@ class ProfileFragment : Fragment() {
 	}
 
 	fun updateNoticeBadge() {
-		if (adapter != null)
-			adapter!!.notifyDataSetChanged()
+		adapter?.updateBadge()
 	}
 
 	override fun onDestroyView() {

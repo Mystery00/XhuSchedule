@@ -39,8 +39,9 @@
 	<string name="action_theme">使用</string>
 	<string name="action_use_theme">使用中</string>
 	<string name="action_bypass">跳过</string>
+	<string name="action_finish">完成</string>
 
-	<string name="prompt_username">用户名</string>
+	<string name="prompt_username">学号</string>
 	<string name="prompt_password">密码</string>
 
 	<string name="operation_notice">通知公告</string>

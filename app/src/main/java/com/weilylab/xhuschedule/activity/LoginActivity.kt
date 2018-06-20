@@ -48,7 +48,6 @@ import com.weilylab.xhuschedule.listener.LoginListener
 import com.weilylab.xhuschedule.util.XhuFileUtil
 
 class LoginActivity : XhuBaseActivity(R.layout.activity_login) {
-
 	private lateinit var loginDialog: ZLoadingDialog
 
 	override fun initView() {
@@ -69,24 +68,24 @@ class LoginActivity : XhuBaseActivity(R.layout.activity_login) {
 	}
 
 	private fun attemptLogin() {
-		username.error = null
-		password.error = null
+		username_edit_text.error = null
+		password_edit_text.error = null
 
-		val usernameStr = username.text.toString()
-		val passwordStr = password.text.toString()
+		val usernameStr = username_edit_text.text.toString()
+		val passwordStr = password_edit_text.text.toString()
 
 		var cancel = false
 		var focusView: View? = null
 
 		when {
 			TextUtils.isEmpty(usernameStr) -> {
-				username.error = getString(R.string.error_field_required)
-				focusView = username
+				username_edit_text.error = getString(R.string.error_field_required)
+				focusView = username_edit_text
 				cancel = true
 			}
 			TextUtils.isEmpty(passwordStr) -> {
-				password.error = getString(R.string.error_field_required)
-				focusView = password
+				password_edit_text.error = getString(R.string.error_field_required)
+				focusView = password_edit_text
 				cancel = true
 			}
 		}
@@ -100,8 +99,8 @@ class LoginActivity : XhuBaseActivity(R.layout.activity_login) {
 
 	private fun login() {
 		loginDialog.show()
-		val usernameStr = username.text.toString()
-		val passwordStr = password.text.toString()
+		val usernameStr = username_edit_text.text.toString()
+		val passwordStr = password_edit_text.text.toString()
 		val student = Student()
 		student.username = usernameStr
 		student.password = passwordStr

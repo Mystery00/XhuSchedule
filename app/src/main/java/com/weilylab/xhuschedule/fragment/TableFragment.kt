@@ -214,7 +214,7 @@ class TableFragment : BaseFragment(R.layout.fragment_table) {
 		calendar.add(Calendar.DATE, calendar.firstDayOfWeek - dayOfWeek)
 		val headerArray = context!!.resources.getStringArray(R.array.table_header)
 		val month = "${calendar.get(Calendar.MONTH) + 1}\n月"
-		(findViewById(R.id.view) as TextView).text = month
+		findViewById<TextView>(R.id.view).text = month
 		for (day in 0 until 7) {
 			val headerTextView = tableHeader.getChildAt(day) as TextView
 			val text = if (calendar.get(Calendar.DAY_OF_MONTH) == 1)

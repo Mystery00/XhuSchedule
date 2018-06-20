@@ -70,7 +70,6 @@ import com.weilylab.xhuschedule.fragment.TableFragment
 import com.weilylab.xhuschedule.fragment.TodayFragment
 import com.weilylab.xhuschedule.listener.GetCourseListener
 import com.weilylab.xhuschedule.listener.ProfileListener
-import com.weilylab.xhuschedule.listener.WeekChangeListener
 import com.weilylab.xhuschedule.service.UpdateService
 import com.weilylab.xhuschedule.util.*
 import com.weilylab.xhuschedule.util.widget.WidgetHelper
@@ -211,14 +210,12 @@ class MainActivity : XhuBaseActivity(R.layout.activity_main) {
 		studentList.addAll(XhuFileUtil.getArrayFromFile(XhuFileUtil.getStudentListFile(this), Student::class.java))
 
 		weekAdapter = WeekAdapter(this, 1)
-		weekAdapter.setWeekChangeListener(object : WeekChangeListener {
-			override fun onChange(week: Int) {
-				ScheduleHelper.weekIndex = week + 1
-				weekAdapter.setWeekIndex(ScheduleHelper.weekIndex)
-				swipeLayout(bottomNavigationView.menu.getItem(viewpager.currentItem).itemId)
-				updateAllView(ScheduleHelper.weekIndex)
-			}
-		})
+		weekAdapter.setWeekChangeListener { week ->
+			ScheduleHelper.weekIndex = week + 1
+			weekAdapter.setWeekIndex(ScheduleHelper.weekIndex)
+			swipeLayout(bottomNavigationView.menu.getItem(viewpager.currentItem).itemId)
+			updateAllView(ScheduleHelper.weekIndex)
+		}
 		layout_week_recycler_view.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
 		layout_week_recycler_view.adapter = weekAdapter
 		layout_week_recycler_view.scrollToPosition(0)

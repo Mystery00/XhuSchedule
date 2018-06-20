@@ -1,5 +1,5 @@
 /*
- * Created by Mystery0 on 18-3-2 上午4:02.
+ * Created by Mystery0 on 6/20/18 7:33 PM.
  * Copyright (c) 2018. All Rights reserved.
  *
  *                    =====================================================
@@ -28,41 +28,41 @@
  *                    =                                                   =
  *                    =====================================================
  *
- * Last modified 18-3-2 上午4:02
+ * Last modified 6/20/18 7:33 PM
  */
 
 package com.weilylab.xhuschedule.activity
 
-import android.animation.Animator
-import android.animation.ObjectAnimator
 import android.content.Intent
 import android.graphics.Color
+import android.support.constraint.ConstraintLayout
 
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
-import android.support.constraint.ConstraintLayout
 import android.support.graphics.drawable.VectorDrawableCompat
 import android.support.v4.view.ViewPager
-import android.view.GestureDetector
-import android.view.MotionEvent
-import android.view.View
+import android.view.*
 import android.widget.LinearLayout
 
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.fragment.PlaceholderFragment
-import com.weilylab.xhuschedule.util.Constants
 import com.weilylab.xhuschedule.util.Settings
-import kotlinx.android.synthetic.main.activity_welcome.*
+import kotlinx.android.synthetic.main.activity_guide.*
 import vip.mystery0.tools.utils.DensityTools
 
-class WelcomeActivity : XhuBaseActivity(R.layout.activity_welcome) {
-
+class GuideActivity : XhuBaseActivity(R.layout.activity_guide) {
 	private var mSectionsPagerAdapter: SectionsPagerAdapter? = null
 	private lateinit var grayPointDrawable: VectorDrawableCompat
 	private lateinit var gestureDetector: GestureDetector
 	private var distance = 0
 	private var flaggingWidth = 0
+	private var currentIndex = 0
+
+	override fun inflateView(layoutId: Int) {
+		window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or View.SYSTEM_UI_FLAG_FULLSCREEN or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+		super.inflateView(layoutId)
+	}
 
 	override fun initData() {
 		super.initData()
@@ -75,7 +75,7 @@ class WelcomeActivity : XhuBaseActivity(R.layout.activity_welcome) {
 
 		mSectionsPagerAdapter = SectionsPagerAdapter(supportFragmentManager)
 
-		viewpager.adapter = mSectionsPagerAdapter
+		container.adapter = mSectionsPagerAdapter
 		for (i in 0..2) {
 			val view = View(applicationContext)
 			view.background = grayPointDrawable
@@ -85,57 +85,48 @@ class WelcomeActivity : XhuBaseActivity(R.layout.activity_welcome) {
 			view.layoutParams = params
 			pointLayout.addView(view)
 		}
-		val pointParams = redPoint.layoutParams
+		val pointParams = point.layoutParams
 		pointParams.height = 20
 		pointParams.width = 20
-		redPoint.layoutParams = pointParams
+		point.layoutParams = pointParams
 	}
 
 	override fun monitor() {
 		super.monitor()
-		enterButton.setOnClickListener {
+		imageButtonPre.setOnClickListener {
+			currentIndex--
+			container.setCurrentItem(currentIndex, true)
+		}
+		imageButtonNext.setOnClickListener {
+			currentIndex++
+			container.setCurrentItem(currentIndex, true)
+		}
+		buttonFinish.setOnClickListener {
 			go()
 		}
 
-		redPoint.viewTreeObserver.addOnGlobalLayoutListener {
+		point.viewTreeObserver.addOnGlobalLayoutListener {
 			distance = pointLayout.getChildAt(1).left - pointLayout.getChildAt(0).left
 		}
 
-		viewpager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
+		container.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
 			override fun onPageScrollStateChanged(state: Int) {
 			}
 
 			override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
 				val index = position % 3
 				val leftMargin = distance * (index + positionOffset)
-				val params = redPoint.layoutParams as ConstraintLayout.LayoutParams
+				val params = point.layoutParams as ConstraintLayout.LayoutParams
 
 				params.leftMargin = Math.round(leftMargin)
-				redPoint.layoutParams = params
+				point.layoutParams = params
 			}
 
 			override fun onPageSelected(position: Int) {
-				if (enterButton.visibility == View.GONE && position == 2) {
-					enterButton.visibility = View.VISIBLE
-					ObjectAnimator.ofFloat(enterButton, Constants.ANIMATION_ALPHA, 0F, 1F).start()
-				} else {
-					val animator = ObjectAnimator.ofFloat(enterButton, Constants.ANIMATION_ALPHA, 1F, 0F)
-					animator.addListener(object : Animator.AnimatorListener {
-						override fun onAnimationRepeat(animation: Animator?) {
-						}
-
-						override fun onAnimationEnd(animation: Animator?) {
-							enterButton.visibility = View.GONE
-						}
-
-						override fun onAnimationCancel(animation: Animator?) {
-						}
-
-						override fun onAnimationStart(animation: Animator?) {
-						}
-					})
-					animator.start()
-				}
+				currentIndex = position
+				imageButtonPre.visibility = if (position == 0) View.GONE else View.VISIBLE
+				imageButtonNext.visibility = if (position == 2) View.GONE else View.VISIBLE
+				buttonFinish.visibility = if (position == 2) View.VISIBLE else View.GONE
 			}
 		})
 	}
@@ -145,6 +136,11 @@ class WelcomeActivity : XhuBaseActivity(R.layout.activity_welcome) {
 			ev.action = MotionEvent.ACTION_CANCEL
 		return super.dispatchTouchEvent(ev)
 	}
+
+	/**
+	 * A [FragmentPagerAdapter] that returns a fragment corresponding to
+	 * one of the sections/tabs/pages.
+	 */
 
 	inner class SectionsPagerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
 		private val imageArray = arrayOf(R.mipmap.welcome1, R.mipmap.welcome2, R.mipmap.welcome3)
@@ -160,7 +156,7 @@ class WelcomeActivity : XhuBaseActivity(R.layout.activity_welcome) {
 
 	inner class GuideViewTouch : GestureDetector.SimpleOnGestureListener() {
 		override fun onFling(e1: MotionEvent, e2: MotionEvent, velocityX: Float, velocityY: Float): Boolean {
-			if (viewpager.currentItem == 2) {
+			if (container.currentItem == 2) {
 				if ((Math.abs(e1.x - e2.x) > Math.abs(e1.y - e2.y)) &&
 						(e1.x - e2.x <= (-flaggingWidth) || (e1.x - e2.x >= flaggingWidth)))
 					if (e1.x - e2.x >= flaggingWidth) {

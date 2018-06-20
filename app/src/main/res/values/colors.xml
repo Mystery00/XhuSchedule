@@ -17,11 +17,11 @@
 
     <color name="schedule_head_text_color">#FFFFFF</color>
 
-    <color name="login_color">#646464</color>
+    <color name="login_color_label">#cccccc</color>
+	<color name="login_color_text">#4ea5ff</color>
     <color name="colorWhite">#FFFFFF</color>
     <color name="colorRed">#ff0000</color>
     <color name="line_color">#bfbfbf</color>
-    <color name="not_theme_color">#8a8a8a</color>
 
     <color name="color1">#039BDA</color>
     <color name="color2">#F5703C</color>

@@ -7,45 +7,50 @@
 
 <resources>
 
-    <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
-    </style>
+	<!-- Base application theme. -->
+	<style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+		<!-- Customize your theme here. -->
+		<item name="colorPrimary">@color/colorPrimary</item>
+		<item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+		<item name="colorAccent">@color/colorAccent</item>
+	</style>
 
-    <style name="AppTheme.Settings" />
+	<style name="AppTheme.Settings" />
 
-    <style name="AppTheme.Main" />
+	<style name="AppTheme.Main" />
 
-    <style name="AppTheme.NoActionBar">
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
-    </style>
+	<style name="AppTheme.NoActionBar">
+		<item name="windowActionBar">false</item>
+		<item name="windowNoTitle">true</item>
+	</style>
 
-    <style name="AppTheme.NoActionBar.FullScreen" />
+	<style name="AppTheme.NoActionBar.FullScreen">
+		<item name="android:windowTranslucentStatus">true</item>
+		<item name="android:windowTranslucentNavigation">true</item>
+	</style>
 
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+	<style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+	<style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
-    <style name="SplashTheme" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="android:windowBackground">@drawable/drawable_splash</item>
-    </style>
+	<style name="SplashTheme" parent="Theme.AppCompat.Light.NoActionBar">
+		<item name="android:windowBackground">@drawable/drawable_splash</item>
+		<item name="android:windowTranslucentStatus">true</item>
+		<item name="android:windowTranslucentNavigation">true</item>
+	</style>
 
-    <!-- popup window 动画 -->
-    <style name="Animation">
-        <item name="android:windowEnterAnimation">@anim/animation_share_list_enter</item>
-        <item name="android:windowExitAnimation">@anim/animation_share_list_out</item>
-    </style>
+	<!-- popup window 动画 -->
+	<style name="Animation">
+		<item name="android:windowEnterAnimation">@anim/animation_share_list_enter</item>
+		<item name="android:windowExitAnimation">@anim/animation_share_list_out</item>
+	</style>
 
-    <style name="LoginButton" parent="Widget.AppCompat.Button.Colored">
-        <item name="android:background">@color/colorPrimary</item>
-    </style>
+	<style name="LoginButton" parent="Widget.AppCompat.Button.Colored">
+		<item name="android:background">@color/colorPrimary</item>
+	</style>
 
-    <style name="LogoutButton" parent="Widget.AppCompat.Button.Colored">
-        <item name="android:background">@color/colorRed</item>
-    </style>
+	<style name="LogoutButton" parent="Widget.AppCompat.Button.Colored">
+		<item name="android:background">@color/colorRed</item>
+	</style>
 
 </resources>

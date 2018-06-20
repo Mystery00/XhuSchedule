@@ -4,57 +4,74 @@
   ~
   ~ Last modified 17-12-2 下午7:56
   -->
+<layout>
 
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+	<data>
 
-    <View
-        android:id="@+id/badgeView"
-        android:layout_width="8dp"
-        android:layout_height="8dp"
-        android:background="@drawable/drawable_badge_view"
-        android:visibility="gone"
-        app:layout_constraintEnd_toStartOf="@id/imageView_more"
-        app:layout_constraintStart_toEndOf="@id/textView"
-        app:layout_constraintTop_toTopOf="@id/imageView_more" />
+		<import type="android.view.View" />
 
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:layout_marginBottom="@dimen/profile_item_margin_vertical"
-        android:layout_marginStart="@dimen/profile_item_margin_horizontal"
-        android:layout_marginTop="@dimen/profile_item_margin_vertical"
-        android:contentDescription="@string/app_name"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+		<variable
+			name="operation"
+			type="com.weilylab.xhuschedule.classes.baseClass.Operation" />
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginEnd="@dimen/profile_item_margin_horizontal"
-        android:layout_marginStart="@dimen/profile_item_margin_horizontal"
-        android:gravity="center_vertical"
-        android:maxLines="1"
-        app:layout_constraintBottom_toBottomOf="@+id/imageView"
-        app:layout_constraintEnd_toStartOf="@+id/imageView_more"
-        app:layout_constraintStart_toEndOf="@+id/imageView"
-        app:layout_constraintTop_toTopOf="@+id/imageView" />
+		<variable
+			name="handler"
+			type="com.weilylab.xhuschedule.handler.BaseClickHandler" />
+	</data>
 
-    <ImageView
-        android:id="@+id/imageView_more"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/profile_item_margin_horizontal"
-        android:contentDescription="@string/app_name"
-        android:tint="@color/login_color"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_keyboard_arrow_right" />
+	<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+		xmlns:app="http://schemas.android.com/apk/res-auto"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:onClick="@{(view)->handler.click(view,operation)}">
 
-</android.support.constraint.ConstraintLayout>
+		<View
+			android:id="@+id/badgeView"
+			android:layout_width="8dp"
+			android:layout_height="8dp"
+			android:background="@drawable/drawable_badge_view"
+			android:visibility="@{operation.showBadge ? View.VISIBLE : View.GONE}"
+			app:layout_constraintEnd_toStartOf="@id/imageView_more"
+			app:layout_constraintStart_toEndOf="@id/textView"
+			app:layout_constraintTop_toTopOf="@id/imageView_more" />
+
+		<ImageView
+			android:id="@+id/imageView"
+			android:layout_width="24dp"
+			android:layout_height="24dp"
+			android:layout_marginBottom="@dimen/profile_item_margin_vertical"
+			android:layout_marginStart="@dimen/profile_item_margin_horizontal"
+			android:layout_marginTop="@dimen/profile_item_margin_vertical"
+			android:contentDescription="@string/app_name"
+			app:layout_constraintBottom_toBottomOf="parent"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintTop_toTopOf="parent" />
+
+		<TextView
+			android:id="@+id/textView"
+			android:layout_width="0dp"
+			android:layout_height="0dp"
+			android:layout_marginEnd="@dimen/profile_item_margin_horizontal"
+			android:layout_marginStart="@dimen/profile_item_margin_horizontal"
+			android:gravity="center_vertical"
+			android:maxLines="1"
+			android:text="@{operation.title}"
+			app:layout_constraintBottom_toBottomOf="@+id/imageView"
+			app:layout_constraintEnd_toStartOf="@+id/imageView_more"
+			app:layout_constraintStart_toEndOf="@+id/imageView"
+			app:layout_constraintTop_toTopOf="@+id/imageView" />
+
+		<ImageView
+			android:id="@+id/imageView_more"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginEnd="@dimen/profile_item_margin_horizontal"
+			android:contentDescription="@string/app_name"
+			android:tint="@color/login_color_label"
+			app:layout_constraintBottom_toBottomOf="parent"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintTop_toTopOf="parent"
+			app:srcCompat="@drawable/ic_keyboard_arrow_right" />
+
+	</android.support.constraint.ConstraintLayout>
+</layout>

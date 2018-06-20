@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:id="@+id/main_content"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:background="#fadeb9"
+	android:fitsSystemWindows="true"
+	tools:context=".activity.GuideActivity">
+
+	<android.support.v4.view.ViewPager
+		android:id="@+id/container"
+		android:layout_width="0dp"
+		android:layout_height="0dp"
+		app:layout_behavior="@string/appbar_scrolling_view_behavior"
+		app:layout_constraintBottom_toTopOf="@id/bottomDivider"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toTopOf="parent" />
+
+	<View
+		android:id="@+id/bottomDivider"
+		android:layout_width="0dp"
+		android:layout_height="1dp"
+		android:layout_gravity="bottom"
+		android:alpha="0.12"
+		android:background="@android:color/white"
+		app:layout_constraintBottom_toTopOf="@id/bottomLayout"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintStart_toStartOf="parent" />
+
+	<android.support.constraint.ConstraintLayout
+		android:id="@+id/bottomLayout"
+		android:layout_width="0dp"
+		android:layout_height="?attr/actionBarSize"
+		android:layout_gravity="bottom"
+		android:paddingEnd="@dimen/activity_horizontal_margin"
+		android:paddingLeft="@dimen/activity_horizontal_margin"
+		android:paddingRight="@dimen/activity_horizontal_margin"
+		android:paddingStart="@dimen/activity_horizontal_margin"
+		app:layout_constraintBottom_toBottomOf="parent"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintStart_toStartOf="parent">
+
+		<ImageButton
+			android:id="@+id/imageButtonPre"
+			style="@style/Widget.AppCompat.Button.Borderless"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_gravity="start|center"
+			android:contentDescription="@string/app_name"
+			android:visibility="gone"
+			app:layout_constraintBottom_toBottomOf="parent"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintTop_toTopOf="parent"
+			app:srcCompat="@drawable/ic_chevron_left_white_24dp" />
+
+		<LinearLayout
+			android:id="@+id/pointLayout"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:orientation="horizontal"
+			app:layout_constraintBottom_toBottomOf="parent"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintTop_toTopOf="parent" />
+
+		<View
+			android:id="@+id/point"
+			android:layout_width="10dp"
+			android:layout_height="10dp"
+			android:background="@drawable/drawable_point_view"
+			android:backgroundTint="@color/colorWhite"
+			app:layout_constraintBottom_toBottomOf="parent"
+			app:layout_constraintStart_toStartOf="@id/pointLayout"
+			app:layout_constraintTop_toTopOf="parent" />
+
+		<android.support.v7.widget.AppCompatButton
+			android:id="@+id/buttonFinish"
+			style="@style/Widget.AppCompat.Button.Borderless"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_gravity="end|center"
+			android:contentDescription="@string/app_name"
+			android:text="@string/action_finish"
+			android:textColor="@android:color/white"
+			android:visibility="gone"
+			app:layout_constraintBottom_toBottomOf="parent"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintTop_toTopOf="parent" />
+
+		<ImageButton
+			android:id="@+id/imageButtonNext"
+			style="@style/Widget.AppCompat.Button.Borderless"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_gravity="end|center"
+			android:contentDescription="@string/app_name"
+			app:layout_constraintBottom_toBottomOf="parent"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintTop_toTopOf="parent"
+			app:srcCompat="@drawable/ic_chevron_right_white_24dp" />
+
+	</android.support.constraint.ConstraintLayout>
+
+</android.support.constraint.ConstraintLayout>

@@ -1,5 +1,5 @@
 /*
- * Created by Mystery0 on 4/3/18 11:52 PM.
+ * Created by Mystery0 on 6/20/18 1:17 PM.
  * Copyright (c) 2018. All Rights reserved.
  *
  *                    =====================================================
@@ -28,59 +28,13 @@
  *                    =                                                   =
  *                    =====================================================
  *
- * Last modified 4/3/18 11:52 PM
+ * Last modified 6/20/18 1:17 PM
  */
 
-package com.weilylab.xhuschedule.activity
+package com.weilylab.xhuschedule.handler
 
-import android.content.Intent
-import android.net.Uri
-import android.text.TextUtils
 import android.view.View
-import com.bumptech.glide.Glide
-import com.weilylab.xhuschedule.R
-import com.weilylab.xhuschedule.util.Constants
-import com.weilylab.xhuschedule.util.Settings
-import com.weilylab.xhuschedule.util.XhuFileUtil
-import kotlinx.android.synthetic.main.activity_splash_image.*
-import java.util.*
 
-class SplashImageActivity : XhuBaseActivity(R.layout.activity_splash_image) {
-	override fun inflateView(layoutId: Int) {
-		window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or View.SYSTEM_UI_FLAG_FULLSCREEN or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
-		super.inflateView(layoutId)
-	}
-
-	override fun initView() {
-		super.initView()
-		val objectId = intent.getStringExtra(Constants.INTENT_TAG_NAME_SPLASH_FILE_NAME)
-		if (TextUtils.isEmpty(objectId)) {
-			go()
-			return
-		}
-		val splashFile = XhuFileUtil.getSplashImageFile(this, objectId)
-		Glide.with(this)
-				.asBitmap()
-				.load(splashFile)
-				.into(imageView)
-		val timer = Timer()
-		timer.schedule(object : TimerTask() {
-			override fun run() {
-				go()
-			}
-		}, Settings.splashTime)
-		imageView.setOnClickListener {
-			if (Settings.splashLocationUrl != "")
-				startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(Settings.splashLocationUrl)))
-		}
-		button.setOnClickListener {
-			go()
-			timer.cancel()
-		}
-	}
-
-	private fun go() {
-		startActivity(Intent(this, MainActivity::class.java))
-		finish()
-	}
+abstract class BaseClickHandler<T> {
+	abstract fun click(view: View, any: T)
 }

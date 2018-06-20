@@ -55,20 +55,6 @@ import vip.mystery0.logs.Logs
  * Created by mystery0.
  */
 class SplashActivity : XhuBaseActivity(null) {
-	private lateinit var initDialog: Dialog
-
-	override fun initView() {
-		super.initView()
-		initDialog = ZLoadingDialog(this)
-				.setLoadingBuilder(Z_TYPE.STAR_LOADING)
-				.setHintText(getString(R.string.hint_dialog_do_update))
-				.setHintTextSize(16F)
-				.setCanceledOnTouchOutside(false)
-				.setCancelable(false)
-				.setLoadingColor(ContextCompat.getColor(this, R.color.colorAccent))
-				.setHintTextColor(ContextCompat.getColor(this, R.color.colorAccent))
-				.create()
-	}
 
 	override fun initData() {
 		super.initData()
@@ -137,12 +123,10 @@ class SplashActivity : XhuBaseActivity(null) {
 					.observeOn(AndroidSchedulers.mainThread())
 					.subscribe(object : Observer<Any> {
 						override fun onComplete() {
-							initDialog.dismiss()
 							go()
 						}
 
 						override fun onSubscribe(d: Disposable) {
-							initDialog.show()
 						}
 
 						override fun onNext(t: Any) {
@@ -150,7 +134,6 @@ class SplashActivity : XhuBaseActivity(null) {
 
 						override fun onError(e: Throwable) {
 							Logs.wtf("onError: ", e)
-							initDialog.dismiss()
 							go()
 						}
 					})
@@ -160,7 +143,7 @@ class SplashActivity : XhuBaseActivity(null) {
 
 	private fun go() {
 		if (Settings.isFirstEnter)
-			startActivity(Intent(this, WelcomeActivity::class.java))
+			startActivity(Intent(this, GuideActivity::class.java))
 		else {
 			val splashImageFileName = Settings.splashImage
 			val file = XhuFileUtil.getSplashImageFile(this, splashImageFileName)
