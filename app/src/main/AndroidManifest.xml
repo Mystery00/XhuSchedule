@@ -26,8 +26,7 @@
 			android:name=".activity.SplashActivity"
 			android:label="@string/app_name"
 			android:screenOrientation="portrait"
-			android:theme="@style/SplashTheme"
-			android:windowSoftInputMode="adjustResize|stateHidden">
+			android:theme="@style/SplashTheme">
 			<intent-filter>
 
 				<!-- 集成调用微博 -->
@@ -38,7 +37,6 @@
 			</intent-filter>
 			<intent-filter>
 				<action android:name="com.weilylab.xhuschedule.NOTIFICATION_VIEW" />
-
 				<category android:name="android.intent.category.DEFAULT" />
 
 				<data
@@ -50,8 +48,13 @@
 				android:name="android.app.shortcuts"
 				android:resource="@xml/shortcuts" />
 		</activity>
-		<activity android:name=".activity.GuideActivity" />
-		<activity android:name=".activity.SplashImageActivity" />
+		<activity
+			android:name=".activity.GuideActivity"
+			android:screenOrientation="portrait"
+			android:theme="@style/AppTheme.NoActionBar" />
+		<activity
+			android:name=".activity.SplashImageActivity"
+			android:screenOrientation="portrait" />
 		<activity
 			android:name=".activity.MainActivity"
 			android:screenOrientation="portrait"
@@ -59,8 +62,7 @@
 		<activity
 			android:name=".activity.LoginActivity"
 			android:screenOrientation="portrait"
-			android:theme="@style/AppTheme.NoActionBar.FullScreen"
-			android:windowSoftInputMode="adjustResize|stateHidden" />
+			android:theme="@style/AppTheme.NoActionBar.FullScreen" />
 		<activity
 			android:name="com.yalantis.ucrop.UCropActivity"
 			android:screenOrientation="portrait"
