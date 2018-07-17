@@ -54,7 +54,7 @@ import com.tencent.connect.share.QQShare
 import com.tencent.mm.opensdk.modelmsg.SendMessageToWX
 import com.tencent.mm.opensdk.modelmsg.WXMediaMessage
 import com.tencent.mm.opensdk.modelmsg.WXWebpageObject
-import com.weilylab.xhuschedule.APP
+import com.weilylab.xhuschedule.newPackage.config.APP
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.activity.MainActivity
 import com.weilylab.xhuschedule.util.Constants

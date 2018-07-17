@@ -48,8 +48,8 @@ import com.google.gson.Gson
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.receiver.AlarmReceiver
 import com.weilylab.xhuschedule.service.CheckJobService
-import com.weilylab.xhuschedule.util.cookie.LoadCookiesInterceptor
-import com.weilylab.xhuschedule.util.cookie.SaveCookiesInterceptor
+import com.weilylab.xhuschedule.newPackage.interceptor.LoadCookiesInterceptor
+import com.weilylab.xhuschedule.newPackage.interceptor.SaveCookiesInterceptor
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory

@@ -38,7 +38,6 @@ import android.graphics.Bitmap
 import android.os.Environment
 import com.google.gson.Gson
 import com.google.gson.JsonParser
-import com.weilylab.xhuschedule.APP
 import java.io.*
 import java.math.BigInteger
 import java.nio.channels.FileChannel

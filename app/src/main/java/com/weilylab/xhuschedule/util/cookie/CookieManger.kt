@@ -34,7 +34,7 @@
 package com.weilylab.xhuschedule.util.cookie
 
 import android.content.Context
-import com.weilylab.xhuschedule.APP
+import com.weilylab.xhuschedule.newPackage.config.APP
 
 object CookieManger {
     private const val COOKIE_PREFS = "cookies"

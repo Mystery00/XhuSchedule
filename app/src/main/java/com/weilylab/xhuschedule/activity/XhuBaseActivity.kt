@@ -42,12 +42,12 @@ abstract class XhuBaseActivity(layoutId: Int?) : BaseActivity(layoutId) {
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		AppCompatDelegate.setCompatVectorFromResourcesEnabled(true)
-		APPActivityManager.appManager.addActivity(this)
+		APPActivityManager.addActivity(this)
 		super.onCreate(savedInstanceState)
 	}
 
 	override fun onDestroy() {
 		super.onDestroy()
-		APPActivityManager.appManager.finishActivity(this)
+		APPActivityManager.finishActivity(this)
 	}
 }

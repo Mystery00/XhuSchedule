@@ -86,7 +86,7 @@ class DownloadSplashIntentService : IntentService(TAG) {
 					.download(qiniuPath)
 					.subscribeOn(Schedulers.newThread())
 					.unsubscribeOn(Schedulers.newThread())
-					.map({ responseBody -> responseBody.byteStream() })
+					.map { responseBody -> responseBody.byteStream() }
 					.observeOn(Schedulers.io())
 					.doOnNext { inputStream ->
 						XhuFileUtil.saveFile(inputStream, file)

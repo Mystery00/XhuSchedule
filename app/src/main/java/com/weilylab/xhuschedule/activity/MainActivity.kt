@@ -57,7 +57,7 @@ import com.sina.weibo.sdk.api.share.WeiboShareSDK
 import com.tencent.mm.opensdk.openapi.IWXAPI
 import com.tencent.mm.opensdk.openapi.WXAPIFactory
 import com.tencent.tauth.Tencent
-import com.weilylab.xhuschedule.APP
+import com.weilylab.xhuschedule.newPackage.config.APP
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.adapter.ViewPagerAdapter
 import com.weilylab.xhuschedule.adapter.WeekAdapter

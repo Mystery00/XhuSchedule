@@ -31,79 +31,43 @@
  * Last modified 18-2-21 下午9:11
  */
 
-package com.weilylab.xhuschedule.util
+package com.weilylab.xhuschedule.newPackage.config
 
-import android.app.Activity
-import java.util.*
+import android.annotation.SuppressLint
+import android.app.Application
+import android.content.Context
+import androidx.multidex.MultiDexApplication
+import com.oasisfeng.condom.CondomContext
+import com.tencent.tauth.Tencent
+import com.weilylab.xhuschedule.listener.EmptyTencentListener
+import com.weilylab.xhuschedule.util.Constants
+import com.weilylab.xhuschedule.util.ScheduleHelper
+import vip.mystery0.crashhandler.CrashHandler
 
 /**
- * Created by kun on 2016/7/12.
- * Activity管理类
+ * Created by myste.
  */
-object APPActivityManager {
-	private var activityStack: Stack<Activity> = Stack()
-	/**
-	 * 添加Activity到堆栈
-	 */
-	fun addActivity(activity: Activity) {
-		activityStack.add(activity)
+class APP : MultiDexApplication() {
+
+	override fun onCreate() {
+		super.onCreate()
+		context = applicationContext
+		instance = this
+		ScheduleHelper.initChannelID(APP.context)//初始化NotificationChannelID
+		val tencent = Tencent.createInstance(Constants.QQ_API_KEY, CondomContext.wrap(applicationContext, "Tencent"))
+		CrashHandler.getInstance(this)
+				.setDir(getExternalFilesDir("log"))
+				.setPrefix("log")
+				.setSuffix("txt")
+				.init()
 	}
 
-	/**
-	 * 获取当前Activity（堆栈中最后一个压入的）
-	 */
-	fun currentActivity(): Activity? {
-		if (!activityStack.empty())
-			return activityStack.lastElement()
-		return null
-	}
+	companion object {
+		@SuppressLint("StaticFieldLeak")
+		lateinit var context: Context
+			private set
 
-	/**
-	 * 获取倒数第二个Activity
-	 */
-	fun lastLastActivity(): Activity? {
-		return if (activityStack.size <= 2)
-			null
-		else
-			activityStack[activityStack.size - 2]
-	}
-
-	/**
-	 * 结束当前Activity（堆栈中最后一个压入的）
-	 */
-	fun finishActivity() {
-		activityStack.lastElement()?.finish()
-	}
-
-	/**
-	 * 结束指定的Activity
-	 */
-	fun finishActivity(activity: Activity) {
-		activityStack.remove(activity)
-		activity.finish()
-	}
-
-	/**
-	 * 结束指定类名的Activity
-	 */
-	fun finishActivity(cls: Class<*>) {
-		activityStack
-				.filter { it.javaClass == cls }
-				.forEach { finishActivity(it) }
-	}
-
-	/**
-	 * 结束所有Activity
-	 */
-	fun finishAllActivity() {
-		var i = 0
-		val size = activityStack.size
-		while (i < size) {
-			if (null != activityStack[i]) {
-				activityStack[i].finish()
-			}
-			i++
-		}
-		activityStack.clear()
+		lateinit var instance: Application
+			private set
 	}
 }

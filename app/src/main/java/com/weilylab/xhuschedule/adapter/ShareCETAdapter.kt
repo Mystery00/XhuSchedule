@@ -43,7 +43,6 @@ import android.os.Build
 import android.os.Bundle
 import androidx.core.content.FileProvider
 import androidx.recyclerview.widget.RecyclerView
-import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
@@ -54,7 +53,7 @@ import com.sina.weibo.sdk.api.ImageObject
 import com.sina.weibo.sdk.api.WeiboMessage
 import com.sina.weibo.sdk.api.share.SendMessageToWeiboRequest
 import com.tencent.connect.share.QQShare
-import com.weilylab.xhuschedule.APP
+import com.weilylab.xhuschedule.newPackage.config.APP
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.activity.MainActivity
 import com.weilylab.xhuschedule.util.Constants

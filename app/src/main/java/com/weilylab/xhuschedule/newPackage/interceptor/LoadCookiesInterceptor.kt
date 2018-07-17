@@ -31,79 +31,41 @@
  * Last modified 18-2-21 下午9:11
  */
 
-package com.weilylab.xhuschedule.util
+package com.weilylab.xhuschedule.newPackage.interceptor
 
-import android.app.Activity
-import java.util.*
+import okhttp3.FormBody
+import okhttp3.Interceptor
+import okhttp3.Response
 
-/**
- * Created by kun on 2016/7/12.
- * Activity管理类
- */
-object APPActivityManager {
-	private var activityStack: Stack<Activity> = Stack()
-	/**
-	 * 添加Activity到堆栈
-	 */
-	fun addActivity(activity: Activity) {
-		activityStack.add(activity)
-	}
-
-	/**
-	 * 获取当前Activity（堆栈中最后一个压入的）
-	 */
-	fun currentActivity(): Activity? {
-		if (!activityStack.empty())
-			return activityStack.lastElement()
-		return null
-	}
-
-	/**
-	 * 获取倒数第二个Activity
-	 */
-	fun lastLastActivity(): Activity? {
-		return if (activityStack.size <= 2)
-			null
-		else
-			activityStack[activityStack.size - 2]
-	}
-
-	/**
-	 * 结束当前Activity（堆栈中最后一个压入的）
-	 */
-	fun finishActivity() {
-		activityStack.lastElement()?.finish()
-	}
-
-	/**
-	 * 结束指定的Activity
-	 */
-	fun finishActivity(activity: Activity) {
-		activityStack.remove(activity)
-		activity.finish()
-	}
-
-	/**
-	 * 结束指定类名的Activity
-	 */
-	fun finishActivity(cls: Class<*>) {
-		activityStack
-				.filter { it.javaClass == cls }
-				.forEach { finishActivity(it) }
-	}
-
-	/**
-	 * 结束所有Activity
-	 */
-	fun finishAllActivity() {
-		var i = 0
-		val size = activityStack.size
-		while (i < size) {
-			if (null != activityStack[i]) {
-				activityStack[i].finish()
+class LoadCookiesInterceptor : Interceptor {
+	override fun intercept(chain: Interceptor.Chain): Response {
+		val request = chain.request()
+		val builder = request.newBuilder()
+		val host = request.url().host()
+		var username: String? = null
+		when (request.method().toLowerCase()) {
+			"get" -> {
+				if (request.url().toString().contains("api.lncld.net/1.1/classes/Splash")) {
+					builder.addHeader("X-LC-Id", "f939kTGhlyHAHVsCpccyWU6t-gzGzoHsz")
+					builder.addHeader("X-LC-Key", "wVpJkuI4DLNxXHBfp19XGz3E")
+					builder.addHeader("Content-Type", "application/json")
+					return chain.proceed(builder.build())
+				}
+				val list = request.url().queryParameterValues("username")
+				username = if (list.isNotEmpty()) list[0] else null
 			}
-			i++
+			"post" -> {
+				if (request.body() is FormBody) {
+					val formBody = request.body() as FormBody
+					username = (0 until formBody.size())
+							.firstOrNull { formBody.encodedName(it) == "username" }
+							?.let { formBody.encodedValue(it) }
+				}
+			}
 		}
-		activityStack.clear()
+		if (username != null && CookieManger.getCookie(username, host) != null) {
+			builder.addHeader("Cookie", CookieManger.getCookie(username, host)!!)
+		}
+		return chain.proceed(builder.build())
 	}
 }

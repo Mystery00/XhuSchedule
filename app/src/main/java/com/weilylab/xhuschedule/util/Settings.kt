@@ -35,7 +35,7 @@ package com.weilylab.xhuschedule.util
 
 import android.content.Context
 import androidx.core.content.edit
-import com.weilylab.xhuschedule.APP
+import com.weilylab.xhuschedule.newPackage.config.APP
 
 /**
  * Created by myste.
