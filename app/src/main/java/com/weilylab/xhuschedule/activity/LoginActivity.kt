@@ -42,7 +42,7 @@ import com.zyao89.view.zloading.Z_TYPE
 import kotlinx.android.synthetic.main.activity_login.*
 
 import android.app.Activity
-import android.support.v4.content.ContextCompat
+import androidx.core.content.ContextCompat
 import com.weilylab.xhuschedule.classes.baseClass.Student
 import com.weilylab.xhuschedule.listener.LoginListener
 import com.weilylab.xhuschedule.util.XhuFileUtil

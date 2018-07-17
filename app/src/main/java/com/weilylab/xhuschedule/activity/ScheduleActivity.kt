@@ -36,8 +36,8 @@ package com.weilylab.xhuschedule.activity
 import android.app.Dialog
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
-import android.support.design.widget.Snackbar
-import android.support.v4.content.ContextCompat
+import com.google.android.material.snackbar.Snackbar
+import androidx.core.content.ContextCompat
 import android.util.Base64
 import android.util.TypedValue
 import android.view.*

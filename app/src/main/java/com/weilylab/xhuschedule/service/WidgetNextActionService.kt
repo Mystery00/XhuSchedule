@@ -36,7 +36,7 @@ package com.weilylab.xhuschedule.service
 import android.app.Service
 import android.content.Intent
 import android.os.IBinder
-import android.support.v4.app.NotificationCompat
+import androidx.core.app.NotificationCompat
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.util.Constants
 import com.weilylab.xhuschedule.util.widget.WidgetHelper

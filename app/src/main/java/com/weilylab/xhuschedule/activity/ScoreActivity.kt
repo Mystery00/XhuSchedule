@@ -37,9 +37,9 @@ import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
 import android.app.Dialog
 import android.content.Intent
-import android.support.design.widget.Snackbar
-import android.support.graphics.drawable.VectorDrawableCompat
-import android.support.v4.content.ContextCompat
+import com.google.android.material.snackbar.Snackbar
+import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat
+import androidx.core.content.ContextCompat
 import android.util.Base64
 import android.view.Menu
 import android.view.MenuItem

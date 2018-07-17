@@ -37,8 +37,8 @@ import android.content.Intent
 import android.os.Bundle
 import android.preference.Preference
 import android.preference.SwitchPreference
-import android.support.design.widget.Snackbar
-import android.support.v7.app.AlertDialog
+import com.google.android.material.snackbar.Snackbar
+import androidx.appcompat.app.AlertDialog
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup

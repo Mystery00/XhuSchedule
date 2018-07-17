@@ -35,10 +35,10 @@ package com.weilylab.xhuschedule.util
 
 import android.content.Context
 import android.graphics.*
-import android.support.design.widget.FloatingActionButton
-import android.support.v7.app.AlertDialog
-import android.support.v7.widget.GridLayoutManager
-import android.support.v7.widget.RecyclerView
+import com.google.android.material.floatingactionbutton.FloatingActionButton
+import androidx.appcompat.app.AlertDialog
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import android.view.View
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.adapter.ColorPickerAdapter
@@ -47,8 +47,8 @@ import com.weilylab.xhuschedule.listener.ColorPickerChangeListener
 import com.weilylab.xhuschedule.listener.InfoChangeListener
 import android.graphics.Bitmap
 import android.content.Intent
-import android.support.constraint.ConstraintLayout
-import android.support.graphics.drawable.VectorDrawableCompat
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat
 import android.view.LayoutInflater
 import android.widget.*
 import com.bumptech.glide.Glide

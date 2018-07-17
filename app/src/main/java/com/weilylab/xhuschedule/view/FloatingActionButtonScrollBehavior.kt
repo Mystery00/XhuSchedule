@@ -34,13 +34,13 @@
 package com.weilylab.xhuschedule.view
 
 import android.content.Context
-import android.support.design.widget.CoordinatorLayout
-import android.support.design.widget.FloatingActionButton
+import androidx.coordinatorlayout.widget.CoordinatorLayout
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import android.util.AttributeSet
 import android.view.View
-import android.support.v4.view.ViewCompat
-import android.support.v4.view.ViewPropertyAnimatorListener
-import android.support.v4.view.animation.LinearOutSlowInInterpolator
+import androidx.core.view.ViewCompat
+import androidx.core.view.ViewPropertyAnimatorListener
+import androidx.interpolator.view.animation.LinearOutSlowInInterpolator
 
 
 /**

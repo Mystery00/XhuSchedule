@@ -38,10 +38,10 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.drawable.ColorDrawable
-import android.support.design.widget.TextInputLayout
-import android.support.v4.content.ContextCompat
-import android.support.v7.app.AlertDialog
-import android.support.v7.widget.GridLayoutManager
+import com.google.android.material.textfield.TextInputLayout
+import androidx.core.content.ContextCompat
+import androidx.appcompat.app.AlertDialog
+import androidx.recyclerview.widget.GridLayoutManager
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View

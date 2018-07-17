@@ -34,7 +34,7 @@
 package com.weilylab.xhuschedule.activity
 
 import android.os.Bundle
-import android.support.v7.app.AppCompatDelegate
+import androidx.appcompat.app.AppCompatDelegate
 import com.weilylab.xhuschedule.util.APPActivityManager
 import vip.mystery0.tools.base.BaseActivity
 

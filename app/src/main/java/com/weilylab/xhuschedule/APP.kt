@@ -35,7 +35,7 @@ package com.weilylab.xhuschedule
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.support.multidex.MultiDexApplication
+import androidx.multidex.MultiDexApplication
 import com.oasisfeng.condom.CondomContext
 import com.tencent.tauth.Tencent
 import com.weilylab.xhuschedule.listener.EmptyTencentListener

@@ -39,7 +39,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.os.Environment
-import android.support.v4.content.FileProvider
+import androidx.core.content.FileProvider
 import android.text.TextUtils
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.interfaces.QiniuService

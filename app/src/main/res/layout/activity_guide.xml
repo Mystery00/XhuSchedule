@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:app="http://schemas.android.com/apk/res-auto"
 	xmlns:tools="http://schemas.android.com/tools"
 	android:id="@+id/main_content"
@@ -9,7 +9,7 @@
 	android:fitsSystemWindows="true"
 	tools:context=".activity.GuideActivity">
 
-	<android.support.v4.view.ViewPager
+	<androidx.viewpager.widget.ViewPager
 		android:id="@+id/container"
 		android:layout_width="0dp"
 		android:layout_height="0dp"
@@ -30,7 +30,7 @@
 		app:layout_constraintEnd_toEndOf="parent"
 		app:layout_constraintStart_toStartOf="parent" />
 
-	<android.support.constraint.ConstraintLayout
+	<androidx.constraintlayout.widget.ConstraintLayout
 		android:id="@+id/bottomLayout"
 		android:layout_width="0dp"
 		android:layout_height="?attr/actionBarSize"
@@ -76,7 +76,7 @@
 			app:layout_constraintStart_toStartOf="@id/pointLayout"
 			app:layout_constraintTop_toTopOf="parent" />
 
-		<android.support.v7.widget.AppCompatButton
+		<androidx.appcompat.widget.AppCompatButton
 			android:id="@+id/buttonFinish"
 			style="@style/Widget.AppCompat.Button.Borderless"
 			android:layout_width="wrap_content"
@@ -102,6 +102,6 @@
 			app:layout_constraintTop_toTopOf="parent"
 			app:srcCompat="@drawable/ic_chevron_right_white_24dp" />
 
-	</android.support.constraint.ConstraintLayout>
+	</androidx.constraintlayout.widget.ConstraintLayout>
 
-</android.support.constraint.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

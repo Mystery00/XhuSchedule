@@ -43,7 +43,7 @@ import android.content.Intent
 import android.graphics.Color
 import android.net.ConnectivityManager
 import android.os.Build
-import android.support.annotation.RequiresApi
+import androidx.annotation.RequiresApi
 import com.google.gson.Gson
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.receiver.AlarmReceiver

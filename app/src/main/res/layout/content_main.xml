@@ -5,7 +5,7 @@
   ~ Last modified 17-12-11 下午10:28
   -->
 
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -13,7 +13,7 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.weilylab.xhuschedule.activity.MainActivity">
 
-    <android.support.design.widget.BottomNavigationView
+    <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavigationView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -23,7 +23,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:menu="@menu/menu_bottom_navigation_view" />
 
-    <android.support.design.widget.CoordinatorLayout
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:id="@+id/coordinatorLayoutView"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -32,15 +32,16 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <com.github.ybq.parallaxviewpager.ParallaxViewPager
+        <!--<com.github.ybq.parallaxviewpager.ParallaxViewPager-->
+        <androidx.viewpager.widget.ViewPager
             android:id="@+id/viewpager"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:interpolator="@anim/decelerate_interpolator"
-            app:mode="right_overlay"
-            app:outset="62%"
-            app:shadow_width="30dp"/>
+            android:layout_height="match_parent"/>
+            <!--app:interpolator="@anim/decelerate_interpolator"-->
+            <!--app:mode="right_overlay"-->
+            <!--app:outset="62%"-->
+            <!--app:shadow_width="30dp"/>-->
 
-    </android.support.design.widget.CoordinatorLayout>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
-</android.support.constraint.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

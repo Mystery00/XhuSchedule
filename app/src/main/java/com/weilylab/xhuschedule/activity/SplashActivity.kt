@@ -36,7 +36,7 @@ package com.weilylab.xhuschedule.activity
 import android.app.Dialog
 import android.content.Intent
 import android.os.Build
-import android.support.v4.content.ContextCompat
+import androidx.core.content.ContextCompat
 import com.weilylab.xhuschedule.APP
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.classes.baseClass.Student

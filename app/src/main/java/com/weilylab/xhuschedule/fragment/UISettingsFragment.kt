@@ -44,10 +44,10 @@ import android.os.Build
 import android.os.Bundle
 import android.preference.Preference
 import android.provider.MediaStore
-import android.support.constraint.ConstraintLayout
-import android.support.v4.content.ContextCompat
-import android.support.v7.app.AlertDialog
-import android.support.v7.widget.CardView
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.ContextCompat
+import androidx.appcompat.app.AlertDialog
+import androidx.cardview.widget.CardView
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View

@@ -35,7 +35,7 @@ package com.weilylab.xhuschedule.util
 
 import android.content.Context
 import android.content.Intent
-import android.support.design.widget.Snackbar
+import com.google.android.material.snackbar.Snackbar
 import android.util.Base64
 import com.google.gson.Gson
 import com.weilylab.xhuschedule.R

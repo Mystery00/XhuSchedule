@@ -36,7 +36,7 @@ package com.weilylab.xhuschedule.receiver
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import android.support.v4.content.ContextCompat
+import androidx.core.content.ContextCompat
 import com.weilylab.xhuschedule.service.ShowNotificationService
 
 class AlarmReceiver : BroadcastReceiver() {
