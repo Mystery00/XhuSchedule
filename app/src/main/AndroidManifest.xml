@@ -53,7 +53,7 @@
 			android:screenOrientation="portrait"
 			android:theme="@style/AppTheme.NoActionBar" />
 		<activity
-			android:name=".activity.SplashImageActivity"
+			android:name=".newPackage.ui.activity.SplashImageActivity"
 			android:screenOrientation="portrait" />
 		<activity
 			android:name=".activity.MainActivity"

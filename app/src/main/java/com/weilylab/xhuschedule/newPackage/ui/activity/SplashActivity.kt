@@ -34,13 +34,11 @@
 package com.weilylab.xhuschedule.newPackage.ui.activity
 
 import android.content.Intent
-import android.os.Build
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.weilylab.xhuschedule.activity.GuideActivity
 import com.weilylab.xhuschedule.activity.MainActivity
-import com.weilylab.xhuschedule.activity.SplashImageActivity
-import com.weilylab.xhuschedule.activity.XhuBaseActivity
+import com.weilylab.xhuschedule.newPackage.base.XhuBaseActivity
 import com.weilylab.xhuschedule.newPackage.model.SplashResponse
 import com.weilylab.xhuschedule.newPackage.repository.SplashRepository
 import com.weilylab.xhuschedule.newPackage.utils.ConfigurationUtil
@@ -88,7 +86,7 @@ class SplashActivity : XhuBaseActivity(null) {
 //		ScheduleHelper.checkScreenWidth(this)
 //		if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP)
 //			ScheduleHelper.scheduleJob(this)
-		SplashRepository().requestSplash(splashViewModel)
+		SplashRepository.requestSplash(splashViewModel)
 	}
 
 	private fun initViewModel() {

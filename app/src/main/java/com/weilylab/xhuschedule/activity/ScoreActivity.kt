@@ -52,6 +52,7 @@ import com.weilylab.xhuschedule.classes.baseClass.Score
 import com.weilylab.xhuschedule.classes.baseClass.Student
 import com.weilylab.xhuschedule.listener.GetScoreListener
 import com.weilylab.xhuschedule.listener.ProfileListener
+import com.weilylab.xhuschedule.newPackage.base.XhuBaseActivity
 import com.weilylab.xhuschedule.util.*
 import com.weilylab.xhuschedule.view.TextViewUtils
 import com.zyao89.view.zloading.ZLoadingDialog

@@ -31,7 +31,7 @@
  * Last modified 18-2-21 下午9:11
  */
 
-package com.weilylab.xhuschedule.activity
+package com.weilylab.xhuschedule.newPackage.base
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatDelegate

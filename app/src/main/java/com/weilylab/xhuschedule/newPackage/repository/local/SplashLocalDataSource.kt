@@ -11,6 +11,21 @@ import com.weilylab.xhuschedule.newPackage.repository.dataSource.SplashDataSourc
 object SplashLocalDataSource : SplashDataSource {
 	private val sharedPreferences = APP.context.getSharedPreferences(SharedPreferenceConstant.FILE_NAME_SPLASH, Context.MODE_PRIVATE)
 	override fun requestSplash(splashLiveData: MutableLiveData<SplashResponse.Splash>, requestResultLiveData: MutableLiveData<Int>) {
+		val splash = getSplash()
+		splashLiveData.value = splash
+		requestResultLiveData.value = SplashRepository.DONE
+	}
+
+	fun saveSplash(splash: SplashResponse.Splash) {
+		sharedPreferences.edit()
+				.putString(SharedPreferenceConstant.FIELD_SPLASH_ID, splash.objectId)
+				.putString(SharedPreferenceConstant.FIELD_SPLASH_URL, splash.splashUrl)
+				.putString(SharedPreferenceConstant.FIELD_SPLASH_LOCATION_URL, splash.locationUrl)
+				.putLong(SharedPreferenceConstant.FIELD_SPLASH_TIME, splash.splashTime)
+				.apply()
+	}
+
+	fun getSplash(): SplashResponse.Splash {
 		val splash = SplashResponse.Splash()
 		val isEnable = sharedPreferences.contains(SharedPreferenceConstant.FIELD_SPLASH_ID) &&
 				sharedPreferences.contains(SharedPreferenceConstant.FIELD_SPLASH_URL) &&
@@ -23,16 +38,6 @@ object SplashLocalDataSource : SplashDataSource {
 			splash.locationUrl = sharedPreferences.getString(SharedPreferenceConstant.FIELD_SPLASH_LOCATION_URL, "")
 			splash.splashTime = sharedPreferences.getLong(SharedPreferenceConstant.FIELD_SPLASH_TIME, 0L)
 		}
-		splashLiveData.value = splash
-		requestResultLiveData.value = SplashRepository.DONE
-	}
-
-	fun saveSplash(splash: SplashResponse.Splash) {
-		sharedPreferences.edit()
-				.putString(SharedPreferenceConstant.FIELD_SPLASH_ID, splash.objectId)
-				.putString(SharedPreferenceConstant.FIELD_SPLASH_URL, splash.splashUrl)
-				.putString(SharedPreferenceConstant.FIELD_SPLASH_LOCATION_URL, splash.locationUrl)
-				.putLong(SharedPreferenceConstant.FIELD_SPLASH_TIME, splash.splashTime)
-				.apply()
+		return splash
 	}
 }

@@ -42,6 +42,7 @@ import com.weilylab.xhuschedule.adapter.NoticeAdapter
 import com.weilylab.xhuschedule.classes.baseClass.Notice
 import com.weilylab.xhuschedule.classes.rt.GetNoticesRT
 import com.weilylab.xhuschedule.interfaces.CommonService
+import com.weilylab.xhuschedule.newPackage.base.XhuBaseActivity
 import com.weilylab.xhuschedule.util.Constants
 import com.weilylab.xhuschedule.util.ConstantsCode
 import com.weilylab.xhuschedule.util.ScheduleHelper

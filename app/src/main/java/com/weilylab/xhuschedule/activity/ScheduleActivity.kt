@@ -53,6 +53,7 @@ import com.weilylab.xhuschedule.classes.rt.GetCourseRT
 import com.weilylab.xhuschedule.interfaces.StudentService
 import com.weilylab.xhuschedule.listener.LoginListener
 import com.weilylab.xhuschedule.listener.ProfileListener
+import com.weilylab.xhuschedule.newPackage.base.XhuBaseActivity
 import com.weilylab.xhuschedule.util.*
 import com.zyao89.view.zloading.ZLoadingDialog
 import com.zyao89.view.zloading.Z_TYPE

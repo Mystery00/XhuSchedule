@@ -45,6 +45,7 @@ import android.app.Activity
 import androidx.core.content.ContextCompat
 import com.weilylab.xhuschedule.classes.baseClass.Student
 import com.weilylab.xhuschedule.listener.LoginListener
+import com.weilylab.xhuschedule.newPackage.base.XhuBaseActivity
 import com.weilylab.xhuschedule.util.XhuFileUtil
 
 class LoginActivity : XhuBaseActivity(R.layout.activity_login) {

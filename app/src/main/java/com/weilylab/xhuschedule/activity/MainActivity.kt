@@ -70,6 +70,7 @@ import com.weilylab.xhuschedule.fragment.TableFragment
 import com.weilylab.xhuschedule.fragment.TodayFragment
 import com.weilylab.xhuschedule.listener.GetCourseListener
 import com.weilylab.xhuschedule.listener.ProfileListener
+import com.weilylab.xhuschedule.newPackage.base.XhuBaseActivity
 import com.weilylab.xhuschedule.service.UpdateService
 import com.weilylab.xhuschedule.util.*
 import com.weilylab.xhuschedule.util.widget.WidgetHelper
