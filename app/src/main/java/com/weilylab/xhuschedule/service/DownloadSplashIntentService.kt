@@ -36,6 +36,8 @@ package com.weilylab.xhuschedule.service
 import android.app.IntentService
 import android.content.Intent
 import com.weilylab.xhuschedule.interfaces.QiniuService
+import com.weilylab.xhuschedule.newPackage.constant.IntentConstant
+import com.weilylab.xhuschedule.newPackage.utils.FileUtil
 import com.weilylab.xhuschedule.util.Constants
 import com.weilylab.xhuschedule.util.Settings
 import com.weilylab.xhuschedule.util.XhuFileUtil
@@ -54,7 +56,6 @@ class DownloadSplashIntentService : IntentService(TAG) {
 	companion object {
 		private const val TAG = "DownloadSplashIntentService"
 	}
-
 	private lateinit var retrofit: Retrofit
 
 	override fun onCreate() {
@@ -71,31 +72,27 @@ class DownloadSplashIntentService : IntentService(TAG) {
 	}
 
 	override fun onHandleIntent(intent: Intent?) {
-		val qiniuPath = intent?.getStringExtra(Constants.INTENT_TAG_NAME_QINIU_PATH) ?: return
-		val objectId = intent.getStringExtra(Constants.INTENT_TAG_NAME_SPLASH_FILE_NAME)
-				?: return
-		val file = XhuFileUtil.getSplashImageFile(this, objectId) ?: return
+		if (intent==null)
+			return
+		val qiniuPath = intent.getStringExtra(IntentConstant.INTENT_TAG_NAME_QINIU_PATH) ?: return
+		val objectId = intent.getStringExtra(IntentConstant.INTENT_TAG_NAME_SPLASH_FILE_NAME) ?: return
+		val file = FileUtil.getSplashImageFile(this, objectId) ?: return
 		Logs.i(TAG, "onHandleIntent: $objectId")
 		Logs.i(TAG, "onHandleIntent: ${file.absolutePath}")
 		if (!file.parentFile.exists())
 			file.parentFile.mkdirs()
-		if (file.exists())
-			Settings.splashImage = objectId
-		else
+		if (!file.exists())
 			retrofit.create(QiniuService::class.java)
 					.download(qiniuPath)
 					.subscribeOn(Schedulers.newThread())
 					.unsubscribeOn(Schedulers.newThread())
 					.map { responseBody -> responseBody.byteStream() }
 					.observeOn(Schedulers.io())
-					.doOnNext { inputStream ->
-						XhuFileUtil.saveFile(inputStream, file)
-					}
+					.doOnNext { inputStream -> XhuFileUtil.saveFile(inputStream, file) }
 					.observeOn(AndroidSchedulers.mainThread())
 					.subscribe(object : Observer<InputStream> {
 						override fun onComplete() {
 							Logs.i(TAG, "onComplete: ")
-							Settings.splashImage = objectId
 						}
 
 						override fun onSubscribe(d: Disposable) {

@@ -71,6 +71,7 @@ import com.weilylab.xhuschedule.fragment.TodayFragment
 import com.weilylab.xhuschedule.listener.GetCourseListener
 import com.weilylab.xhuschedule.listener.ProfileListener
 import com.weilylab.xhuschedule.newPackage.base.XhuBaseActivity
+import com.weilylab.xhuschedule.newPackage.ui.activity.LoginActivity
 import com.weilylab.xhuschedule.service.UpdateService
 import com.weilylab.xhuschedule.util.*
 import com.weilylab.xhuschedule.util.widget.WidgetHelper
@@ -133,7 +134,7 @@ class MainActivity : XhuBaseActivity(R.layout.activity_main) {
 						sharedPreference.edit().putInt(Constants.UPDATE_VERSION, getString(R.string.app_version_code).toInt()).apply()
 					}
 					.create()
-			if (APPActivityManager.appManager.currentActivity() == this)
+			if (APPActivityManager.currentActivity() == this)
 				dialog.show()
 		}
 	}

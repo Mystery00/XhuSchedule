@@ -39,12 +39,13 @@ import androidx.lifecycle.ViewModelProviders
 import com.weilylab.xhuschedule.activity.GuideActivity
 import com.weilylab.xhuschedule.activity.MainActivity
 import com.weilylab.xhuschedule.newPackage.base.XhuBaseActivity
-import com.weilylab.xhuschedule.newPackage.model.SplashResponse
+import com.weilylab.xhuschedule.newPackage.constant.IntentConstant
+import com.weilylab.xhuschedule.newPackage.model.response.SplashResponse
 import com.weilylab.xhuschedule.newPackage.repository.SplashRepository
 import com.weilylab.xhuschedule.newPackage.utils.ConfigurationUtil
+import com.weilylab.xhuschedule.newPackage.utils.FileUtil
 import com.weilylab.xhuschedule.newPackage.viewModel.SplashViewModel
 import com.weilylab.xhuschedule.service.DownloadSplashIntentService
-import com.weilylab.xhuschedule.util.*
 
 /**
  * Created by mystery0.
@@ -54,13 +55,16 @@ class SplashActivity : XhuBaseActivity(null) {
 
 	private val splashObserver = Observer<SplashResponse.Splash> {
 		if (it.isEnable) {
-			Settings.splashTime = it.splashTime
-			Settings.splashLocationUrl = it.locationUrl
-			val intent = Intent(this@SplashActivity, DownloadSplashIntentService::class.java)
-			intent.putExtra(Constants.INTENT_TAG_NAME_QINIU_PATH, it.splashUrl)
-			intent.putExtra(Constants.INTENT_TAG_NAME_SPLASH_FILE_NAME, it.objectId)
-			startService(intent)
-			gotoSplashImage()
+			val splashFile = FileUtil.getSplashImageFile(this, it.objectId)
+			if (splashFile != null && splashFile.exists())
+				gotoSplashImage()
+			else {
+				val intent = Intent(this@SplashActivity, DownloadSplashIntentService::class.java)
+				intent.putExtra(IntentConstant.INTENT_TAG_NAME_QINIU_PATH, it.splashUrl)
+				intent.putExtra(IntentConstant.INTENT_TAG_NAME_SPLASH_FILE_NAME, it.objectId)
+				startService(intent)
+				gotoMain()
+			}
 		} else
 			gotoMain()
 	}

@@ -4,7 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import com.weilylab.xhuschedule.newPackage.api.LeanCloudAPI
 import com.weilylab.xhuschedule.newPackage.factory.GsonFactory
 import com.weilylab.xhuschedule.newPackage.factory.RetrofitFactory
-import com.weilylab.xhuschedule.newPackage.model.SplashResponse
+import com.weilylab.xhuschedule.newPackage.model.response.SplashResponse
 import com.weilylab.xhuschedule.newPackage.repository.SplashRepository
 import com.weilylab.xhuschedule.newPackage.repository.dataSource.SplashDataSource
 import com.weilylab.xhuschedule.newPackage.repository.local.SplashLocalDataSource

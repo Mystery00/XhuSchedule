@@ -37,10 +37,12 @@ import android.content.Intent
 import android.net.Uri
 import android.view.View
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.request.RequestOptions
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.activity.MainActivity
 import com.weilylab.xhuschedule.newPackage.base.XhuBaseActivity
-import com.weilylab.xhuschedule.newPackage.model.SplashResponse
+import com.weilylab.xhuschedule.newPackage.model.response.SplashResponse
 import com.weilylab.xhuschedule.newPackage.repository.SplashRepository
 import com.weilylab.xhuschedule.newPackage.utils.FileUtil
 import com.weilylab.xhuschedule.util.Settings
@@ -76,6 +78,7 @@ class SplashImageActivity : XhuBaseActivity(R.layout.activity_splash_image) {
 		Glide.with(this)
 				.asBitmap()
 				.load(splashFile)
+				.apply(RequestOptions().diskCacheStrategy(DiskCacheStrategy.NONE))
 				.into(imageView)
 		val timer = Timer()
 		timer.schedule(object : TimerTask() {
@@ -88,8 +91,8 @@ class SplashImageActivity : XhuBaseActivity(R.layout.activity_splash_image) {
 				startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(Settings.splashLocationUrl)))
 		}
 		button.setOnClickListener {
-			gotoMain()
 			timer.cancel()
+			gotoMain()
 		}
 	}
 

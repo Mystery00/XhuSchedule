@@ -1,6 +1,6 @@
 package com.weilylab.xhuschedule.newPackage.repository
 
-import com.weilylab.xhuschedule.newPackage.model.SplashResponse
+import com.weilylab.xhuschedule.newPackage.model.response.SplashResponse
 import com.weilylab.xhuschedule.newPackage.repository.local.SplashLocalDataSource
 import com.weilylab.xhuschedule.newPackage.repository.remote.SplashRemoteDataSource
 import com.weilylab.xhuschedule.newPackage.utils.NetworkUtil

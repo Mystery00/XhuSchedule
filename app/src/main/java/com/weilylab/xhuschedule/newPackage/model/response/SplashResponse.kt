@@ -1,4 +1,4 @@
-package com.weilylab.xhuschedule.newPackage.model
+package com.weilylab.xhuschedule.newPackage.model.response
 
 class SplashResponse {
 	lateinit var results: ArrayList<Splash>

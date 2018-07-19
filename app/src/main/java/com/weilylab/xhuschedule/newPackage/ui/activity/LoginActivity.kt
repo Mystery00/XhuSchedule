@@ -31,7 +31,7 @@
  * Last modified 18-2-21 下午9:11
  */
 
-package com.weilylab.xhuschedule.activity
+package com.weilylab.xhuschedule.newPackage.ui.activity
 
 import android.text.TextUtils
 import android.view.View
@@ -42,25 +42,55 @@ import com.zyao89.view.zloading.Z_TYPE
 import kotlinx.android.synthetic.main.activity_login.*
 
 import android.app.Activity
+import android.app.Dialog
 import androidx.core.content.ContextCompat
-import com.weilylab.xhuschedule.classes.baseClass.Student
-import com.weilylab.xhuschedule.listener.LoginListener
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import com.weilylab.xhuschedule.newPackage.base.XhuBaseActivity
-import com.weilylab.xhuschedule.util.XhuFileUtil
+import com.weilylab.xhuschedule.newPackage.model.Student
+import com.weilylab.xhuschedule.newPackage.repository.LoginRepository
+import com.weilylab.xhuschedule.newPackage.viewModel.LoginViewModel
 
 class LoginActivity : XhuBaseActivity(R.layout.activity_login) {
-	private lateinit var loginDialog: ZLoadingDialog
+	private lateinit var loginViewModel: LoginViewModel
+	private lateinit var dialog: Dialog
+
+	private val messageObserver = Observer<String> {
+		Toast.makeText(this, it, Toast.LENGTH_SHORT)
+				.show()
+	}
+	private val requestCodeObserver = Observer<Int> {
+		hideDialog()
+		if (it == LoginRepository.DONE) {
+			Toast.makeText(this, getString(R.string.success_login, getString(R.string.app_name)), Toast.LENGTH_SHORT)
+					.show()
+			setResult(Activity.RESULT_OK, intent)
+			finish()
+		}
+	}
 
 	override fun initView() {
 		super.initView()
-		loginDialog = ZLoadingDialog(this)
+		dialog = ZLoadingDialog(this)
 				.setLoadingBuilder(Z_TYPE.STAR_LOADING)
 				.setHintText(getString(R.string.hint_dialog_login))
 				.setHintTextSize(16F)
 				.setCanceledOnTouchOutside(false)
 				.setCancelable(false)
-				.setLoadingColor(ContextCompat.getColor(this, R.color.colorAccent))
-				.setHintTextColor(ContextCompat.getColor(this, R.color.colorAccent))
+				.setLoadingColor(ContextCompat.getColor(this, R.color.colorPrimary))
+				.setHintTextColor(ContextCompat.getColor(this, R.color.colorPrimary))
+				.create()
+	}
+
+	override fun initData() {
+		super.initData()
+		initViewModel()
+	}
+
+	private fun initViewModel() {
+		loginViewModel = ViewModelProviders.of(this).get(LoginViewModel::class.java)
+		loginViewModel.message.observe(this, messageObserver)
+		loginViewModel.requestResult.observe(this, requestCodeObserver)
 	}
 
 	override fun monitor() {
@@ -99,39 +129,22 @@ class LoginActivity : XhuBaseActivity(R.layout.activity_login) {
 	}
 
 	private fun login() {
-		loginDialog.show()
+		showDialog()
 		val usernameStr = username_edit_text.text.toString()
 		val passwordStr = password_edit_text.text.toString()
 		val student = Student()
 		student.username = usernameStr
 		student.password = passwordStr
-		student.login(object : LoginListener {
-			override fun error(rt: Int, e: Throwable) {
-				loginDialog.dismiss()
-				Toast.makeText(this@LoginActivity, e.message.toString(), Toast.LENGTH_SHORT)
-						.show()
-			}
+		LoginRepository.login(student, loginViewModel)
+	}
 
-			override fun loginDone() {
-				val userList = XhuFileUtil.getArrayListFromFile(XhuFileUtil.getStudentListFile(this@LoginActivity), Student::class.java)
-				var result = false
-				var hasMain = false
-				userList.forEach {
-					result = result || it.username == student.username
-					hasMain = hasMain || it.isMain
-				}
-				if (!hasMain)
-					student.isMain = true
-				if (!result)
-					userList.add(student)
-				XhuFileUtil.saveObjectToFile(userList, XhuFileUtil.getStudentListFile(this@LoginActivity))
-				loginDialog.dismiss()
-				Toast.makeText(this@LoginActivity, getString(R.string.success_login, getString(R.string.app_name)), Toast.LENGTH_SHORT)
-						.show()
-				setResult(Activity.RESULT_OK, intent)
-				finish()
-				return
-			}
-		})
+	private fun showDialog() {
+		if (!dialog.isShowing)
+			dialog.show()
+	}
+
+	private fun hideDialog() {
+		if (dialog.isShowing)
+			dialog.dismiss()
 	}
 }

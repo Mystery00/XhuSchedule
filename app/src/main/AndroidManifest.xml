@@ -37,6 +37,7 @@
 			</intent-filter>
 			<intent-filter>
 				<action android:name="com.weilylab.xhuschedule.NOTIFICATION_VIEW" />
+
 				<category android:name="android.intent.category.DEFAULT" />
 
 				<data
@@ -60,7 +61,7 @@
 			android:screenOrientation="portrait"
 			android:theme="@style/AppTheme.NoActionBar" />
 		<activity
-			android:name=".activity.LoginActivity"
+			android:name=".newPackage.ui.activity.LoginActivity"
 			android:screenOrientation="portrait"
 			android:theme="@style/AppTheme.NoActionBar.FullScreen" />
 		<activity
@@ -210,6 +211,10 @@
 		<service
 			android:name=".service.CheckJobService"
 			android:permission="android.permission.BIND_JOB_SERVICE" />
+
+		<activity
+			android:name=".newPackage.ui.activity.BottomNavigationActivity"
+			android:label="@string/title_activity_bottom_navigation"></activity>
 	</application>
 
 </manifest>

@@ -61,12 +61,10 @@
 	<string name="share_more">更多</string>
 
 	<string name="hint_dialog_update_vcode">获取验证码中……</string>
-	<string name="hint_dialog_login">登录中……</string>
 	<string name="hint_dialog_update_cache">更新缓存中……</string>
 	<string name="hint_dialog_update_profile">正在更新个人信息……</string>
 	<string name="hint_dialog_check_update">检查更新中……</string>
 	<string name="hint_dialog_check_update_latest">当前已是最新版本。</string>
-	<string name="hint_dialog_init">正在初始化……</string>
 	<string name="hint_dialog_sync">信息同步中……</string>
 	<string name="hint_dialog_upload_log">日志上传中……</string>
 	<string name="hint_dialog_download_img">图片下载中……</string>
@@ -238,4 +236,13 @@
 	<string name="tomorrow_exam_notification_title">您明天有%1$d门考试哦~</string>
 
 	<string name="tomorrow_info_notification_placeholder_text">展开可查看详细信息</string>
+
+	<string name="hint_network_error">网络无法使用，请检查网络连接！</string>
+	<string name="hint_data_null">返回的数据为空！</string>
+	<string name="hint_do_too_many">频繁操作！</string>
+
+	<string name="hint_dialog_login">登录中……</string>
+	<string name="hint_dialog_init">正在初始化……</string>
+
+	<string name="title_activity_bottom_navigation">BottomNavigationActivity</string>
 </resources>

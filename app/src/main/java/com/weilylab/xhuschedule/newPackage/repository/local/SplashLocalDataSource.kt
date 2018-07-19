@@ -4,7 +4,7 @@ import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import com.weilylab.xhuschedule.newPackage.config.APP
 import com.weilylab.xhuschedule.newPackage.constant.SharedPreferenceConstant
-import com.weilylab.xhuschedule.newPackage.model.SplashResponse
+import com.weilylab.xhuschedule.newPackage.model.response.SplashResponse
 import com.weilylab.xhuschedule.newPackage.repository.SplashRepository
 import com.weilylab.xhuschedule.newPackage.repository.dataSource.SplashDataSource
 

@@ -64,6 +64,8 @@ android {
 		}
 		// Enabling multi dex support.
 		multiDexEnabled true
+
+
 	}
 	dependencies {
 		implementation 'com.android.support:multidex:1.0.3'
@@ -88,6 +90,7 @@ android {
 			path 'src/main/jni/CMakeLists.txt'
 		}
 	}
+
 }
 
 dependencies {

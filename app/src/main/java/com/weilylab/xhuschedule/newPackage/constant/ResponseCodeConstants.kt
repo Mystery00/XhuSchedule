@@ -1,5 +1,5 @@
 /*
- * Created by Mystery0 on 18-2-21 下午9:12.
+ * Created by Mystery0 on 18-2-27 下午6:59.
  * Copyright (c) 2018. All Rights reserved.
  *
  *                    =====================================================
@@ -28,48 +28,33 @@
  *                    =                                                   =
  *                    =====================================================
  *
- * Last modified 18-2-21 下午9:11
+ * Last modified 18-2-27 下午6:59
  */
 
-package com.weilylab.xhuschedule.newPackage.config
+package com.weilylab.xhuschedule.newPackage.constant
 
-import android.annotation.SuppressLint
-import android.app.Application
-import android.content.Context
-import androidx.multidex.MultiDexApplication
-import com.oasisfeng.condom.CondomContext
-import com.tencent.tauth.Tencent
-import com.weilylab.xhuschedule.listener.EmptyTencentListener
-import com.weilylab.xhuschedule.newPackage.repository.local.db.DBHelper
-import com.weilylab.xhuschedule.util.Constants
-import com.weilylab.xhuschedule.util.ScheduleHelper
-import vip.mystery0.crashhandler.CrashHandler
+object ResponseCodeConstants {
+	const val DO_TOO_MANY = "-3"
+	const val CATCH_ERROR = "-2"
+	const val UNKNOWN_ERROR = "-1"
+	const val DONE = "0"
 
-/**
- * Created by myste.
- */
-class APP : MultiDexApplication() {
+	const val JWC_TIMEOUT = "101"
+	const val JWC_BUSY = "102"
+	const val JWC_NEED_RATE = "103"
 
-	override fun onCreate() {
-		super.onCreate()
-		context = applicationContext
-		instance = this
-		DBHelper.init(this)
-		ScheduleHelper.initChannelID(APP.context)//初始化NotificationChannelID
-		val tencent = Tencent.createInstance(Constants.QQ_API_KEY, CondomContext.wrap(applicationContext, "Tencent"))
-		CrashHandler.getInstance(this)
-				.setDir(getExternalFilesDir("log"))
-				.setPrefix("log")
-				.setSuffix("txt")
-				.init()
-	}
+	const val SERVER_WRONG = "201"
+	const val SERVER_COURSE_ANALYZE_ERROR = "202"
+	const val SERVER_EXAM_ANALYZE_ERROR = "203"
+	const val SERVER_SCORE_ANALYZE_ERROR = "204"
+	const val SERVER_PROFILE_ANALYZE_ERROR = "205"
 
-	companion object {
-		@SuppressLint("StaticFieldLeak")
-		lateinit var context: Context
-			private set
+	const val VERIFY_SERVER_TIMEOUT = "301"
+	const val VERIFY_SERVER_ANAYLYZE_ERROR = "302"
 
-		lateinit var instance: Application
-			private set
-	}
+	const val ERROR_USERNAME = "401"
+	const val ERROR_PASSWORD = "402"
+	const val ERROR_VERIFY_CODE = "403"
+	const val ERROR_NOT_LOGIN = "405"
+	const val ERROR_API = "406"
 }

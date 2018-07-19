@@ -44,7 +44,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.weilylab.xhuschedule.R
-import com.weilylab.xhuschedule.activity.LoginActivity
+import com.weilylab.xhuschedule.newPackage.ui.activity.LoginActivity
 import com.weilylab.xhuschedule.classes.baseClass.Student
 import com.weilylab.xhuschedule.util.ScheduleHelper
 import com.weilylab.xhuschedule.util.Settings

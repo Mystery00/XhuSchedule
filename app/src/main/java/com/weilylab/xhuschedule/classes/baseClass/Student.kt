@@ -72,7 +72,7 @@ class Student : Serializable {
 				.autoLogin(username, password)
 				.subscribeOn(Schedulers.newThread())
 				.unsubscribeOn(Schedulers.newThread())
-				.map({ ScheduleHelper.gson.fromJson(InputStreamReader(it.byteStream()), AutoLoginRT::class.java) })
+				.map { ScheduleHelper.gson.fromJson(InputStreamReader(it.byteStream()), AutoLoginRT::class.java) }
 				.observeOn(AndroidSchedulers.mainThread())
 				.subscribe(object : Observer<AutoLoginRT> {
 					private var autoLoginRT: AutoLoginRT? = null

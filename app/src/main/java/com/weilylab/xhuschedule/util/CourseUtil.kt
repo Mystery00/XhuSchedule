@@ -34,13 +34,8 @@
 package com.weilylab.xhuschedule.util
 
 import android.content.Context
-import android.content.Intent
-import com.google.android.material.snackbar.Snackbar
 import android.util.Base64
 import com.google.gson.Gson
-import com.weilylab.xhuschedule.R
-import com.weilylab.xhuschedule.activity.LoginActivity
-import com.weilylab.xhuschedule.activity.MainActivity
 import com.weilylab.xhuschedule.classes.baseClass.Course
 import com.weilylab.xhuschedule.classes.baseClass.CourseTimeInfo
 import com.weilylab.xhuschedule.classes.baseClass.Student
@@ -56,11 +51,9 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.observers.DisposableObserver
 import io.reactivex.schedulers.Schedulers
-import kotlinx.android.synthetic.main.content_main.*
 import vip.mystery0.logs.Logs
 import java.io.File
 import java.io.InputStreamReader
-import java.net.UnknownHostException
 import kotlin.collections.ArrayList
 
 /**

@@ -89,10 +89,10 @@ object Constants {
 	const val INTENT_TAG_NAME_TAG = "TAG"
 	const val INTENT_TAG_NAME_TYPE = "type"
 	const val INTENT_TAG_NAME_QINIU_PATH = "qiniuPath"
+	const val INTENT_TAG_NAME_SPLASH_FILE_NAME = "splashFileName"
 	const val INTENT_TAG_NAME_PROFILE = "profile"
 	const val INTENT_TAG_NAME_LIST = "list"
 	const val INTENT_TAG_NAME_VERSION = "version"
-	const val INTENT_TAG_NAME_SPLASH_FILE_NAME = "splashFileName"
 
 	const val DOWNLOAD_TYPE_APK = "apk"
 	const val DOWNLOAD_TYPE_PATCH = "patch"
