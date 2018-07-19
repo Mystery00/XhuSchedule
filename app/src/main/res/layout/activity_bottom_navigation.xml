@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
 	xmlns:tools="http://schemas.android.com/tools"
 	android:id="@+id/coordinatorLayout"
 	android:layout_width="match_parent"
@@ -10,7 +11,58 @@
 		android:layout_width="match_parent"
 		android:layout_height="match_parent">
 
-		<include layout="@layout/content_bottom_navigation" />
+		<ImageView
+			android:id="@+id/backgroundImageView"
+			android:layout_width="384dp"
+			android:layout_height="0dp"
+			android:contentDescription="@string/app_name"
+			app:layout_constraintBottom_toBottomOf="parent"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintTop_toTopOf="parent" />
+
+		<include
+			layout="@layout/content_bottom_navigation"
+			android:layout_width="0dp"
+			android:layout_height="0dp"
+			app:layout_constraintBottom_toBottomOf="parent"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintTop_toBottomOf="@id/appBarLayout" />
+
+		<com.zhuangfei.timetable.view.WeekView
+			android:id="@+id/weekView"
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			app:layout_constraintBottom_toBottomOf="@id/appBarLayout"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintStart_toStartOf="parent" />
+
+		<androidx.constraintlayout.widget.ConstraintLayout
+			android:id="@+id/appBarLayout"
+			android:layout_width="0dp"
+			android:layout_height="?attr/actionBarSize"
+			android:background="#000FFF"
+			app:elevation="8dp"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintTop_toTopOf="parent">
+
+			<TextView
+				android:id="@+id/titleTextView"
+				android:layout_width="wrap_content"
+				android:layout_height="0dp"
+				android:gravity="center_vertical"
+				android:padding="@dimen/course_padding"
+				android:textColor="@color/colorWhite"
+				android:text="alsdlaskjdsakld"
+				android:textStyle="bold"
+				app:layout_constraintBottom_toBottomOf="parent"
+				app:layout_constraintEnd_toEndOf="parent"
+				app:layout_constraintStart_toStartOf="parent"
+				app:layout_constraintTop_toTopOf="parent" />
+
+		</androidx.constraintlayout.widget.ConstraintLayout>
 
 	</androidx.constraintlayout.widget.ConstraintLayout>
 

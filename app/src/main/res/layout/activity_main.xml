@@ -26,16 +26,16 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/appBar" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/layout_week_recycler_view"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:background="@color/colorPrimary"
-            app:layout_constraintBottom_toBottomOf="@id/appBar"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+		<androidx.recyclerview.widget.RecyclerView
+			android:id="@+id/layout_week_recycler_view"
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:background="@color/colorPrimary"
+			app:layout_constraintBottom_toBottomOf="@id/appBar"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintStart_toStartOf="parent" />
 
-        <com.google.android.material.appbar.AppBarLayout
+		<com.google.android.material.appbar.AppBarLayout
             android:id="@+id/appBar"
             android:layout_width="0dp"
             android:layout_height="?attr/actionBarSize"

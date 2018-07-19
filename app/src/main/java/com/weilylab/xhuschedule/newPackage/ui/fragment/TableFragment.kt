@@ -11,6 +11,7 @@ import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.databinding.FragmentTableBinding
 import com.weilylab.xhuschedule.newPackage.model.Course
 import com.weilylab.xhuschedule.newPackage.model.Student
+import com.weilylab.xhuschedule.newPackage.repository.BottomNavigationRepository
 import com.weilylab.xhuschedule.newPackage.repository.CourseRepository
 import com.weilylab.xhuschedule.newPackage.viewModel.BottomNavigationViewModel
 import vip.mystery0.tools.base.BaseFragment
@@ -20,13 +21,18 @@ class TableFragment : BaseFragment(R.layout.fragment_table) {
 	private lateinit var bottomNavigationViewModel: BottomNavigationViewModel
 
 	private val courseListObserver = Observer<List<Course>> {
-		fragmentTableBinding.timeTableView.setSource(it).showView()
+		fragmentTableBinding.timeTableView.setSource(it).updateView()
 	}
 
 	private val studentObserver = Observer<List<Student>> {
 		if (it.isNotEmpty()) {
 			CourseRepository.getCourseCacheByStudent(it[0], bottomNavigationViewModel)
 		}
+	}
+
+	private val weekObserver = Observer<Int> {
+		fragmentTableBinding.timeTableView.changeWeekOnly(it)
+		fragmentTableBinding.timeTableView.updateView()
 	}
 
 	companion object {
@@ -40,11 +46,13 @@ class TableFragment : BaseFragment(R.layout.fragment_table) {
 
 	override fun initView() {
 		initViewModel()
+		fragmentTableBinding.timeTableView.initView(activity!!)
 	}
 
 	private fun initViewModel() {
 		bottomNavigationViewModel = ViewModelProviders.of(activity!!).get(BottomNavigationViewModel::class.java)
 		bottomNavigationViewModel.courseList.observe(activity!!, courseListObserver)
 		bottomNavigationViewModel.studentList.observe(activity!!, studentObserver)
+		bottomNavigationViewModel.week.observe(activity!!, weekObserver)
 	}
 }

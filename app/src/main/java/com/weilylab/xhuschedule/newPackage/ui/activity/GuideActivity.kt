@@ -33,6 +33,8 @@
 
 package com.weilylab.xhuschedule.newPackage.ui.activity
 
+import android.animation.Animator
+import android.animation.ObjectAnimator
 import android.content.Intent
 import android.graphics.Color
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -43,6 +45,7 @@ import androidx.fragment.app.FragmentPagerAdapter
 import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat
 import androidx.viewpager.widget.ViewPager
 import android.view.*
+import android.view.animation.Animation
 import android.widget.LinearLayout
 
 import com.weilylab.xhuschedule.R
@@ -59,6 +62,9 @@ class GuideActivity : XhuBaseActivity(R.layout.activity_guide) {
 	private var distance = 0
 	private var flaggingWidth = 0
 	private var currentIndex = 0
+	private var leftAnimation: ObjectAnimator? = null
+	private var rightAnimation: ObjectAnimator? = null
+	private var buttonAnimation: ObjectAnimator? = null
 
 	override fun inflateView(layoutId: Int) {
 		window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or View.SYSTEM_UI_FLAG_FULLSCREEN or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
@@ -125,6 +131,34 @@ class GuideActivity : XhuBaseActivity(R.layout.activity_guide) {
 
 			override fun onPageSelected(position: Int) {
 				currentIndex = position
+//				when (position) {
+//					0 -> {
+//						if ()
+//						leftAnimation?.cancel()
+//						leftAnimation = ObjectAnimator.ofFloat(imageButtonPre, "alpha", 1F, 0F)
+//						leftAnimation!!.addListener(object : Animator.AnimatorListener {
+//							override fun onAnimationRepeat(p0: Animator?) {
+//							}
+//
+//							override fun onAnimationEnd(p0: Animator?) {
+//								imageButtonPre.visibility = View.GONE
+//							}
+//
+//							override fun onAnimationCancel(p0: Animator?) {
+//							}
+//
+//							override fun onAnimationStart(p0: Animator?) {
+//							}
+//						})
+//						leftAnimation!!.start()
+//					}
+//					1 -> {
+//
+//					}
+//					2 -> {
+//
+//					}
+//				}
 				imageButtonPre.visibility = if (position == 0) View.GONE else View.VISIBLE
 				imageButtonNext.visibility = if (position == 2) View.GONE else View.VISIBLE
 				buttonFinish.visibility = if (position == 2) View.VISIBLE else View.GONE
@@ -137,11 +171,6 @@ class GuideActivity : XhuBaseActivity(R.layout.activity_guide) {
 			ev.action = MotionEvent.ACTION_CANCEL
 		return super.dispatchTouchEvent(ev)
 	}
-
-	/**
-	 * A [FragmentPagerAdapter] that returns a fragment corresponding to
-	 * one of the sections/tabs/pages.
-	 */
 
 	inner class SectionsPagerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
 		private val imageArray = arrayOf(R.mipmap.welcome1, R.mipmap.welcome2, R.mipmap.welcome3)

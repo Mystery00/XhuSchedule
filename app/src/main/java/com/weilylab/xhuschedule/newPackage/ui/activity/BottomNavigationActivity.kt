@@ -1,5 +1,6 @@
 package com.weilylab.xhuschedule.newPackage.ui.activity
 
+import android.animation.ObjectAnimator
 import android.app.Activity
 import android.app.Dialog
 import android.content.Intent
@@ -9,6 +10,7 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.viewpager.widget.ViewPager
 import com.google.android.material.snackbar.Snackbar
 import com.weilylab.xhuschedule.R
+import com.weilylab.xhuschedule.newPackage.model.Course
 import com.weilylab.xhuschedule.newPackage.model.Student
 import com.weilylab.xhuschedule.newPackage.repository.BottomNavigationRepository
 import com.weilylab.xhuschedule.newPackage.ui.adapter.ViewPagerAdapter
@@ -20,6 +22,7 @@ import com.zyao89.view.zloading.ZLoadingDialog
 import com.zyao89.view.zloading.Z_TYPE
 import kotlinx.android.synthetic.main.activity_bottom_navigation.*
 import kotlinx.android.synthetic.main.content_bottom_navigation.*
+import vip.mystery0.logs.Logs
 import vip.mystery0.tools.base.BaseActivity
 
 class BottomNavigationActivity : BaseActivity(R.layout.activity_bottom_navigation) {
@@ -29,6 +32,8 @@ class BottomNavigationActivity : BaseActivity(R.layout.activity_bottom_navigatio
 
 	private lateinit var bottomNavigationViewModel: BottomNavigationViewModel
 	private lateinit var dialog: Dialog
+	private var animation: ObjectAnimator? = null
+	private var isShowWeekView = false
 
 	private val messageObserver = Observer<String> {
 		Snackbar.make(coordinatorLayout, it, Snackbar.LENGTH_LONG)
@@ -38,6 +43,10 @@ class BottomNavigationActivity : BaseActivity(R.layout.activity_bottom_navigatio
 		if (it != BottomNavigationRepository.DONE) {
 			hideDialog()
 		}
+	}
+
+	private val courseListObserver = Observer<List<Course>> {
+		weekView.setSource(it).updateView()
 	}
 
 	override fun initView() {
@@ -68,6 +77,7 @@ class BottomNavigationActivity : BaseActivity(R.layout.activity_bottom_navigatio
 		})
 		bottomNavigationViewModel.message.observe(this, messageObserver)
 		bottomNavigationViewModel.requestCode.observe(this, requestCodeObserver)
+		bottomNavigationViewModel.courseList.observe(this, courseListObserver)
 	}
 
 	private fun initDialog() {
@@ -103,6 +113,33 @@ class BottomNavigationActivity : BaseActivity(R.layout.activity_bottom_navigatio
 				bottomNavigationView.menu.getItem(position).isChecked = true
 			}
 		})
+		weekView.setCurWeek(1)
+				.setOnWeekItemClickedListener {
+					Logs.i("monitor: setOnWeekItemClickedListener")
+				}
+				.setOnWeekLeftClickedListener {
+					Logs.i("monitor: setOnWeekLeftClickedListener")
+				}
+		titleTextView.setOnClickListener {
+			Logs.i("monitor: ")
+			if (isShowWeekView)
+				hideWeekView()
+			else
+				showWeekView()
+			isShowWeekView = !isShowWeekView
+		}
+	}
+
+	private fun showWeekView() {
+		animation?.cancel()
+		animation = ObjectAnimator.ofFloat(weekView, "translationY", 0F, 200F)
+		animation!!.start()
+	}
+
+	private fun hideWeekView() {
+		animation?.cancel()
+		animation = ObjectAnimator.ofFloat(weekView, "translationY", 200F, 0F)
+		animation!!.start()
 	}
 
 	private fun showDialog() {

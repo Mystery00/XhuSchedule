@@ -214,7 +214,7 @@
 
 		<activity
 			android:name=".newPackage.ui.activity.BottomNavigationActivity"
-			android:label="@string/title_activity_bottom_navigation"></activity>
+			android:theme="@style/AppTheme.NoActionBar" />
 	</application>
 
 </manifest>

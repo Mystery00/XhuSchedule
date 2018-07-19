@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto">
 
 	<data />
 
@@ -12,7 +12,8 @@
 		<com.zhuangfei.timetable.TimetableView
 			android:id="@+id/timeTableView"
 			android:layout_width="match_parent"
-			android:layout_height="match_parent" />
+			android:layout_height="match_parent"
+			app:max_slide_item="11" />
 
 	</FrameLayout>
 </layout>
