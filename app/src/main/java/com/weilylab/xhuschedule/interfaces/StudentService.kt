@@ -39,7 +39,7 @@ import retrofit2.http.*
 
 interface StudentService {
     @FormUrlEncoded
-    @POST("/Course/getCourses")
+    @POST("/Course/getCourseList")
     fun getCourses(@Field("username") username: String, @Field("year") year: String?, @Field("term") term: Int?): Observable<ResponseBody>
 
     @FormUrlEncoded

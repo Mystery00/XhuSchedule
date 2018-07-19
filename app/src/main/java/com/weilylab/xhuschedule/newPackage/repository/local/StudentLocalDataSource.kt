@@ -7,7 +7,7 @@ import com.weilylab.xhuschedule.newPackage.model.StudentInfo
 import com.weilylab.xhuschedule.newPackage.repository.BottomNavigationRepository
 import com.weilylab.xhuschedule.newPackage.repository.dataSource.StudentDataSource
 import com.weilylab.xhuschedule.newPackage.repository.local.service.StudentService
-import com.weilylab.xhuschedule.newPackage.repository.local.service.StudentServiceImpl
+import com.weilylab.xhuschedule.newPackage.repository.local.service.impl.StudentServiceImpl
 import com.weilylab.xhuschedule.newPackage.utils.rxAndroid.RxObservable
 import com.weilylab.xhuschedule.newPackage.utils.rxAndroid.RxObserver
 import vip.mystery0.logs.Logs

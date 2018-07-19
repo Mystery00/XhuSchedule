@@ -5,11 +5,13 @@ import androidx.lifecycle.ViewModel
 import com.weilylab.xhuschedule.newPackage.model.Course
 import com.weilylab.xhuschedule.newPackage.model.Student
 import com.weilylab.xhuschedule.newPackage.model.StudentInfo
+import com.zhuangfei.timetable.model.Schedule
 
 class BottomNavigationViewModel : ViewModel() {
 	val studentList = MutableLiveData<List<Student>>()
 	val studentInfo = MutableLiveData<StudentInfo>()
-	val courses = MutableLiveData<Course>()
+	val courseList = MutableLiveData<List<Course>>()
+	val scheduleList = MutableLiveData<List<Schedule>>()
 	val message = MutableLiveData<String>()
 	val requestCode = MutableLiveData<Int>()
 }

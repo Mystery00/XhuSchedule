@@ -1,8 +1,9 @@
-package com.weilylab.xhuschedule.newPackage.repository.local.service
+package com.weilylab.xhuschedule.newPackage.repository.local.service.impl
 
 import com.weilylab.xhuschedule.newPackage.model.Student
 import com.weilylab.xhuschedule.newPackage.model.StudentInfo
 import com.weilylab.xhuschedule.newPackage.repository.local.db.DBHelper
+import com.weilylab.xhuschedule.newPackage.repository.local.service.StudentService
 
 class StudentServiceImpl : StudentService {
 

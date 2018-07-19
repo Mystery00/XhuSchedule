@@ -75,7 +75,7 @@ object XhuFileUtil {
 	 * 获取存储Course信息的File对象
 	 */
 	fun getCourseParentFile(context: Context): File {
-		return File(context.filesDir.absolutePath + File.separator + "courses/")
+		return File(context.filesDir.absolutePath + File.separator + "courseList/")
 	}
 
 	/**

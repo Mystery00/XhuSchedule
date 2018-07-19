@@ -29,13 +29,8 @@ class ProfileFragment : BaseFragment(R.layout.fragment_profile) {
 		fun newInstance() = ProfileFragment()
 	}
 
-	override fun onCreate(savedInstanceState: Bundle?) {
-		super.onCreate(savedInstanceState)
-		Logs.i("onCreate: ")
-	}
-
 	override fun inflateView(layoutId: Int, inflater: LayoutInflater, container: ViewGroup?): View {
-		fragmentProfileBinding = DataBindingUtil.inflate(inflater, layoutId, container, false)
+		fragmentProfileBinding = FragmentProfileBinding.inflate(inflater, container, false)
 		return fragmentProfileBinding.root
 	}
 

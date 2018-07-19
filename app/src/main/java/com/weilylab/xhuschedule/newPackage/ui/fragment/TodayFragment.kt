@@ -16,11 +16,6 @@ class TodayFragment : BaseFragment(R.layout.fragment_today) {
 
 	private lateinit var viewModel: BottomNavigationViewModel
 
-	override fun onCreate(savedInstanceState: Bundle?) {
-		super.onCreate(savedInstanceState)
-		Logs.i("onCreate: ")
-	}
-
 	override fun initView() {
 		viewModel = ViewModelProviders.of(activity!!).get(BottomNavigationViewModel::class.java)
 	}

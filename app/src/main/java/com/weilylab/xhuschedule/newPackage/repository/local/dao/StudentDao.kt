@@ -15,15 +15,15 @@ interface StudentDao {
 	@Delete
 	fun studentLogout(student: Student): Int
 
-	@Query("SELECT * FROM tb_student")
+	@Query("select * from tb_student")
 	fun queryAllStudentList(): List<Student>
 
-	@Query("SELECT count(username) FROM tb_student")
+	@Query("select count(username) from tb_student")
 	fun queryStudentSize(): Int
 
 	@Insert
 	fun saveStudentInfo(studentInfo: StudentInfo): Long
 
-	@Query("SELECT * FROM tb_student_info WHERE student_id = :username LIMIT 1")
+	@Query("select * from tb_student_info where student_id = :username limit 1")
 	fun queryStudentInfoByUsername(username: String): StudentInfo?
 }

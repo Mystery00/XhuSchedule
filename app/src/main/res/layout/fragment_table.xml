@@ -1,13 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	xmlns:tools="http://schemas.android.com/tools"
-	android:layout_width="match_parent"
-	android:layout_height="match_parent"
-	tools:context=".newPackage.ui.fragment.TableFragment">
+<layout>
 
-	<com.zhuangfei.timetable.TimetableView
-		android:id="@+id/timeTableView"
+	<data />
+
+	<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+		xmlns:tools="http://schemas.android.com/tools"
 		android:layout_width="match_parent"
-		android:layout_height="match_parent" />
+		android:layout_height="match_parent"
+		tools:context=".newPackage.ui.fragment.TableFragment">
 
-</FrameLayout>
+		<com.zhuangfei.timetable.TimetableView
+			android:id="@+id/timeTableView"
+			android:layout_width="match_parent"
+			android:layout_height="match_parent" />
+
+	</FrameLayout>
+</layout>

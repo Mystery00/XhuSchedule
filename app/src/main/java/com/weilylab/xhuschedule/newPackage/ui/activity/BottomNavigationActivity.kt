@@ -1,5 +1,6 @@
 package com.weilylab.xhuschedule.newPackage.ui.activity
 
+import android.app.Activity
 import android.app.Dialog
 import android.content.Intent
 import androidx.core.content.ContextCompat
@@ -30,7 +31,7 @@ class BottomNavigationActivity : BaseActivity(R.layout.activity_bottom_navigatio
 	private lateinit var dialog: Dialog
 
 	private val messageObserver = Observer<String> {
-		Snackbar.make(coordinatorLayout, it, Snackbar.LENGTH_SHORT)
+		Snackbar.make(coordinatorLayout, it, Snackbar.LENGTH_LONG)
 				.show()
 	}
 	private val requestCodeObserver = Observer<Int> {
@@ -112,5 +113,17 @@ class BottomNavigationActivity : BaseActivity(R.layout.activity_bottom_navigatio
 	private fun hideDialog() {
 		if (dialog.isShowing)
 			dialog.dismiss()
+	}
+
+	override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+		when (requestCode) {
+			ADD_ACCOUNT_CODE -> {
+				if (resultCode == Activity.RESULT_OK) {
+					BottomNavigationRepository.queryAllStudent(bottomNavigationViewModel)
+				} else {
+					finish()
+				}
+			}
+		}
 	}
 }
