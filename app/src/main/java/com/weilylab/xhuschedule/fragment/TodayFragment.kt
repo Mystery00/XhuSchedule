@@ -36,9 +36,6 @@ package com.weilylab.xhuschedule.fragment
 import android.os.Bundle
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.widget.ImageView
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.adapter.TodayAdapter
@@ -51,7 +48,7 @@ import java.util.*
 /**
  * Created by myste.
  */
-class TodayFragment : BaseFragment(R.layout.fragment_today) {
+class TodayFragment : BaseFragment(R.layout.fragment_todayold) {
 	companion object {
 
 		fun newInstance(list: ArrayList<Course>): TodayFragment {

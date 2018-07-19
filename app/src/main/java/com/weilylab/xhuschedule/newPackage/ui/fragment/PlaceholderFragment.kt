@@ -1,5 +1,5 @@
 /*
- * Created by Mystery0 on 18-2-21 下午9:12.
+ * Created by Mystery0 on 18-3-2 上午4:18.
  * Copyright (c) 2018. All Rights reserved.
  *
  *                    =====================================================
@@ -28,28 +28,48 @@
  *                    =                                                   =
  *                    =====================================================
  *
- * Last modified 18-2-21 下午9:11
+ * Last modified 18-3-2 上午4:18
  */
 
-package com.weilylab.xhuschedule.adapter
+package com.weilylab.xhuschedule.newPackage.ui.fragment
 
-import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentPagerAdapter
-import java.util.ArrayList
+import android.os.Bundle
 import androidx.fragment.app.Fragment
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.ImageView
+import com.weilylab.xhuschedule.R
 
-/**
- * Created by myste.
- */
-class ViewPagerAdapter(fragmentManager: FragmentManager) : FragmentPagerAdapter(fragmentManager) {
+class PlaceholderFragment : Fragment() {
+	private var imageID: Int? = null
+	private lateinit var imageView: ImageView
 
-    private val fragmentList = ArrayList<Fragment>()
+	companion object {
+		fun newInstance(imageID: Int): PlaceholderFragment {
+			val fragment = PlaceholderFragment()
+			val args = Bundle()
+			args.putInt("image", imageID)
+			fragment.arguments = args
+			return fragment
+		}
+	}
 
-    fun addFragment(fragment: Fragment) {
-        fragmentList.add(fragment)
-    }
+	override fun onCreate(savedInstanceState: Bundle?) {
+		super.onCreate(savedInstanceState)
+		imageID = arguments?.getInt("image")
+	}
 
-    override fun getItem(position: Int) = fragmentList[position]
+	override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
+							  savedInstanceState: Bundle?): View? {
+		val rootView = inflater.inflate(R.layout.fragment_welcome, container, false)
+		imageView = rootView.findViewById(R.id.imageView)
+		return rootView
+	}
 
-    override fun getCount(): Int = fragmentList.size
+	override fun onActivityCreated(savedInstanceState: Bundle?) {
+		super.onActivityCreated(savedInstanceState)
+		if (imageID != null)
+			imageView.setImageResource(imageID!!)
+	}
 }

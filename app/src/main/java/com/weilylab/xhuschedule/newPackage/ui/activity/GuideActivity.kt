@@ -46,10 +46,9 @@ import android.view.*
 import android.widget.LinearLayout
 
 import com.weilylab.xhuschedule.R
-import com.weilylab.xhuschedule.fragment.PlaceholderFragment
+import com.weilylab.xhuschedule.newPackage.ui.fragment.PlaceholderFragment
 import com.weilylab.xhuschedule.newPackage.base.XhuBaseActivity
 import com.weilylab.xhuschedule.newPackage.utils.ConfigurationUtil
-import com.weilylab.xhuschedule.util.Settings
 import kotlinx.android.synthetic.main.activity_guide.*
 import vip.mystery0.tools.utils.DensityTools
 

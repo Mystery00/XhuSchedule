@@ -114,7 +114,6 @@ object ScheduleHelper {
 	}
 
 	fun initChannelID(context: Context) {
-		Logs.i(TAG, "initChannelID: ")
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 			val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 			notificationManager.createNotificationChannel(createDefaultChannel())

@@ -5,15 +5,20 @@ import android.content.Intent
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.viewpager.widget.ViewPager
 import com.google.android.material.snackbar.Snackbar
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.newPackage.model.Student
 import com.weilylab.xhuschedule.newPackage.repository.BottomNavigationRepository
+import com.weilylab.xhuschedule.newPackage.ui.adapter.ViewPagerAdapter
+import com.weilylab.xhuschedule.newPackage.ui.fragment.ProfileFragment
+import com.weilylab.xhuschedule.newPackage.ui.fragment.TableFragment
+import com.weilylab.xhuschedule.newPackage.ui.fragment.TodayFragment
 import com.weilylab.xhuschedule.newPackage.viewModel.BottomNavigationViewModel
 import com.zyao89.view.zloading.ZLoadingDialog
 import com.zyao89.view.zloading.Z_TYPE
 import kotlinx.android.synthetic.main.activity_bottom_navigation.*
-import kotlinx.android.synthetic.main.content_main.*
+import kotlinx.android.synthetic.main.content_bottom_navigation.*
 import vip.mystery0.tools.base.BaseActivity
 
 class BottomNavigationActivity : BaseActivity(R.layout.activity_bottom_navigation) {
@@ -38,6 +43,12 @@ class BottomNavigationActivity : BaseActivity(R.layout.activity_bottom_navigatio
 		super.initView()
 		initDialog()
 		showDialog()
+		val viewPagerAdapter = ViewPagerAdapter(supportFragmentManager)
+		viewPagerAdapter.addFragment(TodayFragment.newInstance())
+		viewPagerAdapter.addFragment(TableFragment.newInstance())
+		viewPagerAdapter.addFragment(ProfileFragment.newInstance())
+		viewPager.offscreenPageLimit = 2
+		viewPager.adapter = viewPagerAdapter
 	}
 
 	override fun initData() {
@@ -73,15 +84,24 @@ class BottomNavigationActivity : BaseActivity(R.layout.activity_bottom_navigatio
 		super.monitor()
 		bottomNavigationView.setOnNavigationItemSelectedListener {
 			when (it.itemId) {
-//				R.id.navigation_home -> {
-//				}
-//				R.id.navigation_dashboard -> {
-//				}
-//				R.id.navigation_notifications -> {
-//				}
+				R.id.bottom_nav_today -> viewPager.setCurrentItem(0, true)
+				R.id.bottom_nav_week -> viewPager.setCurrentItem(1, true)
+				R.id.bottom_nav_profile -> viewPager.setCurrentItem(2, true)
 			}
 			true
 		}
+		viewPager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
+			override fun onPageScrollStateChanged(state: Int) {
+			}
+
+			override fun onPageScrolled(position: Int, positionOffset: Float,
+										positionOffsetPixels: Int) {
+			}
+
+			override fun onPageSelected(position: Int) {
+				bottomNavigationView.menu.getItem(position).isChecked = true
+			}
+		})
 	}
 
 	private fun showDialog() {

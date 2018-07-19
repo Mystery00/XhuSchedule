@@ -89,7 +89,7 @@ class ProfileFragment : Fragment() {
 
 	override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 		if (rootView == null) {
-			rootView = inflater.inflate(R.layout.fragment_profile, container, false)
+			rootView = inflater.inflate(R.layout.fragment_profileold, container, false)
 			profileImageView = rootView!!.findViewById(R.id.profile_img)
 			profileTextView = rootView!!.findViewById(R.id.textView_title)
 			recyclerView = rootView!!.findViewById(R.id.recycler_view)

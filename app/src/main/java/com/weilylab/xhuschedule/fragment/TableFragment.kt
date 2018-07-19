@@ -61,7 +61,7 @@ import kotlin.math.max
 /**
  * Created by myste.
  */
-class TableFragment : BaseFragment(R.layout.fragment_table) {
+class TableFragment : BaseFragment(R.layout.fragment_tableold) {
 	companion object {
 		fun newInstance(list: ArrayList<ArrayList<ArrayList<Course>>>): TableFragment {
 			val bundle = Bundle()

@@ -127,6 +127,7 @@ dependencies {
 	kapt "androidx.room:room-compiler:2.0.0-beta01"
 
 //	implementation 'com.github.ybq:parallaxviewpager:2.0.0'
+	implementation 'com.zhuangfei:TimetableView:2.0.1'
 	implementation 'de.hdodenhof:circleimageview:2.2.0'
 	implementation 'com.jrummyapps:colorpicker:2.1.6'
 	implementation 'com.getkeepsafe.taptargetview:taptargetview:1.11.0'

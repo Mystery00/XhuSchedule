@@ -1,25 +1,12 @@
-<?xml version="1.0" encoding="utf-8"?><!--
-  ~ Created by Mystery0 on 17-12-21 上午3:41.
-  ~ Copyright (c) 2017. All Rights reserved.
-  ~
-  ~ Last modified 17-11-27 上午3:50
-  -->
-
+<?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	tools:context=".newPackage.ui.fragment.TodayFragment">
 
-    <ImageView
-        android:id="@+id/background"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/colorWhite"
-        android:contentDescription="@string/app_name"
-        android:scaleType="centerCrop" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler_view"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+	<androidx.recyclerview.widget.RecyclerView
+		android:layout_width="match_parent"
+		android:layout_height="match_parent" />
 
 </FrameLayout>
