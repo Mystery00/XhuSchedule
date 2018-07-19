@@ -50,7 +50,7 @@
 				android:resource="@xml/shortcuts" />
 		</activity>
 		<activity
-			android:name=".activity.GuideActivity"
+			android:name=".newPackage.ui.activity.GuideActivity"
 			android:screenOrientation="portrait"
 			android:theme="@style/AppTheme.NoActionBar" />
 		<activity

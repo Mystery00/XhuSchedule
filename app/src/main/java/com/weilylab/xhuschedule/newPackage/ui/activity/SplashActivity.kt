@@ -36,8 +36,6 @@ package com.weilylab.xhuschedule.newPackage.ui.activity
 import android.content.Intent
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import com.weilylab.xhuschedule.activity.GuideActivity
-import com.weilylab.xhuschedule.activity.MainActivity
 import com.weilylab.xhuschedule.newPackage.base.XhuBaseActivity
 import com.weilylab.xhuschedule.newPackage.constant.IntentConstant
 import com.weilylab.xhuschedule.newPackage.model.response.SplashResponse
@@ -100,7 +98,7 @@ class SplashActivity : XhuBaseActivity(null) {
 	}
 
 	private fun gotoMain() {
-		startActivity(Intent(this, MainActivity::class.java))
+		startActivity(Intent(this, BottomNavigationActivity::class.java))
 		finish()
 	}
 

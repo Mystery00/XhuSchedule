@@ -601,8 +601,8 @@ class MainActivity : XhuBaseActivity(R.layout.activity_main) {
 				updateAllData()
 			requestCode == noticeActivityCode ->
 				profileFragment.updateNoticeBadge()
-			requestCode == com.tencent.connect.common.Constants.REQUEST_QQ_SHARE ->
-				Tencent.onActivityResultData(requestCode, resultCode, data, APP.tencentListener)
+			requestCode == com.tencent.connect.common.Constants.REQUEST_QQ_SHARE -> Logs.i("onActivityResult: ")
+//				Tencent.onActivityResultData(requestCode, resultCode, data, APP.tencentListener)
 			else ->
 				finish()
 		}

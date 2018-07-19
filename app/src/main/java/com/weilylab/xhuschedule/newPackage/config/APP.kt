@@ -56,7 +56,7 @@ class APP : MultiDexApplication() {
 		instance = this
 		DBHelper.init(this)
 		ScheduleHelper.initChannelID(APP.context)//初始化NotificationChannelID
-		val tencent = Tencent.createInstance(Constants.QQ_API_KEY, CondomContext.wrap(applicationContext, "Tencent"))
+//		val tencent = Tencent.createInstance(Constants.QQ_API_KEY, CondomContext.wrap(applicationContext, "Tencent"))
 		CrashHandler.getInstance(this)
 				.setDir(getExternalFilesDir("log"))
 				.setPrefix("log")

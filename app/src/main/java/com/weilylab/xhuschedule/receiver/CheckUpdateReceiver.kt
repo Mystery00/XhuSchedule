@@ -51,31 +51,31 @@ class CheckUpdateReceiver : BroadcastReceiver() {
 				?: return
 		val title = context.getString(R.string.dialog_update_title, context.getString(R.string.app_version_name), version.versionName)
 		val text = context.getString(R.string.dialog_update_text, version.updateLog)
-		val currentActivity = APPActivityManager.appManager.currentActivity() ?: return
+		val currentActivity = APPActivityManager.currentActivity() ?: return
 		val builder = AlertDialog.Builder(currentActivity)
 				.setTitle(title)
 				.setMessage(text)
-				.setPositiveButton("${context.getString(R.string.action_download_apk)}(${FileTools.formatFileSize(version.apkSize)})", { _, _ ->
+				.setPositiveButton("${context.getString(R.string.action_download_apk)}(${FileTools.formatFileSize(version.apkSize)})") { _, _ ->
 					val downloadAPKIntent = Intent(context, DownloadService::class.java)
 					downloadAPKIntent.putExtra(Constants.INTENT_TAG_NAME_TYPE, Constants.DOWNLOAD_TYPE_APK)
 					downloadAPKIntent.putExtra(Constants.INTENT_TAG_NAME_QINIU_PATH, version.apkQiniuPath)
 					context.startService(downloadAPKIntent)
-				})
+				}
 		if (version.lastVersionCode == context.getString(R.string.app_version_code).toInt())
-			builder.setNegativeButton("${context.getString(R.string.action_download_patch)}(${FileTools.formatFileSize(version.patchSize)})", { _, _ ->
+			builder.setNegativeButton("${context.getString(R.string.action_download_patch)}(${FileTools.formatFileSize(version.patchSize)})") { _, _ ->
 				val downloadPatchIntent = Intent(context, DownloadService::class.java)
 				downloadPatchIntent.putExtra(Constants.INTENT_TAG_NAME_TYPE, Constants.DOWNLOAD_TYPE_PATCH)
 				downloadPatchIntent.putExtra(Constants.INTENT_TAG_NAME_QINIU_PATH, version.patchQiniuPath)
 				context.startService(downloadPatchIntent)
-			})
+			}
 		if (version.must)
 			builder.setOnCancelListener {
-				APPActivityManager.appManager.finishAllActivity()
+				APPActivityManager.finishAllActivity()
 			}
 		else
-			builder.setNeutralButton(R.string.action_download_cancel, { _, _ ->
+			builder.setNeutralButton(R.string.action_download_cancel) { _, _ ->
 				Settings.ignoreUpdate = version.versionCode
-			})
+			}
 		builder.show()
 	}
 }

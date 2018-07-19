@@ -36,13 +36,14 @@ class BottomNavigationActivity : BaseActivity(R.layout.activity_bottom_navigatio
 
 	override fun initView() {
 		super.initView()
+		initDialog()
 		showDialog()
 	}
 
 	override fun initData() {
 		super.initData()
 		initViewModel()
-		initDialog()
+		BottomNavigationRepository.queryAllStudent(bottomNavigationViewModel)
 	}
 
 	private fun initViewModel() {
@@ -61,6 +62,7 @@ class BottomNavigationActivity : BaseActivity(R.layout.activity_bottom_navigatio
 		dialog = ZLoadingDialog(this)
 				.setLoadingBuilder(Z_TYPE.STAR_LOADING)
 				.setHintText(getString(R.string.hint_dialog_init))
+				.setHintTextSize(16F)
 				.setCanceledOnTouchOutside(false)
 				.setLoadingColor(ContextCompat.getColor(this, R.color.colorPrimary))
 				.setHintTextColor(ContextCompat.getColor(this, R.color.colorPrimary))

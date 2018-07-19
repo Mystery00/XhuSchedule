@@ -7,7 +7,7 @@
 	android:layout_height="match_parent"
 	android:background="#fadeb9"
 	android:fitsSystemWindows="true"
-	tools:context=".activity.GuideActivity">
+	tools:context=".newPackage.ui.activity.GuideActivity">
 
 	<androidx.viewpager.widget.ViewPager
 		android:id="@+id/container"

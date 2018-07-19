@@ -102,7 +102,7 @@ class ShareWithFriendsAdapter(private val context: Context, private val list: Ar
 					params.putString(QQShare.SHARE_TO_QQ_TARGET_URL, Constants.SHARE_TARGET_URL)
 					params.putString(QQShare.SHARE_TO_QQ_IMAGE_URL, Constants.SHARE_IMAGE_URL)
 					params.putString(QQShare.SHARE_TO_QQ_APP_NAME, context.getString(R.string.app_name))
-					APP.tencent.shareToQQ(context as Activity, params, APP.tencentListener)
+//					APP.tencent.shareToQQ(context as Activity, params, APP.tencentListener)
 				}
 				1 -> {//分享到空间
 					val params = Bundle()
@@ -113,7 +113,7 @@ class ShareWithFriendsAdapter(private val context: Context, private val list: Ar
 					params.putString(QQShare.SHARE_TO_QQ_IMAGE_URL, Constants.SHARE_IMAGE_URL)
 					params.putString(QQShare.SHARE_TO_QQ_APP_NAME, context.getString(R.string.app_name))
 					params.putInt(QQShare.SHARE_TO_QQ_EXT_INT, QQShare.SHARE_TO_QQ_FLAG_QZONE_AUTO_OPEN)
-					APP.tencent.shareToQQ(context as Activity, params, APP.tencentListener)
+//					APP.tencent.shareToQQ(context as Activity, params, APP.tencentListener)
 				}
 				2 -> {//分享到微博
 					val weiboShareAPI = (context as MainActivity).mWeiboShareAPI

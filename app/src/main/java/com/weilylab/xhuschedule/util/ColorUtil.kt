@@ -41,7 +41,7 @@ import com.weilylab.xhuschedule.classes.baseClass.Course
 import java.util.*
 
 object ColorUtil {
-	private val sharedPreference = APP.getContext().getSharedPreferences(Constants.SHARED_PREFERENCE_COLOR, Context.MODE_PRIVATE)
+	private val sharedPreference = APP.context.getSharedPreferences(Constants.SHARED_PREFERENCE_COLOR, Context.MODE_PRIVATE)
 
 	fun getCourseColor(keyName: String): Int {
 		var color = getColor(keyName)

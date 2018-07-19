@@ -40,7 +40,6 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import com.weilylab.xhuschedule.R
-import com.weilylab.xhuschedule.activity.MainActivity
 import com.weilylab.xhuschedule.newPackage.base.XhuBaseActivity
 import com.weilylab.xhuschedule.newPackage.model.response.SplashResponse
 import com.weilylab.xhuschedule.newPackage.repository.SplashRepository
@@ -97,7 +96,7 @@ class SplashImageActivity : XhuBaseActivity(R.layout.activity_splash_image) {
 	}
 
 	private fun gotoMain() {
-		startActivity(Intent(this, MainActivity::class.java))
+		startActivity(Intent(this, BottomNavigationActivity::class.java))
 		finish()
 	}
 }

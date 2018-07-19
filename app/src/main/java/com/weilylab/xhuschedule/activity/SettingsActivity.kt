@@ -57,7 +57,7 @@ import com.weilylab.xhuschedule.util.APPActivityManager
 class SettingsActivity : AppCompatPreferenceActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        APPActivityManager.appManager.addActivity(this)
+        APPActivityManager.addActivity(this)
         setupActionBar()
     }
 
@@ -111,6 +111,6 @@ class SettingsActivity : AppCompatPreferenceActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        APPActivityManager.appManager.finishActivity(this)
+        APPActivityManager.finishActivity(this)
     }
 }

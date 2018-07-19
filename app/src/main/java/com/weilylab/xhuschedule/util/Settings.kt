@@ -41,7 +41,7 @@ import com.weilylab.xhuschedule.newPackage.config.APP
  * Created by myste.
  */
 object Settings {
-	private val sharedPreference = APP.getContext().getSharedPreferences(Constants.SHARED_PREFERENCE_SETTINGS, Context.MODE_PRIVATE)
+	private val sharedPreference = APP.context.getSharedPreferences(Constants.SHARED_PREFERENCE_SETTINGS, Context.MODE_PRIVATE)
 
 	var firstWeekOfTerm: String//开学时间
 		set(value) {

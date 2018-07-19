@@ -37,21 +37,21 @@ import android.content.Context
 import com.weilylab.xhuschedule.newPackage.config.APP
 
 object CookieManger {
-    private const val COOKIE_PREFS = "cookies"
-    private val cookiePreferences = APP.getContext().getSharedPreferences(COOKIE_PREFS, Context.MODE_PRIVATE)
+	private const val COOKIE_PREFS = "cookies"
+	private val cookiePreferences = APP.context.getSharedPreferences(COOKIE_PREFS, Context.MODE_PRIVATE)
 
-    fun putCookie(username: String, host: String, cookie: String?) {
-        val name = getCookieToken(username, host)
-        cookiePreferences.edit()
-                .putString(name, cookie)
-                .apply()
-    }
+	fun putCookie(username: String, host: String, cookie: String?) {
+		val name = getCookieToken(username, host)
+		cookiePreferences.edit()
+				.putString(name, cookie)
+				.apply()
+	}
 
-    fun getCookie(username: String, host: String): String? {
-        val name = getCookieToken(username, host)
+	fun getCookie(username: String, host: String): String? {
+		val name = getCookieToken(username, host)
 
-        return cookiePreferences.getString(name, null)
-    }
+		return cookiePreferences.getString(name, null)
+	}
 
-    private fun getCookieToken(username: String, host: String): String = username + '@' + host
+	private fun getCookieToken(username: String, host: String): String = username + '@' + host
 }

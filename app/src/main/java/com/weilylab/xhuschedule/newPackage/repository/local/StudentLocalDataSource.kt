@@ -10,6 +10,7 @@ import com.weilylab.xhuschedule.newPackage.repository.local.service.StudentServi
 import com.weilylab.xhuschedule.newPackage.repository.local.service.StudentServiceImpl
 import com.weilylab.xhuschedule.newPackage.utils.rxAndroid.RxObservable
 import com.weilylab.xhuschedule.newPackage.utils.rxAndroid.RxObserver
+import vip.mystery0.logs.Logs
 
 object StudentLocalDataSource : StudentDataSource {
 	private val studentService: StudentService = StudentServiceImpl()
@@ -30,6 +31,7 @@ object StudentLocalDataSource : StudentDataSource {
 					}
 
 					override fun onError(e: Throwable) {
+						Logs.wtf("onError: ", e)
 						messageLiveData.value = e.message
 						requestCodeLiveData.value = BottomNavigationRepository.ERROR
 					}
@@ -58,6 +60,7 @@ object StudentLocalDataSource : StudentDataSource {
 					}
 
 					override fun onError(e: Throwable) {
+						Logs.wtf("onError: ", e)
 						messageLiveData.value = e.message
 						requestCodeLiveData.value = BottomNavigationRepository.ERROR
 					}

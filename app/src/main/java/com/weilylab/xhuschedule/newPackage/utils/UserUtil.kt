@@ -10,9 +10,11 @@ import com.weilylab.xhuschedule.newPackage.listener.RequestListener
 import com.weilylab.xhuschedule.newPackage.model.response.BaseResponse
 import com.weilylab.xhuschedule.newPackage.model.Student
 import com.weilylab.xhuschedule.newPackage.model.StudentInfo
+import com.weilylab.xhuschedule.newPackage.model.response.LoginResponse
 import com.weilylab.xhuschedule.newPackage.utils.rxAndroid.RxObserver
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import vip.mystery0.logs.Logs
 
 object UserUtil {
 	private const val RETRY_TIME = 1
@@ -24,7 +26,7 @@ object UserUtil {
 				.subscribeOn(Schedulers.newThread())
 				.unsubscribeOn(Schedulers.newThread())
 				.map {
-					val data = GsonFactory.parseInputStream(it.byteStream(), BaseResponse::class.java)
+					val data = GsonFactory.parseInputStream(it.byteStream(), LoginResponse::class.java)
 					if (data.rt == ResponseCodeConstants.DONE)
 						doSaveListener?.doSave(student)
 					data
@@ -40,6 +42,7 @@ object UserUtil {
 					}
 
 					override fun onError(e: Throwable) {
+						Logs.wtf("onError: ", e)
 						requestListener.error(ResponseCodeConstants.CATCH_ERROR, e.message)
 					}
 				})
@@ -82,6 +85,7 @@ object UserUtil {
 					}
 
 					override fun onError(e: Throwable) {
+						Logs.wtf("onError: ", e)
 						requestListener.error(ResponseCodeConstants.CATCH_ERROR, e.message)
 					}
 				})

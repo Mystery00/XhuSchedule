@@ -113,7 +113,7 @@ abstract class AppCompatPreferenceActivity : PreferenceActivity() {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP)
             overridePendingTransition(R.anim.animation_settings_out_enter, R.anim.animation_settings_out_exit)
         else {
-            val lastActivity=APPActivityManager.appManager.lastLastActivity()
+            val lastActivity=APPActivityManager.lastLastActivity()
             if (lastActivity!=null&&lastActivity is MainActivity)
                 ObjectAnimator.ofFloat(lastActivity.action_settings, "rotation", 360F, 0F).start()
         }

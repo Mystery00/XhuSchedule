@@ -31,7 +31,7 @@
  * Last modified 6/20/18 7:33 PM
  */
 
-package com.weilylab.xhuschedule.activity
+package com.weilylab.xhuschedule.newPackage.ui.activity
 
 import android.content.Intent
 import android.graphics.Color
@@ -48,6 +48,7 @@ import android.widget.LinearLayout
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.fragment.PlaceholderFragment
 import com.weilylab.xhuschedule.newPackage.base.XhuBaseActivity
+import com.weilylab.xhuschedule.newPackage.utils.ConfigurationUtil
 import com.weilylab.xhuschedule.util.Settings
 import kotlinx.android.synthetic.main.activity_guide.*
 import vip.mystery0.tools.utils.DensityTools
@@ -170,8 +171,8 @@ class GuideActivity : XhuBaseActivity(R.layout.activity_guide) {
 	}
 
 	private fun go() {
-		Settings.isFirstEnter = false
-		startActivity(Intent(this, MainActivity::class.java))
+		ConfigurationUtil.firstEnter = false
+		startActivity(Intent(this, BottomNavigationActivity::class.java))
 		finish()
 	}
 }
