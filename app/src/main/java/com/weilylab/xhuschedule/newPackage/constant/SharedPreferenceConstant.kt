@@ -11,4 +11,5 @@ object SharedPreferenceConstant {
 	const val FILE_NAME_CONFIG = "config"
 
 	const val FIELD_CONFIG_FIRST_ENTER = "config_first_enter"
+	const val FIELD_START_DATE_TIME = "config_start_date_time"
 }

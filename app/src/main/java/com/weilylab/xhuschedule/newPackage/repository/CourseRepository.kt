@@ -9,7 +9,7 @@ object CourseRepository {
 	const val DONE = 21
 	const val ERROR = 22
 
-	fun getCourseByStudent(student: Student, bottomNavigationViewModel: BottomNavigationViewModel) = CourseRemoteDataSource.queryCourseByUsername(bottomNavigationViewModel.courseList, bottomNavigationViewModel.message, bottomNavigationViewModel.requestCode, student, false)
+	fun getCourseByStudent(student: Student, bottomNavigationViewModel: BottomNavigationViewModel) = CourseRemoteDataSource.queryCourseByUsername(bottomNavigationViewModel.courseList, bottomNavigationViewModel.message, bottomNavigationViewModel.requestCode, student, null, null, false)
 
-	fun getCourseCacheByStudent(student: Student, bottomNavigationViewModel: BottomNavigationViewModel) = CourseLocalDataSource.queryCourseByUsername(bottomNavigationViewModel.courseList, bottomNavigationViewModel.message, bottomNavigationViewModel.requestCode, student, true)
+	fun getCourseCacheByStudent(student: Student, bottomNavigationViewModel: BottomNavigationViewModel) = CourseLocalDataSource.queryCourseByUsername(bottomNavigationViewModel.courseList, bottomNavigationViewModel.message, bottomNavigationViewModel.requestCode, student, null, null, true)
 }

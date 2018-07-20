@@ -14,12 +14,19 @@ import com.weilylab.xhuschedule.newPackage.utils.NetworkUtil
 import vip.mystery0.logs.Logs
 
 object CourseRemoteDataSource : CourseDataSource {
-	override fun queryCourseByUsername(courseListLiveData: MutableLiveData<List<Course>>, messageLiveData: MutableLiveData<String>, requestCodeLiveData: MutableLiveData<Int>, student: Student, isFromCache: Boolean) {
+	override fun queryCourseByUsername(courseListLiveData: MutableLiveData<List<Course>>, messageLiveData: MutableLiveData<String>, requestCodeLiveData: MutableLiveData<Int>, student: Student, year: String?, term: String?, isFromCache: Boolean) {
 		if (NetworkUtil.isConnectInternet()) {
-			CourseUtil.getCourse(student, object : DoSaveListener<List<Course>> {
+			CourseUtil.getCourse(student, year, term, object : DoSaveListener<List<Course>> {
 				override fun doSave(t: List<Course>) {
 					t.forEach {
 						it.studentID = student.username
+						if (year != null && term != null) {
+							it.year = year
+							it.term = term
+						} else {
+							it.year = "current"
+							it.term = "current"
+						}
 					}
 					CourseLocalDataSource.saveCourseList(t)
 				}
@@ -40,7 +47,7 @@ object CourseRemoteDataSource : CourseDataSource {
 			if (isFromCache)
 				requestCodeLiveData.value = BottomNavigationRepository.ERROR
 			else
-				CourseLocalDataSource.queryCourseByUsername(courseListLiveData, messageLiveData, requestCodeLiveData, student, isFromCache)
+				CourseLocalDataSource.queryCourseByUsername(courseListLiveData, messageLiveData, requestCodeLiveData, student, year, term, isFromCache)
 		}
 	}
 }

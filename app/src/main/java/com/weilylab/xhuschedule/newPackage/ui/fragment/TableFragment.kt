@@ -1,6 +1,5 @@
 package com.weilylab.xhuschedule.newPackage.ui.fragment
 
-
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,10 +10,11 @@ import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.databinding.FragmentTableBinding
 import com.weilylab.xhuschedule.newPackage.model.Course
 import com.weilylab.xhuschedule.newPackage.model.Student
-import com.weilylab.xhuschedule.newPackage.repository.BottomNavigationRepository
 import com.weilylab.xhuschedule.newPackage.repository.CourseRepository
 import com.weilylab.xhuschedule.newPackage.viewModel.BottomNavigationViewModel
 import vip.mystery0.tools.base.BaseFragment
+import java.text.SimpleDateFormat
+import java.util.*
 
 class TableFragment : BaseFragment(R.layout.fragment_table) {
 	private lateinit var fragmentTableBinding: FragmentTableBinding
@@ -32,7 +32,11 @@ class TableFragment : BaseFragment(R.layout.fragment_table) {
 
 	private val weekObserver = Observer<Int> {
 		fragmentTableBinding.timeTableView.changeWeekOnly(it)
-		fragmentTableBinding.timeTableView.updateView()
+	}
+
+	private val startDateTimeObserver = Observer<Calendar> {
+		val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINA)
+		fragmentTableBinding.timeTableView.setCurWeek(simpleDateFormat.format(it.time))
 	}
 
 	companion object {
@@ -54,5 +58,15 @@ class TableFragment : BaseFragment(R.layout.fragment_table) {
 		bottomNavigationViewModel.courseList.observe(activity!!, courseListObserver)
 		bottomNavigationViewModel.studentList.observe(activity!!, studentObserver)
 		bottomNavigationViewModel.week.observe(activity!!, weekObserver)
+		bottomNavigationViewModel.startDateTime.observe(activity!!, startDateTimeObserver)
+	}
+
+	override fun monitor() {
+		super.monitor()
+		fragmentTableBinding.timeTableView.scheduleManager
+				.setOnItemClickListener { _, scheduleList ->
+					scheduleList.forEach {
+					}
+				}
 	}
 }

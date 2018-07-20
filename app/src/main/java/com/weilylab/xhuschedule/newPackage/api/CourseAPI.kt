@@ -9,5 +9,5 @@ import retrofit2.http.POST
 interface CourseAPI {
 	@FormUrlEncoded
 	@POST("/Course/getCourses")
-	fun getCourses(@Field("username") username: String, @Field("year") year: String? = null, @Field("term") term: Int? = null): Observable<ResponseBody>
+	fun getCourses(@Field("username") username: String, @Field("year") year: String? = null, @Field("term") term: String? = null): Observable<ResponseBody>
 }

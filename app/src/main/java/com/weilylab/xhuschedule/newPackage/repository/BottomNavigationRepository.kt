@@ -2,6 +2,7 @@ package com.weilylab.xhuschedule.newPackage.repository
 
 import com.weilylab.xhuschedule.newPackage.model.Student
 import com.weilylab.xhuschedule.newPackage.repository.local.StudentLocalDataSource
+import com.weilylab.xhuschedule.newPackage.repository.remote.InitRemoteDataSource
 import com.weilylab.xhuschedule.newPackage.repository.remote.StudentRemoteDataSource
 import com.weilylab.xhuschedule.newPackage.viewModel.BottomNavigationViewModel
 
@@ -11,9 +12,12 @@ object BottomNavigationRepository {
 
 	const val NONE = 30
 	const val ACTION_REFRESH = 31
-	const val ACTION_WEEK = 32
 
 	fun queryAllStudent(bottomNavigationViewModel: BottomNavigationViewModel) = StudentLocalDataSource.queryAllStudentList(bottomNavigationViewModel.studentList, bottomNavigationViewModel.message, bottomNavigationViewModel.requestCode)
 
 	fun queryStudentInfo(student: Student, bottomNavigationViewModel: BottomNavigationViewModel) = StudentRemoteDataSource.queryStudentInfo(bottomNavigationViewModel.studentInfo, bottomNavigationViewModel.message, bottomNavigationViewModel.requestCode, student)
+
+	fun queryCurrentWeek(bottomNavigationViewModel: BottomNavigationViewModel) {
+		InitRemoteDataSource.getStartDateTime(bottomNavigationViewModel.startDateTime, bottomNavigationViewModel.currentWeek)
+	}
 }

@@ -1,5 +1,6 @@
 package com.weilylab.xhuschedule.newPackage.ui.activity
 
+import android.animation.Animator
 import android.animation.ObjectAnimator
 import android.app.Activity
 import android.app.Dialog
@@ -22,8 +23,8 @@ import com.zyao89.view.zloading.ZLoadingDialog
 import com.zyao89.view.zloading.Z_TYPE
 import kotlinx.android.synthetic.main.activity_bottom_navigation.*
 import kotlinx.android.synthetic.main.content_bottom_navigation.*
-import vip.mystery0.logs.Logs
 import vip.mystery0.tools.base.BaseActivity
+import vip.mystery0.tools.utils.DensityTools
 
 class BottomNavigationActivity : BaseActivity(R.layout.activity_bottom_navigation) {
 	companion object {
@@ -46,7 +47,16 @@ class BottomNavigationActivity : BaseActivity(R.layout.activity_bottom_navigatio
 	}
 
 	private val courseListObserver = Observer<List<Course>> {
-		weekView.setSource(it).updateView()
+		weekView.setSource(it).showView()
+	}
+
+	private val currentWeekObserver = Observer<Int> {
+		val week = when {
+			it < 1 -> 1
+			it > 20 -> 20
+			else -> it
+		}
+		weekView.setCurWeek(week).showView()
 	}
 
 	override fun initView() {
@@ -59,12 +69,19 @@ class BottomNavigationActivity : BaseActivity(R.layout.activity_bottom_navigatio
 		viewPagerAdapter.addFragment(ProfileFragment.newInstance())
 		viewPager.offscreenPageLimit = 2
 		viewPager.adapter = viewPagerAdapter
+		weekView.setCurWeek(1)
+				.hideLeftLayout()
+				.setOnWeekItemClickedListener {
+					bottomNavigationViewModel.week.value = it
+				}
+				.showView()
 	}
 
 	override fun initData() {
 		super.initData()
 		initViewModel()
 		BottomNavigationRepository.queryAllStudent(bottomNavigationViewModel)
+		BottomNavigationRepository.queryCurrentWeek(bottomNavigationViewModel)
 	}
 
 	private fun initViewModel() {
@@ -77,6 +94,7 @@ class BottomNavigationActivity : BaseActivity(R.layout.activity_bottom_navigatio
 		})
 		bottomNavigationViewModel.message.observe(this, messageObserver)
 		bottomNavigationViewModel.requestCode.observe(this, requestCodeObserver)
+		bottomNavigationViewModel.currentWeek.observe(this, currentWeekObserver)
 		bottomNavigationViewModel.courseList.observe(this, courseListObserver)
 	}
 
@@ -113,15 +131,7 @@ class BottomNavigationActivity : BaseActivity(R.layout.activity_bottom_navigatio
 				bottomNavigationView.menu.getItem(position).isChecked = true
 			}
 		})
-		weekView.setCurWeek(1)
-				.setOnWeekItemClickedListener {
-					Logs.i("monitor: setOnWeekItemClickedListener")
-				}
-				.setOnWeekLeftClickedListener {
-					Logs.i("monitor: setOnWeekLeftClickedListener")
-				}
 		titleTextView.setOnClickListener {
-			Logs.i("monitor: ")
 			if (isShowWeekView)
 				hideWeekView()
 			else
@@ -132,13 +142,41 @@ class BottomNavigationActivity : BaseActivity(R.layout.activity_bottom_navigatio
 
 	private fun showWeekView() {
 		animation?.cancel()
-		animation = ObjectAnimator.ofFloat(weekView, "translationY", 0F, 200F)
+		animation = ObjectAnimator.ofFloat(weekView, "translationY", 0F, DensityTools.dp2px(this, 90F).toFloat())
+		animation!!.addListener(object : Animator.AnimatorListener {
+			override fun onAnimationRepeat(p0: Animator?) {
+			}
+
+			override fun onAnimationEnd(p0: Animator?) {
+			}
+
+			override fun onAnimationCancel(p0: Animator?) {
+			}
+
+			override fun onAnimationStart(p0: Animator?) {
+				weekView.isShow(true)
+			}
+		})
 		animation!!.start()
 	}
 
 	private fun hideWeekView() {
 		animation?.cancel()
-		animation = ObjectAnimator.ofFloat(weekView, "translationY", 200F, 0F)
+		animation = ObjectAnimator.ofFloat(weekView, "translationY", DensityTools.dp2px(this, 90F).toFloat(), 0F)
+		animation!!.addListener(object : Animator.AnimatorListener {
+			override fun onAnimationRepeat(p0: Animator?) {
+			}
+
+			override fun onAnimationEnd(p0: Animator?) {
+				weekView.isShow(false)
+			}
+
+			override fun onAnimationCancel(p0: Animator?) {
+			}
+
+			override fun onAnimationStart(p0: Animator?) {
+			}
+		})
 		animation!!.start()
 	}
 

@@ -22,7 +22,7 @@ object SplashRemoteDataSource : SplashDataSource {
 				.unsubscribeOn(Schedulers.newThread())
 				.map {
 					val splashResponse = GsonFactory.parseInputStream(it.byteStream(), SplashResponse::class.java)
-					if (splashResponse.results.size != 0)
+					if (splashResponse.results.isNotEmpty())
 						SplashLocalDataSource.saveSplash(splashResponse.results[0])
 					splashResponse
 				}

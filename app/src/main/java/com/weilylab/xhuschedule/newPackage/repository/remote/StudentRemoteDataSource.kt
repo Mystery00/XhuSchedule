@@ -31,11 +31,11 @@ object StudentRemoteDataSource : StudentDataSource {
 
 				override fun error(rt: String, msg: String?) {
 					Logs.im(rt, msg)
-					messageLiveData.value = msg
-					requestCodeLiveData.value = BottomNavigationRepository.ERROR
+					StudentLocalDataSource.queryStudentInfo(studentInfoLiveData, messageLiveData, requestCodeLiveData, student)
 				}
 			})
 		} else {
+			messageLiveData.value = StringConstant.hint_network_error
 			StudentLocalDataSource.queryStudentInfo(studentInfoLiveData, messageLiveData, requestCodeLiveData, student)
 		}
 	}

@@ -11,5 +11,5 @@ class CourseServiceImpl : CourseService {
 
 	override fun deleteCourse(course: Course): Int = courseDao.deleteCourse(course)
 
-	override fun queryCourseByUsername(username: String): List<Course> = courseDao.queryCourseByUsername(username)
+	override fun queryCourseByUsernameAndTerm(username: String, year: String, term: String): List<Course> = courseDao.queryCourseByUsernameAndTerm(username, year, term)
 }

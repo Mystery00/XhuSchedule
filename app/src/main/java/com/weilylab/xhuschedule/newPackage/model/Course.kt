@@ -5,6 +5,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.zhuangfei.timetable.model.Schedule
 import com.zhuangfei.timetable.model.ScheduleEnable
+import java.util.ArrayList
 
 @Entity(tableName = "tb_course")
 class Course : ScheduleEnable {
@@ -34,6 +35,10 @@ class Course : ScheduleEnable {
 	lateinit var type: String
 	@ColumnInfo(name = "course_day")
 	lateinit var day: String
+	@ColumnInfo(name = "course_year")
+	lateinit var year: String
+	@ColumnInfo(name = "course_term")
+	lateinit var term: String
 	@ColumnInfo(name = "student_id")
 	lateinit var studentID: String
 	@ColumnInfo(name = "edit_type")
@@ -45,7 +50,10 @@ class Course : ScheduleEnable {
 		schedule.room = location
 		schedule.teacher = teacher
 		val weekArray = week.trim().split('-')
-		schedule.weekList = listOf(weekArray[0].toInt(), weekArray[1].toInt())
+		val weekList = ArrayList<Int>()
+		for (i in weekArray[0].toInt()..weekArray[1].toInt())
+			weekList.add(i)
+		schedule.weekList = weekList
 		val timeArray = time.trim().split('-')
 		schedule.start = timeArray[0].toInt()
 		schedule.step = timeArray[1].toInt() - timeArray[0].toInt() + 1

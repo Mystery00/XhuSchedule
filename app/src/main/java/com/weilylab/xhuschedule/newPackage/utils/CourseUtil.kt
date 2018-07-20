@@ -18,10 +18,10 @@ import vip.mystery0.logs.Logs
 object CourseUtil {
 	private const val RETRY_TIME = 1
 
-	fun getCourse(student: Student, doSaveListener: DoSaveListener<List<Course>>?, requestListener: RequestListener<List<Course>>, index: Int = 0) {
+	fun getCourse(student: Student, year: String?, term: String?, doSaveListener: DoSaveListener<List<Course>>?, requestListener: RequestListener<List<Course>>, index: Int = 0) {
 		RetrofitFactory.tomcatRetrofit
 				.create(CourseAPI::class.java)
-				.getCourses(student.username)
+				.getCourses(student.username, year, term)
 				.subscribeOn(Schedulers.newThread())
 				.unsubscribeOn(Schedulers.newThread())
 				.map {
@@ -42,7 +42,7 @@ object CourseUtil {
 								else
 									UserUtil.login(student, null, object : RequestListener<Boolean> {
 										override fun done(t: Boolean) {
-											getCourse(student, doSaveListener, requestListener, index + 1)
+											getCourse(student, year, term, doSaveListener, requestListener, index + 1)
 										}
 
 										override fun error(rt: String, msg: String?) {
