@@ -17,6 +17,10 @@ class TodayFragment : BaseFragment(R.layout.fragment_today) {
 	private lateinit var viewModel: BottomNavigationViewModel
 
 	override fun initView() {
+		initViewModel()
+	}
+
+	private fun initViewModel() {
 		viewModel = ViewModelProviders.of(activity!!).get(BottomNavigationViewModel::class.java)
 	}
 

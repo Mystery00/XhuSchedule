@@ -17,4 +17,5 @@ class BottomNavigationViewModel : ViewModel() {
 	val message = MutableLiveData<String>()
 	val requestCode = MutableLiveData<Int>()
 	val action = MutableLiveData<Int>()
+	val showCourse = MutableLiveData<Course>()
 }

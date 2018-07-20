@@ -23,6 +23,7 @@ import com.zyao89.view.zloading.ZLoadingDialog
 import com.zyao89.view.zloading.Z_TYPE
 import kotlinx.android.synthetic.main.activity_bottom_navigation.*
 import kotlinx.android.synthetic.main.content_bottom_navigation.*
+import vip.mystery0.logs.Logs
 import vip.mystery0.tools.base.BaseActivity
 import vip.mystery0.tools.utils.DensityTools
 
@@ -57,6 +58,10 @@ class BottomNavigationActivity : BaseActivity(R.layout.activity_bottom_navigatio
 			else -> it
 		}
 		weekView.setCurWeek(week).showView()
+	}
+
+	private val showCourseObserver = Observer<Course> {
+		Logs.i("show: ${it.name}")
 	}
 
 	override fun initView() {
@@ -96,6 +101,7 @@ class BottomNavigationActivity : BaseActivity(R.layout.activity_bottom_navigatio
 		bottomNavigationViewModel.requestCode.observe(this, requestCodeObserver)
 		bottomNavigationViewModel.currentWeek.observe(this, currentWeekObserver)
 		bottomNavigationViewModel.courseList.observe(this, courseListObserver)
+		bottomNavigationViewModel.showCourse.observe(this, showCourseObserver)
 	}
 
 	private fun initDialog() {
