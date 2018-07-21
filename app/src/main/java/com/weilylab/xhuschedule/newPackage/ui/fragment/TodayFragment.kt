@@ -9,9 +9,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.databinding.FragmentTodayBinding
-import com.weilylab.xhuschedule.newPackage.model.Course
 import com.weilylab.xhuschedule.newPackage.ui.adapter.FragmentTodayRecyclerViewAdapter
 import com.weilylab.xhuschedule.newPackage.viewModel.BottomNavigationViewModel
+import com.zhuangfei.timetable.model.Schedule
 import vip.mystery0.tools.base.BaseFragment
 import java.util.ArrayList
 
@@ -24,9 +24,9 @@ class TodayFragment : BaseFragment(R.layout.fragment_today) {
 	private lateinit var viewModel: BottomNavigationViewModel
 	private lateinit var fragmentTodayBinding: FragmentTodayBinding
 	private lateinit var adapter: FragmentTodayRecyclerViewAdapter
-	private val list = ArrayList<Course>()
+	private val list = ArrayList<Schedule>()
 
-	private val todayCourseListObserver = Observer<List<Course>> {
+	private val todayCourseListObserver = Observer<List<Schedule>> {
 		list.clear()
 		list.addAll(it)
 		adapter.notifyDataSetChanged()
@@ -51,5 +51,9 @@ class TodayFragment : BaseFragment(R.layout.fragment_today) {
 
 	override fun monitor() {
 		super.monitor()
+		adapter.setOnItemClickListener { _, course ->
+			viewModel.showCourse.value = arrayListOf(course)
+			true
+		}
 	}
 }

@@ -11,7 +11,6 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.viewpager.widget.ViewPager
 import com.google.android.material.snackbar.Snackbar
 import com.weilylab.xhuschedule.R
-import com.weilylab.xhuschedule.newPackage.model.Course
 import com.weilylab.xhuschedule.newPackage.model.Student
 import com.weilylab.xhuschedule.newPackage.repository.BottomNavigationRepository
 import com.weilylab.xhuschedule.newPackage.ui.adapter.ViewPagerAdapter
@@ -19,11 +18,11 @@ import com.weilylab.xhuschedule.newPackage.ui.fragment.ProfileFragment
 import com.weilylab.xhuschedule.newPackage.ui.fragment.TableFragment
 import com.weilylab.xhuschedule.newPackage.ui.fragment.TodayFragment
 import com.weilylab.xhuschedule.newPackage.viewModel.BottomNavigationViewModel
+import com.zhuangfei.timetable.model.Schedule
 import com.zyao89.view.zloading.ZLoadingDialog
 import com.zyao89.view.zloading.Z_TYPE
 import kotlinx.android.synthetic.main.activity_bottom_navigation.*
 import kotlinx.android.synthetic.main.content_bottom_navigation.*
-import vip.mystery0.logs.Logs
 import vip.mystery0.tools.base.BaseActivity
 import vip.mystery0.tools.utils.DensityTools
 
@@ -41,14 +40,15 @@ class BottomNavigationActivity : BaseActivity(R.layout.activity_bottom_navigatio
 		Snackbar.make(coordinatorLayout, it, Snackbar.LENGTH_LONG)
 				.show()
 	}
+
 	private val requestCodeObserver = Observer<Int> {
 		if (it != BottomNavigationRepository.DONE) {
 			hideDialog()
 		}
 	}
 
-	private val courseListObserver = Observer<List<Course>> {
-		weekView.setSource(it).showView()
+	private val courseListObserver = Observer<List<Schedule>> {
+		weekView.setData(it).showView()
 	}
 
 	private val currentWeekObserver = Observer<Int> {
@@ -60,8 +60,21 @@ class BottomNavigationActivity : BaseActivity(R.layout.activity_bottom_navigatio
 		weekView.setCurWeek(week).showView()
 	}
 
-	private val showCourseObserver = Observer<Course> {
-		Logs.i("show: ${it.name}")
+	private val showCourseObserver = Observer<List<Schedule>> {
+		if (it.isEmpty())
+			return@Observer
+		val s = StringBuilder("显示：")
+		it.forEach {
+			s.append(it.name).append(it.weekList).append(it.room).appendln()
+		}
+		Snackbar.make(coordinatorLayout, s.toString(), Snackbar.LENGTH_LONG)
+				.addCallback(object : Snackbar.Callback() {
+					override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
+						super.onDismissed(transientBottomBar, event)
+						bottomNavigationViewModel.showCourse.value = emptyList()
+					}
+				})
+				.show()
 	}
 
 	override fun initView() {

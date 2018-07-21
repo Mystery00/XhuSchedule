@@ -11,10 +11,11 @@ import com.weilylab.xhuschedule.newPackage.repository.dataSource.CourseDataSourc
 import com.weilylab.xhuschedule.newPackage.repository.local.CourseLocalDataSource
 import com.weilylab.xhuschedule.newPackage.utils.CourseUtil
 import com.weilylab.xhuschedule.newPackage.utils.NetworkUtil
+import com.zhuangfei.timetable.model.Schedule
 import vip.mystery0.logs.Logs
 
 object CourseRemoteDataSource : CourseDataSource {
-	override fun queryCourseByUsername(courseListLiveData: MutableLiveData<List<Course>>, todayCourseListLiveData: MutableLiveData<List<Course>>, messageLiveData: MutableLiveData<String>, requestCodeLiveData: MutableLiveData<Int>, student: Student, year: String?, term: String?, isFromCache: Boolean) {
+	override fun queryCourseByUsername(courseListLiveData: MutableLiveData<List<Schedule>>, todayCourseListLiveData: MutableLiveData<List<Schedule>>, messageLiveData: MutableLiveData<String>, requestCodeLiveData: MutableLiveData<Int>, student: Student, year: String?, term: String?, isFromCache: Boolean) {
 		if (NetworkUtil.isConnectInternet()) {
 			CourseUtil.getCourse(student, year, term, object : DoSaveListener<List<Course>> {
 				override fun doSave(t: List<Course>) {
@@ -32,8 +33,9 @@ object CourseRemoteDataSource : CourseDataSource {
 				}
 			}, object : RequestListener<List<Course>> {
 				override fun done(t: List<Course>) {
-					courseListLiveData.value = t
-					CourseUtil.getTodayCourse(t) {
+					val scheduleList = CourseUtil.convertCourseToSchedule(t)
+					courseListLiveData.value = scheduleList
+					CourseUtil.getTodayCourse(scheduleList) {
 						todayCourseListLiveData.value = it
 					}
 					requestCodeLiveData.value = BottomNavigationRepository.DONE

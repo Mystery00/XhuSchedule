@@ -12,6 +12,7 @@ import com.weilylab.xhuschedule.newPackage.model.Student
 import com.weilylab.xhuschedule.newPackage.model.response.CourseResponse
 import com.weilylab.xhuschedule.newPackage.repository.local.InitLocalDataSource
 import com.weilylab.xhuschedule.newPackage.utils.rxAndroid.RxObserver
+import com.zhuangfei.timetable.model.Schedule
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import vip.mystery0.logs.Logs
@@ -63,17 +64,47 @@ object CourseUtil {
 				})
 	}
 
-	fun getTodayCourse(courseList: List<Course>, listener: (List<Course>) -> Unit) {
+	fun getTodayCourse(courseList: List<Schedule>, listener: (List<Schedule>) -> Unit) {
 		val week = CalendarUtil.getWeekFromCalendar(InitLocalDataSource.getStartDataTime())
-		val todayCourseList = ArrayList<Course>()
+		val todayCourseList = ArrayList<Schedule>()
 		val weekIndex = CalendarUtil.getWeekIndex()
 		courseList.forEach {
-			if (it.day.toInt() == weekIndex) {
-				val weekArray = it.week.split('-')
-				if (weekArray[0].toInt() <= week && weekArray[1].toInt() >= week)
+			if (it.day == weekIndex&&it.weekList.contains(week)) {
 					todayCourseList.add(it)
 			}
 		}
 		listener.invoke(todayCourseList)
+	}
+
+	fun convertCourseToSchedule(courseList: List<Course>): List<Schedule> {
+		val list = ArrayList<Schedule>()
+		courseList.forEach {
+			list.add(it.schedule)
+		}
+		return filterCourse(list)
+	}
+
+	private fun filterCourse(courseList: List<Schedule>): List<Schedule> {
+		val list = ArrayList<Schedule>()
+		courseList.forEach {
+			if (check(list, it))
+				list.add(it)
+		}
+		return list
+	}
+
+	private fun check(courseList: List<Schedule>, schedule: Schedule): Boolean {
+		courseList.forEach {
+			if (it.name == schedule.name &&
+					it.room == schedule.room &&
+					it.teacher == schedule.teacher &&
+					it.start == schedule.start &&
+					it.step == schedule.step &&
+					it.day == schedule.day) {
+				it.weekList.addAll(schedule.weekList)
+				return false
+			}
+		}
+		return true
 	}
 }

@@ -8,10 +8,10 @@ import androidx.lifecycle.ViewModelProviders
 
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.databinding.FragmentTableBinding
-import com.weilylab.xhuschedule.newPackage.model.Course
 import com.weilylab.xhuschedule.newPackage.model.Student
 import com.weilylab.xhuschedule.newPackage.repository.CourseRepository
 import com.weilylab.xhuschedule.newPackage.viewModel.BottomNavigationViewModel
+import com.zhuangfei.timetable.model.Schedule
 import vip.mystery0.tools.base.BaseFragment
 import java.text.SimpleDateFormat
 import java.util.*
@@ -20,8 +20,8 @@ class TableFragment : BaseFragment(R.layout.fragment_table) {
 	private lateinit var fragmentTableBinding: FragmentTableBinding
 	private lateinit var bottomNavigationViewModel: BottomNavigationViewModel
 
-	private val courseListObserver = Observer<List<Course>> {
-		fragmentTableBinding.timeTableView.setSource(it).updateView()
+	private val courseListObserver = Observer<List<Schedule>> {
+		fragmentTableBinding.timeTableView.setData(it).updateView()
 	}
 
 	private val studentObserver = Observer<List<Student>> {
@@ -65,9 +65,7 @@ class TableFragment : BaseFragment(R.layout.fragment_table) {
 		super.monitor()
 		fragmentTableBinding.timeTableView.scheduleManager
 				.setOnItemClickListener { _, scheduleList ->
-					scheduleList.forEach {
-
-					}
+					bottomNavigationViewModel.showCourse.value = scheduleList
 				}
 	}
 }
