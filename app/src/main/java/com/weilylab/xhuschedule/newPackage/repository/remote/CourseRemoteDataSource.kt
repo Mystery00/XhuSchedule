@@ -14,7 +14,7 @@ import com.weilylab.xhuschedule.newPackage.utils.NetworkUtil
 import vip.mystery0.logs.Logs
 
 object CourseRemoteDataSource : CourseDataSource {
-	override fun queryCourseByUsername(courseListLiveData: MutableLiveData<List<Course>>, messageLiveData: MutableLiveData<String>, requestCodeLiveData: MutableLiveData<Int>, student: Student, year: String?, term: String?, isFromCache: Boolean) {
+	override fun queryCourseByUsername(courseListLiveData: MutableLiveData<List<Course>>, todayCourseListLiveData: MutableLiveData<List<Course>>, messageLiveData: MutableLiveData<String>, requestCodeLiveData: MutableLiveData<Int>, student: Student, year: String?, term: String?, isFromCache: Boolean) {
 		if (NetworkUtil.isConnectInternet()) {
 			CourseUtil.getCourse(student, year, term, object : DoSaveListener<List<Course>> {
 				override fun doSave(t: List<Course>) {
@@ -33,6 +33,9 @@ object CourseRemoteDataSource : CourseDataSource {
 			}, object : RequestListener<List<Course>> {
 				override fun done(t: List<Course>) {
 					courseListLiveData.value = t
+					CourseUtil.getTodayCourse(t) {
+						todayCourseListLiveData.value = it
+					}
 					requestCodeLiveData.value = BottomNavigationRepository.DONE
 				}
 
@@ -47,7 +50,7 @@ object CourseRemoteDataSource : CourseDataSource {
 			if (isFromCache)
 				requestCodeLiveData.value = BottomNavigationRepository.ERROR
 			else
-				CourseLocalDataSource.queryCourseByUsername(courseListLiveData, messageLiveData, requestCodeLiveData, student, year, term, isFromCache)
+				CourseLocalDataSource.queryCourseByUsername(courseListLiveData, todayCourseListLiveData, messageLiveData, requestCodeLiveData, student, year, term, isFromCache)
 		}
 	}
 }

@@ -10,10 +10,12 @@ import com.weilylab.xhuschedule.newPackage.listener.RequestListener
 import com.weilylab.xhuschedule.newPackage.model.Course
 import com.weilylab.xhuschedule.newPackage.model.Student
 import com.weilylab.xhuschedule.newPackage.model.response.CourseResponse
+import com.weilylab.xhuschedule.newPackage.repository.local.InitLocalDataSource
 import com.weilylab.xhuschedule.newPackage.utils.rxAndroid.RxObserver
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import vip.mystery0.logs.Logs
+import java.util.ArrayList
 
 object CourseUtil {
 	private const val RETRY_TIME = 1
@@ -59,5 +61,19 @@ object CourseUtil {
 						requestListener.error(ResponseCodeConstants.CATCH_ERROR, e.message)
 					}
 				})
+	}
+
+	fun getTodayCourse(courseList: List<Course>, listener: (List<Course>) -> Unit) {
+		val week = CalendarUtil.getWeekFromCalendar(InitLocalDataSource.getStartDataTime())
+		val todayCourseList = ArrayList<Course>()
+		val weekIndex = CalendarUtil.getWeekIndex()
+		courseList.forEach {
+			if (it.day.toInt() == weekIndex) {
+				val weekArray = it.week.split('-')
+				if (weekArray[0].toInt() <= week && weekArray[1].toInt() >= week)
+					todayCourseList.add(it)
+			}
+		}
+		listener.invoke(todayCourseList)
 	}
 }

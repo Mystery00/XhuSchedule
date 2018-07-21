@@ -22,7 +22,7 @@ object InitLocalDataSource : InitDataSource {
 				.apply()
 	}
 
-	private fun getStartDataTime(): Calendar {
+	fun getStartDataTime(): Calendar {
 		val calendar = Calendar.getInstance()
 		val dateString = sharedPreferences.getString(SharedPreferenceConstant.FIELD_START_DATE_TIME, "")
 		if (dateString == "")

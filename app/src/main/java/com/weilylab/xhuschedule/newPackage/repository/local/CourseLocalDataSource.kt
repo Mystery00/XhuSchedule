@@ -7,6 +7,7 @@ import com.weilylab.xhuschedule.newPackage.repository.BottomNavigationRepository
 import com.weilylab.xhuschedule.newPackage.repository.dataSource.CourseDataSource
 import com.weilylab.xhuschedule.newPackage.repository.local.service.impl.CourseServiceImpl
 import com.weilylab.xhuschedule.newPackage.repository.remote.CourseRemoteDataSource
+import com.weilylab.xhuschedule.newPackage.utils.CourseUtil
 import com.weilylab.xhuschedule.newPackage.utils.rxAndroid.RxObservable
 import com.weilylab.xhuschedule.newPackage.utils.rxAndroid.RxObserver
 import vip.mystery0.logs.Logs
@@ -14,7 +15,7 @@ import vip.mystery0.logs.Logs
 object CourseLocalDataSource : CourseDataSource {
 	private val courseService = CourseServiceImpl()
 
-	override fun queryCourseByUsername(courseListLiveData: MutableLiveData<List<Course>>, messageLiveData: MutableLiveData<String>, requestCodeLiveData: MutableLiveData<Int>, student: Student, year: String?, term: String?, isFromCache: Boolean) {
+	override fun queryCourseByUsername(courseListLiveData: MutableLiveData<List<Course>>, todayCourseListLiveData: MutableLiveData<List<Course>>, messageLiveData: MutableLiveData<String>, requestCodeLiveData: MutableLiveData<Int>, student: Student, year: String?, term: String?, isFromCache: Boolean) {
 		RxObservable<List<Course>>()
 				.doThings {
 					try {
@@ -29,9 +30,12 @@ object CourseLocalDataSource : CourseDataSource {
 				.subscribe(object : RxObserver<List<Course>>() {
 					override fun onFinish(data: List<Course>?) {
 						if (data == null || data.isEmpty())
-							CourseRemoteDataSource.queryCourseByUsername(courseListLiveData, messageLiveData, requestCodeLiveData, student, year, term, isFromCache)
+							CourseRemoteDataSource.queryCourseByUsername(courseListLiveData, todayCourseListLiveData, messageLiveData, requestCodeLiveData, student, year, term, isFromCache)
 						else {
 							courseListLiveData.value = data
+							CourseUtil.getTodayCourse(data) {
+								todayCourseListLiveData.value = it
+							}
 							requestCodeLiveData.value = BottomNavigationRepository.DONE
 						}
 					}
@@ -39,7 +43,7 @@ object CourseLocalDataSource : CourseDataSource {
 					override fun onError(e: Throwable) {
 						Logs.wtf("onError: ", e)
 						if (isFromCache) {
-							CourseRemoteDataSource.queryCourseByUsername(courseListLiveData, messageLiveData, requestCodeLiveData, student, year, term, isFromCache)
+							CourseRemoteDataSource.queryCourseByUsername(courseListLiveData, todayCourseListLiveData, messageLiveData, requestCodeLiveData, student, year, term, isFromCache)
 						} else {
 							messageLiveData.value = e.message
 							requestCodeLiveData.value = BottomNavigationRepository.ERROR

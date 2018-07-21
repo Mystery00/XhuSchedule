@@ -11,4 +11,12 @@ object CalendarUtil {
 		val seconds = now.timeInMillis / 1000 - startDateTime.timeInMillis / 1000
 		return (seconds / 60 / 60 / 24 / 7).toInt() + 1
 	}
+
+	fun getWeekIndex(): Int {
+		val calendar = Calendar.getInstance()
+		return when (calendar.get(Calendar.DAY_OF_WEEK)) {
+			Calendar.SUNDAY -> 7
+			else -> calendar.get(Calendar.DAY_OF_WEEK) - 1
+		}
+	}
 }

@@ -11,6 +11,7 @@ class BottomNavigationViewModel : ViewModel() {
 	val studentList = MutableLiveData<List<Student>>()
 	val studentInfo = MutableLiveData<StudentInfo>()
 	val courseList = MutableLiveData<List<Course>>()
+	val todayCourseList = MutableLiveData<List<Course>>()
 	val week = MutableLiveData<Int>()
 	val currentWeek = MutableLiveData<Int>()
 	val startDateTime = MutableLiveData<Calendar>()

@@ -66,6 +66,7 @@ class TableFragment : BaseFragment(R.layout.fragment_table) {
 		fragmentTableBinding.timeTableView.scheduleManager
 				.setOnItemClickListener { _, scheduleList ->
 					scheduleList.forEach {
+
 					}
 				}
 	}
