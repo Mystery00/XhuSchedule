@@ -129,7 +129,6 @@ dependencies {
 //	implementation 'com.github.ybq:parallaxviewpager:2.0.0'
 //	implementation 'com.zhuangfei:TimetableView:2.0.1'
 	implementation 'com.github.Mystery00:TimetableView:V2.0.2'
-	implementation 'com.github.DingMouRen:LayoutManagerGroup:1e6f4f96eb'
 	implementation 'de.hdodenhof:circleimageview:2.2.0'
 	implementation 'com.jrummyapps:colorpicker:2.1.6'
 	implementation 'com.getkeepsafe.taptargetview:taptargetview:1.11.0'

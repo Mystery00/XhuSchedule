@@ -39,6 +39,8 @@ class Course : ScheduleEnable {
 	lateinit var year: String
 	@ColumnInfo(name = "course_term")
 	lateinit var term: String
+//	@ColumnInfo(name = "course_color")
+//	var color = 0//颜色
 	@ColumnInfo(name = "student_id")
 	lateinit var studentID: String
 	@ColumnInfo(name = "edit_type")
