@@ -215,6 +215,10 @@
 		<activity
 			android:name=".newPackage.ui.activity.BottomNavigationActivity"
 			android:theme="@style/AppTheme.NoActionBar" />
+		<activity
+			android:name=".newPackage.ui.activity.QueryTestActivity"
+			android:label="@string/title_activity_query_test"
+			android:theme="@style/AppTheme.NoActionBar"></activity>
 	</application>
 
 </manifest>
