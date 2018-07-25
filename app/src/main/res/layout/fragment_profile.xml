@@ -18,6 +18,7 @@
 		tools:context=".newPackage.ui.fragment.ProfileFragment">
 
 		<androidx.constraintlayout.widget.ConstraintLayout
+			android:id="@+id/profileLayout"
 			android:layout_width="match_parent"
 			android:layout_height="96dp">
 
@@ -75,6 +76,7 @@
 			android:background="#f5f5f5" />
 
 		<androidx.constraintlayout.widget.ConstraintLayout
+			android:id="@+id/queryTestLayout"
 			android:layout_width="match_parent"
 			android:layout_height="52dp">
 
@@ -120,6 +122,7 @@
 			android:background="#eaeaea" />
 
 		<androidx.constraintlayout.widget.ConstraintLayout
+			android:id="@+id/queryScoreLayout"
 			android:layout_width="match_parent"
 			android:layout_height="52dp">
 
@@ -165,6 +168,7 @@
 			android:background="#f5f5f5" />
 
 		<androidx.constraintlayout.widget.ConstraintLayout
+			android:id="@+id/accountSettingsLayout"
 			android:layout_width="match_parent"
 			android:layout_height="52dp">
 
@@ -210,6 +214,7 @@
 			android:background="#eaeaea" />
 
 		<androidx.constraintlayout.widget.ConstraintLayout
+			android:id="@+id/classSettingsLayout"
 			android:layout_width="match_parent"
 			android:layout_height="52dp">
 
@@ -255,6 +260,7 @@
 			android:background="#eaeaea" />
 
 		<androidx.constraintlayout.widget.ConstraintLayout
+			android:id="@+id/softwareSettingsLayout"
 			android:layout_width="match_parent"
 			android:layout_height="52dp">
 
@@ -300,6 +306,7 @@
 			android:background="#f5f5f5" />
 
 		<androidx.constraintlayout.widget.ConstraintLayout
+			android:id="@+id/noticeLayout"
 			android:layout_width="match_parent"
 			android:layout_height="52dp">
 
@@ -345,6 +352,7 @@
 			android:background="#eaeaea" />
 
 		<androidx.constraintlayout.widget.ConstraintLayout
+			android:id="@+id/feedbackLayout"
 			android:layout_width="match_parent"
 			android:layout_height="52dp">
 
@@ -390,6 +398,7 @@
 			android:background="#eaeaea" />
 
 		<androidx.constraintlayout.widget.ConstraintLayout
+			android:id="@+id/shareWithFriendsLayout"
 			android:layout_width="match_parent"
 			android:layout_height="52dp">
 

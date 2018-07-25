@@ -1,16 +1,16 @@
 package com.weilylab.xhuschedule.newPackage.ui.fragment
 
-import android.os.Bundle
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.databinding.FragmentProfileBinding
 import com.weilylab.xhuschedule.newPackage.model.Student
 import com.weilylab.xhuschedule.newPackage.repository.BottomNavigationRepository
+import com.weilylab.xhuschedule.newPackage.ui.activity.QueryTestActivity
 import com.weilylab.xhuschedule.newPackage.viewModel.BottomNavigationViewModel
 import vip.mystery0.logs.Logs
 import vip.mystery0.tools.base.BaseFragment
@@ -48,5 +48,8 @@ class ProfileFragment : BaseFragment(R.layout.fragment_profile) {
 
 	override fun monitor() {
 		super.monitor()
+		fragmentProfileBinding.queryTestLayout.setOnClickListener {
+			startActivity(Intent(activity, QueryTestActivity::class.java))
+		}
 	}
 }
