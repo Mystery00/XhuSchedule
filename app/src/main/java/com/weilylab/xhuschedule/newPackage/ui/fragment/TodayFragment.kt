@@ -10,12 +10,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.databinding.FragmentTodayBinding
 import com.weilylab.xhuschedule.newPackage.ui.adapter.FragmentTodayRecyclerViewAdapter
+import com.weilylab.xhuschedule.newPackage.utils.CalendarUtil
 import com.weilylab.xhuschedule.newPackage.viewModel.BottomNavigationViewModel
 import com.zhuangfei.timetable.model.Schedule
 import vip.mystery0.tools.base.BaseFragment
 import java.util.ArrayList
 
-class TodayFragment : BaseFragment(R.layout.fragment_today) {
+class TodayFragment : BaseBottomNavigationFragment(R.layout.fragment_today) {
 
 	companion object {
 		fun newInstance() = TodayFragment()
@@ -30,6 +31,10 @@ class TodayFragment : BaseFragment(R.layout.fragment_today) {
 		list.clear()
 		list.addAll(it)
 		adapter.notifyDataSetChanged()
+		if (list.size == 0)
+			fragmentTodayBinding.nullDataView.visibility = View.VISIBLE
+		else
+			fragmentTodayBinding.nullDataView.visibility = View.GONE
 	}
 
 	override fun inflateView(layoutId: Int, inflater: LayoutInflater, container: ViewGroup?): View {
@@ -55,5 +60,9 @@ class TodayFragment : BaseFragment(R.layout.fragment_today) {
 			viewModel.showCourse.value = arrayListOf(course)
 			true
 		}
+	}
+
+	override fun updateTitle() {
+		viewModel.title.value = "第${viewModel.week.value}周 ${CalendarUtil.getWeekIndexInString()}"
 	}
 }

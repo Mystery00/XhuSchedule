@@ -15,7 +15,7 @@ import com.weilylab.xhuschedule.newPackage.viewModel.BottomNavigationViewModel
 import vip.mystery0.logs.Logs
 import vip.mystery0.tools.base.BaseFragment
 
-class ProfileFragment : BaseFragment(R.layout.fragment_profile) {
+class ProfileFragment : BaseBottomNavigationFragment(R.layout.fragment_profile) {
 	private lateinit var fragmentProfileBinding: FragmentProfileBinding
 	private lateinit var bottomNavigationViewModel: BottomNavigationViewModel
 
@@ -51,5 +51,9 @@ class ProfileFragment : BaseFragment(R.layout.fragment_profile) {
 		fragmentProfileBinding.queryTestLayout.setOnClickListener {
 			startActivity(Intent(activity, QueryTestActivity::class.java))
 		}
+	}
+
+	override fun updateTitle() {
+		bottomNavigationViewModel.title.value = "我的"
 	}
 }

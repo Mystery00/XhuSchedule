@@ -16,7 +16,7 @@ import vip.mystery0.tools.base.BaseFragment
 import java.text.SimpleDateFormat
 import java.util.*
 
-class TableFragment : BaseFragment(R.layout.fragment_table) {
+class TableFragment : BaseBottomNavigationFragment(R.layout.fragment_table) {
 	private lateinit var fragmentTableBinding: FragmentTableBinding
 	private lateinit var bottomNavigationViewModel: BottomNavigationViewModel
 
@@ -69,5 +69,9 @@ class TableFragment : BaseFragment(R.layout.fragment_table) {
 				.setOnItemClickListener { _, scheduleList ->
 					bottomNavigationViewModel.showCourse.value = scheduleList
 				}
+	}
+
+	override fun updateTitle() {
+		bottomNavigationViewModel.title.value = "第${bottomNavigationViewModel.week.value}周"
 	}
 }

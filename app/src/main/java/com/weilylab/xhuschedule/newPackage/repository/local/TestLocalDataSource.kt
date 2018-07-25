@@ -40,6 +40,8 @@ object TestLocalDataSource : TestDataSource {
 	}
 
 	fun saveTests(tests: List<Test>) {
-
+		tests.forEach {
+			testService.insert(it)
+		}
 	}
 }

@@ -19,4 +19,9 @@ object CalendarUtil {
 			else -> calendar.get(Calendar.DAY_OF_WEEK) - 1
 		}
 	}
+
+	fun getWeekIndexInString(): String {
+		val weeks = arrayOf("周一", "周二", "周三", "周四", "周五", "周六", "周日")
+		return weeks[getWeekIndex() - 1]
+	}
 }

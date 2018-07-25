@@ -250,6 +250,8 @@
 	<string name="hint_data_null">返回的数据为空！</string>
 	<string name="hint_do_too_many">频繁操作！</string>
 
+	<string name="hint_null_course_data">这里什么都没有(ŎдŎ；)</string>
+
 	<string name="hint_dialog_login">登录中……</string>
 	<string name="hint_dialog_init">正在初始化……</string>
 	<string name="hint_dialog_get_tests">获取考试数据中……</string>
@@ -259,6 +261,5 @@
 	<string name="hint_query_test_location">考试地点：%1$s</string>
 	<string name="hint_query_test_test_no">座位号：%1$s</string>
 
-	<string name="title_activity_bottom_navigation">BottomNavigationActivity</string>
 	<string name="title_activity_query_test">考试查询</string>
 </resources>

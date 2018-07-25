@@ -18,6 +18,8 @@
 		android:layout_width="0dp"
 		android:layout_height="wrap_content"
 		android:background="?android:attr/windowBackground"
+		app:itemIconTint="@drawable/selector_bottom_navigation_view"
+		app:itemTextColor="@drawable/selector_bottom_navigation_view"
 		app:layout_constraintBottom_toBottomOf="parent"
 		app:layout_constraintEnd_toEndOf="parent"
 		app:layout_constraintStart_toStartOf="parent"

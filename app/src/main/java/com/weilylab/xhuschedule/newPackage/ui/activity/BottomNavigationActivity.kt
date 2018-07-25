@@ -19,6 +19,7 @@ import com.weilylab.xhuschedule.newPackage.model.Student
 import com.weilylab.xhuschedule.newPackage.repository.BottomNavigationRepository
 import com.weilylab.xhuschedule.newPackage.ui.adapter.ShowCourseRecyclerViewAdapter
 import com.weilylab.xhuschedule.newPackage.ui.adapter.ViewPagerAdapter
+import com.weilylab.xhuschedule.newPackage.ui.fragment.BaseBottomNavigationFragment
 import com.weilylab.xhuschedule.newPackage.ui.fragment.ProfileFragment
 import com.weilylab.xhuschedule.newPackage.ui.fragment.TableFragment
 import com.weilylab.xhuschedule.newPackage.ui.fragment.TodayFragment
@@ -39,6 +40,7 @@ class BottomNavigationActivity : BaseActivity(R.layout.activity_bottom_navigatio
 	}
 
 	private lateinit var bottomNavigationViewModel: BottomNavigationViewModel
+	private lateinit var viewPagerAdapter: ViewPagerAdapter
 	private lateinit var dialog: Dialog
 	private var animation: ObjectAnimator? = null
 	private var isShowWeekView = false
@@ -78,12 +80,17 @@ class BottomNavigationActivity : BaseActivity(R.layout.activity_bottom_navigatio
 		showPopupWindow()
 	}
 
+	private val titleObserver = Observer<String> {
+		titleTextView.text = it
+	}
+
 	override fun initView() {
 		super.initView()
+		titleTextView.text = title
 		initDialog()
 		showDialog()
 		initPopupWindow()
-		val viewPagerAdapter = ViewPagerAdapter(supportFragmentManager)
+		viewPagerAdapter = ViewPagerAdapter(supportFragmentManager)
 		viewPagerAdapter.addFragment(TodayFragment.newInstance())
 		viewPagerAdapter.addFragment(TableFragment.newInstance())
 		viewPagerAdapter.addFragment(ProfileFragment.newInstance())
@@ -117,6 +124,7 @@ class BottomNavigationActivity : BaseActivity(R.layout.activity_bottom_navigatio
 		bottomNavigationViewModel.currentWeek.observe(this, currentWeekObserver)
 		bottomNavigationViewModel.courseList.observe(this, courseListObserver)
 		bottomNavigationViewModel.showCourse.observe(this, showCourseObserver)
+		bottomNavigationViewModel.title.observe(this, titleObserver)
 	}
 
 	private fun initDialog() {
@@ -125,8 +133,8 @@ class BottomNavigationActivity : BaseActivity(R.layout.activity_bottom_navigatio
 				.setHintText(getString(R.string.hint_dialog_init))
 				.setHintTextSize(16F)
 				.setCanceledOnTouchOutside(false)
-				.setLoadingColor(ContextCompat.getColor(this, R.color.colorPrimary))
-				.setHintTextColor(ContextCompat.getColor(this, R.color.colorPrimary))
+				.setLoadingColor(ContextCompat.getColor(this, R.color.colorAccent))
+				.setHintTextColor(ContextCompat.getColor(this, R.color.colorAccent))
 				.create()
 	}
 
@@ -150,6 +158,7 @@ class BottomNavigationActivity : BaseActivity(R.layout.activity_bottom_navigatio
 
 			override fun onPageSelected(position: Int) {
 				bottomNavigationView.menu.getItem(position).isChecked = true
+				(viewPagerAdapter.getItem(position) as BaseBottomNavigationFragment).updateTitle()
 			}
 		})
 		titleTextView.setOnClickListener {
@@ -234,10 +243,6 @@ class BottomNavigationActivity : BaseActivity(R.layout.activity_bottom_navigatio
 				position = index
 		}
 		recyclerView.scrollToPosition(position)
-	}
-
-	private fun hidePopupWindow() {
-		popupWindow.dismiss()
 	}
 
 	override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

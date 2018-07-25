@@ -10,7 +10,6 @@
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
 	android:fillViewport="true"
-	android:fitsSystemWindows="true"
 	android:orientation="vertical"
 	tools:context="com.weilylab.xhuschedule.newPackage.ui.activity.LoginActivity">
 
@@ -31,9 +30,11 @@
 
 		<androidx.constraintlayout.widget.ConstraintLayout
 			android:id="@+id/username_layout"
-			android:layout_width="220dp"
+			android:layout_width="0dp"
 			android:layout_height="wrap_content"
+			android:layout_marginStart="48dp"
 			android:layout_marginTop="62dp"
+			android:layout_marginEnd="48dp"
 			app:layout_constraintEnd_toEndOf="parent"
 			app:layout_constraintStart_toStartOf="parent"
 			app:layout_constraintTop_toBottomOf="@+id/imageView">
@@ -82,9 +83,11 @@
 
 		<androidx.constraintlayout.widget.ConstraintLayout
 			android:id="@+id/password_layout"
-			android:layout_width="220dp"
+			android:layout_width="0dp"
 			android:layout_height="wrap_content"
+			android:layout_marginStart="48dp"
 			android:layout_marginTop="48dp"
+			android:layout_marginEnd="48dp"
 			app:layout_constraintEnd_toEndOf="parent"
 			app:layout_constraintStart_toStartOf="parent"
 			app:layout_constraintTop_toBottomOf="@id/username_layout">
@@ -133,8 +136,10 @@
 
 		<Button
 			android:id="@+id/login_button"
-			android:layout_width="264dp"
+			android:layout_width="0dp"
 			android:layout_height="wrap_content"
+			android:layout_marginStart="32dp"
+			android:layout_marginEnd="32dp"
 			android:background="@drawable/drawable_login_button"
 			android:text="@string/action_login"
 			android:textColor="@color/colorWhite"

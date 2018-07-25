@@ -54,6 +54,7 @@ class QueryTestActivity : XhuBaseActivity(R.layout.activity_query_test) {
 	override fun initView() {
 		super.initView()
 		setSupportActionBar(toolbar)
+		supportActionBar?.setDisplayHomeAsUpEnabled(true)
 		initDialog()
 		showDialog()
 		recyclerView.layoutManager = LinearLayoutManager(this)
@@ -70,8 +71,8 @@ class QueryTestActivity : XhuBaseActivity(R.layout.activity_query_test) {
 				.setHintText(getString(R.string.hint_dialog_get_tests))
 				.setHintTextSize(16F)
 				.setCanceledOnTouchOutside(false)
-				.setLoadingColor(ContextCompat.getColor(this, R.color.colorPrimary))
-				.setHintTextColor(ContextCompat.getColor(this, R.color.colorPrimary))
+				.setLoadingColor(ContextCompat.getColor(this, R.color.colorAccent))
+				.setHintTextColor(ContextCompat.getColor(this, R.color.colorAccent))
 				.create()
 	}
 
@@ -79,6 +80,13 @@ class QueryTestActivity : XhuBaseActivity(R.layout.activity_query_test) {
 		super.initData()
 		initViewModel()
 		TestRepository.queryAllStudent(queryTestViewModel)
+	}
+
+	override fun monitor() {
+		super.monitor()
+		toolbar.setNavigationOnClickListener {
+			finish()
+		}
 	}
 
 	private fun initViewModel() {

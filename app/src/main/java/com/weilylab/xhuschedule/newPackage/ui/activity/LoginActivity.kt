@@ -43,6 +43,8 @@ import kotlinx.android.synthetic.main.activity_login.*
 
 import android.app.Activity
 import android.app.Dialog
+import android.graphics.Color
+import android.os.Build
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -50,6 +52,8 @@ import com.weilylab.xhuschedule.newPackage.base.XhuBaseActivity
 import com.weilylab.xhuschedule.newPackage.model.Student
 import com.weilylab.xhuschedule.newPackage.repository.LoginRepository
 import com.weilylab.xhuschedule.newPackage.viewModel.LoginViewModel
+import android.view.WindowManager
+
 
 class LoginActivity : XhuBaseActivity(R.layout.activity_login) {
 	private lateinit var loginViewModel: LoginViewModel
@@ -71,14 +75,20 @@ class LoginActivity : XhuBaseActivity(R.layout.activity_login) {
 
 	override fun initView() {
 		super.initView()
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+			window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+			window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION)
+			window.statusBarColor = Color.TRANSPARENT
+			window.navigationBarColor = Color.TRANSPARENT
+		}
 		dialog = ZLoadingDialog(this)
 				.setLoadingBuilder(Z_TYPE.STAR_LOADING)
 				.setHintText(getString(R.string.hint_dialog_login))
 				.setHintTextSize(16F)
 				.setCanceledOnTouchOutside(false)
 				.setCancelable(false)
-				.setLoadingColor(ContextCompat.getColor(this, R.color.colorPrimary))
-				.setHintTextColor(ContextCompat.getColor(this, R.color.colorPrimary))
+				.setLoadingColor(ContextCompat.getColor(this, R.color.colorAccent))
+				.setHintTextColor(ContextCompat.getColor(this, R.color.colorAccent))
 				.create()
 	}
 
