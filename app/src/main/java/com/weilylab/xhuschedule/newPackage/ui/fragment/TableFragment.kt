@@ -50,7 +50,9 @@ class TableFragment : BaseFragment(R.layout.fragment_table) {
 
 	override fun initView() {
 		initViewModel()
-		fragmentTableBinding.timeTableView.initView(activity!!)
+		fragmentTableBinding.timeTableView
+				.setTransparent(0.5f)
+				.initView(activity!!)
 	}
 
 	private fun initViewModel() {
