@@ -51,7 +51,6 @@
 				android:text="@{test.name}"
 				android:textColor="@android:color/black"
 				android:textSize="16sp"
-				android:textStyle="bold"
 				app:layout_constraintBottom_toTopOf="@id/textViewTestDate"
 				app:layout_constraintEnd_toEndOf="parent"
 				app:layout_constraintStart_toStartOf="parent"

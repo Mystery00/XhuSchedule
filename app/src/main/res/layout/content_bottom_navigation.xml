@@ -8,7 +8,7 @@
 		android:id="@+id/viewPager"
 		android:layout_width="0dp"
 		android:layout_height="0dp"
-		app:layout_constraintBottom_toTopOf="@id/bottomNavigationView"
+		app:layout_constraintBottom_toTopOf="@id/line"
 		app:layout_constraintEnd_toEndOf="parent"
 		app:layout_constraintStart_toStartOf="parent"
 		app:layout_constraintTop_toTopOf="parent" />
@@ -16,13 +16,82 @@
 	<com.google.android.material.bottomnavigation.BottomNavigationView
 		android:id="@+id/bottomNavigationView"
 		android:layout_width="0dp"
-		android:layout_height="wrap_content"
+		android:layout_height="45dp"
 		android:background="?android:attr/windowBackground"
+		android:visibility="gone"
 		app:itemIconTint="@drawable/selector_bottom_navigation_view"
 		app:itemTextColor="@drawable/selector_bottom_navigation_view"
 		app:layout_constraintBottom_toBottomOf="parent"
 		app:layout_constraintEnd_toEndOf="parent"
 		app:layout_constraintStart_toStartOf="parent"
 		app:menu="@menu/menu_bottom_navigation_view" />
+
+	<View
+		android:id="@+id/line"
+		android:layout_width="0dp"
+		android:layout_height="0.5dp"
+		android:background="#e5e5e5"
+		app:layout_constraintBottom_toTopOf="@id/bottomNavigationView1"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintStart_toStartOf="parent" />
+
+	<LinearLayout
+		android:id="@+id/bottomNavigationView1"
+		android:layout_width="0dp"
+		android:layout_height="47dp"
+		android:background="#FFF"
+		app:layout_constraintBottom_toBottomOf="parent"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintStart_toStartOf="parent">
+
+		<FrameLayout
+			android:layout_width="0dp"
+			android:layout_height="match_parent"
+			android:layout_weight="1">
+
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_gravity="center"
+				android:drawableTop="@mipmap/mine_43"
+				android:text="今日"
+				android:textColor="#333"
+				android:textSize="11sp" />
+
+		</FrameLayout>
+
+		<FrameLayout
+			android:layout_width="0dp"
+			android:layout_height="match_parent"
+			android:layout_weight="1">
+
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_gravity="center"
+				android:drawableTop="@mipmap/mine_38"
+				android:text="本周"
+				android:textColor="#333"
+				android:textSize="11sp" />
+
+		</FrameLayout>
+
+		<FrameLayout
+			android:layout_width="0dp"
+			android:layout_height="match_parent"
+			android:layout_weight="1">
+
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_gravity="center"
+				android:drawableTop="@mipmap/mine_40"
+				android:text="我的"
+				android:textColor="#333"
+				android:textSize="11sp" />
+
+		</FrameLayout>
+
+	</LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

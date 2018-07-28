@@ -39,11 +39,11 @@
 				android:layout_marginStart="27dp"
 				android:text="@{studentInfo.name}"
 				android:textColor="@android:color/black"
-				android:textSize="16sp"
+				android:textSize="17sp"
 				app:layout_constraintBottom_toTopOf="@id/studentClassNameTextView"
 				app:layout_constraintEnd_toStartOf="@+id/imageViewHeaderMore"
 				app:layout_constraintStart_toEndOf="@id/studentProfileImage"
-				app:layout_constraintTop_toTopOf="@id/studentProfileImage" />
+				app:layout_constraintTop_toTopOf="parent" />
 
 			<TextView
 				android:id="@+id/studentClassNameTextView"
@@ -51,16 +51,16 @@
 				android:layout_height="wrap_content"
 				android:layout_marginStart="27dp"
 				android:text="@{studentInfo.classname}"
-				android:textSize="12sp"
-				app:layout_constraintBottom_toBottomOf="@id/studentProfileImage"
+				android:textSize="13.67sp"
+				app:layout_constraintBottom_toBottomOf="parent"
 				app:layout_constraintEnd_toStartOf="@+id/imageViewHeaderMore"
 				app:layout_constraintStart_toEndOf="@id/studentProfileImage"
 				app:layout_constraintTop_toBottomOf="@id/studentNameTextView" />
 
 			<ImageView
 				android:id="@+id/imageViewHeaderMore"
-				android:layout_width="16dp"
-				android:layout_height="16dp"
+				android:layout_width="10dp"
+				android:layout_height="12dp"
 				android:layout_marginEnd="14dp"
 				android:contentDescription="@string/app_name"
 				app:layout_constraintBottom_toBottomOf="parent"
@@ -78,12 +78,12 @@
 		<androidx.constraintlayout.widget.ConstraintLayout
 			android:id="@+id/queryTestLayout"
 			android:layout_width="match_parent"
-			android:layout_height="52dp">
+			android:layout_height="44.67dp">
 
 			<ImageView
 				android:id="@+id/imageViewQueryTest"
-				android:layout_width="20dp"
-				android:layout_height="20dp"
+				android:layout_width="16.33dp"
+				android:layout_height="18dp"
 				android:layout_marginStart="16dp"
 				android:contentDescription="@string/app_name"
 				android:src="@mipmap/ic_query_test"
@@ -98,6 +98,7 @@
 				android:layout_marginStart="16dp"
 				android:text="@string/profile_action_query_test"
 				android:textColor="@android:color/black"
+				android:textSize="15sp"
 				app:layout_constraintBottom_toBottomOf="parent"
 				app:layout_constraintEnd_toStartOf="@id/imageViewMoreQueryTest"
 				app:layout_constraintStart_toEndOf="@id/imageViewQueryTest"
@@ -105,8 +106,8 @@
 
 			<ImageView
 				android:id="@+id/imageViewMoreQueryTest"
-				android:layout_width="16dp"
-				android:layout_height="16dp"
+				android:layout_width="10dp"
+				android:layout_height="12dp"
 				android:layout_marginEnd="14dp"
 				android:contentDescription="@string/app_name"
 				app:layout_constraintBottom_toBottomOf="parent"
@@ -124,12 +125,12 @@
 		<androidx.constraintlayout.widget.ConstraintLayout
 			android:id="@+id/queryScoreLayout"
 			android:layout_width="match_parent"
-			android:layout_height="52dp">
+			android:layout_height="44.67dp">
 
 			<ImageView
 				android:id="@+id/imageViewQueryScore"
-				android:layout_width="20dp"
-				android:layout_height="20dp"
+				android:layout_width="16.67dp"
+				android:layout_height="18dp"
 				android:layout_marginStart="16dp"
 				android:contentDescription="@string/app_name"
 				android:src="@mipmap/ic_query_score"
@@ -144,6 +145,7 @@
 				android:layout_marginStart="16dp"
 				android:text="@string/profile_action_query_score"
 				android:textColor="@android:color/black"
+				android:textSize="15sp"
 				app:layout_constraintBottom_toBottomOf="parent"
 				app:layout_constraintEnd_toStartOf="@id/imageViewMoreQueryScore"
 				app:layout_constraintStart_toEndOf="@id/imageViewQueryScore"
@@ -151,8 +153,8 @@
 
 			<ImageView
 				android:id="@+id/imageViewMoreQueryScore"
-				android:layout_width="16dp"
-				android:layout_height="16dp"
+				android:layout_width="10dp"
+				android:layout_height="12dp"
 				android:layout_marginEnd="14dp"
 				android:contentDescription="@string/app_name"
 				app:layout_constraintBottom_toBottomOf="parent"
@@ -170,12 +172,12 @@
 		<androidx.constraintlayout.widget.ConstraintLayout
 			android:id="@+id/accountSettingsLayout"
 			android:layout_width="match_parent"
-			android:layout_height="52dp">
+			android:layout_height="44.67dp">
 
 			<ImageView
 				android:id="@+id/imageViewAccountSettings"
-				android:layout_width="20dp"
-				android:layout_height="20dp"
+				android:layout_width="16.67dp"
+				android:layout_height="16.33dp"
 				android:layout_marginStart="16dp"
 				android:contentDescription="@string/app_name"
 				android:src="@mipmap/ic_account_settings"
@@ -190,6 +192,7 @@
 				android:layout_marginStart="16dp"
 				android:text="@string/profile_action_account_settings"
 				android:textColor="@android:color/black"
+				android:textSize="15sp"
 				app:layout_constraintBottom_toBottomOf="parent"
 				app:layout_constraintEnd_toStartOf="@id/imageViewMoreAccountSettings"
 				app:layout_constraintStart_toEndOf="@id/imageViewAccountSettings"
@@ -197,8 +200,8 @@
 
 			<ImageView
 				android:id="@+id/imageViewMoreAccountSettings"
-				android:layout_width="16dp"
-				android:layout_height="16dp"
+				android:layout_width="10dp"
+				android:layout_height="12dp"
 				android:layout_marginEnd="14dp"
 				android:contentDescription="@string/app_name"
 				app:layout_constraintBottom_toBottomOf="parent"
@@ -216,12 +219,12 @@
 		<androidx.constraintlayout.widget.ConstraintLayout
 			android:id="@+id/classSettingsLayout"
 			android:layout_width="match_parent"
-			android:layout_height="52dp">
+			android:layout_height="44.67dp">
 
 			<ImageView
 				android:id="@+id/imageViewClassSettings"
-				android:layout_width="20dp"
-				android:layout_height="20dp"
+				android:layout_width="16.67dp"
+				android:layout_height="17.67dp"
 				android:layout_marginStart="16dp"
 				android:contentDescription="@string/app_name"
 				android:src="@mipmap/ic_class_settings"
@@ -236,6 +239,7 @@
 				android:layout_marginStart="16dp"
 				android:text="@string/profile_action_class_settings"
 				android:textColor="@android:color/black"
+				android:textSize="15sp"
 				app:layout_constraintBottom_toBottomOf="parent"
 				app:layout_constraintEnd_toStartOf="@id/imageViewMoreClassSettings"
 				app:layout_constraintStart_toEndOf="@id/imageViewClassSettings"
@@ -243,8 +247,8 @@
 
 			<ImageView
 				android:id="@+id/imageViewMoreClassSettings"
-				android:layout_width="16dp"
-				android:layout_height="16dp"
+				android:layout_width="10dp"
+				android:layout_height="12dp"
 				android:layout_marginEnd="14dp"
 				android:contentDescription="@string/app_name"
 				app:layout_constraintBottom_toBottomOf="parent"
@@ -262,12 +266,12 @@
 		<androidx.constraintlayout.widget.ConstraintLayout
 			android:id="@+id/softwareSettingsLayout"
 			android:layout_width="match_parent"
-			android:layout_height="52dp">
+			android:layout_height="44.67dp">
 
 			<ImageView
 				android:id="@+id/imageViewSoftwareSettings"
-				android:layout_width="20dp"
-				android:layout_height="20dp"
+				android:layout_width="18.67dp"
+				android:layout_height="18dp"
 				android:layout_marginStart="16dp"
 				android:contentDescription="@string/app_name"
 				android:src="@mipmap/ic_software_settings"
@@ -282,6 +286,7 @@
 				android:layout_marginStart="16dp"
 				android:text="@string/profile_action_software_settings"
 				android:textColor="@android:color/black"
+				android:textSize="15sp"
 				app:layout_constraintBottom_toBottomOf="parent"
 				app:layout_constraintEnd_toStartOf="@id/imageViewMoreSoftwareSettings"
 				app:layout_constraintStart_toEndOf="@id/imageViewSoftwareSettings"
@@ -289,8 +294,8 @@
 
 			<ImageView
 				android:id="@+id/imageViewMoreSoftwareSettings"
-				android:layout_width="16dp"
-				android:layout_height="16dp"
+				android:layout_width="10dp"
+				android:layout_height="12dp"
 				android:layout_marginEnd="14dp"
 				android:contentDescription="@string/app_name"
 				app:layout_constraintBottom_toBottomOf="parent"
@@ -308,12 +313,12 @@
 		<androidx.constraintlayout.widget.ConstraintLayout
 			android:id="@+id/noticeLayout"
 			android:layout_width="match_parent"
-			android:layout_height="52dp">
+			android:layout_height="44.67dp">
 
 			<ImageView
 				android:id="@+id/imageViewNotice"
-				android:layout_width="20dp"
-				android:layout_height="20dp"
+				android:layout_width="17.67dp"
+				android:layout_height="17dp"
 				android:layout_marginStart="16dp"
 				android:contentDescription="@string/app_name"
 				android:src="@mipmap/ic_notice"
@@ -328,6 +333,7 @@
 				android:layout_marginStart="16dp"
 				android:text="@string/profile_action_notice"
 				android:textColor="@android:color/black"
+				android:textSize="15sp"
 				app:layout_constraintBottom_toBottomOf="parent"
 				app:layout_constraintEnd_toStartOf="@id/imageViewMoreNotice"
 				app:layout_constraintStart_toEndOf="@id/imageViewNotice"
@@ -335,8 +341,8 @@
 
 			<ImageView
 				android:id="@+id/imageViewMoreNotice"
-				android:layout_width="16dp"
-				android:layout_height="16dp"
+				android:layout_width="10dp"
+				android:layout_height="12dp"
 				android:layout_marginEnd="14dp"
 				android:contentDescription="@string/app_name"
 				app:layout_constraintBottom_toBottomOf="parent"
@@ -354,12 +360,12 @@
 		<androidx.constraintlayout.widget.ConstraintLayout
 			android:id="@+id/feedbackLayout"
 			android:layout_width="match_parent"
-			android:layout_height="52dp">
+			android:layout_height="44.67dp">
 
 			<ImageView
 				android:id="@+id/imageViewFeedback"
-				android:layout_width="20dp"
-				android:layout_height="20dp"
+				android:layout_width="16.67dp"
+				android:layout_height="18dp"
 				android:layout_marginStart="16dp"
 				android:contentDescription="@string/app_name"
 				android:src="@mipmap/ic_feedback"
@@ -374,6 +380,7 @@
 				android:layout_marginStart="16dp"
 				android:text="@string/profile_action_feedback"
 				android:textColor="@android:color/black"
+				android:textSize="15sp"
 				app:layout_constraintBottom_toBottomOf="parent"
 				app:layout_constraintEnd_toStartOf="@id/imageViewMoreFeedback"
 				app:layout_constraintStart_toEndOf="@id/imageViewFeedback"
@@ -381,8 +388,8 @@
 
 			<ImageView
 				android:id="@+id/imageViewMoreFeedback"
-				android:layout_width="16dp"
-				android:layout_height="16dp"
+				android:layout_width="10dp"
+				android:layout_height="12dp"
 				android:layout_marginEnd="14dp"
 				android:contentDescription="@string/app_name"
 				app:layout_constraintBottom_toBottomOf="parent"
@@ -400,12 +407,12 @@
 		<androidx.constraintlayout.widget.ConstraintLayout
 			android:id="@+id/shareWithFriendsLayout"
 			android:layout_width="match_parent"
-			android:layout_height="52dp">
+			android:layout_height="44.67dp">
 
 			<ImageView
 				android:id="@+id/imageViewShareWithFriends"
-				android:layout_width="20dp"
-				android:layout_height="20dp"
+				android:layout_width="18dp"
+				android:layout_height="18dp"
 				android:layout_marginStart="16dp"
 				android:contentDescription="@string/app_name"
 				android:src="@mipmap/ic_share_with_friends"
@@ -420,6 +427,7 @@
 				android:layout_marginStart="16dp"
 				android:text="@string/profile_action_share_with_friends"
 				android:textColor="@android:color/black"
+				android:textSize="15sp"
 				app:layout_constraintBottom_toBottomOf="parent"
 				app:layout_constraintEnd_toStartOf="@id/imageViewMoreShareWithFriends"
 				app:layout_constraintStart_toEndOf="@id/imageViewShareWithFriends"
@@ -427,8 +435,8 @@
 
 			<ImageView
 				android:id="@+id/imageViewMoreShareWithFriends"
-				android:layout_width="16dp"
-				android:layout_height="16dp"
+				android:layout_width="10dp"
+				android:layout_height="12dp"
 				android:layout_marginEnd="14dp"
 				android:contentDescription="@string/app_name"
 				app:layout_constraintBottom_toBottomOf="parent"
