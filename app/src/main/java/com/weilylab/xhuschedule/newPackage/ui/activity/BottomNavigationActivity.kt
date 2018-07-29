@@ -5,6 +5,7 @@ import android.animation.ObjectAnimator
 import android.app.Activity
 import android.app.Dialog
 import android.content.Intent
+import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.view.Gravity
 import android.widget.PopupWindow
@@ -30,6 +31,7 @@ import com.zyao89.view.zloading.ZLoadingDialog
 import com.zyao89.view.zloading.Z_TYPE
 import kotlinx.android.synthetic.main.activity_bottom_navigation.*
 import kotlinx.android.synthetic.main.content_bottom_navigation.*
+import vip.mystery0.bottomTabView.BottomTabItem
 import vip.mystery0.tools.base.BaseActivity
 import vip.mystery0.tools.utils.DensityTools
 import java.util.ArrayList
@@ -102,6 +104,13 @@ class BottomNavigationActivity : BaseActivity(R.layout.activity_bottom_navigatio
 					bottomNavigationViewModel.week.value = it
 				}
 				.showView()
+		bottomNavigationView.config
+				.setGradientColors(intArrayOf(Color.parseColor("#0297fe"), Color.parseColor("#0fc8ff")))
+		bottomNavigationView.setMenuList(arrayListOf(
+				BottomTabItem(getString(R.string.nav_today), R.drawable.ic_today_selected, R.drawable.ic_today),
+				BottomTabItem(getString(R.string.nav_week), R.drawable.ic_week_selected, R.drawable.ic_week),
+				BottomTabItem(getString(R.string.nav_profile), R.drawable.ic_profile_selected, R.drawable.ic_profile)
+		))
 	}
 
 	override fun initData() {
@@ -140,13 +149,8 @@ class BottomNavigationActivity : BaseActivity(R.layout.activity_bottom_navigatio
 
 	override fun monitor() {
 		super.monitor()
-		bottomNavigationView.setOnNavigationItemSelectedListener {
-			when (it.itemId) {
-				R.id.bottom_nav_today -> viewPager.setCurrentItem(0, true)
-				R.id.bottom_nav_week -> viewPager.setCurrentItem(1, true)
-				R.id.bottom_nav_profile -> viewPager.setCurrentItem(2, true)
-			}
-			true
+		bottomNavigationView.setOnItemSelectedListener {
+			viewPager.setCurrentItem(bottomNavigationView.indexOf(it), true)
 		}
 		viewPager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
 			override fun onPageScrollStateChanged(state: Int) {
@@ -157,7 +161,7 @@ class BottomNavigationActivity : BaseActivity(R.layout.activity_bottom_navigatio
 			}
 
 			override fun onPageSelected(position: Int) {
-				bottomNavigationView.menu.getItem(position).isChecked = true
+				bottomNavigationView.setCheckedItem(position)
 				(viewPagerAdapter.getItem(position) as BaseBottomNavigationFragment).updateTitle()
 			}
 		})
