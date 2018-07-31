@@ -27,34 +27,31 @@ class CustomDateAdapter : ISchedule.OnDateBuildListener {
 
 	override fun onUpdateDate() {
 		val weekDays = ScheduleSupport.getWeekDate()
-		val monthString = "${weekDays[0]}\n月"
-		(bindingList[0] as ItemCustomDateviewFirstBinding).idWeekMonth.text = monthString
-		for (i in 1..7) {
-			val dayString = "${weekDays[i]}日"
-			(bindingList[i] as ItemCustomDateviewBinding).idWeekDay.text = dayString
-		}
+		(bindingList[0] as ItemCustomDateviewFirstBinding).monthString = "${weekDays[0]}\n月"
+		for (i in 1..7)
+			(bindingList[i] as ItemCustomDateviewBinding).weekString = "${weekDays[i]}日"
 	}
 
 	override fun getDateViews(mInflate: LayoutInflater, perWidth: Float, height: Int): Array<View?> {
-		val weekDays = ScheduleSupport.getWeekDate()
+//		val weekDays = ScheduleSupport.getWeekDate()
 		val heightPx = DensityTools.dp2px(APP.context, 35f)
 		val views = arrayOfNulls<View>(8)
 		val itemCustomDateviewFirstBinding = ItemCustomDateviewFirstBinding.inflate(mInflate)
 		val firstLayoutParams = LinearLayout.LayoutParams(perWidth.toInt(), heightPx)
 		itemCustomDateviewFirstBinding.root.layoutParams = firstLayoutParams
-		val monthString = "${weekDays[0]}\n月"
-		itemCustomDateviewFirstBinding.idWeekMonth.text = monthString
+//		val monthString = "${weekDays[0]}\n月"
+//		itemCustomDateviewFirstBinding.idWeekMonth.text = monthString
 		bindingList.add(itemCustomDateviewFirstBinding)
 		views[0] = itemCustomDateviewFirstBinding.root
 
 		//星期设置
 		val weekLayoutParams = LinearLayout.LayoutParams((perWidth * 1.5).toInt(), heightPx)
 		for (i in 1..7) {
-			val dayString = "${weekDays[i]}日"
+//			val dayString = "${weekDays[i]}日"
 			val itemCustomDateviewBinding = ItemCustomDateviewBinding.inflate(mInflate)
 			itemCustomDateviewBinding.root.layoutParams = weekLayoutParams
 			itemCustomDateviewBinding.idWeekDayIndex.text = CalendarUtil.getWeekIndexInString(i)
-			itemCustomDateviewBinding.idWeekDay.text = dayString
+//			itemCustomDateviewBinding.idWeekDay.text = dayString
 			bindingList.add(itemCustomDateviewBinding)
 			views[i] = itemCustomDateviewBinding.root
 		}

@@ -17,7 +17,7 @@
 			android:id="@+id/line"
 			android:layout_width="1dp"
 			android:layout_height="0dp"
-			android:layout_marginStart="48dp"
+			android:layout_marginStart="8dp"
 			android:background="#dfdfdf"
 			app:layout_constraintBottom_toBottomOf="parent"
 			app:layout_constraintStart_toStartOf="parent"
