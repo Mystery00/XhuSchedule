@@ -3,6 +3,8 @@ package com.weilylab.xhuschedule.newPackage.utils
 import java.util.*
 
 object CalendarUtil {
+	var startDateTime = Calendar.getInstance()
+
 	fun getWeekFromCalendar(startDateTime: Calendar): Int {
 		val now = Calendar.getInstance()
 		now.set(Calendar.HOUR_OF_DAY, 0)
@@ -14,14 +16,15 @@ object CalendarUtil {
 
 	fun getWeekIndex(): Int {
 		val calendar = Calendar.getInstance()
+		calendar.firstDayOfWeek = Calendar.MONDAY
 		return when (calendar.get(Calendar.DAY_OF_WEEK)) {
 			Calendar.SUNDAY -> 7
 			else -> calendar.get(Calendar.DAY_OF_WEEK) - 1
 		}
 	}
 
-	fun getWeekIndexInString(): String {
+	fun getWeekIndexInString(index: Int = getWeekIndex()): String {
 		val weeks = arrayOf("周一", "周二", "周三", "周四", "周五", "周六", "周日")
-		return weeks[getWeekIndex() - 1]
+		return weeks[index - 1]
 	}
 }

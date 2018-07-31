@@ -13,7 +13,8 @@
 			android:id="@+id/timeTableView"
 			android:layout_width="match_parent"
 			android:layout_height="match_parent"
-			app:max_slide_item="11" />
+			app:max_slide_item="11"
+			app:show_notcurweek="false" />
 
 	</FrameLayout>
 </layout>

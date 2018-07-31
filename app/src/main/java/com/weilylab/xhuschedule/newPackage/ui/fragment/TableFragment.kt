@@ -10,9 +10,9 @@ import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.databinding.FragmentTableBinding
 import com.weilylab.xhuschedule.newPackage.model.Student
 import com.weilylab.xhuschedule.newPackage.repository.CourseRepository
+import com.weilylab.xhuschedule.newPackage.ui.custom.CustomDateAdapter
 import com.weilylab.xhuschedule.newPackage.viewModel.BottomNavigationViewModel
 import com.zhuangfei.timetable.model.Schedule
-import vip.mystery0.tools.base.BaseFragment
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -21,7 +21,11 @@ class TableFragment : BaseBottomNavigationFragment(R.layout.fragment_table) {
 	private lateinit var bottomNavigationViewModel: BottomNavigationViewModel
 
 	private val courseListObserver = Observer<List<Schedule>> {
-		fragmentTableBinding.timeTableView.setData(it).updateView()
+		fragmentTableBinding.timeTableView
+				.config()
+				.data(it)
+				.toggle(fragmentTableBinding.timeTableView)
+				.updateView()
 	}
 
 	private val studentObserver = Observer<List<Student>> {
@@ -36,7 +40,9 @@ class TableFragment : BaseBottomNavigationFragment(R.layout.fragment_table) {
 
 	private val startDateTimeObserver = Observer<Calendar> {
 		val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINA)
-		fragmentTableBinding.timeTableView.setCurWeek(simpleDateFormat.format(it.time))
+		fragmentTableBinding.timeTableView
+				.config()
+				.curWeek(simpleDateFormat.format(it.time))
 	}
 
 	companion object {
@@ -51,8 +57,10 @@ class TableFragment : BaseBottomNavigationFragment(R.layout.fragment_table) {
 	override fun initView() {
 		initViewModel()
 		fragmentTableBinding.timeTableView
-				.setTransparent(0.5f)
-				.initView(activity!!)
+				.config()
+				.callback(CustomDateAdapter())
+				.toggle(fragmentTableBinding.timeTableView)
+				.showView()
 	}
 
 	private fun initViewModel() {
@@ -65,8 +73,9 @@ class TableFragment : BaseBottomNavigationFragment(R.layout.fragment_table) {
 
 	override fun monitor() {
 		super.monitor()
-		fragmentTableBinding.timeTableView.scheduleManager
-				.setOnItemClickListener { _, scheduleList ->
+		fragmentTableBinding.timeTableView
+				.config()
+				.callback { _, scheduleList ->
 					bottomNavigationViewModel.showCourse.value = scheduleList
 				}
 	}

@@ -24,6 +24,7 @@ import com.weilylab.xhuschedule.newPackage.ui.fragment.BaseBottomNavigationFragm
 import com.weilylab.xhuschedule.newPackage.ui.fragment.ProfileFragment
 import com.weilylab.xhuschedule.newPackage.ui.fragment.TableFragment
 import com.weilylab.xhuschedule.newPackage.ui.fragment.TodayFragment
+import com.weilylab.xhuschedule.newPackage.utils.CalendarUtil
 import com.weilylab.xhuschedule.newPackage.utils.layoutManager.EchelonLayoutManager
 import com.weilylab.xhuschedule.newPackage.viewModel.BottomNavigationViewModel
 import com.zhuangfei.timetable.model.Schedule
@@ -34,7 +35,7 @@ import kotlinx.android.synthetic.main.content_bottom_navigation.*
 import vip.mystery0.bottomTabView.BottomTabItem
 import vip.mystery0.tools.base.BaseActivity
 import vip.mystery0.tools.utils.DensityTools
-import java.util.ArrayList
+import java.util.*
 
 class BottomNavigationActivity : BaseActivity(R.layout.activity_bottom_navigation) {
 	companion object {
@@ -61,7 +62,7 @@ class BottomNavigationActivity : BaseActivity(R.layout.activity_bottom_navigatio
 	}
 
 	private val courseListObserver = Observer<List<Schedule>> {
-		weekView.setData(it).showView()
+		weekView.data(it).showView()
 	}
 
 	private val currentWeekObserver = Observer<Int> {
@@ -70,7 +71,7 @@ class BottomNavigationActivity : BaseActivity(R.layout.activity_bottom_navigatio
 			it > 20 -> 20
 			else -> it
 		}
-		weekView.setCurWeek(week).showView()
+		weekView.curWeek(week).showView()
 	}
 
 	private val showCourseObserver = Observer<List<Schedule>> {
@@ -86,6 +87,10 @@ class BottomNavigationActivity : BaseActivity(R.layout.activity_bottom_navigatio
 		titleTextView.text = it
 	}
 
+	private val startDateTimeObserver = Observer<Calendar> {
+		CalendarUtil.startDateTime = it
+	}
+
 	override fun initView() {
 		super.initView()
 		titleTextView.text = title
@@ -98,7 +103,7 @@ class BottomNavigationActivity : BaseActivity(R.layout.activity_bottom_navigatio
 		viewPagerAdapter.addFragment(ProfileFragment.newInstance())
 		viewPager.offscreenPageLimit = 2
 		viewPager.adapter = viewPagerAdapter
-		weekView.setCurWeek(1)
+		weekView.curWeek(1)
 				.hideLeftLayout()
 				.setOnWeekItemClickedListener {
 					bottomNavigationViewModel.week.value = it
@@ -134,6 +139,7 @@ class BottomNavigationActivity : BaseActivity(R.layout.activity_bottom_navigatio
 		bottomNavigationViewModel.courseList.observe(this, courseListObserver)
 		bottomNavigationViewModel.showCourse.observe(this, showCourseObserver)
 		bottomNavigationViewModel.title.observe(this, titleObserver)
+		bottomNavigationViewModel.startDateTime.observe(this, startDateTimeObserver)
 	}
 
 	private fun initDialog() {
