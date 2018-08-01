@@ -18,6 +18,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.newPackage.model.Student
 import com.weilylab.xhuschedule.newPackage.repository.BottomNavigationRepository
+import com.weilylab.xhuschedule.newPackage.repository.CourseRepository
 import com.weilylab.xhuschedule.newPackage.ui.adapter.ShowCourseRecyclerViewAdapter
 import com.weilylab.xhuschedule.newPackage.ui.adapter.ViewPagerAdapter
 import com.weilylab.xhuschedule.newPackage.ui.fragment.ProfileFragment
@@ -32,7 +33,6 @@ import com.zyao89.view.zloading.Z_TYPE
 import kotlinx.android.synthetic.main.activity_bottom_navigation.*
 import kotlinx.android.synthetic.main.content_bottom_navigation.*
 import vip.mystery0.bottomTabView.BottomTabItem
-import vip.mystery0.logs.Logs
 import vip.mystery0.tools.base.BaseActivity
 import vip.mystery0.tools.utils.DensityTools
 import java.util.*
@@ -93,6 +93,18 @@ class BottomNavigationActivity : BaseActivity(R.layout.activity_bottom_navigatio
 		CalendarUtil.startDateTime = it
 	}
 
+	private val actionObserver = Observer<Int> {
+		when (it) {
+			BottomNavigationRepository.ACTION_REFRESH -> {
+				val studentList = bottomNavigationViewModel.studentList.value
+				if (studentList == null || studentList.isEmpty())
+					return@Observer
+				
+				CourseRepository.getCourseByStudent(studentList[0], bottomNavigationViewModel)
+			}
+		}
+	}
+
 	override fun initView() {
 		super.initView()
 		titleTextView.text = title
@@ -144,11 +156,12 @@ class BottomNavigationActivity : BaseActivity(R.layout.activity_bottom_navigatio
 		bottomNavigationViewModel.showCourse.observe(this, showCourseObserver)
 		bottomNavigationViewModel.title.observe(this, titleObserver)
 		bottomNavigationViewModel.startDateTime.observe(this, startDateTimeObserver)
+		bottomNavigationViewModel.action.observe(this, actionObserver)
 	}
 
 	private fun initDialog() {
 		dialog = ZLoadingDialog(this)
-				.setLoadingBuilder(Z_TYPE.STAR_LOADING)
+				.setLoadingBuilder(Z_TYPE.SINGLE_CIRCLE)
 				.setHintText(getString(R.string.hint_dialog_init))
 				.setHintTextSize(16F)
 				.setCanceledOnTouchOutside(false)
@@ -181,6 +194,10 @@ class BottomNavigationActivity : BaseActivity(R.layout.activity_bottom_navigatio
 			else
 				showWeekView()
 			isShowWeekView = !isShowWeekView
+		}
+		imageSync.setOnClickListener {
+			bottomNavigationViewModel.action.value = BottomNavigationRepository.ACTION_REFRESH
+			bottomNavigationViewModel.action.value = BottomNavigationRepository.ACTION_NONE
 		}
 	}
 

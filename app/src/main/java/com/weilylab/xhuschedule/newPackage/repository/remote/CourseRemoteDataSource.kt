@@ -19,6 +19,7 @@ object CourseRemoteDataSource : CourseDataSource {
 		if (NetworkUtil.isConnectInternet()) {
 			CourseUtil.getCourse(student, year, term, object : DoSaveListener<List<Course>> {
 				override fun doSave(t: List<Course>) {
+					CourseLocalDataSource.deleteAllCourseListForStudent(student.username,year,term)
 					t.forEach {
 						it.studentID = student.username
 						if (year != null && term != null) {

@@ -1,10 +1,10 @@
 package com.weilylab.xhuschedule.newPackage.viewModel
 
-import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.ViewModel
 import com.weilylab.xhuschedule.newPackage.model.response.SplashResponse
+import com.weilylab.xhuschedule.newPackage.utils.rxAndroid.PackageData
 
 class SplashViewModel : ViewModel() {
-	val splash = MutableLiveData<SplashResponse.Splash>()
-	val requestResult = MutableLiveData<Int>()
+	val splash = MediatorLiveData<PackageData<SplashResponse.Splash>>()
 }

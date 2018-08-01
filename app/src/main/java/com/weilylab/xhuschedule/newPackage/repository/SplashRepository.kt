@@ -12,9 +12,9 @@ object SplashRepository {
 
 	fun requestSplash(splashViewModel: SplashViewModel) {
 		if (NetworkUtil.isConnectInternet())
-			SplashRemoteDataSource.requestSplash(splashViewModel.splash, splashViewModel.requestResult)
+			SplashRemoteDataSource.requestSplash(splashViewModel.splash)
 		else
-			SplashLocalDataSource.requestSplash(splashViewModel.splash, splashViewModel.requestResult)
+			SplashLocalDataSource.requestSplash(splashViewModel.splash)
 	}
 
 	fun getSplash(): SplashResponse.Splash = SplashLocalDataSource.getSplash()

@@ -53,6 +53,14 @@ object CourseLocalDataSource : CourseDataSource {
 				})
 	}
 
+	fun deleteAllCourseListForStudent(username: String, year: String?, term: String?) {
+		val list = courseService.queryCourseByUsernameAndTerm(username, year ?: "current", term
+				?: "current")
+		list.forEach {
+			courseService.deleteCourse(it)
+		}
+	}
+
 	fun saveCourseList(courseList: List<Course>) {
 		courseList.forEach {
 			courseService.addCourse(it)

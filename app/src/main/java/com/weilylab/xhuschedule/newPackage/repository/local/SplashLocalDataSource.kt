@@ -1,20 +1,23 @@
 package com.weilylab.xhuschedule.newPackage.repository.local
 
 import android.content.Context
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import com.weilylab.xhuschedule.newPackage.config.APP
 import com.weilylab.xhuschedule.newPackage.constant.SharedPreferenceConstant
 import com.weilylab.xhuschedule.newPackage.model.response.SplashResponse
 import com.weilylab.xhuschedule.newPackage.repository.SplashRepository
 import com.weilylab.xhuschedule.newPackage.repository.dataSource.SplashDataSource
+import com.weilylab.xhuschedule.newPackage.utils.rxAndroid.PackageData
 
 object SplashLocalDataSource : SplashDataSource {
-	private val sharedPreferences = APP.context.getSharedPreferences(SharedPreferenceConstant.FILE_NAME_SPLASH, Context.MODE_PRIVATE)
-	override fun requestSplash(splashLiveData: MutableLiveData<SplashResponse.Splash>, requestResultLiveData: MutableLiveData<Int>) {
+	override fun requestSplash(splashPackageLiveData: MediatorLiveData<PackageData<SplashResponse.Splash>>) {
+		splashPackageLiveData.value = PackageData.loading()
 		val splash = getSplash()
-		splashLiveData.value = splash
-		requestResultLiveData.value = SplashRepository.DONE
+		splashPackageLiveData.value = PackageData.content(splash)
 	}
+
+	private val sharedPreferences = APP.context.getSharedPreferences(SharedPreferenceConstant.FILE_NAME_SPLASH, Context.MODE_PRIVATE)
 
 	fun saveSplash(splash: SplashResponse.Splash) {
 		sharedPreferences.edit()

@@ -39,7 +39,7 @@ object TestLocalDataSource : TestDataSource {
 	fun queryTestsOnThisDay(testLiveData: MutableLiveData<Test>, messageLiveData: MutableLiveData<String>, requestCodeLiveData: MutableLiveData<Int>, day: String, student: Student) {
 	}
 
-	fun deleteAllTests(username: String) {
+	fun deleteAllTestsForStudent(username: String) {
 		val list = testService.queryTestsForStudent(username)
 		list.forEach {
 			testService.delete(it)

@@ -23,84 +23,90 @@
 			app:layout_constraintStart_toStartOf="parent"
 			app:layout_constraintTop_toTopOf="parent" />
 
-		<View
+		<ImageView
 			android:id="@+id/point"
 			android:layout_width="8dp"
 			android:layout_height="8dp"
-			android:background="@drawable/ic_point"
-			android:backgroundTint="#123456"
+			android:contentDescription="@string/app_name"
 			app:layout_constraintBottom_toBottomOf="@id/line"
 			app:layout_constraintEnd_toEndOf="@id/line"
 			app:layout_constraintStart_toStartOf="@id/line"
-			app:layout_constraintTop_toTopOf="@id/line" />
+			app:layout_constraintTop_toTopOf="@id/line"
+			app:srcCompat="@drawable/ic_point" />
 
-		<androidx.cardview.widget.CardView
+		<androidx.constraintlayout.widget.ConstraintLayout
 			android:id="@+id/cardView"
 			android:layout_width="0dp"
-			android:layout_height="wrap_content"
+			android:layout_height="100dp"
 			android:layout_marginStart="8dp"
 			android:layout_marginTop="8dp"
 			android:layout_marginEnd="16dp"
 			android:layout_marginBottom="8dp"
+			android:background="@drawable/drawable_shape_corner"
+			android:padding="8dp"
 			app:layout_constraintBottom_toBottomOf="parent"
 			app:layout_constraintEnd_toEndOf="parent"
 			app:layout_constraintStart_toEndOf="@id/line"
 			app:layout_constraintTop_toTopOf="parent">
 
-			<androidx.constraintlayout.widget.ConstraintLayout
-				android:layout_width="match_parent"
+			<ImageView
+				android:id="@+id/imageView"
+				android:layout_width="20dp"
+				android:layout_height="20dp"
+				android:contentDescription="@string/app_name"
+				android:src="@mipmap/ic_today_course_bottom_watermelon"
+				app:layout_constraintBottom_toBottomOf="parent"
+				app:layout_constraintStart_toStartOf="parent"
+				app:layout_constraintTop_toTopOf="parent" />
+
+			<TextView
+				android:id="@+id/textViewName"
+				android:layout_width="0dp"
 				android:layout_height="wrap_content"
-				android:layout_margin="8dp">
+				android:layout_marginStart="12dp"
+				android:text="@{course.name}"
+				android:textColor="@android:color/black"
+				android:textSize="16sp"
+				app:layout_constraintBottom_toTopOf="@id/textViewTeacher"
+				app:layout_constraintEnd_toStartOf="@id/textViewTime"
+				app:layout_constraintStart_toEndOf="@id/imageView"
+				app:layout_constraintTop_toTopOf="parent" />
 
-				<ImageView
-					android:id="@+id/imageView"
-					android:layout_width="36dp"
-					android:layout_height="36dp"
-					android:contentDescription="@string/app_name"
-					android:src="@mipmap/image_profile"
-					app:layout_constraintBottom_toBottomOf="parent"
-					app:layout_constraintStart_toStartOf="parent"
-					app:layout_constraintTop_toTopOf="parent" />
+			<TextView
+				android:id="@+id/textViewTeacher"
+				android:layout_width="0dp"
+				android:layout_height="wrap_content"
+				android:layout_marginStart="12dp"
+				android:text="@{course.teacher}"
+				android:textSize="12sp"
+				app:layout_constraintBottom_toTopOf="@id/textViewLocation"
+				app:layout_constraintEnd_toEndOf="parent"
+				app:layout_constraintStart_toEndOf="@id/imageView"
+				app:layout_constraintTop_toBottomOf="@id/textViewName" />
 
-				<TextView
-					android:id="@+id/textViewName"
-					android:layout_width="0dp"
-					android:layout_height="wrap_content"
-					android:layout_marginStart="12dp"
-					android:layout_marginTop="12dp"
-					android:text="@{course.name}"
-					android:textColor="@android:color/black"
-					android:textSize="18sp"
-					app:layout_constraintBottom_toTopOf="@id/textViewLocation"
-					app:layout_constraintEnd_toStartOf="@id/textViewTeacher"
-					app:layout_constraintStart_toEndOf="@id/imageView"
-					app:layout_constraintTop_toTopOf="parent" />
+			<TextView
+				android:id="@+id/textViewLocation"
+				android:layout_width="0dp"
+				android:layout_height="wrap_content"
+				android:layout_marginStart="12dp"
+				android:text="@{course.room}"
+				android:textSize="12sp"
+				app:layout_constraintBottom_toBottomOf="parent"
+				app:layout_constraintEnd_toEndOf="parent"
+				app:layout_constraintStart_toEndOf="@id/imageView"
+				app:layout_constraintTop_toBottomOf="@id/textViewTeacher" />
 
-				<TextView
-					android:id="@+id/textViewLocation"
-					android:layout_width="0dp"
-					android:layout_height="wrap_content"
-					android:layout_marginStart="12dp"
-					android:layout_marginTop="8dp"
-					android:layout_marginBottom="12dp"
-					android:text="@{course.room}"
-					app:layout_constraintBottom_toBottomOf="parent"
-					app:layout_constraintEnd_toStartOf="@id/textViewTeacher"
-					app:layout_constraintStart_toEndOf="@id/imageView"
-					app:layout_constraintTop_toBottomOf="@id/textViewName" />
+			<TextView
+				android:id="@+id/textViewTime"
+				android:layout_width="wrap_content"
+				android:layout_height="0dp"
+				android:gravity="center"
+				app:layout_constraintBottom_toBottomOf="@id/textViewName"
+				app:layout_constraintEnd_toEndOf="parent"
+				app:layout_constraintTop_toTopOf="@id/textViewName" />
 
-				<TextView
-					android:id="@+id/textViewTeacher"
-					android:layout_width="0dp"
-					android:layout_height="wrap_content"
-					android:text="@{course.teacher}"
-					app:layout_constraintBottom_toBottomOf="parent"
-					app:layout_constraintEnd_toEndOf="parent"
-					app:layout_constraintTop_toTopOf="parent" />
-
-			</androidx.constraintlayout.widget.ConstraintLayout>
-
-		</androidx.cardview.widget.CardView>
+		</androidx.constraintlayout.widget.ConstraintLayout>
 
 	</androidx.constraintlayout.widget.ConstraintLayout>
+
 </layout>

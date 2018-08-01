@@ -42,8 +42,10 @@ import com.weilylab.xhuschedule.newPackage.model.response.SplashResponse
 import com.weilylab.xhuschedule.newPackage.repository.SplashRepository
 import com.weilylab.xhuschedule.newPackage.utils.ConfigurationUtil
 import com.weilylab.xhuschedule.newPackage.utils.FileUtil
+import com.weilylab.xhuschedule.newPackage.utils.rxAndroid.PackageData
 import com.weilylab.xhuschedule.newPackage.viewModel.SplashViewModel
 import com.weilylab.xhuschedule.service.DownloadSplashIntentService
+import vip.mystery0.logs.Logs
 
 /**
  * Created by mystery0.
@@ -51,25 +53,19 @@ import com.weilylab.xhuschedule.service.DownloadSplashIntentService
 class SplashActivity : XhuBaseActivity(null) {
 	private lateinit var splashViewModel: SplashViewModel
 
-	private val splashObserver = Observer<SplashResponse.Splash> {
-		if (it.isEnable) {
-			val splashFile = FileUtil.getSplashImageFile(this, it.objectId)
-			if (splashFile != null && splashFile.exists())
-				gotoSplashImage()
-			else {
-				val intent = Intent(this@SplashActivity, DownloadSplashIntentService::class.java)
-				intent.putExtra(IntentConstant.INTENT_TAG_NAME_QINIU_PATH, it.splashUrl)
-				intent.putExtra(IntentConstant.INTENT_TAG_NAME_SPLASH_FILE_NAME, it.objectId)
-				startService(intent)
+	private val splashObserver = Observer<PackageData<SplashResponse.Splash>> {
+		when (it.status) {
+			PackageData.Status.Loading -> Logs.i("loading")
+			PackageData.Status.Empty -> gotoMain()
+			PackageData.Status.Error -> {
+				Logs.e("splashObserver", it.error)
 				gotoMain()
 			}
-		} else
-			gotoMain()
-	}
+			PackageData.Status.Content -> {
+				todo(it.data!!)
+			}
+		}
 
-	private val requestResultObserver = Observer<Int> {
-		if (it == SplashRepository.ERROR)
-			gotoMain()
 	}
 
 	override fun initView() {
@@ -94,7 +90,22 @@ class SplashActivity : XhuBaseActivity(null) {
 	private fun initViewModel() {
 		splashViewModel = ViewModelProviders.of(this).get(SplashViewModel::class.java)
 		splashViewModel.splash.observe(this, splashObserver)
-		splashViewModel.requestResult.observe(this, requestResultObserver)
+	}
+
+	private fun todo(splash: SplashResponse.Splash) {
+		if (splash.isEnable) {
+			val splashFile = FileUtil.getSplashImageFile(this, splash.objectId)
+			if (splashFile != null && splashFile.exists())
+				gotoSplashImage()
+			else {
+				val intent = Intent(this, DownloadSplashIntentService::class.java)
+				intent.putExtra(IntentConstant.INTENT_TAG_NAME_QINIU_PATH, splash.splashUrl)
+				intent.putExtra(IntentConstant.INTENT_TAG_NAME_SPLASH_FILE_NAME, splash.objectId)
+				startService(intent)
+				gotoMain()
+			}
+		} else
+			gotoMain()
 	}
 
 	private fun gotoMain() {

@@ -82,7 +82,7 @@ class LoginActivity : XhuBaseActivity(R.layout.activity_login) {
 			window.navigationBarColor = Color.TRANSPARENT
 		}
 		dialog = ZLoadingDialog(this)
-				.setLoadingBuilder(Z_TYPE.STAR_LOADING)
+				.setLoadingBuilder(Z_TYPE.SINGLE_CIRCLE)
 				.setHintText(getString(R.string.hint_dialog_login))
 				.setHintTextSize(16F)
 				.setCanceledOnTouchOutside(false)

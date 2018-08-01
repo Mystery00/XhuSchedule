@@ -12,7 +12,6 @@ class RxLiveData<T>(private val observable: Observable<T>) : LiveData<PackageDat
 
 	override fun onActive() {
 		super.onActive()
-
 		observable.subscribe(object : Observer<T> {
 			override fun onSubscribe(d: Disposable) {
 				synchronized(lock) {

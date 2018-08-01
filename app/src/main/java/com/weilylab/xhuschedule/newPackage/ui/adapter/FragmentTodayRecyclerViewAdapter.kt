@@ -8,9 +8,10 @@ import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.databinding.ItemFragmentTodayBinding
 import com.weilylab.xhuschedule.newPackage.model.Course
 import com.zhuangfei.timetable.model.Schedule
+import com.zhuangfei.timetable.model.ScheduleColorPool
 import vip.mystery0.tools.base.BaseRecyclerViewAdapter
 
-class FragmentTodayRecyclerViewAdapter(context: Context?, list: ArrayList<in Schedule>) : BaseRecyclerViewAdapter<FragmentTodayRecyclerViewAdapter.ViewHolder, Schedule>(context, R.layout.item_fragment_today, list) {
+class FragmentTodayRecyclerViewAdapter(private val context: Context?, list: ArrayList<in Schedule>) : BaseRecyclerViewAdapter<FragmentTodayRecyclerViewAdapter.ViewHolder, Schedule>(context, R.layout.item_fragment_today, list) {
 	private lateinit var itemFragmentTodayBinding: ItemFragmentTodayBinding
 	private var listener: (Int, Schedule) -> Boolean = { _, _ -> false }
 
@@ -21,6 +22,11 @@ class FragmentTodayRecyclerViewAdapter(context: Context?, list: ArrayList<in Sch
 
 	override fun setItemView(holder: ViewHolder, position: Int, data: Schedule) {
 		itemFragmentTodayBinding.course = data
+		val color = ScheduleColorPool(context).getColorAuto(data.colorRandom)
+		itemFragmentTodayBinding.point.setColorFilter(color)
+		itemFragmentTodayBinding.imageView.setColorFilter(color)
+		val time = "${data.start}-${data.start + data.step - 1}节"
+		itemFragmentTodayBinding.textViewTime.text = time
 		itemFragmentTodayBinding.root.setOnClickListener {
 			listener.invoke(position, data)
 		}

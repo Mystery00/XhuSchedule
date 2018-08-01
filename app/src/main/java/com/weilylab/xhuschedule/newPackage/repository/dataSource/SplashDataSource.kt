@@ -1,8 +1,9 @@
 package com.weilylab.xhuschedule.newPackage.repository.dataSource
 
-import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.MediatorLiveData
 import com.weilylab.xhuschedule.newPackage.model.response.SplashResponse
+import com.weilylab.xhuschedule.newPackage.utils.rxAndroid.PackageData
 
 interface SplashDataSource {
-	fun requestSplash(splashLiveData: MutableLiveData<SplashResponse.Splash>, requestResultLiveData: MutableLiveData<Int>)
+	fun requestSplash(splashPackageLiveData:MediatorLiveData<PackageData<SplashResponse.Splash>>)
 }

@@ -1,20 +1,20 @@
 package com.weilylab.xhuschedule.newPackage.repository.remote
 
-import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.MediatorLiveData
 import com.weilylab.xhuschedule.newPackage.api.LeanCloudAPI
 import com.weilylab.xhuschedule.newPackage.factory.GsonFactory
 import com.weilylab.xhuschedule.newPackage.factory.RetrofitFactory
 import com.weilylab.xhuschedule.newPackage.model.response.SplashResponse
-import com.weilylab.xhuschedule.newPackage.repository.SplashRepository
 import com.weilylab.xhuschedule.newPackage.repository.dataSource.SplashDataSource
 import com.weilylab.xhuschedule.newPackage.repository.local.SplashLocalDataSource
+import com.weilylab.xhuschedule.newPackage.utils.rxAndroid.PackageData
 import com.weilylab.xhuschedule.newPackage.utils.rxAndroid.RxObserver
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import vip.mystery0.logs.Logs
 
 object SplashRemoteDataSource : SplashDataSource {
-	override fun requestSplash(splashLiveData: MutableLiveData<SplashResponse.Splash>, requestResultLiveData: MutableLiveData<Int>) {
+	override fun requestSplash(splashPackageLiveData: MediatorLiveData<PackageData<SplashResponse.Splash>>) {
+		splashPackageLiveData.value = PackageData.loading()
 		RetrofitFactory.splashLeanCloudRetrofit
 				.create(LeanCloudAPI::class.java)
 				.requestSplashInfo()
@@ -30,17 +30,14 @@ object SplashRemoteDataSource : SplashDataSource {
 				.subscribe(object : RxObserver<SplashResponse>() {
 					override fun onFinish(data: SplashResponse?) {
 						if (data == null) {
-							requestResultLiveData.value = SplashRepository.ERROR
-							SplashLocalDataSource.requestSplash(splashLiveData, requestResultLiveData)
+							SplashLocalDataSource.requestSplash(splashPackageLiveData)
 						} else {
-							splashLiveData.value = data.results[0]
-							requestResultLiveData.value = SplashRepository.DONE
+							splashPackageLiveData.value = PackageData.content(data.results[0])
 						}
 					}
 
 					override fun onError(e: Throwable) {
-						Logs.wtf("onError: ", e)
-						SplashLocalDataSource.requestSplash(splashLiveData, requestResultLiveData)
+						splashPackageLiveData.value = PackageData.error(e)
 					}
 				})
 	}

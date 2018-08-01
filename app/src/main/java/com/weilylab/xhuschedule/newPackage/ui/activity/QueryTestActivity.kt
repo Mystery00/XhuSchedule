@@ -67,7 +67,7 @@ class QueryTestActivity : XhuBaseActivity(R.layout.activity_query_test) {
 
 	private fun initDialog() {
 		dialog = ZLoadingDialog(this)
-				.setLoadingBuilder(Z_TYPE.STAR_LOADING)
+				.setLoadingBuilder(Z_TYPE.SINGLE_CIRCLE)
 				.setHintText(getString(R.string.hint_dialog_get_tests))
 				.setHintTextSize(16F)
 				.setCanceledOnTouchOutside(false)

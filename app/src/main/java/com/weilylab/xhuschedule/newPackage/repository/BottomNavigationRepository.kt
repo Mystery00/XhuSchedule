@@ -10,7 +10,7 @@ object BottomNavigationRepository {
 	const val DONE = 21
 	const val ERROR = 22
 
-	const val NONE = 30
+	const val ACTION_NONE = 30
 	const val ACTION_REFRESH = 31
 
 	fun queryAllStudent(bottomNavigationViewModel: BottomNavigationViewModel) = StudentLocalDataSource.queryAllStudentList(bottomNavigationViewModel.studentList, bottomNavigationViewModel.message, bottomNavigationViewModel.requestCode)
