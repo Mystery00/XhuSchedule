@@ -7,9 +7,6 @@ import com.weilylab.xhuschedule.newPackage.utils.rxAndroid.PackageData
 import com.weilylab.xhuschedule.newPackage.viewModel.QueryTestViewModel
 
 object TestRepository {
-	const val DONE = 21
-	const val ERROR = 22
-
 	fun queryTests(queryTestViewModel: QueryTestViewModel) {
 		queryTestViewModel.testList.value = PackageData.loading()
 		queryTestViewModel.testList.addSource(queryTestViewModel.studentList) {

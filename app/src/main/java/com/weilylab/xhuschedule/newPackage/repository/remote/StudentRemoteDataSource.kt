@@ -7,11 +7,11 @@ import com.weilylab.xhuschedule.newPackage.listener.RequestListener
 import com.weilylab.xhuschedule.newPackage.model.Student
 import com.weilylab.xhuschedule.newPackage.model.StudentInfo
 import com.weilylab.xhuschedule.newPackage.repository.BottomNavigationRepository
-import com.weilylab.xhuschedule.newPackage.repository.LoginRepository
 import com.weilylab.xhuschedule.newPackage.repository.dataSource.StudentDataSource
 import com.weilylab.xhuschedule.newPackage.repository.local.StudentLocalDataSource
 import com.weilylab.xhuschedule.newPackage.utils.NetworkUtil
 import com.weilylab.xhuschedule.newPackage.utils.UserUtil
+import com.weilylab.xhuschedule.newPackage.utils.rxAndroid.PackageData
 import vip.mystery0.logs.Logs
 
 object StudentRemoteDataSource : StudentDataSource {
@@ -40,7 +40,8 @@ object StudentRemoteDataSource : StudentDataSource {
 		}
 	}
 
-	fun login(messageLiveData: MutableLiveData<String>, requestCodeLiveData: MutableLiveData<Int>, student: Student) {
+	fun login(loginLiveData: MutableLiveData<PackageData<Boolean>>, student: Student) {
+		loginLiveData.value = PackageData.loading()
 		if (NetworkUtil.isConnectInternet()) {
 			UserUtil.login(student, object : DoSaveListener<Student> {
 				override fun doSave(t: Student) {
@@ -48,17 +49,15 @@ object StudentRemoteDataSource : StudentDataSource {
 				}
 			}, object : RequestListener<Boolean> {
 				override fun done(t: Boolean) {
-					requestCodeLiveData.value = LoginRepository.DONE
+					loginLiveData.value = PackageData.content(true)
 				}
 
 				override fun error(rt: String, msg: String?) {
-					requestCodeLiveData.value = LoginRepository.ERROR
-					messageLiveData.value = msg
+					loginLiveData.value = PackageData.error(Exception(msg))
 				}
 			})
 		} else {
-			requestCodeLiveData.value = LoginRepository.ERROR
-			messageLiveData.value = StringConstant.hint_network_error
+			loginLiveData.value = PackageData.error(Exception(StringConstant.hint_network_error))
 		}
 	}
 }

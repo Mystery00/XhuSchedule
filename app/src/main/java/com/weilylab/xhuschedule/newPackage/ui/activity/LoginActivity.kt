@@ -53,23 +53,29 @@ import com.weilylab.xhuschedule.newPackage.model.Student
 import com.weilylab.xhuschedule.newPackage.repository.LoginRepository
 import com.weilylab.xhuschedule.newPackage.viewModel.LoginViewModel
 import android.view.WindowManager
+import com.weilylab.xhuschedule.newPackage.config.Status.*
+import com.weilylab.xhuschedule.newPackage.utils.rxAndroid.PackageData
 
 
 class LoginActivity : XhuBaseActivity(R.layout.activity_login) {
 	private lateinit var loginViewModel: LoginViewModel
 	private lateinit var dialog: Dialog
 
-	private val messageObserver = Observer<String> {
-		Toast.makeText(this, it, Toast.LENGTH_SHORT)
-				.show()
-	}
-	private val requestCodeObserver = Observer<Int> {
-		hideDialog()
-		if (it == LoginRepository.DONE) {
-			Toast.makeText(this, getString(R.string.success_login, getString(R.string.app_name)), Toast.LENGTH_SHORT)
-					.show()
-			setResult(Activity.RESULT_OK, intent)
-			finish()
+	private val loginObserver= Observer<PackageData<Boolean>> {
+		when(it.status){
+			Content -> {
+				hideDialog()
+				if (it.data!!){
+					Toast.makeText(this, getString(R.string.success_login, getString(R.string.app_name)), Toast.LENGTH_SHORT)
+							.show()
+					setResult(Activity.RESULT_OK, intent)
+					finish()
+				}
+			}
+			Empty -> TODO()
+			Error -> Toast.makeText(this, it.error?.message, Toast.LENGTH_SHORT)
+						.show()
+			Loading -> showDialog()
 		}
 	}
 
@@ -99,8 +105,7 @@ class LoginActivity : XhuBaseActivity(R.layout.activity_login) {
 
 	private fun initViewModel() {
 		loginViewModel = ViewModelProviders.of(this).get(LoginViewModel::class.java)
-		loginViewModel.message.observe(this, messageObserver)
-		loginViewModel.requestResult.observe(this, requestCodeObserver)
+		loginViewModel.loginLiveData.observe(this, loginObserver)
 	}
 
 	override fun monitor() {

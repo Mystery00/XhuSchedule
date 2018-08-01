@@ -2,8 +2,8 @@ package com.weilylab.xhuschedule.newPackage.viewModel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.weilylab.xhuschedule.newPackage.utils.rxAndroid.PackageData
 
 class LoginViewModel : ViewModel() {
-	val message = MutableLiveData<String>()
-	val requestResult = MutableLiveData<Int>()
+	val loginLiveData = MutableLiveData<PackageData<Boolean>>()
 }
