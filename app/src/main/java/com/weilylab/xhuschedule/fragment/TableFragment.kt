@@ -46,6 +46,7 @@ import com.weilylab.xhuschedule.activity.MainActivity
 import com.weilylab.xhuschedule.classes.baseClass.Course
 import com.weilylab.xhuschedule.classes.baseClass.TableLayoutHelper
 import com.weilylab.xhuschedule.listener.InfoChangeListener
+import com.weilylab.xhuschedule.newPackage.ui.fragment.BaseBottomNavigationFragment
 import com.weilylab.xhuschedule.util.*
 import com.weilylab.xhuschedule.view.ContentHorizontalScrollView
 import com.weilylab.xhuschedule.view.ContentVerticalScrollView
@@ -61,7 +62,10 @@ import kotlin.math.max
 /**
  * Created by myste.
  */
-class TableFragment : BaseFragment(R.layout.fragment_tableold) {
+class TableFragment : BaseBottomNavigationFragment(R.layout.fragment_tableold) {
+	override fun updateTitle() {
+	}
+
 	companion object {
 		fun newInstance(list: ArrayList<ArrayList<ArrayList<Course>>>): TableFragment {
 			val bundle = Bundle()

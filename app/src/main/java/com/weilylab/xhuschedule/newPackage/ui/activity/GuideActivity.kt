@@ -56,7 +56,7 @@ import kotlinx.android.synthetic.main.activity_guide.*
 import vip.mystery0.tools.utils.DensityTools
 
 class GuideActivity : XhuBaseActivity(R.layout.activity_guide) {
-	private var mSectionsPagerAdapter: SectionsPagerAdapter? = null
+	private lateinit var mSectionsPagerAdapter: SectionsPagerAdapter
 	private lateinit var grayPointDrawable: VectorDrawableCompat
 	private lateinit var gestureDetector: GestureDetector
 	private var distance = 0

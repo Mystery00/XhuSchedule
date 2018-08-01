@@ -11,9 +11,11 @@ import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.databinding.FragmentTodayBinding
 import com.weilylab.xhuschedule.newPackage.ui.adapter.FragmentTodayRecyclerViewAdapter
 import com.weilylab.xhuschedule.newPackage.utils.CalendarUtil
+import com.weilylab.xhuschedule.newPackage.utils.rxAndroid.RxObservable
+import com.weilylab.xhuschedule.newPackage.utils.rxAndroid.RxObserver
 import com.weilylab.xhuschedule.newPackage.viewModel.BottomNavigationViewModel
 import com.zhuangfei.timetable.model.Schedule
-import vip.mystery0.tools.base.BaseFragment
+import vip.mystery0.logs.Logs
 import java.util.ArrayList
 
 class TodayFragment : BaseBottomNavigationFragment(R.layout.fragment_today) {
@@ -63,6 +65,27 @@ class TodayFragment : BaseBottomNavigationFragment(R.layout.fragment_today) {
 	}
 
 	override fun updateTitle() {
-		viewModel.title.value = "第${viewModel.week.value}周 ${CalendarUtil.getWeekIndexInString()}"
+		RxObservable<Boolean>()
+				.doThings {
+					var num = 0
+					while (true) {
+						when {
+							::viewModel.isInitialized -> it.onFinish(true)
+							num >= 10 -> it.onFinish(false)
+						}
+						Thread.sleep(200)
+						num++
+					}
+				}
+				.subscribe(object : RxObserver<Boolean>() {
+					override fun onFinish(data: Boolean?) {
+						if (data != null && data)
+							viewModel.title.value = "第${viewModel.currentWeek.value}周 ${CalendarUtil.getWeekIndexInString()}"
+					}
+
+					override fun onError(e: Throwable) {
+						Logs.wtf("onError: ", e)
+					}
+				})
 	}
 }

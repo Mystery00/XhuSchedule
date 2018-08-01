@@ -15,7 +15,7 @@ import vip.mystery0.logs.Logs
 
 object SplashRemoteDataSource : SplashDataSource {
 	override fun requestSplash(splashLiveData: MutableLiveData<SplashResponse.Splash>, requestResultLiveData: MutableLiveData<Int>) {
-		RetrofitFactory.leanCloudRetrofit
+		RetrofitFactory.splashLeanCloudRetrofit
 				.create(LeanCloudAPI::class.java)
 				.requestSplashInfo()
 				.subscribeOn(Schedulers.newThread())

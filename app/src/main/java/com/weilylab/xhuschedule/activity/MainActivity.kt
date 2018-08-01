@@ -202,7 +202,7 @@ class MainActivity : XhuBaseActivity(R.layout.activity_main) {
 		val viewPagerAdapter = ViewPagerAdapter(supportFragmentManager)
 		viewPagerAdapter.addFragment(todayFragment)
 		viewPagerAdapter.addFragment(weekFragment)
-		viewPagerAdapter.addFragment(profileFragment)
+//		viewPagerAdapter.addFragment(profileFragment)
 		viewpager.offscreenPageLimit = 2
 		viewpager.adapter = viewPagerAdapter
 

@@ -40,6 +40,7 @@ import android.widget.ImageView
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.adapter.TodayAdapter
 import com.weilylab.xhuschedule.classes.baseClass.Course
+import com.weilylab.xhuschedule.newPackage.ui.fragment.BaseBottomNavigationFragment
 import com.weilylab.xhuschedule.util.Constants
 import com.weilylab.xhuschedule.util.ViewUtil
 import vip.mystery0.tools.base.BaseFragment
@@ -48,7 +49,10 @@ import java.util.*
 /**
  * Created by myste.
  */
-class TodayFragment : BaseFragment(R.layout.fragment_todayold) {
+class TodayFragment : BaseBottomNavigationFragment(R.layout.fragment_todayold) {
+	override fun updateTitle() {
+	}
+
 	companion object {
 
 		fun newInstance(list: ArrayList<Course>): TodayFragment {

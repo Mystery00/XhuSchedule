@@ -1,5 +1,6 @@
 package com.weilylab.xhuschedule.newPackage.ui.fragment
 
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,8 +12,12 @@ import com.weilylab.xhuschedule.databinding.FragmentTableBinding
 import com.weilylab.xhuschedule.newPackage.model.Student
 import com.weilylab.xhuschedule.newPackage.repository.CourseRepository
 import com.weilylab.xhuschedule.newPackage.ui.custom.CustomDateAdapter
+import com.weilylab.xhuschedule.newPackage.utils.rxAndroid.RxObservable
+import com.weilylab.xhuschedule.newPackage.utils.rxAndroid.RxObserver
 import com.weilylab.xhuschedule.newPackage.viewModel.BottomNavigationViewModel
+import com.zhuangfei.timetable.listener.OnSlideBuildAdapter
 import com.zhuangfei.timetable.model.Schedule
+import vip.mystery0.logs.Logs
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -58,7 +63,12 @@ class TableFragment : BaseBottomNavigationFragment(R.layout.fragment_table) {
 		initViewModel()
 		fragmentTableBinding.timeTableView
 				.config()
+				.alpha(0.1f, 0.1f, 1f)
 				.callback(CustomDateAdapter())
+				.callback(OnSlideBuildAdapter()
+						.setBackground(Color.BLACK)
+						.setTextSize(12f)
+						.setTextColor(Color.WHITE))
 				.toggle(fragmentTableBinding.timeTableView)
 				.showView()
 	}
@@ -81,6 +91,27 @@ class TableFragment : BaseBottomNavigationFragment(R.layout.fragment_table) {
 	}
 
 	override fun updateTitle() {
-		bottomNavigationViewModel.title.value = "第${bottomNavigationViewModel.week.value}周"
+		RxObservable<Boolean>()
+				.doThings {
+					var num = 0
+					while (true) {
+						when {
+							::bottomNavigationViewModel.isInitialized -> it.onFinish(true)
+							num >= 10 -> it.onFinish(false)
+						}
+						Thread.sleep(200)
+						num++
+					}
+				}
+				.subscribe(object : RxObserver<Boolean>() {
+					override fun onFinish(data: Boolean?) {
+						if (data != null && data)
+							bottomNavigationViewModel.title.value = "第${bottomNavigationViewModel.week.value}周"
+					}
+
+					override fun onError(e: Throwable) {
+						Logs.wtf("onError: ", e)
+					}
+				})
 	}
 }

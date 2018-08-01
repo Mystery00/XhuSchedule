@@ -18,6 +18,7 @@ object TestRemoteDataSource : TestDataSource {
 		if (NetworkUtil.isConnectInternet()) {
 			TestUtil.getTests(student, object : DoSaveListener<List<Test>> {
 				override fun doSave(t: List<Test>) {
+					TestLocalDataSource.deleteAllTests(student.username)
 					t.forEach {
 						it.studentID = student.username
 					}

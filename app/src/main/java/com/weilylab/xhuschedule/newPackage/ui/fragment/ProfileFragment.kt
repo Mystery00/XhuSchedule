@@ -11,16 +11,16 @@ import com.weilylab.xhuschedule.databinding.FragmentProfileBinding
 import com.weilylab.xhuschedule.newPackage.model.Student
 import com.weilylab.xhuschedule.newPackage.repository.BottomNavigationRepository
 import com.weilylab.xhuschedule.newPackage.ui.activity.QueryTestActivity
+import com.weilylab.xhuschedule.newPackage.utils.rxAndroid.RxObservable
+import com.weilylab.xhuschedule.newPackage.utils.rxAndroid.RxObserver
 import com.weilylab.xhuschedule.newPackage.viewModel.BottomNavigationViewModel
 import vip.mystery0.logs.Logs
-import vip.mystery0.tools.base.BaseFragment
 
 class ProfileFragment : BaseBottomNavigationFragment(R.layout.fragment_profile) {
 	private lateinit var fragmentProfileBinding: FragmentProfileBinding
 	private lateinit var bottomNavigationViewModel: BottomNavigationViewModel
 
 	private val studentObserver = Observer<List<Student>> {
-		Logs.i(it.size.toString())
 		if (it.isNotEmpty())
 			BottomNavigationRepository.queryStudentInfo(it[0], bottomNavigationViewModel)
 	}
@@ -54,6 +54,27 @@ class ProfileFragment : BaseBottomNavigationFragment(R.layout.fragment_profile) 
 	}
 
 	override fun updateTitle() {
-		bottomNavigationViewModel.title.value = "我的"
+		RxObservable<Boolean>()
+				.doThings {
+					var num = 0
+					while (true) {
+						when {
+							::bottomNavigationViewModel.isInitialized -> it.onFinish(true)
+							num >= 10 -> it.onFinish(false)
+						}
+						Thread.sleep(200)
+						num++
+					}
+				}
+				.subscribe(object : RxObserver<Boolean>() {
+					override fun onFinish(data: Boolean?) {
+						if (data != null && data)
+							bottomNavigationViewModel.title.value = "我的"
+					}
+
+					override fun onError(e: Throwable) {
+						Logs.wtf("onError: ", e)
+					}
+				})
 	}
 }

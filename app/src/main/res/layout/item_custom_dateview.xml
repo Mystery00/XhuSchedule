@@ -1,12 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout>
 
-	<data>
-
-		<variable
-			name="weekString"
-			type="String" />
-	</data>
+	<data/>
 
 	<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 		android:id="@+id/id_week_layout"
@@ -31,7 +26,6 @@
 			android:layout_height="0dp"
 			android:layout_weight="1"
 			android:gravity="center"
-			android:text="@{weekString}"
 			android:textColor="@android:color/white"
 			android:textSize="12sp" />
 

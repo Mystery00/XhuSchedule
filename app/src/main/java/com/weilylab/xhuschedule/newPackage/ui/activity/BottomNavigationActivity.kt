@@ -20,7 +20,6 @@ import com.weilylab.xhuschedule.newPackage.model.Student
 import com.weilylab.xhuschedule.newPackage.repository.BottomNavigationRepository
 import com.weilylab.xhuschedule.newPackage.ui.adapter.ShowCourseRecyclerViewAdapter
 import com.weilylab.xhuschedule.newPackage.ui.adapter.ViewPagerAdapter
-import com.weilylab.xhuschedule.newPackage.ui.fragment.BaseBottomNavigationFragment
 import com.weilylab.xhuschedule.newPackage.ui.fragment.ProfileFragment
 import com.weilylab.xhuschedule.newPackage.ui.fragment.TableFragment
 import com.weilylab.xhuschedule.newPackage.ui.fragment.TodayFragment
@@ -33,6 +32,7 @@ import com.zyao89.view.zloading.Z_TYPE
 import kotlinx.android.synthetic.main.activity_bottom_navigation.*
 import kotlinx.android.synthetic.main.content_bottom_navigation.*
 import vip.mystery0.bottomTabView.BottomTabItem
+import vip.mystery0.logs.Logs
 import vip.mystery0.tools.base.BaseActivity
 import vip.mystery0.tools.utils.DensityTools
 import java.util.*
@@ -72,6 +72,8 @@ class BottomNavigationActivity : BaseActivity(R.layout.activity_bottom_navigatio
 			else -> it
 		}
 		weekView.curWeek(week).showView()
+		bottomNavigationViewModel.week.value = week
+		viewPagerAdapter.getItem(viewPager.currentItem).updateTitle()
 	}
 
 	private val showCourseObserver = Observer<List<Schedule>> {
@@ -107,6 +109,7 @@ class BottomNavigationActivity : BaseActivity(R.layout.activity_bottom_navigatio
 				.hideLeftLayout()
 				.setOnWeekItemClickedListener {
 					bottomNavigationViewModel.week.value = it
+					viewPagerAdapter.getItem(viewPager.currentItem).updateTitle()
 				}
 				.showView()
 		bottomNavigationView.config
@@ -121,6 +124,7 @@ class BottomNavigationActivity : BaseActivity(R.layout.activity_bottom_navigatio
 	override fun initData() {
 		super.initData()
 		initViewModel()
+		viewPagerAdapter.getItem(0).updateTitle()
 		BottomNavigationRepository.queryAllStudent(bottomNavigationViewModel)
 		BottomNavigationRepository.queryCurrentWeek(bottomNavigationViewModel)
 	}
@@ -168,7 +172,7 @@ class BottomNavigationActivity : BaseActivity(R.layout.activity_bottom_navigatio
 
 			override fun onPageSelected(position: Int) {
 				bottomNavigationView.setCheckedItem(position)
-				(viewPagerAdapter.getItem(position) as BaseBottomNavigationFragment).updateTitle()
+				viewPagerAdapter.getItem(position).updateTitle()
 			}
 		})
 		titleTextView.setOnClickListener {

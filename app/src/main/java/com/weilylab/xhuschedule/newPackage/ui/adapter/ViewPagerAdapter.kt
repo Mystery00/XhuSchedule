@@ -36,16 +36,16 @@ package com.weilylab.xhuschedule.newPackage.ui.adapter
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
 import java.util.ArrayList
-import androidx.fragment.app.Fragment
+import com.weilylab.xhuschedule.newPackage.ui.fragment.BaseBottomNavigationFragment
 
 /**
  * Created by myste.
  */
 class ViewPagerAdapter(fragmentManager: FragmentManager) : FragmentPagerAdapter(fragmentManager) {
 
-    private val fragmentList = ArrayList<Fragment>()
+    private val fragmentList = ArrayList<BaseBottomNavigationFragment>()
 
-    fun addFragment(fragment: Fragment) {
+    fun addFragment(fragment: BaseBottomNavigationFragment) {
         fragmentList.add(fragment)
     }
 

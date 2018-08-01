@@ -8,6 +8,15 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import java.util.concurrent.TimeUnit
 
 object RetrofitFactory {
+	private val splashClient = OkHttpClient.Builder()
+			.retryOnConnectionFailure(true)
+			.connectTimeout(2, TimeUnit.SECONDS)
+			.readTimeout(2, TimeUnit.SECONDS)
+			.writeTimeout(2, TimeUnit.SECONDS)
+			.addInterceptor(LoadCookiesInterceptor())
+			.addInterceptor(SaveCookiesInterceptor())
+			.build()
+
 	private val client = OkHttpClient.Builder()
 			.retryOnConnectionFailure(true)
 			.connectTimeout(20, TimeUnit.SECONDS)
@@ -32,6 +41,12 @@ object RetrofitFactory {
 	val imgRetrofit = Retrofit.Builder()
 			.baseUrl("http://download.xhuschedule.mostpan.com")
 			.client(client)
+			.addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+			.build()!!
+
+	val splashLeanCloudRetrofit = Retrofit.Builder()
+			.baseUrl("https://f939ktgh.api.lncld.net")
+			.client(splashClient)
 			.addCallAdapterFactory(RxJava2CallAdapterFactory.create())
 			.build()!!
 
