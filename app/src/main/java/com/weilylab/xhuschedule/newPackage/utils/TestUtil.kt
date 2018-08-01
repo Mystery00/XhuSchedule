@@ -10,6 +10,8 @@ import com.weilylab.xhuschedule.newPackage.listener.RequestListener
 import com.weilylab.xhuschedule.newPackage.model.Student
 import com.weilylab.xhuschedule.newPackage.model.Test
 import com.weilylab.xhuschedule.newPackage.model.response.TestResponse
+import com.weilylab.xhuschedule.newPackage.utils.rxAndroid.PackageData
+import com.weilylab.xhuschedule.newPackage.utils.rxAndroid.RxLiveData
 import com.weilylab.xhuschedule.newPackage.utils.rxAndroid.RxObserver
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers

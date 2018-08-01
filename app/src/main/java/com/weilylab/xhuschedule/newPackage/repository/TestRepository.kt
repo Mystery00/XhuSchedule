@@ -1,15 +1,26 @@
 package com.weilylab.xhuschedule.newPackage.repository
 
-import com.weilylab.xhuschedule.newPackage.model.Student
+import com.weilylab.xhuschedule.newPackage.config.Status.*
 import com.weilylab.xhuschedule.newPackage.repository.local.StudentLocalDataSource
 import com.weilylab.xhuschedule.newPackage.repository.remote.TestRemoteDataSource
+import com.weilylab.xhuschedule.newPackage.utils.rxAndroid.PackageData
 import com.weilylab.xhuschedule.newPackage.viewModel.QueryTestViewModel
 
 object TestRepository {
 	const val DONE = 21
 	const val ERROR = 22
 
-	fun queryTests(student: Student, queryTestViewModel: QueryTestViewModel) = TestRemoteDataSource.queryAllTests(queryTestViewModel.testList, queryTestViewModel.message, queryTestViewModel.requestCode, student)
-
-	fun queryAllStudent(queryTestViewModel: QueryTestViewModel) = StudentLocalDataSource.queryAllStudentList(queryTestViewModel.studentList, queryTestViewModel.message, queryTestViewModel.requestCode)
+	fun queryTests(queryTestViewModel: QueryTestViewModel) {
+		queryTestViewModel.testList.value = PackageData.loading()
+		queryTestViewModel.testList.addSource(queryTestViewModel.studentList) {
+			when (it.status) {
+				Content -> if (it.data!!.isNotEmpty())
+					TestRemoteDataSource.queryAllTests(queryTestViewModel.testList, it.data[0])
+				Error -> queryTestViewModel.testList.value = PackageData.error(it.error)
+				Empty -> queryTestViewModel.testList.value = PackageData.empty()
+				Loading -> queryTestViewModel.testList.value = PackageData.loading()
+			}
+		}
+		StudentLocalDataSource.queryAllStudentList(queryTestViewModel.studentList)
+	}
 }

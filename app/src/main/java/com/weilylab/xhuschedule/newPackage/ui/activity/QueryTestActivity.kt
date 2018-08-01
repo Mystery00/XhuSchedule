@@ -1,18 +1,20 @@
 package com.weilylab.xhuschedule.newPackage.ui.activity
 
 import android.app.Dialog
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.android.material.snackbar.Snackbar
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.newPackage.base.XhuBaseActivity
-import com.weilylab.xhuschedule.newPackage.model.Student
+import com.weilylab.xhuschedule.newPackage.config.Status
+import com.weilylab.xhuschedule.newPackage.config.Status.*
 import com.weilylab.xhuschedule.newPackage.model.Test
 import com.weilylab.xhuschedule.newPackage.repository.TestRepository
 import com.weilylab.xhuschedule.newPackage.ui.adapter.QueryTestRecyclerViewAdapter
+import com.weilylab.xhuschedule.newPackage.utils.rxAndroid.PackageData
 import com.weilylab.xhuschedule.newPackage.viewModel.QueryTestViewModel
 import com.zyao89.view.zloading.ZLoadingDialog
 import com.zyao89.view.zloading.Z_TYPE
@@ -27,27 +29,23 @@ class QueryTestActivity : XhuBaseActivity(R.layout.activity_query_test) {
 	private lateinit var queryTestRecyclerViewAdapter: QueryTestRecyclerViewAdapter
 	private val queryTestList = ArrayList<Test>()
 
-	private val queryTestListObserver = Observer<List<Test>> {
-		queryTestList.clear()
-		queryTestList.addAll(it)
-		queryTestRecyclerViewAdapter.notifyDataSetChanged()
-		hideDialog()
-	}
-
-	private val messageObserver = Observer<String> {
-		Snackbar.make(coordinatorLayout, it, Snackbar.LENGTH_LONG)
-				.show()
-	}
-
-	private val requestCodeObserver = Observer<Int> {
-		if (it != TestRepository.DONE) {
-			hideDialog()
-		}
-	}
-
-	private val studentObserver = Observer<List<Student>> {
-		if (it.isNotEmpty()) {
-			TestRepository.queryTests(it[0], queryTestViewModel)
+	private val queryTestListObserver = Observer<PackageData<List<Test>>> {
+		when (it.status) {
+			Loading -> showDialog()
+			Content -> {
+				hideDialog()
+				queryTestList.clear()
+				queryTestList.addAll(it.data!!)
+				queryTestRecyclerViewAdapter.notifyDataSetChanged()
+			}
+			Error -> {
+				hideDialog()
+				Toast.makeText(this, it.error?.message, Toast.LENGTH_LONG)
+						.show()
+			}
+			Empty -> {
+				hideDialog()
+			}
 		}
 	}
 
@@ -79,7 +77,7 @@ class QueryTestActivity : XhuBaseActivity(R.layout.activity_query_test) {
 	override fun initData() {
 		super.initData()
 		initViewModel()
-		TestRepository.queryAllStudent(queryTestViewModel)
+		TestRepository.queryTests(queryTestViewModel)
 	}
 
 	override fun monitor() {
@@ -91,10 +89,7 @@ class QueryTestActivity : XhuBaseActivity(R.layout.activity_query_test) {
 
 	private fun initViewModel() {
 		queryTestViewModel = ViewModelProviders.of(this).get(QueryTestViewModel::class.java)
-		queryTestViewModel.studentList.observe(this, studentObserver)
 		queryTestViewModel.testList.observe(this, queryTestListObserver)
-		queryTestViewModel.message.observe(this, messageObserver)
-		queryTestViewModel.requestCode.observe(this, requestCodeObserver)
 	}
 
 	private fun showDialog() {

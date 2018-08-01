@@ -37,6 +37,7 @@ import android.content.Intent
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.weilylab.xhuschedule.newPackage.base.XhuBaseActivity
+import com.weilylab.xhuschedule.newPackage.config.Status
 import com.weilylab.xhuschedule.newPackage.constant.IntentConstant
 import com.weilylab.xhuschedule.newPackage.model.response.SplashResponse
 import com.weilylab.xhuschedule.newPackage.repository.SplashRepository
@@ -55,13 +56,13 @@ class SplashActivity : XhuBaseActivity(null) {
 
 	private val splashObserver = Observer<PackageData<SplashResponse.Splash>> {
 		when (it.status) {
-			PackageData.Status.Loading -> Logs.i("loading")
-			PackageData.Status.Empty -> gotoMain()
-			PackageData.Status.Error -> {
+			Status.Loading -> Logs.i("loading")
+			Status.Empty -> gotoMain()
+			Status.Error -> {
 				Logs.e("splashObserver", it.error)
 				gotoMain()
 			}
-			PackageData.Status.Content -> {
+			Status.Content -> {
 				todo(it.data!!)
 			}
 		}

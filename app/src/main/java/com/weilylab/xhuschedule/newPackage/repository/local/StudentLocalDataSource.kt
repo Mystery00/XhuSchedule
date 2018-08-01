@@ -1,5 +1,6 @@
 package com.weilylab.xhuschedule.newPackage.repository.local
 
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import com.weilylab.xhuschedule.newPackage.constant.StringConstant
 import com.weilylab.xhuschedule.newPackage.model.Student
@@ -8,6 +9,7 @@ import com.weilylab.xhuschedule.newPackage.repository.BottomNavigationRepository
 import com.weilylab.xhuschedule.newPackage.repository.dataSource.StudentDataSource
 import com.weilylab.xhuschedule.newPackage.repository.local.service.StudentService
 import com.weilylab.xhuschedule.newPackage.repository.local.service.impl.StudentServiceImpl
+import com.weilylab.xhuschedule.newPackage.utils.rxAndroid.PackageData
 import com.weilylab.xhuschedule.newPackage.utils.rxAndroid.RxObservable
 import com.weilylab.xhuschedule.newPackage.utils.rxAndroid.RxObserver
 import vip.mystery0.logs.Logs
@@ -15,7 +17,8 @@ import vip.mystery0.logs.Logs
 object StudentLocalDataSource : StudentDataSource {
 	private val studentService: StudentService = StudentServiceImpl()
 
-	fun queryAllStudentList(studentListLiveData: MutableLiveData<List<Student>>, messageLiveData: MutableLiveData<String>, requestCodeLiveData: MutableLiveData<Int>) {
+	fun queryAllStudentList(studentListLiveData: MediatorLiveData<PackageData<List<Student>>>) {
+		studentListLiveData.value = PackageData.loading()
 		RxObservable<List<Student>>()
 				.doThings {
 					try {
@@ -26,14 +29,11 @@ object StudentLocalDataSource : StudentDataSource {
 				}
 				.subscribe(object : RxObserver<List<Student>>() {
 					override fun onFinish(data: List<Student>?) {
-						requestCodeLiveData.value = BottomNavigationRepository.DONE
-						studentListLiveData.value = data
+						studentListLiveData.value = PackageData.content(data)
 					}
 
 					override fun onError(e: Throwable) {
-						Logs.wtf("onError: ", e)
-						messageLiveData.value = e.message
-						requestCodeLiveData.value = BottomNavigationRepository.ERROR
+						studentListLiveData.value = PackageData.error(e)
 					}
 				})
 	}
