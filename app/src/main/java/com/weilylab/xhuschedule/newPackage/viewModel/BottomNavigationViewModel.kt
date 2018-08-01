@@ -1,23 +1,23 @@
 package com.weilylab.xhuschedule.newPackage.viewModel
 
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.weilylab.xhuschedule.newPackage.model.Student
 import com.weilylab.xhuschedule.newPackage.model.StudentInfo
+import com.weilylab.xhuschedule.newPackage.utils.rxAndroid.PackageData
 import com.zhuangfei.timetable.model.Schedule
 import java.util.*
 
 class BottomNavigationViewModel : ViewModel() {
-	val studentList = MutableLiveData<List<Student>>()
-	val studentInfo = MutableLiveData<StudentInfo>()
-	val courseList = MutableLiveData<List<Schedule>>()
-	val todayCourseList = MutableLiveData<List<Schedule>>()
-	val week = MutableLiveData<Int>()
-	val currentWeek = MutableLiveData<Int>()
-	val startDateTime = MutableLiveData<Calendar>()
-	val message = MutableLiveData<String>()
-	val requestCode = MutableLiveData<Int>()
+	val studentList = MutableLiveData<PackageData<List<Student>>>()
+	val studentInfo = MediatorLiveData<PackageData<StudentInfo>>()
+	val courseList = MediatorLiveData<PackageData<List<Schedule>>>()
+	val todayCourseList = MediatorLiveData<PackageData<List<Schedule>>>()
+	val showCourse = MediatorLiveData<PackageData<List<Schedule>>>()
+	val week = MutableLiveData<PackageData<Int>>()
+	val currentWeek = MutableLiveData<PackageData<Int>>()
+	val startDateTime = MutableLiveData<PackageData<Calendar>>()
 	val action = MutableLiveData<Int>()
-	val showCourse = MutableLiveData<List<Schedule>>()
 	val title = MutableLiveData<String>()
 }

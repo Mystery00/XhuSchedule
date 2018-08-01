@@ -8,8 +8,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.databinding.FragmentProfileBinding
-import com.weilylab.xhuschedule.newPackage.model.Student
-import com.weilylab.xhuschedule.newPackage.repository.BottomNavigationRepository
+import com.weilylab.xhuschedule.newPackage.config.Status.*
 import com.weilylab.xhuschedule.newPackage.ui.activity.QueryTestActivity
 import com.weilylab.xhuschedule.newPackage.utils.rxAndroid.RxObservable
 import com.weilylab.xhuschedule.newPackage.utils.rxAndroid.RxObserver
@@ -19,11 +18,6 @@ import vip.mystery0.logs.Logs
 class ProfileFragment : BaseBottomNavigationFragment(R.layout.fragment_profile) {
 	private lateinit var fragmentProfileBinding: FragmentProfileBinding
 	private lateinit var bottomNavigationViewModel: BottomNavigationViewModel
-
-	private val studentObserver = Observer<List<Student>> {
-		if (it.isNotEmpty())
-			BottomNavigationRepository.queryStudentInfo(it[0], bottomNavigationViewModel)
-	}
 
 	companion object {
 		fun newInstance() = ProfileFragment()
@@ -41,9 +35,13 @@ class ProfileFragment : BaseBottomNavigationFragment(R.layout.fragment_profile) 
 	private fun initViewModel() {
 		bottomNavigationViewModel = ViewModelProviders.of(activity!!).get(BottomNavigationViewModel::class.java)
 		bottomNavigationViewModel.studentInfo.observe(activity!!, Observer {
-			fragmentProfileBinding.studentInfo = it
+			when (it.status) {
+				Content -> fragmentProfileBinding.studentInfo = it.data
+				Loading -> TODO()
+				Empty -> TODO()
+				Error -> TODO()
+			}
 		})
-		bottomNavigationViewModel.studentList.observe(activity!!, studentObserver)
 	}
 
 	override fun monitor() {

@@ -6,16 +6,15 @@ import com.weilylab.xhuschedule.newPackage.listener.DoSaveListener
 import com.weilylab.xhuschedule.newPackage.listener.RequestListener
 import com.weilylab.xhuschedule.newPackage.model.Student
 import com.weilylab.xhuschedule.newPackage.model.StudentInfo
-import com.weilylab.xhuschedule.newPackage.repository.BottomNavigationRepository
 import com.weilylab.xhuschedule.newPackage.repository.dataSource.StudentDataSource
 import com.weilylab.xhuschedule.newPackage.repository.local.StudentLocalDataSource
 import com.weilylab.xhuschedule.newPackage.utils.NetworkUtil
 import com.weilylab.xhuschedule.newPackage.utils.UserUtil
 import com.weilylab.xhuschedule.newPackage.utils.rxAndroid.PackageData
-import vip.mystery0.logs.Logs
 
 object StudentRemoteDataSource : StudentDataSource {
-	override fun queryStudentInfo(studentInfoLiveData: MutableLiveData<StudentInfo>, messageLiveData: MutableLiveData<String>, requestCodeLiveData: MutableLiveData<Int>, student: Student) {
+	override fun queryStudentInfo(studentInfoLiveData: MutableLiveData<PackageData<StudentInfo>>, student: Student) {
+		studentInfoLiveData.value = PackageData.loading()
 		if (NetworkUtil.isConnectInternet()) {
 			UserUtil.getInfo(student, object : DoSaveListener<StudentInfo> {
 				override fun doSave(t: StudentInfo) {
@@ -25,18 +24,17 @@ object StudentRemoteDataSource : StudentDataSource {
 
 			}, object : RequestListener<StudentInfo> {
 				override fun done(t: StudentInfo) {
-					studentInfoLiveData.value = t
-					requestCodeLiveData.value = BottomNavigationRepository.DONE
+					studentInfoLiveData.value = PackageData.content(t)
 				}
 
 				override fun error(rt: String, msg: String?) {
-					Logs.im(rt, msg)
-					StudentLocalDataSource.queryStudentInfo(studentInfoLiveData, messageLiveData, requestCodeLiveData, student)
+					studentInfoLiveData.value = PackageData.error(Exception(msg))
+					StudentLocalDataSource.queryStudentInfo(studentInfoLiveData, student)
 				}
 			})
 		} else {
-			messageLiveData.value = StringConstant.hint_network_error
-			StudentLocalDataSource.queryStudentInfo(studentInfoLiveData, messageLiveData, requestCodeLiveData, student)
+			studentInfoLiveData.value = PackageData.error(Exception(StringConstant.hint_network_error))
+			StudentLocalDataSource.queryStudentInfo(studentInfoLiveData, student)
 		}
 	}
 

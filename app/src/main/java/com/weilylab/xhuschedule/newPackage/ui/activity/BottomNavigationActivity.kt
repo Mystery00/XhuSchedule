@@ -9,6 +9,7 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.view.Gravity
 import android.widget.PopupWindow
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -16,6 +17,8 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager.widget.ViewPager
 import com.google.android.material.snackbar.Snackbar
 import com.weilylab.xhuschedule.R
+import com.weilylab.xhuschedule.newPackage.config.Status
+import com.weilylab.xhuschedule.newPackage.config.Status.*
 import com.weilylab.xhuschedule.newPackage.model.Student
 import com.weilylab.xhuschedule.newPackage.repository.BottomNavigationRepository
 import com.weilylab.xhuschedule.newPackage.repository.CourseRepository
@@ -26,6 +29,7 @@ import com.weilylab.xhuschedule.newPackage.ui.fragment.TableFragment
 import com.weilylab.xhuschedule.newPackage.ui.fragment.TodayFragment
 import com.weilylab.xhuschedule.newPackage.utils.CalendarUtil
 import com.weilylab.xhuschedule.newPackage.utils.layoutManager.EchelonLayoutManager
+import com.weilylab.xhuschedule.newPackage.utils.rxAndroid.PackageData
 import com.weilylab.xhuschedule.newPackage.viewModel.BottomNavigationViewModel
 import com.zhuangfei.timetable.model.Schedule
 import com.zyao89.view.zloading.ZLoadingDialog
@@ -50,19 +54,28 @@ class BottomNavigationActivity : BaseActivity(R.layout.activity_bottom_navigatio
 	private lateinit var showAdapter: ShowCourseRecyclerViewAdapter
 	private val showCourseList = ArrayList<Schedule>()
 
-	private val messageObserver = Observer<String> {
-		Snackbar.make(coordinatorLayout, it, Snackbar.LENGTH_LONG)
-				.show()
-	}
-
-	private val requestCodeObserver = Observer<Int> {
-		if (it != BottomNavigationRepository.DONE) {
-			hideDialog()
+	private val studentListObserver = Observer<PackageData<List<Student>>> {
+		when (it.status) {
+			Empty -> {
+				startActivityForResult(Intent(this, LoginActivity::class.java), ADD_ACCOUNT_CODE)
+				hideDialog()
+			}
+			Loading -> TODO()
+			Content -> TODO()
+			Error -> {
+				Toast.makeText(this, it.error?.message, Toast.LENGTH_LONG)
+						.show()
+			}
 		}
 	}
 
-	private val courseListObserver = Observer<List<Schedule>> {
-		weekView.data(it).showView()
+	private val courseListObserver = Observer<PackageData<List<Schedule>>> {
+		when (it.status) {
+			Content -> weekView.data(it.data).showView()
+			Loading -> showDialog()
+			Empty -> TODO()
+			Error -> hideDialog()
+		}
 	}
 
 	private val currentWeekObserver = Observer<Int> {
@@ -99,7 +112,6 @@ class BottomNavigationActivity : BaseActivity(R.layout.activity_bottom_navigatio
 				val studentList = bottomNavigationViewModel.studentList.value
 				if (studentList == null || studentList.isEmpty())
 					return@Observer
-				
 				CourseRepository.getCourseByStudent(studentList[0], bottomNavigationViewModel)
 			}
 		}
@@ -137,20 +149,13 @@ class BottomNavigationActivity : BaseActivity(R.layout.activity_bottom_navigatio
 		super.initData()
 		initViewModel()
 		viewPagerAdapter.getItem(0).updateTitle()
-		BottomNavigationRepository.queryAllStudent(bottomNavigationViewModel)
+		BottomNavigationRepository.queryStudentInfo(bottomNavigationViewModel)
 		BottomNavigationRepository.queryCurrentWeek(bottomNavigationViewModel)
 	}
 
 	private fun initViewModel() {
 		bottomNavigationViewModel = ViewModelProviders.of(this).get(BottomNavigationViewModel::class.java)
-		bottomNavigationViewModel.studentList.observe(this, Observer<List<Student>> {
-			if (it.isEmpty()) {
-				startActivityForResult(Intent(this, LoginActivity::class.java), ADD_ACCOUNT_CODE)
-			}
-			hideDialog()
-		})
-		bottomNavigationViewModel.message.observe(this, messageObserver)
-		bottomNavigationViewModel.requestCode.observe(this, requestCodeObserver)
+		bottomNavigationViewModel.studentList.observe(this, studentListObserver)
 		bottomNavigationViewModel.currentWeek.observe(this, currentWeekObserver)
 		bottomNavigationViewModel.courseList.observe(this, courseListObserver)
 		bottomNavigationViewModel.showCourse.observe(this, showCourseObserver)
