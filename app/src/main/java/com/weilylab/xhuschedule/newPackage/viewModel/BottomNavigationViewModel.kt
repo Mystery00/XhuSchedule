@@ -15,9 +15,10 @@ class BottomNavigationViewModel : ViewModel() {
 	val courseList = MediatorLiveData<PackageData<List<Schedule>>>()
 	val todayCourseList = MediatorLiveData<PackageData<List<Schedule>>>()
 	val showCourse = MediatorLiveData<PackageData<List<Schedule>>>()
-	val week = MutableLiveData<PackageData<Int>>()
-	val currentWeek = MutableLiveData<PackageData<Int>>()
+	val week = MutableLiveData<Int>()
+	val currentWeek = MediatorLiveData<PackageData<Int>>()
 	val startDateTime = MutableLiveData<PackageData<Calendar>>()
+
 	val action = MutableLiveData<Int>()
 	val title = MutableLiveData<String>()
 }

@@ -7,16 +7,15 @@ import com.weilylab.xhuschedule.newPackage.factory.RetrofitFactory
 import com.weilylab.xhuschedule.newPackage.model.response.StartDateTimeResponse
 import com.weilylab.xhuschedule.newPackage.repository.dataSource.InitDataSource
 import com.weilylab.xhuschedule.newPackage.repository.local.InitLocalDataSource
-import com.weilylab.xhuschedule.newPackage.utils.CalendarUtil
 import com.weilylab.xhuschedule.newPackage.utils.NetworkUtil
+import com.weilylab.xhuschedule.newPackage.utils.rxAndroid.PackageData
 import com.weilylab.xhuschedule.newPackage.utils.rxAndroid.RxObserver
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import vip.mystery0.logs.Logs
 import java.util.*
 
 object InitRemoteDataSource : InitDataSource {
-	override fun getStartDateTime(startDateTimeLiveDate: MutableLiveData<Calendar>, weekLiveData: MutableLiveData<Int>) {
+	override fun getStartDateTime(startDateTimeLiveDate: MutableLiveData<PackageData<Calendar>>) {
 		if (NetworkUtil.isConnectInternet())
 			RetrofitFactory.leanCloudRetrofit
 					.create(LeanCloudAPI::class.java)
@@ -33,22 +32,20 @@ object InitRemoteDataSource : InitDataSource {
 					.subscribe(object : RxObserver<StartDateTimeResponse>() {
 						override fun onFinish(data: StartDateTimeResponse?) {
 							if (data == null) {
-								InitLocalDataSource.getStartDateTime(startDateTimeLiveDate, weekLiveData)
+								InitLocalDataSource.getStartDateTime(startDateTimeLiveDate)
 							} else {
 								val calendar = Calendar.getInstance()
 								val dateArray = data.results[0].date.split('-')
 								calendar.set(dateArray[0].toInt(), dateArray[1].toInt() - 1, dateArray[2].toInt(), 0, 0, 0)
-								startDateTimeLiveDate.value = calendar
-								weekLiveData.value = CalendarUtil.getWeekFromCalendar(calendar)
+								startDateTimeLiveDate.value = PackageData.content(calendar)
 							}
 						}
 
 						override fun onError(e: Throwable) {
-							Logs.wtf("onError: ", e)
-							InitLocalDataSource.getStartDateTime(startDateTimeLiveDate, weekLiveData)
+							InitLocalDataSource.getStartDateTime(startDateTimeLiveDate)
 						}
 					})
 		else
-			InitLocalDataSource.getStartDateTime(startDateTimeLiveDate, weekLiveData)
+			InitLocalDataSource.getStartDateTime(startDateTimeLiveDate)
 	}
 }

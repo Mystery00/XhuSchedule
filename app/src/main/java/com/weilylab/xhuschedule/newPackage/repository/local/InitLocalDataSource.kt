@@ -6,14 +6,17 @@ import com.weilylab.xhuschedule.newPackage.config.APP
 import com.weilylab.xhuschedule.newPackage.constant.SharedPreferenceConstant
 import com.weilylab.xhuschedule.newPackage.repository.dataSource.InitDataSource
 import com.weilylab.xhuschedule.newPackage.utils.CalendarUtil
+import com.weilylab.xhuschedule.newPackage.utils.rxAndroid.PackageData
 import java.util.*
 
 object InitLocalDataSource : InitDataSource {
 	private val sharedPreferences = APP.context.getSharedPreferences(SharedPreferenceConstant.FILE_NAME_CONFIG, Context.MODE_PRIVATE)
-	override fun getStartDateTime(startDateTimeLiveDate: MutableLiveData<Calendar>, weekLiveData: MutableLiveData<Int>) {
-		val startDateTime = getStartDataTime()
-		startDateTimeLiveDate.value = startDateTime
-		weekLiveData.value = CalendarUtil.getWeekFromCalendar(startDateTime)
+	override fun getStartDateTime(startDateTimeLiveDate: MutableLiveData<PackageData<Calendar>>) {
+		try {
+			startDateTimeLiveDate.value = PackageData.content(getStartDataTime())
+		} catch (e: Exception) {
+			startDateTimeLiveDate.value = PackageData.error(e)
+		}
 	}
 
 	fun setStartDataTime(startDateTime: String) {

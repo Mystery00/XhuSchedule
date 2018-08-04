@@ -9,9 +9,9 @@ import androidx.lifecycle.ViewModelProviders
 
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.databinding.FragmentTableBinding
-import com.weilylab.xhuschedule.newPackage.model.Student
-import com.weilylab.xhuschedule.newPackage.repository.CourseRepository
+import com.weilylab.xhuschedule.newPackage.config.Status.*
 import com.weilylab.xhuschedule.newPackage.ui.custom.CustomDateAdapter
+import com.weilylab.xhuschedule.newPackage.utils.rxAndroid.PackageData
 import com.weilylab.xhuschedule.newPackage.utils.rxAndroid.RxObservable
 import com.weilylab.xhuschedule.newPackage.utils.rxAndroid.RxObserver
 import com.weilylab.xhuschedule.newPackage.viewModel.BottomNavigationViewModel
@@ -25,17 +25,13 @@ class TableFragment : BaseBottomNavigationFragment(R.layout.fragment_table) {
 	private lateinit var fragmentTableBinding: FragmentTableBinding
 	private lateinit var bottomNavigationViewModel: BottomNavigationViewModel
 
-	private val courseListObserver = Observer<List<Schedule>> {
-		fragmentTableBinding.timeTableView
-				.config()
-				.data(it)
-				.toggle(fragmentTableBinding.timeTableView)
-				.updateView()
-	}
-
-	private val studentObserver = Observer<List<Student>> {
-		if (it.isNotEmpty()) {
-			CourseRepository.getCourseCacheByStudent(it[0], bottomNavigationViewModel)
+	private val courseListObserver = Observer<PackageData<List<Schedule>>> {
+		when (it.status) {
+			Content -> fragmentTableBinding.timeTableView
+					.config()
+					.data(it.data)
+					.toggle(fragmentTableBinding.timeTableView)
+					.updateView()
 		}
 	}
 
@@ -43,11 +39,15 @@ class TableFragment : BaseBottomNavigationFragment(R.layout.fragment_table) {
 		fragmentTableBinding.timeTableView.changeWeekOnly(it)
 	}
 
-	private val startDateTimeObserver = Observer<Calendar> {
-		val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINA)
-		fragmentTableBinding.timeTableView
-				.config()
-				.curWeek(simpleDateFormat.format(it.time))
+	private val startDateTimeObserver = Observer<PackageData<Calendar>> {
+		when (it.status) {
+			Content -> {
+				val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINA)
+				fragmentTableBinding.timeTableView
+						.config()
+						.curWeek(simpleDateFormat.format(it.data!!.time))
+			}
+		}
 	}
 
 	companion object {
@@ -76,7 +76,6 @@ class TableFragment : BaseBottomNavigationFragment(R.layout.fragment_table) {
 	private fun initViewModel() {
 		bottomNavigationViewModel = ViewModelProviders.of(activity!!).get(BottomNavigationViewModel::class.java)
 		bottomNavigationViewModel.courseList.observe(activity!!, courseListObserver)
-		bottomNavigationViewModel.studentList.observe(activity!!, studentObserver)
 		bottomNavigationViewModel.week.observe(activity!!, weekObserver)
 		bottomNavigationViewModel.startDateTime.observe(activity!!, startDateTimeObserver)
 	}
@@ -86,7 +85,7 @@ class TableFragment : BaseBottomNavigationFragment(R.layout.fragment_table) {
 		fragmentTableBinding.timeTableView
 				.config()
 				.callback { _, scheduleList ->
-					bottomNavigationViewModel.showCourse.value = scheduleList
+					//					bottomNavigationViewModel.showCourse.value = scheduleList
 				}
 	}
 

@@ -15,19 +15,15 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager.widget.ViewPager
-import com.google.android.material.snackbar.Snackbar
 import com.weilylab.xhuschedule.R
-import com.weilylab.xhuschedule.newPackage.config.Status
 import com.weilylab.xhuschedule.newPackage.config.Status.*
 import com.weilylab.xhuschedule.newPackage.model.Student
 import com.weilylab.xhuschedule.newPackage.repository.BottomNavigationRepository
-import com.weilylab.xhuschedule.newPackage.repository.CourseRepository
 import com.weilylab.xhuschedule.newPackage.ui.adapter.ShowCourseRecyclerViewAdapter
 import com.weilylab.xhuschedule.newPackage.ui.adapter.ViewPagerAdapter
 import com.weilylab.xhuschedule.newPackage.ui.fragment.ProfileFragment
 import com.weilylab.xhuschedule.newPackage.ui.fragment.TableFragment
 import com.weilylab.xhuschedule.newPackage.ui.fragment.TodayFragment
-import com.weilylab.xhuschedule.newPackage.utils.CalendarUtil
 import com.weilylab.xhuschedule.newPackage.utils.layoutManager.EchelonLayoutManager
 import com.weilylab.xhuschedule.newPackage.utils.rxAndroid.PackageData
 import com.weilylab.xhuschedule.newPackage.viewModel.BottomNavigationViewModel
@@ -56,37 +52,47 @@ class BottomNavigationActivity : BaseActivity(R.layout.activity_bottom_navigatio
 
 	private val studentListObserver = Observer<PackageData<List<Student>>> {
 		when (it.status) {
+			Loading-> showDialog()
+			Content -> {
+				BottomNavigationRepository.queryStudentInfo(bottomNavigationViewModel)
+				BottomNavigationRepository.queryCurrentWeek(bottomNavigationViewModel)
+				BottomNavigationRepository.queryCacheCourses(bottomNavigationViewModel)
+			}
 			Empty -> {
 				startActivityForResult(Intent(this, LoginActivity::class.java), ADD_ACCOUNT_CODE)
 				hideDialog()
 			}
-			Loading -> TODO()
-			Content -> TODO()
 			Error -> {
 				Toast.makeText(this, it.error?.message, Toast.LENGTH_LONG)
 						.show()
+				hideDialog()
 			}
 		}
 	}
 
 	private val courseListObserver = Observer<PackageData<List<Schedule>>> {
 		when (it.status) {
-			Content -> weekView.data(it.data).showView()
+			Content -> {
+				weekView.data(it.data).showView()
+				hideDialog()
+			}
 			Loading -> showDialog()
-			Empty -> TODO()
 			Error -> hideDialog()
 		}
 	}
 
-	private val currentWeekObserver = Observer<Int> {
-		val week = when {
-			it < 1 -> 1
-			it > 20 -> 20
-			else -> it
+	private val currentWeekObserver = Observer<PackageData<Int>> {
+		when (it.status) {
+			Content -> {
+				val week = when {
+					it.data!! < 1 -> 1
+					it.data > 20 -> 20
+					else -> it.data
+				}
+				weekView.curWeek(week).showView()
+				viewPagerAdapter.getItem(viewPager.currentItem).updateTitle()
+			}
 		}
-		weekView.curWeek(week).showView()
-		bottomNavigationViewModel.week.value = week
-		viewPagerAdapter.getItem(viewPager.currentItem).updateTitle()
 	}
 
 	private val showCourseObserver = Observer<List<Schedule>> {
@@ -102,26 +108,21 @@ class BottomNavigationActivity : BaseActivity(R.layout.activity_bottom_navigatio
 		titleTextView.text = it
 	}
 
-	private val startDateTimeObserver = Observer<Calendar> {
-		CalendarUtil.startDateTime = it
-	}
-
-	private val actionObserver = Observer<Int> {
-		when (it) {
-			BottomNavigationRepository.ACTION_REFRESH -> {
-				val studentList = bottomNavigationViewModel.studentList.value
-				if (studentList == null || studentList.isEmpty())
-					return@Observer
-				CourseRepository.getCourseByStudent(studentList[0], bottomNavigationViewModel)
-			}
-		}
-	}
+//	private val actionObserver = Observer<Int> {
+//		when (it) {
+//			BottomNavigationRepository.ACTION_REFRESH -> {
+//				val studentList = bottomNavigationViewModel.studentList.value
+//				if (studentList == null || studentList.isEmpty())
+//					return@Observer
+//				CourseRepository.getCourseByStudent(studentList[0], bottomNavigationViewModel)
+//			}
+//		}
+//	}
 
 	override fun initView() {
 		super.initView()
 		titleTextView.text = title
 		initDialog()
-		showDialog()
 		initPopupWindow()
 		viewPagerAdapter = ViewPagerAdapter(supportFragmentManager)
 		viewPagerAdapter.addFragment(TodayFragment.newInstance())
@@ -149,8 +150,7 @@ class BottomNavigationActivity : BaseActivity(R.layout.activity_bottom_navigatio
 		super.initData()
 		initViewModel()
 		viewPagerAdapter.getItem(0).updateTitle()
-		BottomNavigationRepository.queryStudentInfo(bottomNavigationViewModel)
-		BottomNavigationRepository.queryCurrentWeek(bottomNavigationViewModel)
+		BottomNavigationRepository.queryStudentList(bottomNavigationViewModel)
 	}
 
 	private fun initViewModel() {
@@ -158,10 +158,9 @@ class BottomNavigationActivity : BaseActivity(R.layout.activity_bottom_navigatio
 		bottomNavigationViewModel.studentList.observe(this, studentListObserver)
 		bottomNavigationViewModel.currentWeek.observe(this, currentWeekObserver)
 		bottomNavigationViewModel.courseList.observe(this, courseListObserver)
-		bottomNavigationViewModel.showCourse.observe(this, showCourseObserver)
+//		bottomNavigationViewModel.showCourse.observe(this, showCourseObserver)
 		bottomNavigationViewModel.title.observe(this, titleObserver)
-		bottomNavigationViewModel.startDateTime.observe(this, startDateTimeObserver)
-		bottomNavigationViewModel.action.observe(this, actionObserver)
+//		bottomNavigationViewModel.action.observe(this, actionObserver)
 	}
 
 	private fun initDialog() {
@@ -285,7 +284,7 @@ class BottomNavigationActivity : BaseActivity(R.layout.activity_bottom_navigatio
 		when (requestCode) {
 			ADD_ACCOUNT_CODE -> {
 				if (resultCode == Activity.RESULT_OK) {
-					BottomNavigationRepository.queryAllStudent(bottomNavigationViewModel)
+					BottomNavigationRepository.queryStudentList(bottomNavigationViewModel)
 				} else {
 					finish()
 				}

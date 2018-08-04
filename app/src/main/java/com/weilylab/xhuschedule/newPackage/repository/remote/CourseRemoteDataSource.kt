@@ -11,15 +11,16 @@ import com.weilylab.xhuschedule.newPackage.repository.dataSource.CourseDataSourc
 import com.weilylab.xhuschedule.newPackage.repository.local.CourseLocalDataSource
 import com.weilylab.xhuschedule.newPackage.utils.CourseUtil
 import com.weilylab.xhuschedule.newPackage.utils.NetworkUtil
+import com.weilylab.xhuschedule.newPackage.utils.rxAndroid.PackageData
 import com.zhuangfei.timetable.model.Schedule
 import vip.mystery0.logs.Logs
 
 object CourseRemoteDataSource : CourseDataSource {
-	override fun queryCourseByUsername(courseListLiveData: MutableLiveData<List<Schedule>>, todayCourseListLiveData: MutableLiveData<List<Schedule>>, messageLiveData: MutableLiveData<String>, requestCodeLiveData: MutableLiveData<Int>, student: Student, year: String?, term: String?, isFromCache: Boolean) {
+	override fun queryCourseByUsername(courseListLiveData: MutableLiveData<PackageData<List<Schedule>>>, student: Student, year: String?, term: String?, isFromCache: Boolean) {
 		if (NetworkUtil.isConnectInternet()) {
 			CourseUtil.getCourse(student, year, term, object : DoSaveListener<List<Course>> {
 				override fun doSave(t: List<Course>) {
-					CourseLocalDataSource.deleteAllCourseListForStudent(student.username,year,term)
+					CourseLocalDataSource.deleteAllCourseListForStudent(student.username, year, term)
 					t.forEach {
 						it.studentID = student.username
 						if (year != null && term != null) {
@@ -34,26 +35,18 @@ object CourseRemoteDataSource : CourseDataSource {
 				}
 			}, object : RequestListener<List<Course>> {
 				override fun done(t: List<Course>) {
-					val scheduleList = CourseUtil.convertCourseToSchedule(t)
-					courseListLiveData.value = scheduleList
-					CourseUtil.getTodayCourse(scheduleList) {
-						todayCourseListLiveData.value = it
-					}
-					requestCodeLiveData.value = BottomNavigationRepository.DONE
+					courseListLiveData.value = PackageData.content(CourseUtil.convertCourseToSchedule(t))
 				}
 
 				override fun error(rt: String, msg: String?) {
-					Logs.im(rt, msg)
-					messageLiveData.value = msg
-					requestCodeLiveData.value = BottomNavigationRepository.ERROR
+					courseListLiveData.value= PackageData.error(Exception(msg))
 				}
 			})
 		} else {
-			messageLiveData.value = StringConstant.hint_network_error
 			if (isFromCache)
-				requestCodeLiveData.value = BottomNavigationRepository.ERROR
+				courseListLiveData.value = PackageData.error(Exception(StringConstant.hint_network_error))
 			else
-				CourseLocalDataSource.queryCourseByUsername(courseListLiveData, todayCourseListLiveData, messageLiveData, requestCodeLiveData, student, year, term, isFromCache)
+				CourseLocalDataSource.queryCourseByUsername(courseListLiveData, student, year, term, isFromCache)
 		}
 	}
 }

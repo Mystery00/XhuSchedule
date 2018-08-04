@@ -9,8 +9,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.databinding.FragmentTodayBinding
+import com.weilylab.xhuschedule.newPackage.config.Status.*
 import com.weilylab.xhuschedule.newPackage.ui.adapter.FragmentTodayRecyclerViewAdapter
 import com.weilylab.xhuschedule.newPackage.utils.CalendarUtil
+import com.weilylab.xhuschedule.newPackage.utils.rxAndroid.PackageData
 import com.weilylab.xhuschedule.newPackage.utils.rxAndroid.RxObservable
 import com.weilylab.xhuschedule.newPackage.utils.rxAndroid.RxObserver
 import com.weilylab.xhuschedule.newPackage.viewModel.BottomNavigationViewModel
@@ -29,14 +31,18 @@ class TodayFragment : BaseBottomNavigationFragment(R.layout.fragment_today) {
 	private lateinit var adapter: FragmentTodayRecyclerViewAdapter
 	private val list = ArrayList<Schedule>()
 
-	private val todayCourseListObserver = Observer<List<Schedule>> {
-		list.clear()
-		list.addAll(it)
-		adapter.notifyDataSetChanged()
-		if (list.size == 0)
-			fragmentTodayBinding.nullDataView.visibility = View.VISIBLE
-		else
-			fragmentTodayBinding.nullDataView.visibility = View.GONE
+	private val todayCourseListObserver = Observer<PackageData<List<Schedule>>> {
+		when (it.status) {
+			Content -> {
+				if (it.data != null) {
+					list.clear()
+					list.addAll(it.data)
+					adapter.notifyDataSetChanged()
+					hideNoDataLayout()
+				}
+			}
+			Empty -> showNoDataLayout()
+		}
 	}
 
 	override fun inflateView(layoutId: Int, inflater: LayoutInflater, container: ViewGroup?): View {
@@ -56,10 +62,20 @@ class TodayFragment : BaseBottomNavigationFragment(R.layout.fragment_today) {
 		viewModel.todayCourseList.observe(activity!!, todayCourseListObserver)
 	}
 
+	private fun showNoDataLayout() {
+		fragmentTodayBinding.nullDataView.visibility = View.VISIBLE
+		fragmentTodayBinding.recyclerView.visibility = View.GONE
+	}
+
+	private fun hideNoDataLayout() {
+		fragmentTodayBinding.nullDataView.visibility = View.GONE
+		fragmentTodayBinding.recyclerView.visibility = View.VISIBLE
+	}
+
 	override fun monitor() {
 		super.monitor()
 		adapter.setOnItemClickListener { _, course ->
-			viewModel.showCourse.value = arrayListOf(course)
+//			viewModel.showCourse.value = arrayListOf(course)
 			true
 		}
 	}
@@ -80,7 +96,7 @@ class TodayFragment : BaseBottomNavigationFragment(R.layout.fragment_today) {
 				.subscribe(object : RxObserver<Boolean>() {
 					override fun onFinish(data: Boolean?) {
 						if (data != null && data)
-							viewModel.title.value = "第${viewModel.currentWeek.value}周 ${CalendarUtil.getWeekIndexInString()}"
+							viewModel.title.value = "第${viewModel.currentWeek.value?.data}周 ${CalendarUtil.getWeekIndexInString()}"
 					}
 
 					override fun onError(e: Throwable) {
