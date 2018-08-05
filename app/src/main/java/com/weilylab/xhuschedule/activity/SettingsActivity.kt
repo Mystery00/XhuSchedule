@@ -33,16 +33,14 @@
 
 package com.weilylab.xhuschedule.activity
 
-import android.content.Context
-import android.content.res.Configuration
 import android.os.Bundle
 import android.preference.PreferenceActivity
-import android.preference.PreferenceFragment
 import android.view.MenuItem
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.fragment.*
 import com.weilylab.xhuschedule.fragment.settings.*
 import com.weilylab.xhuschedule.util.APPActivityManager
+import kotlinx.android.synthetic.main.activity_settings.*
 
 /**
  * A [PreferenceActivity] that presents a set of application settings. On
@@ -55,62 +53,43 @@ import com.weilylab.xhuschedule.util.APPActivityManager
  * for more information on developing a Settings UI.
  */
 class SettingsActivity : AppCompatPreferenceActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        APPActivityManager.addActivity(this)
-        setupActionBar()
-    }
+	override fun onCreate(savedInstanceState: Bundle?) {
+		super.onCreate(savedInstanceState)
+		APPActivityManager.addActivity(this)
+		setContentView(R.layout.activity_settings)
+		setSupportActionBar(toolbar)
+		supportActionBar?.setDisplayHomeAsUpEnabled(true)
+	}
 
-    /**
-     * Set up the [android.app.ActionBar], if the API is available.
-     */
-    private fun setupActionBar() {
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-    }
+	/**
+	 * {@inheritDoc}
+	 */
+	override fun onIsMultiPane(): Boolean = false
 
-    /**
-     * {@inheritDoc}
-     */
-    override fun onIsMultiPane(): Boolean = isXLargeTablet(this)
+	/**
+	 * This method stops fragment injection in malicious applications.
+	 * Make sure to deny any unknown fragments here.
+	 */
+	override fun isValidFragment(fragmentName: String): Boolean = when (fragmentName) {
+		ClassSettingsFragment::class.java.name -> true
+		AccountSettingsFragment::class.java.name -> true
+		UISettingsFragment::class.java.name -> true
+		NotificationFragment::class.java.name -> true
+		DeveloperFragment::class.java.name -> true
+		InfoSettingsFragment::class.java.name -> true
+		else -> false
+	}
 
-    /**
-     * {@inheritDoc}
-     */
-    override fun onBuildHeaders(target: List<PreferenceActivity.Header>) {
-        loadHeadersFromResource(R.xml.preference_header, target)
-    }
+	override fun onOptionsItemSelected(item: MenuItem): Boolean {
+		when (item.itemId) {
+			android.R.id.home ->
+				onBackPressed()
+		}
+		return true
+	}
 
-    /**
-     * This method stops fragment injection in malicious applications.
-     * Make sure to deny any unknown fragments here.
-     */
-    override fun isValidFragment(fragmentName: String): Boolean = when (fragmentName) {
-        PreferenceFragment::class.java.name -> true
-        ClassSettingsFragment::class.java.name -> true
-        AccountSettingsFragment::class.java.name -> true
-        UISettingsFragment::class.java.name -> true
-        NotificationFragment::class.java.name -> true
-        DeveloperFragment::class.java.name -> true
-        InfoSettingsFragment::class.java.name -> true
-        else -> false
-    }
-
-    /**
-     * Helper method to determine if the device has an extra-large screen. For
-     * example, 10" tablets are extra-large.
-     */
-    private fun isXLargeTablet(context: Context): Boolean = context.resources.configuration.screenLayout and Configuration.SCREENLAYOUT_SIZE_MASK >= Configuration.SCREENLAYOUT_SIZE_XLARGE
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            android.R.id.home ->
-                onBackPressed()
-        }
-        return true
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        APPActivityManager.finishActivity(this)
-    }
+	override fun onDestroy() {
+		super.onDestroy()
+		APPActivityManager.finishActivity(this)
+	}
 }

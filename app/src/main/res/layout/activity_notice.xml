@@ -10,7 +10,7 @@
     android:id="@+id/coordinatorLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.weilylab.xhuschedule.activity.NoticeActivity">
+    tools:context="com.weilylab.xhuschedule.newPackage.ui.activity.NoticeActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
@@ -31,7 +31,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="?attr/actionBarSize"
-        tools:context="com.weilylab.xhuschedule.activity.NoticeActivity">
+        tools:context="com.weilylab.xhuschedule.newPackage.ui.activity.NoticeActivity">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerView"

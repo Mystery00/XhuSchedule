@@ -31,12 +31,26 @@
  * Last modified 18-2-21 下午9:11
  */
 
-package com.weilylab.xhuschedule.classes.baseClass
+package com.weilylab.xhuschedule.newPackage.ui.adapter
 
-class Notice {
-    var createTime = ""
-    var id = 0
-    var title = ""
-    var content = ""
-    var platform = ""
+import android.content.Context
+import androidx.recyclerview.widget.RecyclerView
+import android.view.LayoutInflater
+import android.view.ViewGroup
+import com.weilylab.xhuschedule.R
+import com.weilylab.xhuschedule.newPackage.model.Notice
+import com.weilylab.xhuschedule.databinding.ItemNoticeBinding
+import vip.mystery0.tools.base.BaseRecyclerViewAdapter
+
+class NoticeAdapter(private val context: Context, list: ArrayList<Notice>) : BaseRecyclerViewAdapter<NoticeAdapter.ViewHolder, Notice>(context, R.layout.item_notice, list) {
+	override fun setItemView(holder: ViewHolder, position: Int, data: Notice) {
+		holder.binding.notice = data
+	}
+
+	override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+		val binding = ItemNoticeBinding.inflate(LayoutInflater.from(context), parent, false)
+		return ViewHolder(binding)
+	}
+
+	class ViewHolder(val binding: ItemNoticeBinding) : RecyclerView.ViewHolder(binding.root)
 }

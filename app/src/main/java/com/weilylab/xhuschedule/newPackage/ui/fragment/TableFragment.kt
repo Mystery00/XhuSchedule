@@ -42,6 +42,7 @@ class TableFragment : BaseBottomNavigationFragment(R.layout.fragment_table) {
 	private val weekObserver = Observer<Int> {
 		try {
 			fragmentTableBinding.timeTableView.changeWeekOnly(it)
+			fragmentTableBinding.timeTableView.onDateBuildListener().onUpdateDate(fragmentTableBinding.timeTableView.curWeek(), it)
 		} catch (e: Exception) {
 			week = it
 		}

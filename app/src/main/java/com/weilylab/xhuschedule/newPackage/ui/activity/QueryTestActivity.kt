@@ -54,7 +54,6 @@ class QueryTestActivity : XhuBaseActivity(R.layout.activity_query_test) {
 		setSupportActionBar(toolbar)
 		supportActionBar?.setDisplayHomeAsUpEnabled(true)
 		initDialog()
-		showDialog()
 		recyclerView.layoutManager = LinearLayoutManager(this)
 		val dividerItemDecoration = DividerItemDecoration(this, DividerItemDecoration.VERTICAL)
 		dividerItemDecoration.setDrawable(ContextCompat.getDrawable(this, R.drawable.divider_query_test)!!)

@@ -33,7 +33,7 @@
 
 package com.weilylab.xhuschedule.classes.rt
 
-import com.weilylab.xhuschedule.classes.baseClass.Notice
+import com.weilylab.xhuschedule.newPackage.model.Notice
 
 class GetNoticesRT : RT() {
     lateinit var notices: Array<Notice>

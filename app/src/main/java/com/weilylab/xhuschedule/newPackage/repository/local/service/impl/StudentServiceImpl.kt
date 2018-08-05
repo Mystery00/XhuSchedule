@@ -6,7 +6,6 @@ import com.weilylab.xhuschedule.newPackage.repository.local.db.DBHelper
 import com.weilylab.xhuschedule.newPackage.repository.local.service.StudentService
 
 class StudentServiceImpl : StudentService {
-
 	private val studentDao = DBHelper.db.getStudentDao()
 
 	override fun studentLogin(student: Student): Long = studentDao.studentLogin(student)

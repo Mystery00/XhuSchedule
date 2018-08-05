@@ -10,6 +10,7 @@ import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.databinding.FragmentProfileBinding
 import com.weilylab.xhuschedule.newPackage.base.BaseBottomNavigationFragment
 import com.weilylab.xhuschedule.newPackage.config.Status.*
+import com.weilylab.xhuschedule.newPackage.ui.activity.NoticeActivity
 import com.weilylab.xhuschedule.newPackage.ui.activity.QueryTestActivity
 import com.weilylab.xhuschedule.newPackage.utils.rxAndroid.RxObservable
 import com.weilylab.xhuschedule.newPackage.utils.rxAndroid.RxObserver
@@ -43,12 +44,34 @@ class ProfileFragment : BaseBottomNavigationFragment(R.layout.fragment_profile) 
 				}
 			}
 		})
+		bottomNavigationViewModel.noticeList.observe(activity!!, Observer { packageData ->
+			when (packageData.status) {
+				Content -> {
+					if (packageData.data == null || packageData.data.isEmpty())
+						fragmentProfileBinding.redDotView.visibility = View.GONE
+					else {
+						packageData.data.forEach {
+							if (!it.isRead) {
+								fragmentProfileBinding.redDotView.visibility = View.VISIBLE
+								return@Observer
+							}
+						}
+						fragmentProfileBinding.redDotView.visibility = View.GONE
+					}
+				}
+				Loading, Empty, Error ->
+					fragmentProfileBinding.redDotView.visibility = View.GONE
+			}
+		})
 	}
 
 	override fun monitor() {
 		super.monitor()
 		fragmentProfileBinding.queryTestLayout.setOnClickListener {
 			startActivity(Intent(activity, QueryTestActivity::class.java))
+		}
+		fragmentProfileBinding.noticeLayout.setOnClickListener {
+			startActivity(Intent(activity, NoticeActivity::class.java))
 		}
 	}
 

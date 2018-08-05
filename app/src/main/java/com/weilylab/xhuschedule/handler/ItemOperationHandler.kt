@@ -58,6 +58,7 @@ import com.weilylab.xhuschedule.databinding.DialogShareWithFriendsBinding
 import com.weilylab.xhuschedule.listener.FeedBackListener
 import com.weilylab.xhuschedule.listener.GetCETScoresListener
 import com.weilylab.xhuschedule.listener.GetCETVCodeListener
+import com.weilylab.xhuschedule.newPackage.ui.activity.NoticeActivity
 import com.weilylab.xhuschedule.util.XhuFileUtil
 import com.zyao89.view.zloading.ZLoadingDialog
 import com.zyao89.view.zloading.Z_TYPE

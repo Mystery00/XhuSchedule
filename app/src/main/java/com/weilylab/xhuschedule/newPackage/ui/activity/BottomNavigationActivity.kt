@@ -37,6 +37,7 @@ import com.zyao89.view.zloading.Z_TYPE
 import kotlinx.android.synthetic.main.activity_bottom_navigation.*
 import kotlinx.android.synthetic.main.content_bottom_navigation.*
 import vip.mystery0.bottomTabView.BottomTabItem
+import vip.mystery0.logs.Logs
 import vip.mystery0.tools.utils.DensityTools
 import java.util.*
 
@@ -220,6 +221,11 @@ class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_naviga
 			action = ACTION_REFRESH
 			BottomNavigationRepository.queryCoursesOnline(bottomNavigationViewModel)
 		}
+	}
+
+	override fun onResume() {
+		super.onResume()
+		BottomNavigationRepository.queryNotice(bottomNavigationViewModel)
 	}
 
 	private fun showWeekView() {

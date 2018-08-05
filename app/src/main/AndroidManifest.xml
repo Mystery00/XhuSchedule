@@ -101,7 +101,7 @@
 			android:name=".activity.shortcut.RefreshColorActivity"
 			android:theme="@android:style/Theme.NoDisplay" />
 		<activity
-			android:name=".activity.NoticeActivity"
+			android:name=".newPackage.ui.activity.NoticeActivity"
 			android:label="@string/title_activity_notice"
 			android:screenOrientation="portrait"
 			android:theme="@style/AppTheme.NoActionBar">
@@ -222,6 +222,7 @@
 			android:label="@string/title_activity_query_test"
 			android:screenOrientation="portrait"
 			android:theme="@style/AppTheme.NoActionBar" />
+		<activity android:name=".newPackage.ui.activity.SettingsActivity"></activity>
 	</application>
 
 </manifest>

@@ -33,16 +33,13 @@
 
 package com.weilylab.xhuschedule.service
 
-import android.app.ActivityManager
 import android.app.Service
 import android.app.job.JobParameters
 import android.app.job.JobService
-import android.content.Context
 import android.content.Intent
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
-import com.weilylab.xhuschedule.activity.NoticeActivity
 import com.weilylab.xhuschedule.util.ScheduleHelper
 import com.weilylab.xhuschedule.util.widget.WidgetHelper
 import vip.mystery0.logs.Logs

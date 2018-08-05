@@ -33,18 +33,15 @@
 
 package com.weilylab.xhuschedule.fragment.settings
 
-import android.preference.Preference
-import android.preference.PreferenceFragment
 import androidx.annotation.StringRes
 import android.media.RingtoneManager
 import android.net.Uri
+import android.preference.Preference
+import android.preference.PreferenceFragment
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.util.Constants
 
-
-open class BasePreferenceFragment : PreferenceFragment() {
-	val TAG = javaClass.simpleName
-
+abstract class BasePreferenceFragment : PreferenceFragment() {
     fun findPreferenceById(@StringRes id: Int): Preference = findPreference(getString(id))
 
     // 获取提示音名称

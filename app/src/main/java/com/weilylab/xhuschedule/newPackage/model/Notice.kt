@@ -31,26 +31,26 @@
  * Last modified 18-2-21 下午9:11
  */
 
-package com.weilylab.xhuschedule.adapter
+package com.weilylab.xhuschedule.newPackage.model
 
-import android.content.Context
-import androidx.recyclerview.widget.RecyclerView
-import android.view.LayoutInflater
-import android.view.ViewGroup
-import com.weilylab.xhuschedule.R
-import com.weilylab.xhuschedule.classes.baseClass.Notice
-import com.weilylab.xhuschedule.databinding.ItemNoticeBinding
-import vip.mystery0.tools.base.BaseRecyclerViewAdapter
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 
-class NoticeAdapter(private val context: Context, list: ArrayList<Notice>) : BaseRecyclerViewAdapter<NoticeAdapter.ViewHolder, Notice>(context, R.layout.item_notice, list) {
-	override fun setItemView(holder: ViewHolder, position: Int, data: Notice) {
-		holder.binding.notice = data
-	}
+@Entity(tableName = "tb_notice")
+class Notice {
+	@PrimaryKey()
+	@ColumnInfo(name = "notice_id")
+	var id = 0
 
-	override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-		val binding = ItemNoticeBinding.inflate(LayoutInflater.from(context), parent, false)
-		return ViewHolder(binding)
-	}
-
-	class ViewHolder(val binding: ItemNoticeBinding) : RecyclerView.ViewHolder(binding.root)
+	@ColumnInfo(name = "notice_create_time")
+	var createTime = ""
+	@ColumnInfo(name = "notice_title")
+	var title = ""
+	@ColumnInfo(name = "notice_content")
+	var content = ""
+	@ColumnInfo(name = "notice_platform")
+	var platform = ""
+	@ColumnInfo(name = "notice_is_read")
+	var isRead: Boolean = false
 }

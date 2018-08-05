@@ -2,6 +2,7 @@ package com.weilylab.xhuschedule.newPackage.repository
 
 import com.weilylab.xhuschedule.newPackage.config.Status.*
 import com.weilylab.xhuschedule.newPackage.repository.local.CourseLocalDataSource
+import com.weilylab.xhuschedule.newPackage.repository.local.NoticeLocalDataSource
 import com.weilylab.xhuschedule.newPackage.repository.local.StudentLocalDataSource
 import com.weilylab.xhuschedule.newPackage.repository.remote.CourseRemoteDataSource
 import com.weilylab.xhuschedule.newPackage.repository.remote.InitRemoteDataSource
@@ -74,5 +75,9 @@ object BottomNavigationRepository {
 	fun queryStudentList(bottomNavigationViewModel: BottomNavigationViewModel) {
 		bottomNavigationViewModel.studentList.value = PackageData.loading()
 		StudentLocalDataSource.queryAllStudentList(bottomNavigationViewModel.studentList)
+	}
+
+	fun queryNotice(bottomNavigationViewModel: BottomNavigationViewModel) {
+		NoticeRepository.queryNoticeInMainActivity(bottomNavigationViewModel)
 	}
 }
