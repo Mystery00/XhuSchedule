@@ -46,13 +46,12 @@ import com.weilylab.xhuschedule.activity.MainActivity
 import com.weilylab.xhuschedule.classes.baseClass.Course
 import com.weilylab.xhuschedule.classes.baseClass.TableLayoutHelper
 import com.weilylab.xhuschedule.listener.InfoChangeListener
-import com.weilylab.xhuschedule.newPackage.ui.fragment.BaseBottomNavigationFragment
+import com.weilylab.xhuschedule.newPackage.base.BaseBottomNavigationFragment
 import com.weilylab.xhuschedule.util.*
 import com.weilylab.xhuschedule.view.ContentHorizontalScrollView
 import com.weilylab.xhuschedule.view.ContentVerticalScrollView
 import kotlinx.android.synthetic.main.content_main.*
 import vip.mystery0.logs.Logs
-import vip.mystery0.tools.base.BaseFragment
 import vip.mystery0.tools.utils.ColorTools
 import vip.mystery0.tools.utils.DensityTools
 import java.util.*

@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.databinding.FragmentTodayBinding
+import com.weilylab.xhuschedule.newPackage.base.BaseBottomNavigationFragment
 import com.weilylab.xhuschedule.newPackage.config.Status.*
 import com.weilylab.xhuschedule.newPackage.ui.adapter.FragmentTodayRecyclerViewAdapter
 import com.weilylab.xhuschedule.newPackage.utils.CalendarUtil
@@ -42,7 +43,7 @@ class TodayFragment : BaseBottomNavigationFragment(R.layout.fragment_today) {
 				}
 			}
 			Empty -> showNoDataLayout()
-			Error->{
+			Error -> {
 				toastMessage(it.error?.message)
 				showNoDataLayout()
 			}
@@ -79,7 +80,7 @@ class TodayFragment : BaseBottomNavigationFragment(R.layout.fragment_today) {
 	override fun monitor() {
 		super.monitor()
 		adapter.setOnItemClickListener { _, course ->
-//			viewModel.showCourse.value = arrayListOf(course)
+			viewModel.showCourse.value = arrayListOf(course)
 			true
 		}
 	}

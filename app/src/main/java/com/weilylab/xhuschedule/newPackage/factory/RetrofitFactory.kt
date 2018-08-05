@@ -3,6 +3,7 @@ package com.weilylab.xhuschedule.newPackage.factory
 import com.weilylab.xhuschedule.newPackage.interceptor.LoadCookiesInterceptor
 import com.weilylab.xhuschedule.newPackage.interceptor.SaveCookiesInterceptor
 import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import java.util.concurrent.TimeUnit
@@ -24,6 +25,8 @@ object RetrofitFactory {
 			.writeTimeout(20, TimeUnit.SECONDS)
 			.addInterceptor(LoadCookiesInterceptor())
 			.addInterceptor(SaveCookiesInterceptor())
+			.addInterceptor(HttpLoggingInterceptor()
+					.setLevel(HttpLoggingInterceptor.Level.BODY))
 			.build()
 
 	val tomcatRetrofit = Retrofit.Builder()

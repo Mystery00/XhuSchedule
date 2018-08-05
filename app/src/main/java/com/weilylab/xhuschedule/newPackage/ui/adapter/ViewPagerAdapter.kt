@@ -36,7 +36,7 @@ package com.weilylab.xhuschedule.newPackage.ui.adapter
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
 import java.util.ArrayList
-import com.weilylab.xhuschedule.newPackage.ui.fragment.BaseBottomNavigationFragment
+import com.weilylab.xhuschedule.newPackage.base.BaseBottomNavigationFragment
 
 /**
  * Created by myste.

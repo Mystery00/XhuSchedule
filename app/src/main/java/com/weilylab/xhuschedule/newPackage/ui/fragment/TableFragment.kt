@@ -9,8 +9,12 @@ import androidx.lifecycle.ViewModelProviders
 
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.databinding.FragmentTableBinding
+import com.weilylab.xhuschedule.newPackage.base.BaseBottomNavigationFragment
+import com.weilylab.xhuschedule.newPackage.config.SpaceScheduleHelper
 import com.weilylab.xhuschedule.newPackage.config.Status.*
 import com.weilylab.xhuschedule.newPackage.ui.custom.CustomDateAdapter
+import com.weilylab.xhuschedule.newPackage.ui.custom.FlagLayoutClickAdapter
+import com.weilylab.xhuschedule.newPackage.ui.custom.SpaceItemClickAdapter
 import com.weilylab.xhuschedule.newPackage.utils.rxAndroid.PackageData
 import com.weilylab.xhuschedule.newPackage.utils.rxAndroid.RxObservable
 import com.weilylab.xhuschedule.newPackage.utils.rxAndroid.RxObserver
@@ -68,6 +72,8 @@ class TableFragment : BaseBottomNavigationFragment(R.layout.fragment_table) {
 				.curWeek(week)
 				.alpha(0.1f, 0.1f, 1f)
 				.callback(CustomDateAdapter())
+				.callback(FlagLayoutClickAdapter(fragmentTableBinding.timeTableView))
+				.callback(SpaceItemClickAdapter(fragmentTableBinding.timeTableView))
 				.callback(OnSlideBuildAdapter()
 						.setBackground(Color.BLACK)
 						.setTextSize(12f)
@@ -85,13 +91,12 @@ class TableFragment : BaseBottomNavigationFragment(R.layout.fragment_table) {
 	override fun monitor() {
 		super.monitor()
 		fragmentTableBinding.timeTableView
-				.callback(ISchedule.OnFlaglayoutClickListener { day, start ->
-					Logs.i("monitor: $day $start")
-				})
 				.callback(ISchedule.OnItemClickListener { _, scheduleList ->
-					Logs.i("monitor: $scheduleList")
-					//					bottomNavigationViewModel.showCourse.value = scheduleList
+					bottomNavigationViewModel.showCourse.value = scheduleList
 				})
+		SpaceScheduleHelper.onSpaceScheduleClickListener = { day, start, isTwice ->
+			Logs.i("monitor: $day $start $isTwice")
+		}
 	}
 
 	override fun updateTitle() {

@@ -30,6 +30,7 @@ object CourseLocalDataSource : CourseDataSource {
 				}
 				.subscribe(object : RxObserver<List<Schedule>>() {
 					override fun onFinish(data: List<Schedule>?) {
+						Logs.i("onFinish: ")
 						if (data == null || data.isEmpty())
 							CourseRemoteDataSource.queryCourseByUsername(courseListLiveData, student, year, term, isFromCache)
 						else {

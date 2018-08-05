@@ -4,23 +4,17 @@
 	<data />
 
 	<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+		android:id="@+id/cardView"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
+		android:padding="72dp"
 		app:cardCornerRadius="8dp">
 
-		<FrameLayout
-			android:layout_width="match_parent"
-			android:layout_height="match_parent"
-			android:background="#AAAAAA"
-			android:padding="72dp">
-
-			<TextView
-				android:id="@+id/textView"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:layout_gravity="center" />
-
-		</FrameLayout>
+		<TextView
+			android:id="@+id/textView"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_gravity="center" />
 
 	</androidx.cardview.widget.CardView>
 

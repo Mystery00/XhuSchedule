@@ -69,8 +69,8 @@ object CourseUtil {
 		val todayCourseList = ArrayList<Schedule>()
 		val weekIndex = CalendarUtil.getWeekIndex()
 		courseList.forEach {
-			if (it.day == weekIndex&&it.weekList.contains(week)) {
-					todayCourseList.add(it)
+			if (it.day == weekIndex && it.weekList.contains(week)) {
+				todayCourseList.add(it)
 			}
 		}
 		listener.invoke(todayCourseList)

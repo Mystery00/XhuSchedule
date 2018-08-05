@@ -8,6 +8,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.databinding.FragmentProfileBinding
+import com.weilylab.xhuschedule.newPackage.base.BaseBottomNavigationFragment
 import com.weilylab.xhuschedule.newPackage.config.Status.*
 import com.weilylab.xhuschedule.newPackage.ui.activity.QueryTestActivity
 import com.weilylab.xhuschedule.newPackage.utils.rxAndroid.RxObservable

@@ -20,6 +20,7 @@ object CourseRemoteDataSource : CourseDataSource {
 		if (NetworkUtil.isConnectInternet()) {
 			CourseUtil.getCourse(student, year, term, object : DoSaveListener<List<Course>> {
 				override fun doSave(t: List<Course>) {
+					Logs.i("doSave: ")
 					CourseLocalDataSource.deleteAllCourseListForStudent(student.username, year, term)
 					t.forEach {
 						it.studentID = student.username
@@ -35,11 +36,15 @@ object CourseRemoteDataSource : CourseDataSource {
 				}
 			}, object : RequestListener<List<Course>> {
 				override fun done(t: List<Course>) {
+					Logs.i("done: ")
 					courseListLiveData.value = PackageData.content(CourseUtil.convertCourseToSchedule(t))
 				}
 
 				override fun error(rt: String, msg: String?) {
+					Logs.em("error: ", msg)
 					courseListLiveData.value = PackageData.error(Exception(msg))
+					if (!isFromCache)
+						CourseLocalDataSource.queryCourseByUsername(courseListLiveData, student, year, term, isFromCache)
 				}
 			})
 		} else {

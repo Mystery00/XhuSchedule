@@ -40,10 +40,9 @@ import android.widget.ImageView
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.adapter.TodayAdapter
 import com.weilylab.xhuschedule.classes.baseClass.Course
-import com.weilylab.xhuschedule.newPackage.ui.fragment.BaseBottomNavigationFragment
+import com.weilylab.xhuschedule.newPackage.base.BaseBottomNavigationFragment
 import com.weilylab.xhuschedule.util.Constants
 import com.weilylab.xhuschedule.util.ViewUtil
-import vip.mystery0.tools.base.BaseFragment
 import java.util.*
 
 /**

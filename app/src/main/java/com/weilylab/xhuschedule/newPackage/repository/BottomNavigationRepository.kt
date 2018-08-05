@@ -62,13 +62,13 @@ object BottomNavigationRepository {
 					Error -> bottomNavigationViewModel.todayCourseList.value = PackageData.error(packageData.error)
 				}
 			}
-			CourseLocalDataSource.queryCourseByUsername(bottomNavigationViewModel.courseList, bottomNavigationViewModel.studentList.value!!.data!![0], "current", "current", true)
+			CourseLocalDataSource.queryCourseByUsername(bottomNavigationViewModel.courseList, bottomNavigationViewModel.studentList.value!!.data!![0], "2017-2018", "1", true)
 		}
 	}
 
 	fun queryCoursesOnline(bottomNavigationViewModel: BottomNavigationViewModel) {
 		bottomNavigationViewModel.courseList.value = PackageData.loading()
-		CourseRemoteDataSource.queryCourseByUsername(bottomNavigationViewModel.courseList, bottomNavigationViewModel.studentList.value!!.data!![0], "current", "current", false)
+		CourseRemoteDataSource.queryCourseByUsername(bottomNavigationViewModel.courseList, bottomNavigationViewModel.studentList.value!!.data!![0], "2017-2018", "1", false)
 	}
 
 	fun queryStudentList(bottomNavigationViewModel: BottomNavigationViewModel) {

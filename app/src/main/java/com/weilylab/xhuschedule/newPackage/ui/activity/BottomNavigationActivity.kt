@@ -27,7 +27,7 @@ import com.weilylab.xhuschedule.newPackage.ui.adapter.ViewPagerAdapter
 import com.weilylab.xhuschedule.newPackage.ui.fragment.ProfileFragment
 import com.weilylab.xhuschedule.newPackage.ui.fragment.TableFragment
 import com.weilylab.xhuschedule.newPackage.ui.fragment.TodayFragment
-import com.weilylab.xhuschedule.newPackage.utils.layoutManager.EchelonLayoutManager
+import com.weilylab.xhuschedule.newPackage.utils.layoutManager.SkidRightLayoutManager
 import com.weilylab.xhuschedule.newPackage.utils.rxAndroid.PackageData
 import com.weilylab.xhuschedule.newPackage.viewModel.BottomNavigationViewModel
 import com.zhuangfei.timetable.listener.IWeekView
@@ -37,7 +37,6 @@ import com.zyao89.view.zloading.Z_TYPE
 import kotlinx.android.synthetic.main.activity_bottom_navigation.*
 import kotlinx.android.synthetic.main.content_bottom_navigation.*
 import vip.mystery0.bottomTabView.BottomTabItem
-import vip.mystery0.logs.Logs
 import vip.mystery0.tools.utils.DensityTools
 import java.util.*
 
@@ -131,6 +130,13 @@ class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_naviga
 		titleTextView.text = it
 	}
 
+	private val showCourseObserver = Observer<List<Schedule>> {
+		showCourseList.clear()
+		showCourseList.addAll(it)
+		showAdapter.notifyDataSetChanged()
+		showPopupWindow()
+	}
+
 	override fun initView() {
 		super.initView()
 		titleTextView.text = title
@@ -171,6 +177,7 @@ class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_naviga
 		bottomNavigationViewModel.currentWeek.observe(this, currentWeekObserver)
 		bottomNavigationViewModel.courseList.observe(this, courseListObserver)
 		bottomNavigationViewModel.title.observe(this, titleObserver)
+		bottomNavigationViewModel.showCourse.observe(this, showCourseObserver)
 	}
 
 	private fun initDialog() {
@@ -290,17 +297,17 @@ class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_naviga
 
 	private fun initPopupWindow() {
 		recyclerView = RecyclerView(this)
-		recyclerView.layoutManager = EchelonLayoutManager(this)
+		recyclerView.layoutManager = SkidRightLayoutManager(1.5f, 0.85f)
 		showAdapter = ShowCourseRecyclerViewAdapter(this, showCourseList)
 		recyclerView.adapter = showAdapter
-		popupWindow = PopupWindow(recyclerView, DensityTools.dp2px(this, 320F), DensityTools.dp2px(this, 480F))
+		popupWindow = PopupWindow(recyclerView, DensityTools.getScreenWidth(this), DensityTools.dp2px(this, 480F))
 		popupWindow.isOutsideTouchable = true
 		popupWindow.isFocusable = true
 		popupWindow.setBackgroundDrawable(ColorDrawable(0x00000000))
 	}
 
 	private fun showPopupWindow() {
-		popupWindow.showAtLocation(weekView, Gravity.CENTER, 0, 0)
+		popupWindow.showAtLocation(weekView, Gravity.NO_GRAVITY, DensityTools.getScreenWidth(this) - popupWindow.width, DensityTools.getScreenHeight(this) / 2 - popupWindow.height / 2)
 		val week = bottomNavigationViewModel.week.value
 		var position = 0
 		showCourseList.forEachIndexed { index, it ->

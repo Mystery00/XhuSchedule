@@ -1,4 +1,4 @@
-package com.weilylab.xhuschedule.newPackage.ui.fragment
+package com.weilylab.xhuschedule.newPackage.base
 
 import android.widget.Toast
 import vip.mystery0.tools.base.BaseFragment
