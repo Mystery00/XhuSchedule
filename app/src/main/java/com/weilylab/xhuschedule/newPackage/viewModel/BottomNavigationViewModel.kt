@@ -19,6 +19,5 @@ class BottomNavigationViewModel : ViewModel() {
 	val currentWeek = MediatorLiveData<PackageData<Int>>()
 	val startDateTime = MutableLiveData<PackageData<Calendar>>()
 
-	val action = MutableLiveData<Int>()
 	val title = MutableLiveData<String>()
 }

@@ -15,6 +15,7 @@ import com.weilylab.xhuschedule.newPackage.utils.rxAndroid.PackageData
 import com.weilylab.xhuschedule.newPackage.utils.rxAndroid.RxObservable
 import com.weilylab.xhuschedule.newPackage.utils.rxAndroid.RxObserver
 import com.weilylab.xhuschedule.newPackage.viewModel.BottomNavigationViewModel
+import com.zhuangfei.timetable.listener.ISchedule
 import com.zhuangfei.timetable.listener.OnSlideBuildAdapter
 import com.zhuangfei.timetable.model.Schedule
 import vip.mystery0.logs.Logs
@@ -24,19 +25,22 @@ import java.util.*
 class TableFragment : BaseBottomNavigationFragment(R.layout.fragment_table) {
 	private lateinit var fragmentTableBinding: FragmentTableBinding
 	private lateinit var bottomNavigationViewModel: BottomNavigationViewModel
+	private var week = 1
 
 	private val courseListObserver = Observer<PackageData<List<Schedule>>> {
 		when (it.status) {
 			Content -> fragmentTableBinding.timeTableView
-					.config()
 					.data(it.data)
-					.toggle(fragmentTableBinding.timeTableView)
 					.updateView()
 		}
 	}
 
 	private val weekObserver = Observer<Int> {
-		fragmentTableBinding.timeTableView.changeWeekOnly(it)
+		try {
+			fragmentTableBinding.timeTableView.changeWeekOnly(it)
+		} catch (e: Exception) {
+			week = it
+		}
 	}
 
 	private val startDateTimeObserver = Observer<PackageData<Calendar>> {
@@ -44,7 +48,6 @@ class TableFragment : BaseBottomNavigationFragment(R.layout.fragment_table) {
 			Content -> {
 				val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINA)
 				fragmentTableBinding.timeTableView
-						.config()
 						.curWeek(simpleDateFormat.format(it.data!!.time))
 			}
 		}
@@ -62,14 +65,13 @@ class TableFragment : BaseBottomNavigationFragment(R.layout.fragment_table) {
 	override fun initView() {
 		initViewModel()
 		fragmentTableBinding.timeTableView
-				.config()
+				.curWeek(week)
 				.alpha(0.1f, 0.1f, 1f)
 				.callback(CustomDateAdapter())
 				.callback(OnSlideBuildAdapter()
 						.setBackground(Color.BLACK)
 						.setTextSize(12f)
 						.setTextColor(Color.WHITE))
-				.toggle(fragmentTableBinding.timeTableView)
 				.showView()
 	}
 
@@ -83,10 +85,13 @@ class TableFragment : BaseBottomNavigationFragment(R.layout.fragment_table) {
 	override fun monitor() {
 		super.monitor()
 		fragmentTableBinding.timeTableView
-				.config()
-				.callback { _, scheduleList ->
+				.callback(ISchedule.OnFlaglayoutClickListener { day, start ->
+					Logs.i("monitor: $day $start")
+				})
+				.callback(ISchedule.OnItemClickListener { _, scheduleList ->
+					Logs.i("monitor: $scheduleList")
 					//					bottomNavigationViewModel.showCourse.value = scheduleList
-				}
+				})
 	}
 
 	override fun updateTitle() {

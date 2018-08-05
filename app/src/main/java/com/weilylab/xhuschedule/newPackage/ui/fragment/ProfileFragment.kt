@@ -37,6 +37,9 @@ class ProfileFragment : BaseBottomNavigationFragment(R.layout.fragment_profile) 
 		bottomNavigationViewModel.studentInfo.observe(activity!!, Observer {
 			when (it.status) {
 				Content -> fragmentProfileBinding.studentInfo = it.data
+				Error -> {
+					toastMessage(it.error?.message)
+				}
 			}
 		})
 	}

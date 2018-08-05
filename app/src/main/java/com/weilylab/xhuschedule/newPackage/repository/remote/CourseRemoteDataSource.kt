@@ -39,13 +39,12 @@ object CourseRemoteDataSource : CourseDataSource {
 				}
 
 				override fun error(rt: String, msg: String?) {
-					courseListLiveData.value= PackageData.error(Exception(msg))
+					courseListLiveData.value = PackageData.error(Exception(msg))
 				}
 			})
 		} else {
-			if (isFromCache)
-				courseListLiveData.value = PackageData.error(Exception(StringConstant.hint_network_error))
-			else
+			courseListLiveData.value = PackageData.error(Exception(StringConstant.hint_network_error))
+			if (!isFromCache)
 				CourseLocalDataSource.queryCourseByUsername(courseListLiveData, student, year, term, isFromCache)
 		}
 	}

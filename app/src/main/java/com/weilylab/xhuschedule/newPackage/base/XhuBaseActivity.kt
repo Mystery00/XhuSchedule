@@ -34,11 +34,13 @@
 package com.weilylab.xhuschedule.newPackage.base
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatDelegate
 import com.weilylab.xhuschedule.util.APPActivityManager
 import vip.mystery0.tools.base.BaseActivity
 
 abstract class XhuBaseActivity(layoutId: Int?) : BaseActivity(layoutId) {
+	private var toast: Toast? = null
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		AppCompatDelegate.setCompatVectorFromResourcesEnabled(true)
@@ -49,5 +51,11 @@ abstract class XhuBaseActivity(layoutId: Int?) : BaseActivity(layoutId) {
 	override fun onDestroy() {
 		super.onDestroy()
 		APPActivityManager.finishActivity(this)
+	}
+
+	fun toastMessage(message: String?, isShowLong: Boolean = false) {
+		toast?.cancel()
+		toast = Toast.makeText(this, message, if (isShowLong) Toast.LENGTH_LONG else Toast.LENGTH_SHORT)
+		toast?.show()
 	}
 }

@@ -42,6 +42,10 @@ class TodayFragment : BaseBottomNavigationFragment(R.layout.fragment_today) {
 				}
 			}
 			Empty -> showNoDataLayout()
+			Error->{
+				toastMessage(it.error?.message)
+				showNoDataLayout()
+			}
 		}
 	}
 

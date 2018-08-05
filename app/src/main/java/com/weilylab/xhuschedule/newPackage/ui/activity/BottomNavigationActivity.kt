@@ -2,12 +2,14 @@ package com.weilylab.xhuschedule.newPackage.ui.activity
 
 import android.animation.Animator
 import android.animation.ObjectAnimator
+import android.animation.ValueAnimator
 import android.app.Activity
 import android.app.Dialog
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.view.Gravity
+import android.view.animation.Animation
 import android.widget.PopupWindow
 import android.widget.Toast
 import androidx.core.content.ContextCompat
@@ -16,6 +18,7 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager.widget.ViewPager
 import com.weilylab.xhuschedule.R
+import com.weilylab.xhuschedule.newPackage.base.XhuBaseActivity
 import com.weilylab.xhuschedule.newPackage.config.Status.*
 import com.weilylab.xhuschedule.newPackage.model.Student
 import com.weilylab.xhuschedule.newPackage.repository.BottomNavigationRepository
@@ -27,19 +30,24 @@ import com.weilylab.xhuschedule.newPackage.ui.fragment.TodayFragment
 import com.weilylab.xhuschedule.newPackage.utils.layoutManager.EchelonLayoutManager
 import com.weilylab.xhuschedule.newPackage.utils.rxAndroid.PackageData
 import com.weilylab.xhuschedule.newPackage.viewModel.BottomNavigationViewModel
+import com.zhuangfei.timetable.listener.IWeekView
 import com.zhuangfei.timetable.model.Schedule
 import com.zyao89.view.zloading.ZLoadingDialog
 import com.zyao89.view.zloading.Z_TYPE
 import kotlinx.android.synthetic.main.activity_bottom_navigation.*
 import kotlinx.android.synthetic.main.content_bottom_navigation.*
 import vip.mystery0.bottomTabView.BottomTabItem
-import vip.mystery0.tools.base.BaseActivity
+import vip.mystery0.logs.Logs
 import vip.mystery0.tools.utils.DensityTools
 import java.util.*
 
-class BottomNavigationActivity : BaseActivity(R.layout.activity_bottom_navigation) {
+class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_navigation) {
 	companion object {
 		private const val ADD_ACCOUNT_CODE = 21
+
+		private const val ACTION_NONE = 30
+		private const val ACTION_INIT = 31
+		private const val ACTION_REFRESH = 32
 	}
 
 	private lateinit var bottomNavigationViewModel: BottomNavigationViewModel
@@ -49,10 +57,15 @@ class BottomNavigationActivity : BaseActivity(R.layout.activity_bottom_navigatio
 	private var isShowWeekView = false
 	private lateinit var showAdapter: ShowCourseRecyclerViewAdapter
 	private val showCourseList = ArrayList<Schedule>()
+	private lateinit var loadingAnimation: ObjectAnimator
+	private var action = ACTION_NONE
 
 	private val studentListObserver = Observer<PackageData<List<Student>>> {
 		when (it.status) {
-			Loading-> showDialog()
+			Loading -> {
+				if (action == ACTION_INIT)
+					showDialog()
+			}
 			Content -> {
 				BottomNavigationRepository.queryStudentInfo(bottomNavigationViewModel)
 				BottomNavigationRepository.queryCurrentWeek(bottomNavigationViewModel)
@@ -75,9 +88,18 @@ class BottomNavigationActivity : BaseActivity(R.layout.activity_bottom_navigatio
 			Content -> {
 				weekView.data(it.data).showView()
 				hideDialog()
+				cancelLoading()
 			}
-			Loading -> showDialog()
-			Error -> hideDialog()
+			Loading -> showLoading()
+			Error -> {
+				toastMessage(it.error?.message)
+				cancelLoading()
+				hideDialog()
+			}
+			Empty -> {
+				cancelLoading()
+				hideDialog()
+			}
 		}
 	}
 
@@ -92,32 +114,22 @@ class BottomNavigationActivity : BaseActivity(R.layout.activity_bottom_navigatio
 				weekView.curWeek(week).showView()
 				viewPagerAdapter.getItem(viewPager.currentItem).updateTitle()
 			}
+			Error -> {
+				toastMessage(it.error?.message)
+				cancelLoading()
+				hideDialog()
+			}
+			Loading -> showLoading()
+			Empty -> {
+				cancelLoading()
+				hideDialog()
+			}
 		}
-	}
-
-	private val showCourseObserver = Observer<List<Schedule>> {
-		if (it.isEmpty())
-			return@Observer
-		showCourseList.clear()
-		showCourseList.addAll(it)
-		showAdapter.notifyDataSetChanged()
-		showPopupWindow()
 	}
 
 	private val titleObserver = Observer<String> {
 		titleTextView.text = it
 	}
-
-//	private val actionObserver = Observer<Int> {
-//		when (it) {
-//			BottomNavigationRepository.ACTION_REFRESH -> {
-//				val studentList = bottomNavigationViewModel.studentList.value
-//				if (studentList == null || studentList.isEmpty())
-//					return@Observer
-//				CourseRepository.getCourseByStudent(studentList[0], bottomNavigationViewModel)
-//			}
-//		}
-//	}
 
 	override fun initView() {
 		super.initView()
@@ -132,10 +144,10 @@ class BottomNavigationActivity : BaseActivity(R.layout.activity_bottom_navigatio
 		viewPager.adapter = viewPagerAdapter
 		weekView.curWeek(1)
 				.hideLeftLayout()
-				.setOnWeekItemClickedListener {
+				.callback(IWeekView.OnWeekItemClickedListener {
 					bottomNavigationViewModel.week.value = it
 					viewPagerAdapter.getItem(viewPager.currentItem).updateTitle()
-				}
+				})
 				.showView()
 		bottomNavigationView.config
 				.setGradientColors(intArrayOf(Color.parseColor("#0297fe"), Color.parseColor("#0fc8ff")))
@@ -158,9 +170,7 @@ class BottomNavigationActivity : BaseActivity(R.layout.activity_bottom_navigatio
 		bottomNavigationViewModel.studentList.observe(this, studentListObserver)
 		bottomNavigationViewModel.currentWeek.observe(this, currentWeekObserver)
 		bottomNavigationViewModel.courseList.observe(this, courseListObserver)
-//		bottomNavigationViewModel.showCourse.observe(this, showCourseObserver)
 		bottomNavigationViewModel.title.observe(this, titleObserver)
-//		bottomNavigationViewModel.action.observe(this, actionObserver)
 	}
 
 	private fun initDialog() {
@@ -200,8 +210,8 @@ class BottomNavigationActivity : BaseActivity(R.layout.activity_bottom_navigatio
 			isShowWeekView = !isShowWeekView
 		}
 		imageSync.setOnClickListener {
-			bottomNavigationViewModel.action.value = BottomNavigationRepository.ACTION_REFRESH
-			bottomNavigationViewModel.action.value = BottomNavigationRepository.ACTION_NONE
+			action = ACTION_REFRESH
+			BottomNavigationRepository.queryCoursesOnline(bottomNavigationViewModel)
 		}
 	}
 
@@ -253,6 +263,26 @@ class BottomNavigationActivity : BaseActivity(R.layout.activity_bottom_navigatio
 	private fun hideDialog() {
 		if (dialog.isShowing)
 			dialog.dismiss()
+	}
+
+	private fun showLoading() {
+		if (!::loadingAnimation.isInitialized)
+			loadingAnimation = ObjectAnimator.ofFloat(imageSync, "rotation", 0F, 360F)
+					.setDuration(1000)
+		loadingAnimation.repeatCount = Animation.INFINITE
+		loadingAnimation.repeatMode = ValueAnimator.RESTART
+		cancelLoading()
+		loadingAnimation.start()
+	}
+
+	private fun cancelLoading() {
+		if (!::loadingAnimation.isInitialized)
+			return
+		loadingAnimation.repeatCount = 1
+		if (action == ACTION_REFRESH) {
+			toastMessage("信息同步完成！")
+			action = ACTION_NONE
+		}
 	}
 
 	private lateinit var popupWindow: PopupWindow
