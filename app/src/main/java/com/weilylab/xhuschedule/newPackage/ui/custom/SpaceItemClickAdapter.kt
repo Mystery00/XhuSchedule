@@ -20,7 +20,7 @@ class SpaceItemClickAdapter(private val timetableView: TimetableView) : OnSpaceI
 	private fun hasCourse(day: Int, start: Int): Boolean {
 		val list = ScheduleSupport.getHaveSubjectsWithDay(timetableView.dataSource(), timetableView.curWeek(), day)
 		list.forEach {
-			if (it.start == start || (it.start < start && it.start + it.step >= start))
+			if (it.start == start || (it.start < start && it.start + it.step - 1 >= start))
 				return true
 		}
 		return false
