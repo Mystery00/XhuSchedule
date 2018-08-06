@@ -40,8 +40,10 @@ import com.weilylab.xhuschedule.R
  * Created by myste.
  */
 class DeveloperFragment : BasePreferenceFragment() {
+	override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
+	}
 
-    override fun onCreate(savedInstanceState: Bundle?) {
+	override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         addPreferencesFromResource(R.xml.preference_developer)
     }

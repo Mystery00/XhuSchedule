@@ -104,17 +104,16 @@
 			android:name=".newPackage.ui.activity.NoticeActivity"
 			android:label="@string/title_activity_notice"
 			android:screenOrientation="portrait"
-			android:theme="@style/AppTheme.NoActionBar">
-			<intent-filter>
-				<action android:name="com.weilylab.xhuschedule.NOTIFICATION_VIEW" />
-
-				<category android:name="android.intent.category.DEFAULT" />
-
-				<data
-					android:host="notice"
-					android:scheme="xhuschedule" />
-			</intent-filter>
-		</activity>
+			android:theme="@style/AppTheme.NoActionBar" />
+		<activity
+			android:name=".newPackage.ui.activity.BottomNavigationActivity"
+			android:screenOrientation="portrait"
+			android:theme="@style/AppTheme.NoActionBar" />
+		<activity
+			android:name=".newPackage.ui.activity.QueryTestActivity"
+			android:label="@string/title_activity_query_test"
+			android:screenOrientation="portrait"
+			android:theme="@style/AppTheme.NoActionBar" />
 
 		<service android:name=".service.UpdateService" />
 		<service android:name=".service.DownloadService" />
@@ -212,17 +211,6 @@
 		<service
 			android:name=".service.CheckJobService"
 			android:permission="android.permission.BIND_JOB_SERVICE" />
-
-		<activity
-			android:name=".newPackage.ui.activity.BottomNavigationActivity"
-			android:screenOrientation="portrait"
-			android:theme="@style/AppTheme.NoActionBar" />
-		<activity
-			android:name=".newPackage.ui.activity.QueryTestActivity"
-			android:label="@string/title_activity_query_test"
-			android:screenOrientation="portrait"
-			android:theme="@style/AppTheme.NoActionBar" />
-		<activity android:name=".newPackage.ui.activity.SettingsActivity"></activity>
 	</application>
 
 </manifest>

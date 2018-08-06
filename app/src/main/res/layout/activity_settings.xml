@@ -12,7 +12,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.weilylab.xhuschedule.activity.SettingsActivity">
+    tools:context="com.weilylab.xhuschedule.newPackage.ui.activity.SettingsActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"

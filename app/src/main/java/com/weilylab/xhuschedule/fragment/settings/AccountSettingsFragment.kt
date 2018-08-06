@@ -36,9 +36,9 @@ package com.weilylab.xhuschedule.fragment.settings
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.preference.Preference
-import android.preference.PreferenceCategory
-import android.preference.SwitchPreference
+import androidx.preference.Preference
+import androidx.preference.PreferenceCategory
+import androidx.preference.SwitchPreference
 import androidx.appcompat.app.AlertDialog
 import android.view.LayoutInflater
 import android.view.View
@@ -54,6 +54,9 @@ import com.weilylab.xhuschedule.util.XhuFileUtil
  * Created by myste.
  */
 class AccountSettingsFragment : BasePreferenceFragment() {
+	override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
+	}
+
 	companion object {
         private const val ADD_ACCOUNT_CODE = 1
     }

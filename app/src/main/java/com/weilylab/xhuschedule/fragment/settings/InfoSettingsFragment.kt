@@ -36,8 +36,8 @@ package com.weilylab.xhuschedule.fragment.settings
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.preference.Preference
-import android.preference.SwitchPreference
+import androidx.preference.Preference
+import androidx.preference.SwitchPreference
 import com.google.android.material.textfield.TextInputLayout
 import androidx.core.content.ContextCompat
 import androidx.appcompat.app.AlertDialog
@@ -70,7 +70,10 @@ import java.net.UnknownHostException
  * Created by myste.
  */
 class InfoSettingsFragment : BasePreferenceFragment() {
-    private lateinit var loadingDialog: ZLoadingDialog
+	override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
+	}
+
+	private lateinit var loadingDialog: ZLoadingDialog
     private lateinit var autoCheckUpdatePreference: SwitchPreference
     private lateinit var feedbackPreference: Preference
     private lateinit var weixinPreference: Preference
@@ -79,13 +82,13 @@ class InfoSettingsFragment : BasePreferenceFragment() {
 
 	override fun onAttach(context: Context) {
 		super.onAttach(context)
-		loadingDialog = ZLoadingDialog(context)
-				.setLoadingBuilder(Z_TYPE.SEARCH_PATH)
-				.setHintText(getString(R.string.hint_dialog_check_update))
-				.setHintTextSize(16F)
-				.setCanceledOnTouchOutside(false)
-				.setLoadingColor(ContextCompat.getColor(activity, R.color.colorAccent))
-				.setHintTextColor(ContextCompat.getColor(activity, R.color.colorAccent))
+//		loadingDialog = ZLoadingDialog(context)
+//				.setLoadingBuilder(Z_TYPE.SEARCH_PATH)
+//				.setHintText(getString(R.string.hint_dialog_check_update))
+//				.setHintTextSize(16F)
+//				.setCanceledOnTouchOutside(false)
+//				.setLoadingColor(ContextCompat.getColor(activity, R.color.colorAccent))
+//				.setHintTextColor(ContextCompat.getColor(activity, R.color.colorAccent))
 	}
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -93,147 +96,147 @@ class InfoSettingsFragment : BasePreferenceFragment() {
         addPreferencesFromResource(R.xml.preference_info)
     }
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        autoCheckUpdatePreference = findPreferenceById(R.string.key_auto_check_update) as SwitchPreference
-        feedbackPreference = findPreferenceById(R.string.key_feedback)
-        weixinPreference = findPreferenceById(R.string.key_weixin)
-        updateLogPreference = findPreferenceById(R.string.key_update_log)
-        checkUpdatePreference = findPreferenceById(R.string.key_check_update)
-        return super.onCreateView(inflater, container, savedInstanceState)
-    }
-
-	override fun onActivityCreated(savedInstanceState: Bundle?) {
-		super.onActivityCreated(savedInstanceState)
-		autoCheckUpdatePreference.isChecked = Settings.autoCheckUpdate
-		autoCheckUpdatePreference.setOnPreferenceChangeListener { _, _ ->
-			Settings.autoCheckUpdate = !autoCheckUpdatePreference.isChecked
-			true
-		}
-		feedbackPreference.setOnPreferenceClickListener {
-			val loadingDialog = ZLoadingDialog(activity)
-					.setLoadingBuilder(Z_TYPE.DOUBLE_CIRCLE)
-					.setHintText(activity.getString(R.string.hint_dialog_feedback))
-					.setHintTextSize(16F)
-					.setCanceledOnTouchOutside(false)
-					.setLoadingColor(ContextCompat.getColor(activity, R.color.colorAccent))
-					.setHintTextColor(ContextCompat.getColor(activity, R.color.colorAccent))
-					.create()
-			val layout = View.inflate(activity, R.layout.dialog_feedback, null)
-			val emailInput: TextInputLayout = layout.findViewById(R.id.input_email)
-			val textInput: TextInputLayout = layout.findViewById(R.id.input_text)
-			val dialog = AlertDialog.Builder(activity)
-					.setTitle(R.string.operation_feedback)
-					.setView(layout)
-					.setPositiveButton(android.R.string.ok, null)
-					.setNegativeButton(android.R.string.cancel, null)
-					.create()
-			dialog.show()
-			dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
-				if (emailInput.editText!!.text.toString().isEmpty() || textInput.editText!!.text.toString().isEmpty()) {
-					Toast.makeText(activity, R.string.hint_feedback_empty, Toast.LENGTH_SHORT)
-							.show()
-				} else {
-					loadingDialog.show()
-					val studentList = XhuFileUtil.getArrayFromFile(File(activity.filesDir.absolutePath + File.separator + "data" + File.separator + "user"), Student::class.java)
-					var mainStudent: Student? = (0 until studentList.size)
-							.firstOrNull { studentList[it].isMain }
-							?.let { studentList[it] }
-					if (mainStudent == null)
-						mainStudent = studentList[0]
-					mainStudent.feedback(activity, emailInput.editText!!.text.toString(), textInput.editText!!.text.toString(), object : FeedBackListener {
-						override fun error(rt: Int, e: Throwable) {
-							e.printStackTrace()
-							loadingDialog.dismiss()
-							Toast.makeText(activity, getString(R.string.hint_feedback_error, rt, e.message), Toast.LENGTH_LONG)
-									.show()
-						}
-
-						override fun done(rt: Int) {
-							loadingDialog.dismiss()
-							dialog.dismiss()
-							Toast.makeText(activity, R.string.hint_feedback, Toast.LENGTH_SHORT)
-									.show()
-						}
-					})
-				}
-			}
-			true
-		}
-		weixinPreference.setOnPreferenceClickListener {
-			AlertDialog.Builder(activity)
-					.setTitle(R.string.title_weixin)
-					.setView(R.layout.dialog_weixin)
-					.setPositiveButton(android.R.string.ok, null)
-					.show()
-			true
-		}
-		updateLogPreference.setOnPreferenceClickListener {
-			var message = ""
-			resources.getStringArray(R.array.update_list)
-					.forEach { message += it + '\n' }
-			AlertDialog.Builder(activity)
-					.setTitle(getString(R.string.dialog_title_update_log, getString(R.string.app_version_name) + '-' + getString(R.string.app_version_code)))
-					.setMessage(message)
-					.setPositiveButton(android.R.string.ok, null)
-					.show()
-			true
-		}
-		checkUpdatePreference.setOnPreferenceClickListener {
-			loadingDialog.show()
-			ScheduleHelper.phpRetrofit
-					.create(PhpService::class.java)
-					.checkVersion()
-					.subscribeOn(Schedulers.newThread())
-					.unsubscribeOn(Schedulers.newThread())
-					.map { responseBody -> Gson().fromJson(InputStreamReader(responseBody.byteStream()), Version::class.java) }
-					.observeOn(AndroidSchedulers.mainThread())
-					.subscribe(object : DisposableObserver<Version>() {
-						private lateinit var version: Version
-
-						override fun onError(e: Throwable) {
-							loadingDialog.dismiss()
-							e.printStackTrace()
-							if (e is UnknownHostException)
-								Toast.makeText(activity, R.string.error_network, Toast.LENGTH_SHORT)
-										.show()
-							else
-								Toast.makeText(activity, "请求出错：" + e.message, Toast.LENGTH_SHORT)
-										.show()
-						}
-
-						override fun onComplete() {
-							loadingDialog.dismiss()
-							if (version.versionCode > getString(R.string.app_version_code).toInt()) {
-								val title = activity.getString(R.string.dialog_update_title, activity.getString(R.string.app_version_name), version.versionName)
-								val content = activity.getString(R.string.dialog_update_content, FileTools.formatFileSize(version.apkSize), FileTools.formatFileSize(version.patchSize))
-								val text = content + "\n" + activity.getString(R.string.dialog_update_text, version.updateLog)
-								val builder = AlertDialog.Builder(activity)
-										.setTitle(title)
-										.setMessage(text)
-										.setPositiveButton(R.string.action_download_apk, { _, _ ->
-											val downloadAPKIntent = Intent(activity, DownloadService::class.java)
-											downloadAPKIntent.putExtra(Constants.INTENT_TAG_NAME_TYPE, Constants.DOWNLOAD_TYPE_APK)
-											downloadAPKIntent.putExtra(Constants.INTENT_TAG_NAME_QINIU_PATH, version.apkQiniuPath)
-											activity.startService(downloadAPKIntent)
-										})
-								if (version.lastVersionCode == activity.getString(R.string.app_version_code).toInt())
-									builder.setNegativeButton(R.string.action_download_patch, { _, _ ->
-										val downloadPatchIntent = Intent(activity, DownloadService::class.java)
-										downloadPatchIntent.putExtra(Constants.INTENT_TAG_NAME_TYPE, Constants.DOWNLOAD_TYPE_PATCH)
-										downloadPatchIntent.putExtra(Constants.INTENT_TAG_NAME_QINIU_PATH, version.patchQiniuPath)
-										activity.startService(downloadPatchIntent)
-									})
-								builder.show()
-							} else
-								Toast.makeText(activity, R.string.hint_dialog_check_update_latest, Toast.LENGTH_SHORT)
-										.show()
-						}
-
-						override fun onNext(version: Version) {
-							this.version = version
-						}
-					})
-			true
-		}
-	}
+//    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View {
+//        autoCheckUpdatePreference = findPreferenceById(R.string.key_auto_check_update) as SwitchPreference
+//        feedbackPreference = findPreferenceById(R.string.key_feedback)
+//        weixinPreference = findPreferenceById(R.string.key_weixin)
+//        updateLogPreference = findPreferenceById(R.string.key_update_log)
+//        checkUpdatePreference = findPreferenceById(R.string.key_check_update)
+//        return super.onCreateView(inflater, container, savedInstanceState)
+//    }
+//
+//	override fun onActivityCreated(savedInstanceState: Bundle?) {
+//		super.onActivityCreated(savedInstanceState)
+//		autoCheckUpdatePreference.isChecked = Settings.autoCheckUpdate
+//		autoCheckUpdatePreference.setOnPreferenceChangeListener { _, _ ->
+//			Settings.autoCheckUpdate = !autoCheckUpdatePreference.isChecked
+//			true
+//		}
+//		feedbackPreference.setOnPreferenceClickListener {
+//			val loadingDialog = ZLoadingDialog(activity)
+//					.setLoadingBuilder(Z_TYPE.DOUBLE_CIRCLE)
+//					.setHintText(activity.getString(R.string.hint_dialog_feedback))
+//					.setHintTextSize(16F)
+//					.setCanceledOnTouchOutside(false)
+//					.setLoadingColor(ContextCompat.getColor(activity, R.color.colorAccent))
+//					.setHintTextColor(ContextCompat.getColor(activity, R.color.colorAccent))
+//					.create()
+//			val layout = View.inflate(activity, R.layout.dialog_feedback, null)
+//			val emailInput: TextInputLayout = layout.findViewById(R.id.input_email)
+//			val textInput: TextInputLayout = layout.findViewById(R.id.input_text)
+//			val dialog = AlertDialog.Builder(activity)
+//					.setTitle(R.string.operation_feedback)
+//					.setView(layout)
+//					.setPositiveButton(android.R.string.ok, null)
+//					.setNegativeButton(android.R.string.cancel, null)
+//					.create()
+//			dialog.show()
+//			dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
+//				if (emailInput.editText!!.text.toString().isEmpty() || textInput.editText!!.text.toString().isEmpty()) {
+//					Toast.makeText(activity, R.string.hint_feedback_empty, Toast.LENGTH_SHORT)
+//							.show()
+//				} else {
+//					loadingDialog.show()
+//					val studentList = XhuFileUtil.getArrayFromFile(File(activity.filesDir.absolutePath + File.separator + "data" + File.separator + "user"), Student::class.java)
+//					var mainStudent: Student? = (0 until studentList.size)
+//							.firstOrNull { studentList[it].isMain }
+//							?.let { studentList[it] }
+//					if (mainStudent == null)
+//						mainStudent = studentList[0]
+//					mainStudent.feedback(activity, emailInput.editText!!.text.toString(), textInput.editText!!.text.toString(), object : FeedBackListener {
+//						override fun error(rt: Int, e: Throwable) {
+//							e.printStackTrace()
+//							loadingDialog.dismiss()
+//							Toast.makeText(activity, getString(R.string.hint_feedback_error, rt, e.message), Toast.LENGTH_LONG)
+//									.show()
+//						}
+//
+//						override fun done(rt: Int) {
+//							loadingDialog.dismiss()
+//							dialog.dismiss()
+//							Toast.makeText(activity, R.string.hint_feedback, Toast.LENGTH_SHORT)
+//									.show()
+//						}
+//					})
+//				}
+//			}
+//			true
+//		}
+//		weixinPreference.setOnPreferenceClickListener {
+//			AlertDialog.Builder(activity)
+//					.setTitle(R.string.title_weixin)
+//					.setView(R.layout.dialog_weixin)
+//					.setPositiveButton(android.R.string.ok, null)
+//					.show()
+//			true
+//		}
+//		updateLogPreference.setOnPreferenceClickListener {
+//			var message = ""
+//			resources.getStringArray(R.array.update_list)
+//					.forEach { message += it + '\n' }
+//			AlertDialog.Builder(activity)
+//					.setTitle(getString(R.string.dialog_title_update_log, getString(R.string.app_version_name) + '-' + getString(R.string.app_version_code)))
+//					.setMessage(message)
+//					.setPositiveButton(android.R.string.ok, null)
+//					.show()
+//			true
+//		}
+//		checkUpdatePreference.setOnPreferenceClickListener {
+//			loadingDialog.show()
+//			ScheduleHelper.phpRetrofit
+//					.create(PhpService::class.java)
+//					.checkVersion()
+//					.subscribeOn(Schedulers.newThread())
+//					.unsubscribeOn(Schedulers.newThread())
+//					.map { responseBody -> Gson().fromJson(InputStreamReader(responseBody.byteStream()), Version::class.java) }
+//					.observeOn(AndroidSchedulers.mainThread())
+//					.subscribe(object : DisposableObserver<Version>() {
+//						private lateinit var version: Version
+//
+//						override fun onError(e: Throwable) {
+//							loadingDialog.dismiss()
+//							e.printStackTrace()
+//							if (e is UnknownHostException)
+//								Toast.makeText(activity, R.string.error_network, Toast.LENGTH_SHORT)
+//										.show()
+//							else
+//								Toast.makeText(activity, "请求出错：" + e.message, Toast.LENGTH_SHORT)
+//										.show()
+//						}
+//
+//						override fun onComplete() {
+//							loadingDialog.dismiss()
+//							if (version.versionCode > getString(R.string.app_version_code).toInt()) {
+//								val title = activity.getString(R.string.dialog_update_title, activity.getString(R.string.app_version_name), version.versionName)
+//								val content = activity.getString(R.string.dialog_update_content, FileTools.formatFileSize(version.apkSize), FileTools.formatFileSize(version.patchSize))
+//								val text = content + "\n" + activity.getString(R.string.dialog_update_text, version.updateLog)
+//								val builder = AlertDialog.Builder(activity)
+//										.setTitle(title)
+//										.setMessage(text)
+//										.setPositiveButton(R.string.action_download_apk, { _, _ ->
+//											val downloadAPKIntent = Intent(activity, DownloadService::class.java)
+//											downloadAPKIntent.putExtra(Constants.INTENT_TAG_NAME_TYPE, Constants.DOWNLOAD_TYPE_APK)
+//											downloadAPKIntent.putExtra(Constants.INTENT_TAG_NAME_QINIU_PATH, version.apkQiniuPath)
+//											activity.startService(downloadAPKIntent)
+//										})
+//								if (version.lastVersionCode == activity.getString(R.string.app_version_code).toInt())
+//									builder.setNegativeButton(R.string.action_download_patch, { _, _ ->
+//										val downloadPatchIntent = Intent(activity, DownloadService::class.java)
+//										downloadPatchIntent.putExtra(Constants.INTENT_TAG_NAME_TYPE, Constants.DOWNLOAD_TYPE_PATCH)
+//										downloadPatchIntent.putExtra(Constants.INTENT_TAG_NAME_QINIU_PATH, version.patchQiniuPath)
+//										activity.startService(downloadPatchIntent)
+//									})
+//								builder.show()
+//							} else
+//								Toast.makeText(activity, R.string.hint_dialog_check_update_latest, Toast.LENGTH_SHORT)
+//										.show()
+//						}
+//
+//						override fun onNext(version: Version) {
+//							this.version = version
+//						}
+//					})
+//			true
+//		}
+//	}
 }

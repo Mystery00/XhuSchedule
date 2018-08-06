@@ -42,6 +42,7 @@ import com.weilylab.xhuschedule.fragment.settings.*
 import com.weilylab.xhuschedule.util.APPActivityManager
 import kotlinx.android.synthetic.main.activity_settings.*
 
+
 /**
  * A [PreferenceActivity] that presents a set of application settings. On
  * handset devices, settings are presented as a single list. On tablets,
@@ -56,15 +57,18 @@ class SettingsActivity : AppCompatPreferenceActivity() {
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 		APPActivityManager.addActivity(this)
-		setContentView(R.layout.activity_settings)
 		setSupportActionBar(toolbar)
 		supportActionBar?.setDisplayHomeAsUpEnabled(true)
+	}
+
+	override fun onBuildHeaders(target: MutableList<Header>?) {
+		loadHeadersFromResource(R.xml.preference_header, target)
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	override fun onIsMultiPane(): Boolean = false
+	override fun onIsMultiPane(): Boolean = true
 
 	/**
 	 * This method stops fragment injection in malicious applications.

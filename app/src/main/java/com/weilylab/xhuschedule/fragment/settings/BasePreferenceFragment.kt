@@ -36,8 +36,8 @@ package com.weilylab.xhuschedule.fragment.settings
 import androidx.annotation.StringRes
 import android.media.RingtoneManager
 import android.net.Uri
-import android.preference.Preference
-import android.preference.PreferenceFragment
+import androidx.preference.Preference
+import androidx.preference.PreferenceFragment
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.util.Constants
 
