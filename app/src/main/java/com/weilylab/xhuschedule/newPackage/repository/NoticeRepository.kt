@@ -22,7 +22,7 @@ object NoticeRepository {
 	}
 
 	fun markNoticesAsRead(list: List<Notice>) {
-		NoticeLocalDataSource.markAsRead(list)
+		NoticeLocalDataSource.markAsReadInThread(list)
 	}
 
 	fun queryNoticeInMainActivity(bottomNavigationViewModel: BottomNavigationViewModel) {

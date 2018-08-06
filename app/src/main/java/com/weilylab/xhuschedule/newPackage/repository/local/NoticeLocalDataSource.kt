@@ -8,6 +8,7 @@ import com.weilylab.xhuschedule.newPackage.repository.local.service.impl.NoticeS
 import com.weilylab.xhuschedule.newPackage.utils.rxAndroid.PackageData
 import com.weilylab.xhuschedule.newPackage.utils.rxAndroid.RxObservable
 import com.weilylab.xhuschedule.newPackage.utils.rxAndroid.RxObserver
+import vip.mystery0.logs.Logs
 
 object NoticeLocalDataSource : NoticeDataSource {
 	private val noticeService: NoticeService = NoticeServiceImpl()
@@ -46,10 +47,27 @@ object NoticeLocalDataSource : NoticeDataSource {
 		}
 	}
 
-	fun markAsRead(list: List<Notice>) {
+	private fun markAsRead(list: List<Notice>) {
 		list.forEach {
 			it.isRead = true
 			noticeService.update(it)
 		}
+	}
+
+	fun markAsReadInThread(list: List<Notice>) {
+		RxObservable<Boolean>()
+				.doThingsOnThread {
+					markAsRead(list)
+					it.onFinish(true)
+				}
+				.subscribe(object : RxObserver<Boolean>() {
+					override fun onFinish(data: Boolean?) {
+						Logs.i("onFinish: markAsReadInThread")
+					}
+
+					override fun onError(e: Throwable) {
+						Logs.wtf("onError: ", e)
+					}
+				})
 	}
 }

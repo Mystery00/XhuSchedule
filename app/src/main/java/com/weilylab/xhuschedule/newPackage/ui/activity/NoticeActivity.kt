@@ -33,9 +33,7 @@
 
 package com.weilylab.xhuschedule.newPackage.ui.activity
 
-import android.app.Dialog
 import android.widget.Toast
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -48,32 +46,29 @@ import com.weilylab.xhuschedule.newPackage.config.Status.*
 import com.weilylab.xhuschedule.newPackage.repository.NoticeRepository
 import com.weilylab.xhuschedule.newPackage.utils.rxAndroid.PackageData
 import com.weilylab.xhuschedule.newPackage.viewModel.NoticeViewModel
-import com.zyao89.view.zloading.ZLoadingDialog
-import com.zyao89.view.zloading.Z_TYPE
 import kotlinx.android.synthetic.main.activity_notice.*
 
 class NoticeActivity : XhuBaseActivity(R.layout.activity_notice) {
 	private lateinit var noticeViewModel: NoticeViewModel
-	private lateinit var dialog: Dialog
 	private lateinit var noticeAdapter: NoticeAdapter
 	private val noticeList = ArrayList<Notice>()
 
 	private val noticeObserver = Observer<PackageData<List<Notice>>> {
 		when (it.status) {
-			Loading -> showDialog()
+			Loading -> showRefresh()
 			Content -> {
-				hideDialog()
+				hideRefresh()
 				noticeList.clear()
 				noticeList.addAll(it.data!!)
 				noticeAdapter.notifyDataSetChanged()
 			}
 			Error -> {
-				hideDialog()
+				hideRefresh()
 				Toast.makeText(this, it.error?.message, Toast.LENGTH_LONG)
 						.show()
 			}
 			Empty -> {
-				hideDialog()
+				hideRefresh()
 			}
 		}
 	}
@@ -82,7 +77,6 @@ class NoticeActivity : XhuBaseActivity(R.layout.activity_notice) {
 		super.initView()
 		setSupportActionBar(toolbar)
 		supportActionBar?.setDisplayHomeAsUpEnabled(true)
-		initDialog()
 		recyclerView.layoutManager = LinearLayoutManager(this)
 		noticeAdapter = NoticeAdapter(this, noticeList)
 		recyclerView.adapter = noticeAdapter
@@ -93,17 +87,6 @@ class NoticeActivity : XhuBaseActivity(R.layout.activity_notice) {
 				android.R.color.holo_orange_light,
 				android.R.color.holo_red_light)
 		swipeRefreshLayout.isRefreshing = true
-	}
-
-	private fun initDialog() {
-		dialog = ZLoadingDialog(this)
-				.setLoadingBuilder(Z_TYPE.SINGLE_CIRCLE)
-				.setHintText(getString(R.string.hint_dialog_get_notices))
-				.setHintTextSize(16F)
-				.setCanceledOnTouchOutside(false)
-				.setLoadingColor(ContextCompat.getColor(this, R.color.colorAccent))
-				.setHintTextColor(ContextCompat.getColor(this, R.color.colorAccent))
-				.create()
 	}
 
 	override fun initData() {
@@ -135,14 +118,14 @@ class NoticeActivity : XhuBaseActivity(R.layout.activity_notice) {
 		NoticeRepository.queryNoticeForAndroid(noticeViewModel)
 	}
 
-	private fun showDialog() {
-		if (!dialog.isShowing)
-			dialog.show()
+	private fun showRefresh() {
+		if (!swipeRefreshLayout.isRefreshing)
+			swipeRefreshLayout.isRefreshing = true
 	}
 
-	private fun hideDialog() {
-		if (dialog.isShowing)
-			dialog.dismiss()
+	private fun hideRefresh() {
+		if (swipeRefreshLayout.isRefreshing)
+			swipeRefreshLayout.isRefreshing=false
 	}
 
 	override fun onDestroy() {
