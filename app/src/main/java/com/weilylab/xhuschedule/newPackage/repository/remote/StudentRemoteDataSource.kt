@@ -38,7 +38,7 @@ object StudentRemoteDataSource : StudentDataSource {
 		}
 	}
 
-	fun login(loginLiveData: MutableLiveData<PackageData<Boolean>>, student: Student) {
+	fun login(loginLiveData: MutableLiveData<PackageData<Student>>, student: Student) {
 		loginLiveData.value = PackageData.loading()
 		if (NetworkUtil.isConnectInternet()) {
 			UserUtil.login(student, object : DoSaveListener<Student> {
@@ -47,7 +47,7 @@ object StudentRemoteDataSource : StudentDataSource {
 				}
 			}, object : RequestListener<Boolean> {
 				override fun done(t: Boolean) {
-					loginLiveData.value = PackageData.content(true)
+					loginLiveData.value = PackageData.content(student)
 				}
 
 				override fun error(rt: String, msg: String?) {

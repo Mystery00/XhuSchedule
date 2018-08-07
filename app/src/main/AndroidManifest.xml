@@ -90,10 +90,10 @@
 			android:screenOrientation="portrait"
 			android:theme="@style/AppTheme.NoActionBar" />
 		<activity
-			android:name=".activity.SettingsActivity"
+			android:name=".newPackage.ui.activity.SettingsActivity"
 			android:label="@string/title_activity_settings"
 			android:screenOrientation="portrait"
-			android:theme="@style/AppTheme.Settings" />
+			android:theme="@style/AppTheme.NoActionBar" />
 		<activity
 			android:name=".activity.shortcut.RefreshWidgetActivity"
 			android:theme="@android:style/Theme.NoDisplay" />

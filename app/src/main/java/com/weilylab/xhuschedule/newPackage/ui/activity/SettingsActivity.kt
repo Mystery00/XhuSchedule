@@ -31,57 +31,44 @@
  * Last modified 18-2-21 下午9:11
  */
 
-package com.weilylab.xhuschedule.activity
+package com.weilylab.xhuschedule.newPackage.ui.activity
 
-import android.os.Bundle
-import android.preference.PreferenceActivity
+import android.content.Context
+import android.content.Intent
 import android.view.MenuItem
+import android.preference.PreferenceFragment
 import com.weilylab.xhuschedule.R
-import com.weilylab.xhuschedule.fragment.*
-import com.weilylab.xhuschedule.fragment.settings.*
+import com.weilylab.xhuschedule.newPackage.base.XhuBaseActivity
+import com.weilylab.xhuschedule.newPackage.ui.fragment.settings.AccountSettingsFragment
 import com.weilylab.xhuschedule.util.APPActivityManager
 import kotlinx.android.synthetic.main.activity_settings.*
 
+class SettingsActivity : XhuBaseActivity(R.layout.activity_settings) {
+	companion object {
+		private const val INTENT_FRAGMENT = "intent_fragment"
+		const val TYPE_ACCOUNT = 31
 
-/**
- * A [PreferenceActivity] that presents a set of application settings. On
- * handset devices, settings are presented as a single list. On tablets,
- * settings are split by category, with category headers shown to the left of
- * the list of settings.
- *
- * See [Android Design: Settings](http://developer.android.com/design/patterns/settings.html)
- * for design guidelines and the [Settings API Guide](http://developer.android.com/guide/topics/ui/settings.html)
- * for more information on developing a Settings UI.
- */
-class SettingsActivity : AppCompatPreferenceActivity() {
-	override fun onCreate(savedInstanceState: Bundle?) {
-		super.onCreate(savedInstanceState)
-		APPActivityManager.addActivity(this)
+		fun intentTo(context: Context?, type: Int) {
+			val intent = Intent(context, SettingsActivity::class.java)
+			intent.putExtra(INTENT_FRAGMENT, type)
+			context?.startActivity(intent)
+		}
+	}
+
+	override fun initView() {
+		super.initView()
+		fragmentManager.beginTransaction()
+				.replace(R.id.content_wrapper, getFragment())
+				.commit()
 		setSupportActionBar(toolbar)
 		supportActionBar?.setDisplayHomeAsUpEnabled(true)
 	}
 
-	override fun onBuildHeaders(target: MutableList<Header>?) {
-		loadHeadersFromResource(R.xml.preference_header, target)
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	override fun onIsMultiPane(): Boolean = true
-
-	/**
-	 * This method stops fragment injection in malicious applications.
-	 * Make sure to deny any unknown fragments here.
-	 */
-	override fun isValidFragment(fragmentName: String): Boolean = when (fragmentName) {
-		ClassSettingsFragment::class.java.name -> true
-		AccountSettingsFragment::class.java.name -> true
-		UISettingsFragment::class.java.name -> true
-		NotificationFragment::class.java.name -> true
-		DeveloperFragment::class.java.name -> true
-		InfoSettingsFragment::class.java.name -> true
-		else -> false
+	private fun getFragment(): PreferenceFragment {
+		return when (intent.getIntExtra(INTENT_FRAGMENT, 0)) {
+			TYPE_ACCOUNT -> AccountSettingsFragment()
+			else -> throw NullPointerException("null")
+		}
 	}
 
 	override fun onOptionsItemSelected(item: MenuItem): Boolean {

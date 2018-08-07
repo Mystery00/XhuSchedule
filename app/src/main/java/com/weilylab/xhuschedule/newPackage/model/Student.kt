@@ -13,4 +13,8 @@ class Student {
 	lateinit var username: String
 	@ColumnInfo(name = "password")
 	lateinit var password: String
+	@ColumnInfo(name = "is_main")
+	var isMain = false
+	@ColumnInfo(name = "student_name")
+	var studentName: String = ""
 }

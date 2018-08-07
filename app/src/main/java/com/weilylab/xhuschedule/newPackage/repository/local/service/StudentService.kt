@@ -12,6 +12,12 @@ interface StudentService {
 
 	fun queryStudentSize(): Int
 
+	fun queryStudentByUsername(username: String):Student?
+
+	fun queryMainStudent():Student?
+
+	fun updateStudent(student: Student)
+
 	fun saveStudentInfo(studentInfo: StudentInfo): Long
 
 	fun queryStudentInfoByUsername(username: String): StudentInfo?

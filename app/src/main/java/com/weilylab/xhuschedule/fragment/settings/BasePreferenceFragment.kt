@@ -37,19 +37,10 @@ import androidx.annotation.StringRes
 import android.media.RingtoneManager
 import android.net.Uri
 import androidx.preference.Preference
-import androidx.preference.PreferenceFragment
+import androidx.preference.PreferenceFragmentCompat
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.util.Constants
 
-abstract class BasePreferenceFragment : PreferenceFragment() {
+abstract class BasePreferenceFragment : PreferenceFragmentCompat() {
     fun findPreferenceById(@StringRes id: Int): Preference = findPreference(getString(id))
-
-    // 获取提示音名称
-    fun getRingtoneName(uriString: String): String {
-        return when (uriString) {
-            "" -> getString(R.string.hint_notification_none)
-            Constants.NOTIFICATION_SYSTEM_SOUND -> getString(R.string.hint_notification_system)
-            else -> RingtoneManager.getRingtone(activity, Uri.parse(uriString)).getTitle(activity)
-        }
-    }
 }

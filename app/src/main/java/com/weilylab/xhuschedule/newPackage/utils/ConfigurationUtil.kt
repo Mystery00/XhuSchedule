@@ -12,4 +12,10 @@ object ConfigurationUtil {
 				.putBoolean(SharedPreferenceConstant.FIELD_CONFIG_FIRST_ENTER, value)
 				.apply()
 		get() = sharedPreferences.getBoolean(SharedPreferenceConstant.FIELD_CONFIG_FIRST_ENTER, true)
+
+	var isEnableMultiUserMode: Boolean
+		set(value) = sharedPreferences.edit()
+				.putBoolean(SharedPreferenceConstant.FIELD_ENABLE_MULTI_USER_MODE, value)
+				.apply()
+		get() = sharedPreferences.getBoolean(SharedPreferenceConstant.FIELD_ENABLE_MULTI_USER_MODE, false)
 }

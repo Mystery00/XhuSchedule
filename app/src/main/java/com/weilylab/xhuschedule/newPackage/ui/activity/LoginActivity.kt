@@ -56,25 +56,24 @@ import android.view.WindowManager
 import com.weilylab.xhuschedule.newPackage.config.Status.*
 import com.weilylab.xhuschedule.newPackage.utils.rxAndroid.PackageData
 
-
 class LoginActivity : XhuBaseActivity(R.layout.activity_login) {
 	private lateinit var loginViewModel: LoginViewModel
 	private lateinit var dialog: Dialog
 
-	private val loginObserver= Observer<PackageData<Boolean>> {
-		when(it.status){
+	private val loginObserver = Observer<PackageData<Student>> {
+		when (it.status) {
 			Content -> {
 				hideDialog()
-				if (it.data!!){
+				if (it.data != null) {
+					LoginRepository.queryStudentInfo(it.data)
 					Toast.makeText(this, getString(R.string.success_login, getString(R.string.app_name)), Toast.LENGTH_SHORT)
 							.show()
 					setResult(Activity.RESULT_OK, intent)
 					finish()
 				}
 			}
-			Empty -> TODO()
 			Error -> Toast.makeText(this, it.error?.message, Toast.LENGTH_SHORT)
-						.show()
+					.show()
 			Loading -> showDialog()
 		}
 	}

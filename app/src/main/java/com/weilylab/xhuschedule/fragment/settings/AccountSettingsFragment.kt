@@ -58,28 +58,28 @@ class AccountSettingsFragment : BasePreferenceFragment() {
 	}
 
 	companion object {
-        private const val ADD_ACCOUNT_CODE = 1
-    }
+		private const val ADD_ACCOUNT_CODE = 1
+	}
 
-    private lateinit var currentAccountCategory: PreferenceCategory
-    private lateinit var addAccountPreference: Preference
-    private lateinit var delAccountPreference: Preference
-    private lateinit var setMainAccountPreference: Preference
-    private lateinit var multiUserModePreference: SwitchPreference
+	private lateinit var currentAccountCategory: PreferenceCategory
+	private lateinit var addAccountPreference: Preference
+	private lateinit var delAccountPreference: Preference
+	private lateinit var setMainAccountPreference: Preference
+	private lateinit var multiUserModePreference: SwitchPreference
 
 	override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        addPreferencesFromResource(R.xml.preference_account)
-    }
+		super.onCreate(savedInstanceState)
+		addPreferencesFromResource(R.xml.preference_account)
+	}
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        currentAccountCategory = findPreferenceById(R.string.key_current_account) as PreferenceCategory
-        addAccountPreference = findPreferenceById(R.string.key_add_account)
-        delAccountPreference = findPreferenceById(R.string.key_del_account)
-        setMainAccountPreference = findPreferenceById(R.string.key_set_main_account)
-        multiUserModePreference = findPreferenceById(R.string.key_enable_multi_user_mode) as SwitchPreference
-        return super.onCreateView(inflater, container, savedInstanceState)
-    }
+	override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+		currentAccountCategory = findPreferenceById(R.string.key_logged_account) as PreferenceCategory
+		addAccountPreference = findPreferenceById(R.string.key_add_account)
+		delAccountPreference = findPreferenceById(R.string.key_del_account)
+		setMainAccountPreference = findPreferenceById(R.string.key_set_main_account)
+		multiUserModePreference = findPreferenceById(R.string.key_enable_multi_user_mode) as SwitchPreference
+		return super.onCreateView(inflater, container, savedInstanceState)
+	}
 
 	override fun onActivityCreated(savedInstanceState: Bundle?) {
 		super.onActivityCreated(savedInstanceState)
@@ -190,24 +190,24 @@ class AccountSettingsFragment : BasePreferenceFragment() {
 		}
 	}
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == ADD_ACCOUNT_CODE && resultCode == Activity.RESULT_OK) {
-            ScheduleHelper.isUIChange = true
-            val userFile = XhuFileUtil.getStudentListFile(activity!!)
-            updateCategory(XhuFileUtil.getArrayListFromFile(userFile, Student::class.java))
-        }
-    }
+	override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+		super.onActivityResult(requestCode, resultCode, data)
+		if (requestCode == ADD_ACCOUNT_CODE && resultCode == Activity.RESULT_OK) {
+			ScheduleHelper.isUIChange = true
+			val userFile = XhuFileUtil.getStudentListFile(activity!!)
+			updateCategory(XhuFileUtil.getArrayListFromFile(userFile, Student::class.java))
+		}
+	}
 
-    private fun updateCategory(studentList: ArrayList<Student>) {
-        currentAccountCategory.removeAll()
-        studentList.forEach {
-            val preference = Preference(activity)
-            if (it.isMain)
-                preference.title = "${it.username}(主)"
-            else
-                preference.title = it.username
-            currentAccountCategory.addPreference(preference)
-        }
-    }
+	private fun updateCategory(studentList: ArrayList<Student>) {
+		currentAccountCategory.removeAll()
+		studentList.forEach {
+			val preference = Preference(activity)
+			if (it.isMain)
+				preference.title = "${it.username}(主)"
+			else
+				preference.title = it.username
+			currentAccountCategory.addPreference(preference)
+		}
+	}
 }

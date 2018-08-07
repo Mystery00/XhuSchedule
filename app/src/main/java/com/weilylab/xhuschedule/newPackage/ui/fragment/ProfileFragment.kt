@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.weilylab.xhuschedule.R
-import com.weilylab.xhuschedule.activity.SettingsActivity
+import com.weilylab.xhuschedule.newPackage.ui.activity.SettingsActivity
 import com.weilylab.xhuschedule.databinding.FragmentProfileBinding
 import com.weilylab.xhuschedule.fragment.settings.AccountSettingsFragment
 import com.weilylab.xhuschedule.newPackage.base.BaseBottomNavigationFragment
@@ -74,10 +74,7 @@ class ProfileFragment : BaseBottomNavigationFragment(R.layout.fragment_profile) 
 			startActivity(Intent(activity, QueryTestActivity::class.java))
 		}
 		fragmentProfileBinding.accountSettingsLayout.setOnClickListener {
-			val intent = Intent(activity, SettingsActivity::class.java)
-//			intent.putExtra(PreferenceActivity.EXTRA_NO_HEADERS, true)
-			intent.putExtra(PreferenceActivity.EXTRA_SHOW_FRAGMENT, AccountSettingsFragment::class.java.name)
-			startActivity(intent)
+			SettingsActivity.intentTo(activity,SettingsActivity.TYPE_ACCOUNT)
 		}
 		fragmentProfileBinding.noticeLayout.setOnClickListener {
 			startActivity(Intent(activity, NoticeActivity::class.java))

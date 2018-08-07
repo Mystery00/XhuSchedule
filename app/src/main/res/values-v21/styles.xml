@@ -16,17 +16,12 @@
 		<item name="android:navigationBarColor">@color/colorPrimaryDark</item>
 	</style>
 
-	<style name="AppTheme.Settings">
-		<!-- 指定界面进入/退出动画效果 -->
-		<item name="android:windowEnterTransition">@transition/transition_settings_slide_in</item>
-		<item name="android:windowExitTransition">@transition/transition_settings_slide_out</item>
+	<style name="AppTheme.NoActionBar.Settings">
+		<!-- Theme for the Preferences -->
+		<item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
 	</style>
 
-	<style name="AppTheme.Main">
-		<!-- 指定界面进入/退出动画效果 -->
-		<item name="android:windowEnterTransition">@transition/transition_settings_slide_in</item>
-		<item name="android:windowExitTransition">@transition/transition_settings_slide_out</item>
-	</style>
+	<style name="AppTheme.Main"></style>
 
 	<style name="AppTheme.NoActionBar">
 		<item name="windowActionBar">false</item>

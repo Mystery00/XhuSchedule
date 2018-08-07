@@ -16,8 +16,13 @@ class StudentServiceImpl : StudentService {
 
 	override fun queryStudentSize(): Int = studentDao.queryStudentSize()
 
+	override fun queryStudentByUsername(username: String): Student? = studentDao.queryStudentByUsername(username)
+
+	override fun queryMainStudent(): Student? = studentDao.queryMainStudent()
+
+	override fun updateStudent(student: Student) = studentDao.updateStudent(student)
+
 	override fun saveStudentInfo(studentInfo: StudentInfo): Long = studentDao.saveStudentInfo(studentInfo)
 
 	override fun queryStudentInfoByUsername(username: String): StudentInfo? = studentDao.queryStudentInfoByUsername(username)
-
 }
