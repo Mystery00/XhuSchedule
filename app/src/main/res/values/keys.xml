@@ -25,7 +25,7 @@
     <string name="screen_category_ui_common">通用</string>
 
     <string name="key_first_day" translatable="false">key_first_day</string>
-    <string name="key_show_not" translatable="false">key_show_not</string>
+    <string name="key_show_not_week" translatable="false">key_show_not_week</string>
     <string name="key_logged_account" translatable="false">key_logged_account</string>
     <string name="key_add_account" translatable="false">key_add_account</string>
     <string name="key_del_account" translatable="false">key_del_account</string>

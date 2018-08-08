@@ -40,6 +40,7 @@ import android.preference.PreferenceFragment
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.newPackage.base.XhuBaseActivity
 import com.weilylab.xhuschedule.newPackage.ui.fragment.settings.AccountSettingsFragment
+import com.weilylab.xhuschedule.newPackage.ui.fragment.settings.ClassSettingsFragment
 import com.weilylab.xhuschedule.util.APPActivityManager
 import kotlinx.android.synthetic.main.activity_settings.*
 
@@ -47,6 +48,7 @@ class SettingsActivity : XhuBaseActivity(R.layout.activity_settings) {
 	companion object {
 		private const val INTENT_FRAGMENT = "intent_fragment"
 		const val TYPE_ACCOUNT = 31
+		const val TYPE_CLASS = 32
 
 		fun intentTo(context: Context?, type: Int) {
 			val intent = Intent(context, SettingsActivity::class.java)
@@ -67,6 +69,7 @@ class SettingsActivity : XhuBaseActivity(R.layout.activity_settings) {
 	private fun getFragment(): PreferenceFragment {
 		return when (intent.getIntExtra(INTENT_FRAGMENT, 0)) {
 			TYPE_ACCOUNT -> AccountSettingsFragment()
+			TYPE_CLASS -> ClassSettingsFragment()
 			else -> throw NullPointerException("null")
 		}
 	}

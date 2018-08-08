@@ -27,6 +27,9 @@ import com.weilylab.xhuschedule.newPackage.ui.adapter.ViewPagerAdapter
 import com.weilylab.xhuschedule.newPackage.ui.fragment.ProfileFragment
 import com.weilylab.xhuschedule.newPackage.ui.fragment.TableFragment
 import com.weilylab.xhuschedule.newPackage.ui.fragment.TodayFragment
+import com.weilylab.xhuschedule.newPackage.utils.ConfigurationUtil
+import com.weilylab.xhuschedule.newPackage.utils.LayoutRefreshConfigUtil
+import com.weilylab.xhuschedule.newPackage.utils.UserUtil
 import com.weilylab.xhuschedule.newPackage.utils.layoutManager.SkidRightLayoutManager
 import com.weilylab.xhuschedule.newPackage.utils.rxAndroid.PackageData
 import com.weilylab.xhuschedule.newPackage.viewModel.BottomNavigationViewModel
@@ -37,9 +40,7 @@ import com.zyao89.view.zloading.Z_TYPE
 import kotlinx.android.synthetic.main.activity_bottom_navigation.*
 import kotlinx.android.synthetic.main.content_bottom_navigation.*
 import vip.mystery0.bottomTabView.BottomTabItem
-import vip.mystery0.logs.Logs
 import vip.mystery0.tools.utils.DensityTools
-import java.util.*
 
 class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_navigation) {
 	companion object {
@@ -56,7 +57,6 @@ class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_naviga
 	private var animation: ObjectAnimator? = null
 	private var isShowWeekView = false
 	private lateinit var showAdapter: ShowCourseRecyclerViewAdapter
-	private val showCourseList = ArrayList<Schedule>()
 	private lateinit var loadingAnimation: ObjectAnimator
 	private var action = ACTION_NONE
 
@@ -67,9 +67,18 @@ class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_naviga
 					showDialog()
 			}
 			Content -> {
-				BottomNavigationRepository.queryStudentInfo(bottomNavigationViewModel)
+				if (ConfigurationUtil.isEnableMultiUserMode) {
+					val mainStudent = UserUtil.findMainStudent(it.data)
+					if (mainStudent != null)
+						BottomNavigationRepository.queryStudentInfo(bottomNavigationViewModel, mainStudent)
+					else
+						BottomNavigationRepository.queryStudentList(bottomNavigationViewModel)
+					BottomNavigationRepository.queryCacheCoursesForManyStudent(bottomNavigationViewModel)
+				} else {
+					BottomNavigationRepository.queryStudentInfo(bottomNavigationViewModel)
+					BottomNavigationRepository.queryCacheCourses(bottomNavigationViewModel)
+				}
 				BottomNavigationRepository.queryCurrentWeek(bottomNavigationViewModel)
-				BottomNavigationRepository.queryCacheCourses(bottomNavigationViewModel)
 			}
 			Empty -> {
 				startActivityForResult(Intent(this, LoginActivity::class.java), ADD_ACCOUNT_CODE)
@@ -132,8 +141,8 @@ class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_naviga
 	}
 
 	private val showCourseObserver = Observer<List<Schedule>> {
-		showCourseList.clear()
-		showCourseList.addAll(it)
+		showAdapter.items.clear()
+		showAdapter.items.addAll(it)
 		showAdapter.notifyDataSetChanged()
 		showPopupWindow()
 	}
@@ -219,13 +228,23 @@ class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_naviga
 		}
 		imageSync.setOnClickListener {
 			action = ACTION_REFRESH
-			BottomNavigationRepository.queryCoursesOnline(bottomNavigationViewModel)
+			if (ConfigurationUtil.isEnableMultiUserMode)
+				BottomNavigationRepository.queryCoursesOnlineForManyStudent(bottomNavigationViewModel)
+			else
+				BottomNavigationRepository.queryCoursesOnline(bottomNavigationViewModel)
 		}
 	}
 
 	override fun onResume() {
 		super.onResume()
-		BottomNavigationRepository.queryNotice(bottomNavigationViewModel)
+		if (LayoutRefreshConfigUtil.isRefreshNoticeDot) {
+			BottomNavigationRepository.queryNotice(bottomNavigationViewModel)
+			LayoutRefreshConfigUtil.isRefreshNoticeDot = false
+		}
+		if (LayoutRefreshConfigUtil.isRefreshBottomNavigationActivity) {
+			BottomNavigationRepository.queryStudentList(bottomNavigationViewModel)
+			LayoutRefreshConfigUtil.isRefreshBottomNavigationActivity = false
+		}
 	}
 
 	private fun showWeekView() {
@@ -304,7 +323,7 @@ class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_naviga
 	private fun initPopupWindow() {
 		recyclerView = RecyclerView(this)
 		recyclerView.layoutManager = SkidRightLayoutManager(1.5f, 0.85f)
-		showAdapter = ShowCourseRecyclerViewAdapter(this, showCourseList)
+		showAdapter = ShowCourseRecyclerViewAdapter(this)
 		recyclerView.adapter = showAdapter
 		popupWindow = PopupWindow(recyclerView, DensityTools.getScreenWidth(this), DensityTools.dp2px(this, 480F))
 		popupWindow.isOutsideTouchable = true
@@ -316,7 +335,7 @@ class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_naviga
 		popupWindow.showAtLocation(weekView, Gravity.NO_GRAVITY, DensityTools.getScreenWidth(this) - popupWindow.width, DensityTools.getScreenHeight(this) / 2 - popupWindow.height / 2)
 		val week = bottomNavigationViewModel.week.value
 		var position = 0
-		showCourseList.forEachIndexed { index, it ->
+		showAdapter.items.forEachIndexed { index, it ->
 			if (it.weekList.contains(week))
 				position = index
 		}

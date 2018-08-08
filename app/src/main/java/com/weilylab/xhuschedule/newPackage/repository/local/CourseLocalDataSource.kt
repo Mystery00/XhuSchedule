@@ -49,6 +49,45 @@ object CourseLocalDataSource : CourseDataSource {
 				})
 	}
 
+	override fun queryCourseWithManyStudent(courseListLiveData: MutableLiveData<PackageData<List<Schedule>>>, studentList: List<Student>, year: String?, term: String?, isFromCache: Boolean) {
+		RxObservable<List<Schedule>>()
+				.doThings { emitter ->
+					try {
+						val courses = ArrayList<Schedule>()
+						if (year != null && term != null)
+							studentList.forEach {
+								courses.addAll(CourseUtil.convertCourseToSchedule(courseService.queryCourseByUsernameAndTerm(it.username, year, term)))
+							}
+						else
+							studentList.forEach {
+								courses.addAll(CourseUtil.convertCourseToSchedule(courseService.queryCourseByUsernameAndTerm(it.username, "current", "current")))
+							}
+						emitter.onFinish(courses)
+					} catch (e: Exception) {
+						emitter.onError(e)
+					}
+				}
+				.subscribe(object : RxObserver<List<Schedule>>() {
+					override fun onFinish(data: List<Schedule>?) {
+						Logs.i("onFinish: ")
+						if (data == null || data.isEmpty())
+							CourseRemoteDataSource.queryCourseWithManyStudent(courseListLiveData, studentList, year, term, isFromCache)
+						else {
+							courseListLiveData.value = PackageData.content(data)
+						}
+					}
+
+					override fun onError(e: Throwable) {
+						Logs.wtf("onError: ", e)
+						if (isFromCache) {
+							CourseRemoteDataSource.queryCourseWithManyStudent(courseListLiveData, studentList, year, term, isFromCache)
+						} else {
+							courseListLiveData.value = PackageData.error(e)
+						}
+					}
+				})
+	}
+
 	fun deleteAllCourseListForStudent(username: String, year: String?, term: String?) {
 		val list = courseService.queryCourseByUsernameAndTerm(username, year ?: "current", term
 				?: "current")

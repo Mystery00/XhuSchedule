@@ -1,7 +1,6 @@
 package com.weilylab.xhuschedule.newPackage.ui.fragment
 
 import android.content.Intent
-import android.preference.PreferenceActivity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,7 +9,6 @@ import androidx.lifecycle.ViewModelProviders
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.newPackage.ui.activity.SettingsActivity
 import com.weilylab.xhuschedule.databinding.FragmentProfileBinding
-import com.weilylab.xhuschedule.fragment.settings.AccountSettingsFragment
 import com.weilylab.xhuschedule.newPackage.base.BaseBottomNavigationFragment
 import com.weilylab.xhuschedule.newPackage.config.Status.*
 import com.weilylab.xhuschedule.newPackage.ui.activity.NoticeActivity
@@ -74,7 +72,10 @@ class ProfileFragment : BaseBottomNavigationFragment(R.layout.fragment_profile) 
 			startActivity(Intent(activity, QueryTestActivity::class.java))
 		}
 		fragmentProfileBinding.accountSettingsLayout.setOnClickListener {
-			SettingsActivity.intentTo(activity,SettingsActivity.TYPE_ACCOUNT)
+			SettingsActivity.intentTo(activity, SettingsActivity.TYPE_ACCOUNT)
+		}
+		fragmentProfileBinding.classSettingsLayout.setOnClickListener {
+			SettingsActivity.intentTo(activity, SettingsActivity.TYPE_CLASS)
 		}
 		fragmentProfileBinding.noticeLayout.setOnClickListener {
 			startActivity(Intent(activity, NoticeActivity::class.java))

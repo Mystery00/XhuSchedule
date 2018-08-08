@@ -27,6 +27,6 @@ object NoticeRepository {
 
 	fun queryNoticeInMainActivity(bottomNavigationViewModel: BottomNavigationViewModel) {
 		bottomNavigationViewModel.noticeList.value = PackageData.loading()
-		NoticeLocalDataSource.queryNotice(bottomNavigationViewModel.noticeList, "Android")
+		NoticeRemoteDataSource.queryNotice(bottomNavigationViewModel.noticeList, "Android")
 	}
 }

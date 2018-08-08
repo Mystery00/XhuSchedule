@@ -35,7 +35,6 @@ package com.weilylab.xhuschedule.util
 
 import android.content.Context
 import android.graphics.Color
-import androidx.core.content.edit
 import com.weilylab.xhuschedule.newPackage.config.APP
 import com.weilylab.xhuschedule.classes.baseClass.Course
 import java.util.*
@@ -57,9 +56,9 @@ object ColorUtil {
 	}
 
 	fun saveColor(keyName: String, color: Int) {
-		sharedPreference.edit {
-			putInt(keyName, color)
-		}
+//		sharedPreference.edit {
+//			putInt(keyName, color)
+//		}
 	}
 
 	fun getRandomColorAsInt(alpha: Int = 255): Int {

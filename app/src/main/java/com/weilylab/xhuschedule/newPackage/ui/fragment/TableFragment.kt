@@ -12,9 +12,12 @@ import com.weilylab.xhuschedule.databinding.FragmentTableBinding
 import com.weilylab.xhuschedule.newPackage.base.BaseBottomNavigationFragment
 import com.weilylab.xhuschedule.newPackage.config.SpaceScheduleHelper
 import com.weilylab.xhuschedule.newPackage.config.Status.*
+import com.weilylab.xhuschedule.newPackage.repository.BottomNavigationRepository
 import com.weilylab.xhuschedule.newPackage.ui.custom.CustomDateAdapter
 import com.weilylab.xhuschedule.newPackage.ui.custom.FlagLayoutClickAdapter
 import com.weilylab.xhuschedule.newPackage.ui.custom.SpaceItemClickAdapter
+import com.weilylab.xhuschedule.newPackage.utils.ConfigurationUtil
+import com.weilylab.xhuschedule.newPackage.utils.LayoutRefreshConfigUtil
 import com.weilylab.xhuschedule.newPackage.utils.rxAndroid.PackageData
 import com.weilylab.xhuschedule.newPackage.utils.rxAndroid.RxObservable
 import com.weilylab.xhuschedule.newPackage.utils.rxAndroid.RxObserver
@@ -35,6 +38,7 @@ class TableFragment : BaseBottomNavigationFragment(R.layout.fragment_table) {
 		when (it.status) {
 			Content -> fragmentTableBinding.timeTableView
 					.data(it.data)
+					.isShowNotCurWeek(ConfigurationUtil.isShowNotWeek)
 					.updateView()
 		}
 	}
@@ -71,6 +75,7 @@ class TableFragment : BaseBottomNavigationFragment(R.layout.fragment_table) {
 		initViewModel()
 		fragmentTableBinding.timeTableView
 				.curWeek(week)
+				.isShowNotCurWeek(ConfigurationUtil.isShowNotWeek)
 				.alpha(0.1f, 0.1f, 1f)
 				.callback(CustomDateAdapter())
 				.callback(FlagLayoutClickAdapter(fragmentTableBinding.timeTableView))
@@ -97,6 +102,15 @@ class TableFragment : BaseBottomNavigationFragment(R.layout.fragment_table) {
 				})
 		SpaceScheduleHelper.onSpaceScheduleClickListener = { day, start, isTwice ->
 			Logs.i("monitor: $day $start $isTwice")
+		}
+	}
+
+	override fun onResume() {
+		super.onResume()
+		if (LayoutRefreshConfigUtil.isRefreshTableFragment) {
+			if (!LayoutRefreshConfigUtil.isRefreshBottomNavigationActivity)
+				BottomNavigationRepository.queryCacheCourses(bottomNavigationViewModel)
+			LayoutRefreshConfigUtil.isRefreshTableFragment = false
 		}
 	}
 

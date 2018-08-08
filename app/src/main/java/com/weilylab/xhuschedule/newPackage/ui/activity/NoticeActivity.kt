@@ -44,6 +44,7 @@ import com.weilylab.xhuschedule.newPackage.model.Notice
 import com.weilylab.xhuschedule.newPackage.base.XhuBaseActivity
 import com.weilylab.xhuschedule.newPackage.config.Status.*
 import com.weilylab.xhuschedule.newPackage.repository.NoticeRepository
+import com.weilylab.xhuschedule.newPackage.utils.LayoutRefreshConfigUtil
 import com.weilylab.xhuschedule.newPackage.utils.rxAndroid.PackageData
 import com.weilylab.xhuschedule.newPackage.viewModel.NoticeViewModel
 import kotlinx.android.synthetic.main.activity_notice.*
@@ -51,15 +52,14 @@ import kotlinx.android.synthetic.main.activity_notice.*
 class NoticeActivity : XhuBaseActivity(R.layout.activity_notice) {
 	private lateinit var noticeViewModel: NoticeViewModel
 	private lateinit var noticeAdapter: NoticeAdapter
-	private val noticeList = ArrayList<Notice>()
 
 	private val noticeObserver = Observer<PackageData<List<Notice>>> {
 		when (it.status) {
 			Loading -> showRefresh()
 			Content -> {
 				hideRefresh()
-				noticeList.clear()
-				noticeList.addAll(it.data!!)
+				noticeAdapter.items.clear()
+				noticeAdapter.items.addAll(it.data!!)
 				noticeAdapter.notifyDataSetChanged()
 			}
 			Error -> {
@@ -78,7 +78,7 @@ class NoticeActivity : XhuBaseActivity(R.layout.activity_notice) {
 		setSupportActionBar(toolbar)
 		supportActionBar?.setDisplayHomeAsUpEnabled(true)
 		recyclerView.layoutManager = LinearLayoutManager(this)
-		noticeAdapter = NoticeAdapter(this, noticeList)
+		noticeAdapter = NoticeAdapter(this)
 		recyclerView.adapter = noticeAdapter
 		recyclerView.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
 		swipeRefreshLayout.setColorSchemeResources(
@@ -102,6 +102,7 @@ class NoticeActivity : XhuBaseActivity(R.layout.activity_notice) {
 	override fun monitor() {
 		super.monitor()
 		toolbar.setNavigationOnClickListener {
+			LayoutRefreshConfigUtil.isRefreshNoticeDot = true
 			finish()
 		}
 		swipeRefreshLayout.setOnRefreshListener {
@@ -125,11 +126,11 @@ class NoticeActivity : XhuBaseActivity(R.layout.activity_notice) {
 
 	private fun hideRefresh() {
 		if (swipeRefreshLayout.isRefreshing)
-			swipeRefreshLayout.isRefreshing=false
+			swipeRefreshLayout.isRefreshing = false
 	}
 
 	override fun onDestroy() {
-		NoticeRepository.markNoticesAsRead(noticeList)
+		NoticeRepository.markNoticesAsRead(noticeAdapter.items)
 		super.onDestroy()
 	}
 }

@@ -1,6 +1,7 @@
 package com.weilylab.xhuschedule.newPackage.repository
 
 import com.weilylab.xhuschedule.newPackage.config.Status.*
+import com.weilylab.xhuschedule.newPackage.model.Student
 import com.weilylab.xhuschedule.newPackage.repository.local.CourseLocalDataSource
 import com.weilylab.xhuschedule.newPackage.repository.local.StudentLocalDataSource
 import com.weilylab.xhuschedule.newPackage.repository.remote.CourseRemoteDataSource
@@ -19,6 +20,11 @@ object BottomNavigationRepository {
 		else {
 			StudentRemoteDataSource.queryStudentInfo(bottomNavigationViewModel.studentInfo, bottomNavigationViewModel.studentList.value!!.data!![0])
 		}
+	}
+
+	fun queryStudentInfo(bottomNavigationViewModel: BottomNavigationViewModel, mainStudent: Student) {
+		bottomNavigationViewModel.studentInfo.value = PackageData.loading()
+		StudentRemoteDataSource.queryStudentInfo(bottomNavigationViewModel.studentInfo, mainStudent)
 	}
 
 	fun queryCurrentWeek(bottomNavigationViewModel: BottomNavigationViewModel) {
@@ -50,6 +56,7 @@ object BottomNavigationRepository {
 		if (bottomNavigationViewModel.studentList.value == null || bottomNavigationViewModel.studentList.value?.data == null || bottomNavigationViewModel.studentList.value!!.data!!.isEmpty())
 			bottomNavigationViewModel.courseList.value = PackageData.empty()
 		else {
+			bottomNavigationViewModel.todayCourseList.removeSource(bottomNavigationViewModel.courseList)
 			bottomNavigationViewModel.todayCourseList.addSource(bottomNavigationViewModel.courseList) { packageData ->
 				when (packageData.status) {
 					Content -> {
@@ -66,9 +73,36 @@ object BottomNavigationRepository {
 		}
 	}
 
+	fun queryCacheCoursesForManyStudent(bottomNavigationViewModel: BottomNavigationViewModel) {
+		bottomNavigationViewModel.courseList.value = PackageData.loading()
+		if (bottomNavigationViewModel.studentList.value == null || bottomNavigationViewModel.studentList.value?.data == null || bottomNavigationViewModel.studentList.value!!.data!!.isEmpty())
+			bottomNavigationViewModel.courseList.value = PackageData.empty()
+		else {
+			bottomNavigationViewModel.todayCourseList.removeSource(bottomNavigationViewModel.courseList)
+			bottomNavigationViewModel.todayCourseList.addSource(bottomNavigationViewModel.courseList) { packageData ->
+				when (packageData.status) {
+					Content -> {
+						CourseUtil.getTodayCourse(packageData.data!!) {
+							bottomNavigationViewModel.todayCourseList.value = PackageData.content(it)
+						}
+					}
+					Loading -> bottomNavigationViewModel.todayCourseList.value = PackageData.loading()
+					Empty -> bottomNavigationViewModel.todayCourseList.value = PackageData.empty()
+					Error -> bottomNavigationViewModel.todayCourseList.value = PackageData.error(packageData.error)
+				}
+			}
+			CourseLocalDataSource.queryCourseWithManyStudent(bottomNavigationViewModel.courseList, bottomNavigationViewModel.studentList.value!!.data!!, "2017-2018", "1", true)
+		}
+	}
+
 	fun queryCoursesOnline(bottomNavigationViewModel: BottomNavigationViewModel) {
 		bottomNavigationViewModel.courseList.value = PackageData.loading()
 		CourseRemoteDataSource.queryCourseByUsername(bottomNavigationViewModel.courseList, bottomNavigationViewModel.studentList.value!!.data!![0], "2017-2018", "1", false)
+	}
+
+	fun queryCoursesOnlineForManyStudent(bottomNavigationViewModel: BottomNavigationViewModel) {
+		bottomNavigationViewModel.courseList.value = PackageData.loading()
+		CourseRemoteDataSource.queryCourseWithManyStudent(bottomNavigationViewModel.courseList, bottomNavigationViewModel.studentList.value!!.data!!, "2017-2018", "1", true)
 	}
 
 	fun queryStudentList(bottomNavigationViewModel: BottomNavigationViewModel) {

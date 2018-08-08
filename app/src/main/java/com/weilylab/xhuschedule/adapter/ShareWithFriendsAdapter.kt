@@ -61,7 +61,7 @@ import com.weilylab.xhuschedule.util.Constants
 import com.weilylab.xhuschedule.util.XhuFileUtil
 import vip.mystery0.tools.base.BaseRecyclerViewAdapter
 
-class ShareWithFriendsAdapter(private val context: Context, private val list: ArrayList<HashMap<String, Int>> = ArrayList()) : BaseRecyclerViewAdapter<ShareWithFriendsAdapter.ViewHolder, HashMap<String, Int>>(context, R.layout.item_share, list) {
+class ShareWithFriendsAdapter(private val context: Context) : BaseRecyclerViewAdapter<ShareWithFriendsAdapter.ViewHolder, HashMap<String, Int>>( R.layout.item_share) {
 	var shareView: PopupWindow? = null
 
 	init {

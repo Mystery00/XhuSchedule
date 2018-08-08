@@ -53,9 +53,9 @@ class ColorPickerAdapter(var color: Int,
                          private val context: Context) : RecyclerView.Adapter<ColorPickerAdapter.ViewHolder>() {
 
     private var isChecked = false
-    private val arrayOfBitmaps = Array<Bitmap?>(12, { null })
+    private val arrayOfBitmaps = Array<Bitmap?>(12) { null }
 
-    var colorPickerChangeListener: ColorPickerChangeListener? = null
+	var colorPickerChangeListener: ColorPickerChangeListener? = null
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         if (position == 11) {
@@ -136,8 +136,8 @@ class ColorPickerAdapter(var color: Int,
         val paint = Paint()
         paint.isAntiAlias = true
         val colors = intArrayOf(Color.RED, Color.GREEN, Color.BLUE, Color.GREEN, Color.RED)
-        val positions = FloatArray(5, { i -> 0.25F * i })
-        val sweepGradient = SweepGradient(50F, 50F, colors, positions)
+        val positions = FloatArray(5) { i -> 0.25F * i }
+		val sweepGradient = SweepGradient(50F, 50F, colors, positions)
         paint.shader = sweepGradient
         canvas.drawCircle(50F, 50F, 32F, paint)
         return bitmap
@@ -148,8 +148,8 @@ class ColorPickerAdapter(var color: Int,
         val paint = Paint()
         paint.isAntiAlias = true
         val colors = intArrayOf(Color.RED, Color.GREEN, Color.BLUE, Color.GREEN, Color.RED)
-        val positions = FloatArray(5, { i -> 0.25F * i })
-        val sweepGradient = SweepGradient(50F, 50F, colors, positions)
+        val positions = FloatArray(5) { i -> 0.25F * i }
+		val sweepGradient = SweepGradient(50F, 50F, colors, positions)
         paint.shader = sweepGradient
         paint.strokeWidth = 5F
         paint.style = Paint.Style.STROKE

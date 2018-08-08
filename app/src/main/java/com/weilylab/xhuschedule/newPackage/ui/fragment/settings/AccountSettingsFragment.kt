@@ -13,6 +13,7 @@ import com.weilylab.xhuschedule.newPackage.model.Student
 import com.weilylab.xhuschedule.newPackage.repository.local.StudentLocalDataSource
 import com.weilylab.xhuschedule.newPackage.ui.activity.LoginActivity
 import com.weilylab.xhuschedule.newPackage.utils.ConfigurationUtil
+import com.weilylab.xhuschedule.newPackage.utils.LayoutRefreshConfigUtil
 import com.weilylab.xhuschedule.newPackage.utils.rxAndroid.RxObserver
 import vip.mystery0.logs.Logs
 
@@ -37,6 +38,7 @@ class AccountSettingsFragment : BasePreferenceFragment(R.xml.preference_account)
 		enableMultiUserModePreference = findPreferenceById(R.string.key_enable_multi_user_mode) as CheckBoxPreference
 
 		initStudentList()
+		setMainAccountPreference.isEnabled = !ConfigurationUtil.isEnableMultiUserMode
 		enableMultiUserModePreference.isChecked = ConfigurationUtil.isEnableMultiUserMode
 	}
 
@@ -47,6 +49,7 @@ class AccountSettingsFragment : BasePreferenceFragment(R.xml.preference_account)
 			true
 		}
 		delAccountPreference.setOnPreferenceClickListener { _ ->
+			LayoutRefreshConfigUtil.isRefreshBottomNavigationActivity = true
 			val valueArray = Array(studentList.size) { i -> "${studentList[i].username}(${studentList[i].studentName})" }
 			val checkedArray = BooleanArray(studentList.size) { false }
 			AlertDialog.Builder(activity)
@@ -77,6 +80,7 @@ class AccountSettingsFragment : BasePreferenceFragment(R.xml.preference_account)
 			true
 		}
 		setMainAccountPreference.setOnPreferenceClickListener { _ ->
+			LayoutRefreshConfigUtil.isRefreshBottomNavigationActivity = true
 			val valueArray = Array(studentList.size) { i -> studentList[i].username }
 			val oldMainIndex = studentList.indexOfFirst { it.isMain }
 			var newMainIndex = oldMainIndex
@@ -109,6 +113,7 @@ class AccountSettingsFragment : BasePreferenceFragment(R.xml.preference_account)
 			true
 		}
 		enableMultiUserModePreference.setOnPreferenceChangeListener { _, _ ->
+			LayoutRefreshConfigUtil.isRefreshBottomNavigationActivity = true
 			val isEnableMultiUserMode = !enableMultiUserModePreference.isChecked
 			if (isEnableMultiUserMode)
 				AlertDialog.Builder(activity!!)
@@ -163,7 +168,9 @@ class AccountSettingsFragment : BasePreferenceFragment(R.xml.preference_account)
 
 	override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
 		super.onActivityResult(requestCode, resultCode, data)
-		if (requestCode == ADD_ACCOUNT_CODE && resultCode == Activity.RESULT_OK)
+		if (requestCode == ADD_ACCOUNT_CODE && resultCode == Activity.RESULT_OK) {
+			LayoutRefreshConfigUtil.isRefreshBottomNavigationActivity = true
 			initStudentList()
+		}
 	}
 }

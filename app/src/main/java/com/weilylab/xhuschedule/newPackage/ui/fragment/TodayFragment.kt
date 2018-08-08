@@ -11,15 +11,16 @@ import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.databinding.FragmentTodayBinding
 import com.weilylab.xhuschedule.newPackage.base.BaseBottomNavigationFragment
 import com.weilylab.xhuschedule.newPackage.config.Status.*
+import com.weilylab.xhuschedule.newPackage.repository.BottomNavigationRepository
 import com.weilylab.xhuschedule.newPackage.ui.adapter.FragmentTodayRecyclerViewAdapter
 import com.weilylab.xhuschedule.newPackage.utils.CalendarUtil
+import com.weilylab.xhuschedule.newPackage.utils.LayoutRefreshConfigUtil
 import com.weilylab.xhuschedule.newPackage.utils.rxAndroid.PackageData
 import com.weilylab.xhuschedule.newPackage.utils.rxAndroid.RxObservable
 import com.weilylab.xhuschedule.newPackage.utils.rxAndroid.RxObserver
 import com.weilylab.xhuschedule.newPackage.viewModel.BottomNavigationViewModel
 import com.zhuangfei.timetable.model.Schedule
 import vip.mystery0.logs.Logs
-import java.util.ArrayList
 
 class TodayFragment : BaseBottomNavigationFragment(R.layout.fragment_today) {
 
@@ -30,16 +31,18 @@ class TodayFragment : BaseBottomNavigationFragment(R.layout.fragment_today) {
 	private lateinit var viewModel: BottomNavigationViewModel
 	private lateinit var fragmentTodayBinding: FragmentTodayBinding
 	private lateinit var adapter: FragmentTodayRecyclerViewAdapter
-	private val list = ArrayList<Schedule>()
 
 	private val todayCourseListObserver = Observer<PackageData<List<Schedule>>> {
 		when (it.status) {
 			Content -> {
 				if (it.data != null) {
-					list.clear()
-					list.addAll(it.data)
+					adapter.items.clear()
+					adapter.items.addAll(it.data)
 					adapter.notifyDataSetChanged()
 					hideNoDataLayout()
+					it.data.forEach { s ->
+						Logs.im(s.name, s.start, s.teacher)
+					}
 				}
 			}
 			Empty -> showNoDataLayout()
@@ -58,7 +61,7 @@ class TodayFragment : BaseBottomNavigationFragment(R.layout.fragment_today) {
 	override fun initView() {
 		initViewModel()
 		fragmentTodayBinding.recyclerView.layoutManager = LinearLayoutManager(activity)
-		adapter = FragmentTodayRecyclerViewAdapter(activity, list)
+		adapter = FragmentTodayRecyclerViewAdapter(activity)
 		fragmentTodayBinding.recyclerView.adapter = adapter
 	}
 
@@ -82,6 +85,15 @@ class TodayFragment : BaseBottomNavigationFragment(R.layout.fragment_today) {
 		adapter.setOnItemClickListener { _, course ->
 			viewModel.showCourse.value = arrayListOf(course)
 			true
+		}
+	}
+
+	override fun onResume() {
+		super.onResume()
+		if (LayoutRefreshConfigUtil.isRefreshTodayFragment) {
+			if (!LayoutRefreshConfigUtil.isRefreshBottomNavigationActivity && !LayoutRefreshConfigUtil.isRefreshTableFragment)
+				BottomNavigationRepository.queryCacheCourses(viewModel)
+			LayoutRefreshConfigUtil.isRefreshTodayFragment = false
 		}
 	}
 

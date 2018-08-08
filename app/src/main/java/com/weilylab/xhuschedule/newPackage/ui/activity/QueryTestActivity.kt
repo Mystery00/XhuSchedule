@@ -9,7 +9,6 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.newPackage.base.XhuBaseActivity
-import com.weilylab.xhuschedule.newPackage.config.Status
 import com.weilylab.xhuschedule.newPackage.config.Status.*
 import com.weilylab.xhuschedule.newPackage.model.Test
 import com.weilylab.xhuschedule.newPackage.repository.TestRepository
@@ -27,15 +26,14 @@ class QueryTestActivity : XhuBaseActivity(R.layout.activity_query_test) {
 	private lateinit var queryTestViewModel: QueryTestViewModel
 	private lateinit var dialog: Dialog
 	private lateinit var queryTestRecyclerViewAdapter: QueryTestRecyclerViewAdapter
-	private val queryTestList = ArrayList<Test>()
 
 	private val queryTestListObserver = Observer<PackageData<List<Test>>> {
 		when (it.status) {
 			Loading -> showDialog()
 			Content -> {
 				hideDialog()
-				queryTestList.clear()
-				queryTestList.addAll(it.data!!)
+				queryTestRecyclerViewAdapter.items.clear()
+				queryTestRecyclerViewAdapter.items.addAll(it.data!!)
 				queryTestRecyclerViewAdapter.notifyDataSetChanged()
 			}
 			Error -> {
@@ -58,7 +56,7 @@ class QueryTestActivity : XhuBaseActivity(R.layout.activity_query_test) {
 		val dividerItemDecoration = DividerItemDecoration(this, DividerItemDecoration.VERTICAL)
 		dividerItemDecoration.setDrawable(ContextCompat.getDrawable(this, R.drawable.divider_query_test)!!)
 		recyclerView.addItemDecoration(dividerItemDecoration)
-		queryTestRecyclerViewAdapter = QueryTestRecyclerViewAdapter(this, queryTestList)
+		queryTestRecyclerViewAdapter = QueryTestRecyclerViewAdapter(this)
 		recyclerView.adapter = queryTestRecyclerViewAdapter
 	}
 

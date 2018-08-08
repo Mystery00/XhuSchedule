@@ -90,4 +90,8 @@ object UserUtil {
 					}
 				})
 	}
+
+	fun findMainStudent(list: List<Student>?): Student? = list?.firstOrNull {
+		it.isMain
+	}
 }

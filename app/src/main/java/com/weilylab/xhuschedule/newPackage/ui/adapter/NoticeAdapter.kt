@@ -34,23 +34,13 @@
 package com.weilylab.xhuschedule.newPackage.ui.adapter
 
 import android.content.Context
-import androidx.recyclerview.widget.RecyclerView
-import android.view.LayoutInflater
-import android.view.ViewGroup
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.newPackage.model.Notice
 import com.weilylab.xhuschedule.databinding.ItemNoticeBinding
-import vip.mystery0.tools.base.BaseRecyclerViewAdapter
+import vip.mystery0.tools.base.BaseBindingRecyclerViewAdapter
 
-class NoticeAdapter(private val context: Context, list: ArrayList<Notice>) : BaseRecyclerViewAdapter<NoticeAdapter.ViewHolder, Notice>(context, R.layout.item_notice, list) {
-	override fun setItemView(holder: ViewHolder, position: Int, data: Notice) {
-		holder.binding.notice = data
+class NoticeAdapter(private val context: Context) : BaseBindingRecyclerViewAdapter<Notice, ItemNoticeBinding>(R.layout.item_notice) {
+	override fun setItemView(binding: ItemNoticeBinding, position: Int, data: Notice) {
+		binding.notice = data
 	}
-
-	override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-		val binding = ItemNoticeBinding.inflate(LayoutInflater.from(context), parent, false)
-		return ViewHolder(binding)
-	}
-
-	class ViewHolder(val binding: ItemNoticeBinding) : RecyclerView.ViewHolder(binding.root)
 }

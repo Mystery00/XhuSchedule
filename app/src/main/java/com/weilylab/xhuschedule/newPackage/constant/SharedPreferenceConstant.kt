@@ -13,4 +13,5 @@ object SharedPreferenceConstant {
 	const val FIELD_CONFIG_FIRST_ENTER = "config_first_enter"
 	const val FIELD_START_DATE_TIME = "config_start_date_time"
 	const val FIELD_ENABLE_MULTI_USER_MODE = "config_enable_multi_user_mode"
+	const val FIELD_SHOW_NOT_WEEK = "config_show_not_week"
 }

@@ -56,7 +56,7 @@ import vip.mystery0.logs.Logs
 import vip.mystery0.tools.base.BaseRecyclerViewAdapter
 import java.io.InputStreamReader
 
-class OperationAdapter(private val context: Context, val list: ArrayList<Operation> = ArrayList()) : BaseRecyclerViewAdapter<OperationAdapter.ViewHolder, Operation>(context, R.layout.item_operation, list) {
+class OperationAdapter(private val context: Context) : BaseRecyclerViewAdapter<OperationAdapter.ViewHolder, Operation>(R.layout.item_operation) {
 
 	init {
 		val titleArray = arrayOf(
