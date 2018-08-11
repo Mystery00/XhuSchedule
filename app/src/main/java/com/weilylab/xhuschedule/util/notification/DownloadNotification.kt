@@ -33,6 +33,7 @@
 
 package com.weilylab.xhuschedule.util.notification
 
+import android.annotation.SuppressLint
 import android.app.Notification
 import android.app.NotificationManager
 import android.content.Context
@@ -46,13 +47,14 @@ import vip.mystery0.tools.utils.FileTools
 object DownloadNotification {
     private const val NOTIFICATION_TAG = "Download"
     private const val NOTIFICATION_ID = 1
-    private lateinit var notificationBuilder: NotificationCompat.Builder
+    @SuppressLint("StaticFieldLeak")
+	private lateinit var notificationBuilder: NotificationCompat.Builder
 
     fun notify(context: Context, fileName: String) {
         notificationBuilder = NotificationCompat.Builder(context, Constants.NOTIFICATION_CHANNEL_ID_DOWNLOAD)
                 .setSound(null)
                 .setVibrate(null)
-                .setSmallIcon(R.drawable.ic_stat_update)
+                .setSmallIcon(R.drawable.ic_file_download_black_24dp)
                 .setContentTitle(context.getString(R.string.download_notification_title, fileName))
                 .setOngoing(true)
                 .setAutoCancel(true)

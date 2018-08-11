@@ -79,7 +79,6 @@ class DownloadService : IntentService("DownloadService") {
 	private lateinit var retrofit: Retrofit
 
 	override fun onHandleIntent(intent: Intent?) {
-		Logs.i("onHandleIntent: ")
 		val type = intent?.getStringExtra(Constants.INTENT_TAG_NAME_TYPE)
 		val qiniuPath = intent?.getStringExtra(Constants.INTENT_TAG_NAME_QINIU_PATH)
 		val file = File(getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS)!!.absolutePath + File.separator + qiniuPath)
@@ -89,14 +88,10 @@ class DownloadService : IntentService("DownloadService") {
 			Logs.i("onHandleIntent: 格式错误")
 			return
 		}
-		Logs.i("onStartCommand: type: $type")
-		Logs.i("onStartCommand: qiniuPath: $qiniuPath")
-		Logs.i("onStartCommand: " + file.absolutePath)
 		download(this, type!!, qiniuPath!!, file)
 	}
 
 	override fun onCreate() {
-		Logs.i("onCreate: ")
 		super.onCreate()
 
 		val listener = object : DownloadProgressListener {
@@ -137,7 +132,6 @@ class DownloadService : IntentService("DownloadService") {
 						XhuFileUtil.saveFile(inputStream, file)
 						if (type == Constants.DOWNLOAD_TYPE_PATCH) {
 							val applicationInfo = applicationContext.applicationInfo
-							Logs.i("patchAPK: " + applicationInfo.sourceDir)
 							val newApkPath = getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS)!!.absolutePath + File.separator + "apk" + File.separator + qiniuPath + ".apk"
 							val newAPK = File(newApkPath)
 							if (!newAPK.parentFile.exists())
@@ -153,7 +147,6 @@ class DownloadService : IntentService("DownloadService") {
 				.observeOn(AndroidSchedulers.mainThread())
 				.subscribe(object : Observer<InputStream> {
 					override fun onSubscribe(d: Disposable) {
-						Logs.i("onSubscribe: ")
 						DownloadNotification.notify(context, qiniuPath)
 					}
 
@@ -169,8 +162,6 @@ class DownloadService : IntentService("DownloadService") {
 							FileProvider.getUriForFile(context, getString(R.string.uri_authority), installFile)
 						else
 							Uri.fromFile(installFile)
-						Logs.i("onComplete: " + installFile.absolutePath)
-						Logs.i("onComplete: $uri")
 						installIntent.setDataAndType(uri, "application/vnd.android.package-archive")
 						startActivity(installIntent)
 						DownloadNotification.cancel(context)

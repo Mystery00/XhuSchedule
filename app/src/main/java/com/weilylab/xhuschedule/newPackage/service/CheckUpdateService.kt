@@ -11,7 +11,9 @@ import com.weilylab.xhuschedule.newPackage.api.PhpAPI
 import com.weilylab.xhuschedule.newPackage.factory.GsonFactory
 import com.weilylab.xhuschedule.newPackage.factory.RetrofitFactory
 import com.weilylab.xhuschedule.newPackage.model.Version
+import com.weilylab.xhuschedule.newPackage.ui.activity.BottomNavigationActivity
 import com.weilylab.xhuschedule.newPackage.utils.APPActivityManager
+import com.weilylab.xhuschedule.newPackage.utils.rxAndroid.RxObservable
 import com.weilylab.xhuschedule.newPackage.utils.rxAndroid.RxObserver
 import com.weilylab.xhuschedule.util.Constants
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -25,7 +27,7 @@ class CheckUpdateService : Service() {
 	override fun onCreate() {
 		super.onCreate()
 		val notification = NotificationCompat.Builder(this, Constants.NOTIFICATION_CHANNEL_ID_DEFAULT)
-				.setSmallIcon(R.drawable.ic_stat_push_message)
+				.setSmallIcon(R.drawable.ic_stat_init)
 				.setContentText(getString(R.string.hint_foreground_notification))
 				.setAutoCancel(true)
 				.setPriority(NotificationManagerCompat.IMPORTANCE_NONE)
@@ -43,8 +45,7 @@ class CheckUpdateService : Service() {
 				.observeOn(AndroidSchedulers.mainThread())
 				.subscribe(object : RxObserver<Version>() {
 					override fun onFinish(data: Version?) {
-//						if (data != null && data.versionCode.toInt() > getString(R.string.app_version_code).toInt())
-						if (data != null)
+						if (data != null && data.versionCode.toInt() > getString(R.string.app_version_code).toInt())
 							showUpdateDialog(data)
 						Thread(Runnable {
 							Thread.sleep(10000)
@@ -61,30 +62,43 @@ class CheckUpdateService : Service() {
 	}
 
 	private fun showUpdateDialog(version: Version) {
-		val activity = APPActivityManager.currentActivity() ?: return
-		val title = getString(R.string.dialog_update_title, getString(R.string.app_version_name), version.versionName)
-		val text = getString(R.string.dialog_update_text, version.updateLog)
-		val builder = AlertDialog.Builder(activity)
-				.setTitle(title)
-				.setMessage(text)
-				.setPositiveButton("${getString(R.string.action_download_apk)}(${FileTools.formatFileSize(version.apkSize.toLong())})") { _, _ ->
-					Logs.i("showUpdateDialog: 下载")
-					DownloadService.intentTo(activity, Constants.DOWNLOAD_TYPE_APK, version.apkQiniuPath)
+		RxObservable<Boolean>()
+				.doThings {
+					while (APPActivityManager.currentActivity() !is BottomNavigationActivity)
+						Thread.sleep(1000)
+					it.onFinish(true)
 				}
-		if (version.lastVersionCode == getString(R.string.app_version_code))
-			builder.setNegativeButton("${getString(R.string.action_download_patch)}(${FileTools.formatFileSize(version.patchSize.toLong())})") { _, _ ->
-				Logs.i("showUpdateDialog: 下载增量")
-				DownloadService.intentTo(activity, Constants.DOWNLOAD_TYPE_PATCH, version.patchQiniuPath)
-			}
-		if (version.must == "1")
-			builder.setOnCancelListener {
-				APPActivityManager.finishAllActivity()
-			}
-		else
-			builder.setNeutralButton(R.string.action_download_cancel) { _, _ ->
-				Logs.i("showUpdateDialog: 忽略")
-			}
-		if (APPActivityManager.currentActivity() != null)
-			builder.show()
+				.subscribe(object : RxObserver<Boolean>() {
+					override fun onFinish(data: Boolean?) {
+						if (data != null && data) {
+							val activity = APPActivityManager.currentActivity() ?: return
+							val title = getString(R.string.dialog_update_title, getString(R.string.app_version_name), version.versionName)
+							val text = getString(R.string.dialog_update_text, version.updateLog)
+							val builder = AlertDialog.Builder(activity)
+									.setTitle(title)
+									.setMessage(text)
+									.setPositiveButton("${getString(R.string.action_download_apk)}(${FileTools.formatFileSize(version.apkSize.toLong())})") { _, _ ->
+										DownloadService.intentTo(activity, Constants.DOWNLOAD_TYPE_APK, version.apkQiniuPath)
+									}
+							if (version.lastVersionCode == getString(R.string.app_version_code))
+								builder.setNegativeButton("${getString(R.string.action_download_patch)}(${FileTools.formatFileSize(version.patchSize.toLong())})") { _, _ ->
+									DownloadService.intentTo(activity, Constants.DOWNLOAD_TYPE_PATCH, version.patchQiniuPath)
+								}
+							if (version.must == "1")
+								builder.setOnCancelListener {
+									APPActivityManager.finishAllActivity()
+								}
+							else
+								builder.setNeutralButton(R.string.action_download_cancel) { _, _ ->
+									Logs.i("showUpdateDialog: 忽略")
+								}
+							builder.show()
+						}
+					}
+
+					override fun onError(e: Throwable) {
+						Logs.wtf("onError: ", e)
+					}
+				})
 	}
 }
