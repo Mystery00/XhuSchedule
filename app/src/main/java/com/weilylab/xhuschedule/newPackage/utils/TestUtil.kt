@@ -10,8 +10,6 @@ import com.weilylab.xhuschedule.newPackage.listener.RequestListener
 import com.weilylab.xhuschedule.newPackage.model.Student
 import com.weilylab.xhuschedule.newPackage.model.Test
 import com.weilylab.xhuschedule.newPackage.model.response.TestResponse
-import com.weilylab.xhuschedule.newPackage.utils.rxAndroid.PackageData
-import com.weilylab.xhuschedule.newPackage.utils.rxAndroid.RxLiveData
 import com.weilylab.xhuschedule.newPackage.utils.rxAndroid.RxObserver
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -21,7 +19,7 @@ object TestUtil {
 	private const val RETRY_TIME = 1
 
 	fun getTests(student: Student, doSaveListener: DoSaveListener<List<Test>>?, requestListener: RequestListener<List<Test>>, index: Int = 0) {
-		RetrofitFactory.tomcatRetrofit
+		RetrofitFactory.retrofit
 				.create(TestAPI::class.java)
 				.getTests(student.username)
 				.subscribeOn(Schedulers.newThread())

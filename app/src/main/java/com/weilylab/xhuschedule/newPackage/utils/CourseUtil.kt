@@ -14,7 +14,6 @@ import com.weilylab.xhuschedule.newPackage.repository.local.InitLocalDataSource
 import com.weilylab.xhuschedule.newPackage.utils.rxAndroid.RxObservable
 import com.weilylab.xhuschedule.newPackage.utils.rxAndroid.RxObserver
 import com.zhuangfei.timetable.model.Schedule
-import com.zhuangfei.timetable.model.ScheduleSupport
 import io.reactivex.Observable
 import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -27,7 +26,7 @@ object CourseUtil {
 	private const val RETRY_TIME = 1
 
 	fun getCourse(student: Student, year: String?, term: String?, doSaveListener: DoSaveListener<List<Course>>?, requestListener: RequestListener<List<Course>>, index: Int = 0) {
-		RetrofitFactory.tomcatRetrofit
+		RetrofitFactory.retrofit
 				.create(CourseAPI::class.java)
 				.getCourses(student.username, year, term)
 				.subscribeOn(Schedulers.newThread())
@@ -95,7 +94,7 @@ object CourseUtil {
 		resultArray.filter { !it }
 				.forEachIndexed { position, b ->
 					Logs.i("getCoursesForManyStudent: $b")
-					needRequestArray.add(RetrofitFactory.tomcatRetrofit
+					needRequestArray.add(RetrofitFactory.retrofit
 							.create(CourseAPI::class.java)
 							.getCourses(studentList[position].username, year, term)
 							.subscribeOn(Schedulers.newThread())
@@ -185,9 +184,8 @@ object CourseUtil {
 		val todayCourseList = ArrayList<Schedule>()
 		val weekIndex = CalendarUtil.getWeekIndex()
 		courseList.forEach {
-			if (it.day == weekIndex && it.weekList.contains(week)) {
+			if (it.day == weekIndex && it.weekList.contains(week))
 				todayCourseList.add(it)
-			}
 		}
 		todayCourseList.sortBy { it.start }
 		listener.invoke(todayCourseList)

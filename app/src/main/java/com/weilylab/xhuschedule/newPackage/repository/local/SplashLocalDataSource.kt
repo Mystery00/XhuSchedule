@@ -2,11 +2,9 @@ package com.weilylab.xhuschedule.newPackage.repository.local
 
 import android.content.Context
 import androidx.lifecycle.MediatorLiveData
-import androidx.lifecycle.MutableLiveData
 import com.weilylab.xhuschedule.newPackage.config.APP
 import com.weilylab.xhuschedule.newPackage.constant.SharedPreferenceConstant
 import com.weilylab.xhuschedule.newPackage.model.response.SplashResponse
-import com.weilylab.xhuschedule.newPackage.repository.SplashRepository
 import com.weilylab.xhuschedule.newPackage.repository.dataSource.SplashDataSource
 import com.weilylab.xhuschedule.newPackage.utils.rxAndroid.PackageData
 
@@ -36,9 +34,9 @@ object SplashLocalDataSource : SplashDataSource {
 				sharedPreferences.contains(SharedPreferenceConstant.FIELD_SPLASH_TIME)
 		splash.isEnable = isEnable
 		if (isEnable) {
-			splash.objectId = sharedPreferences.getString(SharedPreferenceConstant.FIELD_SPLASH_ID, "")
-			splash.splashUrl = sharedPreferences.getString(SharedPreferenceConstant.FIELD_SPLASH_URL, "")
-			splash.locationUrl = sharedPreferences.getString(SharedPreferenceConstant.FIELD_SPLASH_LOCATION_URL, "")
+			splash.objectId = sharedPreferences.getString(SharedPreferenceConstant.FIELD_SPLASH_ID, "")!!
+			splash.splashUrl = sharedPreferences.getString(SharedPreferenceConstant.FIELD_SPLASH_URL, "")!!
+			splash.locationUrl = sharedPreferences.getString(SharedPreferenceConstant.FIELD_SPLASH_LOCATION_URL, "")!!
 			splash.splashTime = sharedPreferences.getLong(SharedPreferenceConstant.FIELD_SPLASH_TIME, 0L)
 		}
 		return splash

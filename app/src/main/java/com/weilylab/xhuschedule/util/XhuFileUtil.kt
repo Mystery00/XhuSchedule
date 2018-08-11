@@ -54,8 +54,8 @@ import android.text.TextUtils
  * Created by myste.
  */
 object XhuFileUtil {
-	const val UI_IMAGE_BACKGROUND = Constants.FILE_NAME_IMG_BACKGROUND
-	const val UI_IMAGE_USER_IMG = Constants.FILE_NAME_IMG_PROFILE
+//	const val UI_IMAGE_BACKGROUND = Constants.FILE_NAME_IMG_BACKGROUND
+//	const val UI_IMAGE_USER_IMG = Constants.FILE_NAME_IMG_PROFILE
 
 	/**
 	 * 获取存储Student信息的File对象
@@ -127,16 +127,6 @@ object XhuFileUtil {
 	 */
 	fun getCETImageFile(fileName: String): File {
 		return File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), fileName)
-	}
-
-	/**
-	 * 获取存储的皮肤或目录
-	 */
-	fun getSkinPath(skinName: String = ""): File {
-		val dir = Environment.getExternalStoragePublicDirectory(Constants.SKIN_DIR_NAME)
-		if (!dir.exists())
-			dir.mkdirs()
-		return File(dir, skinName)
 	}
 
 	fun filterString(name: String): String {

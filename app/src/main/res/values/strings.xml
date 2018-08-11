@@ -200,10 +200,6 @@
 	<string name="dialog_edit_color_picker">选择颜色</string>
 	<string name="dialog_edit_item_location">地点</string>
 
-	<string name="dialog_update_title">新版本更新 %1$s => %2$s</string>
-	<string name="dialog_update_content">本次更新包大小为%1$s,增量更新包大小为%2$s。\n点击通知下载安装包</string>
-	<string name="dialog_update_text">更新日志：\n %1$s</string>
-
 	<string name="showcase_today">在这里，您可以查看当天的课程</string>
 	<string name="showcase_week">在这里，您可以查看本周的课程</string>
 	<string name="showcase_sync">点击这里，可以从教务系统重新同步数据</string>
@@ -259,6 +255,10 @@
 	<string name="hint_dialog_get_tests">获取考试数据中……</string>
 	<string name="hint_dialog_get_notices">获取公告信息中……</string>
 	<string name="hint_dialog_feedback">正在上传数据……</string>
+
+	<string name="dialog_update_title">新版本更新 %1$s => %2$s</string>
+	<string name="dialog_update_content">本次更新包大小为%1$s,增量更新包大小为%2$s。\n点击通知下载安装包</string>
+	<string name="dialog_update_text">更新日志：\n %1$s</string>
 
 	<string name="hint_query_test_date">考试日期：%1$s</string>
 	<string name="hint_query_test_time">考试时间：%1$s</string>

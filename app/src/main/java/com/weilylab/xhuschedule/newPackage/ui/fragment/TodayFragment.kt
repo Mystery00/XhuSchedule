@@ -40,9 +40,6 @@ class TodayFragment : BaseBottomNavigationFragment(R.layout.fragment_today) {
 					adapter.items.addAll(it.data)
 					adapter.notifyDataSetChanged()
 					hideNoDataLayout()
-					it.data.forEach { s ->
-						Logs.im(s.name, s.start, s.teacher)
-					}
 				}
 			}
 			Empty -> showNoDataLayout()
@@ -72,12 +69,12 @@ class TodayFragment : BaseBottomNavigationFragment(R.layout.fragment_today) {
 
 	private fun showNoDataLayout() {
 		fragmentTodayBinding.nullDataView.visibility = View.VISIBLE
-		fragmentTodayBinding.recyclerView.visibility = View.GONE
+		fragmentTodayBinding.dataView.visibility = View.GONE
 	}
 
 	private fun hideNoDataLayout() {
 		fragmentTodayBinding.nullDataView.visibility = View.GONE
-		fragmentTodayBinding.recyclerView.visibility = View.VISIBLE
+		fragmentTodayBinding.dataView.visibility = View.VISIBLE
 	}
 
 	override fun monitor() {

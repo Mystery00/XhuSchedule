@@ -19,7 +19,7 @@ object NoticeUtil {
 	private const val RETRY_TIME = 1
 
 	fun getNotice(platform: String?, doSaveListener: DoSaveListener<List<Notice>>, requestListener: RequestListener<List<Notice>>, index: Int = 0) {
-		RetrofitFactory.tomcatRetrofit
+		RetrofitFactory.retrofit
 				.create(NoticeAPI::class.java)
 				.getNotices(platform)
 				.subscribeOn(Schedulers.newThread())

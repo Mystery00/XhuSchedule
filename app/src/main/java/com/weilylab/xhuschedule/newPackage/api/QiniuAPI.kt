@@ -1,5 +1,5 @@
 /*
- * Created by Mystery0 on 18-2-21 下午9:12.
+ * Created by Mystery0 on 18-2-27 下午6:22.
  * Copyright (c) 2018. All Rights reserved.
  *
  *                    =====================================================
@@ -28,62 +28,19 @@
  *                    =                                                   =
  *                    =====================================================
  *
- * Last modified 18-2-21 下午9:11
+ * Last modified 18-2-27 下午6:22
  */
 
-package com.weilylab.xhuschedule.newPackage.ui.activity
+package com.weilylab.xhuschedule.newPackage.api
 
-import android.content.Context
-import android.content.Intent
-import android.view.MenuItem
-import android.preference.PreferenceFragment
-import com.weilylab.xhuschedule.R
-import com.weilylab.xhuschedule.newPackage.base.XhuBaseActivity
-import com.weilylab.xhuschedule.newPackage.ui.fragment.settings.AccountSettingsFragment
-import com.weilylab.xhuschedule.newPackage.ui.fragment.settings.ClassSettingsFragment
-import com.weilylab.xhuschedule.newPackage.utils.APPActivityManager
-import kotlinx.android.synthetic.main.activity_settings.*
+import io.reactivex.Observable
+import okhttp3.ResponseBody
+import retrofit2.http.GET
+import retrofit2.http.Path
+import retrofit2.http.Streaming
 
-class SettingsActivity : XhuBaseActivity(R.layout.activity_settings) {
-	companion object {
-		private const val INTENT_FRAGMENT = "intent_fragment"
-		const val TYPE_ACCOUNT = 31
-		const val TYPE_CLASS = 32
-
-		fun intentTo(context: Context?, type: Int) {
-			val intent = Intent(context, SettingsActivity::class.java)
-			intent.putExtra(INTENT_FRAGMENT, type)
-			context?.startActivity(intent)
-		}
-	}
-
-	override fun initView() {
-		super.initView()
-		fragmentManager.beginTransaction()
-				.replace(R.id.content_wrapper, getFragment())
-				.commit()
-		setSupportActionBar(toolbar)
-		supportActionBar?.setDisplayHomeAsUpEnabled(true)
-	}
-
-	private fun getFragment(): PreferenceFragment {
-		return when (intent.getIntExtra(INTENT_FRAGMENT, 0)) {
-			TYPE_ACCOUNT -> AccountSettingsFragment()
-			TYPE_CLASS -> ClassSettingsFragment()
-			else -> throw NullPointerException("null")
-		}
-	}
-
-	override fun onOptionsItemSelected(item: MenuItem): Boolean {
-		when (item.itemId) {
-			android.R.id.home ->
-				onBackPressed()
-		}
-		return true
-	}
-
-	override fun onDestroy() {
-		super.onDestroy()
-		APPActivityManager.finishActivity(this)
-	}
+interface QiniuAPI {
+    @Streaming
+    @GET("/{path}")
+    fun download(@Path("path") path: String): Observable<ResponseBody>
 }

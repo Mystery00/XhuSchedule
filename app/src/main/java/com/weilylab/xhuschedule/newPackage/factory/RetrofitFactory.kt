@@ -29,20 +29,14 @@ object RetrofitFactory {
 					.setLevel(HttpLoggingInterceptor.Level.BODY))
 			.build()
 
-	val tomcatRetrofit = Retrofit.Builder()
+	val retrofit = Retrofit.Builder()
 			.baseUrl("https://xhuschedule.mostpan.com")
 			.client(client)
 			.addCallAdapterFactory(RxJava2CallAdapterFactory.create())
 			.build()!!
 
-	val phpRetrofit = Retrofit.Builder()
-			.baseUrl("http://xhuschedule.mostpan.com:9783")
-			.client(client)
-			.addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-			.build()!!
-
-	val imgRetrofit = Retrofit.Builder()
-			.baseUrl("http://download.xhuschedule.mostpan.com")
+	val qiniuRetrofit = Retrofit.Builder()
+			.baseUrl("https://download.xhuschedule.mostpan.com")
 			.client(client)
 			.addCallAdapterFactory(RxJava2CallAdapterFactory.create())
 			.build()!!

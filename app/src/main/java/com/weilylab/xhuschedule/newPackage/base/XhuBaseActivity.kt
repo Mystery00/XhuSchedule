@@ -36,7 +36,7 @@ package com.weilylab.xhuschedule.newPackage.base
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatDelegate
-import com.weilylab.xhuschedule.util.APPActivityManager
+import com.weilylab.xhuschedule.newPackage.utils.APPActivityManager
 import vip.mystery0.tools.base.BaseActivity
 
 abstract class XhuBaseActivity(layoutId: Int?) : BaseActivity(layoutId) {

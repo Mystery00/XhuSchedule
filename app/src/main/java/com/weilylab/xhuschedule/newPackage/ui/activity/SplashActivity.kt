@@ -37,15 +37,17 @@ import android.content.Intent
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.weilylab.xhuschedule.newPackage.base.XhuBaseActivity
+import com.weilylab.xhuschedule.newPackage.config.APP
 import com.weilylab.xhuschedule.newPackage.config.Status
 import com.weilylab.xhuschedule.newPackage.constant.IntentConstant
 import com.weilylab.xhuschedule.newPackage.model.response.SplashResponse
 import com.weilylab.xhuschedule.newPackage.repository.SplashRepository
+import com.weilylab.xhuschedule.newPackage.service.CheckUpdateService
 import com.weilylab.xhuschedule.newPackage.utils.ConfigurationUtil
 import com.weilylab.xhuschedule.newPackage.utils.FileUtil
 import com.weilylab.xhuschedule.newPackage.utils.rxAndroid.PackageData
 import com.weilylab.xhuschedule.newPackage.viewModel.SplashViewModel
-import com.weilylab.xhuschedule.service.DownloadSplashIntentService
+import com.weilylab.xhuschedule.newPackage.service.DownloadSplashIntentService
 import vip.mystery0.logs.Logs
 
 /**
@@ -56,7 +58,6 @@ class SplashActivity : XhuBaseActivity(null) {
 
 	private val splashObserver = Observer<PackageData<SplashResponse.Splash>> {
 		when (it.status) {
-			Status.Loading -> Logs.i("loading")
 			Status.Empty -> gotoMain()
 			Status.Error -> {
 				Logs.e("splashObserver", it.error)
@@ -66,7 +67,6 @@ class SplashActivity : XhuBaseActivity(null) {
 				todo(it.data!!)
 			}
 		}
-
 	}
 
 	override fun initView() {
@@ -81,11 +81,8 @@ class SplashActivity : XhuBaseActivity(null) {
 	override fun initData() {
 		super.initData()
 		initViewModel()
-//		ScheduleHelper.setTrigger(this)
-//		ScheduleHelper.checkScreenWidth(this)
-//		if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP)
-//			ScheduleHelper.scheduleJob(this)
 		SplashRepository.requestSplash(splashViewModel)
+		startService(Intent(APP.context, CheckUpdateService::class.java))
 	}
 
 	private fun initViewModel() {

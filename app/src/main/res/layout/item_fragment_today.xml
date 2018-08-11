@@ -13,32 +13,21 @@
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content">
 
-		<View
-			android:id="@+id/line"
-			android:layout_width="1dp"
-			android:layout_height="0dp"
-			android:layout_marginStart="8dp"
-			android:background="#dfdfdf"
-			app:layout_constraintBottom_toBottomOf="parent"
-			app:layout_constraintStart_toStartOf="parent"
-			app:layout_constraintTop_toTopOf="parent" />
-
 		<ImageView
 			android:id="@+id/point"
 			android:layout_width="8dp"
 			android:layout_height="8dp"
 			android:contentDescription="@string/app_name"
-			app:layout_constraintBottom_toBottomOf="@id/line"
-			app:layout_constraintEnd_toEndOf="@id/line"
-			app:layout_constraintStart_toStartOf="@id/line"
-			app:layout_constraintTop_toTopOf="@id/line"
+			app:layout_constraintBottom_toBottomOf="@id/cardView"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintTop_toTopOf="@id/cardView"
 			app:srcCompat="@drawable/ic_point" />
 
 		<androidx.constraintlayout.widget.ConstraintLayout
 			android:id="@+id/cardView"
 			android:layout_width="0dp"
 			android:layout_height="100dp"
-			android:layout_marginStart="8dp"
+			android:layout_marginStart="16dp"
 			android:layout_marginTop="8dp"
 			android:layout_marginEnd="16dp"
 			android:layout_marginBottom="8dp"
@@ -46,7 +35,7 @@
 			android:padding="8dp"
 			app:layout_constraintBottom_toBottomOf="parent"
 			app:layout_constraintEnd_toEndOf="parent"
-			app:layout_constraintStart_toEndOf="@id/line"
+			app:layout_constraintStart_toStartOf="parent"
 			app:layout_constraintTop_toTopOf="parent">
 
 			<ImageView

@@ -111,9 +111,14 @@
 			android:label="@string/title_activity_query_test"
 			android:screenOrientation="portrait"
 			android:theme="@style/AppTheme.NoActionBar" />
+		<activity
+			android:name=".newPackage.ui.activity.FeedbackActivity"
+			android:label="@string/title_activity_feedback"
+			android:screenOrientation="portrait"
+			android:theme="@style/AppTheme.NoActionBar" />
 
 		<service android:name=".service.UpdateService" />
-		<service android:name=".service.DownloadService" />
+		<service android:name=".newPackage.service.DownloadService" />
 		<service android:name=".service.WidgetLastActionService" />
 		<service android:name=".service.WidgetNextActionService" />
 		<service android:name=".service.WidgetInitService" />
@@ -205,16 +210,15 @@
 		<!-- 腾讯开放平台 -->
 
 		<service
-			android:name=".service.DownloadSplashIntentService"
+			android:name=".newPackage.service.DownloadSplashIntentService"
 			android:exported="false" />
 		<service
 			android:name=".service.CheckJobService"
 			android:permission="android.permission.BIND_JOB_SERVICE" />
-
-		<activity
-			android:name=".newPackage.ui.activity.FeedbackActivity"
-			android:label="@string/title_activity_feedback"
-			android:theme="@style/AppTheme"></activity>
+		<service
+			android:name=".newPackage.service.CheckUpdateService"
+			android:enabled="true"
+			android:exported="false"></service>
 	</application>
 
 </manifest>

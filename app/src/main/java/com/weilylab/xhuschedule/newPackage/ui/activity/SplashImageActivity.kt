@@ -44,7 +44,6 @@ import com.weilylab.xhuschedule.newPackage.base.XhuBaseActivity
 import com.weilylab.xhuschedule.newPackage.model.response.SplashResponse
 import com.weilylab.xhuschedule.newPackage.repository.SplashRepository
 import com.weilylab.xhuschedule.newPackage.utils.FileUtil
-import com.weilylab.xhuschedule.util.Settings
 import kotlinx.android.synthetic.main.activity_splash_image.*
 import java.io.File
 import java.util.*
@@ -60,7 +59,6 @@ class SplashImageActivity : XhuBaseActivity(R.layout.activity_splash_image) {
 
 	override fun initData() {
 		super.initData()
-		splash = SplashRepository.getSplash()
 		if (!splash.isEnable) {
 			gotoMain()
 			return
@@ -74,6 +72,7 @@ class SplashImageActivity : XhuBaseActivity(R.layout.activity_splash_image) {
 
 	override fun initView() {
 		super.initView()
+		splash = SplashRepository.getSplash()
 		Glide.with(this)
 				.asBitmap()
 				.load(splashFile)
@@ -84,10 +83,10 @@ class SplashImageActivity : XhuBaseActivity(R.layout.activity_splash_image) {
 			override fun run() {
 				gotoMain()
 			}
-		}, Settings.splashTime)
+		}, splash.splashTime)
 		imageView.setOnClickListener {
-			if (Settings.splashLocationUrl != "")
-				startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(Settings.splashLocationUrl)))
+			if (splash.locationUrl != "")
+				startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(splash.locationUrl)))
 		}
 		button.setOnClickListener {
 			timer.cancel()

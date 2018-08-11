@@ -22,7 +22,7 @@ object UserUtil {
 	private const val RETRY_TIME = 1
 
 	fun login(student: Student, doSaveListener: DoSaveListener<Student>?, requestListener: RequestListener<Boolean>) {
-		RetrofitFactory.tomcatRetrofit
+		RetrofitFactory.retrofit
 				.create(UserAPI::class.java)
 				.autoLogin(student.username, student.password)
 				.subscribeOn(Schedulers.newThread())
@@ -51,7 +51,7 @@ object UserUtil {
 	}
 
 	fun getInfo(student: Student, doSaveListener: DoSaveListener<StudentInfo>?, requestListener: RequestListener<StudentInfo>, index: Int = 0) {
-		RetrofitFactory.tomcatRetrofit
+		RetrofitFactory.retrofit
 				.create(UserAPI::class.java)
 				.getInfo(student.username)
 				.subscribeOn(Schedulers.newThread())
@@ -94,7 +94,7 @@ object UserUtil {
 	}
 
 	fun feedback(student: Student, requestListener: RequestListener<Boolean>, appVersion: String, systemVersion: String, manufacturer: String, model: String, rom: String, other: String, message: String, index: Int = 0) {
-		RetrofitFactory.tomcatRetrofit
+		RetrofitFactory.retrofit
 				.create(FeedbackAPI::class.java)
 				.feedback(student.username, appVersion, systemVersion, manufacturer, model, rom, other, message)
 				.subscribeOn(Schedulers.newThread())

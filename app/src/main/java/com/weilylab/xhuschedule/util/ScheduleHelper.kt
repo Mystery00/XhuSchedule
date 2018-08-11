@@ -46,8 +46,6 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import com.google.gson.Gson
 import com.weilylab.xhuschedule.R
-import com.weilylab.xhuschedule.receiver.AlarmReceiver
-import com.weilylab.xhuschedule.service.CheckJobService
 import com.weilylab.xhuschedule.newPackage.interceptor.LoadCookiesInterceptor
 import com.weilylab.xhuschedule.newPackage.interceptor.SaveCookiesInterceptor
 import okhttp3.OkHttpClient
@@ -135,55 +133,5 @@ object ScheduleHelper {
 		channel.description = channelDescription
 		channel.lightColor = Color.GREEN
 		return channel
-	}
-
-	fun setTrigger(context: Context) {
-		val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-		val alarmIntent = Intent(context, AlarmReceiver::class.java)
-		val pendingIntent = PendingIntent.getBroadcast(context, 0, alarmIntent, 0)
-		alarmManager.cancel(pendingIntent)//关闭定时器
-		if (!Settings.isNotificationTomorrowEnable && Settings.isNotificationExamEnable)
-			return
-		//设置定时器
-		val triggerAtTime = CalendarUtil.getNotificationTriggerTime()
-		if (Settings.notificationExactTime)
-			alarmManager.setExact(AlarmManager.RTC_WAKEUP, triggerAtTime, pendingIntent)
-		else
-			alarmManager.set(AlarmManager.RTC_WAKEUP, triggerAtTime, pendingIntent)
-	}
-
-	fun checkScreenWidth(context: Context) {
-		scheduleItemWidth = if (Settings.customTableItemWidth != -1)
-			DensityTools.dp2px(context, Settings.customTableItemWidth.toFloat())
-		else {
-			val navWidth = context.resources.getDimensionPixelSize(R.dimen.nav_width)
-			val lineWidth = context.resources.getDimensionPixelSize(R.dimen.divider_size)
-			(DensityTools.getScreenWidth(context) - navWidth - lineWidth) / 7
-		}
-	}
-
-	fun isConnectInternet(context: Context): Boolean {
-		val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-		val activeNetworkInfo = connectivityManager.activeNetworkInfo
-		return activeNetworkInfo != null && activeNetworkInfo.isConnected
-	}
-
-
-	@RequiresApi(Build.VERSION_CODES.LOLLIPOP)
-	fun scheduleJob(context: Context) {
-		Logs.i(TAG, "scheduleJob: ")
-		val jobScheduler = context.getSystemService(Context.JOB_SCHEDULER_SERVICE) as JobScheduler
-		jobScheduler.schedule(getJobInfo(context))
-	}
-
-	@RequiresApi(Build.VERSION_CODES.LOLLIPOP)
-	private fun getJobInfo(context: Context): JobInfo {
-		val builder = JobInfo.Builder(1, ComponentName(context, CheckJobService::class.java))
-		builder.setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY)
-		builder.setPersisted(true)
-		builder.setRequiresCharging(false)
-		builder.setRequiresDeviceIdle(false)
-		builder.setPeriodic(10000)
-		return builder.build()
 	}
 }

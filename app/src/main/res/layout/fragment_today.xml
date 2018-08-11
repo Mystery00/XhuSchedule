@@ -9,10 +9,24 @@
 		android:layout_height="match_parent"
 		tools:context=".newPackage.ui.fragment.TodayFragment">
 
-		<androidx.recyclerview.widget.RecyclerView
-			android:id="@+id/recyclerView"
+		<FrameLayout
+			android:id="@+id/dataView"
 			android:layout_width="match_parent"
-			android:layout_height="match_parent" />
+			android:layout_height="match_parent">
+
+			<View
+				android:id="@+id/line"
+				android:layout_width="1dp"
+				android:layout_height="match_parent"
+				android:layout_marginStart="8dp"
+				android:background="#dfdfdf" />
+
+			<androidx.recyclerview.widget.RecyclerView
+				android:id="@+id/recyclerView"
+				android:layout_width="match_parent"
+				android:layout_height="match_parent" />
+
+		</FrameLayout>
 
 		<FrameLayout
 			android:id="@+id/nullDataView"

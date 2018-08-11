@@ -1,604 +1,604 @@
-/*
- * Created by Mystery0 on 18-2-21 下午9:12.
- * Copyright (c) 2018. All Rights reserved.
- *
- *                    =====================================================
- *                    =                                                   =
- *                    =                       _oo0oo_                     =
- *                    =                      o8888888o                    =
- *                    =                      88" . "88                    =
- *                    =                      (| -_- |)                    =
- *                    =                      0\  =  /0                    =
- *                    =                    ___/`---'\___                  =
- *                    =                  .' \\|     |# '.                 =
- *                    =                 / \\|||  :  |||# \                =
- *                    =                / _||||| -:- |||||- \              =
- *                    =               |   | \\\  -  #/ |   |              =
- *                    =               | \_|  ''\---/''  |_/ |             =
- *                    =               \  .-\__  '-'  ___/-. /             =
- *                    =             ___'. .'  /--.--\  `. .'___           =
- *                    =          ."" '<  `.___\_<|>_/___.' >' "".         =
- *                    =         | | :  `- \`.;`\ _ /`;.`/ - ` : | |       =
- *                    =         \  \ `_.   \_ __\ /__ _/   .-` /  /       =
- *                    =     =====`-.____`.___ \_____/___.-`___.-'=====    =
- *                    =                       `=---='                     =
- *                    =     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~   =
- *                    =                                                   =
- *                    =               佛祖保佑         永无BUG              =
- *                    =                                                   =
- *                    =====================================================
- *
- * Last modified 18-2-21 下午9:11
- */
-
-package com.weilylab.xhuschedule.activity
-
-import android.animation.Animator
-import android.animation.ObjectAnimator
-import android.app.Activity
-import android.app.Dialog
-import android.content.Context
-import android.content.Intent
-import android.graphics.Point
-import android.graphics.drawable.Drawable
-import android.os.Build
-import com.google.android.material.snackbar.Snackbar
-import androidx.core.app.ActivityOptionsCompat
-import androidx.core.content.ContextCompat
-import androidx.viewpager.widget.ViewPager
-import androidx.appcompat.app.AlertDialog
-import androidx.recyclerview.widget.LinearLayoutManager
-import android.util.Base64
-import android.widget.Toast
-import com.getkeepsafe.taptargetview.TapTarget
-import com.getkeepsafe.taptargetview.TapTargetSequence
-import com.tencent.mm.opensdk.openapi.IWXAPI
-import com.tencent.mm.opensdk.openapi.WXAPIFactory
-import com.weilylab.xhuschedule.R
-import com.weilylab.xhuschedule.newPackage.ui.adapter.ViewPagerAdapter
-import com.weilylab.xhuschedule.adapter.WeekAdapter
-import com.weilylab.xhuschedule.classes.baseClass.Course
-import com.weilylab.xhuschedule.classes.baseClass.Profile
-import com.weilylab.xhuschedule.classes.baseClass.Student
-import com.weilylab.xhuschedule.classes.rt.GetCourseRT
-import com.weilylab.xhuschedule.fragment.ProfileFragment
-import com.weilylab.xhuschedule.fragment.TableFragment
-import com.weilylab.xhuschedule.fragment.TodayFragment
-import com.weilylab.xhuschedule.listener.GetCourseListener
-import com.weilylab.xhuschedule.listener.ProfileListener
-import com.weilylab.xhuschedule.newPackage.base.XhuBaseActivity
-import com.weilylab.xhuschedule.newPackage.ui.activity.LoginActivity
-import com.weilylab.xhuschedule.newPackage.ui.activity.SettingsActivity
-import com.weilylab.xhuschedule.service.UpdateService
-import com.weilylab.xhuschedule.util.*
-import com.weilylab.xhuschedule.util.widget.WidgetHelper
-import com.zyao89.view.zloading.ZLoadingDialog
-import com.zyao89.view.zloading.Z_TYPE
-import io.reactivex.Observable
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.observers.DisposableObserver
-import io.reactivex.schedulers.Schedulers
-import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.content_main.*
-import vip.mystery0.logs.Logs
-import vip.mystery0.tools.utils.DensityTools
-import java.io.File
-import java.net.UnknownHostException
-import java.util.*
-import kotlin.collections.ArrayList
-
-class MainActivity : XhuBaseActivity(R.layout.activity_main) {
-	companion object {
-		private const val ADD_ACCOUNT_CODE = 1
-		private const val ANIMATION_DURATION = 480L
-	}
-
-	val permissionWriteExternalCode = 20
-	val noticeActivityCode = 21
-	private lateinit var loadingDialog: Dialog
-	private lateinit var updateProfileDialog: Dialog
-	private lateinit var weekAdapter: WeekAdapter
-	private var mainStudent: Student? = null
-	private var weekAnimator: ObjectAnimator? = null
-	private var arrowDrawable: Drawable? = null
-	private var isTryRefreshData = false
-	private var isRefreshData = false
-	private var isWeekShow = false
-	private var lastPressBack = 0L
-	private var studentList = ArrayList<Student>()
-	private var weekList = ArrayList<ArrayList<ArrayList<Course>>>()
-	private val todayList = ArrayList<Course>()
-	private val animatorList = ArrayList<ObjectAnimator>()
-	private val todayFragment = TodayFragment.newInstance(todayList)
-	private val weekFragment = TableFragment.newInstance(weekList)
-	private val profileFragment = ProfileFragment.newInstance(Profile())
-	private var lastIndex = 0
-
-	private fun showUpdateLog() {
-		val sharedPreference = getSharedPreferences(Constants.SHARED_PREFERENCE_UPDATE_DATA, Context.MODE_PRIVATE)
-		if (sharedPreference.getInt(Constants.UPDATE_VERSION, 0) < getString(R.string.app_version_code).toInt()) {
-			var message = ""
-			resources.getStringArray(R.array.update_list)
-					.forEach { message += it + '\n' }
-			val dialog = AlertDialog.Builder(this)
-					.setTitle(getString(R.string.dialog_title_update_log, getString(R.string.app_version_name) + '-' + getString(R.string.app_version_code)))
-					.setMessage(message)
-					.setCancelable(false)
-					.setPositiveButton(android.R.string.ok, null)
-					.setOnDismissListener {
-						sharedPreference.edit().putInt(Constants.UPDATE_VERSION, getString(R.string.app_version_code).toInt()).apply()
-					}
-					.create()
-			if (APPActivityManager.currentActivity() == this)
-				dialog.show()
-		}
-	}
-
-	override fun onResume() {
-		super.onResume()
-		if (ScheduleHelper.isBackgroundChange) {
-			todayFragment.setBackground()
-			weekFragment.setBackground()
-		}
-		if (ScheduleHelper.isAvatarChange) {
-			profileFragment.setProfileImg()
-		}
-		if (ScheduleHelper.isUIChange) {
-			loadingDialog.show()
-			studentList.clear()
-			studentList.addAll(XhuFileUtil.getArrayFromFile(File(filesDir.absolutePath + File.separator + "data" + File.separator + "user"), Student::class.java))
-			updateAllView()
-		}
-		if (ScheduleHelper.isTableLayoutChange)
-			weekFragment.updateTableLayout(Settings.customTableItemWidth != -1)
-		ScheduleHelper.isBackgroundChange = false
-		ScheduleHelper.isUIChange = false
-		ScheduleHelper.isTableLayoutChange = false
-	}
-
-	override fun initView() {
-		super.initView()
-		arrowDrawable = ContextCompat.getDrawable(this@MainActivity, R.drawable.ms__arrow)
-		loadingDialog = ZLoadingDialog(this)
-				.setLoadingBuilder(Z_TYPE.DOUBLE_CIRCLE)
-				.setHintText(getString(R.string.hint_dialog_update_cache))
-				.setHintTextSize(16F)
-				.setCanceledOnTouchOutside(false)
-				.setCancelable(false)
-				.setLoadingColor(ContextCompat.getColor(this, R.color.colorAccent))
-				.setHintTextColor(ContextCompat.getColor(this, R.color.colorAccent))
-				.create()
-		updateProfileDialog = ZLoadingDialog(this)
-				.setLoadingBuilder(Z_TYPE.CIRCLE_CLOCK)
-				.setHintText(getString(R.string.hint_dialog_update_profile))
-				.setHintTextSize(16F)
-				.setCanceledOnTouchOutside(false)
-				.setCancelable(false)
-				.setLoadingColor(ContextCompat.getColor(this, R.color.colorAccent))
-				.setHintTextColor(ContextCompat.getColor(this, R.color.colorAccent))
-				.create()
-		initLayout()
-//		val todayInfoText = CalendarUtil.getTodayText()
-//		if (todayInfoText != Settings.isFirstEnterToday) {
-//			Logs.i( "initView: 这是今天的第一次运行")
-//			Settings.isFirstEnterToday = todayInfoText
-//			updateAllData()
-//		} else {
-//			Logs.i( "initView: 这不是今天的第一次运行")
-		updateAllView()
+///*
+// * Created by Mystery0 on 18-2-21 下午9:12.
+// * Copyright (c) 2018. All Rights reserved.
+// *
+// *                    =====================================================
+// *                    =                                                   =
+// *                    =                       _oo0oo_                     =
+// *                    =                      o8888888o                    =
+// *                    =                      88" . "88                    =
+// *                    =                      (| -_- |)                    =
+// *                    =                      0\  =  /0                    =
+// *                    =                    ___/`---'\___                  =
+// *                    =                  .' \\|     |# '.                 =
+// *                    =                 / \\|||  :  |||# \                =
+// *                    =                / _||||| -:- |||||- \              =
+// *                    =               |   | \\\  -  #/ |   |              =
+// *                    =               | \_|  ''\---/''  |_/ |             =
+// *                    =               \  .-\__  '-'  ___/-. /             =
+// *                    =             ___'. .'  /--.--\  `. .'___           =
+// *                    =          ."" '<  `.___\_<|>_/___.' >' "".         =
+// *                    =         | | :  `- \`.;`\ _ /`;.`/ - ` : | |       =
+// *                    =         \  \ `_.   \_ __\ /__ _/   .-` /  /       =
+// *                    =     =====`-.____`.___ \_____/___.-`___.-'=====    =
+// *                    =                       `=---='                     =
+// *                    =     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~   =
+// *                    =                                                   =
+// *                    =               佛祖保佑         永无BUG              =
+// *                    =                                                   =
+// *                    =====================================================
+// *
+// * Last modified 18-2-21 下午9:11
+// */
+//
+//package com.weilylab.xhuschedule.activity
+//
+//import android.animation.Animator
+//import android.animation.ObjectAnimator
+//import android.app.Activity
+//import android.app.Dialog
+//import android.content.Context
+//import android.content.Intent
+//import android.graphics.Point
+//import android.graphics.drawable.Drawable
+//import android.os.Build
+//import com.google.android.material.snackbar.Snackbar
+//import androidx.core.app.ActivityOptionsCompat
+//import androidx.core.content.ContextCompat
+//import androidx.viewpager.widget.ViewPager
+//import androidx.appcompat.app.AlertDialog
+//import androidx.recyclerview.widget.LinearLayoutManager
+//import android.util.Base64
+//import android.widget.Toast
+//import com.getkeepsafe.taptargetview.TapTarget
+//import com.getkeepsafe.taptargetview.TapTargetSequence
+//import com.tencent.mm.opensdk.openapi.IWXAPI
+//import com.tencent.mm.opensdk.openapi.WXAPIFactory
+//import com.weilylab.xhuschedule.R
+//import com.weilylab.xhuschedule.newPackage.ui.adapter.ViewPagerAdapter
+//import com.weilylab.xhuschedule.adapter.WeekAdapter
+//import com.weilylab.xhuschedule.classes.baseClass.Course
+//import com.weilylab.xhuschedule.classes.baseClass.Profile
+//import com.weilylab.xhuschedule.classes.baseClass.Student
+//import com.weilylab.xhuschedule.classes.rt.GetCourseRT
+//import com.weilylab.xhuschedule.fragment.ProfileFragment
+//import com.weilylab.xhuschedule.fragment.TableFragment
+//import com.weilylab.xhuschedule.fragment.TodayFragment
+//import com.weilylab.xhuschedule.listener.GetCourseListener
+//import com.weilylab.xhuschedule.listener.ProfileListener
+//import com.weilylab.xhuschedule.newPackage.base.XhuBaseActivity
+//import com.weilylab.xhuschedule.newPackage.ui.activity.LoginActivity
+//import com.weilylab.xhuschedule.newPackage.ui.activity.SettingsActivity
+//import com.weilylab.xhuschedule.service.UpdateService
+//import com.weilylab.xhuschedule.util.*
+//import com.weilylab.xhuschedule.util.widget.WidgetHelper
+//import com.zyao89.view.zloading.ZLoadingDialog
+//import com.zyao89.view.zloading.Z_TYPE
+//import io.reactivex.Observable
+//import io.reactivex.android.schedulers.AndroidSchedulers
+//import io.reactivex.observers.DisposableObserver
+//import io.reactivex.schedulers.Schedulers
+//import kotlinx.android.synthetic.main.activity_main.*
+//import kotlinx.android.synthetic.main.content_main.*
+//import vip.mystery0.logs.Logs
+//import vip.mystery0.tools.utils.DensityTools
+//import java.io.File
+//import java.net.UnknownHostException
+//import java.util.*
+//import kotlin.collections.ArrayList
+//
+//class MainActivity : XhuBaseActivity(R.layout.activity_main) {
+//	companion object {
+//		private const val ADD_ACCOUNT_CODE = 1
+//		private const val ANIMATION_DURATION = 480L
+//	}
+//
+//	val permissionWriteExternalCode = 20
+//	val noticeActivityCode = 21
+//	private lateinit var loadingDialog: Dialog
+//	private lateinit var updateProfileDialog: Dialog
+//	private lateinit var weekAdapter: WeekAdapter
+//	private var mainStudent: Student? = null
+//	private var weekAnimator: ObjectAnimator? = null
+//	private var arrowDrawable: Drawable? = null
+//	private var isTryRefreshData = false
+//	private var isRefreshData = false
+//	private var isWeekShow = false
+//	private var lastPressBack = 0L
+//	private var studentList = ArrayList<Student>()
+//	private var weekList = ArrayList<ArrayList<ArrayList<Course>>>()
+//	private val todayList = ArrayList<Course>()
+//	private val animatorList = ArrayList<ObjectAnimator>()
+//	private val todayFragment = TodayFragment.newInstance(todayList)
+//	private val weekFragment = TableFragment.newInstance(weekList)
+//	private val profileFragment = ProfileFragment.newInstance(Profile())
+//	private var lastIndex = 0
+//
+//	private fun showUpdateLog() {
+//		val sharedPreference = getSharedPreferences(Constants.SHARED_PREFERENCE_UPDATE_DATA, Context.MODE_PRIVATE)
+//		if (sharedPreference.getInt(Constants.UPDATE_VERSION, 0) < getString(R.string.app_version_code).toInt()) {
+//			var message = ""
+//			resources.getStringArray(R.array.update_list)
+//					.forEach { message += it + '\n' }
+//			val dialog = AlertDialog.Builder(this)
+//					.setTitle(getString(R.string.dialog_title_update_log, getString(R.string.app_version_name) + '-' + getString(R.string.app_version_code)))
+//					.setMessage(message)
+//					.setCancelable(false)
+//					.setPositiveButton(android.R.string.ok, null)
+//					.setOnDismissListener {
+//						sharedPreference.edit().putInt(Constants.UPDATE_VERSION, getString(R.string.app_version_code).toInt()).apply()
+//					}
+//					.create()
+//			if (APPActivityManager.currentActivity() == this)
+//				dialog.show()
 //		}
-		if (Settings.isFirstRun)
-			showcase()
-		if (Settings.autoCheckUpdate)
-			startService(Intent(this, UpdateService::class.java))
-	}
-
-	private fun initLayout() {
-		val viewPagerAdapter = ViewPagerAdapter(supportFragmentManager)
-		viewPagerAdapter.addFragment(todayFragment)
-		viewPagerAdapter.addFragment(weekFragment)
-//		viewPagerAdapter.addFragment(profileFragment)
-		viewpager.offscreenPageLimit = 2
-		viewpager.adapter = viewPagerAdapter
-
-		studentList.clear()
-		studentList.addAll(XhuFileUtil.getArrayFromFile(XhuFileUtil.getStudentListFile(this), Student::class.java))
-
-		weekAdapter = WeekAdapter(this, 1)
-		weekAdapter.setWeekChangeListener { week ->
-			ScheduleHelper.weekIndex = week + 1
-			weekAdapter.setWeekIndex(ScheduleHelper.weekIndex)
-			swipeLayout(bottomNavigationView.menu.getItem(viewpager.currentItem).itemId)
-			updateAllView(ScheduleHelper.weekIndex)
-		}
-		layout_week_recycler_view.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-		layout_week_recycler_view.adapter = weekAdapter
-		layout_week_recycler_view.scrollToPosition(0)
-		layout_week_recycler_view_internal.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-		layout_week_recycler_view_internal.adapter = weekAdapter
-		layout_week_recycler_view_internal.scrollToPosition(0)
-	}
-
-	override fun monitor() {
-		super.monitor()
-		bottomNavigationView.setOnNavigationItemSelectedListener { item ->
-			when (item.itemId) {
-				R.id.bottom_nav_today -> viewpager.currentItem = 0
-				R.id.bottom_nav_week -> viewpager.currentItem = 1
-				R.id.bottom_nav_profile -> viewpager.currentItem = 2
-			}
-			swipeLayout(item.itemId)
-			true
-		}
-		viewpager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
-			override fun onPageScrollStateChanged(state: Int) {
-			}
-
-			override fun onPageScrolled(position: Int, positionOffset: Float,
-										positionOffsetPixels: Int) {
-			}
-
-			override fun onPageSelected(position: Int) {
-				bottomNavigationView.menu.getItem(position).isChecked = true
-				swipeLayout(bottomNavigationView.menu.getItem(position).itemId)
-			}
-		})
-
-		action_sync.setOnClickListener {
-			if (isRefreshData)
-				return@setOnClickListener
-			isTryRefreshData = false
-			loadingDialog.setOnDismissListener {
-				isRefreshData = false
-			}
-			updateAllData()
-		}
-		action_settings.setOnClickListener {
-			if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-				startActivity(Intent(this, SettingsActivity::class.java))
-				overridePendingTransition(R.anim.animation_settings_in_enter, R.anim.animation_settings_in_exit)
-			} else {
-				ObjectAnimator.ofFloat(action_settings, Constants.ANIMATION_ROTATION, 0F, 360F).start()
-				startActivity(Intent(this, SettingsActivity::class.java), ActivityOptionsCompat.makeSceneTransitionAnimation(this).toBundle())
-			}
-		}
-		titleLayout.setOnClickListener {
-			//占位，在上层处理点击事件
-			Logs.i("initView: titleLayout")
-		}
-	}
-
-	fun updateAllView(week: Int = -1) {
-		ScheduleHelper.isAnalysisError = false
-		studentList.clear()
-		studentList.addAll(XhuFileUtil.getArrayFromFile(XhuFileUtil.getStudentListFile(this), Student::class.java))
-		if (studentList.size == 0) {
-			startActivityForResult(Intent(this, LoginActivity::class.java), ADD_ACCOUNT_CODE)
-			return
-		}
-		loadingDialog.show()
-		//清空数组
-		weekList.clear()
-		todayList.clear()
-		val array = ArrayList<Observable<Student>>()
-		val updateList = ArrayList<Student>()
-		if (Settings.isEnableMultiUserMode) {
-			studentList.forEach {
-				array.add(updateView(it, week))
-				updateList.add(it)
-			}
-			mainStudent = studentList[0]
-		} else {
-			var tempStudent: Student? = (0 until studentList.size)
-					.firstOrNull { studentList[it].isMain }
-					?.let { studentList[it] }
-			if (tempStudent == null)
-				tempStudent = studentList[0]
-			array.add(updateView(tempStudent, week))
-			updateList.add(tempStudent)
-			mainStudent = tempStudent
-		}
-		Observable.merge(array)
-				.subscribeOn(Schedulers.newThread())
-				.observeOn(AndroidSchedulers.mainThread())
-				.subscribe(object : DisposableObserver<Student>() {
-					override fun onComplete() {
-						loadingDialog.dismiss()
-						swipeLayout(bottomNavigationView.menu.getItem(viewpager.currentItem).itemId)
-						weekAdapter.setWeekIndex(ScheduleHelper.weekIndex)
-						layout_week_recycler_view.scrollToPosition(ScheduleHelper.weekIndex - 1)
-						layout_week_recycler_view_internal.scrollToPosition(ScheduleHelper.weekIndex - 1)
-						if (!Settings.isEnableMultiUserMode)
-							when (todayList.size) {
-								0 -> bottomNavigationView.menu.findItem(R.id.bottom_nav_today).setIcon(R.drawable.ic_sentiment_very_satisfied)
-								1 -> bottomNavigationView.menu.findItem(R.id.bottom_nav_today).setIcon(R.drawable.ic_sentiment_very_satisfied)
-								2 -> bottomNavigationView.menu.findItem(R.id.bottom_nav_today).setIcon(R.drawable.ic_sentiment_satisfied)
-								3 -> bottomNavigationView.menu.findItem(R.id.bottom_nav_today).setIcon(R.drawable.ic_sentiment_neutral)
-								4 -> bottomNavigationView.menu.findItem(R.id.bottom_nav_today).setIcon(R.drawable.ic_sentiment_dissatisfied)
-								else -> bottomNavigationView.menu.findItem(R.id.bottom_nav_today).setIcon(R.drawable.ic_sentiment_very_dissatisfied)
-							}
-						else
-							bottomNavigationView.menu.findItem(R.id.bottom_nav_today).setIcon(R.drawable.ic_sentiment_very_satisfied)
-						updateList.forEach {
-							weekList.addAll(CourseUtil.mergeCourses(weekList, it.weekCourses))
-							todayList.addAll(it.todayCourses)
-						}
-						weekFragment.refreshData()
-						todayFragment.refreshData()
-						isRefreshData = false
-						showUpdateLog()
-					}
-
-					override fun onError(e: Throwable) {
-						e.printStackTrace()
-						isRefreshData = false
-						loadingDialog.dismiss()
-						showUpdateLog()
-					}
-
-					override fun onNext(student: Student) {
-					}
-				})
-	}
-
-	private fun updateView(student: Student, week: Int): Observable<Student> {
-		return Observable.create<Student> { subscriber ->
-			val parentFile = XhuFileUtil.getCourseCacheParentFile(this)
-			if (!parentFile.exists())
-				parentFile.mkdirs()
-			val base64Name = XhuFileUtil.filterString(Base64.encodeToString(student.username.toByteArray(), Base64.DEFAULT))
-			//判断是否有缓存
-			val cacheResult = parentFile.listFiles().filter { it.name == base64Name }.size == 1
-			if (!cacheResult) {
-				subscriber.onNext(student)
-				subscriber.onComplete()
-				return@create
-			}
-			val oldFile = File(parentFile, base64Name)
-			if (!oldFile.exists()) {
-				subscriber.onNext(student)
-				subscriber.onComplete()
-				return@create
-			}
-			val tempArray = if (week != -1)
-				if (Settings.isShowNot)
-					CourseUtil.formatCourses(CourseUtil.getCoursesFromFile(oldFile), week)
-				else
-					CourseUtil.getWeekCourses(CourseUtil.getCoursesFromFile(oldFile), week)
-			else
-				if (Settings.isShowNot)
-					CourseUtil.formatCourses(CourseUtil.getCoursesFromFile(oldFile))
-				else
-					CourseUtil.getWeekCourses(CourseUtil.getCoursesFromFile(oldFile))
-			student.weekCourses.clear()
-			student.weekCourses.addAll(tempArray)
-			val todayArray = CourseUtil.getTodayCourses(CourseUtil.getCoursesFromFile(oldFile))
-			student.todayCourses.clear()
-			student.todayCourses.addAll(todayArray)
-			student.isReady = true
-			while (true) {
-				if (weekFragment.isReady() && todayFragment.isReady())
-					break
-				Thread.sleep(200)
-			}
-			subscriber.onComplete()
-		}
-	}
-
-	private fun updateAllData() {
-		Logs.i("updateAllData: ")
-		ObjectAnimator.ofFloat(action_sync, Constants.ANIMATION_ROTATION, 0F, 360F).setDuration(1000).start()
-		studentList.clear()
-		studentList.addAll(XhuFileUtil.getArrayFromFile(XhuFileUtil.getStudentListFile(this), Student::class.java))
-		if (studentList.size == 0) {
-			startActivityForResult(Intent(this, LoginActivity::class.java), ADD_ACCOUNT_CODE)
-			return
-		}
-		CourseUtil.getCoursesFromServer(this, null, null, object : GetCourseListener {
-			override fun start() {
-				loadingDialog.show()
-				todayList.clear()
-				isRefreshData = true
-			}
-
-			override fun got(studentList: ArrayList<Student>, rtList: ArrayList<GetCourseRT>) {
-				isRefreshData = false
-				XhuFileUtil.saveObjectToFile(studentList, XhuFileUtil.getStudentListFile(this@MainActivity))
-				sendBroadcast(Intent(Constants.ACTION_WIDGET_UPDATE_BROADCAST)
-						.putExtra(Constants.INTENT_TAG_NAME_TAG, WidgetHelper.ALL_TAG))
-				for (getCourseRT in rtList) {
-					when (getCourseRT.rt) {ConstantsCode.DONE, ConstantsCode.SERVER_COURSE_ANALYZE_ERROR -> {
-						if (getCourseRT.rt == ConstantsCode.SERVER_COURSE_ANALYZE_ERROR)
-							Snackbar.make(coordinatorLayoutView, R.string.hint_update_data_error, Snackbar.LENGTH_LONG).show()
-						else {
-							if (ScheduleHelper.isAnalysisError) {
-								Snackbar.make(coordinatorLayoutView, R.string.hint_analyze_error, Snackbar.LENGTH_LONG).show()
-							} else
-								Snackbar.make(coordinatorLayoutView, R.string.hint_update_data, Snackbar.LENGTH_SHORT).show()
-						}
-					}
-						ConstantsCode.ERROR_USERNAME, ConstantsCode.ERROR_PASSWORD -> {//前端信息错误
-							isRefreshData = false
-							Snackbar.make(coordinatorLayoutView, getString(R.string.hint_try_refresh_data_error, getCourseRT.msg), Snackbar.LENGTH_LONG)
-									.setAction(android.R.string.ok) {
-										startActivityForResult(Intent(this@MainActivity, LoginActivity::class.java), ADD_ACCOUNT_CODE)
-									}
-									.show()
-						}
-						ConstantsCode.ERROR_NOT_LOGIN -> Logs.i("updateAllData: onNext: 未登录")
-						else -> {
-							Logs.i("updateAllData: onNext: ${getCourseRT.rt} ${getCourseRT.msg}")
-							Snackbar.make(coordinatorLayoutView, getCourseRT.msg, Snackbar.LENGTH_LONG)
-									.show()
-						}
-					}
-				}
-				updateAllView()
-			}
-
-			override fun error(rt: Int, e: Throwable) {
-				loadingDialog.dismiss()
-				isRefreshData = false
-				e.printStackTrace()
-				if (e is UnknownHostException)
-					Snackbar.make(coordinatorLayoutView, R.string.error_network, Snackbar.LENGTH_SHORT)
-							.show()
-				else
-					Snackbar.make(coordinatorLayoutView, "请求出错：${e.message.toString()}，请重试", Snackbar.LENGTH_SHORT)
-							.show()
-			}
-		})
-	}
-
-	private fun showcase() {
-		val size = Point()
-		windowManager.defaultDisplay.getSize(size)
-		TapTargetSequence(this)
-				.targets(
-						TapTarget.forView(bottomNavigationView.findViewById(R.id.bottom_nav_today), getString(R.string.showcase_today)),
-						TapTarget.forView(bottomNavigationView.findViewById(R.id.bottom_nav_week), getString(R.string.showcase_week)),
-						TapTarget.forView(action_sync, getString(R.string.showcase_sync)))
-				.continueOnCancel(true)
-				.considerOuterCircleCanceled(true)
-				.listener(object : TapTargetSequence.Listener {
-					override fun onSequenceCanceled(lastTarget: TapTarget?) {
-					}
-
-					override fun onSequenceFinish() {
-						Settings.isFirstRun = false
-					}
-
-					override fun onSequenceStep(lastTarget: TapTarget?, targetClicked: Boolean) {
-					}
-				})
-				.start()
-	}
-
-	private fun showWeekAnim(isShow: Boolean, isShowArrow: Boolean) {
-		titleTextView.setCompoundDrawablesWithIntrinsicBounds(null, null, if (isShowArrow) arrowDrawable else null, null)
-		weekAnimator?.cancel()
-		weekAnimator = if (isShow)
-			ObjectAnimator.ofFloat(layout_week_recycler_view, Constants.ANIMATION_TRANSLATION_Y, 0F, DensityTools.dp2px(this, 56F).toFloat())
-		else
-			ObjectAnimator.ofFloat(layout_week_recycler_view, Constants.ANIMATION_TRANSLATION_Y, DensityTools.dp2px(this, 56F).toFloat(), 0F)
-		weekAnimator?.addListener(object : Animator.AnimatorListener {
-			override fun onAnimationRepeat(animation: Animator?) {
-			}
-
-			override fun onAnimationEnd(animation: Animator?) {
-				if (!isShow && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
-					layout_week_recycler_view.elevation = 6F
-			}
-
-			override fun onAnimationCancel(animation: Animator?) {
-			}
-
-			override fun onAnimationStart(animation: Animator?) {
-				if (isShow && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
-					layout_week_recycler_view.elevation = 0F
-			}
-		})
-		weekAnimator?.start()
-		val start = if (isShow) 0 else 10000
-		val end = if (isShow) 10000 else 0
-		ObjectAnimator.ofInt(arrowDrawable!!, Constants.ANIMATION_LEVEL, start, end).start()
-		isWeekShow = isShow
-	}
-
-	private fun swipeLayout(itemId: Int) {
-		when (itemId) {
-			R.id.bottom_nav_today -> {
-				if (lastIndex == 2)
-					setRefresh()
-				lastIndex = viewpager.currentItem
-				if (isWeekShow)
-					showWeekAnim(false, false)
-				titleTextView.setOnClickListener(null)
-				titleTextView.text = CalendarUtil.getTodayInfo(this@MainActivity)
-				titleTextView.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null)
-			}
-			R.id.bottom_nav_week -> {
-				if (lastIndex == 2)
-					setRefresh()
-				lastIndex = viewpager.currentItem
-				titleTextView.setOnClickListener {
-					showWeekAnim(!isWeekShow, true)
-				}
-				titleTextView.text = getString(R.string.course_week_index, ScheduleHelper.weekIndex)
-				titleTextView.setCompoundDrawablesWithIntrinsicBounds(null, null, arrowDrawable, null)
-			}
-			R.id.bottom_nav_profile -> {
-				if (lastIndex != 2)
-					setSettings()
-				lastIndex = viewpager.currentItem
-				if (isWeekShow)
-					showWeekAnim(false, false)
-				profileFragment.updateNoticeBadge()
-				titleTextView.text = getString(R.string.course_profile_title)
-				titleTextView.setOnClickListener(null)
-				titleTextView.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null)
-				if (mainStudent?.profile == null) {
-					updateProfileDialog.show()
-					mainStudent?.getInfo(object : ProfileListener {
-						override fun error(rt: Int, e: Throwable) {
-							updateProfileDialog.dismiss()
-							Logs.e("error: $rt")
-							e.printStackTrace()
-						}
-
-						override fun got(profile: Profile) {
-							updateProfileDialog.dismiss()
-							XhuFileUtil.saveObjectToFile(studentList, XhuFileUtil.getStudentListFile(this@MainActivity))
-							profileFragment.setProfile(profile)
-						}
-					})
-				} else
-					profileFragment.setProfile(mainStudent?.profile!!)
-			}
-		}
-	}
-
-	private fun setRefresh() {
-		animatorList.forEach { it.cancel() }
-		animatorList.clear()
-		animatorList.add(ObjectAnimator.ofFloat(action_sync, Constants.ANIMATION_ROTATION, 360F, 0F).setDuration(ANIMATION_DURATION))
-		animatorList.add(ObjectAnimator.ofFloat(action_sync, Constants.ANIMATION_TRANSLATION_X, DensityTools.dp2px(this, 68F).toFloat(), 0F).setDuration(ANIMATION_DURATION))
-		animatorList.add(ObjectAnimator.ofFloat(action_settings, Constants.ANIMATION_ROTATION, 0F, 360F).setDuration(ANIMATION_DURATION))
-		animatorList.add(ObjectAnimator.ofFloat(action_settings, Constants.ANIMATION_TRANSLATION_X, -DensityTools.dp2px(this, 68F).toFloat(), 0F).setDuration(ANIMATION_DURATION))
-		animatorList.forEach { it.start() }
-	}
-
-	private fun setSettings() {
-		animatorList.forEach { it.cancel() }
-		animatorList.clear()
-		animatorList.add(ObjectAnimator.ofFloat(action_sync, Constants.ANIMATION_ROTATION, 0F, 360F).setDuration(ANIMATION_DURATION))
-		animatorList.add(ObjectAnimator.ofFloat(action_sync, Constants.ANIMATION_TRANSLATION_X, 0F, DensityTools.dp2px(this, 68F).toFloat()).setDuration(ANIMATION_DURATION))
-		animatorList.add(ObjectAnimator.ofFloat(action_settings, Constants.ANIMATION_ROTATION, 360F, 0F).setDuration(ANIMATION_DURATION))
-		animatorList.add(ObjectAnimator.ofFloat(action_settings, Constants.ANIMATION_TRANSLATION_X, 0F, -DensityTools.dp2px(this, 68F).toFloat()).setDuration(ANIMATION_DURATION))
-		animatorList.forEach { it.start() }
-	}
-
-	override fun onBackPressed() {
-		val press = Calendar.getInstance().timeInMillis
-		if (press - lastPressBack <= 2000) {
-			super.onBackPressed()
-		} else {
-			lastPressBack = press
-			Toast.makeText(this, R.string.hint_twice_press_exit, Toast.LENGTH_SHORT).show()
-		}
-	}
-
-	override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-		when {
-			requestCode == ADD_ACCOUNT_CODE && resultCode == Activity.RESULT_OK ->
-				updateAllData()
-			requestCode == noticeActivityCode ->
-				profileFragment.updateNoticeBadge()
-			requestCode == com.tencent.connect.common.Constants.REQUEST_QQ_SHARE -> Logs.i("onActivityResult: ")
-//				Tencent.onActivityResultData(requestCode, resultCode, data, APP.tencentListener)
-			else ->
-				finish()
-		}
-		super.onActivityResult(requestCode, resultCode, data)
-	}
-}
+//	}
+//
+//	override fun onResume() {
+//		super.onResume()
+//		if (ScheduleHelper.isBackgroundChange) {
+//			todayFragment.setBackground()
+//			weekFragment.setBackground()
+//		}
+//		if (ScheduleHelper.isAvatarChange) {
+//			profileFragment.setProfileImg()
+//		}
+//		if (ScheduleHelper.isUIChange) {
+//			loadingDialog.show()
+//			studentList.clear()
+//			studentList.addAll(XhuFileUtil.getArrayFromFile(File(filesDir.absolutePath + File.separator + "data" + File.separator + "user"), Student::class.java))
+//			updateAllView()
+//		}
+//		if (ScheduleHelper.isTableLayoutChange)
+//			weekFragment.updateTableLayout(Settings.customTableItemWidth != -1)
+//		ScheduleHelper.isBackgroundChange = false
+//		ScheduleHelper.isUIChange = false
+//		ScheduleHelper.isTableLayoutChange = false
+//	}
+//
+//	override fun initView() {
+//		super.initView()
+//		arrowDrawable = ContextCompat.getDrawable(this@MainActivity, R.drawable.ms__arrow)
+//		loadingDialog = ZLoadingDialog(this)
+//				.setLoadingBuilder(Z_TYPE.DOUBLE_CIRCLE)
+//				.setHintText(getString(R.string.hint_dialog_update_cache))
+//				.setHintTextSize(16F)
+//				.setCanceledOnTouchOutside(false)
+//				.setCancelable(false)
+//				.setLoadingColor(ContextCompat.getColor(this, R.color.colorAccent))
+//				.setHintTextColor(ContextCompat.getColor(this, R.color.colorAccent))
+//				.create()
+//		updateProfileDialog = ZLoadingDialog(this)
+//				.setLoadingBuilder(Z_TYPE.CIRCLE_CLOCK)
+//				.setHintText(getString(R.string.hint_dialog_update_profile))
+//				.setHintTextSize(16F)
+//				.setCanceledOnTouchOutside(false)
+//				.setCancelable(false)
+//				.setLoadingColor(ContextCompat.getColor(this, R.color.colorAccent))
+//				.setHintTextColor(ContextCompat.getColor(this, R.color.colorAccent))
+//				.create()
+//		initLayout()
+////		val todayInfoText = CalendarUtil.getTodayText()
+////		if (todayInfoText != Settings.isFirstEnterToday) {
+////			Logs.i( "initView: 这是今天的第一次运行")
+////			Settings.isFirstEnterToday = todayInfoText
+////			updateAllData()
+////		} else {
+////			Logs.i( "initView: 这不是今天的第一次运行")
+//		updateAllView()
+////		}
+//		if (Settings.isFirstRun)
+//			showcase()
+//		if (Settings.autoCheckUpdate)
+//			startService(Intent(this, UpdateService::class.java))
+//	}
+//
+//	private fun initLayout() {
+//		val viewPagerAdapter = ViewPagerAdapter(supportFragmentManager)
+//		viewPagerAdapter.addFragment(todayFragment)
+//		viewPagerAdapter.addFragment(weekFragment)
+////		viewPagerAdapter.addFragment(profileFragment)
+//		viewpager.offscreenPageLimit = 2
+//		viewpager.adapter = viewPagerAdapter
+//
+//		studentList.clear()
+//		studentList.addAll(XhuFileUtil.getArrayFromFile(XhuFileUtil.getStudentListFile(this), Student::class.java))
+//
+//		weekAdapter = WeekAdapter(this, 1)
+//		weekAdapter.setWeekChangeListener { week ->
+//			ScheduleHelper.weekIndex = week + 1
+//			weekAdapter.setWeekIndex(ScheduleHelper.weekIndex)
+//			swipeLayout(bottomNavigationView.menu.getItem(viewpager.currentItem).itemId)
+//			updateAllView(ScheduleHelper.weekIndex)
+//		}
+//		layout_week_recycler_view.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+//		layout_week_recycler_view.adapter = weekAdapter
+//		layout_week_recycler_view.scrollToPosition(0)
+//		layout_week_recycler_view_internal.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+//		layout_week_recycler_view_internal.adapter = weekAdapter
+//		layout_week_recycler_view_internal.scrollToPosition(0)
+//	}
+//
+//	override fun monitor() {
+//		super.monitor()
+//		bottomNavigationView.setOnNavigationItemSelectedListener { item ->
+//			when (item.itemId) {
+//				R.id.bottom_nav_today -> viewpager.currentItem = 0
+//				R.id.bottom_nav_week -> viewpager.currentItem = 1
+//				R.id.bottom_nav_profile -> viewpager.currentItem = 2
+//			}
+//			swipeLayout(item.itemId)
+//			true
+//		}
+//		viewpager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
+//			override fun onPageScrollStateChanged(state: Int) {
+//			}
+//
+//			override fun onPageScrolled(position: Int, positionOffset: Float,
+//										positionOffsetPixels: Int) {
+//			}
+//
+//			override fun onPageSelected(position: Int) {
+//				bottomNavigationView.menu.getItem(position).isChecked = true
+//				swipeLayout(bottomNavigationView.menu.getItem(position).itemId)
+//			}
+//		})
+//
+//		action_sync.setOnClickListener {
+//			if (isRefreshData)
+//				return@setOnClickListener
+//			isTryRefreshData = false
+//			loadingDialog.setOnDismissListener {
+//				isRefreshData = false
+//			}
+//			updateAllData()
+//		}
+//		action_settings.setOnClickListener {
+//			if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+//				startActivity(Intent(this, SettingsActivity::class.java))
+//				overridePendingTransition(R.anim.animation_settings_in_enter, R.anim.animation_settings_in_exit)
+//			} else {
+//				ObjectAnimator.ofFloat(action_settings, Constants.ANIMATION_ROTATION, 0F, 360F).start()
+//				startActivity(Intent(this, SettingsActivity::class.java), ActivityOptionsCompat.makeSceneTransitionAnimation(this).toBundle())
+//			}
+//		}
+//		titleLayout.setOnClickListener {
+//			//占位，在上层处理点击事件
+//			Logs.i("initView: titleLayout")
+//		}
+//	}
+//
+//	fun updateAllView(week: Int = -1) {
+//		ScheduleHelper.isAnalysisError = false
+//		studentList.clear()
+//		studentList.addAll(XhuFileUtil.getArrayFromFile(XhuFileUtil.getStudentListFile(this), Student::class.java))
+//		if (studentList.size == 0) {
+//			startActivityForResult(Intent(this, LoginActivity::class.java), ADD_ACCOUNT_CODE)
+//			return
+//		}
+//		loadingDialog.show()
+//		//清空数组
+//		weekList.clear()
+//		todayList.clear()
+//		val array = ArrayList<Observable<Student>>()
+//		val updateList = ArrayList<Student>()
+//		if (Settings.isEnableMultiUserMode) {
+//			studentList.forEach {
+//				array.add(updateView(it, week))
+//				updateList.add(it)
+//			}
+//			mainStudent = studentList[0]
+//		} else {
+//			var tempStudent: Student? = (0 until studentList.size)
+//					.firstOrNull { studentList[it].isMain }
+//					?.let { studentList[it] }
+//			if (tempStudent == null)
+//				tempStudent = studentList[0]
+//			array.add(updateView(tempStudent, week))
+//			updateList.add(tempStudent)
+//			mainStudent = tempStudent
+//		}
+//		Observable.merge(array)
+//				.subscribeOn(Schedulers.newThread())
+//				.observeOn(AndroidSchedulers.mainThread())
+//				.subscribe(object : DisposableObserver<Student>() {
+//					override fun onComplete() {
+//						loadingDialog.dismiss()
+//						swipeLayout(bottomNavigationView.menu.getItem(viewpager.currentItem).itemId)
+//						weekAdapter.setWeekIndex(ScheduleHelper.weekIndex)
+//						layout_week_recycler_view.scrollToPosition(ScheduleHelper.weekIndex - 1)
+//						layout_week_recycler_view_internal.scrollToPosition(ScheduleHelper.weekIndex - 1)
+//						if (!Settings.isEnableMultiUserMode)
+//							when (todayList.size) {
+//								0 -> bottomNavigationView.menu.findItem(R.id.bottom_nav_today).setIcon(R.drawable.ic_sentiment_very_satisfied)
+//								1 -> bottomNavigationView.menu.findItem(R.id.bottom_nav_today).setIcon(R.drawable.ic_sentiment_very_satisfied)
+//								2 -> bottomNavigationView.menu.findItem(R.id.bottom_nav_today).setIcon(R.drawable.ic_sentiment_satisfied)
+//								3 -> bottomNavigationView.menu.findItem(R.id.bottom_nav_today).setIcon(R.drawable.ic_sentiment_neutral)
+//								4 -> bottomNavigationView.menu.findItem(R.id.bottom_nav_today).setIcon(R.drawable.ic_sentiment_dissatisfied)
+//								else -> bottomNavigationView.menu.findItem(R.id.bottom_nav_today).setIcon(R.drawable.ic_sentiment_very_dissatisfied)
+//							}
+//						else
+//							bottomNavigationView.menu.findItem(R.id.bottom_nav_today).setIcon(R.drawable.ic_sentiment_very_satisfied)
+//						updateList.forEach {
+//							weekList.addAll(CourseUtil.mergeCourses(weekList, it.weekCourses))
+//							todayList.addAll(it.todayCourses)
+//						}
+//						weekFragment.refreshData()
+//						todayFragment.refreshData()
+//						isRefreshData = false
+//						showUpdateLog()
+//					}
+//
+//					override fun onError(e: Throwable) {
+//						e.printStackTrace()
+//						isRefreshData = false
+//						loadingDialog.dismiss()
+//						showUpdateLog()
+//					}
+//
+//					override fun onNext(student: Student) {
+//					}
+//				})
+//	}
+//
+//	private fun updateView(student: Student, week: Int): Observable<Student> {
+//		return Observable.create<Student> { subscriber ->
+//			val parentFile = XhuFileUtil.getCourseCacheParentFile(this)
+//			if (!parentFile.exists())
+//				parentFile.mkdirs()
+//			val base64Name = XhuFileUtil.filterString(Base64.encodeToString(student.username.toByteArray(), Base64.DEFAULT))
+//			//判断是否有缓存
+//			val cacheResult = parentFile.listFiles().filter { it.name == base64Name }.size == 1
+//			if (!cacheResult) {
+//				subscriber.onNext(student)
+//				subscriber.onComplete()
+//				return@create
+//			}
+//			val oldFile = File(parentFile, base64Name)
+//			if (!oldFile.exists()) {
+//				subscriber.onNext(student)
+//				subscriber.onComplete()
+//				return@create
+//			}
+//			val tempArray = if (week != -1)
+//				if (Settings.isShowNot)
+//					CourseUtil.formatCourses(CourseUtil.getCoursesFromFile(oldFile), week)
+//				else
+//					CourseUtil.getWeekCourses(CourseUtil.getCoursesFromFile(oldFile), week)
+//			else
+//				if (Settings.isShowNot)
+//					CourseUtil.formatCourses(CourseUtil.getCoursesFromFile(oldFile))
+//				else
+//					CourseUtil.getWeekCourses(CourseUtil.getCoursesFromFile(oldFile))
+//			student.weekCourses.clear()
+//			student.weekCourses.addAll(tempArray)
+//			val todayArray = CourseUtil.getTodayCourses(CourseUtil.getCoursesFromFile(oldFile))
+//			student.todayCourses.clear()
+//			student.todayCourses.addAll(todayArray)
+//			student.isReady = true
+//			while (true) {
+//				if (weekFragment.isReady() && todayFragment.isReady())
+//					break
+//				Thread.sleep(200)
+//			}
+//			subscriber.onComplete()
+//		}
+//	}
+//
+//	private fun updateAllData() {
+//		Logs.i("updateAllData: ")
+//		ObjectAnimator.ofFloat(action_sync, Constants.ANIMATION_ROTATION, 0F, 360F).setDuration(1000).start()
+//		studentList.clear()
+//		studentList.addAll(XhuFileUtil.getArrayFromFile(XhuFileUtil.getStudentListFile(this), Student::class.java))
+//		if (studentList.size == 0) {
+//			startActivityForResult(Intent(this, LoginActivity::class.java), ADD_ACCOUNT_CODE)
+//			return
+//		}
+//		CourseUtil.getCoursesFromServer(this, null, null, object : GetCourseListener {
+//			override fun start() {
+//				loadingDialog.show()
+//				todayList.clear()
+//				isRefreshData = true
+//			}
+//
+//			override fun got(studentList: ArrayList<Student>, rtList: ArrayList<GetCourseRT>) {
+//				isRefreshData = false
+//				XhuFileUtil.saveObjectToFile(studentList, XhuFileUtil.getStudentListFile(this@MainActivity))
+//				sendBroadcast(Intent(Constants.ACTION_WIDGET_UPDATE_BROADCAST)
+//						.putExtra(Constants.INTENT_TAG_NAME_TAG, WidgetHelper.ALL_TAG))
+//				for (getCourseRT in rtList) {
+//					when (getCourseRT.rt) {ConstantsCode.DONE, ConstantsCode.SERVER_COURSE_ANALYZE_ERROR -> {
+//						if (getCourseRT.rt == ConstantsCode.SERVER_COURSE_ANALYZE_ERROR)
+//							Snackbar.make(coordinatorLayoutView, R.string.hint_update_data_error, Snackbar.LENGTH_LONG).show()
+//						else {
+//							if (ScheduleHelper.isAnalysisError) {
+//								Snackbar.make(coordinatorLayoutView, R.string.hint_analyze_error, Snackbar.LENGTH_LONG).show()
+//							} else
+//								Snackbar.make(coordinatorLayoutView, R.string.hint_update_data, Snackbar.LENGTH_SHORT).show()
+//						}
+//					}
+//						ConstantsCode.ERROR_USERNAME, ConstantsCode.ERROR_PASSWORD -> {//前端信息错误
+//							isRefreshData = false
+//							Snackbar.make(coordinatorLayoutView, getString(R.string.hint_try_refresh_data_error, getCourseRT.msg), Snackbar.LENGTH_LONG)
+//									.setAction(android.R.string.ok) {
+//										startActivityForResult(Intent(this@MainActivity, LoginActivity::class.java), ADD_ACCOUNT_CODE)
+//									}
+//									.show()
+//						}
+//						ConstantsCode.ERROR_NOT_LOGIN -> Logs.i("updateAllData: onNext: 未登录")
+//						else -> {
+//							Logs.i("updateAllData: onNext: ${getCourseRT.rt} ${getCourseRT.msg}")
+//							Snackbar.make(coordinatorLayoutView, getCourseRT.msg, Snackbar.LENGTH_LONG)
+//									.show()
+//						}
+//					}
+//				}
+//				updateAllView()
+//			}
+//
+//			override fun error(rt: Int, e: Throwable) {
+//				loadingDialog.dismiss()
+//				isRefreshData = false
+//				e.printStackTrace()
+//				if (e is UnknownHostException)
+//					Snackbar.make(coordinatorLayoutView, R.string.error_network, Snackbar.LENGTH_SHORT)
+//							.show()
+//				else
+//					Snackbar.make(coordinatorLayoutView, "请求出错：${e.message.toString()}，请重试", Snackbar.LENGTH_SHORT)
+//							.show()
+//			}
+//		})
+//	}
+//
+//	private fun showcase() {
+//		val size = Point()
+//		windowManager.defaultDisplay.getSize(size)
+//		TapTargetSequence(this)
+//				.targets(
+//						TapTarget.forView(bottomNavigationView.findViewById(R.id.bottom_nav_today), getString(R.string.showcase_today)),
+//						TapTarget.forView(bottomNavigationView.findViewById(R.id.bottom_nav_week), getString(R.string.showcase_week)),
+//						TapTarget.forView(action_sync, getString(R.string.showcase_sync)))
+//				.continueOnCancel(true)
+//				.considerOuterCircleCanceled(true)
+//				.listener(object : TapTargetSequence.Listener {
+//					override fun onSequenceCanceled(lastTarget: TapTarget?) {
+//					}
+//
+//					override fun onSequenceFinish() {
+//						Settings.isFirstRun = false
+//					}
+//
+//					override fun onSequenceStep(lastTarget: TapTarget?, targetClicked: Boolean) {
+//					}
+//				})
+//				.start()
+//	}
+//
+//	private fun showWeekAnim(isShow: Boolean, isShowArrow: Boolean) {
+//		titleTextView.setCompoundDrawablesWithIntrinsicBounds(null, null, if (isShowArrow) arrowDrawable else null, null)
+//		weekAnimator?.cancel()
+//		weekAnimator = if (isShow)
+//			ObjectAnimator.ofFloat(layout_week_recycler_view, Constants.ANIMATION_TRANSLATION_Y, 0F, DensityTools.dp2px(this, 56F).toFloat())
+//		else
+//			ObjectAnimator.ofFloat(layout_week_recycler_view, Constants.ANIMATION_TRANSLATION_Y, DensityTools.dp2px(this, 56F).toFloat(), 0F)
+//		weekAnimator?.addListener(object : Animator.AnimatorListener {
+//			override fun onAnimationRepeat(animation: Animator?) {
+//			}
+//
+//			override fun onAnimationEnd(animation: Animator?) {
+//				if (!isShow && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+//					layout_week_recycler_view.elevation = 6F
+//			}
+//
+//			override fun onAnimationCancel(animation: Animator?) {
+//			}
+//
+//			override fun onAnimationStart(animation: Animator?) {
+//				if (isShow && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+//					layout_week_recycler_view.elevation = 0F
+//			}
+//		})
+//		weekAnimator?.start()
+//		val start = if (isShow) 0 else 10000
+//		val end = if (isShow) 10000 else 0
+//		ObjectAnimator.ofInt(arrowDrawable!!, Constants.ANIMATION_LEVEL, start, end).start()
+//		isWeekShow = isShow
+//	}
+//
+//	private fun swipeLayout(itemId: Int) {
+//		when (itemId) {
+//			R.id.bottom_nav_today -> {
+//				if (lastIndex == 2)
+//					setRefresh()
+//				lastIndex = viewpager.currentItem
+//				if (isWeekShow)
+//					showWeekAnim(false, false)
+//				titleTextView.setOnClickListener(null)
+//				titleTextView.text = CalendarUtil.getTodayInfo(this@MainActivity)
+//				titleTextView.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null)
+//			}
+//			R.id.bottom_nav_week -> {
+//				if (lastIndex == 2)
+//					setRefresh()
+//				lastIndex = viewpager.currentItem
+//				titleTextView.setOnClickListener {
+//					showWeekAnim(!isWeekShow, true)
+//				}
+//				titleTextView.text = getString(R.string.course_week_index, ScheduleHelper.weekIndex)
+//				titleTextView.setCompoundDrawablesWithIntrinsicBounds(null, null, arrowDrawable, null)
+//			}
+//			R.id.bottom_nav_profile -> {
+//				if (lastIndex != 2)
+//					setSettings()
+//				lastIndex = viewpager.currentItem
+//				if (isWeekShow)
+//					showWeekAnim(false, false)
+//				profileFragment.updateNoticeBadge()
+//				titleTextView.text = getString(R.string.course_profile_title)
+//				titleTextView.setOnClickListener(null)
+//				titleTextView.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null)
+//				if (mainStudent?.profile == null) {
+//					updateProfileDialog.show()
+//					mainStudent?.getInfo(object : ProfileListener {
+//						override fun error(rt: Int, e: Throwable) {
+//							updateProfileDialog.dismiss()
+//							Logs.e("error: $rt")
+//							e.printStackTrace()
+//						}
+//
+//						override fun got(profile: Profile) {
+//							updateProfileDialog.dismiss()
+//							XhuFileUtil.saveObjectToFile(studentList, XhuFileUtil.getStudentListFile(this@MainActivity))
+//							profileFragment.setProfile(profile)
+//						}
+//					})
+//				} else
+//					profileFragment.setProfile(mainStudent?.profile!!)
+//			}
+//		}
+//	}
+//
+//	private fun setRefresh() {
+//		animatorList.forEach { it.cancel() }
+//		animatorList.clear()
+//		animatorList.add(ObjectAnimator.ofFloat(action_sync, Constants.ANIMATION_ROTATION, 360F, 0F).setDuration(ANIMATION_DURATION))
+//		animatorList.add(ObjectAnimator.ofFloat(action_sync, Constants.ANIMATION_TRANSLATION_X, DensityTools.dp2px(this, 68F).toFloat(), 0F).setDuration(ANIMATION_DURATION))
+//		animatorList.add(ObjectAnimator.ofFloat(action_settings, Constants.ANIMATION_ROTATION, 0F, 360F).setDuration(ANIMATION_DURATION))
+//		animatorList.add(ObjectAnimator.ofFloat(action_settings, Constants.ANIMATION_TRANSLATION_X, -DensityTools.dp2px(this, 68F).toFloat(), 0F).setDuration(ANIMATION_DURATION))
+//		animatorList.forEach { it.start() }
+//	}
+//
+//	private fun setSettings() {
+//		animatorList.forEach { it.cancel() }
+//		animatorList.clear()
+//		animatorList.add(ObjectAnimator.ofFloat(action_sync, Constants.ANIMATION_ROTATION, 0F, 360F).setDuration(ANIMATION_DURATION))
+//		animatorList.add(ObjectAnimator.ofFloat(action_sync, Constants.ANIMATION_TRANSLATION_X, 0F, DensityTools.dp2px(this, 68F).toFloat()).setDuration(ANIMATION_DURATION))
+//		animatorList.add(ObjectAnimator.ofFloat(action_settings, Constants.ANIMATION_ROTATION, 360F, 0F).setDuration(ANIMATION_DURATION))
+//		animatorList.add(ObjectAnimator.ofFloat(action_settings, Constants.ANIMATION_TRANSLATION_X, 0F, -DensityTools.dp2px(this, 68F).toFloat()).setDuration(ANIMATION_DURATION))
+//		animatorList.forEach { it.start() }
+//	}
+//
+//	override fun onBackPressed() {
+//		val press = Calendar.getInstance().timeInMillis
+//		if (press - lastPressBack <= 2000) {
+//			super.onBackPressed()
+//		} else {
+//			lastPressBack = press
+//			Toast.makeText(this, R.string.hint_twice_press_exit, Toast.LENGTH_SHORT).show()
+//		}
+//	}
+//
+//	override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+//		when {
+//			requestCode == ADD_ACCOUNT_CODE && resultCode == Activity.RESULT_OK ->
+//				updateAllData()
+//			requestCode == noticeActivityCode ->
+//				profileFragment.updateNoticeBadge()
+//			requestCode == com.tencent.connect.common.Constants.REQUEST_QQ_SHARE -> Logs.i("onActivityResult: ")
+////				Tencent.onActivityResultData(requestCode, resultCode, data, APP.tencentListener)
+//			else ->
+//				finish()
+//		}
+//		super.onActivityResult(requestCode, resultCode, data)
+//	}
+//}
