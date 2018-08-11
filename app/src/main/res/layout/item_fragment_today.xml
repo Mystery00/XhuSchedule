@@ -19,6 +19,7 @@
 			android:layout_height="8dp"
 			android:contentDescription="@string/app_name"
 			app:layout_constraintBottom_toBottomOf="@id/cardView"
+			app:layout_constraintEnd_toStartOf="@id/cardView"
 			app:layout_constraintStart_toStartOf="parent"
 			app:layout_constraintTop_toTopOf="@id/cardView"
 			app:srcCompat="@drawable/ic_point" />
@@ -67,6 +68,7 @@
 				android:layout_height="wrap_content"
 				android:layout_marginStart="12dp"
 				android:text="@{course.teacher}"
+				android:textColor="@android:color/black"
 				android:textSize="12sp"
 				app:layout_constraintBottom_toTopOf="@id/textViewLocation"
 				app:layout_constraintEnd_toEndOf="parent"
@@ -79,6 +81,7 @@
 				android:layout_height="wrap_content"
 				android:layout_marginStart="12dp"
 				android:text="@{course.room}"
+				android:textColor="@android:color/black"
 				android:textSize="12sp"
 				app:layout_constraintBottom_toBottomOf="parent"
 				app:layout_constraintEnd_toEndOf="parent"
@@ -90,6 +93,7 @@
 				android:layout_width="wrap_content"
 				android:layout_height="0dp"
 				android:gravity="center"
+				android:textColor="@android:color/black"
 				app:layout_constraintBottom_toBottomOf="@id/textViewName"
 				app:layout_constraintEnd_toEndOf="parent"
 				app:layout_constraintTop_toTopOf="@id/textViewName" />

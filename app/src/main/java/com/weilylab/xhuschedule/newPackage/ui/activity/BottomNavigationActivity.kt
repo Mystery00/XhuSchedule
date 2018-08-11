@@ -14,7 +14,6 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager.widget.ViewPager
 import com.weilylab.xhuschedule.R
@@ -41,6 +40,7 @@ import kotlinx.android.synthetic.main.activity_bottom_navigation.*
 import kotlinx.android.synthetic.main.content_bottom_navigation.*
 import vip.mystery0.bottomTabView.BottomTabItem
 import vip.mystery0.tools.utils.DensityTools
+import java.util.ArrayList
 
 class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_navigation) {
 	companion object {
@@ -54,6 +54,7 @@ class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_naviga
 	private lateinit var bottomNavigationViewModel: BottomNavigationViewModel
 	private lateinit var viewPagerAdapter: ViewPagerAdapter
 	private lateinit var dialog: Dialog
+	private val courseList = ArrayList<Schedule>()
 	private var animation: ObjectAnimator? = null
 	private var isShowWeekView = false
 	private lateinit var showAdapter: ShowCourseRecyclerViewAdapter
@@ -95,7 +96,9 @@ class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_naviga
 	private val courseListObserver = Observer<PackageData<List<Schedule>>> {
 		when (it.status) {
 			Content -> {
-				weekView.data(it.data)!!.showView()
+				courseList.clear()
+				courseList.addAll(it.data!!)
+				weekView.showView()
 				hideDialog()
 				cancelLoading()
 			}
@@ -158,7 +161,8 @@ class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_naviga
 		viewPagerAdapter.addFragment(ProfileFragment.newInstance())
 		viewPager.offscreenPageLimit = 2
 		viewPager.adapter = viewPagerAdapter
-		weekView.curWeek(1)
+		weekView.data(courseList)!!
+				.curWeek(1)
 				.callback(IWeekView.OnWeekItemClickedListener {
 					bottomNavigationViewModel.week.value = it
 					viewPagerAdapter.getItem(viewPager.currentItem).updateTitle()

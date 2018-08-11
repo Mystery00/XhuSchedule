@@ -38,10 +38,12 @@ class TableFragment : BaseBottomNavigationFragment(R.layout.fragment_table) {
 
 	private val courseListObserver = Observer<PackageData<List<Schedule>>> {
 		when (it.status) {
-			Content -> fragmentTableBinding.timeTableView
-					.data(it.data)
-					.isShowNotCurWeek(ConfigurationUtil.isShowNotWeek)
-					.updateView()
+			Content -> {
+				fragmentTableBinding.timeTableView
+						.data(it.data)!!
+						.isShowNotCurWeek(ConfigurationUtil.isShowNotWeek)
+						.updateView()
+			}
 		}
 	}
 
