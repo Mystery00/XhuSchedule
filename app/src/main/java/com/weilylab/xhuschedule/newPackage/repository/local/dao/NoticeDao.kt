@@ -14,6 +14,9 @@ interface NoticeDao {
 	@Query("select * from tb_notice")
 	fun queryAllNotice(): List<Notice>
 
+	@Query("select * from tb_notice where notice_is_read = 1 limit 1")
+	fun queryAllReadNotice(): List<Notice>
+
 	@Query("select * from tb_notice where notice_platform = :platform")
 	fun queryNoticeByPlatform(platform: String): List<Notice>
 

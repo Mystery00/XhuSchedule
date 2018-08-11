@@ -9,6 +9,8 @@ interface NoticeService {
 
 	fun queryAllNotice(): List<Notice>
 
+	fun queryAllReadNotice(): List<Notice>
+
 	fun queryNoticeForPlatform(platform: String): List<Notice>
 
 	fun queryNoticeById(id: Int): Notice?

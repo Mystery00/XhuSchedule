@@ -50,10 +50,7 @@ import android.widget.PopupWindow
 import android.widget.TextView
 import android.widget.Toast
 import com.sina.weibo.sdk.api.ImageObject
-import com.sina.weibo.sdk.api.WeiboMessage
-import com.sina.weibo.sdk.api.share.SendMessageToWeiboRequest
 import com.tencent.connect.share.QQShare
-import com.weilylab.xhuschedule.newPackage.config.APP
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.activity.MainActivity
 import com.weilylab.xhuschedule.util.Constants
@@ -110,20 +107,20 @@ class ShareCETAdapter(private val context: Context) : BaseRecyclerViewAdapter<Sh
 //					APP.tencent.shareToQQ(context as Activity, params, APP.tencentListener)
 				}
 				2 -> {//分享到微博
-					val weiboShareAPI = (context as MainActivity).mWeiboShareAPI
-					if (weiboShareAPI.isWeiboAppInstalled) {
-						val weiboMessage = WeiboMessage()
-						val imageObject = ImageObject()
-						imageObject.setImageObject(BitmapFactory.decodeFile(XhuFileUtil.getCETImageFile(fileName).absolutePath))
-						weiboMessage.mediaObject = imageObject
-						val request = SendMessageToWeiboRequest()
-						request.transaction = System.currentTimeMillis().toString()
-						request.message = weiboMessage
-						weiboShareAPI.sendRequest(request)
-					} else {
-						Toast.makeText(context, R.string.hint_no_weibo, Toast.LENGTH_SHORT)
-								.show()
-					}
+//					val weiboShareAPI = (context as MainActivity).mWeiboShareAPI
+//					if (weiboShareAPI.isWeiboAppInstalled) {
+//						val weiboMessage = WeiboMessage()
+//						val imageObject = ImageObject()
+//						imageObject.setImageObject(BitmapFactory.decodeFile(XhuFileUtil.getCETImageFile(fileName).absolutePath))
+//						weiboMessage.mediaObject = imageObject
+//						val request = SendMessageToWeiboRequest()
+//						request.transaction = System.currentTimeMillis().toString()
+//						request.message = weiboMessage
+//						weiboShareAPI.sendRequest(request)
+//					} else {
+//						Toast.makeText(context, R.string.hint_no_weibo, Toast.LENGTH_SHORT)
+//								.show()
+//					}
 				}
 				3 -> {//分享到微信
 					if (XhuFileUtil.checkAPPInstall(context, Constants.WEIXIN_PACKAGE_NAME)) {

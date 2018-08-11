@@ -15,6 +15,7 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager.widget.ViewPager
 import com.weilylab.xhuschedule.R
@@ -30,7 +31,6 @@ import com.weilylab.xhuschedule.newPackage.ui.fragment.TodayFragment
 import com.weilylab.xhuschedule.newPackage.utils.ConfigurationUtil
 import com.weilylab.xhuschedule.newPackage.utils.LayoutRefreshConfigUtil
 import com.weilylab.xhuschedule.newPackage.utils.UserUtil
-import com.weilylab.xhuschedule.newPackage.utils.layoutManager.SkidRightLayoutManager
 import com.weilylab.xhuschedule.newPackage.utils.rxAndroid.PackageData
 import com.weilylab.xhuschedule.newPackage.viewModel.BottomNavigationViewModel
 import com.zhuangfei.timetable.listener.IWeekView
@@ -322,7 +322,7 @@ class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_naviga
 
 	private fun initPopupWindow() {
 		recyclerView = RecyclerView(this)
-		recyclerView.layoutManager = SkidRightLayoutManager(1.5f, 0.85f)
+		recyclerView.layoutManager = GridLayoutManager(this, 2)
 		showAdapter = ShowCourseRecyclerViewAdapter(this)
 		recyclerView.adapter = showAdapter
 		popupWindow = PopupWindow(recyclerView, DensityTools.getScreenWidth(this), DensityTools.dp2px(this, 480F))

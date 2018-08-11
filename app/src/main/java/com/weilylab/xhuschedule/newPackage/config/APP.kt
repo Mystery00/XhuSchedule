@@ -38,10 +38,13 @@ import android.app.Application
 import android.content.Context
 import androidx.multidex.MultiDexApplication
 import com.oasisfeng.condom.CondomContext
+import com.sina.weibo.sdk.WbSdk
+import com.sina.weibo.sdk.auth.AuthInfo
+import com.tencent.mm.opensdk.openapi.IWXAPI
+import com.tencent.mm.opensdk.openapi.WXAPIFactory
 import com.tencent.tauth.Tencent
-import com.weilylab.xhuschedule.listener.EmptyTencentListener
 import com.weilylab.xhuschedule.newPackage.repository.local.db.DBHelper
-import com.weilylab.xhuschedule.util.Constants
+import com.weilylab.xhuschedule.newPackage.utils.PackageUtil
 import com.weilylab.xhuschedule.util.ScheduleHelper
 import vip.mystery0.crashhandler.CrashHandler
 
@@ -56,9 +59,14 @@ class APP : MultiDexApplication() {
 		instance = this
 		DBHelper.init(this)
 		ScheduleHelper.initChannelID(APP.context)//初始化NotificationChannelID
-//		val tencent = Tencent.createInstance(Constants.QQ_API_KEY, CondomContext.wrap(applicationContext, "Tencent"))
+		if (PackageUtil.isQQApplicationAvailable())
+			tencent = Tencent.createInstance("1106663023", CondomContext.wrap(applicationContext, "Tencent"))
+		if (PackageUtil.isWeiXinApplicationAvailable())
+			wxAPI = WXAPIFactory.createWXAPI(CondomContext.wrap(applicationContext, "WeiXin"), "2170085314", false)
+		if (PackageUtil.isWeiBoApplicationAvailable())
+			WbSdk.install(CondomContext.wrap(applicationContext, "WeiBo"), AuthInfo(CondomContext.wrap(applicationContext, "WeiBo"), "2170085314", "https://api.weibo.com/oauth2/default.html", "statuses/share"))
 		CrashHandler.getInstance(this)
-				.setDir(getExternalFilesDir("log"))
+				.setDir(getExternalFilesDir("log")!!)
 				.setPrefix("log")
 				.setSuffix("txt")
 				.init()
@@ -70,6 +78,12 @@ class APP : MultiDexApplication() {
 			private set
 
 		lateinit var instance: Application
+			private set
+
+		lateinit var tencent: Tencent
+			private set
+
+		lateinit var wxAPI: IWXAPI
 			private set
 	}
 }

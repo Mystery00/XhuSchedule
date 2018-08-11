@@ -13,6 +13,8 @@ class NoticeServiceImpl : NoticeService {
 
 	override fun queryAllNotice(): List<Notice> = noticeDao.queryAllNotice()
 
+	override fun queryAllReadNotice(): List<Notice> = noticeDao.queryAllReadNotice()
+
 	override fun queryNoticeForPlatform(platform: String): List<Notice> = noticeDao.queryNoticeByPlatform(platform)
 
 	override fun queryNoticeById(id: Int): Notice? = noticeDao.queryNoticeById(id)

@@ -14,6 +14,7 @@ import com.weilylab.xhuschedule.newPackage.repository.local.InitLocalDataSource
 import com.weilylab.xhuschedule.newPackage.utils.rxAndroid.RxObservable
 import com.weilylab.xhuschedule.newPackage.utils.rxAndroid.RxObserver
 import com.zhuangfei.timetable.model.Schedule
+import com.zhuangfei.timetable.model.ScheduleSupport
 import io.reactivex.Observable
 import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers

@@ -138,9 +138,12 @@ dependencies {
 	implementation 'com.oasisfeng.condom:library:2.2.0'
 	implementation 'com.jaredrummler:material-spinner:1.2.4'
 	implementation 'androidx.multidex:multidex:2.0.0'
+	//微信
 	implementation 'com.tencent.mm.opensdk:wechat-sdk-android-without-mta:5.1.4'
+	//微博
+	implementation 'com.sina.weibo.sdk:core:4.3.0:openDefaultRelease@aar'
+	//qq
 	implementation files('libs/tencent_sdk.jar')
-	implementation files('libs/weibo_sdk.jar')
 }
 repositories {
 	mavenCentral()

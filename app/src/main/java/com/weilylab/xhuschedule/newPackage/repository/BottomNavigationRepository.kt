@@ -61,7 +61,10 @@ object BottomNavigationRepository {
 				when (packageData.status) {
 					Content -> {
 						CourseUtil.getTodayCourse(packageData.data!!) {
-							bottomNavigationViewModel.todayCourseList.value = PackageData.content(it)
+							if (it.isEmpty())
+								bottomNavigationViewModel.todayCourseList.value = PackageData.empty(it)
+							else
+								bottomNavigationViewModel.todayCourseList.value = PackageData.content(it)
 						}
 					}
 					Loading -> bottomNavigationViewModel.todayCourseList.value = PackageData.loading()
@@ -83,7 +86,10 @@ object BottomNavigationRepository {
 				when (packageData.status) {
 					Content -> {
 						CourseUtil.getTodayCourse(packageData.data!!) {
-							bottomNavigationViewModel.todayCourseList.value = PackageData.content(it)
+							if (it.isEmpty())
+								bottomNavigationViewModel.todayCourseList.value = PackageData.empty(it)
+							else
+								bottomNavigationViewModel.todayCourseList.value = PackageData.content(it)
 						}
 					}
 					Loading -> bottomNavigationViewModel.todayCourseList.value = PackageData.loading()

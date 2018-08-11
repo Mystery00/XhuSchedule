@@ -28,18 +28,13 @@
 			android:screenOrientation="portrait"
 			android:theme="@style/SplashTheme">
 			<intent-filter>
-
-				<!-- 集成调用微博 -->
-				<action android:name="com.sina.weibo.sdk.action.ACTION_SDK_REQ_ACTIVITY" />
 				<action android:name="android.intent.action.MAIN" />
 
 				<category android:name="android.intent.category.LAUNCHER" />
 			</intent-filter>
 			<intent-filter>
 				<action android:name="com.weilylab.xhuschedule.NOTIFICATION_VIEW" />
-
 				<category android:name="android.intent.category.DEFAULT" />
-
 				<data
 					android:host="main"
 					android:scheme="xhuschedule" />
@@ -189,7 +184,8 @@
 		<activity
 			android:name="com.tencent.tauth.AuthActivity"
 			android:launchMode="singleTask"
-			android:noHistory="true">
+			android:noHistory="true"
+			android:process="com.weilylab.xhuschedule.sb">
 			<intent-filter>
 				<action android:name="android.intent.action.VIEW" />
 
@@ -202,6 +198,7 @@
 		<activity
 			android:name="com.tencent.connect.common.AssistActivity"
 			android:configChanges="orientation|keyboardHidden|screenSize"
+			android:process="com.weilylab.xhuschedule.sb"
 			android:theme="@android:style/Theme.Translucent.NoTitleBar" />
 		<!-- 腾讯开放平台 -->
 

@@ -14,6 +14,7 @@ import com.weilylab.xhuschedule.newPackage.config.SpaceScheduleHelper
 import com.weilylab.xhuschedule.newPackage.config.Status.*
 import com.weilylab.xhuschedule.newPackage.repository.BottomNavigationRepository
 import com.weilylab.xhuschedule.newPackage.ui.custom.CustomDateAdapter
+import com.weilylab.xhuschedule.newPackage.ui.custom.CustomItemBuildAdapter
 import com.weilylab.xhuschedule.newPackage.ui.custom.FlagLayoutClickAdapter
 import com.weilylab.xhuschedule.newPackage.ui.custom.SpaceItemClickAdapter
 import com.weilylab.xhuschedule.newPackage.utils.ConfigurationUtil
@@ -25,6 +26,7 @@ import com.weilylab.xhuschedule.newPackage.viewModel.BottomNavigationViewModel
 import com.zhuangfei.timetable.listener.ISchedule
 import com.zhuangfei.timetable.listener.OnSlideBuildAdapter
 import com.zhuangfei.timetable.model.Schedule
+import com.zhuangfei.timetable.model.ScheduleSupport
 import vip.mystery0.logs.Logs
 import java.text.SimpleDateFormat
 import java.util.*
@@ -78,6 +80,7 @@ class TableFragment : BaseBottomNavigationFragment(R.layout.fragment_table) {
 				.isShowNotCurWeek(ConfigurationUtil.isShowNotWeek)
 				.alpha(0.1f, 0.1f, 1f)
 				.callback(CustomDateAdapter())
+				.callback(CustomItemBuildAdapter())
 				.callback(FlagLayoutClickAdapter(fragmentTableBinding.timeTableView))
 				.callback(SpaceItemClickAdapter(fragmentTableBinding.timeTableView))
 				.callback(OnSlideBuildAdapter()
@@ -98,7 +101,7 @@ class TableFragment : BaseBottomNavigationFragment(R.layout.fragment_table) {
 		super.monitor()
 		fragmentTableBinding.timeTableView
 				.callback(ISchedule.OnItemClickListener { _, scheduleList ->
-					bottomNavigationViewModel.showCourse.value = scheduleList
+					bottomNavigationViewModel.showCourse.value = scheduleList.filter { ScheduleSupport.isThisWeek(it, week) }
 				})
 		SpaceScheduleHelper.onSpaceScheduleClickListener = { day, start, isTwice ->
 			Logs.i("monitor: $day $start $isTwice")

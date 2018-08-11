@@ -190,24 +190,6 @@ class ItemOperationHandler(val context: Context) : BaseClickHandler<Operation>()
 				}
 			}
 			context.getString(R.string.operation_share) -> {
-				val binding = DialogShareWithFriendsBinding.inflate(LayoutInflater.from(context))
-				val shareView = PopupWindow(binding.root, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
-				shareView.isOutsideTouchable = true
-				shareView.isFocusable = true
-				shareView.animationStyle = R.style.Animation
-				shareView.setBackgroundDrawable(ColorDrawable(0x00000000))
-				shareView.setOnDismissListener {
-					setWindowAlpha(1F)
-				}
-				binding.textViewCancel.setOnClickListener {
-					shareView.dismiss()
-				}
-				binding.recyclerView.layoutManager = GridLayoutManager(context, 3)
-				val shareWithFriendsAdapter = ShareWithFriendsAdapter(context)
-				shareWithFriendsAdapter.shareView = shareView
-				binding.recyclerView.adapter = shareWithFriendsAdapter
-				shareView.showAtLocation((context as MainActivity).bottomNavigationView, Gravity.BOTTOM, 0, 0)
-				setWindowAlpha(0.6F)
 			}
 		}
 	}
@@ -232,11 +214,5 @@ class ItemOperationHandler(val context: Context) : BaseClickHandler<Operation>()
 				loadingDialog.dismiss()
 			}
 		})
-	}
-
-	private fun setWindowAlpha(alpha: Float) {
-		val layoutParams = (context as MainActivity).window.attributes
-		layoutParams.alpha = alpha
-		context.window.attributes = layoutParams
 	}
 }

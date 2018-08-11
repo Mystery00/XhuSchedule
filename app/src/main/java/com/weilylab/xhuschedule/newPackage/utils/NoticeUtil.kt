@@ -9,6 +9,7 @@ import com.weilylab.xhuschedule.newPackage.listener.DoSaveListener
 import com.weilylab.xhuschedule.newPackage.listener.RequestListener
 import com.weilylab.xhuschedule.newPackage.model.Notice
 import com.weilylab.xhuschedule.newPackage.model.response.NoticeResponse
+import com.weilylab.xhuschedule.newPackage.repository.local.NoticeLocalDataSource
 import com.weilylab.xhuschedule.newPackage.utils.rxAndroid.RxObserver
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -23,10 +24,14 @@ object NoticeUtil {
 				.getNotices(platform)
 				.subscribeOn(Schedulers.newThread())
 				.unsubscribeOn(Schedulers.newThread())
-				.map {
-					val noticeResponse = GsonFactory.parseInputStream(it.byteStream(), NoticeResponse::class.java)
-					if (noticeResponse.rt == ResponseCodeConstants.DONE)
+				.map { responseBody ->
+					val noticeResponse = GsonFactory.parseInputStream(responseBody.byteStream(), NoticeResponse::class.java)
+					if (noticeResponse.rt == ResponseCodeConstants.DONE) {
+						val getList = noticeResponse.notices
+						val readList = NoticeLocalDataSource.queryAllReadNotices()
+						readList.forEach { notice -> getList.first { it.id == notice.id }.isRead = true }
 						doSaveListener.doSave(noticeResponse.notices)
+					}
 					noticeResponse
 				}
 				.observeOn(AndroidSchedulers.mainThread())

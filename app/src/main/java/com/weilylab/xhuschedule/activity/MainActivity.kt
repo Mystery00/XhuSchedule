@@ -52,8 +52,6 @@ import android.util.Base64
 import android.widget.Toast
 import com.getkeepsafe.taptargetview.TapTarget
 import com.getkeepsafe.taptargetview.TapTargetSequence
-import com.sina.weibo.sdk.api.share.IWeiboShareAPI
-import com.sina.weibo.sdk.api.share.WeiboShareSDK
 import com.tencent.mm.opensdk.openapi.IWXAPI
 import com.tencent.mm.opensdk.openapi.WXAPIFactory
 import com.weilylab.xhuschedule.R
@@ -115,8 +113,6 @@ class MainActivity : XhuBaseActivity(R.layout.activity_main) {
 	private val weekFragment = TableFragment.newInstance(weekList)
 	private val profileFragment = ProfileFragment.newInstance(Profile())
 	private var lastIndex = 0
-	lateinit var mWeiboShareAPI: IWeiboShareAPI
-	lateinit var wxAPI: IWXAPI
 
 	private fun showUpdateLog() {
 		val sharedPreference = getSharedPreferences(Constants.SHARED_PREFERENCE_UPDATE_DATA, Context.MODE_PRIVATE)
@@ -163,8 +159,6 @@ class MainActivity : XhuBaseActivity(R.layout.activity_main) {
 	override fun initView() {
 		super.initView()
 		arrowDrawable = ContextCompat.getDrawable(this@MainActivity, R.drawable.ms__arrow)
-		registerWeibo()
-		registerWeiXin()
 		loadingDialog = ZLoadingDialog(this)
 				.setLoadingBuilder(Z_TYPE.DOUBLE_CIRCLE)
 				.setHintText(getString(R.string.hint_dialog_update_cache))
@@ -606,26 +600,5 @@ class MainActivity : XhuBaseActivity(R.layout.activity_main) {
 				finish()
 		}
 		super.onActivityResult(requestCode, resultCode, data)
-	}
-
-	private fun registerWeibo() {
-		mWeiboShareAPI = WeiboShareSDK.createWeiboAPI(this, Constants.WEIBO_API_KEY, false)
-	}
-
-	private fun registerWeiXin() {
-		// 通过WXAPIFactory工厂，获取IWXAPI的实例
-		wxAPI = WXAPIFactory.createWXAPI(this, Constants.WEIXIN_API_KEY, false)
-		// 将该app注册到微信
-		wxAPI.registerApp(Constants.WEIXIN_API_KEY)
-	}
-
-	override fun onNewIntent(intent: Intent?) {
-		super.onNewIntent(intent)
-		// 从当前应用唤起微博并进行分享后，返回到当前应用时，需要在此处调用该函数
-		// 来接收微博客户端返回的数据；执行成功，返回 true，并调用
-		// {@link IWeiboHandler.Response#onResponse}；失败返回 false，不调用上述回调
-		mWeiboShareAPI.handleWeiboResponse(intent) {
-			Logs.i("registerWeibo: $it")
-		}
 	}
 }
