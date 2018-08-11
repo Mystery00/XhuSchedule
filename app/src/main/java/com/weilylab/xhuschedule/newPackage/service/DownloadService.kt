@@ -43,7 +43,7 @@ import androidx.core.content.FileProvider
 import android.text.TextUtils
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.newPackage.api.QiniuAPI
-import com.weilylab.xhuschedule.listener.DownloadProgressListener
+import com.weilylab.xhuschedule.newPackage.listener.DownloadProgressListener
 import com.weilylab.xhuschedule.util.BsPatch
 import com.weilylab.xhuschedule.util.Constants
 import com.weilylab.xhuschedule.util.notification.DownloadNotification

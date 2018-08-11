@@ -33,7 +33,7 @@
 
 package com.weilylab.xhuschedule.util.download
 
-import com.weilylab.xhuschedule.listener.DownloadProgressListener
+import com.weilylab.xhuschedule.newPackage.listener.DownloadProgressListener
 import okhttp3.Interceptor
 import okhttp3.Response
 import java.io.IOException

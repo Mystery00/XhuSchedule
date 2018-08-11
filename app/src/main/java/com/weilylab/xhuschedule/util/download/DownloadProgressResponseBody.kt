@@ -35,7 +35,7 @@ package com.weilylab.xhuschedule.util.download
 
 import okhttp3.MediaType
 import okhttp3.ResponseBody
-import com.weilylab.xhuschedule.listener.DownloadProgressListener
+import com.weilylab.xhuschedule.newPackage.listener.DownloadProgressListener
 import okio.*
 import java.io.IOException
 
