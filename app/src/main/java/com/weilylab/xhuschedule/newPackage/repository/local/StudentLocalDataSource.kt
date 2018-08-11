@@ -47,6 +47,29 @@ object StudentLocalDataSource : StudentDataSource {
 				})
 	}
 
+	fun queryMainStudent(listener: (PackageData<Student>) -> Unit) {
+		RxObservable<Student?>()
+				.doThings {
+					try {
+						it.onFinish(studentService.queryMainStudent())
+					} catch (e: Exception) {
+						it.onError(e)
+					}
+				}
+				.subscribe(object : RxObserver<Student?>() {
+					override fun onFinish(data: Student?) {
+						if (data == null)
+							listener.invoke(PackageData.empty(data))
+						else
+							listener.invoke(PackageData.content(data))
+					}
+
+					override fun onError(e: Throwable) {
+						listener.invoke(PackageData.error(e))
+					}
+				})
+	}
+
 	fun saveStudent(student: Student) {
 		val mainStudent = studentService.queryMainStudent()
 		if (mainStudent == null)
@@ -75,7 +98,7 @@ object StudentLocalDataSource : StudentDataSource {
 				.subscribe(observer)
 	}
 
-	fun updateStudent(studentList: List<Student>, observer: Observer<Boolean>){
+	fun updateStudent(studentList: List<Student>, observer: Observer<Boolean>) {
 		RxObservable<Boolean>()
 				.doThings { emitter ->
 					try {

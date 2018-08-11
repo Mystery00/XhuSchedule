@@ -36,7 +36,7 @@
 	<string name="action_download_apk">下载APK</string>
 	<string name="action_download_patch">下载增量包</string>
 	<string name="action_download_cancel">忽略这个版本</string>
-	<string name="action_feedback">反馈该信息</string>
+	<string name="action_feedback">提交意见</string>
 	<string name="action_open">开启</string>
 	<string name="action_show_failed">显示未通过成绩</string>
 	<string name="action_auto_select">自动查询数据</string>
@@ -79,7 +79,6 @@
 	<string name="hint_dialog_download_img">图片下载中……</string>
 	<string name="hint_dialog_save_image">图片保存中……</string>
 	<string name="hint_dialog_cet">正在获取数据……</string>
-	<string name="hint_dialog_feedback">正在提交中……</string>
 	<string name="hint_dialog_do_update">正在进行数据更新……</string>
 	<string name="hint_twice_press_exit">再按一次退出</string>
 	<string name="hint_invalid_cookie">登陆信息已过期，是否重新登录？</string>
@@ -95,8 +94,6 @@
 	<string name="hint_reset">界面设置已经恢复为默认设置</string>
 	<string name="hint_logout_title">确定要注销吗？</string>
 	<string name="hint_logout_content">注销后将会清空本帐号的数据，请问您确定要注销吗？</string>
-	<string name="hint_feedback">感谢您的建议，我们会尝试做得更好，祝您阖家幸福，生活愉快~</string>
-	<string name="hint_feedback_empty">联系方式不能为空</string>
 	<string name="hint_feedback_error">反馈失败，错误码：%1$d，错误信息：%2$s，请联系开发者</string>
 	<string name="hint_popup_view_student">请选择要查询的学生</string>
 	<string name="hint_popup_view_year">请选择要查询的学年</string>
@@ -119,11 +116,11 @@
 	<string name="hint_cet_empty">参数不能为空</string>
 	<string name="hint_cet_vcode_error">验证码获取失败</string>
 
-	<string name="warning_enable_multi_user_mode">
-        请确保您是双学位的学生或者有同时查看多个账号课表的需求。\n\n
-        一般来说，普通学生或者用户没有这种需求，强行开启这个模式并不会导致什么问题，但是可能会使您的课表变得很乱或者很窄，所以，作为一名您的同学，我有必要在这里对您的这个操作进行警告。\n\n
-        请确保您有这样的需求再开启这个开关！
-    </string>
+	<string name="warning_enable_multi_user_mode">请确保您是双学位的学生或者有同时查看多个账号课表的需求。</string>
+
+	<string name="hint_feedback_null_student">用户数据获取错误！</string>
+	<string name="hint_feedback_empty">提交信息不能为空！</string>
+	<string name="hint_feedback_done">信息提交成功！</string>
 
 	<string name="error_invalid_username">用户名无效</string>
 	<string name="error_invalid_password">密码无效</string>
@@ -253,10 +250,15 @@
 
 	<string name="hint_null_course_data">这里什么都没有(ŎдŎ；)</string>
 
+	<string name="hint_feedback_title">请问您的意见或建议是？</string>
+	<string name="hint_feedback">您的意见或建议：</string>
+	<string name="hint_feedback_submit">感谢您对西瓜课表提出的宝贵意见或建议，我们将认真阅读并积极改正！您还可以加入西瓜课表用户交流QQ群 426878786 哟(o°ω°o) </string>
+
 	<string name="hint_dialog_login">登录中……</string>
 	<string name="hint_dialog_init">正在初始化……</string>
 	<string name="hint_dialog_get_tests">获取考试数据中……</string>
 	<string name="hint_dialog_get_notices">获取公告信息中……</string>
+	<string name="hint_dialog_feedback">正在上传数据……</string>
 
 	<string name="hint_query_test_date">考试日期：%1$s</string>
 	<string name="hint_query_test_time">考试时间：%1$s</string>
@@ -264,4 +266,5 @@
 	<string name="hint_query_test_test_no">座位号：%1$s</string>
 
 	<string name="title_activity_query_test">考试查询</string>
+	<string name="title_activity_feedback">意见反馈</string>
 </resources>

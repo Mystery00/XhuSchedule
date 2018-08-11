@@ -11,13 +11,10 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.databinding.DialogShareWithFriendsBinding
-import com.weilylab.xhuschedule.newPackage.ui.activity.SettingsActivity
 import com.weilylab.xhuschedule.databinding.FragmentProfileBinding
 import com.weilylab.xhuschedule.newPackage.base.BaseBottomNavigationFragment
 import com.weilylab.xhuschedule.newPackage.config.Status.*
-import com.weilylab.xhuschedule.newPackage.ui.activity.BottomNavigationActivity
-import com.weilylab.xhuschedule.newPackage.ui.activity.NoticeActivity
-import com.weilylab.xhuschedule.newPackage.ui.activity.QueryTestActivity
+import com.weilylab.xhuschedule.newPackage.ui.activity.*
 import com.weilylab.xhuschedule.newPackage.utils.AnimationUtil
 import com.weilylab.xhuschedule.newPackage.utils.ShareUtil
 import com.weilylab.xhuschedule.newPackage.utils.rxAndroid.RxObservable
@@ -89,6 +86,9 @@ class ProfileFragment : BaseBottomNavigationFragment(R.layout.fragment_profile) 
 		}
 		fragmentProfileBinding.noticeLayout.setOnClickListener {
 			startActivity(Intent(activity, NoticeActivity::class.java))
+		}
+		fragmentProfileBinding.feedbackLayout.setOnClickListener {
+			startActivity(Intent(activity, FeedbackActivity::class.java))
 		}
 		fragmentProfileBinding.shareWithFriendsLayout.setOnClickListener {
 			showShareMenu()

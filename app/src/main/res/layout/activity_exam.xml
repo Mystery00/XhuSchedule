@@ -26,12 +26,12 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="45dp">
 
                 <androidx.appcompat.widget.Toolbar
                     android:id="@+id/toolbar"
                     android:layout_width="0dp"
-                    android:layout_height="?attr/actionBarSize"
+                    android:layout_height="match_parent"
                     android:background="?attr/colorPrimary"
                     app:layout_constraintBottom_toTopOf="@id/spinner_username"
                     app:layout_constraintEnd_toEndOf="parent"

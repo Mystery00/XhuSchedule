@@ -34,7 +34,9 @@
 			</intent-filter>
 			<intent-filter>
 				<action android:name="com.weilylab.xhuschedule.NOTIFICATION_VIEW" />
+
 				<category android:name="android.intent.category.DEFAULT" />
+
 				<data
 					android:host="main"
 					android:scheme="xhuschedule" />
@@ -208,6 +210,11 @@
 		<service
 			android:name=".service.CheckJobService"
 			android:permission="android.permission.BIND_JOB_SERVICE" />
+
+		<activity
+			android:name=".newPackage.ui.activity.FeedbackActivity"
+			android:label="@string/title_activity_feedback"
+			android:theme="@style/AppTheme"></activity>
 	</application>
 
 </manifest>

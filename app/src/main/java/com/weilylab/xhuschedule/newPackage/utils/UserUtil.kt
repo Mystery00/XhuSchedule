@@ -1,5 +1,6 @@
 package com.weilylab.xhuschedule.newPackage.utils
 
+import com.weilylab.xhuschedule.newPackage.api.FeedbackAPI
 import com.weilylab.xhuschedule.newPackage.api.UserAPI
 import com.weilylab.xhuschedule.newPackage.constant.ResponseCodeConstants
 import com.weilylab.xhuschedule.newPackage.constant.StringConstant
@@ -10,6 +11,7 @@ import com.weilylab.xhuschedule.newPackage.listener.RequestListener
 import com.weilylab.xhuschedule.newPackage.model.response.BaseResponse
 import com.weilylab.xhuschedule.newPackage.model.Student
 import com.weilylab.xhuschedule.newPackage.model.StudentInfo
+import com.weilylab.xhuschedule.newPackage.model.response.FeedbackResponse
 import com.weilylab.xhuschedule.newPackage.model.response.LoginResponse
 import com.weilylab.xhuschedule.newPackage.utils.rxAndroid.RxObserver
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -91,7 +93,43 @@ object UserUtil {
 				})
 	}
 
-	fun findMainStudent(list: List<Student>?): Student? = list?.firstOrNull {
-		it.isMain
+	fun feedback(student: Student, requestListener: RequestListener<Boolean>, appVersion: String, systemVersion: String, manufacturer: String, model: String, rom: String, other: String, message: String, index: Int = 0) {
+		RetrofitFactory.tomcatRetrofit
+				.create(FeedbackAPI::class.java)
+				.feedback(student.username, appVersion, systemVersion, manufacturer, model, rom, other, message)
+				.subscribeOn(Schedulers.newThread())
+				.unsubscribeOn(Schedulers.newThread())
+				.map { GsonFactory.parseInputStream(it.byteStream(), FeedbackResponse::class.java) }
+				.observeOn(AndroidSchedulers.mainThread())
+				.subscribe(object : RxObserver<FeedbackResponse>() {
+					override fun onFinish(data: FeedbackResponse?) {
+						when {
+							data == null -> requestListener.error(ResponseCodeConstants.UNKNOWN_ERROR, StringConstant.hint_data_null)
+							data.rt == ResponseCodeConstants.DONE -> requestListener.done(true)
+							data.rt == ResponseCodeConstants.ERROR_NOT_LOGIN -> {
+								if (index == RETRY_TIME)
+									requestListener.error(ResponseCodeConstants.DO_TOO_MANY, StringConstant.hint_do_too_many)
+								else
+									login(student, null, object : RequestListener<Boolean> {
+										override fun done(t: Boolean) {
+											feedback(student, requestListener, appVersion, systemVersion, manufacturer, model, rom, other, message)
+										}
+
+										override fun error(rt: String, msg: String?) {
+											requestListener.error(rt, msg)
+										}
+									})
+							}
+							else -> requestListener.error(data.rt, data.msg)
+						}
+					}
+
+					override fun onError(e: Throwable) {
+						Logs.wtf("onError: ", e)
+						requestListener.error(ResponseCodeConstants.CATCH_ERROR, e.message)
+					}
+				})
 	}
+
+	fun findMainStudent(list: List<Student>?): Student? = list?.firstOrNull { it.isMain }
 }

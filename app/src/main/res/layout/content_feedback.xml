@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:background="#e0e0e0"
+	app:layout_behavior="@string/appbar_scrolling_view_behavior"
+	tools:context=".newPackage.ui.activity.FeedbackActivity"
+	tools:showIn="@layout/activity_feedback">
+
+	<androidx.constraintlayout.widget.ConstraintLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_marginStart="20dp"
+		android:layout_marginTop="22dp"
+		android:layout_marginEnd="20dp">
+
+		<TextView
+			android:id="@+id/textViewTitle"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="@string/hint_feedback_title"
+			android:textColor="@color/colorAccent"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintTop_toTopOf="parent" />
+
+		<EditText
+			android:id="@+id/editTextFeedback"
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:layout_marginTop="18dp"
+			android:background="@drawable/drawable_shape_corner"
+			android:gravity="top"
+			android:hint="@string/hint_feedback"
+			android:inputType="text|textMultiLine"
+			android:minHeight="160dp"
+			android:padding="10dp"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintTop_toBottomOf="@id/textViewTitle" />
+
+		<TextView
+			android:id="@+id/textViewHint"
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:layout_marginStart="8dp"
+			android:layout_marginTop="12dp"
+			android:layout_marginEnd="8dp"
+			android:text="@string/hint_feedback_submit"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintTop_toBottomOf="@id/editTextFeedback" />
+
+		<Button
+			android:id="@+id/buttonSubmit"
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:layout_marginTop="55dp"
+			android:backgroundTint="@color/colorAccent"
+			android:text="@string/action_feedback"
+			android:textColor="@android:color/white"
+			app:layout_constraintBottom_toBottomOf="parent"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintTop_toBottomOf="@id/textViewHint" />
+
+	</androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.core.widget.NestedScrollView>
