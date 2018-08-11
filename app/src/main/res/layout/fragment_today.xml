@@ -26,6 +26,7 @@
 				android:layout_height="wrap_content"
 				android:layout_gravity="center"
 				android:drawableTop="@mipmap/ic_null_course_data"
+				android:drawablePadding="16dp"
 				android:text="@string/hint_null_course_data" />
 
 		</FrameLayout>

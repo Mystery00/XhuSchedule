@@ -140,6 +140,7 @@ class ProfileFragment : BaseBottomNavigationFragment(R.layout.fragment_profile) 
 	}
 
 	override fun updateTitle() {
+
 		RxObservable<Boolean>()
 				.doThings {
 					var num = 0

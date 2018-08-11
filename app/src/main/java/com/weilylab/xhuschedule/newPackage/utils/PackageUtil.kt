@@ -8,10 +8,11 @@ object PackageUtil {
 	private const val timPackage = "com.tencent.tim"
 	private const val wxPackage = "com.tencent.mm"
 	private const val wbPackage = "com.sina.weibo"
+	private const val weicoPackage = "com.weico.international"
 
 	fun isQQApplicationAvailable(): Boolean = isApplicationAvailable(arrayListOf(qqPackage, timPackage))
-	fun isWeiXinApplicationAvailable(): Boolean = isApplicationAvailable(wxPackage)
-	fun isWeiBoApplicationAvailable(): Boolean = isApplicationAvailable(wbPackage)
+	fun isWeiXinApplicationAvailable(): Boolean = isApplicationAvailable(arrayListOf(wxPackage))
+	fun isWeiBoApplicationAvailable(): Boolean = isApplicationAvailable(arrayListOf(wbPackage, weicoPackage))
 
 	/**
 	 * 判断手机是否安装某个应用
@@ -22,13 +23,12 @@ object PackageUtil {
 	fun isApplicationAvailable(appPackageName: String): Boolean {
 		val packageManager = APP.context.packageManager// 获取packageManager
 		val installedPackages = packageManager.getInstalledPackages(0)// 获取所有已安装程序的包信息
-		if (installedPackages != null) {
+		if (installedPackages != null)
 			for (i in installedPackages.indices) {
 				val pn = installedPackages[i].packageName
 				if (appPackageName == pn)
 					return true
 			}
-		}
 		return false
 	}
 
@@ -41,13 +41,12 @@ object PackageUtil {
 	fun isApplicationAvailable(arrayList: ArrayList<String>): Boolean {
 		val packageManager = APP.context.packageManager// 获取packageManager
 		val installedPackages = packageManager.getInstalledPackages(0)// 获取所有已安装程序的包信息
-		if (installedPackages != null) {
+		if (installedPackages != null)
 			for (i in installedPackages.indices) {
 				val pn = installedPackages[i].packageName
 				if (arrayList.contains(pn))
 					return true
 			}
-		}
 		return false
 	}
 }

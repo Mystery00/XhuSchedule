@@ -27,4 +27,11 @@ class DateAdapterHelper : BaseObservable() {
 			field = colorArray
 			notifyPropertyChanged(BR.colorArray)
 		}
+
+	@get:Bindable
+	var currentWeek = 1
+		set(currentWeek) {
+			field = currentWeek
+			notifyPropertyChanged(BR.currentWeek)
+		}
 }

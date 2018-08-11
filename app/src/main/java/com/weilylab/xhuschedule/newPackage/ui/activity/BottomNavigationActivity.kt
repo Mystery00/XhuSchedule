@@ -1,6 +1,5 @@
 package com.weilylab.xhuschedule.newPackage.ui.activity
 
-import android.animation.Animator
 import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
 import android.app.Activity
@@ -95,7 +94,7 @@ class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_naviga
 	private val courseListObserver = Observer<PackageData<List<Schedule>>> {
 		when (it.status) {
 			Content -> {
-				weekView.data(it.data).showView()
+				weekView.data(it.data)!!.showView()
 				hideDialog()
 				cancelLoading()
 			}
@@ -159,7 +158,6 @@ class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_naviga
 		viewPager.offscreenPageLimit = 2
 		viewPager.adapter = viewPagerAdapter
 		weekView.curWeek(1)
-				.hideLeftLayout()
 				.callback(IWeekView.OnWeekItemClickedListener {
 					bottomNavigationViewModel.week.value = it
 					viewPagerAdapter.getItem(viewPager.currentItem).updateTitle()
@@ -217,6 +215,17 @@ class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_naviga
 			override fun onPageSelected(position: Int) {
 				bottomNavigationView.setCheckedItem(position)
 				viewPagerAdapter.getItem(position).updateTitle()
+				when (position) {
+					0 -> {
+						if (isShowWeekView) hideWeekView()
+						titleTextView.isClickable = false
+					}
+					1 -> titleTextView.isClickable = true
+					2 -> {
+						if (isShowWeekView) hideWeekView()
+						titleTextView.isClickable = false
+					}
+				}
 			}
 		})
 		titleTextView.setOnClickListener {
@@ -224,7 +233,6 @@ class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_naviga
 				hideWeekView()
 			else
 				showWeekView()
-			isShowWeekView = !isShowWeekView
 		}
 		imageSync.setOnClickListener {
 			action = ACTION_REFRESH
@@ -249,42 +257,16 @@ class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_naviga
 
 	private fun showWeekView() {
 		animation?.cancel()
-		animation = ObjectAnimator.ofFloat(weekView, "translationY", 0F, DensityTools.dp2px(this, 90F).toFloat())
-		animation!!.addListener(object : Animator.AnimatorListener {
-			override fun onAnimationRepeat(p0: Animator?) {
-			}
-
-			override fun onAnimationEnd(p0: Animator?) {
-			}
-
-			override fun onAnimationCancel(p0: Animator?) {
-			}
-
-			override fun onAnimationStart(p0: Animator?) {
-				weekView.isShow(true)
-			}
-		})
+		animation = ObjectAnimator.ofFloat(weekView, "translationY", 0F, DensityTools.dp2px(this, 72F).toFloat())
 		animation!!.start()
+		isShowWeekView = true
 	}
 
 	private fun hideWeekView() {
 		animation?.cancel()
-		animation = ObjectAnimator.ofFloat(weekView, "translationY", DensityTools.dp2px(this, 90F).toFloat(), 0F)
-		animation!!.addListener(object : Animator.AnimatorListener {
-			override fun onAnimationRepeat(p0: Animator?) {
-			}
-
-			override fun onAnimationEnd(p0: Animator?) {
-				weekView.isShow(false)
-			}
-
-			override fun onAnimationCancel(p0: Animator?) {
-			}
-
-			override fun onAnimationStart(p0: Animator?) {
-			}
-		})
+		animation = ObjectAnimator.ofFloat(weekView, "translationY", DensityTools.dp2px(this, 72F).toFloat(), 0F)
 		animation!!.start()
+		isShowWeekView = false
 	}
 
 	private fun showDialog() {
