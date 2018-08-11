@@ -31,9 +31,10 @@
  * Last modified 18-2-21 下午9:11
  */
 
-package com.weilylab.xhuschedule.util.download
+package com.weilylab.xhuschedule.newPackage.interceptor
 
 import com.weilylab.xhuschedule.newPackage.listener.DownloadProgressListener
+import com.weilylab.xhuschedule.newPackage.model.DownloadProgressResponseBody
 import okhttp3.Interceptor
 import okhttp3.Response
 import java.io.IOException

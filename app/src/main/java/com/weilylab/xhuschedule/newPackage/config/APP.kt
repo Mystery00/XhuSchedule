@@ -44,6 +44,7 @@ import com.tencent.mm.opensdk.openapi.IWXAPI
 import com.tencent.mm.opensdk.openapi.WXAPIFactory
 import com.tencent.tauth.Tencent
 import com.weilylab.xhuschedule.newPackage.repository.local.db.DBHelper
+import com.weilylab.xhuschedule.newPackage.utils.NotificationUtil
 import com.weilylab.xhuschedule.newPackage.utils.PackageUtil
 import com.weilylab.xhuschedule.util.ScheduleHelper
 import vip.mystery0.crashhandler.CrashHandler
@@ -58,7 +59,7 @@ class APP : MultiDexApplication() {
 		context = applicationContext
 		instance = this
 		DBHelper.init(this)
-		ScheduleHelper.initChannelID(APP.context)//初始化NotificationChannelID
+		NotificationUtil.initChannelID(APP.context)//初始化NotificationChannelID
 		if (PackageUtil.isQQApplicationAvailable())
 			tencent = Tencent.createInstance("1106663023", CondomContext.wrap(applicationContext, "Tencent"))
 		if (PackageUtil.isWeiXinApplicationAvailable())

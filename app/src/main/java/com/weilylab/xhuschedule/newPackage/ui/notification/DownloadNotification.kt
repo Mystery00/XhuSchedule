@@ -31,7 +31,7 @@
  * Last modified 18-2-21 下午9:11
  */
 
-package com.weilylab.xhuschedule.util.notification
+package com.weilylab.xhuschedule.newPackage.ui.notification
 
 import android.annotation.SuppressLint
 import android.app.Notification
@@ -41,7 +41,7 @@ import androidx.core.app.NotificationCompat
 
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.util.Constants
-import com.weilylab.xhuschedule.util.download.Download
+import com.weilylab.xhuschedule.newPackage.model.Download
 import vip.mystery0.tools.utils.FileTools
 
 object DownloadNotification {
@@ -58,14 +58,14 @@ object DownloadNotification {
                 .setContentTitle(context.getString(R.string.download_notification_title, fileName))
                 .setOngoing(true)
                 .setAutoCancel(true)
-        notify(context, notificationBuilder.build())
+		notify(context, notificationBuilder.build())
     }
 
     fun updateProgress(context: Context, download: Download) {
         notificationBuilder.setProgress(100, download.progress, false)
                 .setContentText(context.getString(R.string.download_notification_title_download, FileTools.formatFileSize(download.currentFileSize), FileTools.formatFileSize(download.totalFileSize)))
                 .setSubText(context.getString(R.string.download_notification_text, download.progress))
-        notify(context, notificationBuilder.build())
+		notify(context, notificationBuilder.build())
     }
 
     fun downloadError(context: Context) {
@@ -73,7 +73,7 @@ object DownloadNotification {
                 .setContentTitle(context.getString(R.string.error_download))
                 .setContentText(" ")
                 .setOngoing(false)
-        notify(context, notificationBuilder.build())
+		notify(context, notificationBuilder.build())
     }
 
     private fun notify(context: Context, notification: Notification) {

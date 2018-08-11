@@ -1,5 +1,5 @@
 /*
- * Created by Mystery0 on 18-2-27 下午6:59.
+ * Created by Mystery0 on 18-2-21 下午9:12.
  * Copyright (c) 2018. All Rights reserved.
  *
  *                    =====================================================
@@ -28,30 +28,49 @@
  *                    =                                                   =
  *                    =====================================================
  *
- * Last modified 18-2-27 下午6:59
+ * Last modified 18-2-21 下午9:11
  */
 
-package com.weilylab.xhuschedule.util
+package com.weilylab.xhuschedule.newPackage.model
 
-object ConstantsCode {
-    const val DONE="0"
+import okhttp3.MediaType
+import okhttp3.ResponseBody
+import com.weilylab.xhuschedule.newPackage.listener.DownloadProgressListener
+import okio.*
+import java.io.IOException
 
-    const val JWC_TIMEOUT = "101"
-    const val JWC_BUSY = "102"
-    const val JWC_NEED_RATE = "103"
 
-    const val SERVER_WRONG = "201"
-    const val SERVER_COURSE_ANALYZE_ERROR = "202"
-    const val SERVER_EXAM_ANALYZE_ERROR = "203"
-    const val SERVER_SCORE_ANALYZE_ERROR = "204"
-    const val SERVER_PROFILE_ANALYZE_ERROR = "205"
+/**
+ * Created by JokAr-.
+ * 原文地址：http://blog.csdn.net/a1018875550/article/details/51832700
+ */
+class DownloadProgressResponseBody(private val responseBody: ResponseBody,
+                                   private val progressListener: DownloadProgressListener?) : ResponseBody() {
+    private var bufferedSource: BufferedSource? = null
 
-    const val VERIFY_SERVER_TIMEOUT = "301"
-    const val VERIFY_SERVER_ANAYLYZE_ERROR = "302"
+    override fun contentType(): MediaType? = responseBody.contentType()
 
-    const val ERROR_USERNAME = "401"
-    const val ERROR_PASSWORD = "402"
-    const val ERROR_VERIFY_CODE = "403"
-    const val ERROR_NOT_LOGIN = "405"
-    const val ERROR_API = "406"
+    override fun contentLength(): Long = responseBody.contentLength()
+
+    override fun source(): BufferedSource {
+        if (bufferedSource == null) {
+            bufferedSource = Okio.buffer(source(responseBody.source()))
+        }
+        return bufferedSource!!
+    }
+
+    private fun source(source: Source): Source {
+        return object : ForwardingSource(source) {
+            internal var totalBytesRead = 0L
+
+            @Throws(IOException::class)
+            override fun read(sink: Buffer, byteCount: Long): Long {
+                val bytesRead = super.read(sink, byteCount)
+                totalBytesRead += if (bytesRead != -1L) bytesRead else 0
+                progressListener?.update(totalBytesRead, responseBody.contentLength(), bytesRead == -1L)
+                return bytesRead
+            }
+        }
+
+    }
 }

@@ -31,46 +31,41 @@
  * Last modified 18-2-21 下午9:11
  */
 
-package com.weilylab.xhuschedule.util.download
+package com.weilylab.xhuschedule.newPackage.model
 
-import okhttp3.MediaType
-import okhttp3.ResponseBody
-import com.weilylab.xhuschedule.newPackage.listener.DownloadProgressListener
-import okio.*
-import java.io.IOException
-
+import android.os.Parcel
+import android.os.Parcelable
 
 /**
  * Created by JokAr-.
  * 原文地址：http://blog.csdn.net/a1018875550/article/details/51832700
  */
-class DownloadProgressResponseBody(private val responseBody: ResponseBody,
-                                   private val progressListener: DownloadProgressListener?) : ResponseBody() {
-    private var bufferedSource: BufferedSource? = null
+class Download : Parcelable {
+    var progress = 0
+    var currentFileSize = 0L
+    var totalFileSize = 0L
 
-    override fun contentType(): MediaType? = responseBody.contentType()
+    override fun describeContents(): Int = 0
 
-    override fun contentLength(): Long = responseBody.contentLength()
-
-    override fun source(): BufferedSource {
-        if (bufferedSource == null) {
-            bufferedSource = Okio.buffer(source(responseBody.source()))
-        }
-        return bufferedSource!!
+    override fun writeToParcel(dest: Parcel, flags: Int) {
+        dest.writeInt(this.progress)
+        dest.writeLong(this.currentFileSize)
+        dest.writeLong(this.totalFileSize)
     }
 
-    private fun source(source: Source): Source {
-        return object : ForwardingSource(source) {
-            internal var totalBytesRead = 0L
+    constructor()
 
-            @Throws(IOException::class)
-            override fun read(sink: Buffer, byteCount: Long): Long {
-                val bytesRead = super.read(sink, byteCount)
-                totalBytesRead += if (bytesRead != -1L) bytesRead else 0
-                progressListener?.update(totalBytesRead, responseBody.contentLength(), bytesRead == -1L)
-                return bytesRead
-            }
+    private constructor(parcel: Parcel) {
+        this.progress = parcel.readInt()
+        this.currentFileSize = parcel.readLong()
+        this.totalFileSize = parcel.readLong()
+    }
+
+    companion object {
+		@JvmField
+        val CREATOR: Parcelable.Creator<Download> = object : Parcelable.Creator<Download> {
+            override fun createFromParcel(source: Parcel): Download = Download(source)
+            override fun newArray(size: Int): Array<Download?> = arrayOfNulls(size)
         }
-
     }
 }
