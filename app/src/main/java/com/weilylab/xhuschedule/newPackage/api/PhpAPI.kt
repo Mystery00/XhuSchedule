@@ -2,11 +2,16 @@ package com.weilylab.xhuschedule.newPackage.api
 
 import io.reactivex.Observable
 import okhttp3.ResponseBody
-import retrofit2.http.GET
-import retrofit2.http.Streaming
+import retrofit2.http.Field
+import retrofit2.http.FormUrlEncoded
+import retrofit2.http.POST
 
 interface PhpAPI {
-	@Streaming
-	@GET("/9783/interface/checkVersion.php")
-	fun checkVersion(): Observable<ResponseBody>
+	@FormUrlEncoded
+	@POST("/9783/interface/checkVersion.php")
+	fun checkVersion(@Field("appVersion") appVersion: String,
+					 @Field("systemVersion") systemVersion: String,
+					 @Field("factory") vendor: String,
+					 @Field("model") model: String,
+					 @Field("rom") rom: String): Observable<ResponseBody>
 }

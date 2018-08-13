@@ -2,6 +2,7 @@ package com.weilylab.xhuschedule.newPackage.service
 
 import android.app.Service
 import android.content.Intent
+import android.os.Build
 import android.os.IBinder
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.NotificationCompat
@@ -36,9 +37,14 @@ class CheckUpdateService : Service() {
 	}
 
 	override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+		val appVersion = "${getString(R.string.app_version_name)}-${getString(R.string.app_version_code)}"
+		val systemVersion = "Android ${Build.VERSION.RELEASE}-${Build.VERSION.SDK_INT}"
+		val manufacturer = Build.MANUFACTURER
+		val model = Build.MODEL
+		val rom = Build.DISPLAY
 		RetrofitFactory.retrofit
 				.create(PhpAPI::class.java)
-				.checkVersion()
+				.checkVersion(appVersion, systemVersion, manufacturer, model, rom)
 				.subscribeOn(Schedulers.newThread())
 				.unsubscribeOn(Schedulers.newThread())
 				.map { GsonFactory.parseInputStream(it.byteStream(), Version::class.java) }
