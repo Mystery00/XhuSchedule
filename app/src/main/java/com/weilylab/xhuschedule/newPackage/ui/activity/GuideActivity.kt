@@ -66,6 +66,11 @@ class GuideActivity : XhuBaseActivity(R.layout.activity_guide) {
 		super.inflateView(layoutId)
 	}
 
+	override fun initView() {
+		super.initView()
+		changeBackground(0)
+	}
+
 	override fun initData() {
 		super.initData()
 		gestureDetector = GestureDetector(this, GuideViewTouch())
@@ -78,7 +83,7 @@ class GuideActivity : XhuBaseActivity(R.layout.activity_guide) {
 		mSectionsPagerAdapter = SectionsPagerAdapter(supportFragmentManager)
 
 		container.adapter = mSectionsPagerAdapter
-		for (i in 0..imageArray.size) {
+		for (i in 0 until imageArray.size) {
 			val view = View(applicationContext)
 			view.background = grayPointDrawable
 			val params = LinearLayout.LayoutParams(20, 20)
@@ -125,12 +130,18 @@ class GuideActivity : XhuBaseActivity(R.layout.activity_guide) {
 			}
 
 			override fun onPageSelected(position: Int) {
+				changeBackground(position)
 				currentIndex = position
 				imageButtonPre.visibility = if (position == 0) View.GONE else View.VISIBLE
 				imageButtonNext.visibility = if (position == imageArray.size - 1) View.GONE else View.VISIBLE
 				buttonFinish.visibility = if (position == imageArray.size - 1) View.VISIBLE else View.GONE
 			}
 		})
+	}
+
+	private fun changeBackground(position: Int) {
+		val resId = resources.getIdentifier("welcome${position + 1}_bg", "mipmap", packageName)
+		imageViewBackground.setImageResource(resId)
 	}
 
 	override fun dispatchTouchEvent(ev: MotionEvent): Boolean {

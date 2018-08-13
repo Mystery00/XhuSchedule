@@ -54,10 +54,6 @@
 			android:name=".newPackage.ui.activity.SplashImageActivity"
 			android:screenOrientation="portrait" />
 		<activity
-			android:name=".activity.MainActivity"
-			android:screenOrientation="portrait"
-			android:theme="@style/AppTheme.NoActionBar" />
-		<activity
 			android:name=".newPackage.ui.activity.LoginActivity"
 			android:screenOrientation="portrait"
 			android:theme="@style/AppTheme.NoActionBar"
@@ -67,36 +63,10 @@
 			android:screenOrientation="portrait"
 			android:theme="@style/AppTheme.NoActionBar" />
 		<activity
-			android:name=".activity.ExamActivity"
-			android:label="@string/title_activity_exam"
-			android:screenOrientation="portrait"
-			android:theme="@style/AppTheme.NoActionBar" />
-		<activity
-			android:name=".activity.ScoreActivity"
-			android:label="@string/title_activity_score"
-			android:screenOrientation="portrait"
-			android:theme="@style/AppTheme.NoActionBar" />
-		<activity
-			android:name=".activity.ExpScoreActivity"
-			android:label="@string/title_activity_expscore"
-			android:screenOrientation="portrait"
-			android:theme="@style/AppTheme.NoActionBar" />
-		<activity
-			android:name=".activity.ScheduleActivity"
-			android:label="@string/title_activity_schedule"
-			android:screenOrientation="portrait"
-			android:theme="@style/AppTheme.NoActionBar" />
-		<activity
 			android:name=".newPackage.ui.activity.SettingsActivity"
 			android:label="@string/title_activity_settings"
 			android:screenOrientation="portrait"
 			android:theme="@style/AppTheme.NoActionBar" />
-		<activity
-			android:name=".activity.shortcut.RefreshWidgetActivity"
-			android:theme="@android:style/Theme.NoDisplay" />
-		<activity
-			android:name=".activity.shortcut.RefreshColorActivity"
-			android:theme="@android:style/Theme.NoDisplay" />
 		<activity
 			android:name=".newPackage.ui.activity.NoticeActivity"
 			android:label="@string/title_activity_notice"
@@ -117,23 +87,15 @@
 			android:screenOrientation="portrait"
 			android:theme="@style/AppTheme.NoActionBar" />
 
-		<service android:name=".service.UpdateService" />
-		<service android:name=".newPackage.service.DownloadService" />
-		<service android:name=".service.WidgetLastActionService" />
-		<service android:name=".service.WidgetNextActionService" />
-		<service android:name=".service.WidgetInitService" />
-		<service android:name=".service.ClearCacheColorService" />
-		<service android:name=".service.ShowNotificationService" />
-		<service android:name=".service.BootInitService" />
 		<service
-			android:name=".service.GridWidgetService"
-			android:permission="android.permission.BIND_REMOTEVIEWS" />
+			android:name=".newPackage.service.DownloadSplashIntentService"
+			android:exported="false" />
 		<service
-			android:name=".service.TodayWidgetService"
-			android:permission="android.permission.BIND_REMOTEVIEWS" />
+			android:name=".newPackage.service.CheckUpdateService"
+			android:exported="false" />
 		<service
-			android:name=".service.ExamWidgetService"
-			android:permission="android.permission.BIND_REMOTEVIEWS" />
+			android:name=".newPackage.service.DownloadService"
+			android:exported="false" />
 
 		<provider
 			android:name="androidx.core.content.FileProvider"
@@ -144,48 +106,6 @@
 				android:name="android.support.FILE_PROVIDER_PATHS"
 				android:resource="@xml/file_paths" />
 		</provider>
-
-		<receiver android:name=".receiver.AlarmReceiver" />
-		<receiver android:name=".receiver.BootCompletedReceiver">
-			<intent-filter>
-				<action android:name="android.intent.action.BOOT_COMPLETED" />
-
-				<category android:name="android.intent.category.HOME" />
-			</intent-filter>
-		</receiver>
-		<receiver
-			android:name=".util.widget.ScheduleCourseWidget"
-			android:label="本周课表">
-			<intent-filter>
-				<action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-			</intent-filter>
-
-			<meta-data
-				android:name="android.appwidget.provider"
-				android:resource="@xml/schedule_course_widget_info" />
-		</receiver>
-		<receiver
-			android:name=".util.widget.TodayCourseWidget"
-			android:label="今日课表">
-			<intent-filter>
-				<action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-			</intent-filter>
-
-			<meta-data
-				android:name="android.appwidget.provider"
-				android:resource="@xml/today_course_widget_info" />
-		</receiver>
-		<receiver
-			android:name=".util.widget.ExamWidget"
-			android:label="考试查询">
-			<intent-filter>
-				<action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-			</intent-filter>
-
-			<meta-data
-				android:name="android.appwidget.provider"
-				android:resource="@xml/exam_widget_info" />
-		</receiver>
 
 		<!-- 腾讯开放平台 -->
 		<activity
@@ -208,17 +128,6 @@
 			android:process="com.weilylab.xhuschedule.sb"
 			android:theme="@android:style/Theme.Translucent.NoTitleBar" />
 		<!-- 腾讯开放平台 -->
-
-		<service
-			android:name=".newPackage.service.DownloadSplashIntentService"
-			android:exported="false" />
-		<service
-			android:name=".service.CheckJobService"
-			android:permission="android.permission.BIND_JOB_SERVICE" />
-		<service
-			android:name=".newPackage.service.CheckUpdateService"
-			android:enabled="true"
-			android:exported="false"></service>
 	</application>
 
 </manifest>

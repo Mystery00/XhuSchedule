@@ -5,14 +5,26 @@
 	android:id="@+id/main_content"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
-	android:background="#fadeb9"
 	android:fitsSystemWindows="true"
 	tools:context=".newPackage.ui.activity.GuideActivity">
+
+	<ImageView
+		android:id="@+id/imageViewBackground"
+		android:layout_width="0dp"
+		android:layout_height="0dp"
+		android:contentDescription="@string/app_name"
+		android:scaleType="centerCrop"
+		app:layout_constraintBottom_toBottomOf="parent"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toTopOf="parent" />
 
 	<androidx.viewpager.widget.ViewPager
 		android:id="@+id/container"
 		android:layout_width="0dp"
 		android:layout_height="0dp"
+		android:layout_marginTop="48dp"
+		android:layout_marginBottom="16dp"
 		app:layout_behavior="@string/appbar_scrolling_view_behavior"
 		app:layout_constraintBottom_toTopOf="@id/bottomDivider"
 		app:layout_constraintEnd_toEndOf="parent"
@@ -35,10 +47,10 @@
 		android:layout_width="0dp"
 		android:layout_height="?attr/actionBarSize"
 		android:layout_gravity="bottom"
-		android:paddingEnd="@dimen/activity_horizontal_margin"
-		android:paddingLeft="@dimen/activity_horizontal_margin"
-		android:paddingRight="@dimen/activity_horizontal_margin"
 		android:paddingStart="@dimen/activity_horizontal_margin"
+		android:paddingLeft="@dimen/activity_horizontal_margin"
+		android:paddingEnd="@dimen/activity_horizontal_margin"
+		android:paddingRight="@dimen/activity_horizontal_margin"
 		app:layout_constraintBottom_toBottomOf="parent"
 		app:layout_constraintEnd_toEndOf="parent"
 		app:layout_constraintStart_toStartOf="parent">

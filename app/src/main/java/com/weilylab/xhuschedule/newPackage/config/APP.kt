@@ -46,7 +46,6 @@ import com.tencent.tauth.Tencent
 import com.weilylab.xhuschedule.newPackage.repository.local.db.DBHelper
 import com.weilylab.xhuschedule.newPackage.utils.NotificationUtil
 import com.weilylab.xhuschedule.newPackage.utils.PackageUtil
-import com.weilylab.xhuschedule.util.ScheduleHelper
 import vip.mystery0.crashhandler.CrashHandler
 
 /**
