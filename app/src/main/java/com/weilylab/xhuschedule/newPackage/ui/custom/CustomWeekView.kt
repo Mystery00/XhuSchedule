@@ -32,6 +32,7 @@ class CustomWeekView : LinearLayout, WeekViewEnable<CustomWeekView> {
 	constructor(context: Context) : this(context, null)
 	constructor(context: Context, attributes: AttributeSet?) : super(context, attributes) {
 		layoutWeekViewBinding = LayoutWeekViewBinding.inflate(LayoutInflater.from(context), this, true)
+		layoutWeekViewBinding.nestedScrollView.isSmoothScrollingEnabled = true
 	}
 
 	fun callback(onWeekItemClickedListener: IWeekView.OnWeekItemClickedListener): CustomWeekView {

@@ -78,11 +78,17 @@ class ProfileFragment : BaseBottomNavigationFragment(R.layout.fragment_profile) 
 		fragmentProfileBinding.queryTestLayout.setOnClickListener {
 			startActivity(Intent(activity, QueryTestActivity::class.java))
 		}
+		fragmentProfileBinding.queryScoreLayout.setOnClickListener {
+			SettingsActivity.intentTo(activity, SettingsActivity.TYPE_QUERY_SCORE)
+		}
 		fragmentProfileBinding.accountSettingsLayout.setOnClickListener {
 			SettingsActivity.intentTo(activity, SettingsActivity.TYPE_ACCOUNT)
 		}
 		fragmentProfileBinding.classSettingsLayout.setOnClickListener {
 			SettingsActivity.intentTo(activity, SettingsActivity.TYPE_CLASS)
+		}
+		fragmentProfileBinding.softwareSettingsLayout.setOnClickListener {
+			SettingsActivity.intentTo(activity, SettingsActivity.TYPE_SETTINGS)
 		}
 		fragmentProfileBinding.noticeLayout.setOnClickListener {
 			startActivity(Intent(activity, NoticeActivity::class.java))

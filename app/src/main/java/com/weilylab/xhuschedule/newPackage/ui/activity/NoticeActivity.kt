@@ -86,7 +86,7 @@ class NoticeActivity : XhuBaseActivity(R.layout.activity_notice) {
 				android.R.color.holo_green_light,
 				android.R.color.holo_orange_light,
 				android.R.color.holo_red_light)
-		swipeRefreshLayout.isRefreshing = true
+		showRefresh()
 	}
 
 	override fun initData() {

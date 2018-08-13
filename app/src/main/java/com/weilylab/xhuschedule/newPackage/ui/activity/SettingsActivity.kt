@@ -39,8 +39,10 @@ import android.view.MenuItem
 import android.preference.PreferenceFragment
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.newPackage.base.XhuBaseActivity
+import com.weilylab.xhuschedule.newPackage.ui.fragment.QueryScoreFragment
 import com.weilylab.xhuschedule.newPackage.ui.fragment.settings.AccountSettingsFragment
 import com.weilylab.xhuschedule.newPackage.ui.fragment.settings.ClassSettingsFragment
+import com.weilylab.xhuschedule.newPackage.ui.fragment.settings.SettingsPreferenceFragment
 import com.weilylab.xhuschedule.newPackage.utils.APPActivityManager
 import kotlinx.android.synthetic.main.activity_settings.*
 
@@ -49,6 +51,8 @@ class SettingsActivity : XhuBaseActivity(R.layout.activity_settings) {
 		private const val INTENT_FRAGMENT = "intent_fragment"
 		const val TYPE_ACCOUNT = 31
 		const val TYPE_CLASS = 32
+		const val TYPE_QUERY_SCORE = 33
+		const val TYPE_SETTINGS = 34
 
 		fun intentTo(context: Context?, type: Int) {
 			val intent = Intent(context, SettingsActivity::class.java)
@@ -62,6 +66,7 @@ class SettingsActivity : XhuBaseActivity(R.layout.activity_settings) {
 		fragmentManager.beginTransaction()
 				.replace(R.id.content_wrapper, getFragment())
 				.commit()
+		setTitleString()
 		setSupportActionBar(toolbar)
 		supportActionBar?.setDisplayHomeAsUpEnabled(true)
 	}
@@ -70,7 +75,19 @@ class SettingsActivity : XhuBaseActivity(R.layout.activity_settings) {
 		return when (intent.getIntExtra(INTENT_FRAGMENT, 0)) {
 			TYPE_ACCOUNT -> AccountSettingsFragment()
 			TYPE_CLASS -> ClassSettingsFragment()
+			TYPE_QUERY_SCORE -> QueryScoreFragment()
+			TYPE_SETTINGS -> SettingsPreferenceFragment()
 			else -> throw NullPointerException("null")
+		}
+	}
+
+	private fun setTitleString() {
+		toolbar.title = when (intent.getIntExtra(INTENT_FRAGMENT, 0)) {
+			TYPE_ACCOUNT -> "账号管理"
+			TYPE_CLASS -> "课程设置"
+			TYPE_QUERY_SCORE -> "成绩查询"
+			TYPE_SETTINGS -> "软件设置"
+			else -> "设置"
 		}
 	}
 

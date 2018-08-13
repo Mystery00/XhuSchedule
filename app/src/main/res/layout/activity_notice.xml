@@ -12,35 +12,46 @@
 	android:layout_height="match_parent"
 	tools:context="com.weilylab.xhuschedule.newPackage.ui.activity.NoticeActivity">
 
-	<androidx.appcompat.widget.Toolbar
-		android:id="@+id/toolbar"
+	<androidx.constraintlayout.widget.ConstraintLayout
 		android:layout_width="match_parent"
-		android:layout_height="45dp"
-		android:background="?attr/colorPrimary"
-		app:popupTheme="@style/AppTheme.PopupOverlay" />
+		android:layout_height="match_parent">
 
-	<View
-		android:id="@+id/line"
-		android:layout_width="0dp"
-		android:layout_height="0.33dp"
-		android:background="#e5e5e5"
-		app:layout_constraintBottom_toBottomOf="parent"
-		app:layout_constraintEnd_toEndOf="parent"
-		app:layout_constraintStart_toStartOf="parent"
-		app:layout_constraintTop_toBottomOf="@id/titleTextView" />
+		<androidx.appcompat.widget.Toolbar
+			android:id="@+id/toolbar"
+			android:layout_width="0dp"
+			android:layout_height="45dp"
+			android:background="?attr/colorPrimary"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintTop_toTopOf="parent"
+			app:popupTheme="@style/AppTheme.PopupOverlay" />
 
-	<androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-		android:id="@+id/swipeRefreshLayout"
-		android:layout_width="match_parent"
-		android:layout_height="match_parent"
-		android:layout_marginTop="45dp"
-		tools:context="com.weilylab.xhuschedule.newPackage.ui.activity.NoticeActivity">
+		<View
+			android:id="@+id/line"
+			android:layout_width="0dp"
+			android:layout_height="0.33dp"
+			android:background="#e5e5e5"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintTop_toBottomOf="@id/toolbar" />
 
-		<androidx.recyclerview.widget.RecyclerView
-			android:id="@+id/recyclerView"
-			android:layout_width="match_parent"
-			android:layout_height="match_parent" />
+		<androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+			android:id="@+id/swipeRefreshLayout"
+			android:layout_width="0dp"
+			android:layout_height="0dp"
+			app:layout_constraintBottom_toBottomOf="parent"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintTop_toBottomOf="@id/line"
+			tools:context="com.weilylab.xhuschedule.newPackage.ui.activity.NoticeActivity">
 
-	</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+			<androidx.recyclerview.widget.RecyclerView
+				android:id="@+id/recyclerView"
+				android:layout_width="match_parent"
+				android:layout_height="match_parent" />
+
+		</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+	</androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

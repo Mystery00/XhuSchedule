@@ -6,30 +6,6 @@
   -->
 
 <resources>
-    <string-array name="table_header">
-        <item>@string/table_header1</item>
-        <item>@string/table_header2</item>
-        <item>@string/table_header3</item>
-        <item>@string/table_header4</item>
-        <item>@string/table_header5</item>
-        <item>@string/table_header6</item>
-        <item>@string/table_header7</item>
-    </string-array>
-
-    <string-array name="table_nav">
-        <item>@string/table_nav1</item>
-        <item>@string/table_nav2</item>
-        <item>@string/table_nav3</item>
-        <item>@string/table_nav4</item>
-        <item>@string/table_nav5</item>
-        <item>@string/table_nav6</item>
-        <item>@string/table_nav7</item>
-        <item>@string/table_nav8</item>
-        <item>@string/table_nav9</item>
-        <item>@string/table_nav10</item>
-        <item>@string/table_nav11</item>
-    </string-array>
-
     <string-array name="color_array">
         <item>#039BDA</item>
         <item>#F5703C</item>
@@ -42,52 +18,5 @@
         <item>#A40035</item>
         <item>#32B16C</item>
         <item>#0000FF</item>
-    </string-array>
-
-    <string-array name="notification_tomorrow_type">
-        <item>提醒今天的课程</item>
-        <item>提醒明天的课程</item>
-    </string-array>
-
-    <string-array name="start_time">
-        <item>08:00</item>
-        <item>08:55</item>
-        <item>10:00</item>
-        <item>10:55</item>
-        <item>14:00</item>
-        <item>14:55</item>
-        <item>16:00</item>
-        <item>16:55</item>
-        <item>19:00</item>
-        <item>19:55</item>
-        <item>20:50</item>
-    </string-array>
-
-    <string-array name="end_time">
-        <item>08:45</item>
-        <item>09:40</item>
-        <item>10:45</item>
-        <item>11:40</item>
-        <item>14:45</item>
-        <item>15:40</item>
-        <item>16:45</item>
-        <item>17:40</item>
-        <item>19:45</item>
-        <item>20:40</item>
-        <item>21:35</item>
-    </string-array>
-
-    <string-array name="thumbnail_background_img">
-        <item>http://download.xhuschedule.mostpan.com/image/a.png?imageMogr2/thumbnail/270x480/blur/1x0/quality/50</item>
-        <item>http://download.xhuschedule.mostpan.com/image/b.png?imageMogr2/thumbnail/270x480/blur/1x0/quality/50</item>
-        <item>http://download.xhuschedule.mostpan.com/image/c.png?imageMogr2/thumbnail/270x480/blur/1x0/quality/50</item>
-        <item>http://download.xhuschedule.mostpan.com/image/d.png?imageMogr2/thumbnail/270x480/blur/1x0/quality/50</item>
-    </string-array>
-
-    <string-array name="background_img">
-        <item>http://download.xhuschedule.mostpan.com/image/a.png</item>
-        <item>http://download.xhuschedule.mostpan.com/image/b.png</item>
-        <item>http://download.xhuschedule.mostpan.com/image/c.png</item>
-        <item>http://download.xhuschedule.mostpan.com/image/d.png</item>
     </string-array>
 </resources>

@@ -26,6 +26,7 @@ import com.weilylab.xhuschedule.newPackage.ui.adapter.ViewPagerAdapter
 import com.weilylab.xhuschedule.newPackage.ui.fragment.ProfileFragment
 import com.weilylab.xhuschedule.newPackage.ui.fragment.TableFragment
 import com.weilylab.xhuschedule.newPackage.ui.fragment.TodayFragment
+import com.weilylab.xhuschedule.newPackage.utils.ConfigUtil
 import com.weilylab.xhuschedule.newPackage.utils.ConfigurationUtil
 import com.weilylab.xhuschedule.newPackage.utils.LayoutRefreshConfigUtil
 import com.weilylab.xhuschedule.newPackage.utils.UserUtil
@@ -39,6 +40,7 @@ import com.zyao89.view.zloading.Z_TYPE
 import kotlinx.android.synthetic.main.activity_bottom_navigation.*
 import kotlinx.android.synthetic.main.content_bottom_navigation.*
 import vip.mystery0.bottomTabView.BottomTabItem
+import vip.mystery0.logs.Logs
 import vip.mystery0.tools.utils.DensityTools
 import java.util.ArrayList
 
@@ -181,6 +183,7 @@ class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_naviga
 		super.initData()
 		initViewModel()
 		viewPagerAdapter.getItem(0).updateTitle()
+		configWeekView(0)
 		BottomNavigationRepository.queryStudentList(bottomNavigationViewModel)
 	}
 
@@ -220,19 +223,10 @@ class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_naviga
 			override fun onPageSelected(position: Int) {
 				bottomNavigationView.setCheckedItem(position)
 				viewPagerAdapter.getItem(position).updateTitle()
-				when (position) {
-					0 -> {
-						if (isShowWeekView) hideWeekView()
-						titleTextView.isClickable = false
-					}
-					1 -> titleTextView.isClickable = true
-					2 -> {
-						if (isShowWeekView) hideWeekView()
-						titleTextView.isClickable = false
-					}
-				}
+				configWeekView(position)
 			}
 		})
+		appBarLayout.setOnClickListener { Logs.i("monitor: ") }
 		titleTextView.setOnClickListener {
 			if (isShowWeekView)
 				hideWeekView()
@@ -257,6 +251,28 @@ class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_naviga
 		if (LayoutRefreshConfigUtil.isRefreshBottomNavigationActivity) {
 			BottomNavigationRepository.queryStudentList(bottomNavigationViewModel)
 			LayoutRefreshConfigUtil.isRefreshBottomNavigationActivity = false
+		}
+	}
+
+	override fun onBackPressed() {
+		if (ConfigUtil.isTwiceClick())
+			super.onBackPressed()
+		else
+			Toast.makeText(this, R.string.hint_twice_press_exit, Toast.LENGTH_SHORT)
+					.show()
+	}
+
+	private fun configWeekView(position: Int) {
+		when (position) {
+			0 -> {
+				if (isShowWeekView) hideWeekView()
+				titleTextView.isClickable = false
+			}
+			1 -> titleTextView.isClickable = true
+			2 -> {
+				if (isShowWeekView) hideWeekView()
+				titleTextView.isClickable = false
+			}
 		}
 	}
 
@@ -290,7 +306,6 @@ class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_naviga
 					.setDuration(1000)
 		loadingAnimation.repeatCount = Animation.INFINITE
 		loadingAnimation.repeatMode = ValueAnimator.RESTART
-		cancelLoading()
 		loadingAnimation.start()
 	}
 

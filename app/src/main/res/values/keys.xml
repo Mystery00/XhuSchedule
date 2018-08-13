@@ -6,23 +6,11 @@
   -->
 
 <resources>
-    <string name="screen_category_class">课程设置</string>
-    <string name="screen_category_account">账号管理</string>
-    <string name="screen_category_ui">界面设置</string>
-    <string name="screen_category_developer">鸣谢</string>
-    <string name="category_custom">自定义项</string>
-    <string name="screen_category_about">关于</string>
+	<string name="screen_category_about">关于</string>
     <string name="screen_category_about_developer">更多应用</string>
     <string name="screen_category_about_version">版本关于</string>
     <string name="screen_category_about_application">应用关于</string>
-    <string name="screen_category_notification">消息设置</string>
-    <string name="screen_category_notification_settings">通知设置</string>
-    <string name="screen_category_notification_for_tomorrow">明日课程提醒</string>
-    <string name="screen_category_notification_for_exam">考试提醒</string>
-    <string name="screen_category_ui_today">今日界面</string>
-    <string name="screen_category_ui_table">表格界面</string>
-    <string name="screen_category_ui_profile">个人界面</string>
-    <string name="screen_category_ui_common">通用</string>
+	<string name="screen_category_developer">开发者信息</string>
 
     <string name="key_first_day" translatable="false">key_first_day</string>
     <string name="key_show_not_week" translatable="false">key_show_not_week</string>
@@ -31,9 +19,7 @@
     <string name="key_del_account" translatable="false">key_del_account</string>
     <string name="key_set_main_account" translatable="false">key_set_main_account</string>
     <string name="key_enable_multi_user_mode" translatable="false">key_enable_multi_user_mode</string>
-    <string name="key_user_img" translatable="false">key_user_img</string>
     <string name="key_header_img" translatable="false">key_header_img</string>
-    <string name="key_background_img" translatable="false">key_background_img</string>
     <string name="key_custom_today_opacity" translatable="false">key_custom_today_opacity</string>
     <string name="key_custom_table_opacity" translatable="false">key_custom_table_opacity</string>
     <string name="key_custom_today_text_color" translatable="false">key_custom_today_text_color</string>
@@ -58,6 +44,9 @@
     <string name="key_notification_for_exam_enable" translatable="false">key_notification_for_exam_enable</string>
     <string name="key_notification_for_tomorrow_type" translatable="false">key_notification_for_tomorrow_type</string>
 
+	<string name="key_user_img" translatable="false">key_user_img</string>
+	<string name="key_background_img" translatable="false">key_background_img</string>
+
     <string name="title_icon_ui">图标以及界面设计</string>
     <string name="title_back">数据提供</string>
     <string name="title_ui">产品设计</string>
@@ -66,15 +55,7 @@
     <string name="title_local_img">预设图片提供者</string>
     <string name="title_first_day">设置本学期开始时间</string>
     <string name="title_show_not">显示非本周课程</string>
-    <string name="title_current_account">当前已登录账号</string>
-    <string name="title_account_manager">账号管理</string>
-    <string name="title_add_account">添加账号</string>
-    <string name="title_del_account">删除账号</string>
-    <string name="title_set_main_account">设置主账号</string>
-    <string name="title_enable_multi_user_mode">启用多用户模式</string>
-    <string name="title_user_img">自定义个人头像</string>
     <string name="title_header_img">自定义个人页背景</string>
-    <string name="title_background_img">自定义背景</string>
     <string name="title_custom_today_opacity">自定义今日课表透明度</string>
     <string name="title_custom_table_opacity">自定义表格透明度</string>
     <string name="title_custom_today_text_color">自定义今日课表文字颜色</string>
@@ -83,18 +64,6 @@
     <string name="title_custom_text_height">自定义表格高度</string>
     <string name="title_custom_table_item_width">自定义表格宽度</string>
     <string name="title_reset">界面重置</string>
-    <string name="title_weily_product">微力实验室出品</string>
-    <string name="title_auto_check_update">自动检查更新</string>
-    <string name="title_source_code">开源地址</string>
-    <string name="title_open_source_license">开源协议</string>
-    <string name="title_feedback">意见反馈</string>
-    <string name="title_more_app">开发者更多应用</string>
-    <string name="title_community_link">点击加入群【西瓜课表用户交流反馈】</string>
-    <string name="title_weixin">微信小程序二维码</string>
-    <string name="title_version_code">版本号</string>
-    <string name="title_update_log">更新日志</string>
-    <string name="title_check_update">检查更新</string>
-    <string name="title_version_name">版本名称</string>
     <string name="title_notification_sound">通知声音</string>
     <string name="title_notification_vibrate">震动</string>
     <string name="title_notification_time">提醒时间</string>
@@ -103,6 +72,30 @@
     <string name="title_notification_for_exam_enable">启用提醒</string>
     <string name="title_notification_for_tomorrow_type">提醒类型</string>
     <string name="title_notification_for_exam_hint">请确保已经查询过考试列表</string>
+
+	<string name="title_current_account">当前已登录账号</string>
+	<string name="title_account_manager">账号管理</string>
+	<string name="title_add_account">添加账号</string>
+	<string name="title_del_account">删除账号</string>
+	<string name="title_set_main_account">设置主账号</string>
+	<string name="title_enable_multi_user_mode">启用多用户模式</string>
+	<string name="title_query_score_schedule">课程查询</string>
+	<string name="title_query_score_experiment">实验成绩查询</string>
+	<string name="title_query_score_cet">四六级查询</string>
+	<string name="title_user_img">自定义个人头像</string>
+	<string name="title_background_img">自定义背景图片</string>
+	<string name="title_other">其他设置</string>
+	<string name="title_weily_product">微力实验室出品</string>
+	<string name="title_community_link">点击加入群【西瓜课表用户交流反馈】</string>
+	<string name="title_auto_check_update">自动检查更新</string>
+	<string name="title_source_code">开源地址</string>
+	<string name="title_open_source_license">开源协议</string>
+	<string name="title_more_app">开发者更多应用</string>
+	<string name="title_weixin">微信小程序二维码</string>
+	<string name="title_version_code">版本号</string>
+	<string name="title_update_log">更新日志</string>
+	<string name="title_check_update">检查更新</string>
+	<string name="title_version_name">版本名称</string>
 
     <string name="summary_enable_multi_user_mode">注意：如果多个用户的课表存在冲突的情况，表格可能会变得很乱，请确定您开启这个模式的意义！</string>
     <string name="summary_icon" translatable="false">\@爱吃饭的越越</string>

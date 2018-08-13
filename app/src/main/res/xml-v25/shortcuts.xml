@@ -6,26 +6,26 @@
   -->
 
 <shortcuts xmlns:android="http://schemas.android.com/apk/res/android">
-    <shortcut
-        android:enabled="true"
-        android:icon="@mipmap/ic_shortcut_refresh_widget"
-        android:shortcutId="title_shortcuts_refresh_widget"
-        android:shortcutLongLabel="@string/title_shortcuts_refresh_widget"
-        android:shortcutShortLabel="@string/title_shortcuts_refresh_widget">
-        <intent
-            android:action="android.intent.action.VIEW"
-            android:targetClass="com.weilylab.xhuschedule.activity.shortcut.RefreshWidgetActivity"
-            android:targetPackage="com.weilylab.xhuschedule" />
-    </shortcut>
-    <shortcut
-        android:enabled="true"
-        android:icon="@mipmap/ic_shortcut_refresh_color"
-        android:shortcutId="title_shortcuts_refresh_color"
-        android:shortcutLongLabel="@string/title_shortcuts_refresh_color"
-        android:shortcutShortLabel="@string/title_shortcuts_refresh_color">
-        <intent
-            android:action="android.intent.action.VIEW"
-            android:targetClass="com.weilylab.xhuschedule.activity.shortcut.RefreshColorActivity"
-            android:targetPackage="com.weilylab.xhuschedule" />
-    </shortcut>
+    <!--<shortcut-->
+        <!--android:enabled="true"-->
+        <!--android:icon="@mipmap/ic_shortcut_refresh_widget"-->
+        <!--android:shortcutId="title_shortcuts_query_exam"-->
+        <!--android:shortcutLongLabel="@string/title_shortcuts_query_exam"-->
+        <!--android:shortcutShortLabel="@string/title_shortcuts_query_exam">-->
+        <!--<intent-->
+            <!--android:action="android.intent.action.VIEW"-->
+            <!--android:targetClass="com.weilylab.xhuschedule.activity.shortcut.RefreshWidgetActivity"-->
+            <!--android:targetPackage="com.weilylab.xhuschedule" />-->
+    <!--</shortcut>-->
+    <!--<shortcut-->
+        <!--android:enabled="true"-->
+        <!--android:icon="@mipmap/ic_shortcut_refresh_color"-->
+        <!--android:shortcutId="title_shortcuts_query_score"-->
+        <!--android:shortcutLongLabel="@string/title_shortcuts_query_score"-->
+        <!--android:shortcutShortLabel="@string/title_shortcuts_query_score">-->
+        <!--<intent-->
+            <!--android:action="android.intent.action.VIEW"-->
+            <!--android:targetClass="com.weilylab.xhuschedule.activity.shortcut.RefreshColorActivity"-->
+            <!--android:targetPackage="com.weilylab.xhuschedule" />-->
+    <!--</shortcut>-->
 </shortcuts>
