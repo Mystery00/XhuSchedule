@@ -25,4 +25,19 @@ object ConfigurationUtil {
 				.putBoolean(SharedPreferenceConstant.FIELD_SHOW_NOT_WEEK, value)
 				.apply()
 		get() = sharedPreferences.getBoolean(SharedPreferenceConstant.FIELD_SHOW_NOT_WEEK, false)
+	var autoCheckUpdate: Boolean
+		set(value) = sharedPreferences.edit()
+				.putBoolean(SharedPreferenceConstant.FIELD_AUTO_CHECK_UPDATE, value)
+				.apply()
+		get() = sharedPreferences.getBoolean(SharedPreferenceConstant.FIELD_AUTO_CHECK_UPDATE, true)
+	var customUserImage: String
+		set(value) = sharedPreferences.edit()
+				.putString(SharedPreferenceConstant.FIELD_CUSTOM_USER_IMAGE, value)
+				.apply()
+		get() = sharedPreferences.getString(SharedPreferenceConstant.FIELD_CUSTOM_USER_IMAGE, "")!!
+	var customBackgroundImage: String
+		set(value) = sharedPreferences.edit()
+				.putString(SharedPreferenceConstant.FIELD_CUSTOM_BACKGROUND_IMAGE, value)
+				.apply()
+		get() = sharedPreferences.getString(SharedPreferenceConstant.FIELD_CUSTOM_BACKGROUND_IMAGE, "")!!
 }

@@ -31,20 +31,20 @@
  * Last modified 18-2-21 下午9:11
  */
 
-package com.weilylab.xhuschedule.util
+package com.weilylab.xhuschedule.newPackage.constant
 
 object Constants {
-	const val NOTICE_PLATFORM = "Android"
+	const val NOTICE_PLATFORM_ANDROID = "Android"
+	const val NOTICE_PLATFORM_ALL = "All"
+
+	const val FILE_NAME_IMG_BACKGROUND = "file_name_img_background"
+	const val FILE_NAME_IMG_PROFILE = "file_name_img_profile"
 
 	const val COURSE_TYPE_ERROR = "-1"
 	const val COURSE_TYPE_ALL = "0"
 	const val COURSE_TYPE_SINGLE = "1"
 	const val COURSE_TYPE_DOUBLE = "2"
 	const val COURSE_TYPE_NOT = "not"
-
-	const val TABLE_NAME_SPLASH = "Splash"
-
-	const val NOTIFICATION_SYSTEM_SOUND = "content://settings/system/notification_sound"
 
 	const val NOTIFICATION_CHANNEL_ID_DEFAULT = "XhuSchedule-Default"
 	const val NOTIFICATION_CHANNEL_NAME_DEFAULT = "默认"
@@ -58,60 +58,12 @@ object Constants {
 	const val NOTIFICATION_CHANNEL_NAME_PUSH = "消息推送"
 	const val NOTIFICATION_CHANNEL_DESCRIPTION_PUSH = "消息推送"
 
-	const val NOTIFICATION_ID_FOREGROUND_ALARM = 20
-	const val NOTIFICATION_ID_FOREGROUND_WIDGET = 21
-	const val NOTIFICATION_ID_FOREGROUND_BOOT_COMPLETE = 22
-	const val NOTIFICATION_ID_WIDGET_ACTION_NEXT = 51
-	const val NOTIFICATION_ID_WIDGET_ACTION_LAST = 52
-	const val NOTIFICATION_ID_SHORTCUT_CLEAR_COLOR = 53
-	const val NOTIFICATION_ID_LEAN_CLOUD_PUSH = 54
-	const val NOTIFICATION_ID_COURSE_START_INDEX = 100
-	const val NOTIFICATION_ID_EXAM_START_INDEX = 200
-
-	const val INTENT_TAG_NAME_TAG = "TAG"
 	const val INTENT_TAG_NAME_TYPE = "type"
 	const val INTENT_TAG_NAME_QINIU_PATH = "qiniuPath"
-	const val INTENT_TAG_NAME_SPLASH_FILE_NAME = "splashFileName"
-	const val INTENT_TAG_NAME_PROFILE = "profile"
-	const val INTENT_TAG_NAME_LIST = "list"
-	const val INTENT_TAG_NAME_VERSION = "version"
 
 	const val DOWNLOAD_TYPE_APK = "apk"
 	const val DOWNLOAD_TYPE_PATCH = "patch"
 
 	const val SHARE_TARGET_URL = "https://www.coolapk.com/apk/com.weilylab.xhuschedule"
 	const val SHARE_IMAGE_URL = "http://image.coolapk.com/apk_logo/2018/0302/ic_launcher-168930-o_1c7i548l61b4k1p091q5l9tk15bj1b-uid-631231@192x192.png"
-
-	const val IS_FIRST_RUN = "isFirstRun"
-	const val IS_FIRST_ENTER = "isFirstEnter"
-	const val IS_FIRST_RUN_210 = "isFirstRun210"
-	const val IS_FIRST_ENTER_TODAY = "isFirstEnterToday"
-	const val FIRST_WEEK_OF_TERM = "firstWeekOfTerm"
-	const val IS_SHOW_NOT = "isShowNot"
-	const val USER_IMG = "userImg"
-	const val CUSTOM_BACKGROUND_IMG = "customBackgroundImg"
-	const val CUSTOM_TABLE_OPACITY = "customTableOpacity"
-	const val CUSTOM_TODAY_OPACITY = "customTodayOpacity"
-	const val CUSTOM_TABLE_TEXT_COLOR = "customTableTextColor"
-	const val CUSTOM_TODAY_TEXT_COLOR = "customTodayTextColor"
-	const val CUSTOM_TEXT_SIZE = "customTextSize"
-	const val CUSTOM_HEIGHT_SIZE = "customHeightSize"
-	const val CUSTOM_TABLE_ITEM_WIDTH = "customTableItemWidth"
-	const val AUTO_CHECK_UPDATE = "autoCheckUpdate"
-	const val IS_ENABLE_MULTI_USER_MODE = "isEnableMultiUserMode"
-	const val IS_SHOW_FAILED = "isShowFailed"
-	const val IS_AUTO_SELECT = "isAutoSelect"
-	const val IGNORE_UPDATE = "ignoreUpdate"
-	const val SHOW_NOTICE_ID = "shownNoticeID"
-	const val NOTIFICATION_SOUND = "notificationSound"
-	const val NOTIFICATION_VIBRATE = "notificationVibrate"
-	const val NOTIFICATION_TIME = "notificationTime"
-	const val NOTIFICATION_EXACT_TIME = "notificationExactTime"
-	const val NOTIFICATION_TOMORROW_ENABLE = "isNotificationTomorrowEnable"
-	const val NOTIFICATION_EXAM_ENABLE = "isNotificationExamEnable"
-	const val NOTIFICATION_TOMORROW_TYPE = "isNotificationTomorrowType"
-	const val SPLASH_IMAGE_FILE_NAME = "splashImageFileName"
-	const val SPLASH_TIME = "splashTime"
-	const val SPLASH_LOCATION_URL = "splashLocationUrl"
-	const val APPLIED_THEME = "appliedTheme"
 }

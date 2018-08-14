@@ -6,72 +6,35 @@
   -->
 
 <resources>
+	<string name="screen_category_ui">界面设置</string>
 	<string name="screen_category_about">关于</string>
-    <string name="screen_category_about_developer">更多应用</string>
-    <string name="screen_category_about_version">版本关于</string>
-    <string name="screen_category_about_application">应用关于</string>
+	<string name="screen_category_about_version">版本关于</string>
+	<string name="screen_category_about_application">应用关于</string>
 	<string name="screen_category_developer">开发者信息</string>
 
-    <string name="key_first_day" translatable="false">key_first_day</string>
-    <string name="key_show_not_week" translatable="false">key_show_not_week</string>
-    <string name="key_logged_account" translatable="false">key_logged_account</string>
-    <string name="key_add_account" translatable="false">key_add_account</string>
-    <string name="key_del_account" translatable="false">key_del_account</string>
-    <string name="key_set_main_account" translatable="false">key_set_main_account</string>
-    <string name="key_enable_multi_user_mode" translatable="false">key_enable_multi_user_mode</string>
-    <string name="key_header_img" translatable="false">key_header_img</string>
-    <string name="key_custom_today_opacity" translatable="false">key_custom_today_opacity</string>
-    <string name="key_custom_table_opacity" translatable="false">key_custom_table_opacity</string>
-    <string name="key_custom_today_text_color" translatable="false">key_custom_today_text_color</string>
-    <string name="key_custom_table_text_color" translatable="false">key_custom_table_text_color</string>
-    <string name="key_custom_text_size" translatable="false">key_custom_text_size</string>
-    <string name="key_custom_text_height" translatable="false">key_custom_text_height</string>
-    <string name="key_custom_table_item_width" translatable="false">key_custom_table_item_width</string>
-    <string name="key_reset" translatable="false">key_reset</string>
-    <string name="key_auto_check_update" translatable="false">key_auto_check_update</string>
-    <string name="key_source_code" translatable="false">key_source_code</string>
-    <string name="key_feedback" translatable="false">key_feedback</string>
-    <string name="key_update_log" translatable="false">key_update_log</string>
-    <string name="key_weixin" translatable="false">key_weixin</string>
-    <string name="key_check_update" translatable="false">key_check_update</string>
-    <string name="key_version_name" translatable="false">key_version_name</string>
-    <string name="key_version_code" translatable="false">key_version_code</string>
-    <string name="key_notification_sound" translatable="false">key_notification_sound</string>
-    <string name="key_notification_vibrate" translatable="false">key_notification_vibrate</string>
-    <string name="key_notification_time" translatable="false">key_notification_time</string>
-    <string name="key_notification_exact_time" translatable="false">key_notification_exact_time</string>
-    <string name="key_notification_for_tomorrow_enable" translatable="false">key_notification_for_tomorrow_enable</string>
-    <string name="key_notification_for_exam_enable" translatable="false">key_notification_for_exam_enable</string>
-    <string name="key_notification_for_tomorrow_type" translatable="false">key_notification_for_tomorrow_type</string>
+	<string name="key_show_not_week" translatable="false">key_show_not_week</string>
+	<string name="key_logged_account" translatable="false">key_logged_account</string>
+	<string name="key_add_account" translatable="false">key_add_account</string>
+	<string name="key_del_account" translatable="false">key_del_account</string>
+	<string name="key_set_main_account" translatable="false">key_set_main_account</string>
+	<string name="key_enable_multi_user_mode" translatable="false">key_enable_multi_user_mode</string>
+	<string name="key_reset" translatable="false">key_reset</string>
+	<string name="key_auto_check_update" translatable="false">key_auto_check_update</string>
+	<string name="key_update_log" translatable="false">key_update_log</string>
+	<string name="key_weixin" translatable="false">key_weixin</string>
+	<string name="key_check_update" translatable="false">key_check_update</string>
+	<string name="key_version_name" translatable="false">key_version_name</string>
+	<string name="key_version_code" translatable="false">key_version_code</string>
 
 	<string name="key_user_img" translatable="false">key_user_img</string>
 	<string name="key_background_img" translatable="false">key_background_img</string>
 
-    <string name="title_icon_ui">图标以及界面设计</string>
-    <string name="title_back">数据提供</string>
-    <string name="title_ui">产品设计</string>
-    <string name="title_developer">开发者</string>
-    <string name="title_login_img">登录背景图片提供者</string>
-    <string name="title_local_img">预设图片提供者</string>
-    <string name="title_first_day">设置本学期开始时间</string>
-    <string name="title_show_not">显示非本周课程</string>
-    <string name="title_header_img">自定义个人页背景</string>
-    <string name="title_custom_today_opacity">自定义今日课表透明度</string>
-    <string name="title_custom_table_opacity">自定义表格透明度</string>
-    <string name="title_custom_today_text_color">自定义今日课表文字颜色</string>
-    <string name="title_custom_table_text_color">自定义表格文字颜色</string>
-    <string name="title_custom_text_size">自定义文本大小</string>
-    <string name="title_custom_text_height">自定义表格高度</string>
-    <string name="title_custom_table_item_width">自定义表格宽度</string>
-    <string name="title_reset">界面重置</string>
-    <string name="title_notification_sound">通知声音</string>
-    <string name="title_notification_vibrate">震动</string>
-    <string name="title_notification_time">提醒时间</string>
-    <string name="title_notification_exact_time">准确时间提醒（建议关闭）</string>
-    <string name="title_notification_for_tomorrow_enable">启用提醒</string>
-    <string name="title_notification_for_exam_enable">启用提醒</string>
-    <string name="title_notification_for_tomorrow_type">提醒类型</string>
-    <string name="title_notification_for_exam_hint">请确保已经查询过考试列表</string>
+	<string name="title_icon_ui">图标以及界面设计</string>
+	<string name="title_back">数据提供</string>
+	<string name="title_ui">产品设计</string>
+	<string name="title_developer">开发者</string>
+	<string name="title_show_not">显示非本周课程</string>
+	<string name="title_reset">界面重置</string>
 
 	<string name="title_current_account">当前已登录账号</string>
 	<string name="title_account_manager">账号管理</string>
@@ -90,41 +53,26 @@
 	<string name="title_auto_check_update">自动检查更新</string>
 	<string name="title_source_code">开源地址</string>
 	<string name="title_open_source_license">开源协议</string>
-	<string name="title_more_app">开发者更多应用</string>
 	<string name="title_weixin">微信小程序二维码</string>
 	<string name="title_version_code">版本号</string>
 	<string name="title_update_log">更新日志</string>
 	<string name="title_check_update">检查更新</string>
 	<string name="title_version_name">版本名称</string>
 
-    <string name="summary_enable_multi_user_mode">注意：如果多个用户的课表存在冲突的情况，表格可能会变得很乱，请确定您开启这个模式的意义！</string>
-    <string name="summary_icon" translatable="false">\@爱吃饭的越越</string>
-    <string name="summary_back" translatable="false">\@pan</string>
-    <string name="summary_ui" translatable="false">\@Johnny Zen</string>
-    <string name="summary_developer" translatable="false">\@Mystery0</string>
-    <string name="summary_login_img" translatable="false">\@Qwin Chen</string>
-    <string name="summary_local_img" translatable="false">\@BigDingDing</string>
-    <string name="summary_source_code" translatable="false">https://github.com/Mystery00/XhuSchedule</string>
-    <string name="summary_open_source_license" translatable="false">GNU General Public License v3.0</string>
-    <string name="summary_more_app_play" translatable="false">Google Play</string>
-    <string name="summary_version_name" translatable="false">@string/app_version_name</string>
-    <string name="summary_version_code" translatable="false">@string/app_version_code</string>
-    <string name="summary_auto_check_update">在每一次启动时自动检查更新，注意，跳过某个版本将会无法使用增量更新</string>
-    <string name="summary_weily_product">点击进入实验室官网</string>
-    <string name="summary_feedback">请发送邮件到mystery0dyl520@gmail.com并注明APP名称</string>
-    <string name="summary_more_app_coolapk">酷安</string>
-    <string name="summary_weixin">可以在微信小程序页面直接搜索“西瓜课表”即可使用</string>
-    <string name="summary_notification_sound">当前铃声为 %1$s</string>
-    <string name="summary_notification_time">将会在每天的 %1$s 提醒您</string>
-    <string name="summary_notification_for_tomorrow_type">将会提醒您%1$s的课程</string>
-    <string name="summary_notification_exact_time">开启这项之后，将会使通知准时显示，可能会增加系统的耗电；不开启此项，通知可能会有一定的延时（120s内）。这是由于系统在耗电方面进行的优化，系统会自动监测并将触发时间相近的几个任务会放在一起执行，这可以有效延长电池的使用时间。</string>
-    <string name="summary_notification_for_exam_hint">为了节省流量并且提高效率，在您查询考试的时候，软件已经将数据离线到本地，提醒考试和课程的数据均来自本地</string>
+	<string name="summary_enable_multi_user_mode">注意：如果多个用户的课表存在冲突的情况，表格可能会变得很乱，请确定您开启这个模式的意义！</string>
+	<string name="summary_icon" translatable="false">\@爱吃饭的越越</string>
+	<string name="summary_back" translatable="false">\@pan</string>
+	<string name="summary_ui" translatable="false">\@Johnny Zen</string>
+	<string name="summary_developer" translatable="false">\@Mystery0</string>
+	<string name="summary_source_code" translatable="false">https://github.com/Mystery00/XhuSchedule</string>
+	<string name="summary_open_source_license" translatable="false">GNU General Public License v3.0</string>
+	<string name="summary_version_name" translatable="false">@string/app_version_name</string>
+	<string name="summary_version_code" translatable="false">@string/app_version_code</string>
+	<string name="summary_auto_check_update">在每一次启动时自动检查更新，注意，跳过某个版本将会无法使用增量更新</string>
+	<string name="summary_weily_product">点击进入实验室官网</string>
+	<string name="summary_weixin">可以在微信小程序页面直接搜索“西瓜课表”即可使用</string>
 
-    <string name="link_developer" translatable="false">https://mystery0.vip/</string>
-    <string name="link_login_img" translatable="false">http://www.jianshu.com/u/de99e3e9e332</string>
-    <string name="link_local_img" translatable="false">http://www.coolapk.com/u/703237</string>
-    <string name="link_open_source_license" translatable="false">https://github.com/Mystery00/XhuSchedule/blob/master/LICENSE.TXT</string>
-    <string name="link_more_app_coolapk" translatable="false">http://www.coolapk.com/u/631231</string>
-    <string name="link_more_app_play" translatable="false">https://play.google.com/store/apps/developer?id=Mystery0</string>
-    <string name="link_community_link" translatable="false">https://jq.qq.com/?_wv=1027&#038;k=5Nz3XlU</string>
+	<string name="link_developer" translatable="false">https://mystery0.vip/</string>
+	<string name="link_open_source_license" translatable="false">https://github.com/Mystery00/XhuSchedule/blob/master/LICENSE.TXT</string>
+	<string name="link_community_link" translatable="false">https://jq.qq.com/?_wv=1027&#038;k=5Nz3XlU</string>
 </resources>

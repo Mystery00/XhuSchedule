@@ -16,7 +16,7 @@ import com.weilylab.xhuschedule.newPackage.ui.activity.BottomNavigationActivity
 import com.weilylab.xhuschedule.newPackage.utils.APPActivityManager
 import com.weilylab.xhuschedule.newPackage.utils.rxAndroid.RxObservable
 import com.weilylab.xhuschedule.newPackage.utils.rxAndroid.RxObserver
-import com.weilylab.xhuschedule.util.Constants
+import com.weilylab.xhuschedule.newPackage.constant.Constants
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import vip.mystery0.logs.Logs
@@ -53,10 +53,7 @@ class CheckUpdateService : Service() {
 					override fun onFinish(data: Version?) {
 						if (data != null && data.versionCode.toInt() > getString(R.string.app_version_code).toInt())
 							showUpdateDialog(data)
-						Thread(Runnable {
-							Thread.sleep(10000)
-							stopSelf()
-						}).start()
+						stopSelf()
 					}
 
 					override fun onError(e: Throwable) {

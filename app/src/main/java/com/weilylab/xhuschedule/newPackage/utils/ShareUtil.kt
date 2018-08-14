@@ -18,7 +18,7 @@ import com.tencent.tauth.IUiListener
 import com.tencent.tauth.UiError
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.newPackage.config.APP
-import com.weilylab.xhuschedule.util.Constants
+import com.weilylab.xhuschedule.newPackage.constant.Constants
 import com.weilylab.xhuschedule.util.XhuFileUtil
 
 object ShareUtil {

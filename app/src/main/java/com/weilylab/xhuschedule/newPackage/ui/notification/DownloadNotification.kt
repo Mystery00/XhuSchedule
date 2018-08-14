@@ -40,7 +40,7 @@ import android.content.Context
 import androidx.core.app.NotificationCompat
 
 import com.weilylab.xhuschedule.R
-import com.weilylab.xhuschedule.util.Constants
+import com.weilylab.xhuschedule.newPackage.constant.Constants
 import com.weilylab.xhuschedule.newPackage.model.Download
 import vip.mystery0.tools.utils.FileTools
 

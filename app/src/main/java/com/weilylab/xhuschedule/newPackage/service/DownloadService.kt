@@ -45,7 +45,7 @@ import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.newPackage.api.QiniuAPI
 import com.weilylab.xhuschedule.newPackage.listener.DownloadProgressListener
 import com.weilylab.xhuschedule.util.BsPatch
-import com.weilylab.xhuschedule.util.Constants
+import com.weilylab.xhuschedule.newPackage.constant.Constants
 import com.weilylab.xhuschedule.newPackage.ui.notification.DownloadNotification
 import com.weilylab.xhuschedule.util.XhuFileUtil
 import com.weilylab.xhuschedule.newPackage.model.Download

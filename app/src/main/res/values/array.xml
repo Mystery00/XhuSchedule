@@ -5,18 +5,4 @@
   ~ Last modified 17-12-20 下午9:53
   -->
 
-<resources>
-    <string-array name="color_array">
-        <item>#039BDA</item>
-        <item>#F5703C</item>
-        <item>#CEB28B</item>
-        <item>#0BDBB9</item>
-        <item>#5A7AD9</item>
-        <item>#F0DE12</item>
-        <item>#F15056</item>
-        <item>#373E4D</item>
-        <item>#A40035</item>
-        <item>#32B16C</item>
-        <item>#0000FF</item>
-    </string-array>
-</resources>
+<resources></resources>

@@ -6,32 +6,24 @@
   ~ Last modified 17-12-2 下午5:09
   -->
 
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 	<color name="colorPrimary">#FFFFFF</color>
 	<color name="colorPrimaryDark">#000000</color>
 	<color name="colorAccent">#2e85df</color>
-    <color name="colorWeekAccent">#3F51B5</color>
-    <color name="colorWeekPrimary">#303F9F</color>
-    <color name="colorWeekNotIndex">#3F51B5</color>
-    <color name="colorWeekIndex">#303F9F</color>
-
-    <color name="schedule_head_text_color">#FFFFFF</color>
 
     <color name="login_color_label">#cccccc</color>
 	<color name="login_color_text">#4ea5ff</color>
     <color name="colorWhite">#FFFFFF</color>
-    <color name="colorRed">#ff0000</color>
-    <color name="line_color">#bfbfbf</color>
 
-    <color name="color1">#039BDA</color>
-    <color name="color2">#F5703C</color>
-    <color name="color3">#CEB28B</color>
-    <color name="color4">#0BDBB9</color>
-    <color name="color5">#5A7AD9</color>
-    <color name="color6">#F0DE12</color>
-    <color name="color7">#F15056</color>
-    <color name="color8">#373E4D</color>
-    <color name="color9">#0000FF</color>
-    <color name="color10">#A40035</color>
-    <color name="color11">#32B16C</color>
+    <!--<color name="color1" tools:keep="@color/color1">#039BDA</color>-->
+    <!--<color name="color2" tools:keep="@color/color2">#F5703C</color>-->
+    <!--<color name="color3" tools:keep="@color/color3">#CEB28B</color>-->
+    <!--<color name="color4" tools:keep="@color/color4">#0BDBB9</color>-->
+    <!--<color name="color5" tools:keep="@color/color5">#5A7AD9</color>-->
+    <!--<color name="color6" tools:keep="@color/color6">#F0DE12</color>-->
+    <!--<color name="color7" tools:keep="@color/color7">#F15056</color>-->
+    <!--<color name="color8" tools:keep="@color/color8">#373E4D</color>-->
+    <!--<color name="color9" tools:keep="@color/color9">#0000FF</color>-->
+    <!--<color name="color10" tools:keep="@color/color10">#A40035</color>-->
+    <!--<color name="color11" tools:keep="@color/color11">#32B16C</color>-->
 </resources>

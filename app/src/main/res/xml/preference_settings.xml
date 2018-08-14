@@ -1,13 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-	<Preference
-		android:key="@string/key_user_img"
-		android:title="@string/title_user_img" />
+	<PreferenceCategory android:title="@string/screen_category_ui">
 
-	<Preference
-		android:key="@string/key_background_img"
-		android:title="@string/title_background_img" />
+		<Preference
+			android:key="@string/key_user_img"
+			android:title="@string/title_user_img" />
+
+		<Preference
+			android:key="@string/key_background_img"
+			android:title="@string/title_background_img" />
+
+		<Preference
+			android:key="@string/key_reset"
+			android:title="@string/title_reset" />
+
+	</PreferenceCategory>
 
 	<PreferenceCategory android:title="@string/title_other">
 

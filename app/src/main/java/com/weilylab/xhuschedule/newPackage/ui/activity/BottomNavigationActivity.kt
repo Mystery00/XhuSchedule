@@ -16,6 +16,10 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager.widget.ViewPager
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.request.RequestOptions
+import com.bumptech.glide.signature.MediaStoreSignature
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.newPackage.base.XhuBaseActivity
 import com.weilylab.xhuschedule.newPackage.config.Status.*
@@ -42,6 +46,7 @@ import kotlinx.android.synthetic.main.content_bottom_navigation.*
 import vip.mystery0.bottomTabView.BottomTabItem
 import vip.mystery0.logs.Logs
 import vip.mystery0.tools.utils.DensityTools
+import java.io.File
 import java.util.ArrayList
 
 class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_navigation) {
@@ -155,6 +160,7 @@ class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_naviga
 	override fun initView() {
 		super.initView()
 		titleTextView.text = title
+		showBackground()
 		initDialog()
 		initPopupWindow()
 		viewPagerAdapter = ViewPagerAdapter(supportFragmentManager)
@@ -179,6 +185,32 @@ class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_naviga
 		))
 	}
 
+	private fun showBackground() {
+		val path = ConfigurationUtil.customBackgroundImage
+		if (path == "" || !File(path).exists()) {
+			backgroundImageView.setImageResource(R.mipmap.bg1)
+		} else {
+			val options = RequestOptions()
+					.signature(MediaStoreSignature("image/*", File(path).lastModified(), 0))
+					.diskCacheStrategy(DiskCacheStrategy.NONE)
+			Glide.with(this)
+					.load(path)
+					.apply(options)
+					.into(backgroundImageView)
+		}
+	}
+
+	private fun initDialog() {
+		dialog = ZLoadingDialog(this)
+				.setLoadingBuilder(Z_TYPE.SINGLE_CIRCLE)
+				.setHintText(getString(R.string.hint_dialog_init))
+				.setHintTextSize(16F)
+				.setCanceledOnTouchOutside(false)
+				.setLoadingColor(ContextCompat.getColor(this, R.color.colorAccent))
+				.setHintTextColor(ContextCompat.getColor(this, R.color.colorAccent))
+				.create()
+	}
+
 	override fun initData() {
 		super.initData()
 		initViewModel()
@@ -194,17 +226,6 @@ class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_naviga
 		bottomNavigationViewModel.courseList.observe(this, courseListObserver)
 		bottomNavigationViewModel.title.observe(this, titleObserver)
 		bottomNavigationViewModel.showCourse.observe(this, showCourseObserver)
-	}
-
-	private fun initDialog() {
-		dialog = ZLoadingDialog(this)
-				.setLoadingBuilder(Z_TYPE.SINGLE_CIRCLE)
-				.setHintText(getString(R.string.hint_dialog_init))
-				.setHintTextSize(16F)
-				.setCanceledOnTouchOutside(false)
-				.setLoadingColor(ContextCompat.getColor(this, R.color.colorAccent))
-				.setHintTextColor(ContextCompat.getColor(this, R.color.colorAccent))
-				.create()
 	}
 
 	override fun monitor() {
@@ -244,6 +265,10 @@ class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_naviga
 
 	override fun onResume() {
 		super.onResume()
+		if (LayoutRefreshConfigUtil.isChangeBackgroundImage) {
+			showBackground()
+			LayoutRefreshConfigUtil.isChangeBackgroundImage = false
+		}
 		if (LayoutRefreshConfigUtil.isRefreshNoticeDot) {
 			BottomNavigationRepository.queryNotice(bottomNavigationViewModel)
 			LayoutRefreshConfigUtil.isRefreshNoticeDot = false

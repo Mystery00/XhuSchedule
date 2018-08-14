@@ -6,7 +6,7 @@ import android.app.NotificationManager
 import android.content.Context
 import android.graphics.Color
 import android.os.Build
-import com.weilylab.xhuschedule.util.Constants
+import com.weilylab.xhuschedule.newPackage.constant.Constants
 
 object NotificationUtil {
 	fun initChannelID(context: Context) {

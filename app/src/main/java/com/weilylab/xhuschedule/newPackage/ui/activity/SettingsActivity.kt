@@ -61,6 +61,8 @@ class SettingsActivity : XhuBaseActivity(R.layout.activity_settings) {
 		}
 	}
 
+	private lateinit var settingsPreferenceFragment: SettingsPreferenceFragment
+
 	override fun initView() {
 		super.initView()
 		fragmentManager.beginTransaction()
@@ -76,7 +78,10 @@ class SettingsActivity : XhuBaseActivity(R.layout.activity_settings) {
 			TYPE_ACCOUNT -> AccountSettingsFragment()
 			TYPE_CLASS -> ClassSettingsFragment()
 			TYPE_QUERY_SCORE -> QueryScoreFragment()
-			TYPE_SETTINGS -> SettingsPreferenceFragment()
+			TYPE_SETTINGS -> {
+				settingsPreferenceFragment = SettingsPreferenceFragment()
+				settingsPreferenceFragment
+			}
 			else -> throw NullPointerException("null")
 		}
 	}
@@ -97,6 +102,10 @@ class SettingsActivity : XhuBaseActivity(R.layout.activity_settings) {
 				onBackPressed()
 		}
 		return true
+	}
+
+	override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+		settingsPreferenceFragment.getResult(requestCode, resultCode, data)
 	}
 
 	override fun onDestroy() {

@@ -82,7 +82,8 @@ class SplashActivity : XhuBaseActivity(null) {
 		super.initData()
 		initViewModel()
 		SplashRepository.requestSplash(splashViewModel)
-		startService(Intent(APP.context, CheckUpdateService::class.java))
+		if (ConfigurationUtil.autoCheckUpdate)
+			startService(Intent(APP.context, CheckUpdateService::class.java))
 	}
 
 	private fun initViewModel() {

@@ -9,6 +9,10 @@ import android.view.ViewGroup
 import android.widget.PopupWindow
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.request.RequestOptions
+import com.bumptech.glide.signature.MediaStoreSignature
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.databinding.DialogShareWithFriendsBinding
 import com.weilylab.xhuschedule.databinding.FragmentProfileBinding
@@ -16,12 +20,15 @@ import com.weilylab.xhuschedule.newPackage.base.BaseBottomNavigationFragment
 import com.weilylab.xhuschedule.newPackage.config.Status.*
 import com.weilylab.xhuschedule.newPackage.ui.activity.*
 import com.weilylab.xhuschedule.newPackage.utils.AnimationUtil
+import com.weilylab.xhuschedule.newPackage.utils.ConfigurationUtil
+import com.weilylab.xhuschedule.newPackage.utils.LayoutRefreshConfigUtil
 import com.weilylab.xhuschedule.newPackage.utils.ShareUtil
 import com.weilylab.xhuschedule.newPackage.utils.rxAndroid.RxObservable
 import com.weilylab.xhuschedule.newPackage.utils.rxAndroid.RxObserver
 import com.weilylab.xhuschedule.newPackage.viewModel.BottomNavigationViewModel
 import kotlinx.android.synthetic.main.content_bottom_navigation.*
 import vip.mystery0.logs.Logs
+import java.io.File
 
 class ProfileFragment : BaseBottomNavigationFragment(R.layout.fragment_profile) {
 	private lateinit var fragmentProfileBinding: FragmentProfileBinding
@@ -38,8 +45,24 @@ class ProfileFragment : BaseBottomNavigationFragment(R.layout.fragment_profile) 
 	}
 
 	override fun initView() {
+		showUserImage()
 		initViewModel()
 		initShareMenu()
+	}
+
+	private fun showUserImage() {
+		val path = ConfigurationUtil.customUserImage
+		if (path == "" || !File(path).exists()) {
+			fragmentProfileBinding.studentProfileImage.setImageResource(R.mipmap.image_profile)
+		} else {
+			val options = RequestOptions()
+					.signature(MediaStoreSignature("image/*", File(path).lastModified(), 0))
+					.diskCacheStrategy(DiskCacheStrategy.NONE)
+			Glide.with(this)
+					.load(path)
+					.apply(options)
+					.into(fragmentProfileBinding.studentProfileImage)
+		}
 	}
 
 	private fun initViewModel() {
@@ -98,6 +121,14 @@ class ProfileFragment : BaseBottomNavigationFragment(R.layout.fragment_profile) 
 		}
 		fragmentProfileBinding.shareWithFriendsLayout.setOnClickListener {
 			showShareMenu()
+		}
+	}
+
+	override fun onResume() {
+		super.onResume()
+		if (LayoutRefreshConfigUtil.isChangeUserImage) {
+			showUserImage()
+			LayoutRefreshConfigUtil.isChangeUserImage = false
 		}
 	}
 

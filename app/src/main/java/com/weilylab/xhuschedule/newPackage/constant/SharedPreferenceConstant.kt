@@ -14,4 +14,7 @@ object SharedPreferenceConstant {
 	const val FIELD_START_DATE_TIME = "config_start_date_time"
 	const val FIELD_ENABLE_MULTI_USER_MODE = "config_enable_multi_user_mode"
 	const val FIELD_SHOW_NOT_WEEK = "config_show_not_week"
+	const val FIELD_AUTO_CHECK_UPDATE = "config_auto_check_update"
+	const val FIELD_CUSTOM_USER_IMAGE = "config_custom_user_image"
+	const val FIELD_CUSTOM_BACKGROUND_IMAGE = "config_custom_background_image"
 }
