@@ -94,9 +94,15 @@ class SplashActivity : XhuBaseActivity(null) {
 	private fun todo(splash: SplashResponse.Splash) {
 		if (splash.isEnable) {
 			val splashFile = FileUtil.getSplashImageFile(this, splash.objectId)
-			if (splashFile != null && splashFile.exists())
-				gotoSplashImage()
-			else {
+			if (splashFile != null && splashFile.exists()) {
+				val md5 = FileUtil.getMD5(splashFile)
+				if (splash.imageMD5 == md5)
+					gotoSplashImage()
+				else {
+					splashFile.delete()
+					gotoMain()
+				}
+			} else {
 				val intent = Intent(this, DownloadSplashIntentService::class.java)
 				intent.putExtra(IntentConstant.INTENT_TAG_NAME_QINIU_PATH, splash.splashUrl)
 				intent.putExtra(IntentConstant.INTENT_TAG_NAME_SPLASH_FILE_NAME, splash.objectId)

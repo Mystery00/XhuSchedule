@@ -45,6 +45,7 @@ import com.weilylab.xhuschedule.model.response.SplashResponse
 import com.weilylab.xhuschedule.repository.SplashRepository
 import com.weilylab.xhuschedule.utils.FileUtil
 import kotlinx.android.synthetic.main.activity_splash_image.*
+import vip.mystery0.tools.utils.DensityTools
 import java.io.File
 import java.util.*
 
@@ -53,12 +54,18 @@ class SplashImageActivity : XhuBaseActivity(R.layout.activity_splash_image) {
 	private var splashFile: File? = null
 
 	override fun inflateView(layoutId: Int) {
-		window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or View.SYSTEM_UI_FLAG_FULLSCREEN or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+		window.decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+				or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+				or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+				or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+				or View.SYSTEM_UI_FLAG_FULLSCREEN
+				or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY)
 		super.inflateView(layoutId)
 	}
 
-	override fun initData() {
-		super.initData()
+	override fun initView() {
+		super.initView()
+		splash = SplashRepository.getSplash()
 		if (!splash.isEnable) {
 			gotoMain()
 			return
@@ -68,15 +75,12 @@ class SplashImageActivity : XhuBaseActivity(R.layout.activity_splash_image) {
 			gotoMain()
 			return
 		}
-	}
-
-	override fun initView() {
-		super.initView()
-		splash = SplashRepository.getSplash()
 		Glide.with(this)
 				.asBitmap()
 				.load(splashFile)
-				.apply(RequestOptions().diskCacheStrategy(DiskCacheStrategy.NONE))
+				.apply(RequestOptions()
+						.override(DensityTools.getScreenWidth(this), DensityTools.getScreenHeight(this))
+						.diskCacheStrategy(DiskCacheStrategy.NONE))
 				.into(imageView)
 		val timer = Timer()
 		timer.schedule(object : TimerTask() {

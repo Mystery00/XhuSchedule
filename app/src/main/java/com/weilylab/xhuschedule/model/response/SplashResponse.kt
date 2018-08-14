@@ -13,11 +13,13 @@ class SplashResponse {
 		 * locationUrl : http://www.xbfan.xin/
 		 * createdAt : 2018-06-02T12:23:30.675Z
 		 * splashUrl : image/splash/20180602.jpg
+		 * imageMD5 : 925754dfeb605f9936ba4cb69e872883
 		 */
 		var splashTime: Long = 0L
 		var isEnable: Boolean = false
 		lateinit var objectId: String
 		lateinit var locationUrl: String
 		lateinit var splashUrl: String
+		lateinit var imageMD5: String
 	}
 }
