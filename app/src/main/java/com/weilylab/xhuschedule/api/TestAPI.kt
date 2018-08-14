@@ -6,8 +6,8 @@ import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.POST
 
-interface TestAPI{
+interface TestAPI {
 	@FormUrlEncoded
 	@POST("/Test/getTests")
-	fun getTests(@Field("username") username: String): Observable<ResponseBody>
+	fun getTests(@Field("username") username: String, @Field("year") year: String = "2017-2018", @Field("term") term: String = "1"): Observable<ResponseBody>
 }
