@@ -28,9 +28,18 @@
 	<string name="action_open">开启</string>
 	<string name="action_bypass">跳过</string>
 	<string name="action_finish">完成</string>
+	<string name="action_ok">确定</string>
+	<string name="action_cancel">取消</string>
 
 	<string name="prompt_username">学号</string>
 	<string name="prompt_password">密码</string>
+
+	<string name="share_qq">QQ</string>
+	<string name="share_weixin">微信</string>
+	<string name="share_weibo">微博</string>
+	<string name="share_qzone">空间</string>
+	<string name="share_friends">朋友圈</string>
+	<string name="share_more">更多</string>
 
 	<string name="hint_twice_press_exit">再按一次退出西瓜课表</string>
 	<string name="hint_custom_img">自定义图片设置成功！</string>
@@ -39,12 +48,29 @@
 	<string name="hint_no_weixin">微信未安装！</string>
 	<string name="hint_no_weibo">微博未安装！</string>
 	<string name="hint_foreground_notification">正在初始化数据</string>
-
-	<string name="warning_enable_multi_user_mode">请确保您是双学位的学生或者有同时查看多个账号课表的需求。</string>
+	<string name="hint_network_error">网络无法使用，请检查网络连接！</string>
+	<string name="hint_data_null">返回的数据为空！</string>
+	<string name="hint_do_too_many">频繁操作！</string>
 
 	<string name="hint_feedback_null_student">用户数据获取错误！</string>
 	<string name="hint_feedback_empty">提交信息不能为空！</string>
 	<string name="hint_feedback_done">信息提交成功！</string>
+
+	<string name="hint_null_course_data">这里什么都没有(ŎдŎ;)</string>
+
+	<string name="hint_feedback_title">请问您的意见或建议是？</string>
+	<string name="hint_feedback">您的意见或建议：</string>
+	<string name="hint_feedback_submit">感谢您对西瓜课表提出的宝贵意见或建议，我们将认真阅读并积极改正！您还可以加入西瓜课表用户交流QQ群 426878786 哟(o°ω°o) </string>
+
+	<string name="hint_dialog_login">登录中……</string>
+	<string name="hint_dialog_init">正在初始化……</string>
+	<string name="hint_dialog_get_tests">获取考试数据中……</string>
+	<string name="hint_dialog_feedback">正在上传数据……</string>
+
+	<string name="hint_confirm_reset_user_img">确定要重置个人头像吗？</string>
+	<string name="hint_confirm_reset_background_img">确定要重置背景图片吗？</string>
+
+	<string name="warning_enable_multi_user_mode">请确保您是双学位的学生或者有同时查看多个账号课表的需求。</string>
 
 	<string name="error_field_required">参数不可为空</string>
 	<string name="error_download">下载失败</string>
@@ -59,24 +85,6 @@
 	<string name="download_notification_title_download">%1$s/%2$s</string>
 	<string name="download_notification_text">已下载%1$d%%</string>
 
-	<string name="title_activity_settings">设置</string>
-	<string name="title_activity_notice">通知公告</string>
-
-	<string name="hint_network_error">网络无法使用，请检查网络连接！</string>
-	<string name="hint_data_null">返回的数据为空！</string>
-	<string name="hint_do_too_many">频繁操作！</string>
-
-	<string name="hint_null_course_data">这里什么都没有(ŎдŎ；)</string>
-
-	<string name="hint_feedback_title">请问您的意见或建议是？</string>
-	<string name="hint_feedback">您的意见或建议：</string>
-	<string name="hint_feedback_submit">感谢您对西瓜课表提出的宝贵意见或建议，我们将认真阅读并积极改正！您还可以加入西瓜课表用户交流QQ群 426878786 哟(o°ω°o) </string>
-
-	<string name="hint_dialog_login">登录中……</string>
-	<string name="hint_dialog_init">正在初始化……</string>
-	<string name="hint_dialog_get_tests">获取考试数据中……</string>
-	<string name="hint_dialog_feedback">正在上传数据……</string>
-
 	<string name="dialog_update_title">新版本更新 %1$s => %2$s</string>
 	<string name="dialog_update_text">更新日志：\n %1$s</string>
 
@@ -85,6 +93,10 @@
 	<string name="hint_query_test_location">考试地点：%1$s</string>
 	<string name="hint_query_test_test_no">座位号：%1$s</string>
 
+	<string name="title_dialog_share_with_friends">分享给朋友们</string>
+
+	<string name="title_activity_settings">设置</string>
+	<string name="title_activity_notice">通知公告</string>
 	<string name="title_activity_query_test">考试查询</string>
 	<string name="title_activity_feedback">意见反馈</string>
 </resources>

@@ -5,7 +5,7 @@
 	android:id="@+id/coordinatorLayout"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
-	tools:context=".newPackage.ui.activity.BottomNavigationActivity">
+	tools:context=".ui.activity.BottomNavigationActivity">
 
 	<androidx.constraintlayout.widget.ConstraintLayout
 		android:layout_width="match_parent"
@@ -31,7 +31,7 @@
 			app:layout_constraintStart_toStartOf="parent"
 			app:layout_constraintTop_toBottomOf="@id/appBarLayout" />
 
-		<com.weilylab.xhuschedule.newPackage.ui.custom.CustomWeekView
+		<com.weilylab.xhuschedule.ui.custom.CustomWeekView
 			android:id="@+id/weekView"
 			android:layout_width="0dp"
 			android:layout_height="wrap_content"

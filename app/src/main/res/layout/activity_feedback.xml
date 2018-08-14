@@ -4,7 +4,7 @@
 	xmlns:tools="http://schemas.android.com/tools"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
-	tools:context=".newPackage.ui.activity.FeedbackActivity">
+	tools:context=".ui.activity.FeedbackActivity">
 
 	<androidx.constraintlayout.widget.ConstraintLayout
 		android:layout_width="match_parent"

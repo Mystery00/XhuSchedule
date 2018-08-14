@@ -29,4 +29,10 @@
 		<item name="android:windowTranslucentNavigation">true</item>
 	</style>
 
+	<!-- popup window 动画 -->
+	<style name="Animation">
+		<item name="android:windowEnterAnimation">@anim/animation_share_list_enter</item>
+		<item name="android:windowExitAnimation">@anim/animation_share_list_out</item>
+	</style>
+
 </resources>

@@ -11,7 +11,7 @@
 	android:layout_height="match_parent"
 	android:fillViewport="true"
 	android:orientation="vertical"
-	tools:context="com.weilylab.xhuschedule.newPackage.ui.activity.LoginActivity">
+	tools:context="com.weilylab.xhuschedule.ui.activity.LoginActivity">
 
 	<androidx.constraintlayout.widget.ConstraintLayout
 		android:layout_width="match_parent"

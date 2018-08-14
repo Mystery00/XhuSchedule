@@ -10,7 +10,7 @@
 
 		<variable
 			name="notice"
-			type="com.weilylab.xhuschedule.newPackage.model.Notice" />
+			type="com.weilylab.xhuschedule.model.Notice" />
 	</data>
 
 	<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"

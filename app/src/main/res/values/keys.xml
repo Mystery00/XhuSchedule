@@ -7,6 +7,7 @@
 
 <resources>
 	<string name="screen_category_ui">界面设置</string>
+	<string name="screen_category_reset_ui">界面重置</string>
 	<string name="screen_category_about">关于</string>
 	<string name="screen_category_about_version">版本关于</string>
 	<string name="screen_category_about_application">应用关于</string>
@@ -18,24 +19,24 @@
 	<string name="key_del_account" translatable="false">key_del_account</string>
 	<string name="key_set_main_account" translatable="false">key_set_main_account</string>
 	<string name="key_enable_multi_user_mode" translatable="false">key_enable_multi_user_mode</string>
-	<string name="key_reset" translatable="false">key_reset</string>
 	<string name="key_auto_check_update" translatable="false">key_auto_check_update</string>
 	<string name="key_update_log" translatable="false">key_update_log</string>
 	<string name="key_weixin" translatable="false">key_weixin</string>
 	<string name="key_check_update" translatable="false">key_check_update</string>
 	<string name="key_version_name" translatable="false">key_version_name</string>
 	<string name="key_version_code" translatable="false">key_version_code</string>
-
 	<string name="key_user_img" translatable="false">key_user_img</string>
 	<string name="key_background_img" translatable="false">key_background_img</string>
+	<string name="key_reset_user_img" translatable="false">key_reset_user_img</string>
+	<string name="key_reset_background_img" translatable="false">key_reset_background_img</string>
 
 	<string name="title_icon_ui">图标以及界面设计</string>
 	<string name="title_back">数据提供</string>
 	<string name="title_ui">产品设计</string>
 	<string name="title_developer">开发者</string>
 	<string name="title_show_not">显示非本周课程</string>
-	<string name="title_reset">界面重置</string>
-
+	<string name="title_reset_user_img">重置个人头像</string>
+	<string name="title_reset_background_img">重置背景图片</string>
 	<string name="title_current_account">当前已登录账号</string>
 	<string name="title_account_manager">账号管理</string>
 	<string name="title_add_account">添加账号</string>
