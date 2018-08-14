@@ -74,6 +74,7 @@
 
 	<string name="error_field_required">参数不可为空</string>
 	<string name="error_download">下载失败</string>
+	<string name="error_download_md5_not_matched">MD5校验失败，请重新下载</string>
 
 	<string name="success_login">登陆成功，欢迎使用%1$s！</string>
 
@@ -84,6 +85,7 @@
 	<string name="download_notification_title">正在下载：%1$s</string>
 	<string name="download_notification_title_download">%1$s/%2$s</string>
 	<string name="download_notification_text">已下载%1$d%%</string>
+	<string name="download_notification_md5_matching">MD5校验中……</string>
 
 	<string name="dialog_update_title">新版本更新 %1$s => %2$s</string>
 	<string name="dialog_update_text">更新日志：\n %1$s</string>

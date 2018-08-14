@@ -52,15 +52,14 @@ class DownloadProgressResponseBody(private val responseBody: ResponseBody,
     override fun contentLength(): Long = responseBody.contentLength()
 
     override fun source(): BufferedSource {
-        if (bufferedSource == null) {
+        if (bufferedSource == null)
             bufferedSource = Okio.buffer(source(responseBody.source()))
-        }
         return bufferedSource!!
     }
 
     private fun source(source: Source): Source {
         return object : ForwardingSource(source) {
-            internal var totalBytesRead = 0L
+			var totalBytesRead = 0L
 
             @Throws(IOException::class)
             override fun read(sink: Buffer, byteCount: Long): Long {
@@ -70,6 +69,5 @@ class DownloadProgressResponseBody(private val responseBody: ResponseBody,
                 return bytesRead
             }
         }
-
     }
 }

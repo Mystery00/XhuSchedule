@@ -211,7 +211,7 @@ int patchMethod(int argc, char *argv[]) {
     return 0;
 }
 
-JNIEXPORT jint JNICALL Java_com_weilylab_xhuschedule_util_BsPatch_patch
+JNIEXPORT jint JNICALL Java_com_weilylab_xhuschedule_utils_BsPatch_patch
         (JNIEnv *env, jclass cls,
          jstring old, jstring new, jstring patch) {
     int argc = 4;

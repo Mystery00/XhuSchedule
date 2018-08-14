@@ -45,46 +45,65 @@ import com.weilylab.xhuschedule.model.Download
 import vip.mystery0.tools.utils.FileTools
 
 object DownloadNotification {
-    private const val NOTIFICATION_TAG = "Download"
-    private const val NOTIFICATION_ID = 1
-    @SuppressLint("StaticFieldLeak")
+	private const val NOTIFICATION_TAG = "Download"
+	private var NOTIFICATION_ID = 1
+	@SuppressLint("StaticFieldLeak")
 	private lateinit var notificationBuilder: NotificationCompat.Builder
 
-    fun notify(context: Context, fileName: String) {
-        notificationBuilder = NotificationCompat.Builder(context, Constants.NOTIFICATION_CHANNEL_ID_DOWNLOAD)
-                .setSound(null)
-                .setVibrate(null)
-                .setSmallIcon(R.drawable.ic_file_download_black_24dp)
-                .setContentTitle(context.getString(R.string.download_notification_title, fileName))
-                .setOngoing(true)
-                .setAutoCancel(true)
+	fun notify(context: Context, fileName: String) {
+		notificationBuilder = NotificationCompat.Builder(context, Constants.NOTIFICATION_CHANNEL_ID_DOWNLOAD)
+				.setSound(null)
+				.setVibrate(null)
+				.setSmallIcon(R.drawable.ic_file_download_black_24dp)
+				.setContentTitle(context.getString(R.string.download_notification_title, fileName))
+				.setOngoing(true)
+				.setAutoCancel(true)
 		notify(context, notificationBuilder.build())
-    }
+	}
 
-    fun updateProgress(context: Context, download: Download) {
-        notificationBuilder.setProgress(100, download.progress, false)
-                .setContentText(context.getString(R.string.download_notification_title_download, FileTools.formatFileSize(download.currentFileSize), FileTools.formatFileSize(download.totalFileSize)))
-                .setSubText(context.getString(R.string.download_notification_text, download.progress))
+	fun updateProgress(context: Context, download: Download) {
+		notificationBuilder.setProgress(100, download.progress, false)
+				.setContentText(context.getString(R.string.download_notification_title_download, FileTools.formatFileSize(download.currentFileSize), FileTools.formatFileSize(download.totalFileSize)))
+				.setSubText(context.getString(R.string.download_notification_text, download.progress))
 		notify(context, notificationBuilder.build())
-    }
+	}
 
-    fun downloadError(context: Context) {
-        notificationBuilder.setProgress(0, 0, false)
-                .setContentTitle(context.getString(R.string.error_download))
-                .setContentText(" ")
-                .setOngoing(false)
+	fun downloadError(context: Context) {
+		cancel(context)
+		notificationBuilder.setProgress(0, 0, false)
+				.setContentTitle(context.getString(R.string.error_download))
+				.setContentText(" ")
+				.setOngoing(false)
 		notify(context, notificationBuilder.build())
-    }
+	}
 
-    private fun notify(context: Context, notification: Notification) {
-        val notificationManager = context
-                .getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        notificationManager.notify(NOTIFICATION_TAG, NOTIFICATION_ID, notification)
-    }
+	fun downloadFileMD5Matching(context: Context) {
+		cancel(context)
+		notificationBuilder.setProgress(0, 0, false)
+				.setContentTitle(context.getString(R.string.download_notification_md5_matching))
+				.setContentText(" ")
+				.setOngoing(false)
+		notify(context, notificationBuilder.build())
+	}
 
-    fun cancel(context: Context) {
-        val notificationManager = context
-                .getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        notificationManager.cancel(NOTIFICATION_TAG, NOTIFICATION_ID)
-    }
+	fun downloadFileMD5NotMatch(context: Context) {
+		cancel(context)
+		notificationBuilder.setProgress(0, 0, false)
+				.setContentTitle(context.getString(R.string.error_download_md5_not_matched))
+				.setContentText(" ")
+				.setOngoing(false)
+		notify(context, notificationBuilder.build())
+	}
+
+	private fun notify(context: Context, notification: Notification) {
+		val notificationManager = context
+				.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+		notificationManager.notify(NOTIFICATION_TAG, NOTIFICATION_ID, notification)
+	}
+
+	fun cancel(context: Context) {
+		val notificationManager = context
+				.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+		notificationManager.cancel(NOTIFICATION_TAG, NOTIFICATION_ID++)
+	}
 }

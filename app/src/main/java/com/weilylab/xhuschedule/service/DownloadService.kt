@@ -50,6 +50,7 @@ import com.weilylab.xhuschedule.ui.notification.DownloadNotification
 import com.weilylab.xhuschedule.XhuFileUtil
 import com.weilylab.xhuschedule.model.Download
 import com.weilylab.xhuschedule.interceptor.DownloadProgressInterceptor
+import com.weilylab.xhuschedule.utils.FileUtil
 import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
@@ -68,19 +69,24 @@ import java.util.concurrent.TimeUnit
  */
 class DownloadService : IntentService("DownloadService") {
 	companion object {
-		fun intentTo(context: Context, type: String, qiniuPath: String) {
+		fun intentTo(context: Context, type: String, qiniuPath: String, apkMD5: String, patchMD5: String) {
 			val intent = Intent(context, DownloadService::class.java)
 			intent.putExtra(Constants.INTENT_TAG_NAME_TYPE, type)
 			intent.putExtra(Constants.INTENT_TAG_NAME_QINIU_PATH, qiniuPath)
+			intent.putExtra(Constants.INTENT_TAG_NAME_APK_MD5, apkMD5)
+			intent.putExtra(Constants.INTENT_TAG_NAME_PATCH_MD5, patchMD5)
 			context.startService(intent)
 		}
 	}
 
 	private lateinit var retrofit: Retrofit
+	private var isDownloadMD5Matched = false
 
 	override fun onHandleIntent(intent: Intent?) {
 		val type = intent?.getStringExtra(Constants.INTENT_TAG_NAME_TYPE)
 		val qiniuPath = intent?.getStringExtra(Constants.INTENT_TAG_NAME_QINIU_PATH)
+		val apkMD5 = intent?.getStringExtra(Constants.INTENT_TAG_NAME_APK_MD5)
+		val patchMD5 = intent?.getStringExtra(Constants.INTENT_TAG_NAME_PATCH_MD5)
 		val file = File(getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS)!!.absolutePath + File.separator + qiniuPath)
 		if (!file.parentFile.exists())
 			file.parentFile.mkdirs()
@@ -88,23 +94,19 @@ class DownloadService : IntentService("DownloadService") {
 			Logs.i("onHandleIntent: 格式错误")
 			return
 		}
-		download(this, type!!, qiniuPath!!, file)
+		download(this, type!!, qiniuPath!!, file, apkMD5!!, patchMD5!!)
 	}
 
 	override fun onCreate() {
 		super.onCreate()
 
 		val listener = object : DownloadProgressListener {
-			private var temp = 0
-
 			override fun update(bytesRead: Long, contentLength: Long, done: Boolean) {
 				val download = Download()
 				download.totalFileSize = contentLength
 				download.currentFileSize = bytesRead
 				download.progress = (bytesRead * 100 / contentLength).toInt()
-				if (temp % 3 == 0)
-					DownloadNotification.updateProgress(applicationContext, download)
-				temp++
+				DownloadNotification.updateProgress(applicationContext, download)
 			}
 		}
 		val client = OkHttpClient.Builder()
@@ -119,29 +121,35 @@ class DownloadService : IntentService("DownloadService") {
 				.build()
 	}
 
-	private fun download(context: Context, type: String, qiniuPath: String, file: File) {
-		Logs.i("download: $qiniuPath")
+	private fun download(context: Context, type: String, qiniuPath: String, file: File, apkMD5: String, patchMD5: String) {
 		retrofit.create(QiniuAPI::class.java)
 				.download(qiniuPath)
 				.subscribeOn(Schedulers.newThread())
 				.unsubscribeOn(Schedulers.newThread())
-				.map { responseBody -> responseBody.byteStream() }
-				.observeOn(Schedulers.io())
-				.doOnNext { inputStream ->
+				.map { responseBody ->
+					val inputStream = responseBody.byteStream()
 					try {
 						XhuFileUtil.saveFile(inputStream, file)
-						if (type == Constants.DOWNLOAD_TYPE_PATCH) {
-							val applicationInfo = applicationContext.applicationInfo
-							val newApkPath = getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS)!!.absolutePath + File.separator + "apk" + File.separator + qiniuPath + ".apk"
-							val newAPK = File(newApkPath)
-							if (!newAPK.parentFile.exists())
-								newAPK.parentFile.mkdirs()
-							BsPatch.patch(applicationInfo.sourceDir,
-									newApkPath,
-									file.absolutePath)
+						val downloadFileMD5 = FileUtil.getMD5(file)
+						when (type) {
+							Constants.DOWNLOAD_TYPE_APK -> isDownloadMD5Matched = downloadFileMD5 == apkMD5
+							Constants.DOWNLOAD_TYPE_PATCH -> isDownloadMD5Matched = downloadFileMD5 == patchMD5
 						}
 					} catch (e: IOException) {
 						e.printStackTrace()
+					}
+					inputStream
+				}
+				.doAfterNext {
+					if (isDownloadMD5Matched && type == Constants.DOWNLOAD_TYPE_PATCH) {
+						val applicationInfo = applicationContext.applicationInfo
+						val newApkPath = getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS)!!.absolutePath + File.separator + "apk" + File.separator + qiniuPath + ".apk"
+						val newAPK = File(newApkPath)
+						if (!newAPK.parentFile.exists())
+							newAPK.parentFile.mkdirs()
+						BsPatch.patch(applicationInfo.sourceDir,
+								newApkPath,
+								file.absolutePath)
 					}
 				}
 				.observeOn(AndroidSchedulers.mainThread())
@@ -151,6 +159,10 @@ class DownloadService : IntentService("DownloadService") {
 					}
 
 					override fun onComplete() {
+						if (!isDownloadMD5Matched) {
+							DownloadNotification.downloadFileMD5NotMatch(context)
+							return
+						}
 						val installIntent = Intent(Intent.ACTION_VIEW)
 						installIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
 						installIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
@@ -169,6 +181,7 @@ class DownloadService : IntentService("DownloadService") {
 					}
 
 					override fun onNext(t: InputStream) {
+						DownloadNotification.downloadFileMD5Matching(context)
 					}
 
 					override fun onError(e: Throwable) {
