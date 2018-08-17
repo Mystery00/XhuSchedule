@@ -21,12 +21,18 @@ class QueryClassScoreActivity : XhuBaseActivity(R.layout.activity_query_class_sc
 	private var startTouchY = 0F
 	private var scoreListLayoutShowY = 0//显示时的位置
 	private var scoreListLayoutHideButHasData = 0//隐藏时有数据的位置
+	private var scoreListLayoutHideNoData = 0//隐藏时无数据的位置
+	private var isShowScoreLayout = true
+	private var hasData = false
 
 	private val scoreListObserver = Observer<PackageData<List<String>>> {
 		when (it.status) {
 			Loading -> showLoading()
 			Empty -> showEmpty()
-			Content -> showContent(true)
+			Content -> {
+				hasData = true
+				showContent(true)
+			}
 			Error -> Toast.makeText(this, it.error?.message, Toast.LENGTH_SHORT)
 					.show()
 		}
@@ -74,7 +80,17 @@ class QueryClassScoreActivity : XhuBaseActivity(R.layout.activity_query_class_sc
 			when (motionEvent.action) {
 				MotionEvent.ACTION_DOWN -> startTouchY = motionEvent.rawY
 				MotionEvent.ACTION_MOVE -> moveContent((motionEvent.rawY - startTouchY + scoreListLayoutShowY).toInt())
-				MotionEvent.ACTION_UP -> hideContentFromHere((motionEvent.rawY - startTouchY + scoreListLayoutShowY).toInt())
+				MotionEvent.ACTION_UP -> {
+					val offset = motionEvent.rawY - startTouchY
+					val current = when {
+						isShowScoreLayout -> scoreListLayoutShowY
+						!isShowScoreLayout && hasData -> scoreListLayoutHideButHasData
+						else -> scoreListLayoutHideNoData
+					}
+					val isDeverse = Math.abs(offset) * 3 > DensityTools.getScreenHeight(this)
+					if (isDeverse) isShowScoreLayout = !isShowScoreLayout
+					moveContentFromHere((offset + current).toInt())
+				}
 			}
 			true
 		}
@@ -96,35 +112,46 @@ class QueryClassScoreActivity : XhuBaseActivity(R.layout.activity_query_class_sc
 	}
 
 	private fun getScoreLayoutY() {
-		val array = intArrayOf(0, 0)
-		scoreListLayout.getLocationOnScreen(array)
-		scoreListLayoutShowY = array[1]
+		val statusBarHeight = resources.getDimensionPixelSize(resources.getIdentifier("status_bar_height", "dimen", "android"))
+		val height = DensityTools.getScreenHeight(this)
+		scoreListLayoutShowY = 0
+		scoreListLayoutHideNoData = height - statusBarHeight - DensityTools.dp2px(this, 45F)
+		scoreListLayoutHideButHasData = scoreListLayoutHideNoData - DensityTools.dp2px(this, 45F)
 	}
 
 	private fun showContent(isShowAnimation: Boolean) {
 		dismissLoading()
-		val height = DensityTools.getScreenHeight(this)
 		if (isShowAnimation)
-			AnimationHelper.translationY(scoreListLayout, scoreListLayoutShowY + height, scoreListLayoutShowY, 300L)
+			AnimationHelper.translationY(scoreListLayout, scoreListLayoutHideNoData, scoreListLayoutShowY, 300L)
 		else
 			AnimationHelper.move(scoreListLayout, scoreListLayoutShowY, 0)
+		isShowScoreLayout = true
 	}
 
 	private fun moveContent(current: Int) {
-		AnimationHelper.move(scoreListLayout, scoreListLayoutShowY, current)
+		val start = when {
+			isShowScoreLayout -> scoreListLayoutShowY
+			!isShowScoreLayout && hasData -> scoreListLayoutHideButHasData
+			else -> scoreListLayoutHideNoData
+		}
+		AnimationHelper.move(scoreListLayout, start, current)
 	}
 
 	private fun hideContent(isShowAnimation: Boolean) {
 		dismissLoading()
-		val height = DensityTools.getScreenHeight(this)
 		if (isShowAnimation)
-			AnimationHelper.translationY(scoreListLayout, scoreListLayoutShowY, scoreListLayoutShowY + height, 300L)
+			AnimationHelper.translationY(scoreListLayout, scoreListLayoutShowY, scoreListLayoutHideNoData, 300L)
 		else
-			AnimationHelper.move(scoreListLayout, scoreListLayoutShowY, height)
+			AnimationHelper.move(scoreListLayout, scoreListLayoutHideNoData, 0)
+		isShowScoreLayout = false
 	}
 
-	private fun hideContentFromHere(current: Int) {
-		val height = DensityTools.getScreenHeight(this)
-		AnimationHelper.translationY(scoreListLayout, current, scoreListLayoutShowY + height, 300L)
+	private fun moveContentFromHere(current: Int) {
+		val end = when {
+			isShowScoreLayout -> scoreListLayoutShowY
+			!isShowScoreLayout && hasData -> scoreListLayoutHideButHasData
+			else -> scoreListLayoutHideNoData
+		}
+		AnimationHelper.translationY(scoreListLayout, current, end, 300L)
 	}
 }

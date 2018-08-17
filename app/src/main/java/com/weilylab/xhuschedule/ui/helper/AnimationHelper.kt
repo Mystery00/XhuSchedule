@@ -15,6 +15,7 @@ object AnimationHelper {
 	private val nowPlayingList = ArrayList<View>()
 
 	fun translationY(target: View, start: Int, end: Int, duration: Long) {
+		Logs.im("translationY: ", start, end)
 		val layoutParams = target.layoutParams as ViewGroup.MarginLayoutParams
 		Observable.create<Int> {
 			var index = 0F
@@ -34,6 +35,8 @@ object AnimationHelper {
 				.observeOn(AndroidSchedulers.mainThread())
 				.subscribe(object : Observer<Int> {
 					override fun onComplete() {
+						layoutParams.setMargins(0, end, 0, 0)
+						target.layoutParams = layoutParams
 						nowPlayingList.remove(target)
 					}
 
