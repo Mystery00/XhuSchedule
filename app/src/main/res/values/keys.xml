@@ -29,6 +29,9 @@
 	<string name="key_background_img" translatable="false">key_background_img</string>
 	<string name="key_reset_user_img" translatable="false">key_reset_user_img</string>
 	<string name="key_reset_background_img" translatable="false">key_reset_background_img</string>
+	<string name="key_query_score_class" translatable="false">key_query_score_class</string>
+	<string name="key_query_score_experiment" translatable="false">key_query_score_experiment</string>
+	<string name="key_query_score_cet" translatable="false">key_query_score_cet</string>
 
 	<string name="title_icon_ui">图标以及界面设计</string>
 	<string name="title_back">数据提供</string>
@@ -43,7 +46,7 @@
 	<string name="title_del_account">删除账号</string>
 	<string name="title_set_main_account">设置主账号</string>
 	<string name="title_enable_multi_user_mode">启用多用户模式</string>
-	<string name="title_query_score_schedule">课程查询</string>
+	<string name="title_query_score_class">课程查询</string>
 	<string name="title_query_score_experiment">实验成绩查询</string>
 	<string name="title_query_score_cet">四六级查询</string>
 	<string name="title_user_img">自定义个人头像</string>

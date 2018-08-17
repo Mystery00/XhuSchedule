@@ -127,6 +127,7 @@
 			android:process="com.weilylab.xhuschedule.sb"
 			android:theme="@android:style/Theme.Translucent.NoTitleBar" />
 		<!-- 腾讯开放平台 -->
+		<activity android:name=".ui.activity.QueryClassScoreActivity"></activity>
 	</application>
 
 </manifest>

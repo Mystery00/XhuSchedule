@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-	<Preference android:title="@string/title_query_score_schedule">
-
-	</Preference>
-	<Preference android:title="@string/title_query_score_experiment">
-
-	</Preference>
-	<Preference android:title="@string/title_query_score_cet">
-
-	</Preference>
+	<Preference
+		android:key="@string/key_query_score_class"
+		android:title="@string/title_query_score_class" />
+	<Preference
+		android:key="@string/key_query_score_experiment"
+		android:title="@string/title_query_score_experiment" />
+	<Preference
+		android:key="@string/key_query_score_cet"
+		android:title="@string/title_query_score_cet" />
 </PreferenceScreen>
