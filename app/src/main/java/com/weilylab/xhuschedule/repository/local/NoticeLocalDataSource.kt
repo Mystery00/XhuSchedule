@@ -16,14 +16,10 @@ object NoticeLocalDataSource : NoticeDataSource {
 		noticeLiveData.value = PackageData.loading()
 		RxObservable<List<Notice>>()
 				.doThings {
-					try {
-						if (platform == null)
-							it.onFinish(noticeService.queryAllNotice())
-						else
-							it.onFinish(noticeService.queryNoticeForPlatform(platform))
-					} catch (e: Exception) {
-						it.onError(e)
-					}
+					if (platform == null)
+						it.onFinish(noticeService.queryAllNotice())
+					else
+						it.onFinish(noticeService.queryNoticeForPlatform(platform))
 				}
 				.subscribe(object : RxObserver<List<Notice>>() {
 					override fun onFinish(data: List<Notice>?) {

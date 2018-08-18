@@ -23,7 +23,7 @@ object InitRemoteDataSource : InitDataSource {
 					.subscribeOn(Schedulers.newThread())
 					.unsubscribeOn(Schedulers.newThread())
 					.map {
-						val startDateTimeResponse = GsonFactory.parseInputStream(it.byteStream(), StartDateTimeResponse::class.java)
+						val startDateTimeResponse = GsonFactory.parse<StartDateTimeResponse>(it)
 						if (startDateTimeResponse.results.isNotEmpty())
 							InitLocalDataSource.setStartDataTime(startDateTimeResponse.results[0].date)
 						startDateTimeResponse

@@ -47,7 +47,7 @@ class CheckUpdateService : Service() {
 				.checkVersion(appVersion, systemVersion, manufacturer, model, rom)
 				.subscribeOn(Schedulers.newThread())
 				.unsubscribeOn(Schedulers.newThread())
-				.map { GsonFactory.parseInputStream(it.byteStream(), Version::class.java) }
+				.map { GsonFactory.parse<Version>(it) }
 				.observeOn(AndroidSchedulers.mainThread())
 				.subscribe(object : RxObserver<Version>() {
 					override fun onFinish(data: Version?) {

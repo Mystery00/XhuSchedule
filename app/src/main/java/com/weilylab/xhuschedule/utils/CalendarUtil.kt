@@ -3,7 +3,7 @@ package com.weilylab.xhuschedule.utils
 import java.util.*
 
 object CalendarUtil {
-	var startDateTime = Calendar.getInstance()
+	var startDateTime: Calendar = Calendar.getInstance()
 
 	fun getWeekFromCalendar(startDateTime: Calendar): Int {
 		val now = Calendar.getInstance()
@@ -26,5 +26,14 @@ object CalendarUtil {
 	fun getWeekIndexInString(index: Int = getWeekIndex()): String {
 		val weeks = arrayOf("周一", "周二", "周三", "周四", "周五", "周六", "周日")
 		return weeks[index - 1]
+	}
+
+	fun getSelectArray(grade: String?): Array<String> {
+		val calendar = Calendar.getInstance()
+		val nowYear = calendar.get(Calendar.YEAR)
+		val month = calendar.get(Calendar.MONTH)
+		val startYear = grade?.toInt() ?: nowYear-3
+		val endYear = if (month >= Calendar.SEPTEMBER) nowYear + 1 else nowYear
+		return Array(endYear - startYear) { i -> "${startYear + i}-${startYear + 1 + i}" }
 	}
 }

@@ -28,7 +28,7 @@ object InitLocalDataSource : InitDataSource {
 	fun getStartDataTime(): Calendar {
 		val calendar = Calendar.getInstance()
 		val dateString = sharedPreferences.getString(SharedPreferenceConstant.FIELD_START_DATE_TIME, "")
-		if (dateString == "")
+		if (dateString == null || dateString == "")
 			return calendar
 		val dateArray = dateString.split('-')
 		calendar.set(dateArray[0].toInt(), dateArray[1].toInt() - 1, dateArray[2].toInt(), 0, 0, 0)

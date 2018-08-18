@@ -14,22 +14,18 @@ object TestLocalDataSource : TestDataSource {
 	private val testService = TestServiceImpl()
 
 	override fun queryAllTests(testLiveData: MediatorLiveData<PackageData<List<Test>>>, student: Student) {
-		testLiveData.value=PackageData.loading()
+		testLiveData.value = PackageData.loading()
 		RxObservable<List<Test>>()
 				.doThings {
-					try {
-						it.onFinish(testService.queryAllTest())
-					} catch (e: Exception) {
-						it.onError(e)
-					}
+					it.onFinish(testService.queryAllTest())
 				}
 				.subscribe(object : RxObserver<List<Test>>() {
 					override fun onFinish(data: List<Test>?) {
-						testLiveData.value= PackageData.content(data)
+						testLiveData.value = PackageData.content(data)
 					}
 
 					override fun onError(e: Throwable) {
-						testLiveData.value= PackageData.error(e)
+						testLiveData.value = PackageData.error(e)
 					}
 				})
 	}

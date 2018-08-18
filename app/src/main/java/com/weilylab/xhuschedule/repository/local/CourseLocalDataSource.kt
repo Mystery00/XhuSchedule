@@ -19,18 +19,13 @@ object CourseLocalDataSource : CourseDataSource {
 	override fun queryCourseByUsername(courseListLiveData: MutableLiveData<PackageData<List<Schedule>>>, student: Student, year: String?, term: String?, isFromCache: Boolean) {
 		RxObservable<List<Schedule>>()
 				.doThings {
-					try {
-						if (year != null && term != null)
-							it.onFinish(CourseUtil.convertCourseToSchedule(courseService.queryCourseByUsernameAndTerm(student.username, year, term)))
-						else
-							it.onFinish(CourseUtil.convertCourseToSchedule(courseService.queryCourseByUsernameAndTerm(student.username, "current", "current")))
-					} catch (e: Exception) {
-						it.onError(e)
-					}
+					if (year != null && term != null)
+						it.onFinish(CourseUtil.convertCourseToSchedule(courseService.queryCourseByUsernameAndTerm(student.username, year, term)))
+					else
+						it.onFinish(CourseUtil.convertCourseToSchedule(courseService.queryCourseByUsernameAndTerm(student.username, "current", "current")))
 				}
 				.subscribe(object : RxObserver<List<Schedule>>() {
 					override fun onFinish(data: List<Schedule>?) {
-						Logs.i("onFinish: ")
 						if (data == null || data.isEmpty())
 							CourseRemoteDataSource.queryCourseByUsername(courseListLiveData, student, year, term, isFromCache)
 						else {
@@ -52,20 +47,16 @@ object CourseLocalDataSource : CourseDataSource {
 	override fun queryCourseWithManyStudent(courseListLiveData: MutableLiveData<PackageData<List<Schedule>>>, studentList: List<Student>, year: String?, term: String?, isFromCache: Boolean) {
 		RxObservable<List<Schedule>>()
 				.doThings { emitter ->
-					try {
-						val courses = ArrayList<Schedule>()
-						if (year != null && term != null)
-							studentList.forEach {
-								courses.addAll(CourseUtil.convertCourseToSchedule(courseService.queryCourseByUsernameAndTerm(it.username, year, term)))
-							}
-						else
-							studentList.forEach {
-								courses.addAll(CourseUtil.convertCourseToSchedule(courseService.queryCourseByUsernameAndTerm(it.username, "current", "current")))
-							}
-						emitter.onFinish(courses)
-					} catch (e: Exception) {
-						emitter.onError(e)
-					}
+					val courses = ArrayList<Schedule>()
+					if (year != null && term != null)
+						studentList.forEach {
+							courses.addAll(CourseUtil.convertCourseToSchedule(courseService.queryCourseByUsernameAndTerm(it.username, year, term)))
+						}
+					else
+						studentList.forEach {
+							courses.addAll(CourseUtil.convertCourseToSchedule(courseService.queryCourseByUsernameAndTerm(it.username, "current", "current")))
+						}
+					emitter.onFinish(courses)
 				}
 				.subscribe(object : RxObserver<List<Schedule>>() {
 					override fun onFinish(data: List<Schedule>?) {

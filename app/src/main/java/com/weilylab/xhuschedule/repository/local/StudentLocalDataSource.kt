@@ -26,15 +26,11 @@ object StudentLocalDataSource : StudentDataSource {
 		studentInfoLiveData.value = PackageData.loading()
 		RxObservable<StudentInfo>()
 				.doThings {
-					try {
-						val studentInfo = studentService.queryStudentInfoByUsername(student.username)
-						if (studentInfo == null)
-							it.onError(Exception(StringConstant.hint_data_null))
-						else
-							it.onFinish(studentInfo)
-					} catch (e: Exception) {
-						it.onError(e)
-					}
+					val studentInfo = studentService.queryStudentInfoByUsername(student.username)
+					if (studentInfo == null)
+						it.onError(Exception(StringConstant.hint_data_null))
+					else
+						it.onFinish(studentInfo)
 				}
 				.subscribe(object : RxObserver<StudentInfo>() {
 					override fun onFinish(data: StudentInfo?) {
@@ -47,14 +43,31 @@ object StudentLocalDataSource : StudentDataSource {
 				})
 	}
 
+	fun queryManyStudentInfo(studentInfoLiveData: MutableLiveData<PackageData<Map<Student, StudentInfo?>>>, studentList: List<Student>) {
+		studentInfoLiveData.value = PackageData.loading()
+		RxObservable<Map<Student, StudentInfo?>>()
+				.doThings { emitter ->
+					val map = HashMap<Student, StudentInfo?>()
+					studentList.forEach {
+						map[it] = studentService.queryStudentInfoByUsername(it.username)
+					}
+					emitter.onFinish(map)
+				}
+				.subscribe(object : RxObserver<Map<Student, StudentInfo?>>() {
+					override fun onFinish(data: Map<Student, StudentInfo?>?) {
+						studentInfoLiveData.value = PackageData.content(data)
+					}
+
+					override fun onError(e: Throwable) {
+						studentInfoLiveData.value = PackageData.error(e)
+					}
+				})
+	}
+
 	fun queryMainStudent(listener: (PackageData<Student>) -> Unit) {
 		RxObservable<Student?>()
 				.doThings {
-					try {
-						it.onFinish(studentService.queryMainStudent())
-					} catch (e: Exception) {
-						it.onError(e)
-					}
+					it.onFinish(studentService.queryMainStudent())
 				}
 				.subscribe(object : RxObserver<Student?>() {
 					override fun onFinish(data: Student?) {
@@ -80,20 +93,16 @@ object StudentLocalDataSource : StudentDataSource {
 	fun deleteStudent(studentList: List<Student>, observer: Observer<Boolean>) {
 		RxObservable<Boolean>()
 				.doThings { emitter ->
-					try {
-						studentList.forEach {
-							studentService.studentLogout(it)
-						}
-						val list = studentService.queryAllStudentList()
-						if (list.isNotEmpty() && !checkMain(list)) {
-							val mainStudent = list[0]
-							mainStudent.isMain = true
-							studentService.updateStudent(mainStudent)
-						}
-						emitter.onFinish(true)
-					} catch (e: Exception) {
-						emitter.onError(e)
+					studentList.forEach {
+						studentService.studentLogout(it)
 					}
+					val list = studentService.queryAllStudentList()
+					if (list.isNotEmpty() && !checkMain(list)) {
+						val mainStudent = list[0]
+						mainStudent.isMain = true
+						studentService.updateStudent(mainStudent)
+					}
+					emitter.onFinish(true)
 				}
 				.subscribe(observer)
 	}
@@ -101,14 +110,10 @@ object StudentLocalDataSource : StudentDataSource {
 	fun updateStudent(studentList: List<Student>, observer: Observer<Boolean>) {
 		RxObservable<Boolean>()
 				.doThings { emitter ->
-					try {
-						studentList.forEach {
-							studentService.updateStudent(it)
-						}
-						emitter.onFinish(true)
-					} catch (e: Exception) {
-						emitter.onError(e)
+					studentList.forEach {
+						studentService.updateStudent(it)
 					}
+					emitter.onFinish(true)
 				}
 				.subscribe(observer)
 	}
@@ -133,11 +138,7 @@ object StudentLocalDataSource : StudentDataSource {
 	fun queryAllStudentList(listener: (PackageData<List<Student>>) -> Unit) {
 		RxObservable<List<Student>>()
 				.doThings {
-					try {
-						it.onFinish(studentService.queryAllStudentList())
-					} catch (e: Exception) {
-						it.onError(e)
-					}
+					it.onFinish(studentService.queryAllStudentList())
 				}
 				.subscribe(object : RxObserver<List<Student>>() {
 					override fun onFinish(data: List<Student>?) {

@@ -28,14 +28,14 @@ object UserUtil {
 				.subscribeOn(Schedulers.newThread())
 				.unsubscribeOn(Schedulers.newThread())
 				.map {
-					val data = GsonFactory.parseInputStream(it.byteStream(), LoginResponse::class.java)
+					val data = GsonFactory.parse<LoginResponse>(it)
 					if (data.rt == ResponseCodeConstants.DONE)
 						doSaveListener?.doSave(student)
 					data
 				}
 				.observeOn(AndroidSchedulers.mainThread())
-				.subscribe(object : RxObserver<BaseResponse>() {
-					override fun onFinish(data: BaseResponse?) {
+				.subscribe(object : RxObserver<LoginResponse>() {
+					override fun onFinish(data: LoginResponse?) {
 						when {
 							data == null -> requestListener.error(ResponseCodeConstants.UNKNOWN_ERROR, StringConstant.hint_data_null)
 							data.rt == ResponseCodeConstants.DONE -> requestListener.done(true)
@@ -57,7 +57,7 @@ object UserUtil {
 				.subscribeOn(Schedulers.newThread())
 				.unsubscribeOn(Schedulers.newThread())
 				.map {
-					val data = GsonFactory.parseInputStream(it.byteStream(), StudentInfo::class.java)
+					val data = GsonFactory.parse<StudentInfo>(it)
 					if (data.rt == ResponseCodeConstants.DONE)
 						doSaveListener?.doSave(data)
 					data
@@ -99,7 +99,7 @@ object UserUtil {
 				.feedback(student.username, appVersion, systemVersion, manufacturer, model, rom, other, message)
 				.subscribeOn(Schedulers.newThread())
 				.unsubscribeOn(Schedulers.newThread())
-				.map { GsonFactory.parseInputStream(it.byteStream(), FeedbackResponse::class.java) }
+				.map { GsonFactory.parse<FeedbackResponse>(it) }
 				.observeOn(AndroidSchedulers.mainThread())
 				.subscribe(object : RxObserver<FeedbackResponse>() {
 					override fun onFinish(data: FeedbackResponse?) {

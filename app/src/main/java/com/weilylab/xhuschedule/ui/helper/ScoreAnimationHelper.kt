@@ -10,12 +10,19 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import vip.mystery0.logs.Logs
 
-object AnimationHelper {
+object ScoreAnimationHelper {
 	private val interpolator = AccelerateDecelerateInterpolator()
 	private val nowPlayingList = ArrayList<View>()
 
+	var touchByRecyclerView = false
+	var touchByParent = false
+	var isDecideTouchEvent = false
+	var isDown = false
+	var startTouchY = 0F
+	var isShowScoreLayout = true
+	var hasData = false
+
 	fun translationY(target: View, start: Int, end: Int, duration: Long) {
-		Logs.im("translationY: ", start, end)
 		val layoutParams = target.layoutParams as ViewGroup.MarginLayoutParams
 		Observable.create<Int> {
 			var index = 0F

@@ -32,7 +32,7 @@ object CourseUtil {
 				.subscribeOn(Schedulers.newThread())
 				.unsubscribeOn(Schedulers.newThread())
 				.map {
-					val courseResponse = GsonFactory.parseInputStream(it.byteStream(), CourseResponse::class.java)
+					val courseResponse = GsonFactory.parse<CourseResponse>(it)
 					if (courseResponse.rt == ResponseCodeConstants.DONE)
 						doSaveListener?.doSave(courseResponse.courses)
 					courseResponse
@@ -100,7 +100,7 @@ object CourseUtil {
 							.subscribeOn(Schedulers.newThread())
 							.unsubscribeOn(Schedulers.newThread())
 							.map {
-								val courseResponse = GsonFactory.parseInputStream(it.byteStream(), CourseResponse::class.java)
+								val courseResponse = GsonFactory.parse<CourseResponse>(it)
 								if (courseResponse.rt == ResponseCodeConstants.DONE) {
 									val saveMap = HashMap<String, List<Course>>()
 									saveMap[studentList[position].username] = courseResponse.courses

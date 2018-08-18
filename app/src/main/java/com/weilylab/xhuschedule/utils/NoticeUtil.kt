@@ -25,7 +25,7 @@ object NoticeUtil {
 				.subscribeOn(Schedulers.newThread())
 				.unsubscribeOn(Schedulers.newThread())
 				.map { responseBody ->
-					val noticeResponse = GsonFactory.parseInputStream(responseBody.byteStream(), NoticeResponse::class.java)
+					val noticeResponse = GsonFactory.parse<NoticeResponse>(responseBody)
 					if (noticeResponse.rt == ResponseCodeConstants.DONE) {
 						val getList = noticeResponse.notices
 						val readList = NoticeLocalDataSource.queryAllReadNotices()

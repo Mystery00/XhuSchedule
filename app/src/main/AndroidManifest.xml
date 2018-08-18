@@ -82,6 +82,11 @@
 			android:screenOrientation="portrait"
 			android:theme="@style/AppTheme.NoActionBar" />
 		<activity
+			android:name=".ui.activity.QueryClassScoreActivity"
+			android:label="@string/title_query_score_class"
+			android:screenOrientation="portrait"
+			android:theme="@style/AppTheme.NoActionBar" />
+		<activity
 			android:name=".ui.activity.FeedbackActivity"
 			android:label="@string/title_activity_feedback"
 			android:screenOrientation="portrait"
@@ -127,7 +132,6 @@
 			android:process="com.weilylab.xhuschedule.sb"
 			android:theme="@android:style/Theme.Translucent.NoTitleBar" />
 		<!-- 腾讯开放平台 -->
-		<activity android:name=".ui.activity.QueryClassScoreActivity"></activity>
 	</application>
 
 </manifest>
