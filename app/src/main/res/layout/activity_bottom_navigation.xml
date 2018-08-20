@@ -61,6 +61,16 @@
 				app:layout_constraintTop_toTopOf="parent" />
 
 			<ImageView
+				android:id="@+id/arrowImageView"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:contentDescription="@string/app_name"
+				android:src="@drawable/ic_arrow_drop_down_black_24dp"
+				app:layout_constraintBottom_toBottomOf="@id/titleTextView"
+				app:layout_constraintStart_toEndOf="@id/titleTextView"
+				app:layout_constraintTop_toTopOf="@id/titleTextView" />
+
+			<ImageView
 				android:id="@+id/imageSync"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"

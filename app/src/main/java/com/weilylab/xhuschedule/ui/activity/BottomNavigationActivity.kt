@@ -8,6 +8,7 @@ import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.view.Gravity
+import android.view.View
 import android.view.animation.Animation
 import android.widget.PopupWindow
 import android.widget.Toast
@@ -63,6 +64,7 @@ class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_naviga
 	private lateinit var dialog: Dialog
 	private val courseList = ArrayList<Schedule>()
 	private var animation: ObjectAnimator? = null
+	private var arrowAnimation: ObjectAnimator? = null
 	private var isShowWeekView = false
 	private lateinit var showAdapter: ShowCourseRecyclerViewAdapter
 	private lateinit var loadingAnimation: ObjectAnimator
@@ -105,7 +107,7 @@ class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_naviga
 			Content -> {
 				courseList.clear()
 				courseList.addAll(it.data!!)
-				weekView.showView()
+				weekView.data(courseList).showView()
 				hideDialog()
 				cancelLoading()
 			}
@@ -169,7 +171,7 @@ class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_naviga
 		viewPagerAdapter.addFragment(ProfileFragment.newInstance())
 		viewPager.offscreenPageLimit = 2
 		viewPager.adapter = viewPagerAdapter
-		weekView.data(courseList)!!
+		weekView.data(courseList)
 				.curWeek(1)
 				.callback(IWeekView.OnWeekItemClickedListener {
 					bottomNavigationViewModel.week.value = it
@@ -292,26 +294,37 @@ class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_naviga
 			0 -> {
 				if (isShowWeekView) hideWeekView()
 				titleTextView.isClickable = false
+				arrowImageView.visibility = View.GONE
 			}
-			1 -> titleTextView.isClickable = true
+			1 -> {
+				titleTextView.isClickable = true
+				arrowImageView.visibility = View.VISIBLE
+			}
 			2 -> {
 				if (isShowWeekView) hideWeekView()
 				titleTextView.isClickable = false
+				arrowImageView.visibility = View.GONE
 			}
 		}
 	}
 
 	private fun showWeekView() {
 		animation?.cancel()
-		animation = ObjectAnimator.ofFloat(weekView, "translationX", 0F, DensityTools.dp2px(this, 72F).toFloat())
+		arrowAnimation?.cancel()
+		animation = ObjectAnimator.ofFloat(weekView, "translationY", 0F, DensityTools.dp2px(this, 72F).toFloat())
+		arrowAnimation = ObjectAnimator.ofFloat(arrowImageView, "rotation", 0F, 180F)
 		animation!!.start()
+		arrowAnimation!!.start()
 		isShowWeekView = true
 	}
 
 	private fun hideWeekView() {
 		animation?.cancel()
-		animation = ObjectAnimator.ofFloat(weekView, "translationX", DensityTools.dp2px(this, 72F).toFloat(), 0F)
+		arrowAnimation?.cancel()
+		animation = ObjectAnimator.ofFloat(weekView, "translationY", DensityTools.dp2px(this, 72F).toFloat(), 0F)
+		arrowAnimation = ObjectAnimator.ofFloat(arrowImageView, "rotation", 180F, 0F)
 		animation!!.start()
+		arrowAnimation!!.start()
 		isShowWeekView = false
 	}
 

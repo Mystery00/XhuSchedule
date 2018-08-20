@@ -12,6 +12,7 @@ import com.weilylab.xhuschedule.databinding.FragmentTodayBinding
 import com.weilylab.xhuschedule.base.BaseBottomNavigationFragment
 import com.weilylab.xhuschedule.config.Status.*
 import com.weilylab.xhuschedule.repository.BottomNavigationRepository
+import com.weilylab.xhuschedule.ui.activity.BottomNavigationActivity
 import com.weilylab.xhuschedule.ui.adapter.FragmentTodayRecyclerViewAdapter
 import com.weilylab.xhuschedule.utils.CalendarUtil
 import com.weilylab.xhuschedule.utils.LayoutRefreshConfigUtil
@@ -20,6 +21,7 @@ import com.weilylab.xhuschedule.utils.rxAndroid.RxObservable
 import com.weilylab.xhuschedule.utils.rxAndroid.RxObserver
 import com.weilylab.xhuschedule.viewModel.BottomNavigationViewModel
 import com.zhuangfei.timetable.model.Schedule
+import kotlinx.android.synthetic.main.activity_bottom_navigation.*
 import vip.mystery0.logs.Logs
 
 class TodayFragment : BaseBottomNavigationFragment(R.layout.fragment_today) {

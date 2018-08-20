@@ -26,6 +26,7 @@ import com.weilylab.xhuschedule.utils.ShareUtil
 import com.weilylab.xhuschedule.utils.rxAndroid.RxObservable
 import com.weilylab.xhuschedule.utils.rxAndroid.RxObserver
 import com.weilylab.xhuschedule.viewModel.BottomNavigationViewModel
+import kotlinx.android.synthetic.main.activity_bottom_navigation.*
 import kotlinx.android.synthetic.main.content_bottom_navigation.*
 import vip.mystery0.logs.Logs
 import java.io.File
@@ -177,7 +178,6 @@ class ProfileFragment : BaseBottomNavigationFragment(R.layout.fragment_profile) 
 	}
 
 	override fun updateTitle() {
-
 		RxObservable<Boolean>()
 				.doThings {
 					var num = 0

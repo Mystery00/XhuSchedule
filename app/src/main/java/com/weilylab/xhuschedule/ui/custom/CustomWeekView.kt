@@ -20,7 +20,7 @@ import java.util.ArrayList
 
 class CustomWeekView : LinearLayout, WeekViewEnable<CustomWeekView> {
 	private var layoutWeekViewBinding: LayoutWeekViewBinding
-	private lateinit var courseList: List<Schedule>
+	private lateinit var courseList: ArrayList<Schedule>
 	//当前周
 	private var curWeek = 1
 	private var preIndex = 1
@@ -87,15 +87,22 @@ class CustomWeekView : LinearLayout, WeekViewEnable<CustomWeekView> {
 		return courseList
 	}
 
-	override fun source(list: List<ScheduleEnable>?): CustomWeekView {
-		data(ScheduleSupport.transform(list))
-		return this
+	override fun source(list: List<ScheduleEnable>): CustomWeekView {
+		return updateSourceList(ScheduleSupport.transform(list))
 	}
 
-	override fun data(scheduleList: List<Schedule>?): CustomWeekView? {
-		if (scheduleList == null)
-			return null
-		this.courseList = scheduleList
+	override fun data(scheduleList: List<Schedule>): CustomWeekView {
+		return updateSourceList(scheduleList)
+	}
+
+	private fun updateSourceList(list: List<Schedule>): CustomWeekView {
+		if (::courseList.isInitialized) {
+			courseList.clear()
+			courseList.addAll(list)
+		} else {
+			courseList = ArrayList()
+			courseList.addAll(list)
+		}
 		return this
 	}
 

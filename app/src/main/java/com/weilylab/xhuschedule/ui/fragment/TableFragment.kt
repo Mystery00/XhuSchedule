@@ -13,6 +13,7 @@ import com.weilylab.xhuschedule.base.BaseBottomNavigationFragment
 import com.weilylab.xhuschedule.config.SpaceScheduleHelper
 import com.weilylab.xhuschedule.config.Status.*
 import com.weilylab.xhuschedule.repository.BottomNavigationRepository
+import com.weilylab.xhuschedule.ui.activity.BottomNavigationActivity
 import com.weilylab.xhuschedule.ui.custom.CustomDateAdapter
 import com.weilylab.xhuschedule.ui.custom.CustomItemBuildAdapter
 import com.weilylab.xhuschedule.ui.custom.FlagLayoutClickAdapter
@@ -27,6 +28,7 @@ import com.zhuangfei.timetable.listener.ISchedule
 import com.zhuangfei.timetable.listener.OnSlideBuildAdapter
 import com.zhuangfei.timetable.model.Schedule
 import com.zhuangfei.timetable.model.ScheduleSupport
+import kotlinx.android.synthetic.main.activity_bottom_navigation.*
 import vip.mystery0.logs.Logs
 import java.text.SimpleDateFormat
 import java.util.*
