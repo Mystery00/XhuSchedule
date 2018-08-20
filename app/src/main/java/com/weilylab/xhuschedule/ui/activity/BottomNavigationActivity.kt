@@ -303,14 +303,14 @@ class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_naviga
 
 	private fun showWeekView() {
 		animation?.cancel()
-		animation = ObjectAnimator.ofFloat(weekView, "translationY", 0F, DensityTools.dp2px(this, 72F).toFloat())
+		animation = ObjectAnimator.ofFloat(weekView, "translationX", 0F, DensityTools.dp2px(this, 72F).toFloat())
 		animation!!.start()
 		isShowWeekView = true
 	}
 
 	private fun hideWeekView() {
 		animation?.cancel()
-		animation = ObjectAnimator.ofFloat(weekView, "translationY", DensityTools.dp2px(this, 72F).toFloat(), 0F)
+		animation = ObjectAnimator.ofFloat(weekView, "translationX", DensityTools.dp2px(this, 72F).toFloat(), 0F)
 		animation!!.start()
 		isShowWeekView = false
 	}

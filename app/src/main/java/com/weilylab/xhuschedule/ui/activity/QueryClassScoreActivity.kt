@@ -1,9 +1,10 @@
 package com.weilylab.xhuschedule.ui.activity
 
-import android.view.MotionEvent
+import android.view.Gravity
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -16,7 +17,6 @@ import com.weilylab.xhuschedule.model.Student
 import com.weilylab.xhuschedule.model.StudentInfo
 import com.weilylab.xhuschedule.repository.ScoreRepository
 import com.weilylab.xhuschedule.ui.adapter.QueryClassScoreRecyclerViewAdapter
-import com.weilylab.xhuschedule.ui.helper.ScoreAnimationHelper
 import com.weilylab.xhuschedule.utils.CalendarUtil
 import com.weilylab.xhuschedule.utils.rxAndroid.PackageData
 import com.weilylab.xhuschedule.viewModel.QueryClassScoreViewModel
@@ -26,10 +26,8 @@ import java.util.*
 
 class QueryClassScoreActivity : XhuBaseActivity(R.layout.activity_query_class_score) {
 	private lateinit var queryClassScoreViewModel: QueryClassScoreViewModel
-	private var scoreListLayoutShowY = 0//显示时的位置
-	private var scoreListLayoutHideButHasData = 0//隐藏时有数据的位置
-	private var scoreListLayoutHideNoData = 0//隐藏时无数据的位置
 	private lateinit var queryClassScoreRecyclerViewAdapter: QueryClassScoreRecyclerViewAdapter
+	private var hasData = false
 
 	private val studentInfoListObserver = Observer<PackageData<Map<Student, StudentInfo?>>> { data ->
 		when (data.status) {
@@ -63,11 +61,11 @@ class QueryClassScoreActivity : XhuBaseActivity(R.layout.activity_query_class_sc
 			Loading -> showLoading()
 			Empty -> showEmpty()
 			Content -> {
-				ScoreAnimationHelper.hasData = true
+				hasData = true
 				queryClassScoreRecyclerViewAdapter.items.clear()
 				queryClassScoreRecyclerViewAdapter.items.addAll(it.data!!)
 				queryClassScoreRecyclerViewAdapter.notifyDataSetChanged()
-				showContent(true)
+				showContent()
 			}
 			Error -> {
 				dismissLoading()
@@ -81,13 +79,14 @@ class QueryClassScoreActivity : XhuBaseActivity(R.layout.activity_query_class_sc
 		super.initView()
 		setSupportActionBar(toolbar)
 		supportActionBar?.setDisplayHomeAsUpEnabled(true)
-		getScoreLayoutY()
-		recyclerView.layoutManager = LinearLayoutManager(this)
+		scoreListRecyclerView.layoutManager = LinearLayoutManager(this)
 		val dividerItemDecoration = DividerItemDecoration(this, DividerItemDecoration.VERTICAL)
-		recyclerView.addItemDecoration(dividerItemDecoration)
+		scoreListRecyclerView.addItemDecoration(dividerItemDecoration)
 		queryClassScoreRecyclerViewAdapter = QueryClassScoreRecyclerViewAdapter(this)
-		recyclerView.adapter = queryClassScoreRecyclerViewAdapter
-		hideContent(false)
+		scoreListRecyclerView.adapter = queryClassScoreRecyclerViewAdapter
+		val layoutParams = scoreListRecyclerView.layoutParams
+		layoutParams.width = DensityTools.getScreenWidth(this)
+		scoreListRecyclerView.layoutParams = layoutParams
 	}
 
 	override fun initData() {
@@ -108,8 +107,23 @@ class QueryClassScoreActivity : XhuBaseActivity(R.layout.activity_query_class_sc
 	override fun monitor() {
 		super.monitor()
 		toolbar.setNavigationOnClickListener {
-			finish()
+			onBackPressed()
 		}
+		drawerLayout.addDrawerListener(object : DrawerLayout.DrawerListener {
+			override fun onDrawerStateChanged(newState: Int) {
+			}
+
+			override fun onDrawerSlide(drawerView: View, slideOffset: Float) {
+			}
+
+			override fun onDrawerClosed(drawerView: View) {
+			}
+
+			override fun onDrawerOpened(drawerView: View) {
+				if (!hasData)
+					drawerLayout.closeDrawer(Gravity.END)
+			}
+		})
 		textViewStudent.setOnClickListener {
 			val map = queryClassScoreViewModel.studentInfoList.value!!.data!!
 			val studentList = map.keys.toList()
@@ -165,26 +179,13 @@ class QueryClassScoreActivity : XhuBaseActivity(R.layout.activity_query_class_sc
 		queryButton.setOnClickListener {
 			ScoreRepository.queryClassScore(queryClassScoreViewModel)
 		}
-		scoreListLayout.doOnTouchListener = {
-			doOnTouch(it)
-		}
 	}
 
-	private fun doOnTouch(motionEvent: MotionEvent?) {
-		when (motionEvent?.action) {
-			MotionEvent.ACTION_MOVE -> moveContent((motionEvent.rawY - ScoreAnimationHelper.startTouchY + scoreListLayoutShowY).toInt())
-			MotionEvent.ACTION_UP -> {
-				val offset = motionEvent.rawY - ScoreAnimationHelper.startTouchY
-				val current = when {
-					ScoreAnimationHelper.isShowScoreLayout -> scoreListLayoutShowY
-					!ScoreAnimationHelper.isShowScoreLayout && ScoreAnimationHelper.hasData -> scoreListLayoutHideButHasData
-					else -> scoreListLayoutHideNoData
-				}
-				val isReverse = Math.abs(offset) * 3 > DensityTools.getScreenHeight(this)
-				if (isReverse) ScoreAnimationHelper.isShowScoreLayout = !ScoreAnimationHelper.isShowScoreLayout
-				moveContentFromHere((offset + current).toInt())
-			}
-		}
+	override fun onBackPressed() {
+		if (drawerLayout.isDrawerOpen(Gravity.END))
+			drawerLayout.closeDrawer(Gravity.END)
+		else
+			super.onBackPressed()
 	}
 
 	private fun showLoading() {
@@ -202,47 +203,8 @@ class QueryClassScoreActivity : XhuBaseActivity(R.layout.activity_query_class_sc
 
 	}
 
-	private fun getScoreLayoutY() {
-		val statusBarHeight = resources.getDimensionPixelSize(resources.getIdentifier("status_bar_height", "dimen", "android"))
-		val height = DensityTools.getScreenHeight(this)
-		scoreListLayoutShowY = 0
-		scoreListLayoutHideNoData = height - statusBarHeight - DensityTools.dp2px(this, 45F)
-		scoreListLayoutHideButHasData = scoreListLayoutHideNoData - DensityTools.dp2px(this, 45F)
-	}
-
-	private fun showContent(isShowAnimation: Boolean) {
+	private fun showContent() {
 		dismissLoading()
-		if (isShowAnimation)
-			ScoreAnimationHelper.translationY(scoreListLayout, scoreListLayoutHideNoData, scoreListLayoutShowY, 300L)
-		else
-			ScoreAnimationHelper.move(scoreListLayout, scoreListLayoutShowY, 0)
-		ScoreAnimationHelper.isShowScoreLayout = true
-	}
-
-	private fun moveContent(current: Int) {
-		val start = when {
-			ScoreAnimationHelper.isShowScoreLayout -> scoreListLayoutShowY
-			!ScoreAnimationHelper.isShowScoreLayout && ScoreAnimationHelper.hasData -> scoreListLayoutHideButHasData
-			else -> scoreListLayoutHideNoData
-		}
-		ScoreAnimationHelper.move(scoreListLayout, start, current)
-	}
-
-	private fun hideContent(isShowAnimation: Boolean) {
-		dismissLoading()
-		if (isShowAnimation)
-			ScoreAnimationHelper.translationY(scoreListLayout, scoreListLayoutShowY, scoreListLayoutHideNoData, 300L)
-		else
-			ScoreAnimationHelper.move(scoreListLayout, scoreListLayoutHideNoData, 0)
-		ScoreAnimationHelper.isShowScoreLayout = false
-	}
-
-	private fun moveContentFromHere(current: Int) {
-		val end = when {
-			ScoreAnimationHelper.isShowScoreLayout -> scoreListLayoutShowY
-			!ScoreAnimationHelper.isShowScoreLayout && ScoreAnimationHelper.hasData -> scoreListLayoutHideButHasData
-			else -> scoreListLayoutHideNoData
-		}
-		ScoreAnimationHelper.translationY(scoreListLayout, current, end, 300L)
+		drawerLayout.openDrawer(Gravity.END)
 	}
 }

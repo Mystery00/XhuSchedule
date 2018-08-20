@@ -9,5 +9,7 @@ import vip.mystery0.tools.base.BaseBindingRecyclerViewAdapter
 class QueryClassScoreRecyclerViewAdapter(val context: Context) : BaseBindingRecyclerViewAdapter<ClassScore, ItemQueryClassScoreBinding>(R.layout.item_query_class_score) {
 	override fun setItemView(binding: ItemQueryClassScoreBinding, position: Int, data: ClassScore) {
 		binding.classScore = data
+		val gpaString = "${data.gpa}/"
+		binding.textViewGpa.text = gpaString
 	}
 }

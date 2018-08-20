@@ -20,9 +20,11 @@
 		android:layout_height="0.33dp"
 		android:background="#e5e5e5" />
 
-	<FrameLayout
+	<androidx.drawerlayout.widget.DrawerLayout
+		android:id="@+id/drawerLayout"
 		android:layout_width="match_parent"
-		android:layout_height="match_parent">
+		android:layout_height="match_parent"
+		tools:openDrawer="end">
 
 		<androidx.constraintlayout.widget.ConstraintLayout
 			android:layout_width="match_parent"
@@ -78,6 +80,7 @@
 				android:id="@+id/loadingView"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
+				android:visibility="gone"
 				app:layout_constraintBottom_toBottomOf="@id/queryButton"
 				app:layout_constraintEnd_toEndOf="@id/queryButton"
 				app:layout_constraintStart_toStartOf="@id/queryButton"
@@ -87,18 +90,13 @@
 
 		</androidx.constraintlayout.widget.ConstraintLayout>
 
-		<com.weilylab.xhuschedule.ui.custom.CustomFrameLayout
-			android:id="@+id/scoreListLayout"
+		<androidx.recyclerview.widget.RecyclerView
+			android:id="@+id/scoreListRecyclerView"
 			android:layout_width="match_parent"
-			android:layout_height="match_parent">
+			android:layout_height="match_parent"
+			android:layout_gravity="end"
+			android:background="@android:color/white" />
 
-			<com.weilylab.xhuschedule.ui.custom.CustomRecyclerView
-				android:id="@+id/recyclerView"
-				android:layout_width="match_parent"
-				android:layout_height="match_parent" />
-
-		</com.weilylab.xhuschedule.ui.custom.CustomFrameLayout>
-
-	</FrameLayout>
+	</androidx.drawerlayout.widget.DrawerLayout>
 
 </LinearLayout>

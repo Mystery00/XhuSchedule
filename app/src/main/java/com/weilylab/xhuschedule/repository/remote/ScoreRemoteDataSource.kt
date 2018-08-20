@@ -58,7 +58,6 @@ object ScoreRemoteDataSource : ScoreDataSource {
 				}
 
 				override fun error(rt: String, msg: String?) {
-					Logs.em("error: ", msg)
 					scoreLiveData.value = PackageData.error(Exception(msg))
 				}
 			})
