@@ -91,6 +91,18 @@
 			android:label="@string/title_activity_feedback"
 			android:screenOrientation="portrait"
 			android:theme="@style/AppTheme.NoActionBar" />
+		<activity
+			android:name=".ui.activity.QueryCetScoreFirstActivity"
+			android:screenOrientation="portrait"
+			android:theme="@style/SuwThemeMaterial.Light" />
+		<activity
+			android:name=".ui.activity.QueryCetScoreSecondActivity"
+			android:screenOrientation="portrait"
+			android:theme="@style/SuwThemeMaterial.Light" />
+		<activity
+			android:name=".ui.activity.QueryCetScoreShowActivity"
+			android:screenOrientation="portrait"
+			android:theme="@style/AppTheme.NoActionBar" />
 
 		<service
 			android:name=".service.DownloadSplashIntentService"

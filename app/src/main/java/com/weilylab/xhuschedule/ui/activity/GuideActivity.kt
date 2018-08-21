@@ -48,6 +48,7 @@ import android.widget.LinearLayout
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.ui.fragment.PlaceholderFragment
 import com.weilylab.xhuschedule.base.XhuBaseActivity
+import com.weilylab.xhuschedule.ui.ZoomOutPageTransformer
 import com.weilylab.xhuschedule.utils.ConfigurationUtil
 import kotlinx.android.synthetic.main.activity_guide.*
 import vip.mystery0.tools.utils.DensityTools

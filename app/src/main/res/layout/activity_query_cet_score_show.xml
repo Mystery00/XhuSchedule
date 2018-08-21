@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+	<data>
+
+		<variable
+			name="cetScore"
+			type="com.weilylab.xhuschedule.model.CetScore" />
+	</data>
+
+	<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+		xmlns:app="http://schemas.android.com/apk/res-auto"
+		xmlns:tools="http://schemas.android.com/tools"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		tools:context=".ui.activity.QueryCetScoreShowActivity">
+
+		<androidx.appcompat.widget.Toolbar
+			android:id="@+id/toolbar"
+			android:layout_width="0dp"
+			android:layout_height="45dp"
+			android:background="?attr/colorPrimary"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintTop_toTopOf="parent"
+			app:popupTheme="@style/AppTheme.PopupOverlay" />
+
+		<View
+			android:id="@+id/line"
+			android:layout_width="0dp"
+			android:layout_height="0.33dp"
+			android:background="#e5e5e5"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintTop_toBottomOf="@id/toolbar" />
+
+		<TextView
+			android:id="@+id/textViewName"
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:layout_marginStart="44dp"
+			android:layout_marginTop="20dp"
+			android:layout_marginEnd="44dp"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintTop_toBottomOf="@+id/line" />
+
+		<TextView
+			android:id="@+id/textViewSchool"
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:layout_marginStart="44dp"
+			android:layout_marginTop="15dp"
+			android:layout_marginEnd="44dp"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintTop_toBottomOf="@+id/textViewName" />
+
+		<androidx.constraintlayout.widget.ConstraintLayout
+			android:id="@+id/paperScoreLayout"
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:layout_marginStart="20dp"
+			android:layout_marginTop="24dp"
+			android:layout_marginEnd="20dp"
+			android:background="@drawable/drawable_background_cet"
+			android:padding="18dp"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintTop_toBottomOf="@id/textViewSchool">
+
+			<TextView
+				android:id="@+id/textViewPaperScoreHint"
+				android:layout_width="0dp"
+				android:layout_height="wrap_content"
+				android:text="笔试成绩"
+				android:textColor="@color/colorAccent"
+				app:layout_constraintEnd_toEndOf="parent"
+				app:layout_constraintStart_toStartOf="parent"
+				app:layout_constraintTop_toTopOf="parent" />
+
+			<TextView
+				android:id="@+id/hintScoreSum1"
+				android:layout_width="wrap_content"
+				android:layout_height="0dp"
+				android:text="总"
+				app:layout_constraintBottom_toBottomOf="@id/hintScoreSum2"
+				app:layout_constraintStart_toStartOf="@id/hintScoreWrite"
+				app:layout_constraintTop_toTopOf="@id/hintScoreSum2" />
+
+			<TextView
+				android:id="@+id/hintScoreSum2"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginTop="13dp"
+				android:text="分："
+				app:layout_constraintEnd_toEndOf="@id/hintScoreWrite"
+				app:layout_constraintTop_toBottomOf="@id/textViewPaperScoreHint" />
+
+			<TextView
+				android:id="@+id/hintScoreListen1"
+				android:layout_width="wrap_content"
+				android:layout_height="0dp"
+				android:text="听"
+				app:layout_constraintBottom_toBottomOf="@id/hintScoreListen2"
+				app:layout_constraintStart_toStartOf="@id/hintScoreWrite"
+				app:layout_constraintTop_toTopOf="@id/hintScoreListen2" />
+
+			<TextView
+				android:id="@+id/hintScoreListen2"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginTop="6dp"
+				android:text="力："
+				app:layout_constraintEnd_toEndOf="@id/hintScoreWrite"
+				app:layout_constraintTop_toBottomOf="@id/hintScoreSum2" />
+
+			<TextView
+				android:id="@+id/hintScoreRead1"
+				android:layout_width="wrap_content"
+				android:layout_height="0dp"
+				android:text="阅"
+				app:layout_constraintBottom_toBottomOf="@id/hintScoreRead2"
+				app:layout_constraintStart_toStartOf="@id/hintScoreWrite"
+				app:layout_constraintTop_toTopOf="@id/hintScoreRead2" />
+
+			<TextView
+				android:id="@+id/hintScoreRead2"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginTop="6dp"
+				android:text="读："
+				app:layout_constraintEnd_toEndOf="@id/hintScoreWrite"
+				app:layout_constraintTop_toBottomOf="@id/hintScoreListen2" />
+
+			<TextView
+				android:id="@+id/hintScoreWrite"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginStart="6dp"
+				android:layout_marginTop="6dp"
+				android:text="写作和翻译："
+				app:layout_constraintBottom_toBottomOf="parent"
+				app:layout_constraintStart_toStartOf="parent"
+				app:layout_constraintTop_toBottomOf="@id/hintScoreRead2" />
+
+			<TextView
+				android:id="@+id/textViewScoreSum"
+				android:layout_width="wrap_content"
+				android:layout_height="0dp"
+				android:layout_marginStart="16dp"
+				android:text="@{cetScore.total}"
+				app:layout_constraintBottom_toBottomOf="@id/hintScoreSum2"
+				app:layout_constraintStart_toEndOf="@id/hintScoreWrite"
+				app:layout_constraintTop_toTopOf="@id/hintScoreSum2" />
+
+			<TextView
+				android:id="@+id/textViewScoreListen"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginStart="16dp"
+				android:text="@{cetScore.listen}"
+				app:layout_constraintBottom_toBottomOf="@id/hintScoreListen2"
+				app:layout_constraintStart_toEndOf="@id/hintScoreWrite"
+				app:layout_constraintTop_toTopOf="@id/hintScoreListen2" />
+
+			<TextView
+				android:id="@+id/textViewScoreRead"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginStart="16dp"
+				android:text="@{cetScore.read}"
+				app:layout_constraintBottom_toBottomOf="@id/hintScoreRead2"
+				app:layout_constraintStart_toEndOf="@id/hintScoreWrite"
+				app:layout_constraintTop_toTopOf="@id/hintScoreRead2" />
+
+			<TextView
+				android:id="@+id/textViewScoreWrite"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginStart="16dp"
+				android:text="@{cetScore.write}"
+				app:layout_constraintBottom_toBottomOf="@id/hintScoreWrite"
+				app:layout_constraintStart_toEndOf="@id/hintScoreWrite"
+				app:layout_constraintTop_toTopOf="@id/hintScoreWrite" />
+
+		</androidx.constraintlayout.widget.ConstraintLayout>
+
+		<androidx.constraintlayout.widget.ConstraintLayout
+			android:id="@+id/speakScoreLayout"
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:layout_marginStart="20dp"
+			android:layout_marginTop="24dp"
+			android:layout_marginEnd="20dp"
+			android:background="@drawable/drawable_background_cet"
+			android:padding="18dp"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintTop_toBottomOf="@id/paperScoreLayout">
+
+			<TextView
+				android:id="@+id/textViewSpeakScoreHint"
+				android:layout_width="0dp"
+				android:layout_height="wrap_content"
+				android:text="口试成绩"
+				android:textColor="@color/colorAccent"
+				app:layout_constraintEnd_toEndOf="parent"
+				app:layout_constraintStart_toStartOf="parent"
+				app:layout_constraintTop_toTopOf="parent" />
+
+			<TextView
+				android:id="@+id/hintScoreLevel1"
+				android:layout_width="wrap_content"
+				android:layout_height="0dp"
+				android:text="等"
+				app:layout_constraintBottom_toBottomOf="@id/hintScoreLevel2"
+				app:layout_constraintStart_toStartOf="@id/hintHintHintScoreWrite"
+				app:layout_constraintTop_toTopOf="@id/hintScoreLevel2" />
+
+			<TextView
+				android:id="@+id/hintScoreLevel2"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginTop="13dp"
+				android:text="级："
+				app:layout_constraintBottom_toBottomOf="parent"
+				app:layout_constraintEnd_toEndOf="@id/hintHintHintScoreWrite"
+				app:layout_constraintTop_toBottomOf="@id/textViewSpeakScoreHint" />
+
+			<TextView
+				android:id="@+id/textViewScoreLevel"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginStart="16dp"
+				android:text="@{cetScore.oralGrade}"
+				app:layout_constraintBottom_toBottomOf="@id/hintScoreLevel2"
+				app:layout_constraintStart_toEndOf="@id/hintScoreLevel2"
+				app:layout_constraintTop_toTopOf="@id/hintScoreLevel2" />
+
+			<TextView
+				android:id="@+id/hintHintHintScoreWrite"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginStart="6dp"
+				android:alpha="0"
+				android:text="写作和翻译："
+				app:layout_constraintBottom_toBottomOf="parent"
+				app:layout_constraintStart_toStartOf="parent"
+				app:layout_constraintTop_toTopOf="parent" />
+
+		</androidx.constraintlayout.widget.ConstraintLayout>
+
+	</androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

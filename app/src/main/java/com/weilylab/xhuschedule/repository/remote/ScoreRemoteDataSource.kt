@@ -1,9 +1,11 @@
 package com.weilylab.xhuschedule.repository.remote
 
+import android.graphics.Bitmap
 import androidx.lifecycle.MutableLiveData
 import com.weilylab.xhuschedule.constant.StringConstant
 import com.weilylab.xhuschedule.listener.DoSaveListener
 import com.weilylab.xhuschedule.listener.RequestListener
+import com.weilylab.xhuschedule.model.CetScore
 import com.weilylab.xhuschedule.model.ClassScore
 import com.weilylab.xhuschedule.model.Student
 import com.weilylab.xhuschedule.repository.dataSource.ScoreDataSource
@@ -11,7 +13,6 @@ import com.weilylab.xhuschedule.repository.local.ScoreLocalDataSource
 import com.weilylab.xhuschedule.utils.NetworkUtil
 import com.weilylab.xhuschedule.utils.ScoreUtil
 import com.weilylab.xhuschedule.utils.rxAndroid.PackageData
-import vip.mystery0.logs.Logs
 import java.util.ArrayList
 
 object ScoreRemoteDataSource : ScoreDataSource {
@@ -64,6 +65,38 @@ object ScoreRemoteDataSource : ScoreDataSource {
 		} else {
 			scoreLiveData.value = PackageData.error(Exception(StringConstant.hint_network_error))
 			ScoreLocalDataSource.queryClassScoreByUsername(scoreLiveData, student, year, term)
+		}
+	}
+
+	fun getCetVCode(cetVCodeLiveData: MutableLiveData<PackageData<Bitmap>>, student: Student, no: String) {
+		if (NetworkUtil.isConnectInternet()) {
+			ScoreUtil.getCetVCode(student, no, object : RequestListener<Bitmap> {
+				override fun done(t: Bitmap) {
+					cetVCodeLiveData.value = PackageData.content(t)
+				}
+
+				override fun error(rt: String, msg: String?) {
+					cetVCodeLiveData.value = PackageData.error(Exception(msg))
+				}
+			})
+		} else {
+			cetVCodeLiveData.value = PackageData.error(Exception(StringConstant.hint_network_error))
+		}
+	}
+
+	fun queryCetScores(cetScoreLiveData: MutableLiveData<PackageData<CetScore>>, student: Student, no: String, name: String, vcode: String) {
+		if (NetworkUtil.isConnectInternet()) {
+			ScoreUtil.getCetScores(student, no, name, vcode, object : RequestListener<CetScore> {
+				override fun done(t: CetScore) {
+					cetScoreLiveData.value = PackageData.content(t)
+				}
+
+				override fun error(rt: String, msg: String?) {
+					cetScoreLiveData.value = PackageData.error(Exception(msg))
+				}
+			})
+		} else {
+			cetScoreLiveData.value = PackageData.error(Exception(StringConstant.hint_network_error))
 		}
 	}
 }

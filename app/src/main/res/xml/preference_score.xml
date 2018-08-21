@@ -2,11 +2,21 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 	<Preference
 		android:key="@string/key_query_score_class"
-		android:title="@string/title_query_score_class" />
+		android:title="@string/title_query_score_class" >
+		<intent
+			android:action="android.intent.action.VIEW"
+			android:targetClass="com.weilylab.xhuschedule.ui.activity.QueryClassScoreActivity"
+			android:targetPackage="com.weilylab.xhuschedule" />
+	</Preference>
 	<Preference
 		android:key="@string/key_query_score_experiment"
 		android:title="@string/title_query_score_experiment" />
 	<Preference
 		android:key="@string/key_query_score_cet"
-		android:title="@string/title_query_score_cet" />
+		android:title="@string/title_query_score_cet">
+		<intent
+			android:action="android.intent.action.VIEW"
+			android:targetClass="com.weilylab.xhuschedule.ui.activity.QueryCetScoreFirstActivity"
+			android:targetPackage="com.weilylab.xhuschedule" />
+	</Preference>
 </PreferenceScreen>

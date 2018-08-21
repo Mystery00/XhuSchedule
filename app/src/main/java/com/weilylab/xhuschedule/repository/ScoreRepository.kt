@@ -1,9 +1,12 @@
 package com.weilylab.xhuschedule.repository
 
 import com.weilylab.xhuschedule.config.Status.*
+import com.weilylab.xhuschedule.model.Student
 import com.weilylab.xhuschedule.repository.local.StudentLocalDataSource
 import com.weilylab.xhuschedule.repository.remote.ScoreRemoteDataSource
+import com.weilylab.xhuschedule.utils.ScoreUtil
 import com.weilylab.xhuschedule.utils.rxAndroid.PackageData
+import com.weilylab.xhuschedule.viewModel.QueryCetScoreViewModelHelper
 import com.weilylab.xhuschedule.viewModel.QueryClassScoreViewModel
 
 object ScoreRepository {
@@ -24,5 +27,29 @@ object ScoreRepository {
 			}
 		}
 		StudentLocalDataSource.queryAllStudentList(scoreViewModel.studentList)
+	}
+
+	fun queryAllStudentInfo(){
+		QueryCetScoreViewModelHelper.studentInfoList.value = PackageData.loading()
+		QueryCetScoreViewModelHelper.studentInfoList.addSource(QueryCetScoreViewModelHelper.studentList) {
+			when (it.status) {
+				Content -> if (it.data!!.isNotEmpty())
+					StudentLocalDataSource.queryManyStudentInfo(QueryCetScoreViewModelHelper.studentInfoList, it.data)
+				Error -> QueryCetScoreViewModelHelper.studentInfoList.value = PackageData.error(it.error)
+				Empty -> QueryCetScoreViewModelHelper.studentInfoList.value = PackageData.empty()
+				Loading -> QueryCetScoreViewModelHelper.studentInfoList.value = PackageData.loading()
+			}
+		}
+		StudentLocalDataSource.queryAllStudentList(QueryCetScoreViewModelHelper.studentList)
+	}
+
+	fun getCetVCode(student: Student = QueryCetScoreViewModelHelper.student.value!!) {
+		QueryCetScoreViewModelHelper.cetVCodeLiveData.value = PackageData.loading()
+		ScoreRemoteDataSource.getCetVCode(QueryCetScoreViewModelHelper.cetVCodeLiveData, student, QueryCetScoreViewModelHelper.no.value!!)
+	}
+
+	fun getCetScore(vcode: String, student: Student = QueryCetScoreViewModelHelper.student.value!!) {
+		QueryCetScoreViewModelHelper.cetScoreLiveData.value = PackageData.loading()
+		ScoreRemoteDataSource.queryCetScores(QueryCetScoreViewModelHelper.cetScoreLiveData, student, QueryCetScoreViewModelHelper.no.value!!, QueryCetScoreViewModelHelper.name.value!!, vcode)
 	}
 }

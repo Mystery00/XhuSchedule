@@ -39,7 +39,7 @@ import android.view.MenuItem
 import android.preference.PreferenceFragment
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.base.XhuBaseActivity
-import com.weilylab.xhuschedule.ui.fragment.QueryScoreFragment
+import com.weilylab.xhuschedule.ui.fragment.settings.QueryScoreFragment
 import com.weilylab.xhuschedule.ui.fragment.settings.AccountSettingsFragment
 import com.weilylab.xhuschedule.ui.fragment.settings.ClassSettingsFragment
 import com.weilylab.xhuschedule.ui.fragment.settings.SettingsPreferenceFragment

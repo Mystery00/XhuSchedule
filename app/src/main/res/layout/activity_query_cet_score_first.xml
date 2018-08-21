@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.android.setupwizardlib.SetupWizardLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:id="@+id/setupLayout"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	tools:context=".ui.activity.QueryCetScoreFirstActivity">
+
+	<androidx.constraintlayout.widget.ConstraintLayout
+		android:layout_width="match_parent"
+		android:layout_height="match_parent">
+
+		<androidx.constraintlayout.widget.ConstraintLayout
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:layout_marginStart="16dp"
+			android:layout_marginEnd="16dp"
+			android:background="@drawable/drawable_background_cet"
+			app:layout_constraintBottom_toBottomOf="parent"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintTop_toTopOf="parent">
+
+			<TextView
+				android:id="@+id/cetNoLabel"
+				android:layout_width="wrap_content"
+				android:layout_height="0dp"
+				android:layout_marginStart="16dp"
+				android:contentDescription="@string/app_name"
+				android:gravity="center_vertical"
+				android:labelFor="@id/cetNoEditText"
+				android:text="@string/prompt_cet_no"
+				android:textColor="@android:color/black"
+				app:layout_constraintBottom_toBottomOf="@id/cetNoEditText"
+				app:layout_constraintStart_toStartOf="parent"
+				app:layout_constraintTop_toTopOf="@id/cetNoEditText" />
+
+			<TextView
+				android:id="@+id/cetNameLabel"
+				android:layout_width="wrap_content"
+				android:layout_height="0dp"
+				android:layout_marginStart="16dp"
+				android:contentDescription="@string/app_name"
+				android:gravity="center_vertical"
+				android:labelFor="@id/cetNameEditText"
+				android:text="@string/prompt_cet_name"
+				android:textColor="@android:color/black"
+				app:layout_constraintBottom_toBottomOf="@id/cetNameEditText"
+				app:layout_constraintStart_toStartOf="parent"
+				app:layout_constraintTop_toTopOf="@id/cetNameEditText" />
+
+			<androidx.constraintlayout.widget.Barrier
+				android:id="@+id/barrier"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				app:barrierDirection="end"
+				app:constraint_referenced_ids="cetNameLabel,cetNoLabel" />
+
+			<View
+				android:id="@+id/cet_line"
+				android:layout_width="0dp"
+				android:layout_height="1dp"
+				android:background="#f0f0f0"
+				app:layout_constraintBottom_toBottomOf="parent"
+				app:layout_constraintEnd_toEndOf="parent"
+				app:layout_constraintStart_toStartOf="parent"
+				app:layout_constraintTop_toTopOf="parent" />
+
+			<EditText
+				android:id="@+id/cetNoEditText"
+				android:layout_width="0dp"
+				android:layout_height="wrap_content"
+				android:layout_margin="16dp"
+				android:background="@null"
+				android:hint="@string/hint_input_cet_no"
+				android:inputType="number"
+				app:layout_constraintBottom_toBottomOf="@id/cet_line"
+				app:layout_constraintEnd_toEndOf="parent"
+				app:layout_constraintStart_toEndOf="@id/barrier"
+				app:layout_constraintTop_toTopOf="parent" />
+
+			<EditText
+				android:id="@+id/cetNameEditText"
+				android:layout_width="0dp"
+				android:layout_height="wrap_content"
+				android:layout_margin="16dp"
+				android:background="@null"
+				android:hint="@string/hint_input_cet_name"
+				android:inputType="text"
+				app:layout_constraintBottom_toBottomOf="parent"
+				app:layout_constraintEnd_toEndOf="parent"
+				app:layout_constraintStart_toEndOf="@id/barrier"
+				app:layout_constraintTop_toTopOf="@id/cet_line" />
+
+		</androidx.constraintlayout.widget.ConstraintLayout>
+
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="图片来自网络，如果存在侵权行为，请联系作者"
+			android:textSize="8dp"
+			app:layout_constraintBottom_toBottomOf="parent"
+			app:layout_constraintEnd_toEndOf="parent" />
+
+	</androidx.constraintlayout.widget.ConstraintLayout>
+
+</com.android.setupwizardlib.SetupWizardLayout>

@@ -10,7 +10,5 @@ import com.weilylab.xhuschedule.viewModel.LoginViewModel
 object LoginRepository {
 	fun login(student: Student, loginViewModel: LoginViewModel) = StudentRemoteDataSource.login(loginViewModel.loginLiveData, student)
 
-	fun queryStudentInfo(student: Student) {
-		StudentRemoteDataSource.queryStudentInfo(MutableLiveData(), student)
-	}
+	fun queryStudentInfo(student: Student) =StudentRemoteDataSource.queryStudentInfo(MutableLiveData(), student)
 }

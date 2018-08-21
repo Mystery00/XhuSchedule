@@ -134,6 +134,8 @@ dependencies {
 	implementation 'com.zhihu.android:matisse:0.5.2-beta2'
 	//UCrop
 	implementation 'com.github.yalantis:ucrop:2.2.2'
+	//SetupWizardLayout
+	implementation 'com.github.iMeiji:SetupWizardLayout:0.1'
 
 	implementation 'de.hdodenhof:circleimageview:2.2.0'
 	implementation 'com.getkeepsafe.taptargetview:taptargetview:1.11.0'

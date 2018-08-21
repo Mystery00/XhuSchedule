@@ -1,5 +1,8 @@
 package com.weilylab.xhuschedule.utils
 
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.util.Base64
 import com.weilylab.xhuschedule.api.ScoreAPI
 import com.weilylab.xhuschedule.constant.ResponseCodeConstants
 import com.weilylab.xhuschedule.constant.StringConstant
@@ -7,8 +10,11 @@ import com.weilylab.xhuschedule.factory.GsonFactory
 import com.weilylab.xhuschedule.factory.RetrofitFactory
 import com.weilylab.xhuschedule.listener.DoSaveListener
 import com.weilylab.xhuschedule.listener.RequestListener
+import com.weilylab.xhuschedule.model.CetScore
 import com.weilylab.xhuschedule.model.ClassScore
 import com.weilylab.xhuschedule.model.Student
+import com.weilylab.xhuschedule.model.response.CetScoresResponse
+import com.weilylab.xhuschedule.model.response.CetVCodeResponse
 import com.weilylab.xhuschedule.model.response.ScoreResponse
 import com.weilylab.xhuschedule.utils.rxAndroid.RxObserver
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -54,6 +60,87 @@ object ScoreUtil {
 									UserUtil.login(student, null, object : RequestListener<Boolean> {
 										override fun done(t: Boolean) {
 											getClassScore(student, year, term, doSaveListener, requestListener, index + 1)
+										}
+
+										override fun error(rt: String, msg: String?) {
+											requestListener.error(rt, msg)
+										}
+									})
+							}
+							else -> requestListener.error(data.rt, data.msg)
+						}
+					}
+
+					override fun onError(e: Throwable) {
+						Logs.wtf("onError: ", e)
+						requestListener.error(ResponseCodeConstants.CATCH_ERROR, e.message)
+					}
+				})
+	}
+
+	fun getCetVCode(student: Student, no: String, requestListener: RequestListener<Bitmap>, index: Int = 0) {
+		RetrofitFactory.retrofit
+				.create(ScoreAPI::class.java)
+				.getCETVCode(student.username, no, null)
+				.subscribeOn(Schedulers.newThread())
+				.unsubscribeOn(Schedulers.newThread())
+				.map { GsonFactory.parse<CetVCodeResponse>(it) }
+				.observeOn(AndroidSchedulers.mainThread())
+				.subscribe(object : RxObserver<CetVCodeResponse>() {
+					override fun onFinish(data: CetVCodeResponse?) {
+						when {
+							data == null -> requestListener.error(ResponseCodeConstants.UNKNOWN_ERROR, StringConstant.hint_data_null)
+							data.rt == ResponseCodeConstants.DONE -> {
+								val bytes = Base64.decode(data.vcode.substring(data.vcode.indexOfFirst { it == ',' }), Base64.DEFAULT)
+								requestListener.done(BitmapFactory.decodeByteArray(bytes, 0, bytes.size))
+							}
+							data.rt == ResponseCodeConstants.ERROR_NOT_LOGIN -> {
+								if (index == RETRY_TIME)
+									requestListener.error(ResponseCodeConstants.DO_TOO_MANY, StringConstant.hint_do_too_many)
+								else
+									UserUtil.login(student, null, object : RequestListener<Boolean> {
+										override fun done(t: Boolean) {
+											getCetVCode(student, no, requestListener, index + 1)
+										}
+
+										override fun error(rt: String, msg: String?) {
+											requestListener.error(rt, msg)
+										}
+									})
+							}
+							else -> requestListener.error(data.rt, data.msg)
+						}
+					}
+
+					override fun onError(e: Throwable) {
+						Logs.wtf("onError: ", e)
+						requestListener.error(ResponseCodeConstants.CATCH_ERROR, e.message)
+					}
+				})
+	}
+
+	fun getCetScores(student: Student, no: String, name: String, vcode: String, requestListener: RequestListener<CetScore>, index: Int = 0) {
+		RetrofitFactory.retrofit
+				.create(ScoreAPI::class.java)
+				.getCETScores(student.username, no, name, vcode)
+				.subscribeOn(Schedulers.newThread())
+				.unsubscribeOn(Schedulers.newThread())
+				.map { GsonFactory.parse<CetScoresResponse>(it) }
+				.observeOn(AndroidSchedulers.mainThread())
+				.subscribe(object : RxObserver<CetScoresResponse>() {
+					override fun onFinish(data: CetScoresResponse?) {
+						when {
+							data == null -> requestListener.error(ResponseCodeConstants.UNKNOWN_ERROR, StringConstant.hint_data_null)
+							data.rt == ResponseCodeConstants.DONE -> {
+								requestListener.done(data.cetScore)
+							}
+							data.rt == ResponseCodeConstants.ERROR_NOT_LOGIN -> {
+								if (index == RETRY_TIME)
+									requestListener.error(ResponseCodeConstants.DO_TOO_MANY, StringConstant.hint_do_too_many)
+								else
+									UserUtil.login(student, null, object : RequestListener<Boolean> {
+										override fun done(t: Boolean) {
+											getCetScores(student, no, name, vcode, requestListener, index + 1)
 										}
 
 										override fun error(rt: String, msg: String?) {

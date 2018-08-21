@@ -31,12 +31,17 @@
 	<string name="action_ok">确定</string>
 	<string name="action_cancel">取消</string>
 	<string name="action_query">查询</string>
+	<string name="action_more">更多</string>
+	<string name="action_last">上一步</string>
+	<string name="action_next">下一步</string>
 
 	<string name="menu_show_gpa">显示绩点</string>
 	<string name="menu_show_failed">显示未通过成绩</string>
 
 	<string name="prompt_username">学号</string>
 	<string name="prompt_password">密码</string>
+	<string name="prompt_cet_no">准考证号</string>
+	<string name="prompt_cet_name">姓名</string>
 
 	<string name="share_qq">QQ</string>
 	<string name="share_weixin">微信</string>
@@ -44,6 +49,10 @@
 	<string name="share_qzone">空间</string>
 	<string name="share_friends">朋友圈</string>
 	<string name="share_more">更多</string>
+
+	<string name="hint_input_cet_no">请输入准考证号</string>
+	<string name="hint_input_cet_name">请输入考生姓名</string>
+	<string name="hint_input_cet_vcode">请输入验证码</string>
 
 	<string name="hint_twice_press_exit">再按一次退出西瓜课表</string>
 	<string name="hint_custom_img">自定义图片设置成功！</string>
@@ -70,6 +79,8 @@
 	<string name="hint_dialog_init">正在初始化……</string>
 	<string name="hint_dialog_get_tests">获取考试数据中……</string>
 	<string name="hint_dialog_feedback">正在上传数据……</string>
+	<string name="hint_dialog_get_cet_vcode">正在获取验证码……</string>
+	<string name="hint_dialog_query_cet_score">正在查询四六级成绩……</string>
 
 	<string name="hint_confirm_reset_user_img">确定要重置个人头像吗？</string>
 	<string name="hint_confirm_reset_background_img">确定要重置背景图片吗？</string>
