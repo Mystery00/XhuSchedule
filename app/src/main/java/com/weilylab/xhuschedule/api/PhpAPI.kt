@@ -13,5 +13,6 @@ interface PhpAPI {
 					 @Field("systemVersion") systemVersion: String,
 					 @Field("factory") vendor: String,
 					 @Field("model") model: String,
-					 @Field("rom") rom: String): Observable<ResponseBody>
+					 @Field("rom") rom: String,
+					 @Field("device_id") deviceID: String): Observable<ResponseBody>
 }

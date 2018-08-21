@@ -17,6 +17,7 @@ import com.weilylab.xhuschedule.utils.APPActivityManager
 import com.weilylab.xhuschedule.utils.rxAndroid.RxObservable
 import com.weilylab.xhuschedule.utils.rxAndroid.RxObserver
 import com.weilylab.xhuschedule.constant.Constants
+import com.weilylab.xhuschedule.utils.ConfigUtil
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import vip.mystery0.logs.Logs
@@ -44,7 +45,7 @@ class CheckUpdateService : Service() {
 		val rom = Build.DISPLAY
 		RetrofitFactory.retrofit
 				.create(PhpAPI::class.java)
-				.checkVersion(appVersion, systemVersion, manufacturer, model, rom)
+				.checkVersion(appVersion, systemVersion, manufacturer, model, rom, ConfigUtil.getDeviceID(this))
 				.subscribeOn(Schedulers.newThread())
 				.unsubscribeOn(Schedulers.newThread())
 				.map { GsonFactory.parse<Version>(it) }

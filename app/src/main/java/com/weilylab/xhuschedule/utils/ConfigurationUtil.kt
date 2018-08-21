@@ -42,11 +42,16 @@ object ConfigurationUtil {
 				.putBoolean(SharedPreferenceConstant.FIELD_SHOW_GPA, value)
 				.apply()
 		get() = sharedPreferences.getBoolean(SharedPreferenceConstant.FIELD_SHOW_GPA, false)
-	var isShowFailed:Boolean
+	var isShowFailed: Boolean
 		set(value) = sharedPreferences.edit()
 				.putBoolean(SharedPreferenceConstant.FIELD_SHOW_FAILED, value)
 				.apply()
 		get() = sharedPreferences.getBoolean(SharedPreferenceConstant.FIELD_SHOW_FAILED, true)
+	var deviceID: String
+		set(value) = sharedPreferences.edit()
+				.putString(SharedPreferenceConstant.FIELD_DEVICE_ID, value)
+				.apply()
+		get() = sharedPreferences.getString(SharedPreferenceConstant.FIELD_DEVICE_ID, "")!!
 	var clearAppData: Boolean
 		set(value) = sharedPreferences.edit()
 				.putBoolean("clearAppData", value)
