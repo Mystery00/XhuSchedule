@@ -134,6 +134,7 @@ class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_naviga
 					else -> it.data
 				}
 				weekView.curWeek(week).showView()
+				bottomNavigationViewModel.week.value = week
 				viewPagerAdapter.getItem(viewPager.currentItem).updateTitle()
 			}
 			Error -> {
@@ -375,14 +376,14 @@ class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_naviga
 	}
 
 	private fun showPopupWindow() {
-		popupWindow.showAtLocation(weekView, Gravity.NO_GRAVITY, DensityTools.getScreenWidth(this) - popupWindow.width, DensityTools.getScreenHeight(this) / 2 - popupWindow.height / 2)
-		val week = bottomNavigationViewModel.week.value
-		var position = 0
-		showAdapter.items.forEachIndexed { index, it ->
-			if (it.weekList.contains(week))
-				position = index
-		}
-		recyclerView.scrollToPosition(position)
+//		popupWindow.showAtLocation(weekView, Gravity.NO_GRAVITY, DensityTools.getScreenWidth(this) - popupWindow.width, DensityTools.getScreenHeight(this) / 2 - popupWindow.height / 2)
+//		val week = bottomNavigationViewModel.week.value
+//		var position = 0
+//		showAdapter.items.forEachIndexed { index, it ->
+//			if (it.weekList.contains(week))
+//				position = index
+//		}
+//		recyclerView.scrollToPosition(position)
 	}
 
 	override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
