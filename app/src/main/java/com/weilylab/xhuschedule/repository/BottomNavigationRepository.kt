@@ -72,7 +72,7 @@ object BottomNavigationRepository {
 					Error -> bottomNavigationViewModel.todayCourseList.value = PackageData.error(packageData.error)
 				}
 			}
-			CourseLocalDataSource.queryCourseByUsername(bottomNavigationViewModel.courseList, bottomNavigationViewModel.studentList.value!!.data!![0], "2017-2018", "1", true)
+			CourseLocalDataSource.queryCourseByUsername(bottomNavigationViewModel.courseList, bottomNavigationViewModel.studentList.value!!.data!![0], null, null, true)
 		}
 	}
 
@@ -97,18 +97,18 @@ object BottomNavigationRepository {
 					Error -> bottomNavigationViewModel.todayCourseList.value = PackageData.error(packageData.error)
 				}
 			}
-			CourseLocalDataSource.queryCourseWithManyStudent(bottomNavigationViewModel.courseList, bottomNavigationViewModel.studentList.value!!.data!!, "2017-2018", "1", true)
+			CourseLocalDataSource.queryCourseWithManyStudent(bottomNavigationViewModel.courseList, bottomNavigationViewModel.studentList.value!!.data!!, null, null, true)
 		}
 	}
 
 	fun queryCoursesOnline(bottomNavigationViewModel: BottomNavigationViewModel) {
 		bottomNavigationViewModel.courseList.value = PackageData.loading()
-		CourseRemoteDataSource.queryCourseByUsername(bottomNavigationViewModel.courseList, bottomNavigationViewModel.studentList.value!!.data!![0], "2017-2018", "1", false)
+		CourseRemoteDataSource.queryCourseByUsername(bottomNavigationViewModel.courseList, bottomNavigationViewModel.studentList.value!!.data!![0], null, null, false)
 	}
 
 	fun queryCoursesOnlineForManyStudent(bottomNavigationViewModel: BottomNavigationViewModel) {
 		bottomNavigationViewModel.courseList.value = PackageData.loading()
-		CourseRemoteDataSource.queryCourseWithManyStudent(bottomNavigationViewModel.courseList, bottomNavigationViewModel.studentList.value!!.data!!, "2017-2018", "1", false)
+		CourseRemoteDataSource.queryCourseWithManyStudent(bottomNavigationViewModel.courseList, bottomNavigationViewModel.studentList.value!!.data!!, null, null, false)
 	}
 
 	fun queryStudentList(bottomNavigationViewModel: BottomNavigationViewModel) {

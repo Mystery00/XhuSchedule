@@ -1,8 +1,6 @@
 package com.weilylab.xhuschedule.ui.activity
 
 import android.view.Gravity
-import android.view.Menu
-import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
@@ -13,34 +11,33 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.base.XhuBaseActivity
-import com.weilylab.xhuschedule.config.Status.*
-import com.weilylab.xhuschedule.model.ClassScore
+import com.weilylab.xhuschedule.config.Status
+import com.weilylab.xhuschedule.model.ExpScore
 import com.weilylab.xhuschedule.model.Student
 import com.weilylab.xhuschedule.model.StudentInfo
 import com.weilylab.xhuschedule.repository.ScoreRepository
-import com.weilylab.xhuschedule.ui.adapter.QueryClassScoreRecyclerViewAdapter
+import com.weilylab.xhuschedule.ui.adapter.QueryExpScoreRecyclerViewAdapter
 import com.weilylab.xhuschedule.utils.CalendarUtil
-import com.weilylab.xhuschedule.utils.ConfigurationUtil
 import com.weilylab.xhuschedule.utils.rxAndroid.PackageData
-import com.weilylab.xhuschedule.viewModel.QueryClassScoreViewModel
-import kotlinx.android.synthetic.main.activity_query_class_score.*
+import com.weilylab.xhuschedule.viewModel.QueryExpScoreViewModel
+import kotlinx.android.synthetic.main.activity_query_exp_score.*
 import vip.mystery0.tools.utils.DensityTools
 import java.util.*
 
-class QueryClassScoreActivity : XhuBaseActivity(R.layout.activity_query_class_score) {
-	private lateinit var queryClassScoreViewModel: QueryClassScoreViewModel
-	private lateinit var queryClassScoreRecyclerViewAdapter: QueryClassScoreRecyclerViewAdapter
+class QueryExpScoreActivity : XhuBaseActivity(R.layout.activity_query_exp_score) {
+	private lateinit var queryExpScoreViewModel: QueryExpScoreViewModel
+	private lateinit var queryExpScoreRecyclerViewAdapter: QueryExpScoreRecyclerViewAdapter
 	private var hasData = false
 
 	private val studentInfoListObserver = Observer<PackageData<Map<Student, StudentInfo?>>> { data ->
 		when (data.status) {
-			Content -> {
+			Status.Content -> {
 				val map = data.data!!
 				if (map.keys.isNotEmpty()) {
-					queryClassScoreViewModel.student.value = map.keys.first { it.isMain }
-					queryClassScoreViewModel.year.value = CalendarUtil.getSelectArray(null).last()
+					queryExpScoreViewModel.student.value = map.keys.first { it.isMain }
+					queryExpScoreViewModel.year.value = CalendarUtil.getSelectArray(null).last()
 					val month = Calendar.getInstance().get(Calendar.MONTH)
-					queryClassScoreViewModel.term.value = if (month in Calendar.MARCH until Calendar.SEPTEMBER) "2" else "1"
+					queryExpScoreViewModel.term.value = if (month in Calendar.MARCH until Calendar.SEPTEMBER) "2" else "1"
 				}
 			}
 		}
@@ -59,16 +56,16 @@ class QueryClassScoreActivity : XhuBaseActivity(R.layout.activity_query_class_sc
 		textViewTerm.text = it
 	}
 
-	private val scoreListObserver = Observer<PackageData<List<ClassScore>>> {
+	private val scoreListObserver = Observer<PackageData<List<ExpScore>>> {
 		when (it.status) {
-			Loading -> showLoading()
-			Empty -> showEmpty()
-			Content -> {
+			Status.Loading -> showLoading()
+			Status.Empty -> showEmpty()
+			Status.Content -> {
 				hasData = true
 				updateScoreList(it.data!!)
 				showContent()
 			}
-			Error -> {
+			Status.Error -> {
 				dismissLoading()
 				Toast.makeText(this, it.error?.message, Toast.LENGTH_SHORT)
 						.show()
@@ -83,8 +80,8 @@ class QueryClassScoreActivity : XhuBaseActivity(R.layout.activity_query_class_sc
 		scoreListRecyclerView.layoutManager = LinearLayoutManager(this)
 		val dividerItemDecoration = DividerItemDecoration(this, DividerItemDecoration.VERTICAL)
 		scoreListRecyclerView.addItemDecoration(dividerItemDecoration)
-		queryClassScoreRecyclerViewAdapter = QueryClassScoreRecyclerViewAdapter(this)
-		scoreListRecyclerView.adapter = queryClassScoreRecyclerViewAdapter
+		queryExpScoreRecyclerViewAdapter = QueryExpScoreRecyclerViewAdapter(this)
+		scoreListRecyclerView.adapter = queryExpScoreRecyclerViewAdapter
 		val layoutParams = scoreListRecyclerView.layoutParams
 		layoutParams.width = DensityTools.getScreenWidth(this)
 		scoreListRecyclerView.layoutParams = layoutParams
@@ -93,16 +90,16 @@ class QueryClassScoreActivity : XhuBaseActivity(R.layout.activity_query_class_sc
 	override fun initData() {
 		super.initData()
 		initViewModel()
-		ScoreRepository.queryAllStudentInfo(queryClassScoreViewModel)
+		ScoreRepository.queryAllStudentInfo(queryExpScoreViewModel)
 	}
 
 	private fun initViewModel() {
-		queryClassScoreViewModel = ViewModelProviders.of(this).get(QueryClassScoreViewModel::class.java)
-		queryClassScoreViewModel.studentInfoList.observe(this, studentInfoListObserver)
-		queryClassScoreViewModel.student.observe(this, studentObserver)
-		queryClassScoreViewModel.year.observe(this, yearObserver)
-		queryClassScoreViewModel.term.observe(this, termObserver)
-		queryClassScoreViewModel.scoreList.observe(this, scoreListObserver)
+		queryExpScoreViewModel = ViewModelProviders.of(this).get(QueryExpScoreViewModel::class.java)
+		queryExpScoreViewModel.studentInfoList.observe(this, studentInfoListObserver)
+		queryExpScoreViewModel.student.observe(this, studentObserver)
+		queryExpScoreViewModel.year.observe(this, yearObserver)
+		queryExpScoreViewModel.term.observe(this, termObserver)
+		queryExpScoreViewModel.scoreList.observe(this, scoreListObserver)
 	}
 
 	override fun monitor() {
@@ -126,10 +123,10 @@ class QueryClassScoreActivity : XhuBaseActivity(R.layout.activity_query_class_sc
 			}
 		})
 		textViewStudent.setOnClickListener {
-			val map = queryClassScoreViewModel.studentInfoList.value!!.data!!
+			val map = queryExpScoreViewModel.studentInfoList.value!!.data!!
 			val studentList = map.keys.toList()
 			val studentTextArray = Array(studentList.size) { i -> "${studentList[i].studentName}(${studentList[i].username})" }
-			var nowIndex = studentList.indexOf(queryClassScoreViewModel.student.value)
+			var nowIndex = studentList.indexOf(queryExpScoreViewModel.student.value)
 			if (nowIndex == -1) nowIndex = 0
 			var selectIndex = nowIndex
 			AlertDialog.Builder(this)
@@ -138,16 +135,16 @@ class QueryClassScoreActivity : XhuBaseActivity(R.layout.activity_query_class_sc
 						selectIndex = index
 					}
 					.setPositiveButton(R.string.action_ok) { _, _ ->
-						queryClassScoreViewModel.student.value = studentList[selectIndex]
+						queryExpScoreViewModel.student.value = studentList[selectIndex]
 					}
 					.setNegativeButton(R.string.action_cancel, null)
 					.show()
 		}
 		textViewYear.setOnClickListener {
-			val map = queryClassScoreViewModel.studentInfoList.value!!.data!!
-			val studentInfo = map[queryClassScoreViewModel.student.value]
+			val map = queryExpScoreViewModel.studentInfoList.value!!.data!!
+			val studentInfo = map[queryExpScoreViewModel.student.value]
 			val yearTextArray = CalendarUtil.getSelectArray(studentInfo?.grade)
-			var nowIndex = yearTextArray.indexOf(queryClassScoreViewModel.year.value)
+			var nowIndex = yearTextArray.indexOf(queryExpScoreViewModel.year.value)
 			if (nowIndex == -1) nowIndex = 0
 			var selectIndex = nowIndex
 			AlertDialog.Builder(this)
@@ -156,14 +153,14 @@ class QueryClassScoreActivity : XhuBaseActivity(R.layout.activity_query_class_sc
 						selectIndex = index
 					}
 					.setPositiveButton(R.string.action_ok) { _, _ ->
-						queryClassScoreViewModel.year.value = yearTextArray[selectIndex]
+						queryExpScoreViewModel.year.value = yearTextArray[selectIndex]
 					}
 					.setNegativeButton(R.string.action_cancel, null)
 					.show()
 		}
 		textViewTerm.setOnClickListener {
 			val termTextArray = Array(3) { i -> (i + 1).toString() }
-			var nowIndex = termTextArray.indexOf(queryClassScoreViewModel.term.value)
+			var nowIndex = termTextArray.indexOf(queryExpScoreViewModel.term.value)
 			if (nowIndex == -1) nowIndex = 0
 			var selectIndex = nowIndex
 			AlertDialog.Builder(this)
@@ -172,39 +169,13 @@ class QueryClassScoreActivity : XhuBaseActivity(R.layout.activity_query_class_sc
 						selectIndex = index
 					}
 					.setPositiveButton(R.string.action_ok) { _, _ ->
-						queryClassScoreViewModel.term.value = termTextArray[selectIndex]
+						queryExpScoreViewModel.term.value = termTextArray[selectIndex]
 					}
 					.setNegativeButton(R.string.action_cancel, null)
 					.show()
 		}
 		queryButton.setOnClickListener {
-			ScoreRepository.queryClassScore(queryClassScoreViewModel)
-		}
-	}
-
-	override fun onCreateOptionsMenu(menu: Menu): Boolean {
-		menuInflater.inflate(R.menu.menu_query_score, menu)
-		menu.findItem(R.id.action_show_gpa).isChecked = ConfigurationUtil.isShowGpa
-		menu.findItem(R.id.action_show_failed).isChecked = ConfigurationUtil.isShowFailed
-		return true
-	}
-
-	override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-		return when (item?.itemId) {
-			R.id.action_show_gpa -> {
-				item.isChecked = !item.isChecked
-				ConfigurationUtil.isShowGpa = item.isChecked
-				queryClassScoreRecyclerViewAdapter.notifyDataSetChanged()
-				true
-			}
-			R.id.action_show_failed -> {
-				item.isChecked = !item.isChecked
-				ConfigurationUtil.isShowFailed = item.isChecked
-				if (queryClassScoreViewModel.scoreList.value != null && queryClassScoreViewModel.scoreList.value!!.data != null)
-					updateScoreList(queryClassScoreViewModel.scoreList.value!!.data!!)
-				true
-			}
-			else -> super.onOptionsItemSelected(item)
+			ScoreRepository.queryExpScore(queryExpScoreViewModel)
 		}
 	}
 
@@ -215,13 +186,10 @@ class QueryClassScoreActivity : XhuBaseActivity(R.layout.activity_query_class_sc
 			super.onBackPressed()
 	}
 
-	private fun updateScoreList(list: List<ClassScore>) {
-		queryClassScoreRecyclerViewAdapter.items.clear()
-		if (!ConfigurationUtil.isShowFailed)
-			queryClassScoreRecyclerViewAdapter.items.addAll(list.filter { !it.failed })
-		else
-			queryClassScoreRecyclerViewAdapter.items.addAll(list)
-		queryClassScoreRecyclerViewAdapter.notifyDataSetChanged()
+	private fun updateScoreList(list: List<ExpScore>) {
+		queryExpScoreRecyclerViewAdapter.items.clear()
+		queryExpScoreRecyclerViewAdapter.items.addAll(list)
+		queryExpScoreRecyclerViewAdapter.notifyDataSetChanged()
 	}
 
 	private fun showLoading() {

@@ -5,7 +5,7 @@ import androidx.room.RoomDatabase
 import com.weilylab.xhuschedule.model.*
 import com.weilylab.xhuschedule.repository.local.dao.*
 
-@Database(entities = [Student::class, StudentInfo::class, Course::class, Test::class, Notice::class, ClassScore::class], version = 1)
+@Database(entities = [Student::class, StudentInfo::class, Course::class, Test::class, Notice::class, ClassScore::class, ExpScore::class], version = 1)
 abstract class DB : RoomDatabase() {
 	abstract fun getStudentDao(): StudentDao
 	abstract fun getCourseDao(): CourseDao

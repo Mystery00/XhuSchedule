@@ -1,6 +1,7 @@
 package com.weilylab.xhuschedule.ui.activity
 
 import android.app.Dialog
+import android.view.View
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
@@ -32,17 +33,20 @@ class QueryTestActivity : XhuBaseActivity(R.layout.activity_query_test) {
 			Loading -> showDialog()
 			Content -> {
 				hideDialog()
+				hideNoDataLayout()
 				queryTestRecyclerViewAdapter.items.clear()
 				queryTestRecyclerViewAdapter.items.addAll(it.data!!)
 				queryTestRecyclerViewAdapter.notifyDataSetChanged()
 			}
 			Error -> {
 				hideDialog()
+				hideNoDataLayout()
 				Toast.makeText(this, it.error?.message, Toast.LENGTH_LONG)
 						.show()
 			}
 			Empty -> {
 				hideDialog()
+				showNoDataLayout()
 			}
 		}
 	}
@@ -97,5 +101,15 @@ class QueryTestActivity : XhuBaseActivity(R.layout.activity_query_test) {
 	private fun hideDialog() {
 		if (dialog.isShowing)
 			dialog.dismiss()
+	}
+
+	private fun showNoDataLayout() {
+		recyclerView.visibility = View.GONE
+		nullDataView.visibility = View.VISIBLE
+	}
+
+	private fun hideNoDataLayout() {
+		nullDataView.visibility = View.GONE
+		recyclerView.visibility = View.VISIBLE
 	}
 }

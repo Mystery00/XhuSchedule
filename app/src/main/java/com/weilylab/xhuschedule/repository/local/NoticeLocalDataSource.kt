@@ -23,7 +23,10 @@ object NoticeLocalDataSource : NoticeDataSource {
 				}
 				.subscribe(object : RxObserver<List<Notice>>() {
 					override fun onFinish(data: List<Notice>?) {
-						noticeLiveData.value = PackageData.content(data)
+						if (data != null && data.isNotEmpty())
+							noticeLiveData.value = PackageData.content(data)
+						else
+							noticeLiveData.value = PackageData.empty()
 					}
 
 					override fun onError(e: Throwable) {

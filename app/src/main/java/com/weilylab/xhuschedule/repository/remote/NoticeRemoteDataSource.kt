@@ -20,7 +20,10 @@ object NoticeRemoteDataSource : NoticeDataSource {
 				}
 			}, object : RequestListener<List<Notice>> {
 				override fun done(t: List<Notice>) {
-					noticeLiveData.value = PackageData.content(t)
+					if (t.isNotEmpty())
+						noticeLiveData.value = PackageData.content(t)
+					else
+						noticeLiveData.value = PackageData.empty()
 				}
 
 				override fun error(rt: String, msg: String?) {

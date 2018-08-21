@@ -12,10 +12,12 @@ import com.weilylab.xhuschedule.listener.DoSaveListener
 import com.weilylab.xhuschedule.listener.RequestListener
 import com.weilylab.xhuschedule.model.CetScore
 import com.weilylab.xhuschedule.model.ClassScore
+import com.weilylab.xhuschedule.model.ExpScore
 import com.weilylab.xhuschedule.model.Student
 import com.weilylab.xhuschedule.model.response.CetScoresResponse
 import com.weilylab.xhuschedule.model.response.CetVCodeResponse
-import com.weilylab.xhuschedule.model.response.ScoreResponse
+import com.weilylab.xhuschedule.model.response.ClassScoreResponse
+import com.weilylab.xhuschedule.model.response.ExpScoreResponse
 import com.weilylab.xhuschedule.utils.rxAndroid.RxObserver
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -33,7 +35,7 @@ object ScoreUtil {
 				.subscribeOn(Schedulers.newThread())
 				.unsubscribeOn(Schedulers.newThread())
 				.map {
-					val scoreResponse = GsonFactory.parse<ScoreResponse>(it)
+					val scoreResponse = GsonFactory.parse<ClassScoreResponse>(it)
 					if (scoreResponse.rt == ResponseCodeConstants.DONE) {
 						val map = HashMap<Int, List<ClassScore>>()
 						map[TYPE_SCORE] = scoreResponse.scores
@@ -43,8 +45,8 @@ object ScoreUtil {
 					scoreResponse
 				}
 				.observeOn(AndroidSchedulers.mainThread())
-				.subscribe(object : RxObserver<ScoreResponse>() {
-					override fun onFinish(data: ScoreResponse?) {
+				.subscribe(object : RxObserver<ClassScoreResponse>() {
+					override fun onFinish(data: ClassScoreResponse?) {
 						when {
 							data == null -> requestListener.error(ResponseCodeConstants.UNKNOWN_ERROR, StringConstant.hint_data_null)
 							data.rt == ResponseCodeConstants.DONE -> {
@@ -60,6 +62,49 @@ object ScoreUtil {
 									UserUtil.login(student, null, object : RequestListener<Boolean> {
 										override fun done(t: Boolean) {
 											getClassScore(student, year, term, doSaveListener, requestListener, index + 1)
+										}
+
+										override fun error(rt: String, msg: String?) {
+											requestListener.error(rt, msg)
+										}
+									})
+							}
+							else -> requestListener.error(data.rt, data.msg)
+						}
+					}
+
+					override fun onError(e: Throwable) {
+						Logs.wtf("onError: ", e)
+						requestListener.error(ResponseCodeConstants.CATCH_ERROR, e.message)
+					}
+				})
+	}
+
+	fun getExpScore(student: Student, year: String, term: String, doSaveListener: DoSaveListener<List<ExpScore>>?, requestListener: RequestListener<List<ExpScore>>, index: Int = 0) {
+		RetrofitFactory.retrofit
+				.create(ScoreAPI::class.java)
+				.getExpScores(student.username, year, term)
+				.subscribeOn(Schedulers.newThread())
+				.unsubscribeOn(Schedulers.newThread())
+				.map {
+					val scoreResponse = GsonFactory.parse<ExpScoreResponse>(it)
+					if (scoreResponse.rt == ResponseCodeConstants.DONE)
+						doSaveListener?.doSave(scoreResponse.expScores)
+					scoreResponse
+				}
+				.observeOn(AndroidSchedulers.mainThread())
+				.subscribe(object : RxObserver<ExpScoreResponse>() {
+					override fun onFinish(data: ExpScoreResponse?) {
+						when {
+							data == null -> requestListener.error(ResponseCodeConstants.UNKNOWN_ERROR, StringConstant.hint_data_null)
+							data.rt == ResponseCodeConstants.DONE -> requestListener.done(data.expScores)
+							data.rt == ResponseCodeConstants.ERROR_NOT_LOGIN -> {
+								if (index == RETRY_TIME)
+									requestListener.error(ResponseCodeConstants.DO_TOO_MANY, StringConstant.hint_do_too_many)
+								else
+									UserUtil.login(student, null, object : RequestListener<Boolean> {
+										override fun done(t: Boolean) {
+											getExpScore(student, year, term, doSaveListener, requestListener, index + 1)
 										}
 
 										override fun error(rt: String, msg: String?) {

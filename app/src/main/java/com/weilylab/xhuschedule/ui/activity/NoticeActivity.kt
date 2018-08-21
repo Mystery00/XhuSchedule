@@ -33,6 +33,7 @@
 
 package com.weilylab.xhuschedule.ui.activity
 
+import android.view.View
 import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -58,17 +59,20 @@ class NoticeActivity : XhuBaseActivity(R.layout.activity_notice) {
 			Loading -> showRefresh()
 			Content -> {
 				hideRefresh()
+				hideNoDataLayout()
 				noticeAdapter.items.clear()
 				noticeAdapter.items.addAll(it.data!!)
 				noticeAdapter.notifyDataSetChanged()
 			}
 			Error -> {
 				hideRefresh()
+				hideNoDataLayout()
 				Toast.makeText(this, it.error?.message, Toast.LENGTH_LONG)
 						.show()
 			}
 			Empty -> {
 				hideRefresh()
+				showNoDataLayout()
 			}
 		}
 	}
@@ -127,6 +131,16 @@ class NoticeActivity : XhuBaseActivity(R.layout.activity_notice) {
 	private fun hideRefresh() {
 		if (swipeRefreshLayout.isRefreshing)
 			swipeRefreshLayout.isRefreshing = false
+	}
+
+	private fun showNoDataLayout() {
+		recyclerView.visibility = View.GONE
+		nullDataView.visibility = View.VISIBLE
+	}
+
+	private fun hideNoDataLayout() {
+		nullDataView.visibility = View.GONE
+		recyclerView.visibility = View.VISIBLE
 	}
 
 	override fun onDestroy() {

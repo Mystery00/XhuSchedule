@@ -7,6 +7,7 @@ import com.weilylab.xhuschedule.listener.DoSaveListener
 import com.weilylab.xhuschedule.listener.RequestListener
 import com.weilylab.xhuschedule.model.CetScore
 import com.weilylab.xhuschedule.model.ClassScore
+import com.weilylab.xhuschedule.model.ExpScore
 import com.weilylab.xhuschedule.model.Student
 import com.weilylab.xhuschedule.repository.dataSource.ScoreDataSource
 import com.weilylab.xhuschedule.repository.local.ScoreLocalDataSource
@@ -55,7 +56,10 @@ object ScoreRemoteDataSource : ScoreDataSource {
 						it.failed = true
 						resultList.add(it)
 					}
-					scoreLiveData.value = PackageData.content(resultList)
+					if (resultList.isNotEmpty())
+						scoreLiveData.value = PackageData.content(resultList)
+					else
+						scoreLiveData.value = PackageData.empty()
 				}
 
 				override fun error(rt: String, msg: String?) {
@@ -65,6 +69,36 @@ object ScoreRemoteDataSource : ScoreDataSource {
 		} else {
 			scoreLiveData.value = PackageData.error(Exception(StringConstant.hint_network_error))
 			ScoreLocalDataSource.queryClassScoreByUsername(scoreLiveData, student, year, term)
+		}
+	}
+
+	override fun queryExpScoreByUsername(scoreLiveData: MutableLiveData<PackageData<List<ExpScore>>>, student: Student, year: String, term: String) {
+		if (NetworkUtil.isConnectInternet()) {
+			ScoreUtil.getExpScore(student, year, term, object : DoSaveListener<List<ExpScore>> {
+				override fun doSave(t: List<ExpScore>) {
+					ScoreLocalDataSource.deleteAllExpScoreForStudent(student.username, year, term)
+					t.forEach {
+						it.year = year
+						it.term = term
+						it.studentID = student.username
+					}
+					ScoreLocalDataSource.saveExpScoreList(t)
+				}
+			}, object : RequestListener<List<ExpScore>> {
+				override fun done(t: List<ExpScore>) {
+					if (t.isNotEmpty())
+						scoreLiveData.value = PackageData.content(t)
+					else
+						scoreLiveData.value = PackageData.empty()
+				}
+
+				override fun error(rt: String, msg: String?) {
+					scoreLiveData.value = PackageData.error(Exception(msg))
+				}
+			})
+		} else {
+			scoreLiveData.value = PackageData.error(Exception(StringConstant.hint_network_error))
+			ScoreLocalDataSource.queryExpScoreByUsername(scoreLiveData, student, year, term)
 		}
 	}
 

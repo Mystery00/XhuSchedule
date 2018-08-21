@@ -28,7 +28,10 @@ object TestRemoteDataSource : TestDataSource {
 				}
 			}, object : RequestListener<List<Test>> {
 				override fun done(t: List<Test>) {
-					testLiveData.value = PackageData.content(t)
+					if (t.isNotEmpty())
+						testLiveData.value = PackageData.content(t)
+					else
+						testLiveData.value = PackageData.empty()
 				}
 
 				override fun error(rt: String, msg: String?) {

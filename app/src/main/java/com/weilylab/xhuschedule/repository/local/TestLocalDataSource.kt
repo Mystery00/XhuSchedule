@@ -21,7 +21,10 @@ object TestLocalDataSource : TestDataSource {
 				}
 				.subscribe(object : RxObserver<List<Test>>() {
 					override fun onFinish(data: List<Test>?) {
-						testLiveData.value = PackageData.content(data)
+						if (data != null && data.isNotEmpty())
+							testLiveData.value = PackageData.content(data)
+						else
+							testLiveData.value = PackageData.empty()
 					}
 
 					override fun onError(e: Throwable) {
