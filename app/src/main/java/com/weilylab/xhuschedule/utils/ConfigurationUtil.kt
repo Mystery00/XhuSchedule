@@ -37,6 +37,16 @@ object ConfigurationUtil {
 				.putString(SharedPreferenceConstant.FIELD_CUSTOM_BACKGROUND_IMAGE, value)
 				.apply()
 		get() = sharedPreferences.getString(SharedPreferenceConstant.FIELD_CUSTOM_BACKGROUND_IMAGE, "")!!
+	var isShowGpa: Boolean
+		set(value) = sharedPreferences.edit()
+				.putBoolean(SharedPreferenceConstant.FIELD_SHOW_GPA, value)
+				.apply()
+		get() = sharedPreferences.getBoolean(SharedPreferenceConstant.FIELD_SHOW_GPA, false)
+	var isShowFailed:Boolean
+		set(value) = sharedPreferences.edit()
+				.putBoolean(SharedPreferenceConstant.FIELD_SHOW_FAILED, value)
+				.apply()
+		get() = sharedPreferences.getBoolean(SharedPreferenceConstant.FIELD_SHOW_FAILED, true)
 	var clearAppData: Boolean
 		set(value) = sharedPreferences.edit()
 				.putBoolean("clearAppData", value)

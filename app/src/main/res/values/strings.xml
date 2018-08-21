@@ -30,6 +30,10 @@
 	<string name="action_finish">完成</string>
 	<string name="action_ok">确定</string>
 	<string name="action_cancel">取消</string>
+	<string name="action_query">查询</string>
+
+	<string name="menu_show_gpa">显示绩点</string>
+	<string name="menu_show_failed">显示未通过成绩</string>
 
 	<string name="prompt_username">学号</string>
 	<string name="prompt_password">密码</string>

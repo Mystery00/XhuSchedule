@@ -1,6 +1,8 @@
 package com.weilylab.xhuschedule.ui.activity
 
 import android.view.Gravity
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
@@ -18,9 +20,11 @@ import com.weilylab.xhuschedule.model.StudentInfo
 import com.weilylab.xhuschedule.repository.ScoreRepository
 import com.weilylab.xhuschedule.ui.adapter.QueryClassScoreRecyclerViewAdapter
 import com.weilylab.xhuschedule.utils.CalendarUtil
+import com.weilylab.xhuschedule.utils.ConfigurationUtil
 import com.weilylab.xhuschedule.utils.rxAndroid.PackageData
 import com.weilylab.xhuschedule.viewModel.QueryClassScoreViewModel
 import kotlinx.android.synthetic.main.activity_query_class_score.*
+import vip.mystery0.logs.Logs
 import vip.mystery0.tools.utils.DensityTools
 import java.util.*
 
@@ -62,9 +66,7 @@ class QueryClassScoreActivity : XhuBaseActivity(R.layout.activity_query_class_sc
 			Empty -> showEmpty()
 			Content -> {
 				hasData = true
-				queryClassScoreRecyclerViewAdapter.items.clear()
-				queryClassScoreRecyclerViewAdapter.items.addAll(it.data!!)
-				queryClassScoreRecyclerViewAdapter.notifyDataSetChanged()
+				updateScoreList(it.data!!)
 				showContent()
 			}
 			Error -> {
@@ -181,6 +183,32 @@ class QueryClassScoreActivity : XhuBaseActivity(R.layout.activity_query_class_sc
 		}
 	}
 
+	override fun onCreateOptionsMenu(menu: Menu): Boolean {
+		menuInflater.inflate(R.menu.menu_query_score, menu)
+		menu.findItem(R.id.action_show_gpa).isChecked = ConfigurationUtil.isShowGpa
+		menu.findItem(R.id.action_show_failed).isChecked = ConfigurationUtil.isShowFailed
+		return true
+	}
+
+	override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+		return when (item?.itemId) {
+			R.id.action_show_gpa -> {
+				item.isChecked = !item.isChecked
+				ConfigurationUtil.isShowGpa = item.isChecked
+				queryClassScoreRecyclerViewAdapter.notifyDataSetChanged()
+				true
+			}
+			R.id.action_show_failed -> {
+				item.isChecked = !item.isChecked
+				ConfigurationUtil.isShowFailed = item.isChecked
+				if (queryClassScoreViewModel.scoreList.value != null && queryClassScoreViewModel.scoreList.value!!.data != null)
+					updateScoreList(queryClassScoreViewModel.scoreList.value!!.data!!)
+				true
+			}
+			else -> super.onOptionsItemSelected(item)
+		}
+	}
+
 	override fun onBackPressed() {
 		if (drawerLayout.isDrawerOpen(Gravity.END))
 			drawerLayout.closeDrawer(Gravity.END)
@@ -188,13 +216,24 @@ class QueryClassScoreActivity : XhuBaseActivity(R.layout.activity_query_class_sc
 			super.onBackPressed()
 	}
 
+	private fun updateScoreList(list: List<ClassScore>) {
+		queryClassScoreRecyclerViewAdapter.items.clear()
+		if (!ConfigurationUtil.isShowFailed)
+			queryClassScoreRecyclerViewAdapter.items.addAll(list.filter { !it.failed })
+		else
+			queryClassScoreRecyclerViewAdapter.items.addAll(list)
+		queryClassScoreRecyclerViewAdapter.notifyDataSetChanged()
+	}
+
 	private fun showLoading() {
-		queryButton.visibility = View.GONE
+		queryButton.alpha = 0F
+		queryButton.isClickable = false
 		loadingView.visibility = View.VISIBLE
 	}
 
 	private fun dismissLoading() {
-		queryButton.visibility = View.VISIBLE
+		queryButton.alpha = 1F
+		queryButton.isClickable = true
 		loadingView.visibility = View.GONE
 	}
 
