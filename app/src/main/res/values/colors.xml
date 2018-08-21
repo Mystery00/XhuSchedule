@@ -14,6 +14,7 @@
     <color name="login_color_label">#cccccc</color>
 	<color name="login_color_text">#4ea5ff</color>
     <color name="colorWhite">#FFFFFF</color>
+	<color name="splashColor">#2e85df</color>
 
     <!--<color name="color1" tools:keep="@color/color1">#039BDA</color>-->
     <!--<color name="color2" tools:keep="@color/color2">#F5703C</color>-->
