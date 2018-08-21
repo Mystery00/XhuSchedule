@@ -25,18 +25,12 @@ object RetrofitFactory {
 			.writeTimeout(20, TimeUnit.SECONDS)
 			.addInterceptor(LoadCookiesInterceptor())
 			.addInterceptor(SaveCookiesInterceptor())
-			.addInterceptor(HttpLoggingInterceptor()
-					.setLevel(HttpLoggingInterceptor.Level.BODY))
+//			.addInterceptor(HttpLoggingInterceptor()
+//					.setLevel(HttpLoggingInterceptor.Level.BODY))
 			.build()
 
 	val retrofit = Retrofit.Builder()
 			.baseUrl("https://xhuschedule.mostpan.com")
-			.client(client)
-			.addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-			.build()!!
-
-	val qiniuRetrofit = Retrofit.Builder()
-			.baseUrl("https://download.xhuschedule.mostpan.com")
 			.client(client)
 			.addCallAdapterFactory(RxJava2CallAdapterFactory.create())
 			.build()!!

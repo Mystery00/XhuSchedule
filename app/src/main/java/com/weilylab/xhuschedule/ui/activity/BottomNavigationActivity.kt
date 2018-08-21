@@ -7,7 +7,6 @@ import android.app.Dialog
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
-import android.view.Gravity
 import android.view.View
 import android.view.animation.Animation
 import android.widget.PopupWindow
@@ -41,6 +40,7 @@ import com.weilylab.xhuschedule.utils.rxAndroid.PackageData
 import com.weilylab.xhuschedule.viewModel.BottomNavigationViewModel
 import com.zhuangfei.timetable.listener.IWeekView
 import com.zhuangfei.timetable.model.Schedule
+import com.zhuangfei.timetable.model.ScheduleSupport
 import com.zyao89.view.zloading.ZLoadingDialog
 import com.zyao89.view.zloading.Z_TYPE
 import kotlinx.android.synthetic.main.activity_bottom_navigation.*
@@ -49,7 +49,8 @@ import vip.mystery0.bottomTabView.BottomTabItem
 import vip.mystery0.logs.Logs
 import vip.mystery0.tools.utils.DensityTools
 import java.io.File
-import java.util.ArrayList
+import java.text.SimpleDateFormat
+import java.util.*
 
 class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_navigation) {
 	companion object {
@@ -109,6 +110,10 @@ class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_naviga
 				courseList.clear()
 				courseList.addAll(it.data!!)
 				weekView.data(courseList).showView()
+				if (bottomNavigationViewModel.startDateTime.value != null && bottomNavigationViewModel.startDateTime.value!!.data != null) {
+					val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINA)
+					bottomNavigationViewModel.week.value = ScheduleSupport.timeTransfrom(simpleDateFormat.format(bottomNavigationViewModel.startDateTime.value!!.data!!.time))
+				}
 				hideDialog()
 				cancelLoading()
 			}

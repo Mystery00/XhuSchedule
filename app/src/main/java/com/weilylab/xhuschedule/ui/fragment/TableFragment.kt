@@ -53,6 +53,7 @@ class TableFragment : BaseBottomNavigationFragment(R.layout.fragment_table) {
 		try {
 			fragmentTableBinding.timeTableView.changeWeekOnly(it)
 			fragmentTableBinding.timeTableView.onDateBuildListener().onUpdateDate(fragmentTableBinding.timeTableView.curWeek(), it)
+			updateTitle()
 		} catch (e: Exception) {
 			week = it
 		}
