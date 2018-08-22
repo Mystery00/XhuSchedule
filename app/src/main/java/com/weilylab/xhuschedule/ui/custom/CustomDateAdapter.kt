@@ -39,7 +39,7 @@ class CustomDateAdapter : OnDateBuildAapter() {
 		itemCustomDateviewFirstBinding.idWeekMonth.text = monthString
 		for (i in 0 until 7) {
 			bindingArray[i]!!.idWeekDayIndex.text = CalendarUtil.getWeekIndexInString(i + 1)
-			val dayString = "${weekDays[i]}日"
+			val dayString = "${weekDays[i + 1]}日"
 			bindingArray[i]!!.idWeekDay.text = dayString
 		}
 	}
