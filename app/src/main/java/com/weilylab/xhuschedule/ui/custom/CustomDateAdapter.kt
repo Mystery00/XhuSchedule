@@ -8,52 +8,51 @@ import com.weilylab.xhuschedule.config.APP
 import vip.mystery0.tools.utils.DensityTools
 import com.weilylab.xhuschedule.databinding.ItemCustomDateviewBinding
 import com.weilylab.xhuschedule.databinding.ItemCustomDateviewFirstBinding
-import com.weilylab.xhuschedule.config.DateAdapterHelper
 import com.weilylab.xhuschedule.utils.CalendarUtil
 import com.zhuangfei.timetable.listener.OnDateBuildAapter
 import com.zhuangfei.timetable.model.ScheduleSupport
 import com.zhuangfei.timetable.utils.ColorUtils
 
 class CustomDateAdapter : OnDateBuildAapter() {
-	private val dateAdapterHelper = DateAdapterHelper()
+	private lateinit var itemCustomDateviewFirstBinding: ItemCustomDateviewFirstBinding
+	private val bindingArray = arrayOfNulls<ItemCustomDateviewBinding>(7)
 	private val heightPx = DensityTools.dp2px(APP.context, 35f)
 
 	override fun onBuildDayLayout(mInflate: LayoutInflater, pos: Int, width: Int, height: Int): View {
 		val itemCustomDateviewBinding = ItemCustomDateviewBinding.inflate(mInflate)
 		val weekLayoutParams = LinearLayout.LayoutParams(width, heightPx)
 		itemCustomDateviewBinding.root.layoutParams = weekLayoutParams
-		itemCustomDateviewBinding.idWeekDayIndex.text = CalendarUtil.getWeekIndexInString(pos)
-		itemCustomDateviewBinding.idWeekDay.text = dateAdapterHelper.dayString[pos - 1]
-		itemCustomDateviewBinding.root.setBackgroundColor(dateAdapterHelper.colorArray[pos])
+		bindingArray[pos - 1] = itemCustomDateviewBinding
 		return itemCustomDateviewBinding.root
 	}
 
 	override fun onBuildMonthLayout(mInflate: LayoutInflater, width: Int, height: Int): View {
-		val itemCustomDateviewFirstBinding = ItemCustomDateviewFirstBinding.inflate(mInflate)
+		itemCustomDateviewFirstBinding = ItemCustomDateviewFirstBinding.inflate(mInflate)
 		val firstLayoutParams = LinearLayout.LayoutParams(width, heightPx)
 		itemCustomDateviewFirstBinding.root.layoutParams = firstLayoutParams
-		itemCustomDateviewFirstBinding.idWeekMonth.text = dateAdapterHelper.monthString
-		itemCustomDateviewFirstBinding.root.setBackgroundColor(dateAdapterHelper.colorArray[0])
 		return itemCustomDateviewFirstBinding.root
 	}
 
 	override fun onUpdateDate(curWeek: Int, targetWeek: Int) {
 		val weekDays = ScheduleSupport.getDateStringFromWeek(curWeek, targetWeek)
-		dateAdapterHelper.monthString = "${weekDays[0]}\n月"
-		dateAdapterHelper.dayString = arrayOf(
-				"${weekDays[0]}日",
-				"${weekDays[1]}日",
-				"${weekDays[2]}日",
-				"${weekDays[3]}日",
-				"${weekDays[4]}日",
-				"${weekDays[5]}日",
-				"${weekDays[6]}日")
+		val monthString = "${weekDays[0]}\n月"
+		itemCustomDateviewFirstBinding.idWeekMonth.text = monthString
+		for (i in 0 until 7) {
+			bindingArray[i]!!.idWeekDayIndex.text = CalendarUtil.getWeekIndexInString(i + 1)
+			val dayString = "${weekDays[i]}日"
+			bindingArray[i]!!.idWeekDay.text = dayString
+		}
 	}
 
 	override fun onHighLight() {
-		for (i in 0..7)
-			dateAdapterHelper.colorArray[i] = ColorUtils.alphaColor(Color.BLACK, 0.1f)
-		//高亮
-		dateAdapterHelper.colorArray[CalendarUtil.getWeekIndex()] = ColorUtils.alphaColor(Color.BLACK, 0.2f)
+		val normalColor = ColorUtils.alphaColor(Color.BLACK, 0.1f)
+		val highLightColor = ColorUtils.alphaColor(Color.BLACK, 0.2f)
+		itemCustomDateviewFirstBinding.root.setBackgroundColor(normalColor)
+		bindingArray.forEachIndexed { index, itemCustomDateviewBinding ->
+			if (CalendarUtil.getWeekIndex() == index + 1)
+				itemCustomDateviewBinding!!.root.setBackgroundColor(highLightColor)
+			else
+				itemCustomDateviewBinding!!.root.setBackgroundColor(normalColor)
+		}
 	}
 }
