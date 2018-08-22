@@ -26,7 +26,6 @@ import com.weilylab.xhuschedule.utils.ShareUtil
 import com.weilylab.xhuschedule.utils.rxAndroid.RxObservable
 import com.weilylab.xhuschedule.utils.rxAndroid.RxObserver
 import com.weilylab.xhuschedule.viewModel.BottomNavigationViewModel
-import kotlinx.android.synthetic.main.activity_bottom_navigation.*
 import kotlinx.android.synthetic.main.content_bottom_navigation.*
 import vip.mystery0.logs.Logs
 import java.io.File
@@ -138,7 +137,7 @@ class ProfileFragment : BaseBottomNavigationFragment(R.layout.fragment_profile) 
 		shareView = PopupWindow(binding.root, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
 		shareView.isOutsideTouchable = true
 		shareView.isFocusable = true
-		shareView.animationStyle = R.style.Animation
+		shareView.animationStyle = R.style.ShareAnimation
 		shareView.setBackgroundDrawable(ColorDrawable(0x00000000))
 		shareView.setOnDismissListener {
 			AnimationUtil.setWindowAlpha(activity, 1F)

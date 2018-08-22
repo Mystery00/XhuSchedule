@@ -60,7 +60,6 @@ class SplashActivity : XhuBaseActivity(null) {
 		when (it.status) {
 			Status.Empty -> gotoMain()
 			Status.Error -> {
-				Logs.e("splashObserver", it.error)
 				gotoMain()
 			}
 			Status.Content -> {

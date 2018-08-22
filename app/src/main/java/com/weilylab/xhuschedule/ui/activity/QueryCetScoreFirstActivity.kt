@@ -92,7 +92,7 @@ class QueryCetScoreFirstActivity : XhuBaseActivity(R.layout.activity_query_cet_s
 		super.monitor()
 		setupLayout.navigationBar.setNavigationBarListener(object : NavigationBar.NavigationBarListener {
 			override fun onNavigateBack() {
-				onBackPressed()
+				finish()
 			}
 
 			override fun onNavigateNext() {

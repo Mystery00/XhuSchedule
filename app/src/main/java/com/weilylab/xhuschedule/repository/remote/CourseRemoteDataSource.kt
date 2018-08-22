@@ -55,8 +55,8 @@ object CourseRemoteDataSource : CourseDataSource {
 		if (NetworkUtil.isConnectInternet()) {
 			CourseUtil.getCoursesForManyStudent(studentList, year, term, object : DoSaveListener<Map<String, List<Course>>> {
 				override fun doSave(t: Map<String, List<Course>>) {
-					Logs.i("doSave: ")
 					val username = t.keys.first()
+					Logs.i("doSave: $username")
 					val courseList = t[username]!!
 					CourseLocalDataSource.deleteAllCourseListForStudent(username, year, term)
 					courseList.forEach {

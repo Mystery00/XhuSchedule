@@ -3,7 +3,6 @@ package com.weilylab.xhuschedule.ui.activity
 import android.app.Dialog
 import android.content.Intent
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.text.TextUtils
 import android.widget.ScrollView
 import android.widget.Toast
@@ -48,6 +47,7 @@ class QueryCetScoreSecondActivity : XhuBaseActivity(R.layout.activity_query_cet_
 			Content -> {
 				hideDialog()
 				startActivity(Intent(this, QueryCetScoreShowActivity::class.java))
+				finish()
 			}
 			Loading -> showDialog()
 			Empty -> {
@@ -107,7 +107,7 @@ class QueryCetScoreSecondActivity : XhuBaseActivity(R.layout.activity_query_cet_
 		}
 		setupLayout.navigationBar.setNavigationBarListener(object : NavigationBar.NavigationBarListener {
 			override fun onNavigateBack() {
-				onBackPressed()
+				finish()
 			}
 
 			override fun onNavigateNext() {
@@ -133,8 +133,7 @@ class QueryCetScoreSecondActivity : XhuBaseActivity(R.layout.activity_query_cet_
 			cetVCodeEditText.requestFocus()
 			return
 		}
-		//ScoreRepository.getCetScore(cetVCodeStr)
-		QueryCetScoreViewModelHelper.cetScoreLiveData.value = PackageData.content(CetScore())
+		ScoreRepository.getCetScore(cetVCodeStr)
 	}
 
 	private fun showVCodeDialog() {

@@ -28,6 +28,7 @@ import com.zhuangfei.timetable.listener.ISchedule
 import com.zhuangfei.timetable.listener.OnSlideBuildAdapter
 import com.zhuangfei.timetable.model.Schedule
 import com.zhuangfei.timetable.model.ScheduleSupport
+import com.zhuangfei.timetable.utils.ColorUtils
 import kotlinx.android.synthetic.main.activity_bottom_navigation.*
 import vip.mystery0.logs.Logs
 import java.text.SimpleDateFormat
@@ -86,6 +87,8 @@ class TableFragment : BaseBottomNavigationFragment(R.layout.fragment_table) {
 				.alpha(0.1f, 0.1f, 1f)
 				.callback(CustomDateAdapter())
 				.callback(CustomItemBuildAdapter())
+				.callback(OnSlideBuildAdapter()
+						.setBackground(Color.BLACK))
 				.isShowFlaglayout(false)
 //				.callback(FlagLayoutClickAdapter(fragmentTableBinding.timeTableView))
 //				.callback(SpaceItemClickAdapter(fragmentTableBinding.timeTableView))
@@ -107,7 +110,7 @@ class TableFragment : BaseBottomNavigationFragment(R.layout.fragment_table) {
 		super.monitor()
 		fragmentTableBinding.timeTableView
 				.callback(ISchedule.OnItemClickListener { _, scheduleList ->
-					bottomNavigationViewModel.showCourse.value = scheduleList.filter { ScheduleSupport.isThisWeek(it, week) }
+					bottomNavigationViewModel.showCourse.value = scheduleList
 				})
 		SpaceScheduleHelper.onSpaceScheduleClickListener = { day, start, isTwice ->
 			Logs.i("monitor: $day $start $isTwice")

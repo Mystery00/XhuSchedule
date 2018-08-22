@@ -7,6 +7,7 @@ import android.app.Dialog
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.view.Gravity
 import android.view.View
 import android.view.animation.Animation
 import android.widget.PopupWindow
@@ -14,6 +15,7 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager.widget.ViewPager
 import com.bumptech.glide.Glide
@@ -31,10 +33,7 @@ import com.weilylab.xhuschedule.ui.adapter.ViewPagerAdapter
 import com.weilylab.xhuschedule.ui.fragment.ProfileFragment
 import com.weilylab.xhuschedule.ui.fragment.TableFragment
 import com.weilylab.xhuschedule.ui.fragment.TodayFragment
-import com.weilylab.xhuschedule.utils.ConfigUtil
-import com.weilylab.xhuschedule.utils.ConfigurationUtil
-import com.weilylab.xhuschedule.utils.LayoutRefreshConfigUtil
-import com.weilylab.xhuschedule.utils.UserUtil
+import com.weilylab.xhuschedule.utils.*
 import com.weilylab.xhuschedule.utils.layoutManager.SkidRightLayoutManager
 import com.weilylab.xhuschedule.utils.rxAndroid.PackageData
 import com.weilylab.xhuschedule.viewModel.BottomNavigationViewModel
@@ -161,7 +160,8 @@ class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_naviga
 
 	private val showCourseObserver = Observer<List<Schedule>> {
 		showAdapter.items.clear()
-		showAdapter.items.addAll(it)
+		val week = bottomNavigationViewModel.week.value ?: 0
+		showAdapter.items.addAll(CourseUtil.filterShowCourse(it, week))
 		showAdapter.notifyDataSetChanged()
 		showPopupWindow()
 	}
@@ -371,24 +371,22 @@ class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_naviga
 	private fun initPopupWindow() {
 		recyclerView = RecyclerView(this)
 		recyclerView.layoutManager = SkidRightLayoutManager(1.5f, 0.85f)
-//		recyclerView.layoutManager =SkidRightLayoutManager (this, 2)
+//		recyclerView.layoutManager = GridLayoutManager(this, 2)
 		showAdapter = ShowCourseRecyclerViewAdapter(this)
 		recyclerView.adapter = showAdapter
-		popupWindow = PopupWindow(recyclerView, DensityTools.getScreenWidth(this), DensityTools.dp2px(this, 480F))
+		popupWindow = PopupWindow(recyclerView, DensityTools.getScreenWidth(this), DensityTools.dp2px(this, 240F))
 		popupWindow.isOutsideTouchable = true
 		popupWindow.isFocusable = true
+		popupWindow.animationStyle = R.style.ShowCourseAnimation
+		popupWindow.setOnDismissListener {
+			AnimationUtil.setWindowAlpha(this, 1F)
+		}
 		popupWindow.setBackgroundDrawable(ColorDrawable(0x00000000))
 	}
 
 	private fun showPopupWindow() {
-//		popupWindow.showAtLocation(weekView, Gravity.NO_GRAVITY, DensityTools.getScreenWidth(this) - popupWindow.width, DensityTools.getScreenHeight(this) / 2 - popupWindow.height / 2)
-//		val week = bottomNavigationViewModel.week.value
-//		var position = 0
-//		showAdapter.items.forEachIndexed { index, it ->
-//			if (it.weekList.contains(week))
-//				position = index
-//		}
-//		recyclerView.scrollToPosition(position)
+		AnimationUtil.setWindowAlpha(this, 0.6F)
+		popupWindow.showAtLocation(weekView, Gravity.NO_GRAVITY, DensityTools.getScreenWidth(this) - popupWindow.width, DensityTools.getScreenHeight(this) / 2 - popupWindow.height / 2)
 	}
 
 	override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

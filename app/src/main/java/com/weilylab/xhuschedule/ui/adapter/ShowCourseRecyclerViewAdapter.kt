@@ -15,6 +15,6 @@ class ShowCourseRecyclerViewAdapter(private val context: Context?) : BaseBinding
 		stringBuilder.appendln(data.room)
 		binding.textView.text = stringBuilder.toString()
 		val color = ScheduleColorPool(context).getColorAuto(data.colorRandom)
-		binding.cardView.setCardBackgroundColor(color)
+		binding.textView.setBackgroundColor(color)
 	}
 }

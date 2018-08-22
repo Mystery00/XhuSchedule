@@ -20,6 +20,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import vip.mystery0.logs.Logs
+import vip.mystery0.logs.LogsConfig
 import java.util.*
 
 object CourseUtil {
@@ -86,14 +87,18 @@ object CourseUtil {
 	}
 
 	private fun request(resultArray: BooleanArray, studentList: List<Student>, year: String?, term: String?, doSaveListener: DoSaveListener<Map<String, List<Course>>>?, map: HashMap<String, List<Course>>, doneListener: () -> Unit, maxIndex: Int, index: Int = 0) {
+		Logs.setConfig(LogsConfig()
+				.setShowBorder(false))
+		Logs.im("request: ${isAllDone(resultArray)} index=$index")
 		if (index >= maxIndex || isAllDone(resultArray)) {
 			doneListener.invoke()
 			return
 		}
+		Logs.i("request: 未完成全部请求，继续发起请求")
 		val needRequestArray = ArrayList<Observable<DataWithUsername<CourseResponse>>>()
 		resultArray.filter { !it }
 				.forEachIndexed { position, b ->
-					Logs.i("getCoursesForManyStudent: $b")
+					Logs.i("getCoursesForManyStudent: ${studentList[position].username} $b")
 					needRequestArray.add(RetrofitFactory.retrofit
 							.create(CourseAPI::class.java)
 							.getCourses(studentList[position].username, year, term)
@@ -113,6 +118,7 @@ object CourseUtil {
 				.observeOn(AndroidSchedulers.mainThread())
 				.subscribe(object : Observer<DataWithUsername<CourseResponse>> {
 					override fun onComplete() {
+						Logs.i("onComplete: ")
 						resumeRequest(resultArray, studentList, year, term, doSaveListener, map, doneListener, maxIndex, index)
 					}
 
@@ -121,6 +127,7 @@ object CourseUtil {
 					}
 
 					override fun onNext(t: DataWithUsername<CourseResponse>) {
+						Logs.i("onNext: ")
 						val username = t.username
 						val data = t.data!!
 						val position = studentList.indexOfFirst { it.username == username }
@@ -158,10 +165,12 @@ object CourseUtil {
 	private fun resumeRequest(resultArray: BooleanArray, studentList: List<Student>, year: String?, term: String?, doSaveListener: DoSaveListener<Map<String, List<Course>>>?, map: HashMap<String, List<Course>>, doneListener: () -> Unit, maxIndex: Int, index: Int) {
 		RxObservable<Boolean>()
 				.doThings {
-					Thread.sleep(500)
+					Thread.sleep(200)
+					it.onFinish(true)
 				}
 				.subscribe(object : RxObserver<Boolean>() {
 					override fun onFinish(data: Boolean?) {
+						Logs.i("onFinish: 继续请求")
 						request(resultArray, studentList, year, term, doSaveListener, map, doneListener, maxIndex, index + 1)
 					}
 
@@ -196,31 +205,18 @@ object CourseUtil {
 		courseList.forEach {
 			list.add(it.schedule)
 		}
-		return filterCourse(list)
-	}
-
-	private fun filterCourse(courseList: List<Schedule>): List<Schedule> {
-		val list = ArrayList<Schedule>()
-		courseList.forEach {
-			if (check(list, it))
-				list.add(it)
-		}
 		return list
 	}
 
-	private fun check(courseList: List<Schedule>, schedule: Schedule): Boolean {
+	fun filterShowCourse(courseList: List<Schedule>, week: Int): List<Schedule> {
+		if (ConfigurationUtil.isShowNotWeek)
+			return courseList
+		val list = ArrayList<Schedule>()
 		courseList.forEach {
-			if (it.name == schedule.name &&
-					it.room == schedule.room &&
-					it.teacher == schedule.teacher &&
-					it.start == schedule.start &&
-					it.step == schedule.step &&
-					it.day == schedule.day) {
-				it.weekList.addAll(schedule.weekList)
-				return false
-			}
+			if (it.weekList.contains(week))
+				list.add(it)
 		}
-		return true
+		return list
 	}
 
 	internal class DataWithUsername<T>(val username: String, val data: T?)

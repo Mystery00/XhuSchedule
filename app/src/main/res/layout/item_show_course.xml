@@ -1,21 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:app="http://schemas.android.com/apk/res-auto">
+<layout>
 
 	<data />
 
-	<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-		android:id="@+id/cardView"
+	<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+		android:id="@+id/textView"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:padding="72dp"
-		app:cardCornerRadius="8dp">
-
-		<TextView
-			android:id="@+id/textView"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:layout_gravity="center" />
-
-	</androidx.cardview.widget.CardView>
+		android:background="@drawable/drawable_shape_corner"
+		android:backgroundTint="@color/colorAccent"
+		android:gravity="center"
+		android:textColor="@android:color/white" />
 
 </layout>

@@ -29,10 +29,15 @@
 		<item name="android:windowTranslucentNavigation">true</item>
 	</style>
 
-	<!-- popup window 动画 -->
-	<style name="Animation">
+	<!-- share window 动画 -->
+	<style name="ShareAnimation">
 		<item name="android:windowEnterAnimation">@anim/animation_share_list_enter</item>
 		<item name="android:windowExitAnimation">@anim/animation_share_list_out</item>
 	</style>
 
+	<!--show course 动画-->
+	<style name="ShowCourseAnimation">
+		<item name="android:windowEnterAnimation">@anim/animation_show_course_enter</item>
+		<item name="android:windowExitAnimation">@anim/animation_show_course_out</item>
+	</style>
 </resources>
