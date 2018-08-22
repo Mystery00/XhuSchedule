@@ -9,6 +9,7 @@ import com.weilylab.xhuschedule.repository.remote.InitRemoteDataSource
 import com.weilylab.xhuschedule.repository.remote.StudentRemoteDataSource
 import com.weilylab.xhuschedule.utils.CalendarUtil
 import com.weilylab.xhuschedule.utils.CourseUtil
+import com.weilylab.xhuschedule.utils.UserUtil
 import com.weilylab.xhuschedule.utils.rxAndroid.PackageData
 import com.weilylab.xhuschedule.viewModel.BottomNavigationViewModel
 
@@ -18,13 +19,14 @@ object BottomNavigationRepository {
 		if (bottomNavigationViewModel.studentList.value == null || bottomNavigationViewModel.studentList.value?.data == null || bottomNavigationViewModel.studentList.value!!.data!!.isEmpty())
 			bottomNavigationViewModel.courseList.value = PackageData.empty()
 		else {
-			StudentRemoteDataSource.queryStudentInfo(bottomNavigationViewModel.studentInfo, bottomNavigationViewModel.studentList.value!!.data!![0])
+			val mainStudent = UserUtil.findMainStudent(bottomNavigationViewModel.studentList.value!!.data)!!
+			StudentLocalDataSource.queryStudentInfo(bottomNavigationViewModel.studentInfo, mainStudent)
 		}
 	}
 
 	fun queryStudentInfo(bottomNavigationViewModel: BottomNavigationViewModel, mainStudent: Student) {
 		bottomNavigationViewModel.studentInfo.value = PackageData.loading()
-		StudentRemoteDataSource.queryStudentInfo(bottomNavigationViewModel.studentInfo, mainStudent)
+		StudentLocalDataSource.queryStudentInfo(bottomNavigationViewModel.studentInfo, mainStudent)
 	}
 
 	fun queryCurrentWeek(bottomNavigationViewModel: BottomNavigationViewModel) {
@@ -72,7 +74,8 @@ object BottomNavigationRepository {
 					Error -> bottomNavigationViewModel.todayCourseList.value = PackageData.error(packageData.error)
 				}
 			}
-			CourseLocalDataSource.queryCourseByUsername(bottomNavigationViewModel.courseList, bottomNavigationViewModel.studentList.value!!.data!![0], null, null, true)
+			val mainStudent = UserUtil.findMainStudent(bottomNavigationViewModel.studentList.value!!.data)!!
+			CourseLocalDataSource.queryCourseByUsername(bottomNavigationViewModel.courseList, mainStudent, null, null, true)
 		}
 	}
 
@@ -103,7 +106,8 @@ object BottomNavigationRepository {
 
 	fun queryCoursesOnline(bottomNavigationViewModel: BottomNavigationViewModel) {
 		bottomNavigationViewModel.courseList.value = PackageData.loading()
-		CourseRemoteDataSource.queryCourseByUsername(bottomNavigationViewModel.courseList, bottomNavigationViewModel.studentList.value!!.data!![0], null, null, false)
+		val mainStudent = UserUtil.findMainStudent(bottomNavigationViewModel.studentList.value!!.data)!!
+		CourseRemoteDataSource.queryCourseByUsername(bottomNavigationViewModel.courseList, mainStudent, null, null, false)
 	}
 
 	fun queryCoursesOnlineForManyStudent(bottomNavigationViewModel: BottomNavigationViewModel) {

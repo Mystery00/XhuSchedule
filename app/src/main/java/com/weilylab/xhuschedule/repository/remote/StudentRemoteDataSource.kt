@@ -29,12 +29,10 @@ object StudentRemoteDataSource : StudentDataSource {
 
 				override fun error(rt: String, msg: String?) {
 					studentInfoLiveData.value = PackageData.error(Exception(msg))
-					StudentLocalDataSource.queryStudentInfo(studentInfoLiveData, student)
 				}
 			})
 		} else {
 			studentInfoLiveData.value = PackageData.error(Exception(StringConstant.hint_network_error))
-			StudentLocalDataSource.queryStudentInfo(studentInfoLiveData, student)
 		}
 	}
 

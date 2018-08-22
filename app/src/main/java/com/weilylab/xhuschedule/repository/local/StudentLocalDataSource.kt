@@ -1,12 +1,12 @@
 package com.weilylab.xhuschedule.repository.local
 
 import androidx.lifecycle.MutableLiveData
-import com.weilylab.xhuschedule.constant.StringConstant
 import com.weilylab.xhuschedule.model.Student
 import com.weilylab.xhuschedule.model.StudentInfo
 import com.weilylab.xhuschedule.repository.dataSource.StudentDataSource
 import com.weilylab.xhuschedule.repository.local.service.StudentService
 import com.weilylab.xhuschedule.repository.local.service.impl.StudentServiceImpl
+import com.weilylab.xhuschedule.repository.remote.StudentRemoteDataSource
 import com.weilylab.xhuschedule.utils.rxAndroid.PackageData
 import com.weilylab.xhuschedule.utils.rxAndroid.RxObservable
 import com.weilylab.xhuschedule.utils.rxAndroid.RxObserver
@@ -28,7 +28,7 @@ object StudentLocalDataSource : StudentDataSource {
 				.doThings {
 					val studentInfo = studentService.queryStudentInfoByUsername(student.username)
 					if (studentInfo == null)
-						it.onError(Exception(StringConstant.hint_data_null))
+						StudentRemoteDataSource.queryStudentInfo(studentInfoLiveData, student)
 					else
 						it.onFinish(studentInfo)
 				}
