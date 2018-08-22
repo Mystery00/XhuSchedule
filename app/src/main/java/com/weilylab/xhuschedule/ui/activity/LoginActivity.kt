@@ -35,7 +35,6 @@ package com.weilylab.xhuschedule.ui.activity
 
 import android.text.TextUtils
 import android.view.View
-import android.widget.Toast
 import com.weilylab.xhuschedule.R
 import com.zyao89.view.zloading.ZLoadingDialog
 import com.zyao89.view.zloading.Z_TYPE
@@ -66,14 +65,12 @@ class LoginActivity : XhuBaseActivity(R.layout.activity_login) {
 				hideDialog()
 				if (it.data != null) {
 					LoginRepository.queryStudentInfo(it.data)
-					Toast.makeText(this, getString(R.string.success_login, getString(R.string.app_name)), Toast.LENGTH_SHORT)
-							.show()
+					toastMessage(getString(R.string.success_login, getString(R.string.app_name)))
 					setResult(Activity.RESULT_OK, intent)
 					finish()
 				}
 			}
-			Error -> Toast.makeText(this, it.error?.message, Toast.LENGTH_SHORT)
-					.show()
+			Error -> toastMessage(it.error?.message)
 			Loading -> showDialog()
 		}
 	}

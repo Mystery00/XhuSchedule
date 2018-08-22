@@ -3,14 +3,12 @@ package com.weilylab.xhuschedule.ui.activity
 import android.app.Dialog
 import android.content.Intent
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.text.TextUtils
 import android.view.View
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.base.XhuBaseActivity
 import kotlinx.android.synthetic.main.activity_query_cet_score_first.*
 import android.widget.ScrollView
-import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import com.android.setupwizardlib.view.NavigationBar
@@ -22,7 +20,6 @@ import com.weilylab.xhuschedule.utils.rxAndroid.PackageData
 import com.weilylab.xhuschedule.viewModel.QueryCetScoreViewModelHelper
 import com.zyao89.view.zloading.ZLoadingDialog
 import com.zyao89.view.zloading.Z_TYPE
-
 
 class QueryCetScoreFirstActivity : XhuBaseActivity(R.layout.activity_query_cet_score_first) {
 	private lateinit var dialog: Dialog
@@ -49,11 +46,11 @@ class QueryCetScoreFirstActivity : XhuBaseActivity(R.layout.activity_query_cet_s
 			Loading -> showDialog()
 			Empty -> {
 				hideDialog()
-				Toast.makeText(this, "获取数据为空！", Toast.LENGTH_LONG).show()
+				toastMessage("获取数据为空！",true)
 			}
 			Error -> {
 				hideDialog()
-				Toast.makeText(this, it.error?.message, Toast.LENGTH_LONG).show()
+				toastMessage(it.error?.message,true)
 			}
 		}
 	}

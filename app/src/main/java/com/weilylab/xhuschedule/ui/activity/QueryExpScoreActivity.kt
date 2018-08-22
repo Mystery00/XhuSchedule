@@ -2,7 +2,6 @@ package com.weilylab.xhuschedule.ui.activity
 
 import android.view.Gravity
 import android.view.View
-import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.Observer
@@ -67,8 +66,7 @@ class QueryExpScoreActivity : XhuBaseActivity(R.layout.activity_query_exp_score)
 			}
 			Status.Error -> {
 				dismissLoading()
-				Toast.makeText(this, it.error?.message, Toast.LENGTH_SHORT)
-						.show()
+				toastMessage(it.error?.message)
 			}
 		}
 	}
@@ -206,7 +204,7 @@ class QueryExpScoreActivity : XhuBaseActivity(R.layout.activity_query_exp_score)
 
 	private fun showEmpty() {
 		dismissLoading()
-		Toast.makeText(this, "暂时没有数据！", Toast.LENGTH_LONG).show()
+		toastMessage("暂时没有数据！")
 	}
 
 	private fun showContent() {

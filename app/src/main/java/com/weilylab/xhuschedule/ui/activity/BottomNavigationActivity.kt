@@ -11,11 +11,9 @@ import android.view.Gravity
 import android.view.View
 import android.view.animation.Animation
 import android.widget.PopupWindow
-import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager.widget.ViewPager
 import com.bumptech.glide.Glide
@@ -45,7 +43,6 @@ import com.zyao89.view.zloading.Z_TYPE
 import kotlinx.android.synthetic.main.activity_bottom_navigation.*
 import kotlinx.android.synthetic.main.content_bottom_navigation.*
 import vip.mystery0.bottomTabView.BottomTabItem
-import vip.mystery0.logs.Logs
 import vip.mystery0.tools.utils.DensityTools
 import java.io.File
 import java.text.SimpleDateFormat
@@ -54,7 +51,6 @@ import java.util.*
 class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_navigation) {
 	companion object {
 		private const val ADD_ACCOUNT_CODE = 21
-
 		private const val ACTION_NONE = 30
 		private const val ACTION_INIT = 31
 		private const val ACTION_REFRESH = 32
@@ -96,8 +92,7 @@ class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_naviga
 				hideDialog()
 			}
 			Error -> {
-				Toast.makeText(this, it.error?.message, Toast.LENGTH_LONG)
-						.show()
+				toastMessage(it.error?.message, true)
 				hideDialog()
 			}
 		}
@@ -154,6 +149,10 @@ class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_naviga
 		}
 	}
 
+	private val weekObserver = Observer<Int> {
+		viewPagerAdapter.getItem(viewPager.currentItem).updateTitle()
+	}
+
 	private val titleObserver = Observer<String> {
 		titleTextView.text = it
 	}
@@ -183,7 +182,7 @@ class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_naviga
 				.curWeek(1)
 				.callback(IWeekView.OnWeekItemClickedListener {
 					bottomNavigationViewModel.week.value = it
-					viewPagerAdapter.getItem(viewPager.currentItem).updateTitle()
+					configWeekView(viewPager.currentItem)
 				})
 				.showView()
 		bottomNavigationView.config
@@ -234,6 +233,7 @@ class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_naviga
 		bottomNavigationViewModel.studentList.observe(this, studentListObserver)
 		bottomNavigationViewModel.currentWeek.observe(this, currentWeekObserver)
 		bottomNavigationViewModel.courseList.observe(this, courseListObserver)
+		bottomNavigationViewModel.week.observe(this, weekObserver)
 		bottomNavigationViewModel.title.observe(this, titleObserver)
 		bottomNavigationViewModel.showCourse.observe(this, showCourseObserver)
 	}
@@ -257,7 +257,13 @@ class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_naviga
 				configWeekView(position)
 			}
 		})
-		appBarLayout.setOnClickListener { Logs.i("monitor: ") }
+		appBarLayout.setOnClickListener { }
+		arrowImageView.setOnClickListener {
+			if (isShowWeekView)
+				hideWeekView()
+			else
+				showWeekView()
+		}
 		titleTextView.setOnClickListener {
 			if (isShowWeekView)
 				hideWeekView()
@@ -293,8 +299,7 @@ class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_naviga
 		if (ConfigUtil.isTwiceClick())
 			super.onBackPressed()
 		else
-			Toast.makeText(this, R.string.hint_twice_press_exit, Toast.LENGTH_SHORT)
-					.show()
+			toastMessage(R.string.hint_twice_press_exit)
 	}
 
 	private fun configWeekView(position: Int) {

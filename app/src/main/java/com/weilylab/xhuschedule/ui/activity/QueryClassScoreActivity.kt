@@ -4,7 +4,6 @@ import android.view.Gravity
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.Observer
@@ -70,8 +69,7 @@ class QueryClassScoreActivity : XhuBaseActivity(R.layout.activity_query_class_sc
 			}
 			Error -> {
 				dismissLoading()
-				Toast.makeText(this, it.error?.message, Toast.LENGTH_SHORT)
-						.show()
+				toastMessage(it.error?.message)
 			}
 		}
 	}
@@ -238,7 +236,7 @@ class QueryClassScoreActivity : XhuBaseActivity(R.layout.activity_query_class_sc
 
 	private fun showEmpty() {
 		dismissLoading()
-		Toast.makeText(this, "暂时没有数据！", Toast.LENGTH_LONG).show()
+		toastMessage("暂时没有数据！")
 	}
 
 	private fun showContent() {

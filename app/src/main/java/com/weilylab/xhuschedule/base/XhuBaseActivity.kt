@@ -35,6 +35,7 @@ package com.weilylab.xhuschedule.base
 
 import android.os.Bundle
 import android.widget.Toast
+import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatDelegate
 import com.weilylab.xhuschedule.utils.APPActivityManager
 import vip.mystery0.tools.base.BaseActivity
@@ -52,6 +53,8 @@ abstract class XhuBaseActivity(layoutId: Int?) : BaseActivity(layoutId) {
 		super.onDestroy()
 		APPActivityManager.finishActivity(this)
 	}
+
+	fun toastMessage(@StringRes stringRes: Int, isShowLong: Boolean = false) = toastMessage(getString(stringRes), isShowLong)
 
 	fun toastMessage(message: String?, isShowLong: Boolean = false) {
 		toast?.cancel()

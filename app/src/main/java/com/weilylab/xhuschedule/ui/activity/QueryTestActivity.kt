@@ -2,7 +2,6 @@ package com.weilylab.xhuschedule.ui.activity
 
 import android.app.Dialog
 import android.view.View
-import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -21,7 +20,6 @@ import com.zyao89.view.zloading.Z_TYPE
 
 import kotlinx.android.synthetic.main.activity_query_test.*
 import kotlinx.android.synthetic.main.content_query_test.*
-import java.util.ArrayList
 
 class QueryTestActivity : XhuBaseActivity(R.layout.activity_query_test) {
 	private lateinit var queryTestViewModel: QueryTestViewModel
@@ -41,8 +39,7 @@ class QueryTestActivity : XhuBaseActivity(R.layout.activity_query_test) {
 			Error -> {
 				hideDialog()
 				hideNoDataLayout()
-				Toast.makeText(this, it.error?.message, Toast.LENGTH_LONG)
-						.show()
+				toastMessage(it.error?.message)
 			}
 			Empty -> {
 				hideDialog()

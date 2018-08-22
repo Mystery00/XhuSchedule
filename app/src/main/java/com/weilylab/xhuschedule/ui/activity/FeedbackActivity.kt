@@ -2,7 +2,6 @@ package com.weilylab.xhuschedule.ui.activity
 
 import android.app.Dialog
 import android.os.Build
-import android.widget.Toast
 import androidx.core.content.ContextCompat
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.base.XhuBaseActivity
@@ -18,7 +17,6 @@ import kotlinx.android.synthetic.main.activity_feedback.*
 import kotlinx.android.synthetic.main.content_feedback.*
 
 class FeedbackActivity : XhuBaseActivity(R.layout.activity_feedback) {
-	private var toast: Toast? = null
 	private lateinit var student: Student
 	private lateinit var dialog: Dialog
 
@@ -37,9 +35,7 @@ class FeedbackActivity : XhuBaseActivity(R.layout.activity_feedback) {
 					if (it.data != null)
 						student = it.data
 					else {
-						toast?.cancel()
-						toast = Toast.makeText(this, R.string.hint_feedback_null_student, Toast.LENGTH_LONG)
-						toast?.show()
+						toastMessage(R.string.hint_feedback_null_student)
 						finish()
 					}
 				}
@@ -66,9 +62,7 @@ class FeedbackActivity : XhuBaseActivity(R.layout.activity_feedback) {
 		buttonSubmit.setOnClickListener {
 			val feedbackString = editTextFeedback.text.toString()
 			if (feedbackString == "") {
-				toast?.cancel()
-				toast = Toast.makeText(this, R.string.hint_feedback_empty, Toast.LENGTH_SHORT)
-				toast?.show()
+				toastMessage(R.string.hint_feedback_empty)
 				return@setOnClickListener
 			}
 			feedback(feedbackString)
@@ -86,16 +80,12 @@ class FeedbackActivity : XhuBaseActivity(R.layout.activity_feedback) {
 		UserUtil.feedback(student, object : RequestListener<Boolean> {
 			override fun done(t: Boolean) {
 				hideDialog()
-				toast?.cancel()
-				toast = Toast.makeText(this@FeedbackActivity, R.string.hint_feedback_done, Toast.LENGTH_LONG)
-				toast?.show()
+				toastMessage(R.string.hint_feedback_done)
 			}
 
 			override fun error(rt: String, msg: String?) {
 				hideDialog()
-				toast?.cancel()
-				toast = Toast.makeText(this@FeedbackActivity, msg, Toast.LENGTH_LONG)
-				toast?.show()
+				toastMessage(msg)
 			}
 		}, appVersion, systemVersion, manufacturer, model, rom, other, message)
 	}

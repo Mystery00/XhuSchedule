@@ -34,7 +34,6 @@
 package com.weilylab.xhuschedule.ui.activity
 
 import android.view.View
-import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -67,8 +66,7 @@ class NoticeActivity : XhuBaseActivity(R.layout.activity_notice) {
 			Error -> {
 				hideRefresh()
 				hideNoDataLayout()
-				Toast.makeText(this, it.error?.message, Toast.LENGTH_LONG)
-						.show()
+				toastMessage(it.error?.message)
 			}
 			Empty -> {
 				hideRefresh()

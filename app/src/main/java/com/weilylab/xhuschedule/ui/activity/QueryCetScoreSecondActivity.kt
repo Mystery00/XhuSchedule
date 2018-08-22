@@ -33,11 +33,11 @@ class QueryCetScoreSecondActivity : XhuBaseActivity(R.layout.activity_query_cet_
 			Loading -> showVCodeDialog()
 			Empty -> {
 				hideVCodeDialog()
-				Toast.makeText(this, "获取数据为空！", Toast.LENGTH_LONG).show()
+				toastMessage("获取数据为空！",true)
 			}
 			Error -> {
 				hideVCodeDialog()
-				Toast.makeText(this, it.error?.message, Toast.LENGTH_LONG).show()
+				toastMessage(it.error?.message,true)
 			}
 		}
 	}
