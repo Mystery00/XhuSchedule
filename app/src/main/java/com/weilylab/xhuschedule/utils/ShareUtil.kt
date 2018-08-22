@@ -6,14 +6,17 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.widget.Toast
+import com.oasisfeng.condom.CondomContext
 import com.sina.weibo.sdk.api.ImageObject
 import com.sina.weibo.sdk.api.TextObject
 import com.sina.weibo.sdk.api.WeiboMultiMessage
 import com.sina.weibo.sdk.share.WbShareHandler
 import com.tencent.connect.share.QQShare
+import com.tencent.mm.opensdk.modelbiz.WXLaunchMiniProgram
 import com.tencent.mm.opensdk.modelmsg.SendMessageToWX
 import com.tencent.mm.opensdk.modelmsg.WXMediaMessage
 import com.tencent.mm.opensdk.modelmsg.WXWebpageObject
+import com.tencent.mm.opensdk.openapi.WXAPIFactory
 import com.tencent.tauth.IUiListener
 import com.tencent.tauth.UiError
 import com.weilylab.xhuschedule.R
@@ -149,6 +152,21 @@ object ShareUtil {
 				//设置分享列表的标题，并且每次都显示分享列表
 				context.startActivity(Intent.createChooser(shareIntent, "分享西瓜课表到"))
 			}
+		}
+	}
+
+	fun linkWeiXinMiniProgram(context: Context) {
+		if (PackageUtil.isWeiXinApplicationAvailable()) {
+			val appID = "wx862b23e960c40ec0"
+			val userName = "gh_90a4144326af"
+			val wxAPI = WXAPIFactory.createWXAPI(context, appID)
+			val req = WXLaunchMiniProgram.Req()
+			req.userName = userName
+			req.miniprogramType = WXLaunchMiniProgram.Req.MINIPTOGRAM_TYPE_RELEASE
+			wxAPI.sendReq(req)
+		} else {
+			Toast.makeText(context, R.string.hint_no_weixin, Toast.LENGTH_SHORT)
+					.show()
 		}
 	}
 }

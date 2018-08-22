@@ -18,6 +18,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.weilylab.xhuschedule.ui.custom.CustomGlideEngine
 import com.weilylab.xhuschedule.utils.FileUtil
 import com.weilylab.xhuschedule.utils.LayoutRefreshConfigUtil
+import com.weilylab.xhuschedule.utils.ShareUtil
 import com.yalantis.ucrop.UCrop
 import com.zhihu.matisse.Matisse
 import com.zhihu.matisse.MimeType
@@ -37,6 +38,7 @@ class SettingsPreferenceFragment : BasePreferenceFragment(R.xml.preference_setti
 	private lateinit var resetUserImgPreference: Preference
 	private lateinit var resetBackgroundPreference: Preference
 	private lateinit var autoCheckUpdatePreference: CheckBoxPreference
+	private lateinit var weixinPreference: Preference
 	private lateinit var checkUpdatePreference: Preference
 	private lateinit var updateLogPreference: Preference
 
@@ -47,6 +49,7 @@ class SettingsPreferenceFragment : BasePreferenceFragment(R.xml.preference_setti
 		resetUserImgPreference = findPreferenceById(R.string.key_reset_user_img)
 		resetBackgroundPreference = findPreferenceById(R.string.key_reset_background_img)
 		autoCheckUpdatePreference = findPreferenceById(R.string.key_auto_check_update) as CheckBoxPreference
+		weixinPreference = findPreferenceById(R.string.key_weixin)
 		checkUpdatePreference = findPreferenceById(R.string.key_check_update)
 		updateLogPreference = findPreferenceById(R.string.key_update_log)
 
@@ -85,6 +88,14 @@ class SettingsPreferenceFragment : BasePreferenceFragment(R.xml.preference_setti
 					}
 					.setNegativeButton(R.string.action_cancel, null)
 					.show()
+			true
+		}
+		autoCheckUpdatePreference.setOnPreferenceChangeListener { _, _ ->
+			ConfigurationUtil.autoCheckUpdate = !autoCheckUpdatePreference.isChecked
+			true
+		}
+		weixinPreference.setOnPreferenceClickListener {
+			ShareUtil.linkWeiXinMiniProgram(activity)
 			true
 		}
 	}
