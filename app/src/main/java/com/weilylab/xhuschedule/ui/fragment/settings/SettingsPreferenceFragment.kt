@@ -2,11 +2,14 @@ package com.weilylab.xhuschedule.ui.fragment.settings
 
 import android.Manifest
 import android.app.Activity
+import android.app.Dialog
+import android.content.BroadcastReceiver
+import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.preference.CheckBoxPreference
 import android.preference.Preference
 import com.weilylab.xhuschedule.R
-import com.weilylab.xhuschedule.utils.ConfigurationUtil
 import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
 import android.net.Uri
@@ -14,19 +17,22 @@ import android.os.Build
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.google.android.material.snackbar.Snackbar
+import com.weilylab.xhuschedule.service.CheckUpdateService
 import com.weilylab.xhuschedule.ui.custom.CustomGlideEngine
-import com.weilylab.xhuschedule.utils.FileUtil
-import com.weilylab.xhuschedule.utils.LayoutRefreshConfigUtil
-import com.weilylab.xhuschedule.utils.ShareUtil
+import com.weilylab.xhuschedule.utils.*
 import com.yalantis.ucrop.UCrop
 import com.zhihu.matisse.Matisse
 import com.zhihu.matisse.MimeType
+import com.zyao89.view.zloading.ZLoadingDialog
+import com.zyao89.view.zloading.Z_TYPE
 import vip.mystery0.tools.utils.DensityTools
 import java.io.File
 
 class SettingsPreferenceFragment : BasePreferenceFragment(R.xml.preference_settings) {
 	companion object {
+		const val ACTION_CHECK_UPDATE_DONE = "action_check_update_done"
 		private const val REQUEST_CHOOSE_USER = 21
 		private const val REQUEST_CHOOSE_BACKGROUND = 22
 		private const val REQUEST_CROP_USER = 31
@@ -41,6 +47,8 @@ class SettingsPreferenceFragment : BasePreferenceFragment(R.xml.preference_setti
 	private lateinit var weixinPreference: Preference
 	private lateinit var checkUpdatePreference: Preference
 	private lateinit var updateLogPreference: Preference
+	private lateinit var dialog: Dialog
+	private lateinit var localBroadcastManager: LocalBroadcastManager
 
 	override fun initPreference() {
 		super.initPreference()
@@ -96,6 +104,19 @@ class SettingsPreferenceFragment : BasePreferenceFragment(R.xml.preference_setti
 		}
 		weixinPreference.setOnPreferenceClickListener {
 			ShareUtil.linkWeiXinMiniProgram(activity)
+			true
+		}
+		checkUpdatePreference.setOnPreferenceClickListener {
+			showCheckUpdateDialog()
+			val intentFilter = IntentFilter(ACTION_CHECK_UPDATE_DONE)
+			if (!::localBroadcastManager.isInitialized)
+				localBroadcastManager = LocalBroadcastManager.getInstance(activity)
+			localBroadcastManager.registerReceiver(CheckUpdateLocalBroadcastReceiver(), intentFilter)
+			activity.startService(Intent(activity, CheckUpdateService::class.java))
+			true
+		}
+		updateLogPreference.setOnPreferenceClickListener {
+			ConfigUtil.showUpdateLog(activity)
 			true
 		}
 	}
@@ -172,5 +193,36 @@ class SettingsPreferenceFragment : BasePreferenceFragment(R.xml.preference_setti
 				.withAspectRatio(width.toFloat(), height.toFloat())
 				.withMaxResultSize(width * 10, height * 10)
 				.start(activity, this, cropCode)
+	}
+
+	private fun showCheckUpdateDialog() {
+		if (!::dialog.isInitialized)
+			dialog = ZLoadingDialog(activity)
+					.setLoadingBuilder(Z_TYPE.SINGLE_CIRCLE)
+					.setHintText(getString(R.string.hint_dialog_check_update))
+					.setHintTextSize(16F)
+					.setCanceledOnTouchOutside(false)
+					.setLoadingColor(ContextCompat.getColor(activity, R.color.colorAccent))
+					.setHintTextColor(ContextCompat.getColor(activity, R.color.colorAccent))
+					.create()
+		if (!dialog.isShowing)
+			dialog.show()
+	}
+
+	private fun dismissCheckUpdateDialog() {
+		if (dialog.isShowing)
+			dialog.dismiss()
+		Toast.makeText(activity, "检查更新完成！", Toast.LENGTH_SHORT)
+				.show()
+	}
+
+	inner class CheckUpdateLocalBroadcastReceiver : BroadcastReceiver() {
+		override fun onReceive(context: Context?, intent: Intent?) {
+			if (intent?.action == ACTION_CHECK_UPDATE_DONE) {
+				dismissCheckUpdateDialog()
+				if (::localBroadcastManager.isInitialized)
+					localBroadcastManager.unregisterReceiver(this)
+			}
+		}
 	}
 }

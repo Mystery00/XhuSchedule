@@ -11,6 +11,7 @@ object SharedPreferenceConstant {
 	const val FILE_NAME_CONFIG = "config"
 
 	const val FIELD_DEVICE_ID = "config_device_id"
+	const val FIELD_UPDATED_VERSION = "config_updated_version"
 	const val FIELD_CONFIG_FIRST_ENTER = "config_first_enter"
 	const val FIELD_START_DATE_TIME = "config_start_date_time"
 	const val FIELD_ENABLE_MULTI_USER_MODE = "config_enable_multi_user_mode"

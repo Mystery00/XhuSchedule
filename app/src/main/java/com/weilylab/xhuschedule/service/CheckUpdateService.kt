@@ -7,16 +7,20 @@ import android.os.IBinder
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.api.PhpAPI
 import com.weilylab.xhuschedule.factory.GsonFactory
 import com.weilylab.xhuschedule.factory.RetrofitFactory
 import com.weilylab.xhuschedule.model.Version
-import com.weilylab.xhuschedule.ui.activity.BottomNavigationActivity
 import com.weilylab.xhuschedule.utils.APPActivityManager
 import com.weilylab.xhuschedule.utils.rxAndroid.RxObservable
 import com.weilylab.xhuschedule.utils.rxAndroid.RxObserver
 import com.weilylab.xhuschedule.constant.Constants
+import com.weilylab.xhuschedule.ui.activity.GuideActivity
+import com.weilylab.xhuschedule.ui.activity.SplashActivity
+import com.weilylab.xhuschedule.ui.activity.SplashImageActivity
+import com.weilylab.xhuschedule.ui.fragment.settings.SettingsPreferenceFragment
 import com.weilylab.xhuschedule.utils.ConfigUtil
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -55,6 +59,7 @@ class CheckUpdateService : Service() {
 						if (data != null && data.versionCode.toInt() > getString(R.string.app_version_code).toInt())
 							showUpdateDialog(data)
 						stopSelf()
+						LocalBroadcastManager.getInstance(this@CheckUpdateService).sendBroadcast(Intent(SettingsPreferenceFragment.ACTION_CHECK_UPDATE_DONE))
 					}
 
 					override fun onError(e: Throwable) {
@@ -68,7 +73,7 @@ class CheckUpdateService : Service() {
 	private fun showUpdateDialog(version: Version) {
 		RxObservable<Boolean>()
 				.doThings {
-					while (APPActivityManager.currentActivity() !is BottomNavigationActivity)
+					while (APPActivityManager.currentActivity() is SplashActivity || APPActivityManager.currentActivity() is GuideActivity || APPActivityManager.currentActivity() is SplashImageActivity)
 						Thread.sleep(1000)
 					it.onFinish(true)
 				}
@@ -93,9 +98,7 @@ class CheckUpdateService : Service() {
 									APPActivityManager.finishAllActivity()
 								}
 							else
-								builder.setNeutralButton(R.string.action_download_cancel) { _, _ ->
-									Logs.i("showUpdateDialog: 忽略")
-								}
+								builder.setNeutralButton(R.string.action_download_cancel, null)
 							builder.show()
 						}
 					}

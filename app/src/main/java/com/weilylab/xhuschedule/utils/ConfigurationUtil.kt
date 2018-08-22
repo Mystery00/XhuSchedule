@@ -4,6 +4,7 @@ import android.content.Context
 import com.weilylab.xhuschedule.config.APP
 import com.weilylab.xhuschedule.constant.SharedPreferenceConstant
 
+
 object ConfigurationUtil {
 	private val sharedPreferences = APP.context.getSharedPreferences(SharedPreferenceConstant.FILE_NAME_CONFIG, Context.MODE_PRIVATE)
 
@@ -52,6 +53,11 @@ object ConfigurationUtil {
 				.putString(SharedPreferenceConstant.FIELD_DEVICE_ID, value)
 				.apply()
 		get() = sharedPreferences.getString(SharedPreferenceConstant.FIELD_DEVICE_ID, "")!!
+	var updatedVersion: Int
+		set(value) = sharedPreferences.edit()
+				.putInt(SharedPreferenceConstant.FIELD_UPDATED_VERSION, value)
+				.apply()
+		get() = sharedPreferences.getInt(SharedPreferenceConstant.FIELD_UPDATED_VERSION, 0)
 	var clearAppData: Boolean
 		set(value) = sharedPreferences.edit()
 				.putBoolean("clearAppData", value)

@@ -5,4 +5,8 @@
   ~ Last modified 17-12-21 上午3:10
   -->
 
-<resources></resources>
+<resources>
+	<string-array name="update_log">
+		<item>测试日志</item>
+	</string-array>
+</resources>

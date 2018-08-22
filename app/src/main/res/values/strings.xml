@@ -23,7 +23,7 @@
 	<string name="action_settings">设置</string>
 	<string name="action_download_apk">下载APK</string>
 	<string name="action_download_patch">下载增量包</string>
-	<string name="action_download_cancel">忽略这个版本</string>
+	<string name="action_download_cancel">忽略</string>
 	<string name="action_feedback">提交意见</string>
 	<string name="action_open">开启</string>
 	<string name="action_bypass">跳过</string>
@@ -85,6 +85,7 @@
 	<string name="hint_dialog_feedback">正在上传数据……</string>
 	<string name="hint_dialog_get_cet_vcode">正在获取验证码……</string>
 	<string name="hint_dialog_query_cet_score">正在查询四六级成绩……</string>
+	<string name="hint_dialog_check_update">正在检查更新……</string>
 
 	<string name="hint_confirm_reset_user_img">确定要重置个人头像吗？</string>
 	<string name="hint_confirm_reset_background_img">确定要重置背景图片吗？</string>

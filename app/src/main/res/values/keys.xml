@@ -74,7 +74,7 @@
 	<string name="summary_version_code" translatable="false">@string/app_version_code</string>
 	<string name="summary_auto_check_update">在每一次启动时自动检查更新，注意，跳过某个版本将会无法使用增量更新</string>
 	<string name="summary_weily_product">点击进入实验室官网</string>
-	<string name="summary_weixin">点击跳转，可以在微信小程序页面直接搜索“西瓜课表”即可使用</string>
+	<string name="summary_weixin">点击跳转，也可以在微信小程序页面直接搜索“西瓜课表”即可使用</string>
 
 	<string name="link_developer" translatable="false">https://mystery0.vip/</string>
 	<string name="link_open_source_license" translatable="false">https://github.com/Mystery00/XhuSchedule/blob/master/LICENSE.TXT</string>
