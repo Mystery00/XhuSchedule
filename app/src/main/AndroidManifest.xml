@@ -109,6 +109,9 @@
 			android:name=".ui.activity.QueryCetScoreShowActivity"
 			android:screenOrientation="portrait"
 			android:theme="@style/AppTheme.NoActionBar" />
+		<activity
+			android:name=".ui.activity.LinkToWeiXinMiniProgramActivity"
+			android:theme="@android:style/Theme.NoDisplay" />
 
 		<service
 			android:name=".service.DownloadSplashIntentService"

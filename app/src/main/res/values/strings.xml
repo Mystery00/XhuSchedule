@@ -38,6 +38,7 @@
 	<string name="shortcut_title_query_test">考试查询</string>
 	<string name="shortcut_title_query_class_score">成绩查询</string>
 	<string name="shortcut_title_query_cet_score">四六级查询</string>
+	<string name="shortcut_title_link_to_mini_program">微信小程序</string>
 
 	<string name="menu_show_gpa">显示绩点</string>
 	<string name="menu_show_failed">显示未通过成绩</string>

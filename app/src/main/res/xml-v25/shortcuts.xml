@@ -8,13 +8,24 @@
 <shortcuts xmlns:android="http://schemas.android.com/apk/res/android">
 	<shortcut
 		android:enabled="true"
-		android:icon="@mipmap/ic_short_query_test"
-		android:shortcutId="shortcut_title_query_test"
-		android:shortcutLongLabel="@string/shortcut_title_query_test"
-		android:shortcutShortLabel="@string/shortcut_title_query_test">
+		android:icon="@mipmap/ic_short_mini_program"
+		android:shortcutId="shortcut_title_link_to_mini_program"
+		android:shortcutLongLabel="@string/shortcut_title_link_to_mini_program"
+		android:shortcutShortLabel="@string/shortcut_title_link_to_mini_program">
 		<intent
 			android:action="android.intent.action.VIEW"
-			android:targetClass="com.weilylab.xhuschedule.ui.activity.QueryTestActivity"
+			android:targetClass="com.weilylab.xhuschedule.ui.activity.LinkToWeiXinMiniProgramActivity"
+			android:targetPackage="com.weilylab.xhuschedule" />
+	</shortcut>
+	<shortcut
+		android:enabled="true"
+		android:icon="@mipmap/ic_short_query_cet"
+		android:shortcutId="shortcut_title_query_cet_score"
+		android:shortcutLongLabel="@string/shortcut_title_query_cet_score"
+		android:shortcutShortLabel="@string/shortcut_title_query_cet_score">
+		<intent
+			android:action="android.intent.action.VIEW"
+			android:targetClass="com.weilylab.xhuschedule.ui.activity.QueryCetScoreFirstActivity"
 			android:targetPackage="com.weilylab.xhuschedule" />
 	</shortcut>
 	<shortcut
@@ -30,13 +41,13 @@
 	</shortcut>
 	<shortcut
 		android:enabled="true"
-		android:icon="@mipmap/ic_short_query_cet"
-		android:shortcutId="shortcut_title_query_cet_score"
-		android:shortcutLongLabel="@string/shortcut_title_query_cet_score"
-		android:shortcutShortLabel="@string/shortcut_title_query_cet_score">
+		android:icon="@mipmap/ic_short_query_test"
+		android:shortcutId="shortcut_title_query_test"
+		android:shortcutLongLabel="@string/shortcut_title_query_test"
+		android:shortcutShortLabel="@string/shortcut_title_query_test">
 		<intent
 			android:action="android.intent.action.VIEW"
-			android:targetClass="com.weilylab.xhuschedule.ui.activity.QueryCetScoreFirstActivity"
+			android:targetClass="com.weilylab.xhuschedule.ui.activity.QueryTestActivity"
 			android:targetPackage="com.weilylab.xhuschedule" />
 	</shortcut>
 </shortcuts>
