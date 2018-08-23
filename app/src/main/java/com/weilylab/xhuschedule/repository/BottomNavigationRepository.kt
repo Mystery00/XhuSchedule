@@ -6,11 +6,12 @@ import com.weilylab.xhuschedule.repository.local.CourseLocalDataSource
 import com.weilylab.xhuschedule.repository.local.StudentLocalDataSource
 import com.weilylab.xhuschedule.repository.remote.CourseRemoteDataSource
 import com.weilylab.xhuschedule.repository.remote.InitRemoteDataSource
-import com.weilylab.xhuschedule.repository.remote.StudentRemoteDataSource
 import com.weilylab.xhuschedule.utils.CalendarUtil
 import com.weilylab.xhuschedule.utils.CourseUtil
 import com.weilylab.xhuschedule.utils.UserUtil
 import com.weilylab.xhuschedule.utils.rxAndroid.PackageData
+import com.weilylab.xhuschedule.utils.rxAndroid.RxObservable
+import com.weilylab.xhuschedule.utils.rxAndroid.RxObserver
 import com.weilylab.xhuschedule.viewModel.BottomNavigationViewModel
 
 object BottomNavigationRepository {
@@ -120,7 +121,19 @@ object BottomNavigationRepository {
 		StudentLocalDataSource.queryAllStudentList(bottomNavigationViewModel.studentList)
 	}
 
-	fun queryNotice(bottomNavigationViewModel: BottomNavigationViewModel) {
-		NoticeRepository.queryNoticeInMainActivity(bottomNavigationViewModel)
+	fun queryNotice(bottomNavigationViewModel: BottomNavigationViewModel, isFirst: Boolean) {
+		RxObservable<Boolean>()
+				.doThings {
+					Thread.sleep(500)
+					it.onFinish(true)
+				}
+				.subscribe(object :RxObserver<Boolean>(){
+					override fun onFinish(data: Boolean?) {
+						NoticeRepository.queryNoticeInMainActivity(bottomNavigationViewModel, isFirst)
+					}
+
+					override fun onError(e: Throwable) {
+					}
+				})
 	}
 }

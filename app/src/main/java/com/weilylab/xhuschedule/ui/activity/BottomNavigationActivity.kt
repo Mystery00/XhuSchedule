@@ -231,6 +231,7 @@ class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_naviga
 		viewPagerAdapter.getItem(0).updateTitle()
 		configWeekView(0)
 		BottomNavigationRepository.queryStudentList(bottomNavigationViewModel)
+		BottomNavigationRepository.queryNotice(bottomNavigationViewModel, true)
 	}
 
 	private fun initViewModel() {
@@ -291,7 +292,7 @@ class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_naviga
 			LayoutRefreshConfigUtil.isChangeBackgroundImage = false
 		}
 		if (LayoutRefreshConfigUtil.isRefreshNoticeDot) {
-			BottomNavigationRepository.queryNotice(bottomNavigationViewModel)
+			BottomNavigationRepository.queryNotice(bottomNavigationViewModel, false)
 			LayoutRefreshConfigUtil.isRefreshNoticeDot = false
 		}
 		if (LayoutRefreshConfigUtil.isRefreshBottomNavigationActivity) {

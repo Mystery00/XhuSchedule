@@ -71,6 +71,7 @@ class ProfileFragment : BaseBottomNavigationFragment(R.layout.fragment_profile) 
 			when (it.status) {
 				Content -> fragmentProfileBinding.studentInfo = it.data
 				Error -> {
+					Logs.wtf("initViewModel: ", it.error)
 					toastMessage(it.error?.message)
 				}
 			}

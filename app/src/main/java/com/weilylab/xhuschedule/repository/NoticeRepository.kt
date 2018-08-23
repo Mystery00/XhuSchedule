@@ -26,8 +26,11 @@ object NoticeRepository {
 		NoticeLocalDataSource.markAsReadInThread(list)
 	}
 
-	fun queryNoticeInMainActivity(bottomNavigationViewModel: BottomNavigationViewModel) {
+	fun queryNoticeInMainActivity(bottomNavigationViewModel: BottomNavigationViewModel, isFirst: Boolean) {
 		bottomNavigationViewModel.noticeList.value = PackageData.loading()
-		NoticeRemoteDataSource.queryNotice(bottomNavigationViewModel.noticeList, Constants.NOTICE_PLATFORM_ANDROID)
+		if (isFirst)
+			NoticeRemoteDataSource.queryNotice(bottomNavigationViewModel.noticeList, Constants.NOTICE_PLATFORM_ANDROID)
+		else
+			NoticeLocalDataSource.queryNotice(bottomNavigationViewModel.noticeList, Constants.NOTICE_PLATFORM_ANDROID)
 	}
 }

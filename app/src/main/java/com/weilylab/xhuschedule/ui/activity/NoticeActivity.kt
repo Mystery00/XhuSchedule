@@ -142,6 +142,7 @@ class NoticeActivity : XhuBaseActivity(R.layout.activity_notice) {
 	}
 
 	override fun onDestroy() {
+		LayoutRefreshConfigUtil.isRefreshNoticeDot = true
 		NoticeRepository.markNoticesAsRead(noticeAdapter.items)
 		super.onDestroy()
 	}

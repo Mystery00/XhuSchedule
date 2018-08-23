@@ -48,7 +48,6 @@ import android.widget.LinearLayout
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.ui.fragment.PlaceholderFragment
 import com.weilylab.xhuschedule.base.XhuBaseActivity
-import com.weilylab.xhuschedule.ui.ZoomOutPageTransformer
 import com.weilylab.xhuschedule.utils.ConfigurationUtil
 import kotlinx.android.synthetic.main.activity_guide.*
 import vip.mystery0.tools.utils.DensityTools
@@ -57,7 +56,6 @@ class GuideActivity : XhuBaseActivity(R.layout.activity_guide) {
 	private val imageArray = arrayOf(R.mipmap.welcome1, R.mipmap.welcome2, R.mipmap.welcome3, R.mipmap.welcome4)
 	private lateinit var mSectionsPagerAdapter: SectionsPagerAdapter
 	private lateinit var grayPointDrawable: VectorDrawableCompat
-	private lateinit var gestureDetector: GestureDetector
 	private var distance = 0
 	private var flaggingWidth = 0
 	private var currentIndex = 0
@@ -74,12 +72,11 @@ class GuideActivity : XhuBaseActivity(R.layout.activity_guide) {
 
 	override fun initData() {
 		super.initData()
-		gestureDetector = GestureDetector(this, GuideViewTouch())
 		flaggingWidth = DensityTools.getScreenWidth(this) / 3
 
 		grayPointDrawable = VectorDrawableCompat.create(resources, R.drawable.ic_point, null)!!
 		grayPointDrawable.setBounds(0, 0, 20, 20)
-		grayPointDrawable.setTint(Color.GRAY)
+		grayPointDrawable.setTint(Color.LTGRAY)
 
 		mSectionsPagerAdapter = SectionsPagerAdapter(supportFragmentManager)
 
@@ -145,12 +142,6 @@ class GuideActivity : XhuBaseActivity(R.layout.activity_guide) {
 		imageViewBackground.setImageResource(resId)
 	}
 
-	override fun dispatchTouchEvent(ev: MotionEvent): Boolean {
-		if (gestureDetector.onTouchEvent(ev))
-			ev.action = MotionEvent.ACTION_CANCEL
-		return super.dispatchTouchEvent(ev)
-	}
-
 	inner class SectionsPagerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
 
 		override fun getItem(position: Int): Fragment {
@@ -159,20 +150,6 @@ class GuideActivity : XhuBaseActivity(R.layout.activity_guide) {
 
 		override fun getCount(): Int {
 			return imageArray.size
-		}
-	}
-
-	inner class GuideViewTouch : GestureDetector.SimpleOnGestureListener() {
-		override fun onFling(e1: MotionEvent, e2: MotionEvent, velocityX: Float, velocityY: Float): Boolean {
-			if (container.currentItem == 2) {
-				if ((Math.abs(e1.x - e2.x) > Math.abs(e1.y - e2.y)) &&
-						(e1.x - e2.x <= (-flaggingWidth) || (e1.x - e2.x >= flaggingWidth)))
-					if (e1.x - e2.x >= flaggingWidth) {
-						go()
-						return true
-					}
-			}
-			return false
 		}
 	}
 
