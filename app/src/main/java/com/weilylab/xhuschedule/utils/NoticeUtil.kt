@@ -26,12 +26,8 @@ object NoticeUtil {
 				.unsubscribeOn(Schedulers.newThread())
 				.map { responseBody ->
 					val noticeResponse = GsonFactory.parse<NoticeResponse>(responseBody)
-					if (noticeResponse.rt == ResponseCodeConstants.DONE) {
-						val getList = noticeResponse.notices
-						val readList = NoticeLocalDataSource.queryAllReadNotices()
-						readList.forEach { notice -> getList.first { it.id == notice.id }.isRead = true }
+					if (noticeResponse.rt == ResponseCodeConstants.DONE)
 						doSaveListener.doSave(noticeResponse.notices)
-					}
 					noticeResponse
 				}
 				.observeOn(AndroidSchedulers.mainThread())

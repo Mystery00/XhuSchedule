@@ -8,6 +8,11 @@ object SharedPreferenceConstant {
 	const val FIELD_SPLASH_TIME = "splash_time"
 	const val FIELD_SPLASH_LOCATION_URL = "splash_location_url"
 
+	const val FILE_NAME_IDS = "ids"
+
+	const val FIELD_IDS_TODAY = "ids_today"
+	const val FIELD_IDS_EXAM = "ids_exam"
+
 	const val FILE_NAME_CONFIG = "config"
 
 	const val FIELD_DEVICE_ID = "config_device_id"

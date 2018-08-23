@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string-array name="start_time">
+		<item>08:00</item>
+		<item>08:55</item>
+		<item>10:00</item>
+		<item>10:55</item>
+		<item>14:00</item>
+		<item>14:55</item>
+		<item>16:00</item>
+		<item>16:55</item>
+		<item>19:00</item>
+		<item>19:55</item>
+		<item>20:50</item>
+	</string-array>
+
+	<string-array name="end_time">
+		<item>08:45</item>
+		<item>09:40</item>
+		<item>10:45</item>
+		<item>11:40</item>
+		<item>14:45</item>
+		<item>15:40</item>
+		<item>16:45</item>
+		<item>17:40</item>
+		<item>19:45</item>
+		<item>20:40</item>
+		<item>21:35</item>
+	</string-array>
+</resources>

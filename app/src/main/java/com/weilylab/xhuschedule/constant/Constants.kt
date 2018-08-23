@@ -68,4 +68,6 @@ object Constants {
 
 	const val SHARE_TARGET_URL = "https://www.coolapk.com/apk/com.weilylab.xhuschedule"
 	const val SHARE_IMAGE_URL = "http://image.coolapk.com/apk_logo/2018/0302/ic_launcher-168930-o_1c7i548l61b4k1p091q5l9tk15bj1b-uid-631231@192x192.png"
+
+	const val ACTION_WIDGET_UPDATE_BROADCAST = "android.appwidget.action.APPWIDGET_UPDATE"
 }

@@ -46,11 +46,11 @@ class QueryCetScoreFirstActivity : XhuBaseActivity(R.layout.activity_query_cet_s
 			Loading -> showDialog()
 			Empty -> {
 				hideDialog()
-				toastMessage("获取数据为空！",true)
+				toastMessage("获取数据为空！", true)
 			}
 			Error -> {
 				hideDialog()
-				toastMessage(it.error?.message,true)
+				toastMessage(it.error?.message, true)
 			}
 		}
 	}
@@ -85,6 +85,11 @@ class QueryCetScoreFirstActivity : XhuBaseActivity(R.layout.activity_query_cet_s
 		QueryCetScoreViewModelHelper.cetVCodeLiveData.observe(this, cetVCodeObserver)
 	}
 
+	private fun removeObserver() {
+		QueryCetScoreViewModelHelper.studentInfoList.removeObserver(studentInfoListObserver)
+		QueryCetScoreViewModelHelper.cetVCodeLiveData.removeObserver(cetVCodeObserver)
+	}
+
 	override fun monitor() {
 		super.monitor()
 		setupLayout.navigationBar.setNavigationBarListener(object : NavigationBar.NavigationBarListener {
@@ -103,6 +108,11 @@ class QueryCetScoreFirstActivity : XhuBaseActivity(R.layout.activity_query_cet_s
 				}
 			}
 		})
+	}
+
+	override fun onDestroy() {
+		super.onDestroy()
+		removeObserver()
 	}
 
 	private fun requestVCode() {

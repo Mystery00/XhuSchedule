@@ -14,6 +14,7 @@
 	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 	<uses-permission android:name="android.permission.VIBRATE" />
 	<uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
+	<uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
 	<application
 		android:name=".config.APP"
@@ -87,6 +88,11 @@
 			android:screenOrientation="portrait"
 			android:theme="@style/AppTheme.NoActionBar" />
 		<activity
+			android:name=".ui.activity.QueryExpScoreActivity"
+			android:label="@string/title_query_score_experiment"
+			android:screenOrientation="portrait"
+			android:theme="@style/AppTheme.NoActionBar" />
+		<activity
 			android:name=".ui.activity.FeedbackActivity"
 			android:label="@string/title_activity_feedback"
 			android:screenOrientation="portrait"
@@ -113,7 +119,23 @@
 		<service
 			android:name=".service.DownloadService"
 			android:exported="false" />
+		<service
+			android:name=".service.widget.TodayCourseWidgetService"
+			android:exported="false"
+			android:permission="android.permission.BIND_REMOTEVIEWS" />
+		<service
+			android:name=".service.widget.WidgetUpdateService"
+			android:exported="false" />
 
+		<receiver android:name=".ui.widget.TodayCourseWidget">
+			<intent-filter>
+				<action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+			</intent-filter>
+
+			<meta-data
+				android:name="android.appwidget.provider"
+				android:resource="@xml/today_course_widget_info" />
+		</receiver>
 		<provider
 			android:name="androidx.core.content.FileProvider"
 			android:authorities="com.weilylab.xhuschedule"
@@ -144,7 +166,6 @@
 			android:process="com.weilylab.xhuschedule.sb"
 			android:theme="@android:style/Theme.Translucent.NoTitleBar" />
 		<!-- 腾讯开放平台 -->
-		<activity android:name=".ui.activity.QueryExpScoreActivity"></activity>
 	</application>
 
 </manifest>

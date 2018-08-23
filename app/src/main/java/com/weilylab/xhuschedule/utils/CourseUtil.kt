@@ -190,6 +190,7 @@ object CourseUtil {
 
 	fun getTodayCourse(courseList: List<Schedule>, listener: (List<Schedule>) -> Unit) {
 		val week = CalendarUtil.getWeekFromCalendar(InitLocalDataSource.getStartDataTime())
+//		val week = 1
 		val todayCourseList = ArrayList<Schedule>()
 		val weekIndex = CalendarUtil.getWeekIndex()
 		courseList.forEach {

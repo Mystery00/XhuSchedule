@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Created by Mystery0 on 17-12-21 上午3:41.
+  ~ Copyright (c) 2017. All Rights reserved.
+  ~
+  ~ Last modified 17-12-18 下午9:14
+  -->
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:id="@+id/background"
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+	android:layout_margin="8dp">
+
+	<TextView
+		android:id="@+id/course_name_textView"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:paddingBottom="4dp"
+		android:paddingEnd="8dp"
+		android:paddingStart="8dp"
+		android:paddingTop="8dp"
+		android:textColor="@color/colorWhite"
+		android:textStyle="bold" />
+
+	<TextView
+		android:id="@+id/course_teacher_textView"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_below="@id/course_name_textView"
+		android:paddingBottom="4dp"
+		android:paddingEnd="8dp"
+		android:paddingStart="8dp"
+		android:paddingTop="4dp"
+		android:textColor="@color/colorWhite" />
+
+
+	<TextView
+		android:id="@+id/course_time_location_textView"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_below="@id/course_teacher_textView"
+		android:paddingBottom="8dp"
+		android:paddingEnd="8dp"
+		android:paddingStart="8dp"
+		android:paddingTop="4dp"
+		android:textColor="@color/colorWhite" />
+
+</RelativeLayout>

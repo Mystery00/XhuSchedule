@@ -42,11 +42,20 @@ class QueryCetScoreShowActivity : XhuBaseActivity(R.layout.activity_query_cet_sc
 		QueryCetScoreViewModelHelper.cetScoreLiveData.observe(this, cetScoreObserver)
 	}
 
+	private fun removeObserver() {
+		QueryCetScoreViewModelHelper.cetScoreLiveData.removeObserver(cetScoreObserver)
+	}
+
 	override fun monitor() {
 		super.monitor()
 		toolbar.setNavigationOnClickListener {
 			finish()
 		}
+	}
+
+	override fun onDestroy() {
+		super.onDestroy()
+		removeObserver()
 	}
 
 	private fun doShow(cetScore: CetScore) {

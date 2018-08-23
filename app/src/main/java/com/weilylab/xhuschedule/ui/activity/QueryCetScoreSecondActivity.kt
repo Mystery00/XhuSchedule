@@ -33,11 +33,11 @@ class QueryCetScoreSecondActivity : XhuBaseActivity(R.layout.activity_query_cet_
 			Loading -> showVCodeDialog()
 			Empty -> {
 				hideVCodeDialog()
-				toastMessage("获取数据为空！",true)
+				toastMessage("获取数据为空！", true)
 			}
 			Error -> {
 				hideVCodeDialog()
-				toastMessage(it.error?.message,true)
+				toastMessage(it.error?.message, true)
 			}
 		}
 	}
@@ -100,6 +100,11 @@ class QueryCetScoreSecondActivity : XhuBaseActivity(R.layout.activity_query_cet_
 		QueryCetScoreViewModelHelper.cetScoreLiveData.observe(this, cetScoreObserver)
 	}
 
+	private fun removeObserver() {
+		QueryCetScoreViewModelHelper.cetVCodeLiveData.removeObserver(cetVCodeObserver)
+		QueryCetScoreViewModelHelper.cetScoreLiveData.removeObserver(cetScoreObserver)
+	}
+
 	override fun monitor() {
 		super.monitor()
 		imageView.setOnClickListener {
@@ -121,6 +126,11 @@ class QueryCetScoreSecondActivity : XhuBaseActivity(R.layout.activity_query_cet_
 				}
 			}
 		})
+	}
+
+	override fun onDestroy() {
+		super.onDestroy()
+		removeObserver()
 	}
 
 	private fun queryCetScore() {
