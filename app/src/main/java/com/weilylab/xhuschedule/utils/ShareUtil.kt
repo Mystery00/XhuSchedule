@@ -6,7 +6,6 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.widget.Toast
-import com.oasisfeng.condom.CondomContext
 import com.sina.weibo.sdk.api.ImageObject
 import com.sina.weibo.sdk.api.TextObject
 import com.sina.weibo.sdk.api.WeiboMultiMessage
