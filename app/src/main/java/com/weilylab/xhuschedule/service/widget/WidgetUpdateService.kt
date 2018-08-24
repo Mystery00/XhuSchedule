@@ -59,7 +59,7 @@ class WidgetUpdateService : Service() {
 				.setAutoCancel(true)
 				.setPriority(NotificationManagerCompat.IMPORTANCE_NONE)
 				.build()
-		startForeground(20, notification)
+		startForeground(Constants.NOTIFICATION_ID_WIDGET_UPDATE, notification)
 		initObserver()
 		WidgetRepository.queryStudentList()
 	}

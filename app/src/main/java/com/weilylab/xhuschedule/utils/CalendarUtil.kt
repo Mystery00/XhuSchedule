@@ -34,6 +34,25 @@ object CalendarUtil {
 		}
 	}
 
+	fun isTomorrowTest(dateString: String): Boolean {
+		if (dateString == "")
+			return false
+		return try {
+			val dateArray = dateString.split('-')
+			val year = dateArray[0].toInt()
+			val month = dateArray[1].toInt()
+			val day = dateArray[2].toInt()
+			val now = Calendar.getInstance()
+			now.set(Calendar.HOUR_OF_DAY, 0)
+			now.set(Calendar.MINUTE, 0)
+			now.set(Calendar.SECOND, 0)
+			year == now.get(Calendar.YEAR) && month == now.get(Calendar.MONTH) + 1 && day == now.get(Calendar.DATE)
+		} catch (e: Exception) {
+			Logs.wtf("isTomorrowTest: ", e)
+			false
+		}
+	}
+
 	fun getWeekIndexInString(index: Int = getWeekIndex()): String {
 		val weeks = arrayOf("周一", "周二", "周三", "周四", "周五", "周六", "周日")
 		return weeks[index - 1]

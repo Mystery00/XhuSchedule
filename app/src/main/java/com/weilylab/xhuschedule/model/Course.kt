@@ -3,6 +3,7 @@ package com.weilylab.xhuschedule.model
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.weilylab.xhuschedule.constant.Constants
 import com.zhuangfei.timetable.model.Schedule
 import com.zhuangfei.timetable.model.ScheduleEnable
 import java.util.ArrayList
@@ -51,8 +52,13 @@ class Course : ScheduleEnable {
 		schedule.teacher = teacher
 		val weekArray = week.trim().split('-')
 		val weekList = ArrayList<Int>()
-		for (i in weekArray[0].toInt()..weekArray[1].toInt())
-			weekList.add(i)
+		for (i in weekArray[0].toInt()..weekArray[1].toInt()) {
+			when (type) {
+				Constants.COURSE_TYPE_ALL -> weekList.add(i)
+				Constants.COURSE_TYPE_SINGLE -> if (i % 2 == 1) weekList.add(i)
+				Constants.COURSE_TYPE_DOUBLE -> if (i % 2 == 0) weekList.add(i)
+			}
+		}
 		schedule.weekList = weekList
 		val timeArray = time.trim().split('-')
 		schedule.start = timeArray[0].toInt()

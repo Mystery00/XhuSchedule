@@ -1,11 +1,14 @@
 package com.weilylab.xhuschedule.utils
 
+import android.app.job.JobInfo
 import android.app.job.JobScheduler
+import android.content.ComponentName
 import android.content.Context
 import android.os.Build
 import android.util.Base64
 import androidx.appcompat.app.AlertDialog
 import com.weilylab.xhuschedule.R
+import com.weilylab.xhuschedule.service.NotificationJobService
 import java.util.*
 
 object ConfigUtil {
@@ -59,7 +62,13 @@ object ConfigUtil {
 		val scheduler = context.getSystemService(Context.JOB_SCHEDULER_SERVICE) as JobScheduler
 		if (isJobPollServiceOn(context))
 			scheduler.cancel(NOTIFICATION_JOB_ID)
-//		else
+		else {
+			val jobInfo = JobInfo.Builder(NOTIFICATION_JOB_ID, ComponentName(context, NotificationJobService::class.java))
+					.setPeriodic(1000 * 60 * 60 * 24)
+					.setPersisted(true)
+					.build()
+			scheduler.schedule(jobInfo)
+		}
 	}
 
 	private fun isJobPollServiceOn(context: Context): Boolean {

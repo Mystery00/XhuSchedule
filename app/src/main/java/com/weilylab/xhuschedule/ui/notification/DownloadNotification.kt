@@ -45,8 +45,8 @@ import com.weilylab.xhuschedule.model.Download
 import vip.mystery0.tools.utils.FileTools
 
 object DownloadNotification {
-	private const val NOTIFICATION_TAG = "Download"
-	private var NOTIFICATION_ID = 1
+	private const val NOTIFICATION_TAG = "DownloadNotification"
+	private var NOTIFICATION_ID = Constants.NOTIFICATION_ID_DOWNLOAD
 	@SuppressLint("StaticFieldLeak")
 	private lateinit var notificationBuilder: NotificationCompat.Builder
 

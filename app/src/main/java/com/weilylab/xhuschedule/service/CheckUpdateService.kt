@@ -38,7 +38,7 @@ class CheckUpdateService : Service() {
 				.setAutoCancel(true)
 				.setPriority(NotificationManagerCompat.IMPORTANCE_NONE)
 				.build()
-		startForeground(0, notification)
+		startForeground(Constants.NOTIFICATION_ID_CHECK_UPDATE, notification)
 	}
 
 	override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {

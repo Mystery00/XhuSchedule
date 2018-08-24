@@ -69,6 +69,8 @@ object TestLocalDataSource : TestDataSource {
 				})
 	}
 
+	fun getRawTestList(student: Student): List<Test> = testService.queryTestsForStudent(student.username)
+
 	fun deleteAllTestsForStudent(username: String) {
 		val list = testService.queryTestsForStudent(username)
 		list.forEach {

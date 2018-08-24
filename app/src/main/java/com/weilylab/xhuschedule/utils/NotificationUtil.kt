@@ -15,7 +15,7 @@ object NotificationUtil {
 			notificationManager.createNotificationChannel(createDefaultChannel())
 			notificationManager.createNotificationChannel(createChannel(Constants.NOTIFICATION_CHANNEL_ID_DOWNLOAD, Constants.NOTIFICATION_CHANNEL_NAME_DOWNLOAD, Constants.NOTIFICATION_CHANNEL_DESCRIPTION_DOWNLOAD, NotificationManager.IMPORTANCE_LOW))
 			notificationManager.createNotificationChannel(createChannel(Constants.NOTIFICATION_CHANNEL_ID_TOMORROW, Constants.NOTIFICATION_CHANNEL_NAME_TOMORROW, Constants.NOTIFICATION_CHANNEL_DESCRIPTION_TOMORROW, NotificationManager.IMPORTANCE_HIGH))
-			notificationManager.createNotificationChannel(createChannel(Constants.NOTIFICATION_CHANNEL_ID_PUSH, Constants.NOTIFICATION_CHANNEL_NAME_PUSH, Constants.NOTIFICATION_CHANNEL_DESCRIPTION_PUSH, NotificationManager.IMPORTANCE_DEFAULT))
+//			notificationManager.createNotificationChannel(createChannel(Constants.NOTIFICATION_CHANNEL_ID_PUSH, Constants.NOTIFICATION_CHANNEL_NAME_PUSH, Constants.NOTIFICATION_CHANNEL_DESCRIPTION_PUSH, NotificationManager.IMPORTANCE_DEFAULT))
 		}
 	}
 
