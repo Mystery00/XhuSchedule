@@ -157,7 +157,7 @@ object ShareUtil {
 
 	fun linkWeiXinMiniProgram(context: Context) {
 		if (PackageUtil.isWeiXinApplicationAvailable()) {
-			val appID = "wx862b23e960c40ec0"
+			val appID = "wx41799887957cbba8"
 			val userName = "gh_90a4144326af"
 			val wxAPI = WXAPIFactory.createWXAPI(context, appID)
 			val req = WXLaunchMiniProgram.Req()
