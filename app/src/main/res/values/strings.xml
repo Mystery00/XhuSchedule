@@ -40,6 +40,9 @@
 	<string name="shortcut_title_query_cet_score">四六级查询</string>
 	<string name="shortcut_title_link_to_mini_program">微信小程序</string>
 
+	<string name="widget_title_query_test">考试查询</string>
+	<string name="widget_title_query_today_course">今日课表</string>
+
 	<string name="menu_show_gpa">显示绩点</string>
 	<string name="menu_show_failed">显示未通过成绩</string>
 
@@ -61,7 +64,6 @@
 
 	<string name="hint_twice_press_exit">再按一次退出西瓜课表</string>
 	<string name="hint_custom_img">自定义图片设置成功！</string>
-	<string name="hint_share_message">嗨，我正在使用西瓜课表2.0查课程哦~ 除了查课表，还可以查考试，查成绩。 下载链接：https://www.coolapk.com/apk/com.weilylab.xhuschedule</string>
 	<string name="hint_no_qq">QQ未安装！</string>
 	<string name="hint_no_weixin">微信未安装！</string>
 	<string name="hint_no_weibo">微博未安装！</string>

@@ -22,6 +22,7 @@ import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.config.APP
 import com.weilylab.xhuschedule.constant.Constants
 import com.weilylab.xhuschedule.XhuFileUtil
+import kotlin.math.roundToInt
 
 object ShareUtil {
 	enum class ShareType {
@@ -35,7 +36,7 @@ object ShareUtil {
 					val params = Bundle()
 					params.putInt(QQShare.SHARE_TO_QQ_KEY_TYPE, QQShare.SHARE_TO_QQ_TYPE_APP)
 					params.putString(QQShare.SHARE_TO_QQ_TITLE, context.getString(R.string.app_name))
-					params.putString(QQShare.SHARE_TO_QQ_SUMMARY, context.getString(R.string.hint_share_message))
+					params.putString(QQShare.SHARE_TO_QQ_SUMMARY, getRandomText(context))
 					params.putString(QQShare.SHARE_TO_QQ_TARGET_URL, Constants.SHARE_TARGET_URL)
 					params.putString(QQShare.SHARE_TO_QQ_IMAGE_URL, Constants.SHARE_IMAGE_URL)
 					params.putString(QQShare.SHARE_TO_QQ_APP_NAME, context.getString(R.string.app_name))
@@ -59,7 +60,7 @@ object ShareUtil {
 					val params = Bundle()
 					params.putInt(QQShare.SHARE_TO_QQ_KEY_TYPE, QQShare.SHARE_TO_QQ_TYPE_APP)
 					params.putString(QQShare.SHARE_TO_QQ_TITLE, context.getString(R.string.app_name))
-					params.putString(QQShare.SHARE_TO_QQ_SUMMARY, context.getString(R.string.hint_share_message))
+					params.putString(QQShare.SHARE_TO_QQ_SUMMARY, getRandomText(context))
 					params.putString(QQShare.SHARE_TO_QQ_TARGET_URL, Constants.SHARE_TARGET_URL)
 					params.putString(QQShare.SHARE_TO_QQ_IMAGE_URL, Constants.SHARE_IMAGE_URL)
 					params.putString(QQShare.SHARE_TO_QQ_APP_NAME, context.getString(R.string.app_name))
@@ -88,7 +89,7 @@ object ShareUtil {
 					imageObject.setImageObject(BitmapFactory.decodeResource(context.resources, R.mipmap.share_launcher))
 					weiboMultiMessage.mediaObject = imageObject
 					val textObject = TextObject()
-					textObject.text = context.getString(R.string.hint_share_message)
+					textObject.text = getRandomText(context)
 					weiboMultiMessage.textObject = textObject
 					shareHandler.shareMessage(weiboMultiMessage, false)
 				} else {
@@ -105,7 +106,7 @@ object ShareUtil {
 
 					val wxMediaMessage = WXMediaMessage(wxWebpageObject)
 					wxMediaMessage.title = context.getString(R.string.app_name)
-					wxMediaMessage.description = context.getString(R.string.hint_share_message)
+					wxMediaMessage.description = getRandomText(context)
 					val thumbBmp = Bitmap.createScaledBitmap(bitmap, 100, 100, true)
 					bitmap.recycle()
 					wxMediaMessage.thumbData = XhuFileUtil.bmpToByteArray(thumbBmp, true)
@@ -129,7 +130,7 @@ object ShareUtil {
 
 					val wxMediaMessage = WXMediaMessage(wxWebpageObject)
 					wxMediaMessage.title = context.getString(R.string.app_name)
-					wxMediaMessage.description = context.getString(R.string.hint_share_message)
+					wxMediaMessage.description = getRandomText(context)
 					val thumbBmp = Bitmap.createScaledBitmap(bitmap, 100, 100, true)
 					bitmap.recycle()
 					wxMediaMessage.thumbData = XhuFileUtil.bmpToByteArray(thumbBmp, true)
@@ -146,7 +147,7 @@ object ShareUtil {
 			}
 			ShareType.SYSTEM -> {//系统分享
 				val shareIntent = Intent(Intent.ACTION_SEND)
-				shareIntent.putExtra(Intent.EXTRA_TEXT, context.getString(R.string.hint_share_message))
+				shareIntent.putExtra(Intent.EXTRA_TEXT, getRandomText(context))
 				shareIntent.type = "text/plain"
 				//设置分享列表的标题，并且每次都显示分享列表
 				context.startActivity(Intent.createChooser(shareIntent, "分享西瓜课表到"))
@@ -167,5 +168,11 @@ object ShareUtil {
 			Toast.makeText(context, R.string.hint_no_weixin, Toast.LENGTH_SHORT)
 					.show()
 		}
+	}
+
+	private fun getRandomText(context: Context): String {
+		val array = context.resources.getStringArray(R.array.hint_share_message)
+		val random = (Math.random() * array.size).roundToInt()
+		return array[random]
 	}
 }

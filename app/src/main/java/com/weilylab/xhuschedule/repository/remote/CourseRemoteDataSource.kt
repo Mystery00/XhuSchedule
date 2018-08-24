@@ -56,7 +56,6 @@ object CourseRemoteDataSource : CourseDataSource {
 			CourseUtil.getCoursesForManyStudent(studentList, year, term, object : DoSaveListener<Map<String, List<Course>>> {
 				override fun doSave(t: Map<String, List<Course>>) {
 					val username = t.keys.first()
-					Logs.i("doSave: $username")
 					val courseList = t[username]!!
 					CourseLocalDataSource.deleteAllCourseListForStudent(username, year, term)
 					courseList.forEach {
@@ -73,7 +72,6 @@ object CourseRemoteDataSource : CourseDataSource {
 				}
 			}, object : RequestListener<List<Course>> {
 				override fun done(t: List<Course>) {
-					Logs.i("done: ")
 					courseListLiveData.value = PackageData.content(CourseUtil.convertCourseToSchedule(t))
 				}
 

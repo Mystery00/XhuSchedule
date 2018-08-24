@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Created by Mystery0 on 17-12-31 下午5:35.
+  ~ Copyright (c) 2017. All Rights reserved.
+  ~
+  ~ Last modified 17-12-21 上午3:41
+  -->
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:id="@+id/background"
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+	android:layout_margin="8dp">
+
+	<TextView
+		android:id="@+id/exam_days"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_below="@id/exam_no"
+		android:layout_alignBottom="@id/exam_time"
+		android:layout_alignParentEnd="true"
+		android:layout_margin="6dp"
+		android:gravity="center"
+		android:textSize="18sp"
+		android:textStyle="bold" />
+
+	<TextView
+		android:id="@+id/exam_name"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_margin="6dp"
+		android:layout_toStartOf="@id/exam_no"
+		android:textStyle="bold" />
+
+	<TextView
+		android:id="@+id/exam_no"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_alignParentTop="true"
+		android:layout_alignParentEnd="true"
+		android:layout_margin="6dp"
+		android:textStyle="bold" />
+
+	<TextView
+		android:id="@+id/exam_location"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_below="@id/exam_name"
+		android:layout_margin="4dp"
+		android:layout_toStartOf="@id/exam_days" />
+
+	<TextView
+		android:id="@+id/exam_time"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_below="@id/exam_location"
+		android:layout_margin="4dp"
+		android:layout_toStartOf="@id/exam_days" />
+
+</RelativeLayout>

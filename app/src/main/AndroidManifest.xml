@@ -12,7 +12,6 @@
 	<uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
 	<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-	<uses-permission android:name="android.permission.VIBRATE" />
 	<uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
 	<uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
@@ -123,14 +122,24 @@
 			android:name=".service.DownloadService"
 			android:exported="false" />
 		<service
+			android:name=".service.widget.WidgetUpdateService"
+			android:exported="false" />
+		<service
 			android:name=".service.widget.TodayCourseWidgetService"
 			android:exported="false"
 			android:permission="android.permission.BIND_REMOTEVIEWS" />
 		<service
-			android:name=".service.widget.WidgetUpdateService"
-			android:exported="false" />
+			android:name=".service.widget.TestListWidgetService"
+			android:exported="false"
+			android:permission="android.permission.BIND_REMOTEVIEWS" />
+		<service
+			android:name=".service.NotificationJobService"
+			android:exported="true"
+			android:permission="android.permission.BIND_JOB_SERVICE" />
 
-		<receiver android:name=".ui.widget.TodayCourseWidget">
+		<receiver
+			android:name=".ui.widget.TodayCourseWidget"
+			android:label="@string/widget_title_query_today_course">
 			<intent-filter>
 				<action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
 			</intent-filter>
@@ -139,6 +148,18 @@
 				android:name="android.appwidget.provider"
 				android:resource="@xml/today_course_widget_info" />
 		</receiver>
+		<receiver
+			android:name=".ui.widget.TestListWidget"
+			android:label="@string/widget_title_query_test">
+			<intent-filter>
+				<action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+			</intent-filter>
+
+			<meta-data
+				android:name="android.appwidget.provider"
+				android:resource="@xml/test_list_widget_info" />
+		</receiver>
+
 		<provider
 			android:name="androidx.core.content.FileProvider"
 			android:authorities="com.weilylab.xhuschedule"

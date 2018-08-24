@@ -48,6 +48,7 @@ import com.weilylab.xhuschedule.utils.BsPatch
 import com.weilylab.xhuschedule.constant.Constants
 import com.weilylab.xhuschedule.ui.notification.DownloadNotification
 import com.weilylab.xhuschedule.XhuFileUtil
+import com.weilylab.xhuschedule.constant.IntentConstant
 import com.weilylab.xhuschedule.model.Download
 import com.weilylab.xhuschedule.interceptor.DownloadProgressInterceptor
 import com.weilylab.xhuschedule.utils.FileUtil
@@ -71,10 +72,10 @@ class DownloadService : IntentService("DownloadService") {
 	companion object {
 		fun intentTo(context: Context, type: String, qiniuPath: String, apkMD5: String, patchMD5: String) {
 			val intent = Intent(context, DownloadService::class.java)
-			intent.putExtra(Constants.INTENT_TAG_NAME_TYPE, type)
-			intent.putExtra(Constants.INTENT_TAG_NAME_QINIU_PATH, qiniuPath)
-			intent.putExtra(Constants.INTENT_TAG_NAME_APK_MD5, apkMD5)
-			intent.putExtra(Constants.INTENT_TAG_NAME_PATCH_MD5, patchMD5)
+			intent.putExtra(IntentConstant.INTENT_TAG_NAME_TYPE, type)
+			intent.putExtra(IntentConstant.INTENT_TAG_NAME_QINIU_PATH, qiniuPath)
+			intent.putExtra(IntentConstant.INTENT_TAG_NAME_APK_MD5, apkMD5)
+			intent.putExtra(IntentConstant.INTENT_TAG_NAME_PATCH_MD5, patchMD5)
 			context.startService(intent)
 		}
 	}
@@ -83,10 +84,10 @@ class DownloadService : IntentService("DownloadService") {
 	private var isDownloadMD5Matched = false
 
 	override fun onHandleIntent(intent: Intent?) {
-		val type = intent?.getStringExtra(Constants.INTENT_TAG_NAME_TYPE)
-		val qiniuPath = intent?.getStringExtra(Constants.INTENT_TAG_NAME_QINIU_PATH)
-		val apkMD5 = intent?.getStringExtra(Constants.INTENT_TAG_NAME_APK_MD5)
-		val patchMD5 = intent?.getStringExtra(Constants.INTENT_TAG_NAME_PATCH_MD5)
+		val type = intent?.getStringExtra(IntentConstant.INTENT_TAG_NAME_TYPE)
+		val qiniuPath = intent?.getStringExtra(IntentConstant.INTENT_TAG_NAME_QINIU_PATH)
+		val apkMD5 = intent?.getStringExtra(IntentConstant.INTENT_TAG_NAME_APK_MD5)
+		val patchMD5 = intent?.getStringExtra(IntentConstant.INTENT_TAG_NAME_PATCH_MD5)
 		val file = File(getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS)!!.absolutePath + File.separator + qiniuPath)
 		if (!file.parentFile.exists())
 			file.parentFile.mkdirs()

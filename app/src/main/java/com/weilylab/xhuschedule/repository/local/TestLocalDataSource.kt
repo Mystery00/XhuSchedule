@@ -1,30 +1,37 @@
 package com.weilylab.xhuschedule.repository.local
 
 import androidx.lifecycle.MediatorLiveData
-import androidx.lifecycle.MutableLiveData
 import com.weilylab.xhuschedule.model.Student
 import com.weilylab.xhuschedule.model.Test
 import com.weilylab.xhuschedule.repository.dataSource.TestDataSource
 import com.weilylab.xhuschedule.repository.local.service.impl.TestServiceImpl
+import com.weilylab.xhuschedule.utils.TestUtil
 import com.weilylab.xhuschedule.utils.rxAndroid.PackageData
 import com.weilylab.xhuschedule.utils.rxAndroid.RxObservable
 import com.weilylab.xhuschedule.utils.rxAndroid.RxObserver
+import vip.mystery0.logs.Logs
+import java.util.ArrayList
 
 object TestLocalDataSource : TestDataSource {
 	private val testService = TestServiceImpl()
 
-	override fun queryAllTests(testLiveData: MediatorLiveData<PackageData<List<Test>>>, student: Student) {
+	override fun queryAllTestsByUsername(testLiveData: MediatorLiveData<PackageData<List<Test>>>, student: Student) {
 		testLiveData.value = PackageData.loading()
 		RxObservable<List<Test>>()
 				.doThings {
-					it.onFinish(testService.queryAllTest())
+					it.onFinish(testService.queryTestsForStudent(student.username))
 				}
 				.subscribe(object : RxObserver<List<Test>>() {
 					override fun onFinish(data: List<Test>?) {
-						if (data != null && data.isNotEmpty())
-							testLiveData.value = PackageData.content(data)
-						else
+						if (data == null)
 							testLiveData.value = PackageData.empty()
+						else {
+							val testList = TestUtil.filterTestList(data)
+							if (testList.isNotEmpty())
+								testLiveData.value = PackageData.content(testList)
+							else
+								testLiveData.value = PackageData.empty()
+						}
 					}
 
 					override fun onError(e: Throwable) {
@@ -33,7 +40,33 @@ object TestLocalDataSource : TestDataSource {
 				})
 	}
 
-	fun queryTestsOnThisDay(testLiveData: MutableLiveData<Test>, messageLiveData: MutableLiveData<String>, requestCodeLiveData: MutableLiveData<Int>, day: String, student: Student) {
+	override fun queryAllTestsForManyStudent(testLiveData: MediatorLiveData<PackageData<List<Test>>>, studentList: List<Student>) {
+		RxObservable<List<Test>>()
+				.doThings { emitter ->
+					val tests = ArrayList<Test>()
+					studentList.forEach {
+						tests.addAll(testService.queryTestsForStudent(it.username))
+					}
+					emitter.onFinish(tests)
+				}
+				.subscribe(object : RxObserver<List<Test>>() {
+					override fun onFinish(data: List<Test>?) {
+						if (data == null)
+							testLiveData.value = PackageData.empty()
+						else {
+							val testList = TestUtil.filterTestList(data)
+							if (testList.isNotEmpty())
+								testLiveData.value = PackageData.content(testList)
+							else
+								testLiveData.value = PackageData.empty()
+						}
+					}
+
+					override fun onError(e: Throwable) {
+						Logs.wtf("onError: ", e)
+						testLiveData.value = PackageData.error(e)
+					}
+				})
 	}
 
 	fun deleteAllTestsForStudent(username: String) {

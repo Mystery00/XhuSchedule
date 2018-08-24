@@ -3,6 +3,7 @@ package com.weilylab.xhuschedule.repository
 import com.weilylab.xhuschedule.config.Status.*
 import com.weilylab.xhuschedule.repository.local.CourseLocalDataSource
 import com.weilylab.xhuschedule.repository.local.StudentLocalDataSource
+import com.weilylab.xhuschedule.repository.local.TestLocalDataSource
 import com.weilylab.xhuschedule.utils.CourseUtil
 import com.weilylab.xhuschedule.utils.UserUtil
 import com.weilylab.xhuschedule.utils.rxAndroid.PackageData
@@ -58,6 +59,24 @@ object WidgetRepository {
 			}
 			CourseLocalDataSource.queryCourseWithManyStudent(WidgetViewModelHelper.courseList, WidgetViewModelHelper.studentList.value!!.data!!, null, null, true)
 		}
+	}
+
+	fun queryTests() {
+		WidgetViewModelHelper.testList.value = PackageData.loading()
+		if (WidgetViewModelHelper.studentList.value == null || WidgetViewModelHelper.studentList.value?.data == null || WidgetViewModelHelper.studentList.value!!.data!!.isEmpty())
+			WidgetViewModelHelper.testList.value = PackageData.empty()
+		else {
+			val mainStudent = UserUtil.findMainStudent(WidgetViewModelHelper.studentList.value!!.data)!!
+			TestLocalDataSource.queryAllTestsByUsername(WidgetViewModelHelper.testList, mainStudent)
+		}
+	}
+
+	fun queryTestsForManyStudent() {
+		WidgetViewModelHelper.testList.value = PackageData.loading()
+		if (WidgetViewModelHelper.studentList.value == null || WidgetViewModelHelper.studentList.value?.data == null || WidgetViewModelHelper.studentList.value!!.data!!.isEmpty())
+			WidgetViewModelHelper.testList.value = PackageData.empty()
+		else
+			TestLocalDataSource.queryAllTestsForManyStudent(WidgetViewModelHelper.testList, WidgetViewModelHelper.studentList.value!!.data!!)
 	}
 
 	fun queryStudentList() {

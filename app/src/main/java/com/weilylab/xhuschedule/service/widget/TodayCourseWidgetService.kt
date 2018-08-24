@@ -36,7 +36,12 @@ class TodayCourseWidgetService : RemoteViewsService() {
 			return remotesView
 		}
 
-		override fun getCount(): Int = WidgetViewModelHelper.todayCourseList.value!!.data!!.size
+		override fun getCount(): Int {
+			return if (WidgetViewModelHelper.todayCourseList.value == null || WidgetViewModelHelper.todayCourseList.value!!.data == null)
+				0
+			else
+				WidgetViewModelHelper.todayCourseList.value!!.data!!.size
+		}
 
 		override fun getViewTypeCount(): Int = 1
 

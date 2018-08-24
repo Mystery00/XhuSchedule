@@ -58,11 +58,6 @@ object Constants {
 	const val NOTIFICATION_CHANNEL_NAME_PUSH = "消息推送"
 	const val NOTIFICATION_CHANNEL_DESCRIPTION_PUSH = "消息推送"
 
-	const val INTENT_TAG_NAME_TYPE = "type"
-	const val INTENT_TAG_NAME_QINIU_PATH = "qiniuPath"
-	const val INTENT_TAG_NAME_APK_MD5 = "apkMD5"
-	const val INTENT_TAG_NAME_PATCH_MD5 = "patchMD5"
-
 	const val DOWNLOAD_TYPE_APK = "apk"
 	const val DOWNLOAD_TYPE_PATCH = "patch"
 

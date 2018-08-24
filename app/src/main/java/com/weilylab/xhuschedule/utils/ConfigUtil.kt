@@ -1,5 +1,6 @@
 package com.weilylab.xhuschedule.utils
 
+import android.app.job.JobScheduler
 import android.content.Context
 import android.os.Build
 import android.util.Base64
@@ -49,5 +50,26 @@ object ConfigUtil {
 					ConfigurationUtil.updatedVersion = context.getString(R.string.app_version_code).toInt()
 				}
 				.show()
+	}
+
+	private const val NOTIFICATION_JOB_ID = 123
+
+	fun setNotificationAlarm(context: Context) {
+		//得到JobScheduler对象
+		val scheduler = context.getSystemService(Context.JOB_SCHEDULER_SERVICE) as JobScheduler
+
+	}
+
+	private fun isJobPollServiceOn(context: Context): Boolean {
+		val scheduler = context.getSystemService(Context.JOB_SCHEDULER_SERVICE) as JobScheduler
+		var hasBeenScheduled = false
+		//getAllPendingJobs得到是当前Package对应的已经安排的任务
+		for (jobInfo in scheduler.allPendingJobs) {
+			if (jobInfo.id == NOTIFICATION_JOB_ID) {
+				hasBeenScheduled = true
+				break
+			}
+		}
+		return hasBeenScheduled
 	}
 }

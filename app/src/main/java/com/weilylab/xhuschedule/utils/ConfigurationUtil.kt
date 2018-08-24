@@ -58,6 +58,21 @@ object ConfigurationUtil {
 				.putInt(SharedPreferenceConstant.FIELD_UPDATED_VERSION, value)
 				.apply()
 		get() = sharedPreferences.getInt(SharedPreferenceConstant.FIELD_UPDATED_VERSION, 0)
+	var notificationCourse: Boolean
+		set(value) = sharedPreferences.edit()
+				.putBoolean(SharedPreferenceConstant.FIELD_NOTIFICATION_COURSE, value)
+				.apply()
+		get() = sharedPreferences.getBoolean(SharedPreferenceConstant.FIELD_NOTIFICATION_COURSE, true)
+	var notificationExam: Boolean
+		set(value) = sharedPreferences.edit()
+				.putBoolean(SharedPreferenceConstant.FIELD_NOTIFICATION_EXAM, value)
+				.apply()
+		get() = sharedPreferences.getBoolean(SharedPreferenceConstant.FIELD_NOTIFICATION_EXAM, true)
+	var notificationTime: String
+		set(value) = sharedPreferences.edit()
+				.putString(SharedPreferenceConstant.FIELD_NOTIFICATION_TIME, value)
+				.apply()
+		get() = sharedPreferences.getString(SharedPreferenceConstant.FIELD_NOTIFICATION_TIME, "20:00")!!
 	var clearAppData: Boolean
 		set(value) = sharedPreferences.edit()
 				.putBoolean("clearAppData", value)

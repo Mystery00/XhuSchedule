@@ -27,4 +27,8 @@
 		<item>20:40</item>
 		<item>21:35</item>
 	</string-array>
+
+	<string-array name="hint_share_message">
+		<item>查课表，就用西瓜课表！ 下载链接：https://www.coolapk.com/apk/com.weilylab.xhuschedule</item>
+	</string-array>
 </resources>

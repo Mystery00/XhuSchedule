@@ -3,6 +3,7 @@ package com.weilylab.xhuschedule.ui.fragment.settings
 import android.Manifest
 import android.app.Activity
 import android.app.Dialog
+import android.app.TimePickerDialog
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -29,6 +30,7 @@ import com.zyao89.view.zloading.ZLoadingDialog
 import com.zyao89.view.zloading.Z_TYPE
 import vip.mystery0.tools.utils.DensityTools
 import java.io.File
+import java.util.*
 
 class SettingsPreferenceFragment : BasePreferenceFragment(R.xml.preference_settings) {
 	companion object {
@@ -43,6 +45,9 @@ class SettingsPreferenceFragment : BasePreferenceFragment(R.xml.preference_setti
 	private lateinit var backgroundImgPreference: Preference
 	private lateinit var resetUserImgPreference: Preference
 	private lateinit var resetBackgroundPreference: Preference
+	private lateinit var notificationCoursePreference: CheckBoxPreference
+	private lateinit var notificationExamPreference: CheckBoxPreference
+	private lateinit var notificationTimePreference: Preference
 	private lateinit var autoCheckUpdatePreference: CheckBoxPreference
 	private lateinit var weixinPreference: Preference
 	private lateinit var checkUpdatePreference: Preference
@@ -56,6 +61,9 @@ class SettingsPreferenceFragment : BasePreferenceFragment(R.xml.preference_setti
 		backgroundImgPreference = findPreferenceById(R.string.key_background_img)
 		resetUserImgPreference = findPreferenceById(R.string.key_reset_user_img)
 		resetBackgroundPreference = findPreferenceById(R.string.key_reset_background_img)
+		notificationCoursePreference = findPreferenceById(R.string.key_notification_course) as CheckBoxPreference
+		notificationExamPreference = findPreferenceById(R.string.key_notification_exam) as CheckBoxPreference
+		notificationTimePreference = findPreferenceById(R.string.key_notification_time)
 		autoCheckUpdatePreference = findPreferenceById(R.string.key_auto_check_update) as CheckBoxPreference
 		weixinPreference = findPreferenceById(R.string.key_weixin)
 		checkUpdatePreference = findPreferenceById(R.string.key_check_update)
@@ -95,6 +103,37 @@ class SettingsPreferenceFragment : BasePreferenceFragment(R.xml.preference_setti
 						LayoutRefreshConfigUtil.isChangeBackgroundImage = true
 					}
 					.setNegativeButton(R.string.action_cancel, null)
+					.show()
+			true
+		}
+		notificationCoursePreference.setOnPreferenceChangeListener { _, _ ->
+			ConfigurationUtil.notificationCourse = !notificationCoursePreference.isChecked
+			true
+		}
+		notificationExamPreference.setOnPreferenceChangeListener { _, _ ->
+			ConfigurationUtil.notificationExam = !notificationExamPreference.isChecked
+			true
+		}
+		notificationTimePreference.setOnPreferenceClickListener {
+			val time = ConfigurationUtil.notificationTime
+			val oldHour: Int
+			val oldMinute: Int
+			if (time == "") {
+				val calendar = Calendar.getInstance()
+				oldHour = calendar.get(Calendar.HOUR_OF_DAY)
+				oldMinute = calendar.get(Calendar.MINUTE)
+			} else {
+				val array = time.split(':')
+				oldHour = array[0].toInt()
+				oldMinute = array[1].toInt()
+			}
+			TimePickerDialog(activity, TimePickerDialog.OnTimeSetListener { _, hourOfDay, minute ->
+				val hourString = if (hourOfDay < 10) "0$hourOfDay" else hourOfDay.toString()
+				val minuteString = if (minute < 10) "0$minute" else minute.toString()
+				val newString = "$hourString:$minuteString"
+				ConfigurationUtil.notificationTime = newString
+				notificationTimePreference.summary = getString(R.string.summary_notification_time, ConfigurationUtil.notificationTime)
+			}, oldHour, oldMinute, true)
 					.show()
 			true
 		}

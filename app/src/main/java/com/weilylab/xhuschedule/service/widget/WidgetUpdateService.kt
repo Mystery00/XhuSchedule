@@ -7,33 +7,48 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.lifecycle.Observer
 import com.weilylab.xhuschedule.R
-import com.weilylab.xhuschedule.config.Status
+import com.weilylab.xhuschedule.config.Status.*
 import com.weilylab.xhuschedule.constant.Constants
+import com.weilylab.xhuschedule.constant.IntentConstant
 import com.weilylab.xhuschedule.model.Student
+import com.weilylab.xhuschedule.model.Test
 import com.weilylab.xhuschedule.repository.WidgetRepository
 import com.weilylab.xhuschedule.utils.ConfigurationUtil
 import com.weilylab.xhuschedule.utils.rxAndroid.PackageData
 import com.weilylab.xhuschedule.viewModel.WidgetViewModelHelper
 import com.zhuangfei.timetable.model.Schedule
-import vip.mystery0.logs.Logs
 
 class WidgetUpdateService : Service() {
 	override fun onBind(intent: Intent): IBinder? = null
 
 	private val studentListObserver = Observer<PackageData<List<Student>>> {
 		when (it?.status) {
-			Status.Content -> {
-				if (ConfigurationUtil.isEnableMultiUserMode)
+			Content -> {
+				if (ConfigurationUtil.isEnableMultiUserMode) {
 					WidgetRepository.queryTodayCourseForManyStudent()
-				else
+					WidgetRepository.queryTestsForManyStudent()
+				} else {
 					WidgetRepository.queryTodayCourse()
+					WidgetRepository.queryTests()
+				}
 			}
-			else -> sendBroadcast(Intent(Constants.ACTION_WIDGET_UPDATE_BROADCAST))
+			Loading -> finishAndNotify(IntentConstant.INTENT_VALUE_WIDGET_ALL)
+			Empty, Error -> finishAndNotify(IntentConstant.INTENT_VALUE_WIDGET_ALL, true)
 		}
 	}
 
 	private val todayCourseObserver = Observer<PackageData<List<Schedule>>> {
-		sendBroadcast(Intent(Constants.ACTION_WIDGET_UPDATE_BROADCAST))
+		when (it?.status) {
+			Loading -> finishAndNotify(IntentConstant.INTENT_VALUE_WIDGET_TODAY)
+			Content, Empty, Error -> finishAndNotify(IntentConstant.INTENT_VALUE_WIDGET_TODAY, true)
+		}
+	}
+
+	private val testObserver = Observer<PackageData<List<Test>>> {
+		when (it?.status) {
+			Loading -> finishAndNotify(IntentConstant.INTENT_VALUE_WIDGET_TEST)
+			Content, Empty, Error -> finishAndNotify(IntentConstant.INTENT_VALUE_WIDGET_TEST, true)
+		}
 	}
 
 	override fun onCreate() {
@@ -46,28 +61,31 @@ class WidgetUpdateService : Service() {
 				.build()
 		startForeground(20, notification)
 		initObserver()
+		WidgetRepository.queryStudentList()
 	}
 
 	private fun initObserver() {
 		WidgetViewModelHelper.studentList.observeForever(studentListObserver)
 		WidgetViewModelHelper.todayCourseList.observeForever(todayCourseObserver)
+		WidgetViewModelHelper.testList.observeForever(testObserver)
 	}
 
 	private fun removeObserver() {
 		WidgetViewModelHelper.studentList.removeObserver(studentListObserver)
 		WidgetViewModelHelper.todayCourseList.removeObserver(todayCourseObserver)
+		WidgetViewModelHelper.testList.removeObserver(testObserver)
 	}
 
-	override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-		WidgetRepository.queryStudentList()
-		return super.onStartCommand(intent, flags, startId)
+	private fun finishAndNotify(tag: String, isFinish: Boolean = false) {
+		sendBroadcast(Intent(Constants.ACTION_WIDGET_UPDATE_BROADCAST)
+				.putExtra(IntentConstant.INTENT_TAG_NAME_WIDGET_TAG, tag))
+		if (isFinish)
+			stopSelf()
 	}
 
 	override fun onDestroy() {
-		removeObserver()
 		stopForeground(true)
-		WidgetViewModelHelper.studentList.value = null
-		WidgetViewModelHelper.todayCourseList.value = null
+		removeObserver()
 		super.onDestroy()
 	}
 }

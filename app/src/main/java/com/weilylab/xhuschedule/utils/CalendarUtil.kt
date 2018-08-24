@@ -1,5 +1,7 @@
 package com.weilylab.xhuschedule.utils
 
+import com.weilylab.xhuschedule.model.Test
+import vip.mystery0.logs.Logs
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -24,6 +26,14 @@ object CalendarUtil {
 		}
 	}
 
+	fun getTomorrowIndex(): Int {
+		val nowIndex = getWeekIndex()
+		return when (nowIndex) {
+			7 -> 1
+			else -> nowIndex + 1
+		}
+	}
+
 	fun getWeekIndexInString(index: Int = getWeekIndex()): String {
 		val weeks = arrayOf("周一", "周二", "周三", "周四", "周五", "周六", "周日")
 		return weeks[index - 1]
@@ -41,5 +51,35 @@ object CalendarUtil {
 	fun getFormattedText(): String {
 		val simpleDateFormat = SimpleDateFormat("yyyy年MM月dd日", Locale.CHINA)
 		return "${simpleDateFormat.format(Calendar.getInstance().time)} ${getWeekIndexInString()}"
+	}
+
+	fun getTestDateText(test: Test): String {
+		if (test.date == "")
+			return ""
+		try {
+			val dayArray = test.date.split('-')
+			val startTimeArray = test.time.split('-')[0].split(':')
+			val endTimeArray = test.time.split('-')[1].split(':')
+			val startCalendar = Calendar.getInstance()
+			startCalendar.set(dayArray[0].toInt(), dayArray[1].toInt() - 1, dayArray[2].toInt(), startTimeArray[0].toInt(), startTimeArray[1].toInt(), 0)
+			val endCalendar = Calendar.getInstance()
+			endCalendar.set(dayArray[0].toInt(), dayArray[1].toInt() - 1, dayArray[2].toInt(), endTimeArray[0].toInt(), endTimeArray[1].toInt(), 0)
+			val nowCalendar = Calendar.getInstance()
+			return when {
+				nowCalendar.timeInMillis < startCalendar.timeInMillis -> {
+					val millis = startCalendar.timeInMillis - nowCalendar.timeInMillis
+					if (millis > 1000 * 60 * 60 * 24)//大于一天
+						"${millis / 1000 / 60 / 60 / 24} 天后"
+					else//小时
+						"${millis / 1000 / 60 / 60} 小时后"
+				}
+				nowCalendar.timeInMillis > endCalendar.timeInMillis ->
+					"已考过"
+				else -> "考试中"
+			}
+		} catch (e: Exception) {
+			Logs.wtf("getTestDateText: ", e)
+			return ""
+		}
 	}
 }

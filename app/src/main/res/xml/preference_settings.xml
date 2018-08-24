@@ -25,6 +25,22 @@
 
 	</PreferenceCategory>
 
+	<PreferenceCategory android:title="@string/screen_category_notification">
+
+		<CheckBoxPreference
+			android:key="@string/key_notification_course"
+			android:title="@string/title_notification_course" />
+
+		<CheckBoxPreference
+			android:key="@string/key_notification_exam"
+			android:title="@string/title_notification_exam" />
+
+		<Preference
+			android:key="@string/key_notification_time"
+			android:title="@string/title_notification_time" />
+
+	</PreferenceCategory>
+
 	<PreferenceCategory android:title="@string/title_other">
 
 		<CheckBoxPreference

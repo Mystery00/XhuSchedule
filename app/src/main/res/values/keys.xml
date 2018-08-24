@@ -12,6 +12,7 @@
 	<string name="screen_category_about_version">版本关于</string>
 	<string name="screen_category_about_application">应用关于</string>
 	<string name="screen_category_developer">开发者信息</string>
+	<string name="screen_category_notification">通知设置</string>
 
 	<string name="key_show_not_week" translatable="false">key_show_not_week</string>
 	<string name="key_logged_account" translatable="false">key_logged_account</string>
@@ -19,6 +20,9 @@
 	<string name="key_del_account" translatable="false">key_del_account</string>
 	<string name="key_set_main_account" translatable="false">key_set_main_account</string>
 	<string name="key_enable_multi_user_mode" translatable="false">key_enable_multi_user_mode</string>
+	<string name="key_notification_exam" translatable="false">key_notification_exam</string>
+	<string name="key_notification_course" translatable="false">key_notification_course</string>
+	<string name="key_notification_time" translatable="false">key_notification_time</string>
 	<string name="key_auto_check_update" translatable="false">key_auto_check_update</string>
 	<string name="key_update_log" translatable="false">key_update_log</string>
 	<string name="key_weixin" translatable="false">key_weixin</string>
@@ -51,6 +55,9 @@
 	<string name="title_query_score_cet">四六级成绩</string>
 	<string name="title_user_img">自定义个人头像</string>
 	<string name="title_background_img">自定义背景图片</string>
+	<string name="title_notification_course">课程提醒</string>
+	<string name="title_notification_exam">考试提醒</string>
+	<string name="title_notification_time">提醒时间</string>
 	<string name="title_other">其他设置</string>
 	<string name="title_weily_product">微力实验室出品</string>
 	<string name="title_community_link">点击加入群【西瓜课表用户交流反馈】</string>
@@ -72,6 +79,7 @@
 	<string name="summary_open_source_license" translatable="false">GNU General Public License v3.0</string>
 	<string name="summary_version_name" translatable="false">@string/app_version_name</string>
 	<string name="summary_version_code" translatable="false">@string/app_version_code</string>
+	<string name="summary_notification_time">将会在每天的 %1$s 提醒。</string>
 	<string name="summary_auto_check_update">在每一次启动时自动检查更新，注意，跳过某个版本将会无法使用增量更新</string>
 	<string name="summary_weily_product">点击进入实验室官网</string>
 	<string name="summary_weixin">点击跳转，也可以在微信小程序页面直接搜索“西瓜课表”即可使用</string>

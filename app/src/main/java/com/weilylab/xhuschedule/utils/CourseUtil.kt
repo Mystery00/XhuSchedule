@@ -20,7 +20,6 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import vip.mystery0.logs.Logs
-import vip.mystery0.logs.LogsConfig
 import java.util.*
 
 object CourseUtil {
@@ -87,18 +86,13 @@ object CourseUtil {
 	}
 
 	private fun request(resultArray: BooleanArray, studentList: List<Student>, year: String?, term: String?, doSaveListener: DoSaveListener<Map<String, List<Course>>>?, map: HashMap<String, List<Course>>, doneListener: () -> Unit, maxIndex: Int, index: Int = 0) {
-		Logs.setConfig(LogsConfig()
-				.setShowBorder(false))
-		Logs.im("request: ${isAllDone(resultArray)} index=$index")
 		if (index >= maxIndex || isAllDone(resultArray)) {
 			doneListener.invoke()
 			return
 		}
-		Logs.i("request: 未完成全部请求，继续发起请求")
 		val needRequestArray = ArrayList<Observable<DataWithUsername<CourseResponse>>>()
 		resultArray.filter { !it }
-				.forEachIndexed { position, b ->
-					Logs.i("getCoursesForManyStudent: ${studentList[position].username} $b")
+				.forEachIndexed { position, _ ->
 					needRequestArray.add(RetrofitFactory.retrofit
 							.create(CourseAPI::class.java)
 							.getCourses(studentList[position].username, year, term)
@@ -118,16 +112,13 @@ object CourseUtil {
 				.observeOn(AndroidSchedulers.mainThread())
 				.subscribe(object : Observer<DataWithUsername<CourseResponse>> {
 					override fun onComplete() {
-						Logs.i("onComplete: ")
 						resumeRequest(resultArray, studentList, year, term, doSaveListener, map, doneListener, maxIndex, index)
 					}
 
 					override fun onSubscribe(d: Disposable) {
-						Logs.i("onSubscribe: ")
 					}
 
 					override fun onNext(t: DataWithUsername<CourseResponse>) {
-						Logs.i("onNext: ")
 						val username = t.username
 						val data = t.data!!
 						val position = studentList.indexOfFirst { it.username == username }
@@ -170,7 +161,6 @@ object CourseUtil {
 				}
 				.subscribe(object : RxObserver<Boolean>() {
 					override fun onFinish(data: Boolean?) {
-						Logs.i("onFinish: 继续请求")
 						request(resultArray, studentList, year, term, doSaveListener, map, doneListener, maxIndex, index + 1)
 					}
 
