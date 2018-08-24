@@ -25,8 +25,6 @@ class TodayCourseWidgetService : RemoteViewsService() {
 		override fun hasStableIds(): Boolean = true
 
 		override fun getViewAt(position: Int): RemoteViews {
-			if (WidgetViewModelHelper.todayCourseList.value == null || WidgetViewModelHelper.todayCourseList.value!!.data == null || WidgetViewModelHelper.todayCourseList.value!!.data!!.isEmpty())
-				return RemoteViews(context.packageName, R.layout.layout_widget_no_data)
 			val course = WidgetViewModelHelper.todayCourseList.value!!.data!![position]
 			val remotesView = RemoteViews(context.packageName, R.layout.item_widget_today)
 			remotesView.setTextViewText(R.id.course_name_textView, course.name)
@@ -38,14 +36,9 @@ class TodayCourseWidgetService : RemoteViewsService() {
 			return remotesView
 		}
 
-		override fun getCount(): Int {
-			return if (WidgetViewModelHelper.todayCourseList.value == null || WidgetViewModelHelper.todayCourseList.value!!.data == null || WidgetViewModelHelper.todayCourseList.value!!.data!!.isEmpty())
-				1
-			else
-				WidgetViewModelHelper.todayCourseList.value!!.data!!.size
-		}
+		override fun getCount(): Int = WidgetViewModelHelper.todayCourseList.value!!.data!!.size
 
-		override fun getViewTypeCount(): Int = 2
+		override fun getViewTypeCount(): Int = 1
 
 		override fun onDestroy() {
 		}

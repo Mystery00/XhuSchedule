@@ -1,5 +1,6 @@
 package com.weilylab.xhuschedule.utils
 
+import java.text.SimpleDateFormat
 import java.util.*
 
 object CalendarUtil {
@@ -35,5 +36,10 @@ object CalendarUtil {
 		val startYear = grade?.toInt() ?: nowYear-3
 		val endYear = if (month >= Calendar.SEPTEMBER) nowYear + 1 else nowYear
 		return Array(endYear - startYear) { i -> "${startYear + i}-${startYear + 1 + i}" }
+	}
+
+	fun getFormattedText(): String {
+		val simpleDateFormat = SimpleDateFormat("yyyy年MM月dd日", Locale.CHINA)
+		return "${simpleDateFormat.format(Calendar.getInstance().time)} ${getWeekIndexInString()}"
 	}
 }

@@ -21,7 +21,7 @@ class WidgetUpdateService : Service() {
 	override fun onBind(intent: Intent): IBinder? = null
 
 	private val studentListObserver = Observer<PackageData<List<Student>>> {
-		when (it.status) {
+		when (it?.status) {
 			Status.Content -> {
 				if (ConfigurationUtil.isEnableMultiUserMode)
 					WidgetRepository.queryTodayCourseForManyStudent()
@@ -33,12 +33,10 @@ class WidgetUpdateService : Service() {
 	}
 
 	private val todayCourseObserver = Observer<PackageData<List<Schedule>>> {
-		Logs.i("todayCourseObserver: ")
 		sendBroadcast(Intent(Constants.ACTION_WIDGET_UPDATE_BROADCAST))
 	}
 
 	override fun onCreate() {
-		Logs.i("onCreate: ")
 		super.onCreate()
 		val notification = NotificationCompat.Builder(this, Constants.NOTIFICATION_CHANNEL_ID_DEFAULT)
 				.setSmallIcon(R.drawable.ic_stat_init)
@@ -61,15 +59,15 @@ class WidgetUpdateService : Service() {
 	}
 
 	override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-		Logs.i("onStartCommand: ")
 		WidgetRepository.queryStudentList()
 		return super.onStartCommand(intent, flags, startId)
 	}
 
 	override fun onDestroy() {
-		Logs.i("onDestroy: ")
 		removeObserver()
 		stopForeground(true)
+		WidgetViewModelHelper.studentList.value = null
+		WidgetViewModelHelper.todayCourseList.value = null
 		super.onDestroy()
 	}
 }
