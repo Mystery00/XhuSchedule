@@ -57,7 +57,9 @@ object ConfigUtil {
 	fun setNotificationAlarm(context: Context) {
 		//得到JobScheduler对象
 		val scheduler = context.getSystemService(Context.JOB_SCHEDULER_SERVICE) as JobScheduler
-
+		if (isJobPollServiceOn(context))
+			scheduler.cancel(NOTIFICATION_JOB_ID)
+//		else
 	}
 
 	private fun isJobPollServiceOn(context: Context): Boolean {
