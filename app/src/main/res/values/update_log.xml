@@ -7,15 +7,9 @@
 
 <resources>
 	<string-array name="update_log">
-		<item>新增：更新日志显示</item>
-		<item>新增：跳转微信小程序（未测试）</item>
-		<item>新增：检测更新</item>
+		<item>新增：桌面小部件</item>
 		<item> </item>
-		<item>修复：第一次启动时主页面标题显示错误</item>
-		<item>修复：课表页面日期显示错误</item>
-		<item>修复：通知公告处小红点不自动取消</item>
-		<item>修复：引导页面处于第三个页面时滑动不显示第四个页面</item>
-		<item>修复：登陆失败时对话框未自动取消</item>
-		<item>修复：版本号过低 (XD)</item>
+		<item>修复：未登陆时使用shortcut快速启动成绩查询，考试查询，四六级查询时崩溃</item>
+		<item>修复：跳转微信小程序</item>
 	</string-array>
 </resources>
