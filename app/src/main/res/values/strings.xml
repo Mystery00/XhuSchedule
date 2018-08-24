@@ -69,6 +69,8 @@
 	<string name="hint_network_error">网络无法使用，请检查网络连接！</string>
 	<string name="hint_data_null">返回的数据为空！</string>
 	<string name="hint_do_too_many">频繁操作！</string>
+	<string name="hint_action_not_login">请登录后再使用此功能！</string>
+	<string name="hint_course_sync_done">数据同步成功！</string>
 
 	<string name="hint_feedback_null_student">用户数据获取错误！</string>
 	<string name="hint_feedback_empty">提交信息不能为空！</string>
@@ -87,6 +89,9 @@
 	<string name="hint_dialog_get_cet_vcode">正在获取验证码……</string>
 	<string name="hint_dialog_query_cet_score">正在查询四六级成绩……</string>
 	<string name="hint_dialog_check_update">正在检查更新……</string>
+	<string name="hint_dialog_choose_student">请选择要查询的学生</string>
+	<string name="hint_dialog_choose_year">请选择要查询的学年</string>
+	<string name="hint_dialog_choose_term">请选择要查询的学期</string>
 
 	<string name="hint_confirm_reset_user_img">确定要重置个人头像吗？</string>
 	<string name="hint_confirm_reset_background_img">确定要重置背景图片吗？</string>

@@ -371,7 +371,7 @@ class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_naviga
 			return
 		loadingAnimation.repeatCount = 0
 		if (action == ACTION_REFRESH) {
-			toastMessage("信息同步完成！")
+			toastMessage(R.string.hint_course_sync_done)
 			action = ACTION_NONE
 		}
 	}
@@ -382,7 +382,6 @@ class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_naviga
 	private fun initPopupWindow() {
 		recyclerView = RecyclerView(this)
 		recyclerView.layoutManager = SkidRightLayoutManager(1.5f, 0.85f)
-//		recyclerView.layoutManager = GridLayoutManager(this, 2)
 		showAdapter = ShowCourseRecyclerViewAdapter(this)
 		recyclerView.adapter = showAdapter
 		popupWindow = PopupWindow(recyclerView, DensityTools.getScreenWidth(this), DensityTools.dp2px(this, 240F))

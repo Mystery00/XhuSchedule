@@ -124,6 +124,10 @@ class QueryClassScoreActivity : XhuBaseActivity(R.layout.activity_query_class_sc
 			}
 		})
 		textViewStudent.setOnClickListener {
+			if (queryClassScoreViewModel.studentList.value == null || queryClassScoreViewModel.studentList.value!!.data == null || queryClassScoreViewModel.studentList.value!!.data!!.isEmpty()) {
+				toastMessage(R.string.hint_action_not_login, true)
+				return@setOnClickListener
+			}
 			val map = queryClassScoreViewModel.studentInfoList.value!!.data!!
 			val studentList = map.keys.toList()
 			val studentTextArray = Array(studentList.size) { i -> "${studentList[i].studentName}(${studentList[i].username})" }
@@ -131,7 +135,7 @@ class QueryClassScoreActivity : XhuBaseActivity(R.layout.activity_query_class_sc
 			if (nowIndex == -1) nowIndex = 0
 			var selectIndex = nowIndex
 			AlertDialog.Builder(this)
-					.setTitle("选择学生")
+					.setTitle(R.string.hint_dialog_choose_student)
 					.setSingleChoiceItems(studentTextArray, nowIndex) { _, index ->
 						selectIndex = index
 					}
@@ -142,6 +146,10 @@ class QueryClassScoreActivity : XhuBaseActivity(R.layout.activity_query_class_sc
 					.show()
 		}
 		textViewYear.setOnClickListener {
+			if (queryClassScoreViewModel.studentList.value == null || queryClassScoreViewModel.studentList.value!!.data == null || queryClassScoreViewModel.studentList.value!!.data!!.isEmpty()) {
+				toastMessage(R.string.hint_action_not_login, true)
+				return@setOnClickListener
+			}
 			val map = queryClassScoreViewModel.studentInfoList.value!!.data!!
 			val studentInfo = map[queryClassScoreViewModel.student.value]
 			val yearTextArray = CalendarUtil.getSelectArray(studentInfo?.grade)
@@ -149,7 +157,7 @@ class QueryClassScoreActivity : XhuBaseActivity(R.layout.activity_query_class_sc
 			if (nowIndex == -1) nowIndex = 0
 			var selectIndex = nowIndex
 			AlertDialog.Builder(this)
-					.setTitle("选择学年")
+					.setTitle(R.string.hint_dialog_choose_year)
 					.setSingleChoiceItems(yearTextArray, nowIndex) { _, index ->
 						selectIndex = index
 					}
@@ -165,7 +173,7 @@ class QueryClassScoreActivity : XhuBaseActivity(R.layout.activity_query_class_sc
 			if (nowIndex == -1) nowIndex = 0
 			var selectIndex = nowIndex
 			AlertDialog.Builder(this)
-					.setTitle("选择学期")
+					.setTitle(R.string.hint_dialog_choose_term)
 					.setSingleChoiceItems(termTextArray, nowIndex) { _, index ->
 						selectIndex = index
 					}
@@ -176,7 +184,10 @@ class QueryClassScoreActivity : XhuBaseActivity(R.layout.activity_query_class_sc
 					.show()
 		}
 		queryButton.setOnClickListener {
-			ScoreRepository.queryClassScore(queryClassScoreViewModel)
+			if (queryClassScoreViewModel.studentList.value == null || queryClassScoreViewModel.studentList.value!!.data == null || queryClassScoreViewModel.studentList.value!!.data!!.isEmpty())
+				toastMessage(R.string.hint_action_not_login, true)
+			else
+				ScoreRepository.queryClassScore(queryClassScoreViewModel)
 		}
 	}
 
@@ -236,7 +247,7 @@ class QueryClassScoreActivity : XhuBaseActivity(R.layout.activity_query_class_sc
 
 	private fun showEmpty() {
 		dismissLoading()
-		toastMessage("暂时没有数据！")
+		toastMessage(R.string.hint_data_null, true)
 	}
 
 	private fun showContent() {

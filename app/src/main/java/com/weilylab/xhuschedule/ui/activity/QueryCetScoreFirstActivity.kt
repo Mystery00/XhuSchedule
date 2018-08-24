@@ -46,7 +46,7 @@ class QueryCetScoreFirstActivity : XhuBaseActivity(R.layout.activity_query_cet_s
 			Loading -> showDialog()
 			Empty -> {
 				hideDialog()
-				toastMessage("获取数据为空！", true)
+				toastMessage(R.string.hint_data_null, true)
 			}
 			Error -> {
 				hideDialog()
@@ -116,6 +116,10 @@ class QueryCetScoreFirstActivity : XhuBaseActivity(R.layout.activity_query_cet_s
 	}
 
 	private fun requestVCode() {
+		if (QueryCetScoreViewModelHelper.studentList.value == null || QueryCetScoreViewModelHelper.studentList.value!!.data == null || QueryCetScoreViewModelHelper.studentList.value!!.data!!.isEmpty()) {
+			toastMessage(R.string.hint_action_not_login, true)
+			return
+		}
 		cetNoEditText.error = null
 		cetNameEditText.error = null
 

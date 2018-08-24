@@ -5,7 +5,6 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.text.TextUtils
 import android.widget.ScrollView
-import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import com.android.setupwizardlib.view.NavigationBar
@@ -33,7 +32,7 @@ class QueryCetScoreSecondActivity : XhuBaseActivity(R.layout.activity_query_cet_
 			Loading -> showVCodeDialog()
 			Empty -> {
 				hideVCodeDialog()
-				toastMessage("获取数据为空！", true)
+				toastMessage(R.string.hint_data_null, true)
 			}
 			Error -> {
 				hideVCodeDialog()
@@ -52,11 +51,11 @@ class QueryCetScoreSecondActivity : XhuBaseActivity(R.layout.activity_query_cet_
 			Loading -> showDialog()
 			Empty -> {
 				hideDialog()
-				Toast.makeText(this, "获取数据为空！", Toast.LENGTH_LONG).show()
+				toastMessage(R.string.hint_data_null, true)
 			}
 			Error -> {
 				hideDialog()
-				Toast.makeText(this, it.error?.message, Toast.LENGTH_LONG).show()
+				toastMessage(it.error?.message, true)
 			}
 		}
 	}

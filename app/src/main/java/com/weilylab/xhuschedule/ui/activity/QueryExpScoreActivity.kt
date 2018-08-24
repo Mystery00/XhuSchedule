@@ -128,7 +128,7 @@ class QueryExpScoreActivity : XhuBaseActivity(R.layout.activity_query_exp_score)
 			if (nowIndex == -1) nowIndex = 0
 			var selectIndex = nowIndex
 			AlertDialog.Builder(this)
-					.setTitle("选择学生")
+					.setTitle(R.string.hint_dialog_choose_student)
 					.setSingleChoiceItems(studentTextArray, nowIndex) { _, index ->
 						selectIndex = index
 					}
@@ -146,7 +146,7 @@ class QueryExpScoreActivity : XhuBaseActivity(R.layout.activity_query_exp_score)
 			if (nowIndex == -1) nowIndex = 0
 			var selectIndex = nowIndex
 			AlertDialog.Builder(this)
-					.setTitle("选择学年")
+					.setTitle(R.string.hint_dialog_choose_year)
 					.setSingleChoiceItems(yearTextArray, nowIndex) { _, index ->
 						selectIndex = index
 					}
@@ -162,7 +162,7 @@ class QueryExpScoreActivity : XhuBaseActivity(R.layout.activity_query_exp_score)
 			if (nowIndex == -1) nowIndex = 0
 			var selectIndex = nowIndex
 			AlertDialog.Builder(this)
-					.setTitle("选择学期")
+					.setTitle(R.string.hint_dialog_choose_term)
 					.setSingleChoiceItems(termTextArray, nowIndex) { _, index ->
 						selectIndex = index
 					}
@@ -204,7 +204,7 @@ class QueryExpScoreActivity : XhuBaseActivity(R.layout.activity_query_exp_score)
 
 	private fun showEmpty() {
 		dismissLoading()
-		toastMessage("暂时没有数据！")
+		toastMessage(R.string.hint_data_null, true)
 	}
 
 	private fun showContent() {
