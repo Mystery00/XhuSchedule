@@ -7,9 +7,8 @@
 
 <resources>
 	<string-array name="update_log">
-		<item>新增：桌面小部件</item>
+		<item>该版本仅供测试，如果在使用过程中发现任何问题或者有好的建议，请发送邮件到 mystery0dyl520@gmail.com 或者加入交流群私聊Android开发者（群名片：Mystery-Android）</item>
 		<item> </item>
-		<item>修复：未登陆时使用shortcut快速启动成绩查询，考试查询，四六级查询时崩溃</item>
-		<item>修复：跳转微信小程序</item>
+		<item>欢迎通过 软件设置-点击加入群【西瓜课表用户交流反馈】 加入交流群</item>
 	</string-array>
 </resources>
