@@ -16,15 +16,15 @@ object NotificationRepository {
 	fun queryTomorrowCourseByUsername(student: Student, year: String?, term: String?, listener: (PackageData<List<Schedule>>) -> Unit) {
 		listener.invoke(PackageData.loading())
 		RxObservable<List<Schedule>>()
-				.doThings { observableEmitter ->
+				.doThings { emitter ->
 					val startTime = InitLocalDataSource.getStartDataTime()
-					val currentWeek = CalendarUtil.getWeekFromCalendar(startTime)
+					val tomorrowWeek = CalendarUtil.getTomorrowWeekFromCalendar(startTime)
 					val tomorrow = CalendarUtil.getTomorrowIndex()
 					val courseList = CourseLocalDataSource.getRowCourseList(student, year
 							?: "current", term ?: "current")
 					val tomorrowCourseList = ArrayList<Schedule>()
-					tomorrowCourseList.addAll(courseList/*.filter { it.weekList.contains(currentWeek) && it.day == tomorrow }*/)
-					observableEmitter.onFinish(tomorrowCourseList)
+					tomorrowCourseList.addAll(courseList.filter { it.weekList.contains(tomorrowWeek) && it.day == tomorrow })
+					emitter.onFinish(tomorrowCourseList)
 				}
 				.subscribe(object : RxObserver<List<Schedule>>() {
 					override fun onFinish(data: List<Schedule>?) {
@@ -42,7 +42,7 @@ object NotificationRepository {
 		RxObservable<List<Schedule>>()
 				.doThings { emitter ->
 					val startTime = InitLocalDataSource.getStartDataTime()
-					val currentWeek = CalendarUtil.getWeekFromCalendar(startTime)
+					val tomorrowWeekWeek = CalendarUtil.getTomorrowWeekFromCalendar(startTime)
 					val tomorrow = CalendarUtil.getTomorrowIndex()
 					val courseList = ArrayList<Schedule>()
 					studentList.forEach {
@@ -50,8 +50,8 @@ object NotificationRepository {
 								?: "current", term ?: "current"))
 					}
 					val tomorrowCourseList = ArrayList<Schedule>()
-					tomorrowCourseList.addAll(courseList.filter { it.weekList.contains(currentWeek) && it.day == tomorrow })
-					emitter.onFinish(courseList)
+					tomorrowCourseList.addAll(courseList.filter { it.weekList.contains(tomorrowWeekWeek) && it.day == tomorrow })
+					emitter.onFinish(tomorrowCourseList)
 				}
 				.subscribe(object : RxObserver<List<Schedule>>() {
 					override fun onFinish(data: List<Schedule>?) {
@@ -69,9 +69,9 @@ object NotificationRepository {
 		RxObservable<List<Test>>()
 				.doThings { emitter ->
 					val testList = TestLocalDataSource.getRawTestList(student)
-					val tomorrowCourseList = ArrayList<Test>()
-					tomorrowCourseList.addAll(testList/*.filter { CalendarUtil.isTomorrowTest(it.date) }*/)
-					emitter.onFinish(testList)
+					val tomorrowTestList = ArrayList<Test>()
+					tomorrowTestList.addAll(testList.filter { CalendarUtil.isTomorrowTest(it.date) })
+					emitter.onFinish(tomorrowTestList)
 				}
 				.subscribe(object : RxObserver<List<Test>>() {
 					override fun onFinish(data: List<Test>?) {
@@ -93,9 +93,9 @@ object NotificationRepository {
 					studentList.forEach {
 						testList.addAll(TestLocalDataSource.getRawTestList(it))
 					}
-					val tomorrowCourseList = ArrayList<Test>()
-					tomorrowCourseList.addAll(testList/*.filter { CalendarUtil.isTomorrowTest(it.date) }*/)
-					emitter.onFinish(testList)
+					val tomorrowTestList = ArrayList<Test>()
+					tomorrowTestList.addAll(testList.filter { CalendarUtil.isTomorrowTest(it.date) })
+					emitter.onFinish(tomorrowTestList)
 				}
 				.subscribe(object : RxObserver<List<Test>>() {
 					override fun onFinish(data: List<Test>?) {

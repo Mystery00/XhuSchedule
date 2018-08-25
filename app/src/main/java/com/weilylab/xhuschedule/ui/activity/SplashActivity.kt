@@ -34,6 +34,7 @@
 package com.weilylab.xhuschedule.ui.activity
 
 import android.content.Intent
+import android.os.Build
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.weilylab.xhuschedule.base.XhuBaseActivity
@@ -48,8 +49,8 @@ import com.weilylab.xhuschedule.utils.FileUtil
 import com.weilylab.xhuschedule.utils.rxAndroid.PackageData
 import com.weilylab.xhuschedule.viewModel.SplashViewModel
 import com.weilylab.xhuschedule.service.DownloadSplashIntentService
+import com.weilylab.xhuschedule.service.NotificationService
 import com.weilylab.xhuschedule.utils.ConfigUtil
-import vip.mystery0.logs.Logs
 
 /**
  * Created by mystery0.
@@ -82,8 +83,13 @@ class SplashActivity : XhuBaseActivity(null) {
 		super.initData()
 		initViewModel()
 		SplashRepository.requestSplash(splashViewModel)
-		if (ConfigurationUtil.autoCheckUpdate)
-			startService(Intent(APP.context, CheckUpdateService::class.java))
+		if (ConfigurationUtil.autoCheckUpdate) {
+			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+				startForegroundService(Intent(APP.context, CheckUpdateService::class.java))
+			else
+				startService(Intent(APP.context, CheckUpdateService::class.java))
+		}
+		startForegroundService(Intent(this, NotificationService::class.java))
 		ConfigUtil.setTrigger(this)
 	}
 

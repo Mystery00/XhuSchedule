@@ -16,6 +16,7 @@ import com.weilylab.xhuschedule.config.Status.*
 import com.weilylab.xhuschedule.repository.BottomNavigationRepository
 import com.weilylab.xhuschedule.ui.custom.CustomDateAdapter
 import com.weilylab.xhuschedule.ui.custom.CustomItemBuildAdapter
+import com.weilylab.xhuschedule.utils.CalendarUtil
 import com.weilylab.xhuschedule.utils.ConfigurationUtil
 import com.weilylab.xhuschedule.utils.LayoutRefreshConfigUtil
 import com.weilylab.xhuschedule.utils.rxAndroid.PackageData
@@ -60,7 +61,6 @@ class TableFragment : BaseBottomNavigationFragment(R.layout.fragment_table) {
 				val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINA)
 				fragmentTableBinding.timeTableView
 						.curWeek(simpleDateFormat.format(it.data!!.time))
-						.callback(CustomDateAdapter(it.data.timeInMillis))
 			}
 		}
 	}
@@ -138,8 +138,8 @@ class TableFragment : BaseBottomNavigationFragment(R.layout.fragment_table) {
 				.subscribe(object : RxObserver<Boolean>() {
 					override fun onFinish(data: Boolean?) {
 						if (data != null && data) {
-							if (bottomNavigationViewModel.week.value == 0 && fragmentTableBinding.timeTableView.onDateBuildListener() is CustomDateAdapter) {
-								val whenTime = (fragmentTableBinding.timeTableView.onDateBuildListener() as CustomDateAdapter).whenBeginSchool()
+							if (bottomNavigationViewModel.week.value == 0) {
+								val whenTime = CalendarUtil.whenBeginSchool()
 								if (whenTime > 0)
 									bottomNavigationViewModel.title.value = "距离开学还有${whenTime}天"
 								else

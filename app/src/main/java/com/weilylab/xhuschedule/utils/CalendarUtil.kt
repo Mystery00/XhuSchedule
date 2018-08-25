@@ -26,6 +26,11 @@ object CalendarUtil {
 		}
 	}
 
+	fun getTomorrowWeekFromCalendar(startDateTime: Calendar): Int {
+		val todayWeek = getWeekFromCalendar(startDateTime)
+		return if (getWeekIndex() == 7) todayWeek + 1 else todayWeek
+	}
+
 	fun getTomorrowIndex(): Int {
 		val nowIndex = getWeekIndex()
 		return when (nowIndex) {
@@ -43,12 +48,9 @@ object CalendarUtil {
 			val month = dateArray[1].toInt()
 			val day = dateArray[2].toInt()
 			val now = Calendar.getInstance()
-			now.set(Calendar.HOUR_OF_DAY, 0)
-			now.set(Calendar.MINUTE, 0)
-			now.set(Calendar.SECOND, 0)
+			now.add(Calendar.DATE, 1)
 			(year == now.get(Calendar.YEAR)) && (month == now.get(Calendar.MONTH) + 1) && (day == now.get(Calendar.DATE))
 		} catch (e: Exception) {
-			Logs.wtf("isTomorrowTest: ", e)
 			false
 		}
 	}
@@ -110,5 +112,64 @@ object CalendarUtil {
 		if (calendar.timeInMillis < now.timeInMillis)
 			calendar.add(Calendar.DATE, 1)
 		return calendar.timeInMillis
+	}
+
+	fun whenBeginSchool(): Int {
+		val calendar = Calendar.getInstance()
+		startDateTime.set(Calendar.HOUR_OF_DAY, 0)
+		startDateTime.set(Calendar.MINUTE, 0)
+		startDateTime.set(Calendar.SECOND, 0)
+		startDateTime.set(Calendar.MILLISECOND, 0)
+		if (startDateTime.timeInMillis <= calendar.timeInMillis)
+			return 0
+		calendar.set(Calendar.HOUR_OF_DAY, 0)
+		calendar.set(Calendar.MINUTE, 0)
+		calendar.set(Calendar.SECOND, 0)
+		calendar.set(Calendar.MILLISECOND, 0)
+		var num = 0
+		while (calendar.timeInMillis < startDateTime.timeInMillis) {
+			calendar.add(Calendar.DATE, 1)
+			num++
+		}
+		return num
+	}
+
+	fun getTrueWeek(): Int {
+		val calendar = Calendar.getInstance()
+		calendar.set(Calendar.HOUR_OF_DAY, 0)
+		calendar.set(Calendar.MINUTE, 0)
+		calendar.set(Calendar.SECOND, 0)
+		calendar.set(Calendar.MILLISECOND, 0)
+		startDateTime.set(Calendar.HOUR_OF_DAY, 0)
+		startDateTime.set(Calendar.MINUTE, 0)
+		startDateTime.set(Calendar.SECOND, 0)
+		startDateTime.set(Calendar.MILLISECOND, 0)
+		return ((calendar.timeInMillis - startDateTime.timeInMillis) / 1000 / 60 / 60 / 24 / 7).toInt()
+	}
+
+	fun getDateStringFromWeek(curWeek: Int, targetWeek: Int): List<String> {
+		val calendar = Calendar.getInstance()
+		if (targetWeek == curWeek)
+			return getDateStringFromCalendar(calendar)
+		val amount = targetWeek - curWeek
+		calendar.add(Calendar.WEEK_OF_YEAR, amount)
+		return getDateStringFromCalendar(calendar)
+	}
+
+	private fun getDateStringFromCalendar(calendar: Calendar): List<String> {
+		val dateList = ArrayList<String>()
+		while (calendar.get(Calendar.DAY_OF_WEEK) != Calendar.MONDAY) {
+			calendar.add(Calendar.DAY_OF_MONTH, -1)
+		}
+		calendar.firstDayOfWeek = Calendar.MONDAY
+		dateList.add("${calendar.get(Calendar.MONTH) + 1}月")
+		for (i in 0..6) {
+			if (calendar.get(Calendar.DAY_OF_MONTH) == 1)
+				dateList.add("${calendar.get(Calendar.MONTH) + 1}月")
+			else
+				dateList.add("${calendar.get(Calendar.DAY_OF_MONTH)}日")
+			calendar.add(Calendar.DAY_OF_MONTH, 1)
+		}
+		return dateList
 	}
 }
