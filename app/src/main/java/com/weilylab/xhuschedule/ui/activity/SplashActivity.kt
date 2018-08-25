@@ -48,6 +48,7 @@ import com.weilylab.xhuschedule.utils.FileUtil
 import com.weilylab.xhuschedule.utils.rxAndroid.PackageData
 import com.weilylab.xhuschedule.viewModel.SplashViewModel
 import com.weilylab.xhuschedule.service.DownloadSplashIntentService
+import com.weilylab.xhuschedule.utils.ConfigUtil
 import vip.mystery0.logs.Logs
 
 /**
@@ -83,6 +84,7 @@ class SplashActivity : XhuBaseActivity(null) {
 		SplashRepository.requestSplash(splashViewModel)
 		if (ConfigurationUtil.autoCheckUpdate)
 			startService(Intent(APP.context, CheckUpdateService::class.java))
+		ConfigUtil.setTrigger(this)
 	}
 
 	private fun initViewModel() {

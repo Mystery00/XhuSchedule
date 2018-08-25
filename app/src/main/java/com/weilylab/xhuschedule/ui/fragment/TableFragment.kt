@@ -59,6 +59,7 @@ class TableFragment : BaseBottomNavigationFragment(R.layout.fragment_table) {
 				val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINA)
 				fragmentTableBinding.timeTableView
 						.curWeek(simpleDateFormat.format(it.data!!.time))
+						.callback(CustomDateAdapter(it.data.timeInMillis))
 			}
 		}
 	}
@@ -134,8 +135,18 @@ class TableFragment : BaseBottomNavigationFragment(R.layout.fragment_table) {
 				}
 				.subscribe(object : RxObserver<Boolean>() {
 					override fun onFinish(data: Boolean?) {
-						if (data != null && data)
-							bottomNavigationViewModel.title.value = "第${bottomNavigationViewModel.week.value}周"
+						if (data != null && data) {
+							if (bottomNavigationViewModel.week.value == 0 && fragmentTableBinding.timeTableView.onDateBuildListener() is CustomDateAdapter) {
+								val whenTime = (fragmentTableBinding.timeTableView.onDateBuildListener() as CustomDateAdapter).whenBeginSchool()
+								if (whenTime > 0)
+									bottomNavigationViewModel.title.value = "距离开学还有${whenTime}天"
+								else
+									bottomNavigationViewModel.title.value = "第${bottomNavigationViewModel.week.value
+											?: "0"}周"
+							} else
+								bottomNavigationViewModel.title.value = "第${bottomNavigationViewModel.week.value
+										?: "0"}周"
+						}
 					}
 
 					override fun onError(e: Throwable) {

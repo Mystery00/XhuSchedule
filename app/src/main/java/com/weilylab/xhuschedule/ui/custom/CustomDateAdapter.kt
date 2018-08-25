@@ -12,11 +12,16 @@ import com.weilylab.xhuschedule.utils.CalendarUtil
 import com.zhuangfei.timetable.listener.OnDateBuildAapter
 import com.zhuangfei.timetable.model.ScheduleSupport
 import com.zhuangfei.timetable.utils.ColorUtils
+import java.text.SimpleDateFormat
+import java.util.*
 
-class CustomDateAdapter : OnDateBuildAapter() {
+
+class CustomDateAdapter(private val startTime: Long) : OnDateBuildAapter() {
 	private lateinit var itemCustomDateviewFirstBinding: ItemCustomDateviewFirstBinding
 	private val bindingArray = arrayOfNulls<ItemCustomDateviewBinding>(7)
 	private val heightPx = DensityTools.dp2px(APP.context, 35f)
+
+	constructor() : this(Calendar.getInstance().timeInMillis)
 
 	override fun onBuildDayLayout(mInflate: LayoutInflater, pos: Int, width: Int, height: Int): View {
 		val itemCustomDateviewBinding = ItemCustomDateviewBinding.inflate(mInflate)
@@ -53,6 +58,23 @@ class CustomDateAdapter : OnDateBuildAapter() {
 				itemCustomDateviewBinding!!.root.setBackgroundColor(highLightColor)
 			else
 				itemCustomDateviewBinding!!.root.setBackgroundColor(normalColor)
+		}
+	}
+
+	/**
+	 * 计算距离开学的天数
+	 *
+	 * @return 返回值2种类型，0：已经开学；>0:天数
+	 */
+	fun whenBeginSchool(): Long {
+		val calendar = Calendar.getInstance()
+		calendar.timeInMillis = startTime
+		val calWeek = ScheduleSupport.timeTransfrom(SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.CHINA).format(calendar.time))
+		return if (calWeek > 0) {//开学
+			0
+		} else {
+			val seconds = (startTime - System.currentTimeMillis()) / 1000
+			seconds / (24 * 3600)
 		}
 	}
 }

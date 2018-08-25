@@ -112,7 +112,8 @@ class TodayFragment : BaseBottomNavigationFragment(R.layout.fragment_today) {
 				.subscribe(object : RxObserver<Boolean>() {
 					override fun onFinish(data: Boolean?) {
 						if (data != null && data)
-							viewModel.title.value = "第${viewModel.currentWeek.value?.data}周 ${CalendarUtil.getWeekIndexInString()}"
+							viewModel.title.value = "第${viewModel.currentWeek.value?.data
+									?: "0"}周 ${CalendarUtil.getWeekIndexInString()}"
 					}
 
 					override fun onError(e: Throwable) {

@@ -188,6 +188,7 @@ class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_naviga
 				.callback(IWeekView.OnWeekItemClickedListener {
 					bottomNavigationViewModel.week.value = it
 					configWeekView(viewPager.currentItem)
+					viewPagerAdapter.getItem(viewPager.currentItem).updateTitle()
 				})
 				.showView()
 		bottomNavigationView.config

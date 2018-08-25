@@ -1,21 +1,35 @@
 package com.weilylab.xhuschedule.service
 
-import android.app.job.JobParameters
-import android.app.job.JobService
+import android.app.Service
+import android.content.Intent
+import android.os.IBinder
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
+import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.config.Status.*
+import com.weilylab.xhuschedule.constant.Constants
 import com.weilylab.xhuschedule.repository.NotificationRepository
 import com.weilylab.xhuschedule.repository.local.StudentLocalDataSource
 import com.weilylab.xhuschedule.ui.notification.TomorrowNotification
 import com.weilylab.xhuschedule.utils.ConfigurationUtil
 import vip.mystery0.logs.Logs
 
-class NotificationJobService : JobService() {
+class NotificationService : Service() {
+	override fun onBind(intent: Intent?): IBinder? = null
+
 	private var isFinishCourse = false
 	private var isFinishTest = false
 
-	override fun onStopJob(params: JobParameters?): Boolean = ConfigurationUtil.notificationCourse || ConfigurationUtil.notificationExam
-
-	override fun onStartJob(params: JobParameters?): Boolean {
+	override fun onCreate() {
+		Logs.i("onCreate: 接收到定时器的唤醒，成功启动")
+		super.onCreate()
+		val notification = NotificationCompat.Builder(this, Constants.NOTIFICATION_CHANNEL_ID_DEFAULT)
+				.setSmallIcon(R.drawable.ic_stat_init)
+				.setContentText(getString(R.string.hint_foreground_notification))
+				.setAutoCancel(true)
+				.setPriority(NotificationManagerCompat.IMPORTANCE_NONE)
+				.build()
+		startForeground(Constants.NOTIFICATION_ID_TOMORROW_INIT, notification)
 		if (ConfigurationUtil.isEnableMultiUserMode)
 			StudentLocalDataSource.queryAllStudentList { packageData ->
 				when (packageData.status) {
@@ -26,9 +40,9 @@ class NotificationJobService : JobService() {
 									Content -> {
 										TomorrowNotification.notifyCourse(this, it.data!!)
 										isFinishCourse = true
-										checkFinish(params)
+										checkFinish()
 									}
-									Empty, Error -> jobFinished(params, false)
+									Empty, Error -> stopSelf()
 								}
 							}
 						else
@@ -39,15 +53,15 @@ class NotificationJobService : JobService() {
 									Content -> {
 										TomorrowNotification.notifyTest(this, it.data!!)
 										isFinishTest = true
-										checkFinish(params)
+										checkFinish()
 									}
-									Empty, Error -> jobFinished(params, false)
+									Empty, Error -> stopSelf()
 								}
 							}
 						else
 							isFinishTest = true
 					}
-					Empty, Error -> jobFinished(params, false)
+					Empty, Error -> stopSelf()
 					else -> Logs.i("onStartJob: loading")
 				}
 			}
@@ -61,9 +75,9 @@ class NotificationJobService : JobService() {
 									Content -> {
 										TomorrowNotification.notifyCourse(this, it.data!!)
 										isFinishCourse = true
-										checkFinish(params)
+										checkFinish()
 									}
-									Empty, Error -> jobFinished(params, false)
+									Empty, Error -> stopSelf()
 								}
 							}
 						else
@@ -74,23 +88,22 @@ class NotificationJobService : JobService() {
 									Content -> {
 										TomorrowNotification.notifyTest(this, it.data!!)
 										isFinishTest = true
-										checkFinish(params)
+										checkFinish()
 									}
-									Empty, Error -> jobFinished(params, false)
+									Empty, Error -> stopSelf()
 								}
 							}
 						else
 							isFinishTest = true
 					}
-					Empty, Error -> jobFinished(params, false)
+					Empty, Error -> stopSelf()
 					else -> Logs.i("onStartJob: loading")
 				}
 			}
-		return true
 	}
 
-	private fun checkFinish(params: JobParameters?) {
+	private fun checkFinish() {
 		if (isFinishCourse && isFinishTest)
-			jobFinished(params, false)
+			stopSelf()
 	}
 }

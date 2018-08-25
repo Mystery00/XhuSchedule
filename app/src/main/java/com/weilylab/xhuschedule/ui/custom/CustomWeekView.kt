@@ -76,9 +76,9 @@ class CustomWeekView : LinearLayout, WeekViewEnable<CustomWeekView> {
 		return this
 	}
 
-	override fun isShow(isShow: Boolean): WeekView {
+	override fun isShow(isShow: Boolean): CustomWeekView {
 		layoutWeekViewBinding.nestedScrollView.visibility = if (isShow) View.VISIBLE else View.GONE
-		return WeekView(context)
+		return this
 	}
 
 	override fun dataSource(): List<Schedule> {

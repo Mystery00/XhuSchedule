@@ -133,6 +133,7 @@ class SettingsPreferenceFragment : BasePreferenceFragment(R.xml.preference_setti
 				val newString = "$hourString:$minuteString"
 				ConfigurationUtil.notificationTime = newString
 				notificationTimePreference.summary = getString(R.string.summary_notification_time, ConfigurationUtil.notificationTime)
+				ConfigUtil.setTrigger(activity)
 			}, oldHour, oldMinute, true)
 					.show()
 			true

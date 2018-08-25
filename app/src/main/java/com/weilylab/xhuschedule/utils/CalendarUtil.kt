@@ -101,4 +101,14 @@ object CalendarUtil {
 			return ""
 		}
 	}
+
+	fun getNotificationTime(): Long {
+		val now = Calendar.getInstance()
+		val calendar = Calendar.getInstance()
+		val setTime = ConfigurationUtil.notificationTime.split(':')
+		calendar.set(now.get(Calendar.YEAR), now.get(Calendar.MONTH), now.get(Calendar.DATE), setTime[0].toInt(), setTime[1].toInt(), 0)
+		if (calendar.timeInMillis < now.timeInMillis)
+			calendar.add(Calendar.DATE, 1)
+		return calendar.timeInMillis
+	}
 }
