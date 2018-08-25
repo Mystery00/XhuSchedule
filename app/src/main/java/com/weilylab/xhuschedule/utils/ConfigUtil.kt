@@ -1,14 +1,14 @@
 package com.weilylab.xhuschedule.utils
 
-import android.app.job.JobInfo
-import android.app.job.JobScheduler
-import android.content.ComponentName
+import android.app.AlarmManager
+import android.app.PendingIntent
 import android.content.Context
+import android.content.Intent
 import android.os.Build
 import android.util.Base64
 import androidx.appcompat.app.AlertDialog
 import com.weilylab.xhuschedule.R
-import com.weilylab.xhuschedule.service.NotificationJobService
+import com.weilylab.xhuschedule.service.NotificationService
 import java.util.*
 
 object ConfigUtil {
@@ -55,32 +55,17 @@ object ConfigUtil {
 				.show()
 	}
 
-	private const val NOTIFICATION_JOB_ID = 123
-
-	fun setNotificationAlarm(context: Context) {
-		//得到JobScheduler对象
-		val scheduler = context.getSystemService(Context.JOB_SCHEDULER_SERVICE) as JobScheduler
-		if (isJobPollServiceOn(context))
-			scheduler.cancel(NOTIFICATION_JOB_ID)
-		else {
-			val jobInfo = JobInfo.Builder(NOTIFICATION_JOB_ID, ComponentName(context, NotificationJobService::class.java))
-					.setPeriodic(1000 * 60 * 60 * 24)
-					.setPersisted(true)
-					.build()
-			scheduler.schedule(jobInfo)
+	fun setTrigger(context: Context) {
+		if (!ConfigurationUtil.notificationCourse && !ConfigurationUtil.notificationExam)
+			return
+		val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+		val alarmIntent = Intent(context, NotificationService::class.java)
+		val pendingIntent = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+			PendingIntent.getForegroundService(context, 0, alarmIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+		} else {
+			PendingIntent.getService(context, 0, alarmIntent, PendingIntent.FLAG_UPDATE_CURRENT)
 		}
-	}
-
-	private fun isJobPollServiceOn(context: Context): Boolean {
-		val scheduler = context.getSystemService(Context.JOB_SCHEDULER_SERVICE) as JobScheduler
-		var hasBeenScheduled = false
-		//getAllPendingJobs得到是当前Package对应的已经安排的任务
-		for (jobInfo in scheduler.allPendingJobs) {
-			if (jobInfo.id == NOTIFICATION_JOB_ID) {
-				hasBeenScheduled = true
-				break
-			}
-		}
-		return hasBeenScheduled
+		alarmManager.cancel(pendingIntent)//关闭定时器
+		alarmManager.set(AlarmManager.RTC_WAKEUP, CalendarUtil.getNotificationTime(), pendingIntent)
 	}
 }
