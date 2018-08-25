@@ -70,6 +70,9 @@ class SettingsPreferenceFragment : BasePreferenceFragment(R.xml.preference_setti
 		updateLogPreference = findPreferenceById(R.string.key_update_log)
 
 		autoCheckUpdatePreference.isChecked = ConfigurationUtil.autoCheckUpdate
+		notificationCoursePreference.isChecked = ConfigurationUtil.notificationCourse
+		notificationExamPreference.isChecked = ConfigurationUtil.notificationExam
+		notificationTimePreference.summary = getString(R.string.summary_notification_time, ConfigurationUtil.notificationTime)
 	}
 
 	override fun monitor() {

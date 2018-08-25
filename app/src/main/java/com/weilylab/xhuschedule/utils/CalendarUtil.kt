@@ -46,7 +46,7 @@ object CalendarUtil {
 			now.set(Calendar.HOUR_OF_DAY, 0)
 			now.set(Calendar.MINUTE, 0)
 			now.set(Calendar.SECOND, 0)
-			year == now.get(Calendar.YEAR) && month == now.get(Calendar.MONTH) + 1 && day == now.get(Calendar.DATE)
+			(year == now.get(Calendar.YEAR)) && (month == now.get(Calendar.MONTH) + 1) && (day == now.get(Calendar.DATE))
 		} catch (e: Exception) {
 			Logs.wtf("isTomorrowTest: ", e)
 			false

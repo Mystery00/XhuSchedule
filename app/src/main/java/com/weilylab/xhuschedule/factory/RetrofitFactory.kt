@@ -11,11 +11,13 @@ import java.util.concurrent.TimeUnit
 object RetrofitFactory {
 	private val splashClient = OkHttpClient.Builder()
 			.retryOnConnectionFailure(true)
-			.connectTimeout(2, TimeUnit.SECONDS)
-			.readTimeout(2, TimeUnit.SECONDS)
-			.writeTimeout(2, TimeUnit.SECONDS)
+			.connectTimeout(1, TimeUnit.SECONDS)
+			.readTimeout(1, TimeUnit.SECONDS)
+			.writeTimeout(1, TimeUnit.SECONDS)
 			.addInterceptor(LoadCookiesInterceptor())
 			.addInterceptor(SaveCookiesInterceptor())
+//			.addInterceptor(HttpLoggingInterceptor()
+//					.setLevel(HttpLoggingInterceptor.Level.BODY))
 			.build()
 
 	private val client = OkHttpClient.Builder()

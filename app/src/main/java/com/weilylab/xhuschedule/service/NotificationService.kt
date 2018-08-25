@@ -62,7 +62,6 @@ class NotificationService : Service() {
 							isFinishTest = true
 					}
 					Empty, Error -> stopSelf()
-					else -> Logs.i("onStartJob: loading")
 				}
 			}
 		else
@@ -97,7 +96,6 @@ class NotificationService : Service() {
 							isFinishTest = true
 					}
 					Empty, Error -> stopSelf()
-					else -> Logs.i("onStartJob: loading")
 				}
 			}
 	}
@@ -105,5 +103,10 @@ class NotificationService : Service() {
 	private fun checkFinish() {
 		if (isFinishCourse && isFinishTest)
 			stopSelf()
+	}
+
+	override fun onDestroy() {
+		stopForeground(true)
+		super.onDestroy()
 	}
 }

@@ -5,9 +5,9 @@ import android.content.Intent
 import android.widget.RemoteViews
 import android.widget.RemoteViewsService
 import com.weilylab.xhuschedule.R
+import com.weilylab.xhuschedule.config.ColorPoolHelper
 import com.weilylab.xhuschedule.utils.CalendarUtil
 import com.weilylab.xhuschedule.viewModel.WidgetViewModelHelper
-import com.zhuangfei.timetable.model.ScheduleColorPool
 import kotlin.math.roundToInt
 
 class TestListWidgetService : RemoteViewsService() {
@@ -34,8 +34,7 @@ class TestListWidgetService : RemoteViewsService() {
 			remotesView.setTextViewText(R.id.exam_location, "考试地点：${test.location}")
 			remotesView.setTextViewText(R.id.exam_time, "考试时间：${test.date} ${test.time.split('-')[0]}")
 			remotesView.setTextViewText(R.id.exam_days, CalendarUtil.getTestDateText(test))
-			val colorPool = ScheduleColorPool(context)
-			val color = colorPool.getColorAuto((Math.random() * colorPool.size()).roundToInt())
+			val color = ColorPoolHelper.colorPool.getColorAuto((Math.random() * ColorPoolHelper.colorPool.size()).roundToInt())
 			remotesView.setTextColor(R.id.exam_name, color)
 			remotesView.setTextColor(R.id.exam_no, color)
 			return remotesView

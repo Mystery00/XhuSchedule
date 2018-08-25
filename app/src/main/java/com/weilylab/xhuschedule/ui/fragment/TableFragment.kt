@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModelProviders
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.databinding.FragmentTableBinding
 import com.weilylab.xhuschedule.base.BaseBottomNavigationFragment
+import com.weilylab.xhuschedule.config.ColorPoolHelper
 import com.weilylab.xhuschedule.config.SpaceScheduleHelper
 import com.weilylab.xhuschedule.config.Status.*
 import com.weilylab.xhuschedule.repository.BottomNavigationRepository
@@ -75,6 +76,7 @@ class TableFragment : BaseBottomNavigationFragment(R.layout.fragment_table) {
 
 	override fun initView() {
 		initViewModel()
+		ColorPoolHelper.initColorPool(fragmentTableBinding.timeTableView.colorPool())
 		fragmentTableBinding.timeTableView
 				.curWeek(week)
 				.isShowNotCurWeek(ConfigurationUtil.isShowNotWeek)

@@ -5,8 +5,8 @@ import android.content.Intent
 import android.widget.RemoteViews
 import android.widget.RemoteViewsService
 import com.weilylab.xhuschedule.R
+import com.weilylab.xhuschedule.config.ColorPoolHelper
 import com.weilylab.xhuschedule.viewModel.WidgetViewModelHelper
-import com.zhuangfei.timetable.model.ScheduleColorPool
 
 class TodayCourseWidgetService : RemoteViewsService() {
 	override fun onGetViewFactory(intent: Intent?): RemoteViewsFactory = ListRemoteViewFactory(this)
@@ -32,7 +32,7 @@ class TodayCourseWidgetService : RemoteViewsService() {
 			val startTimeArray = context.resources.getStringArray(R.array.start_time)
 			val endTimeArray = context.resources.getStringArray(R.array.end_time)
 			remotesView.setTextViewText(R.id.course_time_location_textView, "${startTimeArray[course.start - 1]}-${endTimeArray[course.start + course.step - 2]} at ${course.room}")
-			remotesView.setInt(R.id.background, "setBackgroundColor", ScheduleColorPool(context).getColorAuto(course.colorRandom))
+			remotesView.setInt(R.id.background, "setBackgroundColor", ColorPoolHelper.colorPool.getColorAuto(course.colorRandom))
 			return remotesView
 		}
 
