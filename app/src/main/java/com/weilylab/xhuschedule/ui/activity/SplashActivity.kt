@@ -49,7 +49,6 @@ import com.weilylab.xhuschedule.utils.FileUtil
 import com.weilylab.xhuschedule.utils.rxAndroid.PackageData
 import com.weilylab.xhuschedule.viewModel.SplashViewModel
 import com.weilylab.xhuschedule.service.DownloadSplashIntentService
-import com.weilylab.xhuschedule.service.NotificationService
 import com.weilylab.xhuschedule.utils.ConfigUtil
 
 /**
@@ -89,7 +88,6 @@ class SplashActivity : XhuBaseActivity(null) {
 			else
 				startService(Intent(APP.context, CheckUpdateService::class.java))
 		}
-		startForegroundService(Intent(this, NotificationService::class.java))
 		ConfigUtil.setTrigger(this)
 	}
 
