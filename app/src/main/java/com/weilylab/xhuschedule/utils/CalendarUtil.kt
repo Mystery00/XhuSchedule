@@ -28,7 +28,7 @@ object CalendarUtil {
 
 	fun getTomorrowWeekFromCalendar(startDateTime: Calendar): Int {
 		val todayWeek = getWeekFromCalendar(startDateTime)
-		return if (getWeekIndex() == 7) todayWeek + 1 else todayWeek
+		return if (getWeekIndex() == 6) todayWeek + 1 else todayWeek
 	}
 
 	fun getTomorrowIndex(): Int {

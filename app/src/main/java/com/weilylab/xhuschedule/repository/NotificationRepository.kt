@@ -10,6 +10,7 @@ import com.weilylab.xhuschedule.utils.rxAndroid.PackageData
 import com.weilylab.xhuschedule.utils.rxAndroid.RxObservable
 import com.weilylab.xhuschedule.utils.rxAndroid.RxObserver
 import com.zhuangfei.timetable.model.Schedule
+import vip.mystery0.logs.Logs
 import java.util.ArrayList
 
 object NotificationRepository {

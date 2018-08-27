@@ -138,7 +138,7 @@ class TableFragment : BaseBottomNavigationFragment(R.layout.fragment_table) {
 				.subscribe(object : RxObserver<Boolean>() {
 					override fun onFinish(data: Boolean?) {
 						if (data != null && data) {
-							if (bottomNavigationViewModel.week.value == 0) {
+							if (bottomNavigationViewModel.week.value != null && bottomNavigationViewModel.week.value!!.toInt() <= 0) {
 								val whenTime = CalendarUtil.whenBeginSchool()
 								if (whenTime > 0)
 									bottomNavigationViewModel.title.value = "距离开学还有${whenTime}天"

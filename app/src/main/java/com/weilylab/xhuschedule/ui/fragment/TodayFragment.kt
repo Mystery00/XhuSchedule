@@ -12,7 +12,6 @@ import com.weilylab.xhuschedule.databinding.FragmentTodayBinding
 import com.weilylab.xhuschedule.base.BaseBottomNavigationFragment
 import com.weilylab.xhuschedule.config.Status.*
 import com.weilylab.xhuschedule.repository.BottomNavigationRepository
-import com.weilylab.xhuschedule.ui.activity.BottomNavigationActivity
 import com.weilylab.xhuschedule.ui.adapter.FragmentTodayRecyclerViewAdapter
 import com.weilylab.xhuschedule.utils.CalendarUtil
 import com.weilylab.xhuschedule.utils.LayoutRefreshConfigUtil
@@ -21,7 +20,6 @@ import com.weilylab.xhuschedule.utils.rxAndroid.RxObservable
 import com.weilylab.xhuschedule.utils.rxAndroid.RxObserver
 import com.weilylab.xhuschedule.viewModel.BottomNavigationViewModel
 import com.zhuangfei.timetable.model.Schedule
-import kotlinx.android.synthetic.main.activity_bottom_navigation.*
 import vip.mystery0.logs.Logs
 
 class TodayFragment : BaseBottomNavigationFragment(R.layout.fragment_today) {
@@ -112,8 +110,16 @@ class TodayFragment : BaseBottomNavigationFragment(R.layout.fragment_today) {
 				.subscribe(object : RxObserver<Boolean>() {
 					override fun onFinish(data: Boolean?) {
 						if (data != null && data)
-							viewModel.title.value = "第${viewModel.currentWeek.value?.data
-									?: "0"}周 ${CalendarUtil.getWeekIndexInString()}"
+							if (viewModel.week.value != null && viewModel.week.value!!.toInt() <= 0) {
+								val whenTime = CalendarUtil.whenBeginSchool()
+								if (whenTime > 0)
+									viewModel.title.value = "距离开学还有${whenTime}天 ${CalendarUtil.getWeekIndexInString()}"
+								else
+									viewModel.title.value = "第${viewModel.week.value
+											?: "0"}周 ${CalendarUtil.getWeekIndexInString()}"
+							} else
+								viewModel.title.value = "第${viewModel.week.value
+										?: "0"}周 ${CalendarUtil.getWeekIndexInString()}"
 					}
 
 					override fun onError(e: Throwable) {
