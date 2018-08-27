@@ -43,7 +43,7 @@ object NotificationRepository {
 		RxObservable<List<Schedule>>()
 				.doThings { emitter ->
 					val startTime = InitLocalDataSource.getStartDataTime()
-					val tomorrowWeekWeek = CalendarUtil.getTomorrowWeekFromCalendar(startTime)
+					val tomorrowWeek = CalendarUtil.getTomorrowWeekFromCalendar(startTime)
 					val tomorrow = CalendarUtil.getTomorrowIndex()
 					val courseList = ArrayList<Schedule>()
 					studentList.forEach {
@@ -51,7 +51,7 @@ object NotificationRepository {
 								?: "current", term ?: "current"))
 					}
 					val tomorrowCourseList = ArrayList<Schedule>()
-					tomorrowCourseList.addAll(courseList.filter { it.weekList.contains(tomorrowWeekWeek) && it.day == tomorrow })
+					tomorrowCourseList.addAll(courseList.filter { it.weekList.contains(tomorrowWeek) && it.day == tomorrow })
 					emitter.onFinish(tomorrowCourseList)
 				}
 				.subscribe(object : RxObserver<List<Schedule>>() {

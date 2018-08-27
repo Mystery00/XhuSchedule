@@ -21,7 +21,6 @@ class NotificationService : Service() {
 	private var isFinishTest = false
 
 	override fun onCreate() {
-		Logs.i("onCreate: 接收到定时器的唤醒，成功启动")
 		super.onCreate()
 		val notification = NotificationCompat.Builder(this, Constants.NOTIFICATION_CHANNEL_ID_DEFAULT)
 				.setSmallIcon(R.drawable.ic_stat_init)

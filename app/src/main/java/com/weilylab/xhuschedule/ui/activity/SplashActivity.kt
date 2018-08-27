@@ -89,6 +89,7 @@ class SplashActivity : XhuBaseActivity(null) {
 			else
 				startService(Intent(APP.context, CheckUpdateService::class.java))
 		}
+		startForegroundService(Intent(APP.context, NotificationService::class.java))
 		ConfigUtil.setTrigger(this)
 	}
 
