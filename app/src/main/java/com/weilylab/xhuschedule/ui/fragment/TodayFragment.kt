@@ -110,15 +110,15 @@ class TodayFragment : BaseBottomNavigationFragment(R.layout.fragment_today) {
 				.subscribe(object : RxObserver<Boolean>() {
 					override fun onFinish(data: Boolean?) {
 						if (data != null && data)
-							if (viewModel.week.value != null && viewModel.week.value!!.toInt() <= 0) {
+							if (viewModel.currentWeek.value?.data != null && viewModel.currentWeek.value!!.data!! <= 0) {
 								val whenTime = CalendarUtil.whenBeginSchool()
 								if (whenTime > 0)
 									viewModel.title.value = "距离开学还有${whenTime}天 ${CalendarUtil.getWeekIndexInString()}"
 								else
-									viewModel.title.value = "第${viewModel.week.value
+									viewModel.title.value = "第${viewModel.currentWeek.value?.data
 											?: "0"}周 ${CalendarUtil.getWeekIndexInString()}"
 							} else
-								viewModel.title.value = "第${viewModel.week.value
+								viewModel.title.value = "第${viewModel.currentWeek.value?.data
 										?: "0"}周 ${CalendarUtil.getWeekIndexInString()}"
 					}
 
