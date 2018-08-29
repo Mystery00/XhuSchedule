@@ -7,11 +7,15 @@
 
 <resources>
 	<string-array name="update_log">
-		<item>该版本仅供测试，如果在使用过程中发现任何问题或者有好的建议，请发送邮件到 mystery0dyl520@gmail.com 或者加入交流群私聊Android开发者（群名片：Mystery-Android）</item>
+		<item>全新西瓜课表，正式发布！</item>
 		<item> </item>
-		<item>欢迎通过 软件设置-点击加入群【西瓜课表用户交流反馈】 加入交流群</item>
+		<item>新学期，新风貌！</item>
+		<item>软件重构，删减冗余，优化体验！</item>
 		<item> </item>
-		<item>修复Android O 以前（8.0-）设备第二次及以后启动闪退</item>
-		<item>修复星期天时课程考试提醒时间错误</item>
+		<item> </item>
+		<item> </item>
+		<item> </item>
+		<item> </item>
+		<item> </item>
 	</string-array>
 </resources>

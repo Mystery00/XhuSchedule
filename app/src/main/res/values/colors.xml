@@ -4,6 +4,9 @@
 	<color name="colorPrimaryDark">#000000</color>
 	<color name="colorAccent">#2e85df</color>
 
+	<color name="colorBackground">#fafafa</color>
+	<color name="colorDivider">#dddddd</color>
+
 	<color name="login_color_label">#cccccc</color>
 	<color name="login_color_text">#4ea5ff</color>
 	<color name="colorWhite">#FFFFFF</color>
