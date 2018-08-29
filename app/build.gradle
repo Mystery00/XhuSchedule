@@ -98,14 +98,15 @@ android {
 }
 
 dependencies {
-	kapt "androidx.databinding:databinding-compiler:3.3.0-alpha02"
+	kapt "androidx.databinding:databinding-compiler:3.2.0-beta05"
 	implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 	implementation 'com.google.android.material:material:1.0.0-rc01'
-	implementation 'androidx.appcompat:appcompat:1.0.0-rc01'
-	implementation 'androidx.cardview:cardview:1.0.0-rc01'
-	implementation 'androidx.legacy:legacy-support-v4:1.0.0-rc01'
-	implementation 'androidx.vectordrawable:vectordrawable:1.0.0-rc01'
-	implementation 'androidx.preference:preference:1.0.0-rc01'
+	implementation 'androidx.appcompat:appcompat:1.0.0-rc02'
+	implementation 'androidx.cardview:cardview:1.0.0-rc02'
+	implementation 'androidx.legacy:legacy-support-v4:1.0.0-rc02'
+	implementation 'androidx.vectordrawable:vectordrawable:1.0.0-rc02'
+	implementation 'androidx.preference:preference:1.0.0-rc02'
+	implementation "androidx.recyclerview:recyclerview:1.0.0-rc02"
 	implementation 'androidx.constraintlayout:constraintlayout:2.0.0-alpha2'
 	//Retrofit
 	implementation 'com.squareup.retrofit2:retrofit:2.4.0'
@@ -144,6 +145,8 @@ dependencies {
 	implementation 'com.github.yalantis:ucrop:2.2.2'
 	//SetupWizardLayout
 	implementation 'com.github.iMeiji:SetupWizardLayout:0.1'
+	//About Library
+	implementation "com.mikepenz:aboutlibraries:6.2.0-rc01"
 
 	implementation 'de.hdodenhof:circleimageview:2.2.0'
 	//微信
