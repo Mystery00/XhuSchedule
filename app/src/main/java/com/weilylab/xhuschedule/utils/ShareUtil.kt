@@ -172,7 +172,7 @@ object ShareUtil {
 
 	private fun getRandomText(context: Context): String {
 		val array = context.resources.getStringArray(R.array.hint_share_message)
-		val random = (Math.random() * array.size).roundToInt()
+		val random = (Math.random() * (array.size - 1)).roundToInt()
 		return array[random]
 	}
 }
