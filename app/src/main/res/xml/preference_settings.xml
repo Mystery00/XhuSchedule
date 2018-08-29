@@ -99,6 +99,10 @@
 					android:data="@string/link_open_source_license" />
 			</Preference>
 
+			<Preference
+				android:key="@string/key_open_source_license_about"
+				android:title="@string/title_open_source_license_about" />
+
 		</PreferenceCategory>
 
 		<PreferenceCategory android:title="@string/screen_category_about_version">

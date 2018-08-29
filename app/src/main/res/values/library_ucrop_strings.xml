@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+	<string name="define_int_ucrop"/>
+	<!-- Author section -->
+	<string name="library_ucrop_author">Yalantis</string>
+	<string name="library_ucrop_authorWebsite">https://github.com/Yalantis</string>
+	<!-- Library section -->
+	<string name="library_ucrop_libraryName">uCrop</string>
+	<string name="library_ucrop_libraryDescription">Image Cropping Library for Android</string>
+	<string name="library_ucrop_libraryWebsite">https://yalantis.com/blog/introducing-ucrop-our-own-image-cropping-library-for-android/</string>
+	<string name="library_ucrop_libraryVersion">2.2.2</string>
+	<!-- OpenSource section -->
+	<string name="library_ucrop_isOpenSource">true</string>
+	<string name="library_ucrop_repositoryLink">https://github.com/Yalantis/uCrop</string>
+	<!-- ClassPath for autoDetect section -->
+	<string name="library_ucrop_classPath">com.yalantis.ucrop</string>
+	<!-- License section -->
+	<string name="library_ucrop_licenseId">apache_2_0</string>
+	<!-- Custom variables section -->
+</resources>

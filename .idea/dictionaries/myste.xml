@@ -1,21 +1,29 @@
 <component name="ProjectDictionaryState">
   <dictionary name="myste">
     <words>
+      <w>bottomtabview</w>
       <w>bspatch</w>
       <w>cbba</w>
       <w>chooseweek</w>
       <w>coolapk</w>
       <w>databinding</w>
+      <w>databindinglibrary</w>
       <w>dateview</w>
       <w>flaglayout</w>
       <w>gson</w>
+      <w>jetpack</w>
+      <w>lifecycles</w>
       <w>mobileqq</w>
+      <w>oasisfeng</w>
       <w>qiniu</w>
       <w>qzone</w>
       <w>remoteviews</w>
       <w>sina</w>
       <w>tencent</w>
+      <w>timetableview</w>
+      <w>ucrop</w>
       <w>vcode</w>
+      <w>viewmodel</w>
       <w>webpage</w>
       <w>weibo</w>
       <w>weico</w>
@@ -24,7 +32,12 @@
       <w>weixin</w>
       <w>xhuschedule</w>
       <w>xxxxxxx</w>
+      <w>yalantis</w>
+      <w>zfman</w>
+      <w>zhihu</w>
       <w>zhuangfei</w>
+      <w>zloading</w>
+      <w>zyao</w>
     </words>
   </dictionary>
 </component>

@@ -20,6 +20,8 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.google.android.material.snackbar.Snackbar
+import com.mikepenz.aboutlibraries.Libs
+import com.mikepenz.aboutlibraries.LibsBuilder
 import com.weilylab.xhuschedule.service.CheckUpdateService
 import com.weilylab.xhuschedule.ui.custom.CustomGlideEngine
 import com.weilylab.xhuschedule.utils.*
@@ -52,6 +54,7 @@ class SettingsPreferenceFragment : BasePreferenceFragment(R.xml.preference_setti
 	private lateinit var weixinPreference: Preference
 	private lateinit var checkUpdatePreference: Preference
 	private lateinit var updateLogPreference: Preference
+	private lateinit var openSourceLicenseAboutPreference: Preference
 	private lateinit var dialog: Dialog
 	private lateinit var localBroadcastManager: LocalBroadcastManager
 
@@ -68,6 +71,7 @@ class SettingsPreferenceFragment : BasePreferenceFragment(R.xml.preference_setti
 		weixinPreference = findPreferenceById(R.string.key_weixin)
 		checkUpdatePreference = findPreferenceById(R.string.key_check_update)
 		updateLogPreference = findPreferenceById(R.string.key_update_log)
+		openSourceLicenseAboutPreference = findPreferenceById(R.string.key_open_source_license_about)
 
 		autoCheckUpdatePreference.isChecked = ConfigurationUtil.autoCheckUpdate
 		notificationCoursePreference.isChecked = ConfigurationUtil.notificationCourse
@@ -160,6 +164,30 @@ class SettingsPreferenceFragment : BasePreferenceFragment(R.xml.preference_setti
 		}
 		updateLogPreference.setOnPreferenceClickListener {
 			ConfigUtil.showUpdateLog(activity)
+			true
+		}
+		openSourceLicenseAboutPreference.setOnPreferenceClickListener {
+			LibsBuilder()
+					.withActivityStyle(Libs.ActivityStyle.LIGHT)
+					.withAboutAppName(getString(R.string.app_name))
+					.withAboutIconShown(true)
+					.withAboutVersionShown(true)
+					.withLicenseShown(true)
+					.withLicenseDialog(true)
+					.withShowLoadingProgress(true)
+					.withLibraries(
+							"BottomTabView",
+							"Condom",
+							"DataBinding",
+							"Lifecycles",
+							"Matisse",
+							"Mystery0Tools",
+							"Room",
+							"TimetableView",
+							"uCrop",
+							"ViewModel",
+							"ZLoading")
+					.start(activity)
 			true
 		}
 	}

@@ -36,6 +36,7 @@
 	<string name="key_query_score_class" translatable="false">key_query_score_class</string>
 	<string name="key_query_score_experiment" translatable="false">key_query_score_experiment</string>
 	<string name="key_query_score_cet" translatable="false">key_query_score_cet</string>
+	<string name="key_open_source_license_about" translatable="true">key_open_source_license_about</string>
 
 	<string name="title_icon_ui">图标以及界面设计</string>
 	<string name="title_back">数据提供</string>
@@ -69,6 +70,7 @@
 	<string name="title_update_log">更新日志</string>
 	<string name="title_check_update">检查更新</string>
 	<string name="title_version_name">版本名称</string>
+	<string name="title_open_source_license_about">开源许可</string>
 
 	<string name="summary_enable_multi_user_mode">注意：如果多个用户的课表存在冲突的情况，表格可能会变得很乱，请确定您开启这个模式的意义！</string>
 	<string name="summary_icon" translatable="false">\@爱吃饭的越越</string>

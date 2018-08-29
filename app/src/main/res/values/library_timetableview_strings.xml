@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+	<string name="define_int_timetableview"/>
+	<!-- Author section -->
+	<string name="library_timetableview_author">zfman</string>
+	<string name="library_timetableview_authorWebsite">https://github.com/zfman</string>
+	<!-- Library section -->
+	<string name="library_timetableview_libraryName">TimetableView</string>
+	<string name="library_timetableview_libraryDescription">一款开源、完善、高效的Android课程表控件，支持高效切换周次、透明背景设置、空白格子点击事件处理等丰富的功能，并且有完善的开发文档、案例以供参考</string>
+	<string name="library_timetableview_libraryWebsite">https://github.com/zfman/TimetableView/wiki</string>
+	<string name="library_timetableview_libraryVersion">2.0.2</string>
+	<!-- OpenSource section -->
+	<string name="library_timetableview_isOpenSource">true</string>
+	<string name="library_timetableview_repositoryLink">https://github.com/zfman/TimetableView</string>
+	<!-- ClassPath for autoDetect section -->
+	<string name="library_timetableview_classPath">com.zhuangfei.timetable</string>
+	<!-- License section -->
+	<string name="library_timetableview_licenseId">mit</string>
+	<!-- Custom variables section -->
+</resources>
