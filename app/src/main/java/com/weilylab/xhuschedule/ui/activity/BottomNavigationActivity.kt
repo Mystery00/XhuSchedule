@@ -34,12 +34,18 @@ import com.weilylab.xhuschedule.ui.fragment.TodayFragment
 import com.weilylab.xhuschedule.utils.*
 import com.weilylab.xhuschedule.utils.layoutManager.SkidRightLayoutManager
 import com.weilylab.xhuschedule.utils.rxAndroid.PackageData
+import com.weilylab.xhuschedule.utils.rxAndroid.RxObservable
+import com.weilylab.xhuschedule.utils.rxAndroid.RxObserver
 import com.weilylab.xhuschedule.viewModel.BottomNavigationViewModel
 import com.zhuangfei.timetable.listener.IWeekView
 import com.zhuangfei.timetable.model.Schedule
 import com.zhuangfei.timetable.model.ScheduleSupport
 import com.zyao89.view.zloading.ZLoadingDialog
 import com.zyao89.view.zloading.Z_TYPE
+import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
+import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_bottom_navigation.*
 import kotlinx.android.synthetic.main.content_bottom_navigation.*
 import vip.mystery0.bottomTabView.BottomTabItem
@@ -361,18 +367,45 @@ class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_naviga
 	}
 
 	private fun showLoading() {
-		if (!::loadingAnimation.isInitialized)
-			loadingAnimation = ObjectAnimator.ofFloat(imageSync, "rotation", 0F, 360F)
-					.setDuration(1000)
-		loadingAnimation.repeatCount = Animation.INFINITE
-		loadingAnimation.repeatMode = ValueAnimator.RESTART
-		loadingAnimation.start()
+		if (!LayoutRefreshConfigUtil.isRefreshDone)
+			return
+		if (!::loadingAnimation.isInitialized) {
+			Observable.create<Boolean> {
+				while (!LayoutRefreshConfigUtil.isRefreshDone) {
+					it.onNext(true)
+					Thread.sleep(1000)
+				}
+				it.onComplete()
+			}
+					.subscribeOn(Schedulers.newThread())
+					.unsubscribeOn(Schedulers.newThread())
+					.observeOn(AndroidSchedulers.mainThread())
+					.subscribe(object : io.reactivex.Observer<Boolean> {
+						override fun onComplete() {
+						}
+
+						override fun onSubscribe(d: Disposable) {
+							LayoutRefreshConfigUtil.isRefreshDone = false
+						}
+
+						override fun onNext(t: Boolean) {
+							ObjectAnimator.ofFloat(imageSync, "rotation", 0F, 360F)
+									.setDuration(1000)
+									.start()
+						}
+
+						override fun onError(e: Throwable) {
+							Logs.wtf("onError: ", e)
+						}
+					})
+		}
 	}
 
 	private fun cancelLoading() {
-		if (!::loadingAnimation.isInitialized)
-			return
-		loadingAnimation.repeatCount = 0
+		LayoutRefreshConfigUtil.isRefreshDone = true
+//		if (!::loadingAnimation.isInitialized)
+//			return
+//		loadingAnimation.repeatCount = 0
 		if (action == ACTION_REFRESH) {
 			toastMessage(R.string.hint_course_sync_done)
 			action = ACTION_NONE

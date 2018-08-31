@@ -7,4 +7,6 @@ object LayoutRefreshConfigUtil {
 	var isRefreshNoticeDot = false
 	var isChangeBackgroundImage = false
 	var isChangeUserImage = false
+
+	var isRefreshDone = true
 }
