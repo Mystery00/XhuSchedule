@@ -327,7 +327,7 @@ class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_naviga
 	private fun showWeekView() {
 		animation?.cancel()
 		arrowAnimation?.cancel()
-		animation = ObjectAnimator.ofFloat(weekView, "translationY", 0F, DensityTools.dp2px(this, 72F).toFloat())
+		animation = ObjectAnimator.ofFloat(weekView, "translationY", 0F, DensityTools.dp2px(this, 71F).toFloat())
 		arrowAnimation = ObjectAnimator.ofFloat(arrowImageView, "rotation", 0F, 180F)
 		animation!!.start()
 		arrowAnimation!!.start()
@@ -337,7 +337,7 @@ class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_naviga
 	private fun hideWeekView() {
 		animation?.cancel()
 		arrowAnimation?.cancel()
-		animation = ObjectAnimator.ofFloat(weekView, "translationY", DensityTools.dp2px(this, 72F).toFloat(), 0F)
+		animation = ObjectAnimator.ofFloat(weekView, "translationY", DensityTools.dp2px(this, 71F).toFloat(), 0F)
 		arrowAnimation = ObjectAnimator.ofFloat(arrowImageView, "rotation", 180F, 0F)
 		animation!!.start()
 		arrowAnimation!!.start()

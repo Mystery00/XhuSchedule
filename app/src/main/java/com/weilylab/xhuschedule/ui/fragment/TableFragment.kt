@@ -80,11 +80,9 @@ class TableFragment : BaseBottomNavigationFragment(R.layout.fragment_table) {
 		fragmentTableBinding.timeTableView
 				.curWeek(week)
 				.isShowNotCurWeek(ConfigurationUtil.isShowNotWeek)
-				.alpha(0.1f, 0.1f, 1f)
+				.alpha(0.1f, 0.05f, 1f)
 				.callback(CustomDateAdapter())
 				.callback(CustomItemBuildAdapter())
-				.callback(OnSlideBuildAdapter()
-						.setBackground(Color.BLACK))
 				.isShowFlaglayout(false)
 //				.callback(FlagLayoutClickAdapter(fragmentTableBinding.timeTableView))
 //				.callback(SpaceItemClickAdapter(fragmentTableBinding.timeTableView))
