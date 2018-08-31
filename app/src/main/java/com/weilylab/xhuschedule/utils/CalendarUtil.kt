@@ -167,7 +167,7 @@ object CalendarUtil {
 			calendar.add(Calendar.DAY_OF_MONTH, -1)
 		}
 		calendar.firstDayOfWeek = Calendar.MONDAY
-		dateList.add("${calendar.get(Calendar.MONTH) + 1}月")
+		dateList.add("${calendar.get(Calendar.MONTH) + 1}\n月")
 		for (i in 0..6) {
 			if (calendar.get(Calendar.DAY_OF_MONTH) == 1)
 				dateList.add("${calendar.get(Calendar.MONTH) + 1}月")
