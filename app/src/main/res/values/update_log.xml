@@ -9,13 +9,10 @@
 	<string-array name="update_log">
 		<item>全新西瓜课表，正式发布！</item>
 		<item> </item>
-		<item>新学期，新风貌！</item>
-		<item>软件重构，删减冗余，优化体验！</item>
+		<item>新学期，新风貌;</item>
+		<item>软件重构，删减冗余，优化体验;</item>
 		<item> </item>
-		<item> </item>
-		<item>待修改！</item>
-		<item> </item>
-		<item> </item>
-		<item> </item>
+		<item>修复若干错误；</item>
+		<item>增加软件稳定性。</item>
 	</string-array>
 </resources>

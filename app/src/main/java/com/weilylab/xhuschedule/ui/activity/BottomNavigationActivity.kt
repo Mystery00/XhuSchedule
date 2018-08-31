@@ -1,7 +1,6 @@
 package com.weilylab.xhuschedule.ui.activity
 
 import android.animation.ObjectAnimator
-import android.animation.ValueAnimator
 import android.app.Activity
 import android.app.Dialog
 import android.content.Intent
@@ -9,7 +8,6 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.view.Gravity
 import android.view.View
-import android.view.animation.Animation
 import android.widget.PopupWindow
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
@@ -34,8 +32,6 @@ import com.weilylab.xhuschedule.ui.fragment.TodayFragment
 import com.weilylab.xhuschedule.utils.*
 import com.weilylab.xhuschedule.utils.layoutManager.SkidRightLayoutManager
 import com.weilylab.xhuschedule.utils.rxAndroid.PackageData
-import com.weilylab.xhuschedule.utils.rxAndroid.RxObservable
-import com.weilylab.xhuschedule.utils.rxAndroid.RxObserver
 import com.weilylab.xhuschedule.viewModel.BottomNavigationViewModel
 import com.zhuangfei.timetable.listener.IWeekView
 import com.zhuangfei.timetable.model.Schedule
@@ -105,22 +101,15 @@ class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_naviga
 		}
 	}
 
-	private val courseListObserver = Observer<PackageData<List<Schedule>>> {
-		when (it.status) {
+	private val courseListObserver = Observer<PackageData<List<Schedule>>> { packageData ->
+		when (packageData.status) {
 			Content -> {
-				courseList.clear()
-				courseList.addAll(it.data!!)
-				weekView.data(courseList).showView()
-				if (bottomNavigationViewModel.startDateTime.value != null && bottomNavigationViewModel.startDateTime.value!!.data != null) {
-					val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINA)
-					bottomNavigationViewModel.week.value = ScheduleSupport.timeTransfrom(simpleDateFormat.format(bottomNavigationViewModel.startDateTime.value!!.data!!.time))
-				}
-				hideDialog()
 				cancelLoading()
+				hideDialog()
 			}
 			Loading -> showLoading()
 			Error -> {
-				toastMessage(it.error?.message)
+				toastMessage(packageData.error?.message)
 				cancelLoading()
 				hideDialog()
 			}
@@ -317,7 +306,6 @@ class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_naviga
 	}
 
 	private fun configWeekView(position: Int) {
-		Logs.i("configWeekView: ")
 		when (position) {
 			0 -> {
 				if (isShowWeekView) hideWeekView()
@@ -382,6 +370,19 @@ class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_naviga
 					.observeOn(AndroidSchedulers.mainThread())
 					.subscribe(object : io.reactivex.Observer<Boolean> {
 						override fun onComplete() {
+							if (action == ACTION_REFRESH) {
+								toastMessage(R.string.hint_course_sync_done)
+								action = ACTION_NONE
+							}
+							if (bottomNavigationViewModel.courseList.value != null && bottomNavigationViewModel.courseList.value!!.data != null) {
+								courseList.clear()
+								courseList.addAll(bottomNavigationViewModel.courseList.value!!.data!!)
+								if (bottomNavigationViewModel.startDateTime.value != null && bottomNavigationViewModel.startDateTime.value!!.data != null) {
+									val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINA)
+									bottomNavigationViewModel.week.value = ScheduleSupport.timeTransfrom(simpleDateFormat.format(bottomNavigationViewModel.startDateTime.value!!.data!!.time))
+								}
+								weekView.data(courseList).showView()
+							}
 						}
 
 						override fun onSubscribe(d: Disposable) {
@@ -403,13 +404,6 @@ class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_naviga
 
 	private fun cancelLoading() {
 		LayoutRefreshConfigUtil.isRefreshDone = true
-//		if (!::loadingAnimation.isInitialized)
-//			return
-//		loadingAnimation.repeatCount = 0
-		if (action == ACTION_REFRESH) {
-			toastMessage(R.string.hint_course_sync_done)
-			action = ACTION_NONE
-		}
 	}
 
 	private lateinit var popupWindow: PopupWindow

@@ -167,12 +167,16 @@ object CalendarUtil {
 			calendar.add(Calendar.DAY_OF_MONTH, -1)
 		}
 		calendar.firstDayOfWeek = Calendar.MONDAY
-		dateList.add("${calendar.get(Calendar.MONTH) + 1}\n月")
+		val month = calendar.get(Calendar.MONTH) + 1
+		dateList.add("${if (month < 10) "0$month" else month.toString()}\n月")
 		for (i in 0..6) {
-			if (calendar.get(Calendar.DAY_OF_MONTH) == 1)
-				dateList.add("${calendar.get(Calendar.MONTH) + 1}月")
-			else
-				dateList.add("${calendar.get(Calendar.DAY_OF_MONTH)}日")
+			if (calendar.get(Calendar.DAY_OF_MONTH) == 1) {
+				val dayMonth = calendar.get(Calendar.MONTH) + 1
+				dateList.add("${if (dayMonth < 10) "0$dayMonth" else dayMonth.toString()}月")
+			} else {
+				val day = calendar.get(Calendar.DAY_OF_MONTH)
+				dateList.add("${if (day < 10) "0$day" else day.toString()}日")
+			}
 			calendar.add(Calendar.DAY_OF_MONTH, 1)
 		}
 		return dateList

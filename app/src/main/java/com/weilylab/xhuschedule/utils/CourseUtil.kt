@@ -21,6 +21,7 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import vip.mystery0.logs.Logs
 import java.util.*
+import kotlin.collections.ArrayList
 
 object CourseUtil {
 	private const val RETRY_TIME = 1
@@ -179,15 +180,27 @@ object CourseUtil {
 	}
 
 	fun getTodayCourse(courseList: List<Schedule>, listener: (List<Schedule>) -> Unit) {
-		val week = CalendarUtil.getWeekFromCalendar(InitLocalDataSource.getStartDataTime())
-		val todayCourseList = ArrayList<Schedule>()
-		val weekIndex = CalendarUtil.getWeekIndex()
-		courseList.forEach {
-			if (it.day == weekIndex && it.weekList.contains(week))
-				todayCourseList.add(it)
-		}
-		todayCourseList.sortBy { it.start }
-		listener.invoke(todayCourseList)
+		RxObservable<ArrayList<Schedule>>()
+				.doThings { observableEmitter ->
+					val week = CalendarUtil.getWeekFromCalendar(InitLocalDataSource.getStartDataTime())
+					val todayCourseList = ArrayList<Schedule>()
+					val weekIndex = CalendarUtil.getWeekIndex()
+					courseList.forEach {
+						if (it.day == weekIndex && it.weekList.contains(week))
+							todayCourseList.add(it)
+					}
+					todayCourseList.sortBy { it.start }
+					observableEmitter.onFinish(todayCourseList)
+				}
+				.subscribe(object : RxObserver<ArrayList<Schedule>>() {
+					override fun onFinish(data: ArrayList<Schedule>?) {
+						listener.invoke(data!!)
+					}
+
+					override fun onError(e: Throwable) {
+						Logs.wtf("onError: ", e)
+					}
+				})
 	}
 
 	fun convertCourseToSchedule(courseList: List<Course>): List<Schedule> {
