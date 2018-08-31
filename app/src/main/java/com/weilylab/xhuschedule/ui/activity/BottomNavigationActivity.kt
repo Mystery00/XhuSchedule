@@ -372,16 +372,16 @@ class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_naviga
 						override fun onComplete() {
 							if (action == ACTION_REFRESH) {
 								toastMessage(R.string.hint_course_sync_done)
-								action = ACTION_NONE
-							}
-							if (bottomNavigationViewModel.courseList.value != null && bottomNavigationViewModel.courseList.value!!.data != null) {
-								courseList.clear()
-								courseList.addAll(bottomNavigationViewModel.courseList.value!!.data!!)
-								if (bottomNavigationViewModel.startDateTime.value != null && bottomNavigationViewModel.startDateTime.value!!.data != null) {
-									val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINA)
-									bottomNavigationViewModel.week.value = ScheduleSupport.timeTransfrom(simpleDateFormat.format(bottomNavigationViewModel.startDateTime.value!!.data!!.time))
+								if (bottomNavigationViewModel.courseList.value != null && bottomNavigationViewModel.courseList.value!!.data != null) {
+									courseList.clear()
+									courseList.addAll(bottomNavigationViewModel.courseList.value!!.data!!)
+									if (bottomNavigationViewModel.startDateTime.value != null && bottomNavigationViewModel.startDateTime.value!!.data != null) {
+										val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINA)
+										bottomNavigationViewModel.week.value = ScheduleSupport.timeTransfrom(simpleDateFormat.format(bottomNavigationViewModel.startDateTime.value!!.data!!.time))
+									}
+									weekView.data(courseList).showView()
 								}
-								weekView.data(courseList).showView()
+								action = ACTION_NONE
 							}
 						}
 
