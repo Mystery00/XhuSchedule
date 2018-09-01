@@ -12,5 +12,7 @@
 		<item>新学期，新气象。</item>
 		<item>软件重构，删减冗余，修复缺陷，优化体验。</item>
 		<item>全新课表，正式发布，你值得拥有！</item>
+		<item> </item>
+		<item>修复：第一次进入每周课程预览时不显示数据</item>
 	</string-array>
 </resources>
