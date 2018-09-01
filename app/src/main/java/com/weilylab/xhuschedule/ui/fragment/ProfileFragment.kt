@@ -73,6 +73,7 @@ class ProfileFragment : BaseBottomNavigationFragment<FragmentProfileBinding>(R.l
 		bottomNavigationViewModel.noticeList.observe(activity!!, Observer { packageData ->
 			when (packageData.status) {
 				Content -> {
+					LayoutRefreshConfigUtil.isRefreshNoticeDone = true
 					if (packageData.data == null || packageData.data.isEmpty())
 						binding.redDotView.visibility = View.GONE
 					else {

@@ -9,4 +9,5 @@ object LayoutRefreshConfigUtil {
 	var isChangeUserImage = false
 
 	var isRefreshDone = true
+	var isRefreshNoticeDone = true
 }

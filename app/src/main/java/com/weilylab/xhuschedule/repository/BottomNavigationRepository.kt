@@ -8,6 +8,7 @@ import com.weilylab.xhuschedule.repository.remote.CourseRemoteDataSource
 import com.weilylab.xhuschedule.repository.remote.InitRemoteDataSource
 import com.weilylab.xhuschedule.utils.CalendarUtil
 import com.weilylab.xhuschedule.utils.CourseUtil
+import com.weilylab.xhuschedule.utils.LayoutRefreshConfigUtil
 import com.weilylab.xhuschedule.utils.UserUtil
 import com.weilylab.xhuschedule.utils.rxAndroid.PackageData
 import com.weilylab.xhuschedule.utils.rxAndroid.RxObservable
@@ -122,12 +123,14 @@ object BottomNavigationRepository {
 	}
 
 	fun queryNotice(bottomNavigationViewModel: BottomNavigationViewModel, isFirst: Boolean) {
+		if (!LayoutRefreshConfigUtil.isRefreshNoticeDone)
+			return
 		RxObservable<Boolean>()
 				.doThings {
 					Thread.sleep(500)
 					it.onFinish(true)
 				}
-				.subscribe(object :RxObserver<Boolean>(){
+				.subscribe(object : RxObserver<Boolean>() {
 					override fun onFinish(data: Boolean?) {
 						NoticeRepository.queryNoticeInMainActivity(bottomNavigationViewModel, isFirst)
 					}
