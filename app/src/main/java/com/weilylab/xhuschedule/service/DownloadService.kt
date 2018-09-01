@@ -132,9 +132,10 @@ class DownloadService : IntentService("DownloadService") {
 					try {
 						XhuFileUtil.saveFile(inputStream, file)
 						val downloadFileMD5 = FileUtil.getMD5(file)
-						when (type) {
-							Constants.DOWNLOAD_TYPE_APK -> isDownloadMD5Matched = downloadFileMD5 == apkMD5
-							Constants.DOWNLOAD_TYPE_PATCH -> isDownloadMD5Matched = downloadFileMD5 == patchMD5
+						isDownloadMD5Matched = when (type) {
+							Constants.DOWNLOAD_TYPE_APK -> downloadFileMD5 == apkMD5
+							Constants.DOWNLOAD_TYPE_PATCH -> downloadFileMD5 == patchMD5
+							else -> false
 						}
 					} catch (e: IOException) {
 						e.printStackTrace()
