@@ -1,9 +1,6 @@
 package com.weilylab.xhuschedule.ui.fragment
 
 import android.graphics.Color
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 
@@ -30,15 +27,18 @@ import vip.mystery0.logs.Logs
 import java.text.SimpleDateFormat
 import java.util.*
 
-class TableFragment : BaseBottomNavigationFragment(R.layout.fragment_table) {
-	private lateinit var fragmentTableBinding: FragmentTableBinding
+class TableFragment : BaseBottomNavigationFragment<FragmentTableBinding>(R.layout.fragment_table) {
+	companion object {
+		fun newInstance() = TableFragment()
+	}
+
 	private lateinit var bottomNavigationViewModel: BottomNavigationViewModel
 	private var week = 1
 
 	private val courseListObserver = Observer<PackageData<List<Schedule>>> {
 		when (it.status) {
 			Content -> {
-				fragmentTableBinding.timeTableView
+				binding.timeTableView
 						.data(it.data)!!
 						.isShowNotCurWeek(ConfigurationUtil.isShowNotWeek)
 						.updateView()
@@ -48,8 +48,8 @@ class TableFragment : BaseBottomNavigationFragment(R.layout.fragment_table) {
 
 	private val weekObserver = Observer<Int> {
 		try {
-			fragmentTableBinding.timeTableView.changeWeekOnly(it)
-			fragmentTableBinding.timeTableView.onDateBuildListener().onUpdateDate(fragmentTableBinding.timeTableView.curWeek(), it)
+			binding.timeTableView.changeWeekOnly(it)
+			binding.timeTableView.onDateBuildListener().onUpdateDate(binding.timeTableView.curWeek(), it)
 		} catch (e: Exception) {
 			week = it
 		}
@@ -59,33 +59,24 @@ class TableFragment : BaseBottomNavigationFragment(R.layout.fragment_table) {
 		when (it.status) {
 			Content -> {
 				val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINA)
-				fragmentTableBinding.timeTableView
+				binding.timeTableView
 						.curWeek(simpleDateFormat.format(it.data!!.time))
 			}
 		}
 	}
 
-	companion object {
-		fun newInstance() = TableFragment()
-	}
-
-	override fun inflateView(layoutId: Int, inflater: LayoutInflater, container: ViewGroup?): View {
-		fragmentTableBinding = FragmentTableBinding.inflate(inflater, container, false)
-		return fragmentTableBinding.root
-	}
-
 	override fun initView() {
 		initViewModel()
-		ColorPoolHelper.initColorPool(fragmentTableBinding.timeTableView.colorPool())
-		fragmentTableBinding.timeTableView
+		ColorPoolHelper.initColorPool(binding.timeTableView.colorPool())
+		binding.timeTableView
 				.curWeek(week)
 				.isShowNotCurWeek(ConfigurationUtil.isShowNotWeek)
 				.alpha(0.1f, 0.05f, 1f)
 				.callback(CustomDateAdapter())
 				.callback(CustomItemBuildAdapter())
 				.isShowFlaglayout(false)
-//				.callback(FlagLayoutClickAdapter(fragmentTableBinding.timeTableView))
-//				.callback(SpaceItemClickAdapter(fragmentTableBinding.timeTableView))
+//				.callback(FlagLayoutClickAdapter(binding.timeTableView))
+//				.callback(SpaceItemClickAdapter(binding.timeTableView))
 				.callback(OnSlideBuildAdapter()
 						.setBackground(Color.BLACK)
 						.setTextSize(12f)
@@ -102,7 +93,7 @@ class TableFragment : BaseBottomNavigationFragment(R.layout.fragment_table) {
 
 	override fun monitor() {
 		super.monitor()
-		fragmentTableBinding.timeTableView
+		binding.timeTableView
 				.callback(ISchedule.OnItemClickListener { _, scheduleList ->
 					bottomNavigationViewModel.showCourse.value = scheduleList
 				})

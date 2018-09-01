@@ -5,9 +5,9 @@ import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.config.ColorPoolHelper
 import com.weilylab.xhuschedule.databinding.ItemFragmentTodayBinding
 import com.zhuangfei.timetable.model.Schedule
-import vip.mystery0.tools.base.BaseBindingRecyclerViewAdapter
+import vip.mystery0.tools.base.binding.BaseBindingRecyclerViewAdapter
 
-class FragmentTodayRecyclerViewAdapter(context: Context?) : BaseBindingRecyclerViewAdapter<Schedule,ItemFragmentTodayBinding>(R.layout.item_fragment_today) {
+class FragmentTodayRecyclerViewAdapter(context: Context?) : BaseBindingRecyclerViewAdapter<Schedule, ItemFragmentTodayBinding>(R.layout.item_fragment_today) {
 	private var listener: (Int, Schedule) -> Boolean = { _, _ -> false }
 
 	override fun setItemView(binding: ItemFragmentTodayBinding, position: Int, data: Schedule) {

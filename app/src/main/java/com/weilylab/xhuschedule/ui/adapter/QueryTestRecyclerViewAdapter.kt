@@ -4,7 +4,7 @@ import android.content.Context
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.databinding.ItemQueryTestBinding
 import com.weilylab.xhuschedule.model.Test
-import vip.mystery0.tools.base.BaseBindingRecyclerViewAdapter
+import vip.mystery0.tools.base.binding.BaseBindingRecyclerViewAdapter
 
 class QueryTestRecyclerViewAdapter(val context: Context) : BaseBindingRecyclerViewAdapter<Test, ItemQueryTestBinding>(R.layout.item_query_test) {
 	override fun setItemView(binding: ItemQueryTestBinding, position: Int, data: Test) {

@@ -21,7 +21,7 @@ import com.tencent.tauth.UiError
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.config.APP
 import com.weilylab.xhuschedule.constant.Constants
-import com.weilylab.xhuschedule.XhuFileUtil
+import vip.mystery0.tools.utils.FileTools
 import kotlin.math.roundToInt
 
 object ShareUtil {
@@ -109,7 +109,7 @@ object ShareUtil {
 					wxMediaMessage.description = getRandomText(context)
 					val thumbBmp = Bitmap.createScaledBitmap(bitmap, 100, 100, true)
 					bitmap.recycle()
-					wxMediaMessage.thumbData = XhuFileUtil.bmpToByteArray(thumbBmp, true)
+					wxMediaMessage.thumbData = FileTools.bitmapToByteArray(Bitmap.CompressFormat.PNG, thumbBmp)
 
 					val request = SendMessageToWX.Req()
 					request.transaction = "ShareWithWeiXin${System.currentTimeMillis()}"
@@ -133,7 +133,7 @@ object ShareUtil {
 					wxMediaMessage.description = getRandomText(context)
 					val thumbBmp = Bitmap.createScaledBitmap(bitmap, 100, 100, true)
 					bitmap.recycle()
-					wxMediaMessage.thumbData = XhuFileUtil.bmpToByteArray(thumbBmp, true)
+					wxMediaMessage.thumbData = FileTools.bitmapToByteArray(Bitmap.CompressFormat.PNG, thumbBmp)
 
 					val req = SendMessageToWX.Req()
 					req.transaction = "ShareWithFriends${System.currentTimeMillis()}"

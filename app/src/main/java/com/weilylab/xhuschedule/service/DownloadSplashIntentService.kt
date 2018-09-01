@@ -38,7 +38,6 @@ import android.content.Intent
 import com.weilylab.xhuschedule.api.QiniuAPI
 import com.weilylab.xhuschedule.constant.IntentConstant
 import com.weilylab.xhuschedule.utils.FileUtil
-import com.weilylab.xhuschedule.XhuFileUtil
 import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
@@ -47,6 +46,7 @@ import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import vip.mystery0.logs.Logs
+import vip.mystery0.tools.utils.FileTools
 import java.io.InputStream
 import java.util.concurrent.TimeUnit
 
@@ -82,7 +82,7 @@ class DownloadSplashIntentService : IntentService("DownloadSplashIntentService")
 					.unsubscribeOn(Schedulers.newThread())
 					.map { responseBody -> responseBody.byteStream() }
 					.observeOn(Schedulers.io())
-					.doOnNext { inputStream -> XhuFileUtil.saveFile(inputStream, file) }
+					.doOnNext { inputStream -> FileTools.saveFile(inputStream, file) }
 					.observeOn(AndroidSchedulers.mainThread())
 					.subscribe(object : Observer<InputStream> {
 						override fun onComplete() {

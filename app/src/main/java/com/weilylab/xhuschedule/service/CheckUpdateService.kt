@@ -56,8 +56,8 @@ class CheckUpdateService : Service() {
 				.observeOn(AndroidSchedulers.mainThread())
 				.subscribe(object : RxObserver<Version>() {
 					override fun onFinish(data: Version?) {
-						if (data != null && data.versionCode.toInt() > getString(R.string.app_version_code).toInt())
-							showUpdateDialog(data)
+//						if (data != null && data.versionCode.toInt() > getString(R.string.app_version_code).toInt())
+							showUpdateDialog(data!!)
 						stopSelf()
 						LocalBroadcastManager.getInstance(this@CheckUpdateService).sendBroadcast(Intent(SettingsPreferenceFragment.ACTION_CHECK_UPDATE_DONE))
 					}
@@ -89,7 +89,7 @@ class CheckUpdateService : Service() {
 									.setPositiveButton("${getString(R.string.action_download_apk)}(${FileTools.formatFileSize(version.apkSize.toLong())})") { _, _ ->
 										DownloadService.intentTo(activity, Constants.DOWNLOAD_TYPE_APK, version.apkQiniuPath, version.apkMD5, version.patchMD5)
 									}
-							if (version.lastVersionCode == getString(R.string.app_version_code))
+//							if (version.lastVersionCode == getString(R.string.app_version_code))
 								builder.setNegativeButton("${getString(R.string.action_download_patch)}(${FileTools.formatFileSize(version.patchSize.toLong())})") { _, _ ->
 									DownloadService.intentTo(activity, Constants.DOWNLOAD_TYPE_PATCH, version.patchQiniuPath, version.apkMD5, version.patchMD5)
 								}

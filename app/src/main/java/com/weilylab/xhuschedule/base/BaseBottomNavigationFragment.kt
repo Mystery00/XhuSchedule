@@ -1,9 +1,10 @@
 package com.weilylab.xhuschedule.base
 
 import android.widget.Toast
-import vip.mystery0.tools.base.BaseFragment
+import androidx.databinding.ViewDataBinding
+import vip.mystery0.tools.base.binding.BaseBindingFragment
 
-abstract class BaseBottomNavigationFragment(layoutId: Int) : BaseFragment(layoutId) {
+abstract class BaseBottomNavigationFragment<B : ViewDataBinding>(layoutId: Int) : BaseBindingFragment<B>(layoutId) {
 	private var toast: Toast? = null
 
 	abstract fun updateTitle()

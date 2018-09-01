@@ -30,19 +30,13 @@ import kotlinx.android.synthetic.main.content_bottom_navigation.*
 import vip.mystery0.logs.Logs
 import java.io.File
 
-class ProfileFragment : BaseBottomNavigationFragment(R.layout.fragment_profile) {
-	private lateinit var fragmentProfileBinding: FragmentProfileBinding
-	private lateinit var bottomNavigationViewModel: BottomNavigationViewModel
-	private lateinit var shareView: PopupWindow
-
+class ProfileFragment : BaseBottomNavigationFragment<FragmentProfileBinding>(R.layout.fragment_profile) {
 	companion object {
 		fun newInstance() = ProfileFragment()
 	}
 
-	override fun inflateView(layoutId: Int, inflater: LayoutInflater, container: ViewGroup?): View {
-		fragmentProfileBinding = FragmentProfileBinding.inflate(inflater, container, false)
-		return fragmentProfileBinding.root
-	}
+	private lateinit var bottomNavigationViewModel: BottomNavigationViewModel
+	private lateinit var shareView: PopupWindow
 
 	override fun initView() {
 		showUserImage()
@@ -53,7 +47,7 @@ class ProfileFragment : BaseBottomNavigationFragment(R.layout.fragment_profile) 
 	private fun showUserImage() {
 		val path = ConfigurationUtil.customUserImage
 		if (path == "" || !File(path).exists()) {
-			fragmentProfileBinding.studentProfileImage.setImageResource(R.mipmap.image_profile)
+			binding.studentProfileImage.setImageResource(R.mipmap.image_profile)
 		} else {
 			val options = RequestOptions()
 					.signature(MediaStoreSignature("image/*", File(path).lastModified(), 0))
@@ -61,7 +55,7 @@ class ProfileFragment : BaseBottomNavigationFragment(R.layout.fragment_profile) 
 			Glide.with(this)
 					.load(path)
 					.apply(options)
-					.into(fragmentProfileBinding.studentProfileImage)
+					.into(binding.studentProfileImage)
 		}
 	}
 
@@ -69,7 +63,7 @@ class ProfileFragment : BaseBottomNavigationFragment(R.layout.fragment_profile) 
 		bottomNavigationViewModel = ViewModelProviders.of(activity!!).get(BottomNavigationViewModel::class.java)
 		bottomNavigationViewModel.studentInfo.observe(activity!!, Observer {
 			when (it.status) {
-				Content -> fragmentProfileBinding.studentInfo = it.data
+				Content -> binding.studentInfo = it.data
 				Error -> {
 					Logs.wtf("initViewModel: ", it.error)
 					toastMessage(it.error?.message)
@@ -80,47 +74,47 @@ class ProfileFragment : BaseBottomNavigationFragment(R.layout.fragment_profile) 
 			when (packageData.status) {
 				Content -> {
 					if (packageData.data == null || packageData.data.isEmpty())
-						fragmentProfileBinding.redDotView.visibility = View.GONE
+						binding.redDotView.visibility = View.GONE
 					else {
 						packageData.data.forEach {
 							if (!it.isRead) {
-								fragmentProfileBinding.redDotView.visibility = View.VISIBLE
+								binding.redDotView.visibility = View.VISIBLE
 								return@Observer
 							}
 						}
-						fragmentProfileBinding.redDotView.visibility = View.GONE
+						binding.redDotView.visibility = View.GONE
 					}
 				}
 				Loading, Empty, Error ->
-					fragmentProfileBinding.redDotView.visibility = View.GONE
+					binding.redDotView.visibility = View.GONE
 			}
 		})
 	}
 
 	override fun monitor() {
 		super.monitor()
-		fragmentProfileBinding.queryTestLayout.setOnClickListener {
+		binding.queryTestLayout.setOnClickListener {
 			startActivity(Intent(activity, QueryTestActivity::class.java))
 		}
-		fragmentProfileBinding.queryScoreLayout.setOnClickListener {
+		binding.queryScoreLayout.setOnClickListener {
 			SettingsActivity.intentTo(activity, SettingsActivity.TYPE_QUERY_SCORE)
 		}
-		fragmentProfileBinding.accountSettingsLayout.setOnClickListener {
+		binding.accountSettingsLayout.setOnClickListener {
 			SettingsActivity.intentTo(activity, SettingsActivity.TYPE_ACCOUNT)
 		}
-		fragmentProfileBinding.classSettingsLayout.setOnClickListener {
+		binding.classSettingsLayout.setOnClickListener {
 			SettingsActivity.intentTo(activity, SettingsActivity.TYPE_CLASS)
 		}
-		fragmentProfileBinding.softwareSettingsLayout.setOnClickListener {
+		binding.softwareSettingsLayout.setOnClickListener {
 			SettingsActivity.intentTo(activity, SettingsActivity.TYPE_SETTINGS)
 		}
-		fragmentProfileBinding.noticeLayout.setOnClickListener {
+		binding.noticeLayout.setOnClickListener {
 			startActivity(Intent(activity, NoticeActivity::class.java))
 		}
-		fragmentProfileBinding.feedbackLayout.setOnClickListener {
+		binding.feedbackLayout.setOnClickListener {
 			startActivity(Intent(activity, FeedbackActivity::class.java))
 		}
-		fragmentProfileBinding.shareWithFriendsLayout.setOnClickListener {
+		binding.shareWithFriendsLayout.setOnClickListener {
 			showShareMenu()
 		}
 	}

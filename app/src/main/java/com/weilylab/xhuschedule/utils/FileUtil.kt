@@ -31,8 +31,4 @@ object FileUtil {
 			return null
 		return File(context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)!!.absolutePath + File.separator + "image" + File.separator + fileName)
 	}
-
-	fun getMD5(file: File): String = getMD5(FileInputStream(file))
-
-	fun getMD5(fileInputStream: FileInputStream): String = BigInteger(1, MessageDigest.getInstance("MD5").digest(fileInputStream.readBytes())).toString(16)
 }

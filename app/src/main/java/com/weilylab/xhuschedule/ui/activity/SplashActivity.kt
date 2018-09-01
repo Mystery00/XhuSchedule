@@ -49,8 +49,8 @@ import com.weilylab.xhuschedule.utils.FileUtil
 import com.weilylab.xhuschedule.utils.rxAndroid.PackageData
 import com.weilylab.xhuschedule.viewModel.SplashViewModel
 import com.weilylab.xhuschedule.service.DownloadSplashIntentService
-import com.weilylab.xhuschedule.service.NotificationService
 import com.weilylab.xhuschedule.utils.ConfigUtil
+import vip.mystery0.tools.utils.FileTools
 
 /**
  * Created by mystery0.
@@ -101,7 +101,7 @@ class SplashActivity : XhuBaseActivity(null) {
 		if (splash.isEnable) {
 			val splashFile = FileUtil.getSplashImageFile(this, splash.objectId)
 			if (splashFile != null && splashFile.exists()) {
-				val md5 = FileUtil.getMD5(splashFile)
+				val md5 = FileTools.getMD5(splashFile)
 				if (splash.imageMD5 == md5)
 					gotoSplashImage()
 				else {

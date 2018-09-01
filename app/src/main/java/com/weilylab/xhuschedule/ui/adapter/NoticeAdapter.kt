@@ -37,7 +37,7 @@ import android.content.Context
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.model.Notice
 import com.weilylab.xhuschedule.databinding.ItemNoticeBinding
-import vip.mystery0.tools.base.BaseBindingRecyclerViewAdapter
+import vip.mystery0.tools.base.binding.BaseBindingRecyclerViewAdapter
 
 class NoticeAdapter(private val context: Context) : BaseBindingRecyclerViewAdapter<Notice, ItemNoticeBinding>(R.layout.item_notice) {
 	override fun setItemView(binding: ItemNoticeBinding, position: Int, data: Notice) {

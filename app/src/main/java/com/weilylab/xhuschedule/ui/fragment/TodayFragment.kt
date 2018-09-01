@@ -1,8 +1,6 @@
 package com.weilylab.xhuschedule.ui.fragment
 
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -22,14 +20,12 @@ import com.weilylab.xhuschedule.viewModel.BottomNavigationViewModel
 import com.zhuangfei.timetable.model.Schedule
 import vip.mystery0.logs.Logs
 
-class TodayFragment : BaseBottomNavigationFragment(R.layout.fragment_today) {
-
+class TodayFragment : BaseBottomNavigationFragment<FragmentTodayBinding>(R.layout.fragment_today) {
 	companion object {
 		fun newInstance() = TodayFragment()
 	}
 
 	private lateinit var viewModel: BottomNavigationViewModel
-	private lateinit var fragmentTodayBinding: FragmentTodayBinding
 	private lateinit var adapter: FragmentTodayRecyclerViewAdapter
 
 	private val todayCourseListObserver = Observer<PackageData<List<Schedule>>> {
@@ -50,16 +46,11 @@ class TodayFragment : BaseBottomNavigationFragment(R.layout.fragment_today) {
 		}
 	}
 
-	override fun inflateView(layoutId: Int, inflater: LayoutInflater, container: ViewGroup?): View {
-		fragmentTodayBinding = FragmentTodayBinding.inflate(LayoutInflater.from(activity), container, false)
-		return fragmentTodayBinding.root
-	}
-
 	override fun initView() {
 		initViewModel()
-		fragmentTodayBinding.recyclerView.layoutManager = LinearLayoutManager(activity)
+		binding.recyclerView.layoutManager = LinearLayoutManager(activity)
 		adapter = FragmentTodayRecyclerViewAdapter(activity)
-		fragmentTodayBinding.recyclerView.adapter = adapter
+		binding.recyclerView.adapter = adapter
 	}
 
 	private fun initViewModel() {
@@ -68,13 +59,13 @@ class TodayFragment : BaseBottomNavigationFragment(R.layout.fragment_today) {
 	}
 
 	private fun showNoDataLayout() {
-		fragmentTodayBinding.nullDataView.visibility = View.VISIBLE
-		fragmentTodayBinding.dataView.visibility = View.GONE
+		binding.nullDataView.visibility = View.VISIBLE
+		binding.dataView.visibility = View.GONE
 	}
 
 	private fun hideNoDataLayout() {
-		fragmentTodayBinding.nullDataView.visibility = View.GONE
-		fragmentTodayBinding.dataView.visibility = View.VISIBLE
+		binding.nullDataView.visibility = View.GONE
+		binding.dataView.visibility = View.VISIBLE
 	}
 
 	override fun monitor() {

@@ -5,7 +5,7 @@ import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.config.ColorPoolHelper
 import com.weilylab.xhuschedule.databinding.ItemShowCourseBinding
 import com.zhuangfei.timetable.model.Schedule
-import vip.mystery0.tools.base.BaseBindingRecyclerViewAdapter
+import vip.mystery0.tools.base.binding.BaseBindingRecyclerViewAdapter
 
 class ShowCourseRecyclerViewAdapter(context: Context?) : BaseBindingRecyclerViewAdapter<Schedule, ItemShowCourseBinding>(R.layout.item_show_course) {
 	override fun setItemView(binding: ItemShowCourseBinding, position: Int, data: Schedule) {

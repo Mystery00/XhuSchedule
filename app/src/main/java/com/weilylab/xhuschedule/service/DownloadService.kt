@@ -47,11 +47,9 @@ import com.weilylab.xhuschedule.listener.DownloadProgressListener
 import com.weilylab.xhuschedule.utils.BsPatch
 import com.weilylab.xhuschedule.constant.Constants
 import com.weilylab.xhuschedule.ui.notification.DownloadNotification
-import com.weilylab.xhuschedule.XhuFileUtil
 import com.weilylab.xhuschedule.constant.IntentConstant
 import com.weilylab.xhuschedule.model.Download
 import com.weilylab.xhuschedule.interceptor.DownloadProgressInterceptor
-import com.weilylab.xhuschedule.utils.FileUtil
 import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
@@ -60,6 +58,7 @@ import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import vip.mystery0.logs.Logs
+import vip.mystery0.tools.utils.FileTools
 import java.io.File
 import java.io.IOException
 import java.io.InputStream
@@ -130,13 +129,14 @@ class DownloadService : IntentService("DownloadService") {
 				.map { responseBody ->
 					val inputStream = responseBody.byteStream()
 					try {
-						XhuFileUtil.saveFile(inputStream, file)
-						val downloadFileMD5 = FileUtil.getMD5(file)
+						FileTools.saveFile(inputStream, file)
+						val downloadFileMD5 = FileTools.getMD5(file)
 						isDownloadMD5Matched = when (type) {
 							Constants.DOWNLOAD_TYPE_APK -> downloadFileMD5 == apkMD5
 							Constants.DOWNLOAD_TYPE_PATCH -> downloadFileMD5 == patchMD5
 							else -> false
 						}
+						Logs.im("download: ", downloadFileMD5, apkMD5, patchMD5, isDownloadMD5Matched)
 					} catch (e: IOException) {
 						e.printStackTrace()
 					}
