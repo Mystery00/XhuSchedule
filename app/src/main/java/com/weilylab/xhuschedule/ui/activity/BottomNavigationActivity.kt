@@ -372,7 +372,6 @@ class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_naviga
 						override fun onComplete() {
 							if (action == ACTION_REFRESH) {
 								toastMessage(R.string.hint_course_sync_done)
-
 								action = ACTION_NONE
 							}
 							if (bottomNavigationViewModel.courseList.value != null && bottomNavigationViewModel.courseList.value!!.data != null) {
