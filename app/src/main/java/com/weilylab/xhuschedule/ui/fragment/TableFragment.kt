@@ -48,6 +48,7 @@ class TableFragment : BaseBottomNavigationFragment<FragmentTableBinding>(R.layou
 
 	private val weekObserver = Observer<Int> {
 		try {
+			(binding.timeTableView.onItemBuildListener() as CustomItemBuildAdapter).week = it
 			binding.timeTableView.changeWeekOnly(it)
 			binding.timeTableView.onDateBuildListener().onUpdateDate(binding.timeTableView.curWeek(), it)
 		} catch (e: Exception) {
@@ -72,7 +73,7 @@ class TableFragment : BaseBottomNavigationFragment<FragmentTableBinding>(R.layou
 				.curWeek(week)
 				.isShowNotCurWeek(ConfigurationUtil.isShowNotWeek)
 				.monthWidthDp(20)
-				.alpha(0.1f, 0.1f, 1f)
+				.alpha(0.1f, 0.06f, 0.8f)
 				.callback(CustomDateAdapter())
 				.callback(CustomItemBuildAdapter())
 				.isShowFlaglayout(false)

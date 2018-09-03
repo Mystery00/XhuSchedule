@@ -8,6 +8,7 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.view.Gravity
 import android.view.View
+import android.view.ViewGroup
 import android.widget.PopupWindow
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
@@ -18,6 +19,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.signature.MediaStoreSignature
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.base.XhuBaseActivity
 import com.weilylab.xhuschedule.config.Status.*
@@ -407,14 +409,21 @@ class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_naviga
 	}
 
 	private lateinit var popupWindow: PopupWindow
+	private lateinit var bottomSheetDialog: BottomSheetDialog
 	private lateinit var recyclerView: RecyclerView
 
 	private fun initPopupWindow() {
 		recyclerView = RecyclerView(this)
 //		recyclerView.layoutManager = SkidRightLayoutManager(1.5f, 0.85f)
 		recyclerView.layoutManager = EchelonLayoutManager(this)
+//		recyclerView.isNestedScrollingEnabled = true
 		showAdapter = ShowCourseRecyclerViewAdapter(this)
 		recyclerView.adapter = showAdapter
+//		bottomSheetDialog = BottomSheetDialog(this)
+//		val layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, DensityTools.dp2px(this, 800F))
+//		bottomSheetDialog.setContentView(recyclerView, layoutParams)
+//		bottomSheetDialog.setCancelable(true)
+//		bottomSheetDialog.setCanceledOnTouchOutside(true)
 		popupWindow = PopupWindow(recyclerView, DensityTools.getScreenWidth(this), DensityTools.dp2px(this, 240F))
 		popupWindow.isOutsideTouchable = true
 		popupWindow.isFocusable = true
@@ -426,6 +435,7 @@ class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_naviga
 	}
 
 	private fun showPopupWindow() {
+//		bottomSheetDialog.show()
 		AnimationUtil.setWindowAlpha(this, 0.6F)
 		popupWindow.showAtLocation(weekView, Gravity.BOTTOM, 0, 0)
 	}

@@ -49,7 +49,7 @@ class TodayFragment : BaseBottomNavigationFragment<FragmentTodayBinding>(R.layou
 	override fun initView() {
 		initViewModel()
 		binding.recyclerView.layoutManager = LinearLayoutManager(activity)
-		adapter = FragmentTodayRecyclerViewAdapter(activity)
+		adapter = FragmentTodayRecyclerViewAdapter(activity!!)
 		binding.recyclerView.adapter = adapter
 	}
 

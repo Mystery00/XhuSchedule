@@ -22,7 +22,7 @@ object ConfigurationUtil {
 		set(value) = sharedPreferences.edit()
 				.putBoolean(SharedPreferenceConstant.FIELD_SHOW_NOT_WEEK, value)
 				.apply()
-		get() = sharedPreferences.getBoolean(SharedPreferenceConstant.FIELD_SHOW_NOT_WEEK, false)
+		get() = sharedPreferences.getBoolean(SharedPreferenceConstant.FIELD_SHOW_NOT_WEEK, true)
 	var autoCheckUpdate: Boolean
 		set(value) = sharedPreferences.edit()
 				.putBoolean(SharedPreferenceConstant.FIELD_AUTO_CHECK_UPDATE, value)

@@ -41,25 +41,25 @@
 					android:layout_width="0dp"
 					android:layout_height="wrap_content"
 					android:layout_marginStart="27dp"
+					android:layout_marginBottom="3dp"
 					android:text="@{studentInfo.name}"
 					android:textColor="@android:color/black"
 					android:textSize="17sp"
-					app:layout_constraintBottom_toTopOf="@id/studentClassNameTextView"
+					app:layout_constraintBottom_toTopOf="@+id/guideline"
 					app:layout_constraintEnd_toStartOf="@+id/imageViewHeaderMore"
-					app:layout_constraintStart_toEndOf="@id/studentProfileImage"
-					app:layout_constraintTop_toTopOf="parent" />
+					app:layout_constraintStart_toEndOf="@id/studentProfileImage" />
 
 				<TextView
 					android:id="@+id/studentClassNameTextView"
 					android:layout_width="0dp"
 					android:layout_height="wrap_content"
 					android:layout_marginStart="27dp"
+					android:layout_marginTop="3dp"
 					android:text="@{studentInfo.classname}"
 					android:textSize="13.67sp"
-					app:layout_constraintBottom_toBottomOf="parent"
 					app:layout_constraintEnd_toStartOf="@+id/imageViewHeaderMore"
 					app:layout_constraintStart_toEndOf="@id/studentProfileImage"
-					app:layout_constraintTop_toBottomOf="@id/studentNameTextView" />
+					app:layout_constraintTop_toTopOf="@+id/guideline" />
 
 				<ImageView
 					android:id="@+id/imageViewHeaderMore"
@@ -71,6 +71,13 @@
 					app:layout_constraintEnd_toEndOf="parent"
 					app:layout_constraintTop_toTopOf="parent"
 					app:srcCompat="@drawable/ic_more" />
+
+				<androidx.constraintlayout.widget.Guideline
+					android:id="@+id/guideline"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:orientation="horizontal"
+					app:layout_constraintGuide_percent="0.5" />
 
 			</androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -84,28 +91,34 @@
 				android:layout_width="match_parent"
 				android:layout_height="44.67dp">
 
-				<ImageView
-					android:id="@+id/imageViewQueryTest"
-					android:layout_width="16.33dp"
-					android:layout_height="18dp"
-					android:layout_marginStart="16dp"
-					android:contentDescription="@string/app_name"
-					android:src="@mipmap/ic_query_test"
-					app:layout_constraintBottom_toBottomOf="parent"
-					app:layout_constraintStart_toStartOf="parent"
-					app:layout_constraintTop_toTopOf="parent" />
+				<FrameLayout
+					android:id="@+id/imageLayoutQueryTest"
+					android:layout_width="48dp"
+					android:layout_height="match_parent">
+
+					<ImageView
+						android:id="@+id/imageViewQueryTest"
+						android:layout_width="16.33dp"
+						android:layout_height="18dp"
+						android:layout_gravity="center"
+						android:contentDescription="@string/app_name"
+						android:src="@mipmap/ic_query_test"
+						app:layout_constraintBottom_toBottomOf="parent"
+						app:layout_constraintStart_toStartOf="parent"
+						app:layout_constraintTop_toTopOf="parent" />
+
+				</FrameLayout>
 
 				<TextView
 					android:id="@+id/textViewQueryTest"
 					android:layout_width="0dp"
 					android:layout_height="wrap_content"
-					android:layout_marginStart="16dp"
 					android:text="@string/profile_action_query_test"
 					android:textColor="@android:color/black"
 					android:textSize="15sp"
 					app:layout_constraintBottom_toBottomOf="parent"
 					app:layout_constraintEnd_toStartOf="@id/imageViewMoreQueryTest"
-					app:layout_constraintStart_toEndOf="@id/imageViewQueryTest"
+					app:layout_constraintStart_toEndOf="@id/imageLayoutQueryTest"
 					app:layout_constraintTop_toTopOf="parent" />
 
 				<ImageView
@@ -131,22 +144,27 @@
 				android:layout_width="match_parent"
 				android:layout_height="44.67dp">
 
-				<ImageView
+				<FrameLayout
 					android:id="@+id/imageViewQueryScore"
-					android:layout_width="16.67dp"
-					android:layout_height="18dp"
-					android:layout_marginStart="16dp"
-					android:contentDescription="@string/app_name"
-					android:src="@mipmap/ic_query_score"
-					app:layout_constraintBottom_toBottomOf="parent"
-					app:layout_constraintStart_toStartOf="parent"
-					app:layout_constraintTop_toTopOf="parent" />
+					android:layout_width="48dp"
+					android:layout_height="match_parent">
+
+					<ImageView
+						android:layout_width="16.67dp"
+						android:layout_height="18dp"
+						android:layout_gravity="center"
+						android:contentDescription="@string/app_name"
+						android:src="@mipmap/ic_query_score"
+						app:layout_constraintBottom_toBottomOf="parent"
+						app:layout_constraintStart_toStartOf="parent"
+						app:layout_constraintTop_toTopOf="parent" />
+
+				</FrameLayout>
 
 				<TextView
 					android:id="@+id/textViewQueryScore"
 					android:layout_width="0dp"
 					android:layout_height="wrap_content"
-					android:layout_marginStart="16dp"
 					android:text="@string/profile_action_query_score"
 					android:textColor="@android:color/black"
 					android:textSize="15sp"
@@ -178,22 +196,27 @@
 				android:layout_width="match_parent"
 				android:layout_height="44.67dp">
 
-				<ImageView
+				<FrameLayout
 					android:id="@+id/imageViewAccountSettings"
-					android:layout_width="16.67dp"
-					android:layout_height="16.33dp"
-					android:layout_marginStart="16dp"
-					android:contentDescription="@string/app_name"
-					android:src="@mipmap/ic_account_settings"
-					app:layout_constraintBottom_toBottomOf="parent"
-					app:layout_constraintStart_toStartOf="parent"
-					app:layout_constraintTop_toTopOf="parent" />
+					android:layout_width="48dp"
+					android:layout_height="match_parent">
+
+					<ImageView
+						android:layout_width="16.67dp"
+						android:layout_height="16.33dp"
+						android:layout_gravity="center"
+						android:contentDescription="@string/app_name"
+						android:src="@mipmap/ic_account_settings"
+						app:layout_constraintBottom_toBottomOf="parent"
+						app:layout_constraintStart_toStartOf="parent"
+						app:layout_constraintTop_toTopOf="parent" />
+
+				</FrameLayout>
 
 				<TextView
 					android:id="@+id/textViewAccountSettings"
 					android:layout_width="0dp"
 					android:layout_height="wrap_content"
-					android:layout_marginStart="16dp"
 					android:text="@string/profile_action_account_settings"
 					android:textColor="@android:color/black"
 					android:textSize="15sp"
@@ -225,22 +248,27 @@
 				android:layout_width="match_parent"
 				android:layout_height="44.67dp">
 
-				<ImageView
+				<FrameLayout
 					android:id="@+id/imageViewClassSettings"
-					android:layout_width="16.67dp"
-					android:layout_height="17.67dp"
-					android:layout_marginStart="16dp"
-					android:contentDescription="@string/app_name"
-					android:src="@mipmap/ic_class_settings"
-					app:layout_constraintBottom_toBottomOf="parent"
-					app:layout_constraintStart_toStartOf="parent"
-					app:layout_constraintTop_toTopOf="parent" />
+					android:layout_width="48dp"
+					android:layout_height="match_parent">
+
+					<ImageView
+						android:layout_width="16.67dp"
+						android:layout_height="17.67dp"
+						android:layout_gravity="center"
+						android:contentDescription="@string/app_name"
+						android:src="@mipmap/ic_class_settings"
+						app:layout_constraintBottom_toBottomOf="parent"
+						app:layout_constraintStart_toStartOf="parent"
+						app:layout_constraintTop_toTopOf="parent" />
+
+				</FrameLayout>
 
 				<TextView
 					android:id="@+id/textViewClassSettings"
 					android:layout_width="0dp"
 					android:layout_height="wrap_content"
-					android:layout_marginStart="16dp"
 					android:text="@string/profile_action_class_settings"
 					android:textColor="@android:color/black"
 					android:textSize="15sp"
@@ -272,22 +300,27 @@
 				android:layout_width="match_parent"
 				android:layout_height="44.67dp">
 
-				<ImageView
+				<FrameLayout
 					android:id="@+id/imageViewSoftwareSettings"
-					android:layout_width="18.67dp"
-					android:layout_height="18dp"
-					android:layout_marginStart="16dp"
-					android:contentDescription="@string/app_name"
-					android:src="@mipmap/ic_software_settings"
-					app:layout_constraintBottom_toBottomOf="parent"
-					app:layout_constraintStart_toStartOf="parent"
-					app:layout_constraintTop_toTopOf="parent" />
+					android:layout_width="48dp"
+					android:layout_height="match_parent">
+
+					<ImageView
+						android:layout_width="18.67dp"
+						android:layout_height="18dp"
+						android:layout_gravity="center"
+						android:contentDescription="@string/app_name"
+						android:src="@mipmap/ic_software_settings"
+						app:layout_constraintBottom_toBottomOf="parent"
+						app:layout_constraintStart_toStartOf="parent"
+						app:layout_constraintTop_toTopOf="parent" />
+
+				</FrameLayout>
 
 				<TextView
 					android:id="@+id/textViewSoftwareSettings"
 					android:layout_width="0dp"
 					android:layout_height="wrap_content"
-					android:layout_marginStart="16dp"
 					android:text="@string/profile_action_software_settings"
 					android:textColor="@android:color/black"
 					android:textSize="15sp"
@@ -319,22 +352,27 @@
 				android:layout_width="match_parent"
 				android:layout_height="44.67dp">
 
-				<ImageView
+				<FrameLayout
 					android:id="@+id/imageViewNotice"
-					android:layout_width="17.67dp"
-					android:layout_height="17dp"
-					android:layout_marginStart="16dp"
-					android:contentDescription="@string/app_name"
-					android:src="@mipmap/ic_notice"
-					app:layout_constraintBottom_toBottomOf="parent"
-					app:layout_constraintStart_toStartOf="parent"
-					app:layout_constraintTop_toTopOf="parent" />
+					android:layout_width="48dp"
+					android:layout_height="match_parent">
+
+					<ImageView
+						android:layout_width="17.67dp"
+						android:layout_height="17dp"
+						android:layout_gravity="center"
+						android:contentDescription="@string/app_name"
+						android:src="@mipmap/ic_notice"
+						app:layout_constraintBottom_toBottomOf="parent"
+						app:layout_constraintStart_toStartOf="parent"
+						app:layout_constraintTop_toTopOf="parent" />
+
+				</FrameLayout>
 
 				<TextView
 					android:id="@+id/textViewNotice"
 					android:layout_width="0dp"
 					android:layout_height="wrap_content"
-					android:layout_marginStart="16dp"
 					android:text="@string/profile_action_notice"
 					android:textColor="@android:color/black"
 					android:textSize="15sp"
@@ -377,22 +415,27 @@
 				android:layout_width="match_parent"
 				android:layout_height="44.67dp">
 
-				<ImageView
+				<FrameLayout
 					android:id="@+id/imageViewFeedback"
-					android:layout_width="16.67dp"
-					android:layout_height="18dp"
-					android:layout_marginStart="16dp"
-					android:contentDescription="@string/app_name"
-					android:src="@mipmap/ic_feedback"
-					app:layout_constraintBottom_toBottomOf="parent"
-					app:layout_constraintStart_toStartOf="parent"
-					app:layout_constraintTop_toTopOf="parent" />
+					android:layout_width="48dp"
+					android:layout_height="match_parent">
+
+					<ImageView
+						android:layout_width="16.67dp"
+						android:layout_height="18dp"
+						android:layout_gravity="center"
+						android:contentDescription="@string/app_name"
+						android:src="@mipmap/ic_feedback"
+						app:layout_constraintBottom_toBottomOf="parent"
+						app:layout_constraintStart_toStartOf="parent"
+						app:layout_constraintTop_toTopOf="parent" />
+
+				</FrameLayout>
 
 				<TextView
 					android:id="@+id/textViewFeedback"
 					android:layout_width="0dp"
 					android:layout_height="wrap_content"
-					android:layout_marginStart="16dp"
 					android:text="@string/profile_action_feedback"
 					android:textColor="@android:color/black"
 					android:textSize="15sp"
@@ -424,22 +467,27 @@
 				android:layout_width="match_parent"
 				android:layout_height="44.67dp">
 
-				<ImageView
+				<FrameLayout
 					android:id="@+id/imageViewShareWithFriends"
-					android:layout_width="18dp"
-					android:layout_height="18dp"
-					android:layout_marginStart="16dp"
-					android:contentDescription="@string/app_name"
-					android:src="@mipmap/ic_share_with_friends"
-					app:layout_constraintBottom_toBottomOf="parent"
-					app:layout_constraintStart_toStartOf="parent"
-					app:layout_constraintTop_toTopOf="parent" />
+					android:layout_width="48dp"
+					android:layout_height="match_parent">
+
+					<ImageView
+						android:layout_width="18dp"
+						android:layout_height="18dp"
+						android:layout_gravity="center"
+						android:contentDescription="@string/app_name"
+						android:src="@mipmap/ic_share_with_friends"
+						app:layout_constraintBottom_toBottomOf="parent"
+						app:layout_constraintStart_toStartOf="parent"
+						app:layout_constraintTop_toTopOf="parent" />
+
+				</FrameLayout>
 
 				<TextView
 					android:id="@+id/textViewShareWithFriends"
 					android:layout_width="0dp"
 					android:layout_height="wrap_content"
-					android:layout_marginStart="16dp"
 					android:text="@string/profile_action_share_with_friends"
 					android:textColor="@android:color/black"
 					android:textSize="15sp"
