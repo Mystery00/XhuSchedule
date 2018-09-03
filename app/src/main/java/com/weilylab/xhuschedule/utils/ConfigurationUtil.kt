@@ -73,9 +73,9 @@ object ConfigurationUtil {
 				.putString(SharedPreferenceConstant.FIELD_NOTIFICATION_TIME, value)
 				.apply()
 		get() = sharedPreferences.getString(SharedPreferenceConstant.FIELD_NOTIFICATION_TIME, "20:00")!!
-	var clearAppData: Boolean
+	var ignoreUpdateVersion: String
 		set(value) = sharedPreferences.edit()
-				.putBoolean("clearAppData", value)
+				.putString(SharedPreferenceConstant.FIELD_IGNORE_UPDATE_VERSION, value)
 				.apply()
-		get() = sharedPreferences.getBoolean("clearAppData", true)
+		get() = sharedPreferences.getString(SharedPreferenceConstant.FIELD_IGNORE_UPDATE_VERSION, "")!!
 }

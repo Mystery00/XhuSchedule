@@ -22,6 +22,7 @@ import com.weilylab.xhuschedule.ui.activity.SplashActivity
 import com.weilylab.xhuschedule.ui.activity.SplashImageActivity
 import com.weilylab.xhuschedule.ui.fragment.settings.SettingsPreferenceFragment
 import com.weilylab.xhuschedule.utils.ConfigUtil
+import com.weilylab.xhuschedule.utils.ConfigurationUtil
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import vip.mystery0.logs.Logs
@@ -71,6 +72,9 @@ class CheckUpdateService : Service() {
 	}
 
 	private fun showUpdateDialog(version: Version) {
+		val ignoreVersionList = ConfigurationUtil.ignoreUpdateVersion.split('!')
+		if (ignoreVersionList.indexOf(version.versionCode) != -1)
+			return
 		RxObservable<Boolean>()
 				.doThings {
 					while (APPActivityManager.currentActivity() is SplashActivity || APPActivityManager.currentActivity() is GuideActivity || APPActivityManager.currentActivity() is SplashImageActivity)
@@ -98,7 +102,9 @@ class CheckUpdateService : Service() {
 									APPActivityManager.finishAllActivity()
 								}
 							else
-								builder.setNeutralButton(R.string.action_download_cancel, null)
+								builder.setNeutralButton(R.string.action_download_cancel) { _, _ ->
+									ConfigurationUtil.ignoreUpdateVersion = "${version.versionCode}!${ConfigurationUtil.ignoreUpdateVersion}"
+								}
 							builder.show()
 						}
 					}

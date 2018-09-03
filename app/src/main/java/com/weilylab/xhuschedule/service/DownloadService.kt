@@ -136,7 +136,6 @@ class DownloadService : IntentService("DownloadService") {
 							Constants.DOWNLOAD_TYPE_PATCH -> downloadFileMD5 == patchMD5
 							else -> false
 						}
-						Logs.im("download: ", downloadFileMD5, apkMD5, patchMD5, isDownloadMD5Matched)
 					} catch (e: IOException) {
 						e.printStackTrace()
 					}

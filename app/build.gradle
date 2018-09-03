@@ -137,8 +137,8 @@ dependencies {
 	//MultiDex
 	implementation 'androidx.multidex:multidex:2.0.0'
 	//TimetableView
-//	implementation 'com.zhuangfei:TimetableView:2.0.2'
-	implementation 'com.github.Mystery00:TimetableView:2.0.2-prerelease-20180901'
+	implementation 'com.zhuangfei:TimetableView:2.0.5'
+//	implementation 'com.github.Mystery00:TimetableView:2.0.2-prerelease-20180901'
 	//Matisse
 	implementation 'com.zhihu.android:matisse:0.5.2-beta2'
 	//UCrop

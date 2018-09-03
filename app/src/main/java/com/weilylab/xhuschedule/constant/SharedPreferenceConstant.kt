@@ -29,4 +29,5 @@ object SharedPreferenceConstant {
 	const val FIELD_NOTIFICATION_COURSE = "config_notification_course"
 	const val FIELD_NOTIFICATION_EXAM = "config_notification_exam"
 	const val FIELD_NOTIFICATION_TIME = "config_notification_time"
+	const val FIELD_IGNORE_UPDATE_VERSION = "config_ignore_update_version"
 }

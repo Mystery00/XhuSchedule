@@ -11,11 +11,16 @@ import com.weilylab.xhuschedule.databinding.ItemCustomDateviewFirstBinding
 import com.weilylab.xhuschedule.utils.CalendarUtil
 import com.zhuangfei.timetable.listener.OnDateBuildAapter
 import com.zhuangfei.timetable.utils.ColorUtils
+import vip.mystery0.logs.Logs
 
 class CustomDateAdapter : OnDateBuildAapter() {
 	private lateinit var itemCustomDateviewFirstBinding: ItemCustomDateviewFirstBinding
 	private val bindingArray = arrayOfNulls<ItemCustomDateviewBinding>(7)
 	private val heightPx = DensityTools.dp2px(APP.context, 35f)
+
+	override fun onInit(layout: LinearLayout?, alpha: Float) {
+		Logs.i("onInit: $alpha")
+	}
 
 	override fun onBuildDayLayout(mInflate: LayoutInflater, pos: Int, width: Int, height: Int): View {
 		val itemCustomDateviewBinding = ItemCustomDateviewBinding.inflate(mInflate)

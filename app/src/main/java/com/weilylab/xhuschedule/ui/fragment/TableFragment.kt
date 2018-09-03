@@ -71,7 +71,8 @@ class TableFragment : BaseBottomNavigationFragment<FragmentTableBinding>(R.layou
 		binding.timeTableView
 				.curWeek(week)
 				.isShowNotCurWeek(ConfigurationUtil.isShowNotWeek)
-				.alpha(0.1f, 0.05f, 1f)
+				.monthWidthDp(20)
+				.alpha(0.1f, 0.1f, 1f)
 				.callback(CustomDateAdapter())
 				.callback(CustomItemBuildAdapter())
 				.isShowFlaglayout(false)
