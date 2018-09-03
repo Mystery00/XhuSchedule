@@ -1,32 +1,27 @@
 package com.weilylab.xhuschedule.ui.fragment
 
 import android.content.Intent
-import android.graphics.drawable.ColorDrawable
-import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import android.widget.PopupWindow
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.signature.MediaStoreSignature
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.databinding.DialogShareWithFriendsBinding
 import com.weilylab.xhuschedule.databinding.FragmentProfileBinding
 import com.weilylab.xhuschedule.base.BaseBottomNavigationFragment
 import com.weilylab.xhuschedule.config.Status.*
 import com.weilylab.xhuschedule.ui.activity.*
-import com.weilylab.xhuschedule.utils.AnimationUtil
 import com.weilylab.xhuschedule.utils.ConfigurationUtil
 import com.weilylab.xhuschedule.utils.LayoutRefreshConfigUtil
 import com.weilylab.xhuschedule.utils.ShareUtil
 import com.weilylab.xhuschedule.utils.rxAndroid.RxObservable
 import com.weilylab.xhuschedule.utils.rxAndroid.RxObserver
 import com.weilylab.xhuschedule.viewModel.BottomNavigationViewModel
-import kotlinx.android.synthetic.main.content_bottom_navigation.*
 import vip.mystery0.logs.Logs
 import java.io.File
 
@@ -36,7 +31,7 @@ class ProfileFragment : BaseBottomNavigationFragment<FragmentProfileBinding>(R.l
 	}
 
 	private lateinit var bottomNavigationViewModel: BottomNavigationViewModel
-	private lateinit var shareView: PopupWindow
+	private lateinit var bottomSheetDialog: BottomSheetDialog
 
 	override fun initView() {
 		showUserImage()
@@ -130,46 +125,41 @@ class ProfileFragment : BaseBottomNavigationFragment<FragmentProfileBinding>(R.l
 
 	private fun initShareMenu() {
 		val binding = DialogShareWithFriendsBinding.inflate(LayoutInflater.from(activity))
-		shareView = PopupWindow(binding.root, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
-		shareView.isOutsideTouchable = true
-		shareView.isFocusable = true
-		shareView.animationStyle = R.style.ShareAnimation
-		shareView.setBackgroundDrawable(ColorDrawable(0x00000000))
-		shareView.setOnDismissListener {
-			AnimationUtil.setWindowAlpha(activity, 1F)
-		}
+		 bottomSheetDialog = BottomSheetDialog(activity!!)
+		bottomSheetDialog.setContentView(binding.root)
+		bottomSheetDialog.setCancelable(true)
+		bottomSheetDialog.setCanceledOnTouchOutside(true)
 		binding.textViewCancel.setOnClickListener {
-			shareView.dismiss()
+			bottomSheetDialog.dismiss()
 		}
 		binding.qqShareLayout.setOnClickListener {
 			ShareUtil.shareApplication(activity!!, ShareUtil.ShareType.QQ)
-			shareView.dismiss()
+			bottomSheetDialog.dismiss()
 		}
 		binding.qzoneShareLayout.setOnClickListener {
 			ShareUtil.shareApplication(activity!!, ShareUtil.ShareType.QZONE)
-			shareView.dismiss()
+			bottomSheetDialog.dismiss()
 		}
 		binding.weiboShareLayout.setOnClickListener {
 			ShareUtil.shareApplication(activity!!, ShareUtil.ShareType.WEIBO)
-			shareView.dismiss()
+			bottomSheetDialog.dismiss()
 		}
 		binding.wxShareLayout.setOnClickListener {
 			ShareUtil.shareApplication(activity!!, ShareUtil.ShareType.WEIXIN)
-			shareView.dismiss()
+			bottomSheetDialog.dismiss()
 		}
 		binding.friendShareLayout.setOnClickListener {
 			ShareUtil.shareApplication(activity!!, ShareUtil.ShareType.FRIEND)
-			shareView.dismiss()
+			bottomSheetDialog.dismiss()
 		}
 		binding.systemShareLayout.setOnClickListener {
 			ShareUtil.shareApplication(activity!!, ShareUtil.ShareType.SYSTEM)
-			shareView.dismiss()
+			bottomSheetDialog.dismiss()
 		}
 	}
 
 	private fun showShareMenu() {
-		shareView.showAtLocation((activity as BottomNavigationActivity).bottomNavigationView, Gravity.BOTTOM, 0, 0)
-		AnimationUtil.setWindowAlpha(activity, 0.6F)
+		bottomSheetDialog.show()
 	}
 
 	override fun updateTitle() {
