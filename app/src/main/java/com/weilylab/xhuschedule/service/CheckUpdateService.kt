@@ -29,6 +29,10 @@ import vip.mystery0.logs.Logs
 import vip.mystery0.tools.utils.FileTools
 
 class CheckUpdateService : Service() {
+	companion object {
+		const val CHECK_ACTION_BY_MANUAL = "check_action_by_manual"
+	}
+
 	override fun onBind(intent: Intent): IBinder? = null
 
 	override fun onCreate() {
@@ -42,7 +46,7 @@ class CheckUpdateService : Service() {
 		startForeground(Constants.NOTIFICATION_ID_CHECK_UPDATE, notification)
 	}
 
-	override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+	override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
 		val appVersion = "${getString(R.string.app_version_name)}-${getString(R.string.app_version_code)}"
 		val systemVersion = "Android ${Build.VERSION.RELEASE}-${Build.VERSION.SDK_INT}"
 		val manufacturer = Build.MANUFACTURER
@@ -58,7 +62,7 @@ class CheckUpdateService : Service() {
 				.subscribe(object : RxObserver<Version>() {
 					override fun onFinish(data: Version?) {
 						if (data != null && data.versionCode.toInt() > getString(R.string.app_version_code).toInt())
-							showUpdateDialog(data)
+							showUpdateDialog(data, intent.getBooleanExtra(CHECK_ACTION_BY_MANUAL, false))
 						stopSelf()
 						LocalBroadcastManager.getInstance(this@CheckUpdateService).sendBroadcast(Intent(SettingsPreferenceFragment.ACTION_CHECK_UPDATE_DONE))
 					}
@@ -71,10 +75,12 @@ class CheckUpdateService : Service() {
 		return super.onStartCommand(intent, flags, startId)
 	}
 
-	private fun showUpdateDialog(version: Version) {
-		val ignoreVersionList = ConfigurationUtil.ignoreUpdateVersion.split('!')
-		if (ignoreVersionList.indexOf(version.versionCode) != -1)
-			return
+	private fun showUpdateDialog(version: Version, checkByManual: Boolean) {
+		if (!checkByManual) {
+			val ignoreVersionList = ConfigurationUtil.ignoreUpdateVersion.split('!')
+			if (ignoreVersionList.indexOf(version.versionCode) != -1)
+				return
+		}
 		RxObservable<Boolean>()
 				.doThings {
 					while (APPActivityManager.currentActivity() is SplashActivity || APPActivityManager.currentActivity() is GuideActivity || APPActivityManager.currentActivity() is SplashImageActivity)

@@ -427,7 +427,7 @@ class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_naviga
 
 	private fun showPopupWindow() {
 		AnimationUtil.setWindowAlpha(this, 0.6F)
-		popupWindow.showAtLocation(weekView, Gravity.NO_GRAVITY, DensityTools.getScreenWidth(this) - popupWindow.width, DensityTools.getScreenHeight(this) / 2 - popupWindow.height / 2)
+		popupWindow.showAtLocation(weekView, Gravity.BOTTOM, 0, 0)
 	}
 
 	override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

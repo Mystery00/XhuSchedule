@@ -159,7 +159,9 @@ class SettingsPreferenceFragment : BasePreferenceFragment(R.xml.preference_setti
 			if (!::localBroadcastManager.isInitialized)
 				localBroadcastManager = LocalBroadcastManager.getInstance(activity)
 			localBroadcastManager.registerReceiver(CheckUpdateLocalBroadcastReceiver(), intentFilter)
-			activity.startService(Intent(activity, CheckUpdateService::class.java))
+			val intent = Intent(activity, CheckUpdateService::class.java)
+			intent.putExtra(CheckUpdateService.CHECK_ACTION_BY_MANUAL, true)
+			activity.startService(intent)
 			true
 		}
 		updateLogPreference.setOnPreferenceClickListener {
