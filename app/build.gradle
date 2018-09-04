@@ -58,7 +58,7 @@ android {
 		versionName "2.2.2 + 0.0.1 = 2.2.3"
 		testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 		vectorDrawables.useSupportLibrary = true
-		setProperty("archivesBaseName", "XhuSchedule-$versionCode-${autoVersion.branch}")
+		setProperty("archivesBaseName", "XhuSchedule-${autoVersion.name}-${autoVersion.code}-${autoVersion.branch}")
 		ndk {
 			moduleName = 'bspatch'
 		}
