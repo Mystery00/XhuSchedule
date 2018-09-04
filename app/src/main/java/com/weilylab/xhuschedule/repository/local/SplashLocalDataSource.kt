@@ -23,6 +23,7 @@ object SplashLocalDataSource : SplashDataSource {
 				.putString(SharedPreferenceConstant.FIELD_SPLASH_URL, splash.splashUrl)
 				.putString(SharedPreferenceConstant.FIELD_SPLASH_LOCATION_URL, splash.locationUrl)
 				.putLong(SharedPreferenceConstant.FIELD_SPLASH_TIME, splash.splashTime)
+				.putString(SharedPreferenceConstant.FIELD_SPLASH_IMAGE_MD5, splash.imageMD5)
 				.apply()
 	}
 
@@ -32,6 +33,7 @@ object SplashLocalDataSource : SplashDataSource {
 				.remove(SharedPreferenceConstant.FIELD_SPLASH_URL)
 				.remove(SharedPreferenceConstant.FIELD_SPLASH_LOCATION_URL)
 				.remove(SharedPreferenceConstant.FIELD_SPLASH_TIME)
+				.remove(SharedPreferenceConstant.FIELD_SPLASH_IMAGE_MD5)
 				.apply()
 	}
 
@@ -40,13 +42,15 @@ object SplashLocalDataSource : SplashDataSource {
 		val isEnable = sharedPreferences.contains(SharedPreferenceConstant.FIELD_SPLASH_ID) &&
 				sharedPreferences.contains(SharedPreferenceConstant.FIELD_SPLASH_URL) &&
 				sharedPreferences.contains(SharedPreferenceConstant.FIELD_SPLASH_LOCATION_URL) &&
-				sharedPreferences.contains(SharedPreferenceConstant.FIELD_SPLASH_TIME)
+				sharedPreferences.contains(SharedPreferenceConstant.FIELD_SPLASH_TIME) &&
+				sharedPreferences.contains(SharedPreferenceConstant.FIELD_SPLASH_IMAGE_MD5)
 		splash.isEnable = isEnable
 		if (isEnable) {
 			splash.objectId = sharedPreferences.getString(SharedPreferenceConstant.FIELD_SPLASH_ID, "")!!
 			splash.splashUrl = sharedPreferences.getString(SharedPreferenceConstant.FIELD_SPLASH_URL, "")!!
 			splash.locationUrl = sharedPreferences.getString(SharedPreferenceConstant.FIELD_SPLASH_LOCATION_URL, "")!!
 			splash.splashTime = sharedPreferences.getLong(SharedPreferenceConstant.FIELD_SPLASH_TIME, 0L)
+			splash.imageMD5 = sharedPreferences.getString(SharedPreferenceConstant.FIELD_SPLASH_IMAGE_MD5, "")!!
 		}
 		return splash
 	}

@@ -7,12 +7,22 @@
 
 <resources>
 	<string-array name="update_log">
-		<item>全新西瓜课表，正式发布！</item>
+		<item>新增：上课时间显示</item>
+		<item>新增：上课周数显示</item>
 		<item> </item>
-		<item>新学期，新气象。</item>
-		<item>软件重构，删减冗余，修复缺陷，优化体验。</item>
-		<item>全新课表，正式发布，你值得拥有！</item>
+		<item>优化：分享列表显示</item>
+		<item>优化：课程颜色显示</item>
+		<item>优化：课程详情界面</item>
+		<item>优化：部分交互界面</item>
 		<item> </item>
-		<item>修复：第一次进入每周课程预览时不显示数据</item>
+		<item>修复：更新新版本时MD5校验失败</item>
+		<item>修复：忽略更新后依旧提示更新</item>
+		<item>修复：课程颜色不存储</item>
+		<item> </item>
+		<item> </item>
+		<item> </item>
+		<item> </item>
+		<item> </item>
+		<item> </item>
 	</string-array>
 </resources>

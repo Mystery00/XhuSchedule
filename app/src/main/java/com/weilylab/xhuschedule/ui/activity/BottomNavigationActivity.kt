@@ -84,6 +84,11 @@ class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_naviga
 					showDialog()
 			}
 			Content -> {
+				try {
+					if (getString(R.string.app_version_code).toInt() > ConfigurationUtil.updatedVersion)
+						ConfigUtil.showUpdateLog(this)
+				} catch (e: Exception) {
+				}
 				if (ConfigurationUtil.isEnableMultiUserMode) {
 					val mainStudent = UserUtil.findMainStudent(it.data)
 					if (mainStudent != null)
@@ -172,11 +177,6 @@ class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_naviga
 		super.initView()
 		titleTextView.text = title
 		showBackground()
-		try {
-			if (getString(R.string.app_version_code).toInt() > ConfigurationUtil.updatedVersion)
-				ConfigUtil.showUpdateLog(this)
-		} catch (e: Exception) {
-		}
 		initDialog()
 		initPopupWindow()
 		viewPagerAdapter = ViewPagerAdapter(supportFragmentManager)

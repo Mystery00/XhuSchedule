@@ -7,6 +7,7 @@ object SharedPreferenceConstant {
 	const val FIELD_SPLASH_URL = "splash_url"
 	const val FIELD_SPLASH_TIME = "splash_time"
 	const val FIELD_SPLASH_LOCATION_URL = "splash_location_url"
+	const val FIELD_SPLASH_IMAGE_MD5 = "splash_image_md5"
 
 	const val FILE_NAME_IDS = "ids"
 
