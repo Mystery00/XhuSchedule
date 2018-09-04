@@ -55,7 +55,7 @@ android {
 		minSdkVersion 21
 		targetSdkVersion 28
 		versionCode autoVersion.code
-		versionName "2.2.2 + 0.0.1 = 2.2.3"
+		versionName autoVersion.name
 		testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 		vectorDrawables.useSupportLibrary = true
 		setProperty("archivesBaseName", "XhuSchedule-${autoVersion.name}-${autoVersion.code}-${autoVersion.branch}")
