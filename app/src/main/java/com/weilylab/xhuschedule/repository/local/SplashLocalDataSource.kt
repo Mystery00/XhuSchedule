@@ -26,6 +26,15 @@ object SplashLocalDataSource : SplashDataSource {
 				.apply()
 	}
 
+	fun removeSplash() {
+		sharedPreferences.edit()
+				.remove(SharedPreferenceConstant.FIELD_SPLASH_ID)
+				.remove(SharedPreferenceConstant.FIELD_SPLASH_URL)
+				.remove(SharedPreferenceConstant.FIELD_SPLASH_LOCATION_URL)
+				.remove(SharedPreferenceConstant.FIELD_SPLASH_TIME)
+				.apply()
+	}
+
 	fun getSplash(): SplashResponse.Splash {
 		val splash = SplashResponse.Splash()
 		val isEnable = sharedPreferences.contains(SharedPreferenceConstant.FIELD_SPLASH_ID) &&

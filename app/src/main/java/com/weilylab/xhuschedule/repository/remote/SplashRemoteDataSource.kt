@@ -24,6 +24,8 @@ object SplashRemoteDataSource : SplashDataSource {
 					val splashResponse = GsonFactory.parse<SplashResponse>(it)
 					if (splashResponse.results.isNotEmpty())
 						SplashLocalDataSource.saveSplash(splashResponse.results[0])
+					else
+						SplashLocalDataSource.removeSplash()
 					splashResponse
 				}
 				.observeOn(AndroidSchedulers.mainThread())
