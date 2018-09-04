@@ -38,22 +38,28 @@ object StudentRemoteDataSource : StudentDataSource {
 
 	fun login(loginLiveData: MutableLiveData<PackageData<Student>>, student: Student) {
 		loginLiveData.value = PackageData.loading()
-		if (NetworkUtil.isConnectInternet()) {
-			UserUtil.login(student, object : DoSaveListener<Student> {
-				override fun doSave(t: Student) {
-					StudentLocalDataSource.saveStudent(student)
-				}
-			}, object : RequestListener<Boolean> {
-				override fun done(t: Boolean) {
-					loginLiveData.value = PackageData.content(student)
-				}
+		UserUtil.checkStudentLogged(student) {
+			if (!it) {
+				if (NetworkUtil.isConnectInternet()) {
+					UserUtil.login(student, object : DoSaveListener<Student> {
+						override fun doSave(t: Student) {
+							StudentLocalDataSource.saveStudent(student)
+						}
+					}, object : RequestListener<Boolean> {
+						override fun done(t: Boolean) {
+							loginLiveData.value = PackageData.content(student)
+						}
 
-				override fun error(rt: String, msg: String?) {
-					loginLiveData.value = PackageData.error(Exception(msg))
+						override fun error(rt: String, msg: String?) {
+							loginLiveData.value = PackageData.error(Exception(msg))
+						}
+					})
+				} else {
+					loginLiveData.value = PackageData.error(Exception(StringConstant.hint_network_error))
 				}
-			})
-		} else {
-			loginLiveData.value = PackageData.error(Exception(StringConstant.hint_network_error))
+			} else {
+				loginLiveData.value = PackageData.error(Exception(StringConstant.hint_student_logged))
+			}
 		}
 	}
 }

@@ -2,17 +2,18 @@ package com.weilylab.xhuschedule.utils
 
 import com.weilylab.xhuschedule.api.FeedbackAPI
 import com.weilylab.xhuschedule.api.UserAPI
+import com.weilylab.xhuschedule.config.Status.*
 import com.weilylab.xhuschedule.constant.ResponseCodeConstants
 import com.weilylab.xhuschedule.constant.StringConstant
 import com.weilylab.xhuschedule.factory.GsonFactory
 import com.weilylab.xhuschedule.factory.RetrofitFactory
 import com.weilylab.xhuschedule.listener.DoSaveListener
 import com.weilylab.xhuschedule.listener.RequestListener
-import com.weilylab.xhuschedule.model.response.BaseResponse
 import com.weilylab.xhuschedule.model.Student
 import com.weilylab.xhuschedule.model.StudentInfo
 import com.weilylab.xhuschedule.model.response.FeedbackResponse
 import com.weilylab.xhuschedule.model.response.LoginResponse
+import com.weilylab.xhuschedule.repository.local.StudentLocalDataSource
 import com.weilylab.xhuschedule.utils.rxAndroid.RxObserver
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -132,4 +133,23 @@ object UserUtil {
 	}
 
 	fun findMainStudent(list: List<Student>?): Student? = list?.firstOrNull { it.isMain }
+
+	fun checkStudentLogged(student: Student, listener: (Boolean) -> Unit) {
+		StudentLocalDataSource.queryAllStudentList { packageData ->
+			when (packageData.status) {
+				Content -> {
+					var isLogged = false
+					packageData.data!!.forEach {
+						if (it.username == student.username) {
+							isLogged = true
+							return@forEach
+						}
+					}
+					listener.invoke(isLogged)
+				}
+				Empty -> listener.invoke(false)
+				Error -> listener.invoke(false)
+			}
+		}
+	}
 }
