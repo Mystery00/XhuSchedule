@@ -1,6 +1,7 @@
 package com.weilylab.xhuschedule.ui.fragment
 
 import android.graphics.Color
+import android.view.ViewTreeObserver
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 
@@ -24,6 +25,7 @@ import com.zhuangfei.timetable.listener.ISchedule
 import com.zhuangfei.timetable.listener.OnSlideBuildAdapter
 import com.zhuangfei.timetable.model.Schedule
 import vip.mystery0.logs.Logs
+import vip.mystery0.tools.utils.DensityTools
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -44,6 +46,11 @@ class TableFragment : BaseBottomNavigationFragment<FragmentTableBinding>(R.layou
 						.updateView()
 			}
 		}
+	}
+
+	private val itemHeightObserver = Observer<Int> {
+		Logs.i(": $it")
+		binding.timeTableView.itemHeight(it).updateView()
 	}
 
 	private val weekObserver = Observer<Int> {
@@ -91,6 +98,7 @@ class TableFragment : BaseBottomNavigationFragment<FragmentTableBinding>(R.layou
 		bottomNavigationViewModel.courseList.observe(activity!!, courseListObserver)
 		bottomNavigationViewModel.week.observe(activity!!, weekObserver)
 		bottomNavigationViewModel.startDateTime.observe(activity!!, startDateTimeObserver)
+		bottomNavigationViewModel.itemHeight.observe(activity!!, itemHeightObserver)
 	}
 
 	override fun monitor() {
@@ -99,6 +107,15 @@ class TableFragment : BaseBottomNavigationFragment<FragmentTableBinding>(R.layou
 				.callback(ISchedule.OnItemClickListener { _, scheduleList ->
 					bottomNavigationViewModel.showCourse.value = scheduleList
 				})
+		binding.timeTableView.viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
+			override fun onGlobalLayout() {
+				binding.timeTableView.viewTreeObserver.removeOnGlobalLayoutListener(this)
+				val timeTableHeight = binding.timeTableView.height - DensityTools.dp2px(activity!!, 35F)
+				val itemHeight = binding.timeTableView.itemHeight()
+				if (itemHeight * 11 < timeTableHeight)
+					bottomNavigationViewModel.itemHeight.value = timeTableHeight / 11
+			}
+		})
 		SpaceScheduleHelper.onSpaceScheduleClickListener = { day, start, isTwice ->
 			Logs.i("monitor: $day $start $isTwice")
 		}

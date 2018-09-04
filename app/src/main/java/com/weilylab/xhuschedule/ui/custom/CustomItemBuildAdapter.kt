@@ -13,7 +13,7 @@ import vip.mystery0.tools.utils.DensityTools
 
 class CustomItemBuildAdapter(private val alpha: Float) : OnItemBuildAdapter() {
 	var week = 0
-	private val counterSize = DensityTools.dp2px(APP.context, 10F)
+	private val counterSize = DensityTools.dp2px(APP.context, 8F)
 
 	override fun onItemUpdate(layout: FrameLayout?, textView: TextView, countTextView: TextView, schedule: Schedule, gd: GradientDrawable) {
 		textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 10f)
@@ -22,7 +22,7 @@ class CustomItemBuildAdapter(private val alpha: Float) : OnItemBuildAdapter() {
 		layoutParams.width = counterSize
 		layoutParams.height = counterSize
 		countTextView.layoutParams = layoutParams
-		countTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 8f)
+		countTextView.text=""
 		if (!schedule.weekList.contains(week)) {
 			textView.setTextColor(Color.parseColor("#888888"))
 			gd.setColor(ColorPoolHelper.colorPool.getUselessColorWithAlpha(alpha))

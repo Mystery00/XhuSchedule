@@ -9,6 +9,13 @@
 		android:layout_height="match_parent"
 		tools:context=".ui.fragment.TableFragment">
 
+		<View
+			android:id="@+id/dateView"
+			android:layout_width="match_parent"
+			android:layout_height="35dp"
+			android:alpha="0.1"
+			android:background="@android:color/black" />
+
 		<com.zhuangfei.timetable.TimetableView
 			android:id="@+id/timeTableView"
 			android:layout_width="match_parent"

@@ -9,6 +9,7 @@ import android.graphics.drawable.ColorDrawable
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.PopupWindow
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -162,11 +163,6 @@ class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_naviga
 	private val showCourseObserver = Observer<List<Schedule>> {
 		showAdapter.items.clear()
 		val week = bottomNavigationViewModel.week.value ?: 0
-		showAdapter.items.addAll(CourseUtil.filterShowCourse(it, week))
-		showAdapter.items.addAll(CourseUtil.filterShowCourse(it, week))
-		showAdapter.items.addAll(CourseUtil.filterShowCourse(it, week))
-		showAdapter.items.addAll(CourseUtil.filterShowCourse(it, week))
-		showAdapter.items.addAll(CourseUtil.filterShowCourse(it, week))
 		showAdapter.items.addAll(CourseUtil.filterShowCourse(it, week))
 		showAdapter.notifyDataSetChanged()
 		showPopupWindow()
@@ -419,7 +415,7 @@ class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_naviga
 
 	private lateinit var popupWindow: PopupWindow
 	private lateinit var dialogShowCourseBinding: DialogShowCourseBinding
-	private var distance = 0
+	private var distance = 40
 
 	private fun initPopupWindow() {
 		dialogShowCourseBinding = DialogShowCourseBinding.inflate(LayoutInflater.from(this))
@@ -437,7 +433,8 @@ class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_naviga
 			}
 		})
 		PagerSnapHelper().attachToRecyclerView(dialogShowCourseBinding.recyclerView)
-		popupWindow = PopupWindow(dialogShowCourseBinding.root, DensityTools.getScreenWidth(this), DensityTools.dp2px(this, 360F))
+		val viewSize = DensityTools.getScreenWidth(this) - DensityTools.dp2px(this, 112F)
+		popupWindow = PopupWindow(dialogShowCourseBinding.root, ViewGroup.LayoutParams.MATCH_PARENT, viewSize)
 		popupWindow.isOutsideTouchable = true
 		popupWindow.isFocusable = true
 		popupWindow.animationStyle = R.style.ShowCourseAnimation
@@ -449,9 +446,12 @@ class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_naviga
 
 	private fun showPopupWindow() {
 		generatePoint()
+		val params = dialogShowCourseBinding.point.layoutParams as ConstraintLayout.LayoutParams
+		params.leftMargin = 0
+		dialogShowCourseBinding.point.layoutParams = params
 		dialogShowCourseBinding.recyclerView.scrollToPosition(0)
-		AnimationUtil.setWindowAlpha(this, 0.6F)
-		popupWindow.showAtLocation(weekView, Gravity.NO_GRAVITY, DensityTools.getScreenWidth(this) - popupWindow.width, DensityTools.getScreenHeight(this) / 2 - popupWindow.height / 2)
+		AnimationUtil.setWindowAlpha(this, 0.5F)
+		popupWindow.showAtLocation(weekView, Gravity.CENTER, 0, 0)
 	}
 
 	private fun generatePoint() {
@@ -472,9 +472,6 @@ class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_naviga
 		pointParams.height = 20
 		pointParams.width = 20
 		dialogShowCourseBinding.point.layoutParams = pointParams
-		dialogShowCourseBinding.point.viewTreeObserver.addOnGlobalLayoutListener {
-			distance = dialogShowCourseBinding.pointLayout.getChildAt(1).left - dialogShowCourseBinding.pointLayout.getChildAt(0).left
-		}
 	}
 
 	override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

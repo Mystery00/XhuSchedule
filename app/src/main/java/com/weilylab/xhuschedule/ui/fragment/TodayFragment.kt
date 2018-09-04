@@ -68,14 +68,6 @@ class TodayFragment : BaseBottomNavigationFragment<FragmentTodayBinding>(R.layou
 		binding.dataView.visibility = View.VISIBLE
 	}
 
-	override fun monitor() {
-		super.monitor()
-		adapter.setOnItemClickListener { _, course ->
-			viewModel.showCourse.value = arrayListOf(course)
-			true
-		}
-	}
-
 	override fun onResume() {
 		super.onResume()
 		if (LayoutRefreshConfigUtil.isRefreshTodayFragment) {

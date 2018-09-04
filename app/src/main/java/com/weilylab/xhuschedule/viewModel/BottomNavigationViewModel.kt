@@ -22,4 +22,6 @@ class BottomNavigationViewModel : ViewModel() {
 	val week = MutableLiveData<Int>()
 	val startDateTime = MutableLiveData<PackageData<Calendar>>()
 	val noticeList = MutableLiveData<PackageData<List<Notice>>>()
+
+	val itemHeight = MutableLiveData<Int>()
 }

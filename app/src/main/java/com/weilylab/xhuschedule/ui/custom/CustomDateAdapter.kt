@@ -47,14 +47,12 @@ class CustomDateAdapter : OnDateBuildAapter() {
 	}
 
 	override fun onHighLight() {
-		val normalColor = ColorUtils.alphaColor(Color.BLACK, 0.1f)
 		val highLightColor = ColorUtils.alphaColor(Color.BLACK, 0.2f)
-		itemCustomDateviewFirstBinding.root.setBackgroundColor(normalColor)
 		bindingArray.forEachIndexed { index, itemCustomDateviewBinding ->
 			if (CalendarUtil.getWeekIndex() == index + 1)
 				itemCustomDateviewBinding!!.root.setBackgroundColor(highLightColor)
 			else
-				itemCustomDateviewBinding!!.root.setBackgroundColor(normalColor)
+				itemCustomDateviewBinding!!.root.setBackgroundColor(Color.TRANSPARENT)
 		}
 	}
 }

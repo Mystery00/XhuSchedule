@@ -72,7 +72,7 @@ class APP : MultiDexApplication() {
 				.setSuffix("txt")
 				.init()
 		Logs.setConfig {
-			it.setShowLog(true).setShowHead(false).setShowBorder(false).setShowThread(false)
+			it.setShowLog(true)
 		}
 	}
 
