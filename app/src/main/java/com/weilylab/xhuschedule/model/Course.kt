@@ -6,7 +6,6 @@ import androidx.room.PrimaryKey
 import com.weilylab.xhuschedule.constant.Constants
 import com.zhuangfei.timetable.model.Schedule
 import com.zhuangfei.timetable.model.ScheduleEnable
-import vip.mystery0.logs.Logs
 import vip.mystery0.tools.utils.StringTools
 import java.util.ArrayList
 

@@ -50,6 +50,7 @@ import com.weilylab.xhuschedule.ui.fragment.PlaceholderFragment
 import com.weilylab.xhuschedule.base.XhuBaseActivity
 import com.weilylab.xhuschedule.utils.ConfigurationUtil
 import kotlinx.android.synthetic.main.activity_guide.*
+import vip.mystery0.logs.Logs
 import vip.mystery0.tools.utils.DensityTools
 
 class GuideActivity : XhuBaseActivity(R.layout.activity_guide) {
@@ -57,7 +58,6 @@ class GuideActivity : XhuBaseActivity(R.layout.activity_guide) {
 	private lateinit var mSectionsPagerAdapter: SectionsPagerAdapter
 	private lateinit var grayPointDrawable: VectorDrawableCompat
 	private var distance = 0
-	private var flaggingWidth = 0
 	private var currentIndex = 0
 
 	override fun inflateView(layoutId: Int) {
@@ -72,8 +72,6 @@ class GuideActivity : XhuBaseActivity(R.layout.activity_guide) {
 
 	override fun initData() {
 		super.initData()
-		flaggingWidth = DensityTools.getScreenWidth(this) / 3
-
 		grayPointDrawable = VectorDrawableCompat.create(resources, R.drawable.ic_point, null)!!
 		grayPointDrawable.setBounds(0, 0, 20, 20)
 		grayPointDrawable.setTint(Color.LTGRAY)

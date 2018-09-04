@@ -7,21 +7,27 @@ import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.view.Gravity
+import android.view.LayoutInflater
 import android.view.View
+import android.widget.LinearLayout
 import android.widget.PopupWindow
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
+import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat
 import androidx.viewpager.widget.ViewPager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.signature.MediaStoreSignature
-import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.base.XhuBaseActivity
 import com.weilylab.xhuschedule.config.Status.*
+import com.weilylab.xhuschedule.databinding.DialogShowCourseBinding
 import com.weilylab.xhuschedule.model.Student
 import com.weilylab.xhuschedule.repository.BottomNavigationRepository
 import com.weilylab.xhuschedule.ui.ZoomOutPageTransformer
@@ -31,7 +37,6 @@ import com.weilylab.xhuschedule.ui.fragment.ProfileFragment
 import com.weilylab.xhuschedule.ui.fragment.TableFragment
 import com.weilylab.xhuschedule.ui.fragment.TodayFragment
 import com.weilylab.xhuschedule.utils.*
-import com.weilylab.xhuschedule.utils.layoutManager.EchelonLayoutManager
 import com.weilylab.xhuschedule.utils.rxAndroid.PackageData
 import com.weilylab.xhuschedule.viewModel.BottomNavigationViewModel
 import com.zhuangfei.timetable.listener.IWeekView
@@ -157,6 +162,11 @@ class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_naviga
 	private val showCourseObserver = Observer<List<Schedule>> {
 		showAdapter.items.clear()
 		val week = bottomNavigationViewModel.week.value ?: 0
+		showAdapter.items.addAll(CourseUtil.filterShowCourse(it, week))
+		showAdapter.items.addAll(CourseUtil.filterShowCourse(it, week))
+		showAdapter.items.addAll(CourseUtil.filterShowCourse(it, week))
+		showAdapter.items.addAll(CourseUtil.filterShowCourse(it, week))
+		showAdapter.items.addAll(CourseUtil.filterShowCourse(it, week))
 		showAdapter.items.addAll(CourseUtil.filterShowCourse(it, week))
 		showAdapter.notifyDataSetChanged()
 		showPopupWindow()
@@ -408,14 +418,26 @@ class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_naviga
 	}
 
 	private lateinit var popupWindow: PopupWindow
-	private lateinit var recyclerView: RecyclerView
+	private lateinit var dialogShowCourseBinding: DialogShowCourseBinding
+	private var distance = 0
 
 	private fun initPopupWindow() {
-		recyclerView = RecyclerView(this)
-		recyclerView.layoutManager = EchelonLayoutManager(this)
+		dialogShowCourseBinding = DialogShowCourseBinding.inflate(LayoutInflater.from(this))
+		val linearLayoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+		dialogShowCourseBinding.recyclerView.layoutManager = linearLayoutManager
 		showAdapter = ShowCourseRecyclerViewAdapter(this)
-		recyclerView.adapter = showAdapter
-		popupWindow = PopupWindow(recyclerView, DensityTools.getScreenWidth(this), DensityTools.dp2px(this, 240F))
+		dialogShowCourseBinding.recyclerView.adapter = showAdapter
+		dialogShowCourseBinding.recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+			override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+				val horizontalOffset = recyclerView.computeHorizontalScrollOffset().toFloat() / DensityTools.getScreenWidth(this@BottomNavigationActivity).toFloat()
+				val params = dialogShowCourseBinding.point.layoutParams as ConstraintLayout.LayoutParams
+				super.onScrolled(recyclerView, dx, dy)
+				params.leftMargin = Math.round(distance * horizontalOffset)
+				dialogShowCourseBinding.point.layoutParams = params
+			}
+		})
+		PagerSnapHelper().attachToRecyclerView(dialogShowCourseBinding.recyclerView)
+		popupWindow = PopupWindow(dialogShowCourseBinding.root, DensityTools.getScreenWidth(this), DensityTools.dp2px(this, 360F))
 		popupWindow.isOutsideTouchable = true
 		popupWindow.isFocusable = true
 		popupWindow.animationStyle = R.style.ShowCourseAnimation
@@ -426,8 +448,33 @@ class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_naviga
 	}
 
 	private fun showPopupWindow() {
+		generatePoint()
+		dialogShowCourseBinding.recyclerView.scrollToPosition(0)
 		AnimationUtil.setWindowAlpha(this, 0.6F)
-		popupWindow.showAtLocation(weekView, Gravity.BOTTOM, 0, 0)
+		popupWindow.showAtLocation(weekView, Gravity.NO_GRAVITY, DensityTools.getScreenWidth(this) - popupWindow.width, DensityTools.getScreenHeight(this) / 2 - popupWindow.height / 2)
+	}
+
+	private fun generatePoint() {
+		dialogShowCourseBinding.pointLayout.removeAllViews()
+		val grayPointDrawable = VectorDrawableCompat.create(resources, R.drawable.ic_point, null)!!
+		grayPointDrawable.setBounds(0, 0, 20, 20)
+		grayPointDrawable.setTint(Color.LTGRAY)
+		for (i in 0 until showAdapter.items.size) {
+			val view = View(applicationContext)
+			view.background = grayPointDrawable
+			val params = LinearLayout.LayoutParams(20, 20)
+			if (i != 0)
+				params.leftMargin = 20
+			view.layoutParams = params
+			dialogShowCourseBinding.pointLayout.addView(view)
+		}
+		val pointParams = dialogShowCourseBinding.point.layoutParams
+		pointParams.height = 20
+		pointParams.width = 20
+		dialogShowCourseBinding.point.layoutParams = pointParams
+		dialogShowCourseBinding.point.viewTreeObserver.addOnGlobalLayoutListener {
+			distance = dialogShowCourseBinding.pointLayout.getChildAt(1).left - dialogShowCourseBinding.pointLayout.getChildAt(0).left
+		}
 	}
 
 	override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

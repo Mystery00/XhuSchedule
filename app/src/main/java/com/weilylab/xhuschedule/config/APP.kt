@@ -47,6 +47,7 @@ import com.weilylab.xhuschedule.repository.local.db.DBHelper
 import com.weilylab.xhuschedule.utils.NotificationUtil
 import com.weilylab.xhuschedule.utils.PackageUtil
 import vip.mystery0.crashhandler.CrashHandler
+import vip.mystery0.logs.Logs
 
 /**
  * Created by myste.
@@ -70,6 +71,9 @@ class APP : MultiDexApplication() {
 				.setPrefix("log")
 				.setSuffix("txt")
 				.init()
+		Logs.setConfig {
+			it.setShowLog(true).setShowHead(false).setShowBorder(false).setShowThread(false)
+		}
 	}
 
 	companion object {
