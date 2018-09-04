@@ -192,6 +192,10 @@
 			android:process="com.weilylab.xhuschedule.sb"
 			android:theme="@android:style/Theme.Translucent.NoTitleBar" />
 		<!-- 腾讯开放平台 -->
+		<service
+			android:name=".service.WidgetService"
+			android:enabled="true"
+			android:exported="false"></service>
 	</application>
 
 </manifest>

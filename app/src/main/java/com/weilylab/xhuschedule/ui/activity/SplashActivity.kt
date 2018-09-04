@@ -35,6 +35,7 @@ package com.weilylab.xhuschedule.ui.activity
 
 import android.content.Intent
 import android.os.Build
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.weilylab.xhuschedule.base.XhuBaseActivity
@@ -83,12 +84,8 @@ class SplashActivity : XhuBaseActivity(null) {
 		super.initData()
 		initViewModel()
 		SplashRepository.requestSplash(splashViewModel)
-		if (ConfigurationUtil.autoCheckUpdate) {
-			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
-				startForegroundService(Intent(APP.context, CheckUpdateService::class.java))
-			else
-				startService(Intent(APP.context, CheckUpdateService::class.java))
-		}
+		if (ConfigurationUtil.autoCheckUpdate)
+			ContextCompat.startForegroundService(this, Intent(APP.context, CheckUpdateService::class.java))
 		ConfigUtil.setTrigger(this)
 	}
 

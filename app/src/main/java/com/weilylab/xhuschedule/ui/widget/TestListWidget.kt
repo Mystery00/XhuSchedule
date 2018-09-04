@@ -14,8 +14,8 @@ import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.constant.Constants
 import com.weilylab.xhuschedule.constant.IntentConstant
 import com.weilylab.xhuschedule.constant.SharedPreferenceConstant
+import com.weilylab.xhuschedule.service.WidgetService
 import com.weilylab.xhuschedule.service.widget.TestListWidgetService
-import com.weilylab.xhuschedule.service.widget.TodayCourseWidgetService
 import com.weilylab.xhuschedule.service.widget.WidgetUpdateService
 import com.weilylab.xhuschedule.utils.CalendarUtil
 import com.weilylab.xhuschedule.utils.WidgetUtil
@@ -38,8 +38,14 @@ class TestListWidget : AppWidgetProvider() {
 		}
 	}
 
+	override fun onEnabled(context: Context?) {
+		super.onEnabled(context)
+		context?.startService(Intent(context, WidgetService::class.java))
+	}
+
 	override fun onDisabled(context: Context?) {
 		super.onDisabled(context)
+		context?.stopService(Intent(context, WidgetService::class.java))
 		WidgetViewModelHelper.testList.value = null
 		WidgetViewModelHelper.studentList.value = null
 	}
