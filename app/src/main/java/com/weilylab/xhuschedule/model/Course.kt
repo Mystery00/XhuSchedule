@@ -6,6 +6,8 @@ import androidx.room.PrimaryKey
 import com.weilylab.xhuschedule.constant.Constants
 import com.zhuangfei.timetable.model.Schedule
 import com.zhuangfei.timetable.model.ScheduleEnable
+import vip.mystery0.logs.Logs
+import vip.mystery0.tools.utils.StringTools
 import java.util.ArrayList
 
 @Entity(tableName = "tb_course")
@@ -64,6 +66,8 @@ class Course : ScheduleEnable {
 		schedule.start = timeArray[0].toInt()
 		schedule.step = timeArray[1].toInt() - timeArray[0].toInt() + 1
 		schedule.day = day.toInt()
+		val md5Int = StringTools.md5(schedule.name).substring(0, 1).toInt(16)
+		schedule.extras["colorInt"] = md5Int
 		return schedule
 	}
 }

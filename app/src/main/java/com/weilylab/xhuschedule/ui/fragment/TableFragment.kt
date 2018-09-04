@@ -75,7 +75,7 @@ class TableFragment : BaseBottomNavigationFragment<FragmentTableBinding>(R.layou
 				.monthWidthDp(20)
 				.alpha(0.1f, 0.06f, 0.8f)
 				.callback(CustomDateAdapter())
-				.callback(CustomItemBuildAdapter())
+				.callback(CustomItemBuildAdapter(binding.timeTableView.itemAlpha()))
 				.isShowFlaglayout(false)
 //				.callback(FlagLayoutClickAdapter(binding.timeTableView))
 //				.callback(SpaceItemClickAdapter(binding.timeTableView))

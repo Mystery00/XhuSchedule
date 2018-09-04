@@ -12,7 +12,7 @@ class FragmentTodayRecyclerViewAdapter(private val context: Context) : BaseBindi
 
 	override fun setItemView(binding: ItemFragmentTodayBinding, position: Int, data: Schedule) {
 		binding.course = data
-		val color = ColorPoolHelper.colorPool.getColorAuto(data.colorRandom)
+		val color = ColorPoolHelper.colorPool.getColorAuto(data.extras["colorInt"] as Int)
 		binding.point.setColorFilter(color)
 		binding.imageView.setColorFilter(color)
 		val startTimeArray = context.resources.getStringArray(R.array.start_time)
