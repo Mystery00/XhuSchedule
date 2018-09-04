@@ -13,14 +13,15 @@
 	<color name="splashColor">#2e85df</color>
 
 	<color name="colorPool1">#D50000</color>
-	<color name="colorPool15">#C51162</color>
+	<color name="colorPool15">#009688</color>
 	<color name="colorPool16">#6200EA</color>
 	<color name="colorPool17">#304FFE</color>
-	<color name="colorPool18">#01579B</color>
+	<color name="colorPool18">#F50057</color>
 	<color name="colorPool19">#004D40</color>
-	<color name="colorPool20">#1B5E20</color>
+	<color name="colorPool20">#455A64</color>
 	<color name="colorPool21">#E65100</color>
-	<color name="colorPool22">#DD2C00</color>
+	<color name="colorPool22">#5D4037</color>
+
 	<!--<color name="colorPool23">#9c27b0</color>-->
 	<!--<color name="colorPool24">#d500f9</color>-->
 	<!--<color name="colorPool25">#ab47bc</color>-->
