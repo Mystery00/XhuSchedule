@@ -12,15 +12,15 @@
 	<color name="colorWhite">#FFFFFF</color>
 	<color name="splashColor">#2e85df</color>
 
-	<color name="colorPool1">#D50000</color>
-	<color name="colorPool15">#009688</color>
-	<color name="colorPool16">#6200EA</color>
-	<color name="colorPool17">#304FFE</color>
-	<color name="colorPool18">#F50057</color>
-	<color name="colorPool19">#004D40</color>
-	<color name="colorPool20">#455A64</color>
-	<color name="colorPool21">#E65100</color>
-	<color name="colorPool22">#5D4037</color>
+	<color name="colorPool1">#7c4dff</color>
+	<color name="colorPool15">#536dfe</color>
+	<color name="colorPool16">#03a9f4</color>
+	<color name="colorPool17">#ff3d00</color>
+	<color name="colorPool18">#ff8f00</color>
+	<color name="colorPool19">#fec106</color>
+	<color name="colorPool20">#8bc34a</color>
+	<color name="colorPool21">#12c700</color>
+	<color name="colorPool22">#ff3a6b</color>
 
 	<!--<color name="colorPool23">#9c27b0</color>-->
 	<!--<color name="colorPool24">#d500f9</color>-->

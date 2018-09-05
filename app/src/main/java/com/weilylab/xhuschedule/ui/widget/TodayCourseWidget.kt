@@ -14,13 +14,11 @@ import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.constant.Constants
 import com.weilylab.xhuschedule.constant.IntentConstant
 import com.weilylab.xhuschedule.constant.SharedPreferenceConstant
-import com.weilylab.xhuschedule.service.WidgetService
 import com.weilylab.xhuschedule.service.widget.TodayCourseWidgetService
 import com.weilylab.xhuschedule.service.widget.WidgetUpdateService
 import com.weilylab.xhuschedule.utils.CalendarUtil
 import com.weilylab.xhuschedule.utils.WidgetUtil
 import com.weilylab.xhuschedule.viewModel.WidgetViewModelHelper
-import vip.mystery0.logs.Logs
 
 class TodayCourseWidget : AppWidgetProvider() {
 	override fun onUpdate(context: Context, appWidgetManager: AppWidgetManager, appWidgetIds: IntArray) {
@@ -36,17 +34,12 @@ class TodayCourseWidget : AppWidgetProvider() {
 					WidgetUtil.getWidgetIDs(context, SharedPreferenceConstant.FIELD_IDS_TODAY).forEach {
 						updateAppWidget(context, AppWidgetManager.getInstance(context), it)
 					}
+			else -> ContextCompat.startForegroundService(context, Intent(context, WidgetUpdateService::class.java))
 		}
-	}
-
-	override fun onEnabled(context: Context?) {
-		super.onEnabled(context)
-		context?.startService(Intent(context, WidgetService::class.java))
 	}
 
 	override fun onDisabled(context: Context?) {
 		super.onDisabled(context)
-		context?.stopService(Intent(context, WidgetService::class.java))
 		WidgetViewModelHelper.todayCourseList.value = null
 		WidgetViewModelHelper.studentList.value = null
 	}
