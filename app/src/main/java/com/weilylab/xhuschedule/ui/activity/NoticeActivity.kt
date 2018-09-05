@@ -48,6 +48,7 @@ import com.weilylab.xhuschedule.utils.LayoutRefreshConfigUtil
 import com.weilylab.xhuschedule.utils.rxAndroid.PackageData
 import com.weilylab.xhuschedule.viewModel.NoticeViewModel
 import kotlinx.android.synthetic.main.activity_notice.*
+import vip.mystery0.logs.Logs
 
 class NoticeActivity : XhuBaseActivity(R.layout.activity_notice) {
 	private lateinit var noticeViewModel: NoticeViewModel
@@ -64,6 +65,7 @@ class NoticeActivity : XhuBaseActivity(R.layout.activity_notice) {
 				noticeAdapter.notifyDataSetChanged()
 			}
 			Error -> {
+				Logs.wtfm("noticeObserver: ", it.error)
 				hideRefresh()
 				hideNoDataLayout()
 				toastMessage(it.error?.message)

@@ -54,6 +54,7 @@ import com.weilylab.xhuschedule.viewModel.LoginViewModel
 import android.view.WindowManager
 import com.weilylab.xhuschedule.config.Status.*
 import com.weilylab.xhuschedule.utils.rxAndroid.PackageData
+import vip.mystery0.logs.Logs
 
 class LoginActivity : XhuBaseActivity(R.layout.activity_login) {
 	private lateinit var loginViewModel: LoginViewModel
@@ -71,6 +72,7 @@ class LoginActivity : XhuBaseActivity(R.layout.activity_login) {
 				}
 			}
 			Error -> {
+				Logs.wtfm("loginObserver: ", it.error)
 				hideDialog()
 				toastMessage(it.error?.message)
 			}

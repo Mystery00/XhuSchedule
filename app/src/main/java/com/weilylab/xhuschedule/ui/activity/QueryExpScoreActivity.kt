@@ -20,6 +20,7 @@ import com.weilylab.xhuschedule.utils.CalendarUtil
 import com.weilylab.xhuschedule.utils.rxAndroid.PackageData
 import com.weilylab.xhuschedule.viewModel.QueryExpScoreViewModel
 import kotlinx.android.synthetic.main.activity_query_exp_score.*
+import vip.mystery0.logs.Logs
 import vip.mystery0.tools.utils.DensityTools
 import java.util.*
 
@@ -65,6 +66,7 @@ class QueryExpScoreActivity : XhuBaseActivity(R.layout.activity_query_exp_score)
 				showContent()
 			}
 			Status.Error -> {
+				Logs.wtfm("scoreListObserver: ", it.error)
 				dismissLoading()
 				toastMessage(it.error?.message)
 			}

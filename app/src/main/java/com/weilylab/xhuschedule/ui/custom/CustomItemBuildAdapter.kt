@@ -16,6 +16,7 @@ import com.zhuangfei.timetable.TimetableView
 import com.zhuangfei.timetable.listener.OnItemBuildAdapter
 import com.zhuangfei.timetable.model.Schedule
 import com.zhuangfei.timetable.model.ScheduleSupport
+import com.zhuangfei.timetable.utils.ColorUtils
 import vip.mystery0.tools.utils.DensityTools
 
 class CustomItemBuildAdapter(private val context: Context,
@@ -36,7 +37,7 @@ class CustomItemBuildAdapter(private val context: Context,
 			gd.setColor(ColorPoolHelper.colorPool.getUselessColorWithAlpha(timetableView.itemAlpha()))
 		} else {
 			textView.setTextColor(Color.WHITE)
-			gd.setColor(ColorPoolHelper.colorPool.getColorAutoWithAlpha(schedule.extras["colorInt"] as Int, timetableView.itemAlpha()))
+			gd.setColor(ColorUtils.alphaColor(schedule.extras["colorInt"] as Int, timetableView.itemAlpha()))
 		}
 		if (ConfigurationUtil.isShowNotWeek) {
 			val todayCourses = ScheduleSupport.getAllSubjectsWithDay(timetableView.dataSource(), schedule.day - 1)

@@ -20,6 +20,7 @@ import com.zyao89.view.zloading.Z_TYPE
 
 import kotlinx.android.synthetic.main.activity_query_test.*
 import kotlinx.android.synthetic.main.content_query_test.*
+import vip.mystery0.logs.Logs
 
 class QueryTestActivity : XhuBaseActivity(R.layout.activity_query_test) {
 	private lateinit var queryTestViewModel: QueryTestViewModel
@@ -37,6 +38,7 @@ class QueryTestActivity : XhuBaseActivity(R.layout.activity_query_test) {
 				queryTestRecyclerViewAdapter.notifyDataSetChanged()
 			}
 			Error -> {
+				Logs.wtfm("queryTestListObserver: ", it.error)
 				hideDialog()
 				hideNoDataLayout()
 				toastMessage(it.error?.message)

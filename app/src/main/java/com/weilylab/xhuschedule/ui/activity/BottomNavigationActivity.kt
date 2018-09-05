@@ -107,6 +107,7 @@ class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_naviga
 				hideDialog()
 			}
 			Error -> {
+				Logs.wtfm("studentListObserver: ", it.error)
 				toastMessage(it.error?.message, true)
 				hideDialog()
 			}
@@ -121,6 +122,7 @@ class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_naviga
 			}
 			Loading -> showLoading()
 			Error -> {
+				Logs.wtfm("courseListObserver: ", packageData.error)
 				toastMessage(packageData.error?.message)
 				cancelLoading()
 				hideDialog()
@@ -145,6 +147,7 @@ class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_naviga
 				viewPagerAdapter.getItem(viewPager.currentItem).updateTitle()
 			}
 			Error -> {
+				Logs.wtfm("currentWeekObserver: ", it.error)
 				toastMessage(it.error?.message)
 				cancelLoading()
 				hideDialog()

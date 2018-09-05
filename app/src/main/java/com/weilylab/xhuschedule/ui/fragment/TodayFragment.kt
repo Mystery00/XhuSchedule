@@ -40,6 +40,7 @@ class TodayFragment : BaseBottomNavigationFragment<FragmentTodayBinding>(R.layou
 			}
 			Empty -> showNoDataLayout()
 			Error -> {
+				Logs.wtfm("todayCourseListObserver: ", it.error)
 				toastMessage(it.error?.message)
 				showNoDataLayout()
 			}

@@ -20,6 +20,7 @@ import com.weilylab.xhuschedule.utils.rxAndroid.PackageData
 import com.weilylab.xhuschedule.viewModel.QueryCetScoreViewModelHelper
 import com.zyao89.view.zloading.ZLoadingDialog
 import com.zyao89.view.zloading.Z_TYPE
+import vip.mystery0.logs.Logs
 
 class QueryCetScoreFirstActivity : XhuBaseActivity(R.layout.activity_query_cet_score_first) {
 	private lateinit var dialog: Dialog
@@ -49,6 +50,7 @@ class QueryCetScoreFirstActivity : XhuBaseActivity(R.layout.activity_query_cet_s
 				toastMessage(R.string.hint_data_null, true)
 			}
 			Error -> {
+				Logs.wtfm("cetVCodeObserver: ", it.error)
 				hideDialog()
 				toastMessage(it.error?.message, true)
 			}

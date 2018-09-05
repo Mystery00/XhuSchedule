@@ -23,6 +23,7 @@ import com.weilylab.xhuschedule.utils.ConfigurationUtil
 import com.weilylab.xhuschedule.utils.rxAndroid.PackageData
 import com.weilylab.xhuschedule.viewModel.QueryClassScoreViewModel
 import kotlinx.android.synthetic.main.activity_query_class_score.*
+import vip.mystery0.logs.Logs
 import vip.mystery0.tools.utils.DensityTools
 import java.util.*
 
@@ -68,6 +69,7 @@ class QueryClassScoreActivity : XhuBaseActivity(R.layout.activity_query_class_sc
 				showContent()
 			}
 			Error -> {
+				Logs.wtfm("scoreListObserver: ", it.error)
 				dismissLoading()
 				toastMessage(it.error?.message)
 			}

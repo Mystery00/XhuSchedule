@@ -16,8 +16,8 @@ object RetrofitFactory {
 			.writeTimeout(1, TimeUnit.SECONDS)
 			.addInterceptor(LoadCookiesInterceptor())
 			.addInterceptor(SaveCookiesInterceptor())
-			.addInterceptor(HttpLoggingInterceptor()
-					.setLevel(HttpLoggingInterceptor.Level.BODY))
+//			.addInterceptor(HttpLoggingInterceptor()
+//					.setLevel(HttpLoggingInterceptor.Level.BODY))
 			.build()
 
 	private val client = OkHttpClient.Builder()

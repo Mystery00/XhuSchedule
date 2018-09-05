@@ -1,8 +1,10 @@
 package com.weilylab.xhuschedule.model
 
+import android.graphics.Color
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.weilylab.xhuschedule.config.ColorPoolHelper
 import com.weilylab.xhuschedule.constant.Constants
 import com.zhuangfei.timetable.model.Schedule
 import com.zhuangfei.timetable.model.ScheduleEnable
@@ -37,6 +39,8 @@ class Course : ScheduleEnable {
 	lateinit var type: String
 	@ColumnInfo(name = "course_day")
 	lateinit var day: String
+	@ColumnInfo(name = "course_color")
+	lateinit var color: String
 	@ColumnInfo(name = "course_year")
 	lateinit var year: String
 	@ColumnInfo(name = "course_term")
@@ -65,8 +69,17 @@ class Course : ScheduleEnable {
 		schedule.start = timeArray[0].toInt()
 		schedule.step = timeArray[1].toInt() - timeArray[0].toInt() + 1
 		schedule.day = day.toInt()
-		val md5Int = StringTools.md5(schedule.name).substring(0, 1).toInt(16)
-		schedule.extras["colorInt"] = md5Int
+		if (::color.isInitialized && color != "")
+			try {
+				schedule.extras["colorInt"] = Color.parseColor(color)
+			} catch (e: Exception) {
+				val md5Int = StringTools.md5(schedule.name).substring(0, 1).toInt(16)
+				schedule.extras["colorInt"] = ColorPoolHelper.colorPool.getColorAuto(md5Int)
+			}
+		else {
+			val md5Int = StringTools.md5(schedule.name).substring(0, 1).toInt(16)
+			schedule.extras["colorInt"] = ColorPoolHelper.colorPool.getColorAuto(md5Int)
+		}
 		return schedule
 	}
 }

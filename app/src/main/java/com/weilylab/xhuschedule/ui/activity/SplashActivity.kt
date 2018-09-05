@@ -51,6 +51,7 @@ import com.weilylab.xhuschedule.utils.rxAndroid.PackageData
 import com.weilylab.xhuschedule.viewModel.SplashViewModel
 import com.weilylab.xhuschedule.service.DownloadSplashIntentService
 import com.weilylab.xhuschedule.utils.ConfigUtil
+import vip.mystery0.logs.Logs
 import vip.mystery0.tools.utils.FileTools
 
 /**
@@ -61,7 +62,10 @@ class SplashActivity : XhuBaseActivity(null) {
 
 	private val splashObserver = Observer<PackageData<SplashResponse.Splash>> {
 		when (it.status) {
-			Status.Empty -> gotoMain()
+			Status.Empty -> {
+				Logs.wtfm("splashObserver: ", it.error)
+				gotoMain()
+			}
 			Status.Error -> {
 				gotoMain()
 			}

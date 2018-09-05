@@ -18,6 +18,7 @@ import com.weilylab.xhuschedule.viewModel.QueryCetScoreViewModelHelper
 import com.zyao89.view.zloading.ZLoadingDialog
 import com.zyao89.view.zloading.Z_TYPE
 import kotlinx.android.synthetic.main.activity_query_cet_score_second.*
+import vip.mystery0.logs.Logs
 
 class QueryCetScoreSecondActivity : XhuBaseActivity(R.layout.activity_query_cet_score_second) {
 	private lateinit var vCodeDialog: Dialog
@@ -35,6 +36,7 @@ class QueryCetScoreSecondActivity : XhuBaseActivity(R.layout.activity_query_cet_
 				toastMessage(R.string.hint_data_null, true)
 			}
 			Error -> {
+				Logs.wtfm("cetVCodeObserver: ", it.error)
 				hideVCodeDialog()
 				toastMessage(it.error?.message, true)
 			}
@@ -54,6 +56,7 @@ class QueryCetScoreSecondActivity : XhuBaseActivity(R.layout.activity_query_cet_
 				toastMessage(R.string.hint_data_null, true)
 			}
 			Error -> {
+				Logs.wtfm("cetScoreObserver: ", it.error)
 				hideDialog()
 				toastMessage(it.error?.message, true)
 			}

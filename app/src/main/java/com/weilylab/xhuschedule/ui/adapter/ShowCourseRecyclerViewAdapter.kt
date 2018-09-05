@@ -3,7 +3,6 @@ package com.weilylab.xhuschedule.ui.adapter
 import android.content.Context
 import android.graphics.drawable.GradientDrawable
 import com.weilylab.xhuschedule.R
-import com.weilylab.xhuschedule.config.ColorPoolHelper
 import com.weilylab.xhuschedule.databinding.ItemShowCourseBinding
 import com.zhuangfei.timetable.model.Schedule
 import vip.mystery0.tools.base.binding.BaseBindingRecyclerViewAdapter
@@ -21,9 +20,8 @@ class ShowCourseRecyclerViewAdapter(private val context: Context) : BaseBindingR
 				.append(courseTimeText)
 		binding.textView.text = stringBuilder.toString()
 		binding.textView.setLineSpacing(binding.textView.textSize * 0.6f, 1f)
-		val color = ColorPoolHelper.colorPool.getColorAuto(data.extras["colorInt"] as Int)
 		val gradientDrawable = GradientDrawable()
-		gradientDrawable.setColor(color)
+		gradientDrawable.setColor(data.extras["colorInt"] as Int)
 		gradientDrawable.cornerRadius = 48F
 		binding.linearLayout.background = gradientDrawable
 	}
