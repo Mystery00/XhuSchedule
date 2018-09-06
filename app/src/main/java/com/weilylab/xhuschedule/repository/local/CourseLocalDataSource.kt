@@ -93,13 +93,13 @@ object CourseLocalDataSource : CourseDataSource {
 				})
 	}
 
-	fun updateCourseColor(course: Course) {
+	fun updateCourseColor(course: Course, color: String) {
 		RxObservable<Boolean>()
 				.doThings { observableEmitter ->
 					val list = courseService.queryCourseByName(course.name)
 					list.forEach {
-						it.color = course.color
-						courseService.updateCourse(course)
+						it.color = color
+						courseService.updateCourse(it)
 					}
 					observableEmitter.onFinish(true)
 				}

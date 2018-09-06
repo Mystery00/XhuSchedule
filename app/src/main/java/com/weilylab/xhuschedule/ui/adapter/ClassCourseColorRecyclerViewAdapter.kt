@@ -28,10 +28,10 @@ class ClassCourseColorRecyclerViewAdapter(private val context: Context) : BaseBi
 				}
 
 				override fun onColorSelected(dialogId: Int, color: Int) {
-					data.color = ConfigUtil.toHexEncoding(color)
-					Logs.i("onColorSelected: ${data.color}")
+					val newColor = ConfigUtil.toHexEncoding(color)
+					data.color = newColor
 					notifyItemChanged(position)
-					CourseLocalDataSource.updateCourseColor(data)
+					CourseLocalDataSource.updateCourseColor(data, newColor)
 					LayoutRefreshConfigUtil.isRefreshBottomNavigationActivity = true
 				}
 			})
