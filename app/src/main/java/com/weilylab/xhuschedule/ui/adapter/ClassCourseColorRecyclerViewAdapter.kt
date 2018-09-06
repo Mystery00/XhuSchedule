@@ -10,13 +10,12 @@ import com.weilylab.xhuschedule.model.Course
 import com.weilylab.xhuschedule.repository.local.CourseLocalDataSource
 import com.weilylab.xhuschedule.utils.ConfigUtil
 import com.weilylab.xhuschedule.utils.LayoutRefreshConfigUtil
-import vip.mystery0.logs.Logs
 import vip.mystery0.tools.base.binding.BaseBindingRecyclerViewAdapter
 
 class ClassCourseColorRecyclerViewAdapter(private val context: Context) : BaseBindingRecyclerViewAdapter<Course, ItemClassCourseColorBinding>(R.layout.item_class_course_color) {
 	override fun setItemView(binding: ItemClassCourseColorBinding, position: Int, data: Course) {
 		binding.textView.text = data.name
-		binding.imageView.setBackgroundColor(data.schedule.extras["colorInt"] as Int)
+		binding.imageView.setColorFilter(data.schedule.extras["colorInt"] as Int)
 		binding.imageView.setOnClickListener {
 			val colorPickerDialog = ColorPickerDialog.newBuilder()
 					.setDialogType(ColorPickerDialog.TYPE_PRESETS)

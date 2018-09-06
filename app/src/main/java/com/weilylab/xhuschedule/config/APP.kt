@@ -36,6 +36,7 @@ package com.weilylab.xhuschedule.config
 import android.annotation.SuppressLint
 import android.app.Application
 import android.content.Context
+import androidx.multidex.BuildConfig
 import androidx.multidex.MultiDexApplication
 import com.oasisfeng.condom.CondomContext
 import com.sina.weibo.sdk.WbSdk
@@ -47,7 +48,6 @@ import com.tencent.tauth.Tencent
 import com.weilylab.xhuschedule.repository.local.db.DBHelper
 import com.weilylab.xhuschedule.utils.NotificationUtil
 import com.weilylab.xhuschedule.utils.PackageUtil
-import vip.mystery0.crashhandler.CrashHandler
 import vip.mystery0.logs.Logs
 
 /**
@@ -72,9 +72,9 @@ class APP : MultiDexApplication() {
 //				.setPrefix("log")
 //				.setSuffix("txt")
 //				.init()
-		CrashReport.initCrashReport(CondomContext.wrap(applicationContext, "Bugly"), "7fe1820ab7", true)
+		CrashReport.initCrashReport(CondomContext.wrap(applicationContext, "Bugly"), "7fe1820ab7", BuildConfig.DEBUG)
 		Logs.setConfig {
-			it.setShowLog(true)
+			it.setShowLog(BuildConfig.DEBUG)
 		}
 	}
 

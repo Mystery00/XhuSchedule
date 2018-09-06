@@ -52,9 +52,6 @@ object Constants {
 	const val NOTIFICATION_CHANNEL_ID_TOMORROW = "XhuSchedule-Tomorrow"
 	const val NOTIFICATION_CHANNEL_NAME_TOMORROW = "课程提醒"
 	const val NOTIFICATION_CHANNEL_DESCRIPTION_TOMORROW = "每日提醒课程或考试"
-	const val NOTIFICATION_CHANNEL_ID_PUSH = "XhuSchedule-Push"
-	const val NOTIFICATION_CHANNEL_NAME_PUSH = "消息推送"
-	const val NOTIFICATION_CHANNEL_DESCRIPTION_PUSH = "消息推送"
 
 	const val DOWNLOAD_TYPE_APK = "apk"
 	const val DOWNLOAD_TYPE_PATCH = "patch"

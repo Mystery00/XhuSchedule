@@ -1,5 +1,6 @@
 package com.weilylab.xhuschedule.factory
 
+import com.weilylab.xhuschedule.interceptor.DebugInterceptor
 import com.weilylab.xhuschedule.interceptor.LoadCookiesInterceptor
 import com.weilylab.xhuschedule.interceptor.SaveCookiesInterceptor
 import okhttp3.OkHttpClient
@@ -16,8 +17,7 @@ object RetrofitFactory {
 			.writeTimeout(1, TimeUnit.SECONDS)
 			.addInterceptor(LoadCookiesInterceptor())
 			.addInterceptor(SaveCookiesInterceptor())
-//			.addInterceptor(HttpLoggingInterceptor()
-//					.setLevel(HttpLoggingInterceptor.Level.BODY))
+			.addInterceptor(DebugInterceptor())
 			.build()
 
 	private val client = OkHttpClient.Builder()
@@ -27,8 +27,7 @@ object RetrofitFactory {
 			.writeTimeout(20, TimeUnit.SECONDS)
 			.addInterceptor(LoadCookiesInterceptor())
 			.addInterceptor(SaveCookiesInterceptor())
-//			.addInterceptor(HttpLoggingInterceptor()
-//					.setLevel(HttpLoggingInterceptor.Level.BODY))
+			.addInterceptor(DebugInterceptor())
 			.build()
 
 	val retrofit = Retrofit.Builder()

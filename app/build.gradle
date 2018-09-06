@@ -81,6 +81,8 @@ android {
 		debug {
 			resValue "string", "app_version_name", autoVersion.name
 			resValue "string", "app_version_code", autoVersion.code + ''
+			//为debug版本的包名添加.debug后缀
+			applicationIdSuffix ".debug"
 		}
 		release {
 			resValue "string", "app_version_name", autoVersion.name
@@ -158,7 +160,7 @@ dependencies {
 	implementation 'de.hdodenhof:circleimageview:2.2.0'
 
 	//Bugly
-	implementation'com.tencent.bugly:crashreport:latest.release'
+	implementation 'com.tencent.bugly:crashreport:latest.release'
 	//微信
 	implementation 'com.tencent.mm.opensdk:wechat-sdk-android-without-mta:5.1.4'
 	//微博

@@ -116,6 +116,14 @@
 		<activity
 			android:name=".ui.activity.LinkToWeiXinMiniProgramActivity"
 			android:theme="@android:style/Theme.NoDisplay" />
+		<activity
+			android:name=".ui.activity.ClassCourseColorActivity"
+			android:screenOrientation="portrait"
+			android:theme="@style/AppTheme.NoActionBar" />
+		<activity
+			android:name=".ui.activity.CustomStartTimeActivity"
+			android:screenOrientation="portrait"
+			android:theme="@style/AppTheme.NoActionBar" />
 
 		<service
 			android:name=".service.DownloadSplashIntentService"
@@ -141,6 +149,10 @@
 			android:name=".service.NotificationService"
 			android:exported="true"
 			android:permission="android.permission.BIND_JOB_SERVICE" />
+		<service
+			android:name=".service.WidgetService"
+			android:enabled="true"
+			android:exported="false" />
 
 		<receiver
 			android:name=".ui.widget.TodayCourseWidget"
@@ -167,7 +179,7 @@
 
 		<provider
 			android:name="androidx.core.content.FileProvider"
-			android:authorities="com.weilylab.xhuschedule"
+			android:authorities="${applicationId}"
 			android:exported="false"
 			android:grantUriPermissions="true">
 			<meta-data
@@ -195,13 +207,6 @@
 			android:process="com.weilylab.xhuschedule.sb"
 			android:theme="@android:style/Theme.Translucent.NoTitleBar" />
 		<!-- 腾讯开放平台 -->
-		<service
-			android:name=".service.WidgetService"
-			android:enabled="true"
-			android:exported="false" />
-
-		<activity android:name=".ui.activity.ClassCourseColorActivity" />
-		<activity android:name=".ui.activity.CustomStartTimeActivity"></activity>
 	</application>
 
 </manifest>

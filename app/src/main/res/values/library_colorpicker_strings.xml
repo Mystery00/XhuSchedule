@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+	<string name="define_int_colorpicker"/>
+	<!-- Author section -->
+	<string name="library_colorpicker_author">jaredrummler</string>
+	<string name="library_colorpicker_authorWebsite">https://github.com/jaredrummler</string>
+	<!-- Library section -->
+	<string name="library_colorpicker_libraryName">ColorPicker</string>
+	<string name="library_colorpicker_libraryDescription">A highly customizable color picker for Android</string>
+	<string name="library_colorpicker_libraryWebsite">https://github.com/jaredrummler/ColorPicker</string>
+	<string name="library_colorpicker_libraryVersion">2.1.6</string>
+	<!-- OpenSource section -->
+	<string name="library_colorpicker_isOpenSource">true</string>
+	<string name="library_colorpicker_repositoryLink">https://github.com/jaredrummler/ColorPicker</string>
+	<!-- ClassPath for autoDetect section -->
+	<string name="library_colorpicker_classPath">com.jaredrummler.android.colorpicker</string>
+	<!-- License section -->
+	<string name="library_colorpicker_licenseId">apache_2_0</string>
+	<!-- Custom variables section -->
+</resources>

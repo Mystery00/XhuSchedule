@@ -179,7 +179,9 @@ class SettingsPreferenceFragment : BasePreferenceFragment(R.xml.preference_setti
 					.withShowLoadingProgress(true)
 					.withLibraries(
 							"BottomTabView",
+							"ColorPicker",
 							"Condom",
+							"CosmoCalendar",
 							"DataBinding",
 							"Lifecycles",
 							"Matisse",

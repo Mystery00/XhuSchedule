@@ -17,11 +17,12 @@
 			android:layout_weight="1"
 			android:gravity="center_vertical" />
 
-		<de.hdodenhof.circleimageview.CircleImageView
+		<ImageView
 			android:id="@+id/imageView"
 			android:layout_width="48dp"
 			android:layout_height="48dp"
-			android:contentDescription="@string/app_name" />
+			android:contentDescription="@string/app_name"
+			android:src="@drawable/ic_point" />
 
 	</LinearLayout>
 
