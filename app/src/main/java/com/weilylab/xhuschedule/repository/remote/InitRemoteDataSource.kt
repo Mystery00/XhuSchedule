@@ -25,7 +25,7 @@ object InitRemoteDataSource : InitDataSource {
 					.map {
 						val startDateTimeResponse = GsonFactory.parse<StartDateTimeResponse>(it)
 						if (startDateTimeResponse.results.isNotEmpty())
-							InitLocalDataSource.setStartDataTime(startDateTimeResponse.results[0].date)
+							InitLocalDataSource.setStartDateTime(startDateTimeResponse.results[0].date)
 						startDateTimeResponse
 					}
 					.observeOn(AndroidSchedulers.mainThread())

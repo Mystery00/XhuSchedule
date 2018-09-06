@@ -34,6 +34,7 @@
 	<string name="action_more">更多</string>
 	<string name="action_last">上一步</string>
 	<string name="action_next">下一步</string>
+	<string name="action_default">恢复默认</string>
 
 	<string name="shortcut_title_query_test">考试查询</string>
 	<string name="shortcut_title_query_class_score">成绩查询</string>

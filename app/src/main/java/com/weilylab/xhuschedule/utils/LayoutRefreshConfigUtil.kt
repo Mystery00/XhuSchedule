@@ -5,6 +5,7 @@ object LayoutRefreshConfigUtil {
 	var isRefreshTableFragment = false
 	var isRefreshBottomNavigationActivity = false
 	var isRefreshNoticeDot = false
+	var isRefreshStartTime = false
 	var isChangeBackgroundImage = false
 	var isChangeUserImage = false
 

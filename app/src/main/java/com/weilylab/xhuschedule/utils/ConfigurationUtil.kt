@@ -78,4 +78,19 @@ object ConfigurationUtil {
 				.putString(SharedPreferenceConstant.FIELD_IGNORE_UPDATE_VERSION, value)
 				.apply()
 		get() = sharedPreferences.getString(SharedPreferenceConstant.FIELD_IGNORE_UPDATE_VERSION, "")!!
+	var startTime: String
+		set(value) = sharedPreferences.edit()
+				.putString(SharedPreferenceConstant.FIELD_START_DATE_TIME, value)
+				.apply()
+		get() = sharedPreferences.getString(SharedPreferenceConstant.FIELD_START_DATE_TIME, "")!!
+	var customStartTime: String
+		set(value) = sharedPreferences.edit()
+				.putString(SharedPreferenceConstant.FIELD_CUSTOM_START_DATE_TIME, value)
+				.apply()
+		get() = sharedPreferences.getString(SharedPreferenceConstant.FIELD_CUSTOM_START_DATE_TIME, "")!!
+	var isCustomStartTime: Boolean
+		set(value) = sharedPreferences.edit()
+				.putBoolean(SharedPreferenceConstant.FIELD_IS_CUSTOM_START_DATE_TIME, value)
+				.apply()
+		get() = sharedPreferences.getBoolean(SharedPreferenceConstant.FIELD_IS_CUSTOM_START_DATE_TIME, false)
 }

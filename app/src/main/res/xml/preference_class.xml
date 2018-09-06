@@ -12,6 +12,10 @@
 		android:title="@string/title_show_not" />
 
 	<Preference
+		android:key="key_custom_start_time"
+		android:title="@string/title_custom_start_time" />
+
+	<Preference
 		android:key="@string/key_custom_course_color"
 		android:title="@string/title_custom_course_color">
 		<intent

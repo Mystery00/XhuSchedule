@@ -17,7 +17,7 @@ object NotificationRepository {
 		listener.invoke(PackageData.loading())
 		RxObservable<List<Schedule>>()
 				.doThings { emitter ->
-					val startTime = InitLocalDataSource.getStartDataTime()
+					val startTime = InitLocalDataSource.getStartDateTime()
 					val tomorrowWeek = CalendarUtil.getTomorrowWeekFromCalendar(startTime)
 					val tomorrow = CalendarUtil.getTomorrowIndex()
 					val courseList = CourseLocalDataSource.getRowCourseList(student, year
@@ -41,7 +41,7 @@ object NotificationRepository {
 		listener.invoke(PackageData.loading())
 		RxObservable<List<Schedule>>()
 				.doThings { emitter ->
-					val startTime = InitLocalDataSource.getStartDataTime()
+					val startTime = InitLocalDataSource.getStartDateTime()
 					val tomorrowWeek = CalendarUtil.getTomorrowWeekFromCalendar(startTime)
 					val tomorrow = CalendarUtil.getTomorrowIndex()
 					val courseList = ArrayList<Schedule>()

@@ -181,4 +181,14 @@ object CalendarUtil {
 		}
 		return dateList
 	}
+
+	fun setCustomStartTime(startDateTime: Calendar?) {
+		if (startDateTime == null) {
+			ConfigurationUtil.isCustomStartTime = false
+			return
+		}
+		val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.CHINA)
+		ConfigurationUtil.customStartTime = simpleDateFormat.format(startDateTime.time)
+		ConfigurationUtil.isCustomStartTime = true
+	}
 }

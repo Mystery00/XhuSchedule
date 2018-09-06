@@ -182,7 +182,7 @@ object CourseUtil {
 	fun getTodayCourse(courseList: List<Schedule>, listener: (List<Schedule>) -> Unit) {
 		RxObservable<ArrayList<Schedule>>()
 				.doThings { observableEmitter ->
-					val week = CalendarUtil.getWeekFromCalendar(InitLocalDataSource.getStartDataTime())
+					val week = CalendarUtil.getWeekFromCalendar(InitLocalDataSource.getStartDateTime())
 					val todayCourseList = ArrayList<Schedule>()
 					val weekIndex = CalendarUtil.getWeekIndex()
 					courseList.forEach {

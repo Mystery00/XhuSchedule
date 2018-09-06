@@ -33,11 +33,12 @@ object BottomNavigationRepository {
 
 	fun queryCurrentWeek(bottomNavigationViewModel: BottomNavigationViewModel) {
 		bottomNavigationViewModel.currentWeek.value = PackageData.loading()
-		if (bottomNavigationViewModel.startDateTime.value != null) {
+		if (bottomNavigationViewModel.startDateTime.value != null && !LayoutRefreshConfigUtil.isRefreshStartTime) {
 			val week = CalendarUtil.getWeekFromCalendar(CalendarUtil.startDateTime)
 			bottomNavigationViewModel.currentWeek.value = PackageData.content(week)
 			bottomNavigationViewModel.week.value = week
 		} else {
+			bottomNavigationViewModel.currentWeek.removeSource(bottomNavigationViewModel.startDateTime)
 			bottomNavigationViewModel.currentWeek.addSource(bottomNavigationViewModel.startDateTime) {
 				when (it.status) {
 					Content -> if (it.data != null) {
@@ -51,7 +52,8 @@ object BottomNavigationRepository {
 					Error -> bottomNavigationViewModel.currentWeek.value = PackageData.error(it.error)
 				}
 			}
-			InitRemoteDataSource.getStartDateTime(bottomNavigationViewModel.startDateTime)
+			InitRepository.getStartTime(bottomNavigationViewModel.startDateTime)
+			LayoutRefreshConfigUtil.isRefreshStartTime = false
 		}
 	}
 

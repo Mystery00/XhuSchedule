@@ -67,8 +67,7 @@ class TableFragment : BaseBottomNavigationFragment<FragmentTableBinding>(R.layou
 		when (it.status) {
 			Content -> {
 				val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINA)
-				binding.timeTableView
-						.curWeek(simpleDateFormat.format(it.data!!.time))
+				binding.timeTableView.curWeek(simpleDateFormat.format(it.data!!.time))
 			}
 		}
 	}
