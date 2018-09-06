@@ -40,7 +40,7 @@ apply plugin: 'kotlin-kapt'
 autoVersion {
 	major 2
 	minor 2
-	patch 3
+	patch 4
 	beta 0
 	alpha 0
 }
@@ -61,6 +61,8 @@ android {
 		setProperty("archivesBaseName", "XhuSchedule-${autoVersion.name}-${autoVersion.code}-${autoVersion.branch}")
 		ndk {
 			moduleName = 'bspatch'
+			// 设置支持的SO库架构
+//			abiFilters 'armeabi' , 'armeabi-v7a', 'arm64-v8a'//, 'x86_64', 'x86'
 		}
 		// Enabling multi dex support.
 		multiDexEnabled true
@@ -152,8 +154,11 @@ dependencies {
 	implementation "com.jrummyapps:colorpicker:2.1.6"
 	//CosmoCalendar
 	implementation 'com.github.applikeysolutions:cosmocalendar:1.0.4'
-
+	//CircleImageView
 	implementation 'de.hdodenhof:circleimageview:2.2.0'
+
+	//Bugly
+	implementation'com.tencent.bugly:crashreport:latest.release'
 	//微信
 	implementation 'com.tencent.mm.opensdk:wechat-sdk-android-without-mta:5.1.4'
 	//微博

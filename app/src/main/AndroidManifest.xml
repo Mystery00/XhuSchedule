@@ -5,6 +5,7 @@
   ~ Last modified 17-12-21 上午2:35
 -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:tools="http://schemas.android.com/tools"
 	package="com.weilylab.xhuschedule">
 
 	<uses-permission android:name="android.permission.INTERNET" />
@@ -14,8 +15,10 @@
 	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 	<uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
 	<uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
-	<uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 	<uses-permission android:name="android.permission.VIBRATE" />
+	<uses-permission
+		android:name="android.permission.READ_LOGS"
+		tools:ignore="ProtectedPermissions" />
 
 	<application
 		android:name=".config.APP"

@@ -40,6 +40,7 @@ import androidx.multidex.MultiDexApplication
 import com.oasisfeng.condom.CondomContext
 import com.sina.weibo.sdk.WbSdk
 import com.sina.weibo.sdk.auth.AuthInfo
+import com.tencent.bugly.crashreport.CrashReport
 import com.tencent.mm.opensdk.openapi.IWXAPI
 import com.tencent.mm.opensdk.openapi.WXAPIFactory
 import com.tencent.tauth.Tencent
@@ -66,11 +67,12 @@ class APP : MultiDexApplication() {
 			wxAPI = WXAPIFactory.createWXAPI(CondomContext.wrap(applicationContext, "WeiXin"), "wx41799887957cbba8", false)
 		if (PackageUtil.isWeiBoApplicationAvailable())
 			WbSdk.install(CondomContext.wrap(applicationContext, "WeiBo"), AuthInfo(CondomContext.wrap(applicationContext, "WeiBo"), "2170085314", "https://api.weibo.com/oauth2/default.html", "statuses/share"))
-		CrashHandler.getInstance(this)
-				.setDir(getExternalFilesDir("log")!!)
-				.setPrefix("log")
-				.setSuffix("txt")
-				.init()
+//		CrashHandler.getInstance(this)
+//				.setDir(getExternalFilesDir("log")!!)
+//				.setPrefix("log")
+//				.setSuffix("txt")
+//				.init()
+		CrashReport.initCrashReport(CondomContext.wrap(applicationContext, "Bugly"), "7fe1820ab7", true)
 		Logs.setConfig {
 			it.setShowLog(true)
 		}
