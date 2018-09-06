@@ -436,7 +436,8 @@ class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_naviga
 			}
 		})
 		PagerSnapHelper().attachToRecyclerView(dialogShowCourseBinding.recyclerView)
-		popupWindow = PopupWindow(dialogShowCourseBinding.root, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+		val viewSize = DensityTools.getScreenWidth(this) - DensityTools.dp2px(this, 96F)
+		popupWindow = PopupWindow(dialogShowCourseBinding.root, ViewGroup.LayoutParams.MATCH_PARENT, viewSize)
 		popupWindow.isOutsideTouchable = true
 		popupWindow.isFocusable = true
 		popupWindow.animationStyle = R.style.ShowCourseAnimation

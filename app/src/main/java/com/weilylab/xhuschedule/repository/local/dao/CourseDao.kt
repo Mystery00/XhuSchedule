@@ -16,4 +16,7 @@ interface CourseDao {
 
 	@Query("select * from tb_course where student_id = :username and course_year = :year and course_term = :term")
 	fun queryCourseByUsernameAndTerm(username: String, year: String, term: String): List<Course>
+
+	@Query("select * from tb_course where student_id = :username and course_year = :year and course_term = :term group by course_name")
+	fun queryDistinctCourseByUsernameAndTerm(username: String, year: String, term: String): List<Course>
 }

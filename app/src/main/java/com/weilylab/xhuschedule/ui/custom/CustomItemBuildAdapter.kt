@@ -26,7 +26,7 @@ class CustomItemBuildAdapter(private val context: Context,
 
 	override fun onItemUpdate(layout: FrameLayout, textView: TextView, countTextView: TextView, schedule: Schedule, gd: GradientDrawable) {
 		textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 10f)
-		textView.setLineSpacing(textView.textSize * 0.4f, 1f)
+		textView.setLineSpacing(DensityTools.dp2px(context,3), 1f)
 		val layoutParams = countTextView.layoutParams
 		layoutParams.width = counterSize
 		layoutParams.height = counterSize

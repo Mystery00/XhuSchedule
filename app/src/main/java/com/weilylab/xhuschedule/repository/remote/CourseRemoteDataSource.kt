@@ -19,7 +19,6 @@ object CourseRemoteDataSource : CourseDataSource {
 		if (NetworkUtil.isConnectInternet()) {
 			CourseUtil.getCourse(student, year, term, object : DoSaveListener<List<Course>> {
 				override fun doSave(t: List<Course>) {
-					CourseLocalDataSource.deleteAllCourseListForStudent(student.username, year, term)
 					t.forEach {
 						it.studentID = student.username
 						if (year != null && term != null) {
@@ -30,7 +29,7 @@ object CourseRemoteDataSource : CourseDataSource {
 							it.term = "current"
 						}
 					}
-					CourseLocalDataSource.saveCourseList(t)
+					CourseLocalDataSource.saveCourseList(student.username, year?:"current", term?:"current", t)
 				}
 			}, object : RequestListener<List<Course>> {
 				override fun done(t: List<Course>) {
@@ -57,7 +56,6 @@ object CourseRemoteDataSource : CourseDataSource {
 				override fun doSave(t: Map<String, List<Course>>) {
 					val username = t.keys.first()
 					val courseList = t[username]!!
-					CourseLocalDataSource.deleteAllCourseListForStudent(username, year, term)
 					courseList.forEach {
 						it.studentID = username
 						if (year != null && term != null) {
@@ -68,7 +66,7 @@ object CourseRemoteDataSource : CourseDataSource {
 							it.term = "current"
 						}
 					}
-					CourseLocalDataSource.saveCourseList(courseList)
+					CourseLocalDataSource.saveCourseList(username, year?:"current", term?:"current", courseList)
 				}
 			}, object : RequestListener<List<Course>> {
 				override fun done(t: List<Course>) {

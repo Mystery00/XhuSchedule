@@ -72,19 +72,38 @@ object CourseLocalDataSource : CourseDataSource {
 				})
 	}
 
-	fun getRowCourseList(student: Student, year: String, term: String): List<Schedule> = CourseUtil.convertCourseToSchedule(courseService.queryCourseByUsernameAndTerm(student.username, year, term))
+	fun queryDistinctCourseByUsernameAndTerm(courseListLiveData: MutableLiveData<PackageData<List<Course>>>, username: String, year: String, term: String) {
+		RxObservable<List<Course>>()
+				.doThings {
+					it.onFinish(courseService.queryDistinctCourseByUsernameAndTerm(username, year, term))
+				}
+				.subscribe(object : RxObserver<List<Course>>() {
+					override fun onFinish(data: List<Course>?) {
+						if (data == null || data.isEmpty())
+							courseListLiveData.value = PackageData.empty()
+						else
+							courseListLiveData.value = PackageData.content(data)
+					}
 
-	fun deleteAllCourseListForStudent(username: String, year: String?, term: String?) {
-		val list = courseService.queryCourseByUsernameAndTerm(username, year ?: "current", term
-				?: "current")
-		list.forEach {
-			courseService.deleteCourse(it)
-		}
+					override fun onError(e: Throwable) {
+						courseListLiveData.value = PackageData.error(e)
+					}
+				})
 	}
 
-	fun saveCourseList(courseList: List<Course>) {
-		courseList.forEach {
-			courseService.addCourse(it)
+	fun getRowCourseList(student: Student, year: String, term: String): List<Schedule> = CourseUtil.convertCourseToSchedule(courseService.queryCourseByUsernameAndTerm(student.username, year, term))
+
+	fun saveCourseList(username: String, year: String, term: String, courseList: List<Course>) {
+		val savedList = courseService.queryCourseByUsernameAndTerm(username, year, term)
+		savedList.forEach {
+			courseService.deleteCourse(it)
+		}
+		courseList.forEach { course ->
+			course.color = ""
+			val has = savedList.find { it.name == course.name }
+			if (has != null)
+				course.color = has.color
+			courseService.addCourse(course)
 		}
 	}
 }
