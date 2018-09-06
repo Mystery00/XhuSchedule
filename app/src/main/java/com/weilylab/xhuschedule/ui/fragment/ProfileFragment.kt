@@ -14,15 +14,15 @@ import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.databinding.DialogShareWithFriendsBinding
 import com.weilylab.xhuschedule.databinding.FragmentProfileBinding
 import com.weilylab.xhuschedule.base.BaseBottomNavigationFragment
-import com.weilylab.xhuschedule.config.Status.*
 import com.weilylab.xhuschedule.ui.activity.*
 import com.weilylab.xhuschedule.utils.ConfigurationUtil
 import com.weilylab.xhuschedule.utils.LayoutRefreshConfigUtil
 import com.weilylab.xhuschedule.utils.ShareUtil
-import com.weilylab.xhuschedule.utils.rxAndroid.RxObservable
-import com.weilylab.xhuschedule.utils.rxAndroid.RxObserver
 import com.weilylab.xhuschedule.viewModel.BottomNavigationViewModel
 import vip.mystery0.logs.Logs
+import vip.mystery0.rxpackagedata.Status.*
+import vip.mystery0.rxpackagedata.rx.RxObservable
+import vip.mystery0.rxpackagedata.rx.RxObserver
 import java.io.File
 
 class ProfileFragment : BaseBottomNavigationFragment<FragmentProfileBinding>(R.layout.fragment_profile) {
@@ -69,10 +69,10 @@ class ProfileFragment : BaseBottomNavigationFragment<FragmentProfileBinding>(R.l
 			when (packageData.status) {
 				Content -> {
 					LayoutRefreshConfigUtil.isRefreshNoticeDone = true
-					if (packageData.data == null || packageData.data.isEmpty())
+					if (packageData.data == null || packageData.data!!.isEmpty())
 						binding.redDotView.visibility = View.GONE
 					else {
-						packageData.data.forEach {
+						packageData.data!!.forEach {
 							if (!it.isRead) {
 								binding.redDotView.visibility = View.VISIBLE
 								return@Observer

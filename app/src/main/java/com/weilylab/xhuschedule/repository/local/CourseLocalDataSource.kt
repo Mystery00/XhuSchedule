@@ -10,6 +10,7 @@ import com.weilylab.xhuschedule.utils.CourseUtil
 import com.zhuangfei.timetable.model.Schedule
 import vip.mystery0.logs.Logs
 import vip.mystery0.rxpackagedata.PackageData
+import vip.mystery0.rxpackagedata.rx.DoNothingObserver
 import vip.mystery0.rxpackagedata.rx.RxObservable
 import vip.mystery0.rxpackagedata.rx.RxObserver
 
@@ -72,10 +73,11 @@ object CourseLocalDataSource : CourseDataSource {
 				})
 	}
 
-	fun queryDistinctCourseByUsernameAndTerm(courseListLiveData: MutableLiveData<PackageData<List<Course>>>, username: String, year: String, term: String) {
+	fun queryDistinctCourseByUsernameAndTerm(courseListLiveData: MutableLiveData<PackageData<List<Course>>>) {
+		courseListLiveData.value = PackageData.loading()
 		RxObservable<List<Course>>()
 				.doThings {
-					it.onFinish(courseService.queryDistinctCourseByUsernameAndTerm(username, year, term))
+					it.onFinish(courseService.queryDistinctCourseByUsernameAndTerm())
 				}
 				.subscribe(object : RxObserver<List<Course>>() {
 					override fun onFinish(data: List<Course>?) {
@@ -89,6 +91,19 @@ object CourseLocalDataSource : CourseDataSource {
 						courseListLiveData.value = PackageData.error(e)
 					}
 				})
+	}
+
+	fun updateCourseColor(course: Course) {
+		RxObservable<Boolean>()
+				.doThings { observableEmitter ->
+					val list = courseService.queryCourseByName(course.name)
+					list.forEach {
+						it.color = course.color
+						courseService.updateCourse(course)
+					}
+					observableEmitter.onFinish(true)
+				}
+				.subscribe(DoNothingObserver<Boolean>())
 	}
 
 	fun getRowCourseList(student: Student, year: String, term: String): List<Schedule> = CourseUtil.convertCourseToSchedule(courseService.queryCourseByUsernameAndTerm(student.username, year, term))

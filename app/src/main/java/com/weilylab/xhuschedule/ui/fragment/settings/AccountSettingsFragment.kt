@@ -8,14 +8,14 @@ import android.preference.PreferenceCategory
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import com.weilylab.xhuschedule.R
-import com.weilylab.xhuschedule.config.Status.*
+import vip.mystery0.rxpackagedata.Status.*
 import com.weilylab.xhuschedule.model.Student
 import com.weilylab.xhuschedule.repository.local.StudentLocalDataSource
 import com.weilylab.xhuschedule.ui.activity.LoginActivity
 import com.weilylab.xhuschedule.utils.ConfigurationUtil
 import com.weilylab.xhuschedule.utils.LayoutRefreshConfigUtil
-import com.weilylab.xhuschedule.utils.rxAndroid.RxObserver
 import vip.mystery0.logs.Logs
+import vip.mystery0.rxpackagedata.rx.RxObserver
 
 class AccountSettingsFragment : BasePreferenceFragment(R.xml.preference_account) {
 	companion object {

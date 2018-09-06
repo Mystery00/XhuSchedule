@@ -1,9 +1,6 @@
 package com.weilylab.xhuschedule.repository.local.dao
 
-import androidx.room.Dao
-import androidx.room.Delete
-import androidx.room.Insert
-import androidx.room.Query
+import androidx.room.*
 import com.weilylab.xhuschedule.model.Course
 
 @Dao
@@ -14,9 +11,15 @@ interface CourseDao {
 	@Delete
 	fun deleteCourse(course: Course): Int
 
+	@Update
+	fun updateCourse(course: Course)
+
 	@Query("select * from tb_course where student_id = :username and course_year = :year and course_term = :term")
 	fun queryCourseByUsernameAndTerm(username: String, year: String, term: String): List<Course>
 
-	@Query("select * from tb_course where student_id = :username and course_year = :year and course_term = :term group by course_name")
-	fun queryDistinctCourseByUsernameAndTerm(username: String, year: String, term: String): List<Course>
+	@Query("select * from tb_course group by course_name")
+	fun queryDistinctCourseByUsernameAndTerm(): List<Course>
+
+	@Query("select * from tb_course where course_name = :name")
+	fun queryCourseByName(name: String): List<Course>
 }

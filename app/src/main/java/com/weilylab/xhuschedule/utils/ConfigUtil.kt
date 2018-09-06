@@ -4,6 +4,7 @@ import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
 import android.os.Build
 import android.util.Base64
 import androidx.appcompat.app.AlertDialog
@@ -67,5 +68,21 @@ object ConfigUtil {
 		}
 		alarmManager.cancel(pendingIntent)//关闭定时器
 		alarmManager.set(AlarmManager.RTC_WAKEUP, CalendarUtil.getNotificationTime(), pendingIntent)
+	}
+
+	fun toHexEncoding(color: Int): String {
+		var r = Integer.toHexString(Color.red(color))
+		var g = Integer.toHexString(Color.green(color))
+		var b = Integer.toHexString(Color.blue(color))
+		val sb = StringBuffer()
+		//判断获取到的R,G,B值的长度 如果长度等于1 给R,G,B值的前边添0
+		r = if (r.length == 1) "0$r" else r
+		g = if (g.length == 1) "0$g" else g
+		b = if (b.length == 1) "0$b" else b
+		sb.append("#")
+		sb.append(r)
+		sb.append(g)
+		sb.append(b)
+		return sb.toString()
 	}
 }

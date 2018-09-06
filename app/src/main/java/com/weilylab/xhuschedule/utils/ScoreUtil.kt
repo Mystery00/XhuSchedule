@@ -18,7 +18,7 @@ import com.weilylab.xhuschedule.model.response.CetScoresResponse
 import com.weilylab.xhuschedule.model.response.CetVCodeResponse
 import com.weilylab.xhuschedule.model.response.ClassScoreResponse
 import com.weilylab.xhuschedule.model.response.ExpScoreResponse
-import com.weilylab.xhuschedule.utils.rxAndroid.RxObserver
+import vip.mystery0.rxpackagedata.rx.RxObserver
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import vip.mystery0.logs.Logs

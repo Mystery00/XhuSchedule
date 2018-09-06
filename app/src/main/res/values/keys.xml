@@ -15,6 +15,7 @@
 	<string name="screen_category_notification">通知设置</string>
 
 	<string name="key_show_not_week" translatable="false">key_show_not_week</string>
+	<string name="key_custom_course_color" translatable="false">key_custom_course_color</string>
 	<string name="key_logged_account" translatable="false">key_logged_account</string>
 	<string name="key_add_account" translatable="false">key_add_account</string>
 	<string name="key_del_account" translatable="false">key_del_account</string>
@@ -43,6 +44,7 @@
 	<string name="title_ui">产品设计</string>
 	<string name="title_developer">开发者</string>
 	<string name="title_show_not">显示非本周课程</string>
+	<string name="title_custom_course_color">自定义课程颜色</string>
 	<string name="title_reset_user_img">重置个人头像</string>
 	<string name="title_reset_background_img">重置背景图片</string>
 	<string name="title_current_account">当前已登录账号</string>

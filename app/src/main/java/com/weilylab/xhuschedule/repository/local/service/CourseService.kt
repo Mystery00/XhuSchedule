@@ -7,7 +7,11 @@ interface CourseService {
 
 	fun deleteCourse(course: Course): Int
 
+	fun updateCourse(course: Course)
+
 	fun queryCourseByUsernameAndTerm(username: String, year: String, term: String): List<Course>
 
-	fun queryDistinctCourseByUsernameAndTerm(username: String, year: String, term: String): List<Course>
+	fun queryDistinctCourseByUsernameAndTerm(): List<Course>
+
+	fun queryCourseByName(name: String): List<Course>
 }

@@ -7,8 +7,17 @@
 
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <CheckBoxPreference
-        android:key="@string/key_show_not_week"
-        android:title="@string/title_show_not" />
+	<CheckBoxPreference
+		android:key="@string/key_show_not_week"
+		android:title="@string/title_show_not" />
+
+	<Preference
+		android:key="@string/key_custom_course_color"
+		android:title="@string/title_custom_course_color">
+		<intent
+			android:action="android.intent.action.VIEW"
+			android:targetClass="com.weilylab.xhuschedule.ui.activity.ClassCourseColorActivity"
+			android:targetPackage="com.weilylab.xhuschedule" />
+	</Preference>
 
 </PreferenceScreen>

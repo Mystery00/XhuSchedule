@@ -1,19 +1,41 @@
 package com.weilylab.xhuschedule.ui.adapter
 
+import android.app.Activity
 import android.content.Context
-import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat
+import com.jrummyapps.android.colorpicker.ColorPickerDialog
+import com.jrummyapps.android.colorpicker.ColorPickerDialogListener
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.databinding.ItemClassCourseColorBinding
 import com.weilylab.xhuschedule.model.Course
+import com.weilylab.xhuschedule.repository.local.CourseLocalDataSource
+import com.weilylab.xhuschedule.utils.ConfigUtil
+import com.weilylab.xhuschedule.utils.LayoutRefreshConfigUtil
+import vip.mystery0.logs.Logs
 import vip.mystery0.tools.base.binding.BaseBindingRecyclerViewAdapter
 
-class ClassCourseColorRecyclerViewAdapter(private val context: Context,
-										  itemLayoutId: Int) : BaseBindingRecyclerViewAdapter<Course, ItemClassCourseColorBinding>(itemLayoutId) {
+class ClassCourseColorRecyclerViewAdapter(private val context: Context) : BaseBindingRecyclerViewAdapter<Course, ItemClassCourseColorBinding>(R.layout.item_class_course_color) {
 	override fun setItemView(binding: ItemClassCourseColorBinding, position: Int, data: Course) {
 		binding.textView.text = data.name
-		val grayPointDrawable = VectorDrawableCompat.create(context.resources, R.drawable.ic_point, null)!!
-		grayPointDrawable.setBounds(0, 0, 20, 20)
-		grayPointDrawable.setTint(data.schedule.extras["colorInt"] as Int)
-		binding.imageView.background = grayPointDrawable
+		binding.imageView.setBackgroundColor(data.schedule.extras["colorInt"] as Int)
+		binding.imageView.setOnClickListener {
+			val colorPickerDialog = ColorPickerDialog.newBuilder()
+					.setDialogType(ColorPickerDialog.TYPE_PRESETS)
+					.setColor(data.schedule.extras["colorInt"] as Int)
+					.setShowAlphaSlider(false)
+					.create()
+			colorPickerDialog.setColorPickerDialogListener(object : ColorPickerDialogListener {
+				override fun onDialogDismissed(dialogId: Int) {
+				}
+
+				override fun onColorSelected(dialogId: Int, color: Int) {
+					data.color = ConfigUtil.toHexEncoding(color)
+					Logs.i("onColorSelected: ${data.color}")
+					notifyItemChanged(position)
+					CourseLocalDataSource.updateCourseColor(data)
+					LayoutRefreshConfigUtil.isRefreshBottomNavigationActivity = true
+				}
+			})
+			colorPickerDialog.show((context as Activity).fragmentManager, "color-picker-dialog")
+		}
 	}
 }
