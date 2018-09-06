@@ -5,8 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import com.weilylab.xhuschedule.config.APP
 import com.weilylab.xhuschedule.constant.SharedPreferenceConstant
 import com.weilylab.xhuschedule.repository.dataSource.InitDataSource
-import com.weilylab.xhuschedule.utils.CalendarUtil
-import com.weilylab.xhuschedule.utils.rxAndroid.PackageData
+import vip.mystery0.rxpackagedata.PackageData
 import java.util.*
 
 object InitLocalDataSource : InitDataSource {

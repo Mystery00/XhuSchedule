@@ -1,13 +1,13 @@
 package com.weilylab.xhuschedule.repository
 
-import com.weilylab.xhuschedule.config.Status.*
 import com.weilylab.xhuschedule.repository.local.CourseLocalDataSource
 import com.weilylab.xhuschedule.repository.local.StudentLocalDataSource
 import com.weilylab.xhuschedule.repository.local.TestLocalDataSource
 import com.weilylab.xhuschedule.utils.CourseUtil
 import com.weilylab.xhuschedule.utils.UserUtil
-import com.weilylab.xhuschedule.utils.rxAndroid.PackageData
 import com.weilylab.xhuschedule.viewModel.WidgetViewModelHelper
+import vip.mystery0.rxpackagedata.PackageData
+import vip.mystery0.rxpackagedata.Status.*
 
 object WidgetRepository {
 	fun queryTodayCourse() {

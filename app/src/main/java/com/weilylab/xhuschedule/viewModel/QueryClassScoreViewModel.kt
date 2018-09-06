@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import com.weilylab.xhuschedule.model.ClassScore
 import com.weilylab.xhuschedule.model.Student
 import com.weilylab.xhuschedule.model.StudentInfo
-import com.weilylab.xhuschedule.utils.rxAndroid.PackageData
+import vip.mystery0.rxpackagedata.PackageData
 
 class QueryClassScoreViewModel : ViewModel() {
 	val studentList = MutableLiveData<PackageData<List<Student>>>()

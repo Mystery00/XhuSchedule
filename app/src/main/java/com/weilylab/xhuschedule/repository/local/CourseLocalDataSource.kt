@@ -7,11 +7,11 @@ import com.weilylab.xhuschedule.repository.dataSource.CourseDataSource
 import com.weilylab.xhuschedule.repository.local.service.impl.CourseServiceImpl
 import com.weilylab.xhuschedule.repository.remote.CourseRemoteDataSource
 import com.weilylab.xhuschedule.utils.CourseUtil
-import com.weilylab.xhuschedule.utils.rxAndroid.PackageData
-import com.weilylab.xhuschedule.utils.rxAndroid.RxObservable
-import com.weilylab.xhuschedule.utils.rxAndroid.RxObserver
 import com.zhuangfei.timetable.model.Schedule
 import vip.mystery0.logs.Logs
+import vip.mystery0.rxpackagedata.PackageData
+import vip.mystery0.rxpackagedata.rx.RxObservable
+import vip.mystery0.rxpackagedata.rx.RxObserver
 
 object CourseLocalDataSource : CourseDataSource {
 	private val courseService = CourseServiceImpl()

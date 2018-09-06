@@ -40,14 +40,14 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.weilylab.xhuschedule.base.XhuBaseActivity
 import com.weilylab.xhuschedule.config.APP
-import com.weilylab.xhuschedule.config.Status
 import com.weilylab.xhuschedule.constant.IntentConstant
 import com.weilylab.xhuschedule.model.response.SplashResponse
 import com.weilylab.xhuschedule.repository.SplashRepository
 import com.weilylab.xhuschedule.service.CheckUpdateService
 import com.weilylab.xhuschedule.utils.ConfigurationUtil
 import com.weilylab.xhuschedule.utils.FileUtil
-import com.weilylab.xhuschedule.utils.rxAndroid.PackageData
+import vip.mystery0.rxpackagedata.PackageData
+import vip.mystery0.rxpackagedata.Status
 import com.weilylab.xhuschedule.viewModel.SplashViewModel
 import com.weilylab.xhuschedule.service.DownloadSplashIntentService
 import com.weilylab.xhuschedule.utils.ConfigUtil

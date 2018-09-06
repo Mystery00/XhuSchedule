@@ -9,7 +9,7 @@ import com.weilylab.xhuschedule.repository.dataSource.NoticeDataSource
 import com.weilylab.xhuschedule.repository.local.NoticeLocalDataSource
 import com.weilylab.xhuschedule.utils.NetworkUtil
 import com.weilylab.xhuschedule.utils.NoticeUtil
-import com.weilylab.xhuschedule.utils.rxAndroid.PackageData
+import vip.mystery0.rxpackagedata.PackageData
 
 object NoticeRemoteDataSource : NoticeDataSource {
 	override fun queryNotice(noticeLiveData: MutableLiveData<PackageData<List<Notice>>>, platform: String?) {

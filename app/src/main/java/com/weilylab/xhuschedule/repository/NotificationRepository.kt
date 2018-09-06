@@ -6,11 +6,10 @@ import com.weilylab.xhuschedule.repository.local.CourseLocalDataSource
 import com.weilylab.xhuschedule.repository.local.InitLocalDataSource
 import com.weilylab.xhuschedule.repository.local.TestLocalDataSource
 import com.weilylab.xhuschedule.utils.CalendarUtil
-import com.weilylab.xhuschedule.utils.rxAndroid.PackageData
-import com.weilylab.xhuschedule.utils.rxAndroid.RxObservable
-import com.weilylab.xhuschedule.utils.rxAndroid.RxObserver
+import vip.mystery0.rxpackagedata.PackageData
+import vip.mystery0.rxpackagedata.rx.RxObservable
+import vip.mystery0.rxpackagedata.rx.RxObserver
 import com.zhuangfei.timetable.model.Schedule
-import vip.mystery0.logs.Logs
 import java.util.ArrayList
 
 object NotificationRepository {

@@ -10,14 +10,14 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.base.XhuBaseActivity
-import com.weilylab.xhuschedule.config.Status
 import com.weilylab.xhuschedule.model.ExpScore
 import com.weilylab.xhuschedule.model.Student
 import com.weilylab.xhuschedule.model.StudentInfo
 import com.weilylab.xhuschedule.repository.ScoreRepository
 import com.weilylab.xhuschedule.ui.adapter.QueryExpScoreRecyclerViewAdapter
 import com.weilylab.xhuschedule.utils.CalendarUtil
-import com.weilylab.xhuschedule.utils.rxAndroid.PackageData
+import vip.mystery0.rxpackagedata.PackageData
+import vip.mystery0.rxpackagedata.Status
 import com.weilylab.xhuschedule.viewModel.QueryExpScoreViewModel
 import kotlinx.android.synthetic.main.activity_query_exp_score.*
 import vip.mystery0.logs.Logs

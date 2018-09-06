@@ -6,8 +6,8 @@ import androidx.lifecycle.ViewModel
 import com.weilylab.xhuschedule.model.Notice
 import com.weilylab.xhuschedule.model.Student
 import com.weilylab.xhuschedule.model.StudentInfo
-import com.weilylab.xhuschedule.utils.rxAndroid.PackageData
 import com.zhuangfei.timetable.model.Schedule
+import vip.mystery0.rxpackagedata.PackageData
 import java.util.*
 
 class BottomNavigationViewModel : ViewModel() {

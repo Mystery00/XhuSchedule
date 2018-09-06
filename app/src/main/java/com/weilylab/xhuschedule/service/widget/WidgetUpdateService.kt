@@ -7,16 +7,16 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.lifecycle.Observer
 import com.weilylab.xhuschedule.R
-import com.weilylab.xhuschedule.config.Status.*
 import com.weilylab.xhuschedule.constant.Constants
 import com.weilylab.xhuschedule.constant.IntentConstant
 import com.weilylab.xhuschedule.model.Student
 import com.weilylab.xhuschedule.model.Test
 import com.weilylab.xhuschedule.repository.WidgetRepository
 import com.weilylab.xhuschedule.utils.ConfigurationUtil
-import com.weilylab.xhuschedule.utils.rxAndroid.PackageData
 import com.weilylab.xhuschedule.viewModel.WidgetViewModelHelper
 import com.zhuangfei.timetable.model.Schedule
+import vip.mystery0.rxpackagedata.PackageData
+import vip.mystery0.rxpackagedata.Status.*
 
 class WidgetUpdateService : Service() {
 	override fun onBind(intent: Intent): IBinder? = null

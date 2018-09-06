@@ -9,11 +9,11 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.base.XhuBaseActivity
-import com.weilylab.xhuschedule.config.Status.*
 import com.weilylab.xhuschedule.model.Test
 import com.weilylab.xhuschedule.repository.TestRepository
 import com.weilylab.xhuschedule.ui.adapter.QueryTestRecyclerViewAdapter
-import com.weilylab.xhuschedule.utils.rxAndroid.PackageData
+import vip.mystery0.rxpackagedata.PackageData
+import vip.mystery0.rxpackagedata.Status.*
 import com.weilylab.xhuschedule.viewModel.QueryTestViewModel
 import com.zyao89.view.zloading.ZLoadingDialog
 import com.zyao89.view.zloading.Z_TYPE

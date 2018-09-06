@@ -14,8 +14,6 @@ import com.weilylab.xhuschedule.factory.GsonFactory
 import com.weilylab.xhuschedule.factory.RetrofitFactory
 import com.weilylab.xhuschedule.model.Version
 import com.weilylab.xhuschedule.utils.APPActivityManager
-import com.weilylab.xhuschedule.utils.rxAndroid.RxObservable
-import com.weilylab.xhuschedule.utils.rxAndroid.RxObserver
 import com.weilylab.xhuschedule.constant.Constants
 import com.weilylab.xhuschedule.ui.activity.GuideActivity
 import com.weilylab.xhuschedule.ui.activity.SplashActivity
@@ -26,6 +24,8 @@ import com.weilylab.xhuschedule.utils.ConfigurationUtil
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import vip.mystery0.logs.Logs
+import vip.mystery0.rxpackagedata.rx.RxObservable
+import vip.mystery0.rxpackagedata.rx.RxObserver
 import vip.mystery0.tools.utils.FileTools
 
 class CheckUpdateService : Service() {

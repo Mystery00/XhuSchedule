@@ -1,6 +1,5 @@
 package com.weilylab.xhuschedule.repository
 
-import com.weilylab.xhuschedule.config.Status.*
 import com.weilylab.xhuschedule.model.Student
 import com.weilylab.xhuschedule.repository.local.CourseLocalDataSource
 import com.weilylab.xhuschedule.repository.local.StudentLocalDataSource
@@ -10,10 +9,11 @@ import com.weilylab.xhuschedule.utils.CalendarUtil
 import com.weilylab.xhuschedule.utils.CourseUtil
 import com.weilylab.xhuschedule.utils.LayoutRefreshConfigUtil
 import com.weilylab.xhuschedule.utils.UserUtil
-import com.weilylab.xhuschedule.utils.rxAndroid.PackageData
-import com.weilylab.xhuschedule.utils.rxAndroid.RxObservable
-import com.weilylab.xhuschedule.utils.rxAndroid.RxObserver
+import vip.mystery0.rxpackagedata.PackageData
+import vip.mystery0.rxpackagedata.rx.RxObservable
+import vip.mystery0.rxpackagedata.rx.RxObserver
 import com.weilylab.xhuschedule.viewModel.BottomNavigationViewModel
+import vip.mystery0.rxpackagedata.Status.*
 
 object BottomNavigationRepository {
 	fun queryStudentInfo(bottomNavigationViewModel: BottomNavigationViewModel) {
@@ -41,8 +41,8 @@ object BottomNavigationRepository {
 			bottomNavigationViewModel.currentWeek.addSource(bottomNavigationViewModel.startDateTime) {
 				when (it.status) {
 					Content -> if (it.data != null) {
-						CalendarUtil.startDateTime = it.data
-						val week = CalendarUtil.getWeekFromCalendar(it.data)
+						CalendarUtil.startDateTime = it.data!!
+						val week = CalendarUtil.getWeekFromCalendar(it.data!!)
 						bottomNavigationViewModel.currentWeek.value = PackageData.content(week)
 						bottomNavigationViewModel.week.value = week
 					}

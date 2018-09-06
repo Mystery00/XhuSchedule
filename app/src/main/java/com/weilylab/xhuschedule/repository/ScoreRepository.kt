@@ -1,13 +1,13 @@
 package com.weilylab.xhuschedule.repository
 
-import com.weilylab.xhuschedule.config.Status.*
 import com.weilylab.xhuschedule.model.Student
 import com.weilylab.xhuschedule.repository.local.StudentLocalDataSource
 import com.weilylab.xhuschedule.repository.remote.ScoreRemoteDataSource
-import com.weilylab.xhuschedule.utils.rxAndroid.PackageData
 import com.weilylab.xhuschedule.viewModel.QueryCetScoreViewModelHelper
 import com.weilylab.xhuschedule.viewModel.QueryClassScoreViewModel
 import com.weilylab.xhuschedule.viewModel.QueryExpScoreViewModel
+import vip.mystery0.rxpackagedata.PackageData
+import vip.mystery0.rxpackagedata.Status.*
 
 object ScoreRepository {
 	fun queryClassScore(scoreViewModel: QueryClassScoreViewModel) {
@@ -25,7 +25,7 @@ object ScoreRepository {
 		scoreViewModel.studentInfoList.addSource(scoreViewModel.studentList) {
 			when (it.status) {
 				Content -> if (it.data!!.isNotEmpty())
-					StudentLocalDataSource.queryManyStudentInfo(scoreViewModel.studentInfoList, it.data)
+					StudentLocalDataSource.queryManyStudentInfo(scoreViewModel.studentInfoList, it.data!!)
 				Error -> scoreViewModel.studentInfoList.value = PackageData.error(it.error)
 				Empty -> scoreViewModel.studentInfoList.value = PackageData.empty()
 				Loading -> scoreViewModel.studentInfoList.value = PackageData.loading()
@@ -39,7 +39,7 @@ object ScoreRepository {
 		scoreViewModel.studentInfoList.addSource(scoreViewModel.studentList) {
 			when (it.status) {
 				Content -> if (it.data!!.isNotEmpty())
-					StudentLocalDataSource.queryManyStudentInfo(scoreViewModel.studentInfoList, it.data)
+					StudentLocalDataSource.queryManyStudentInfo(scoreViewModel.studentInfoList, it.data!!)
 				Error -> scoreViewModel.studentInfoList.value = PackageData.error(it.error)
 				Empty -> scoreViewModel.studentInfoList.value = PackageData.empty()
 				Loading -> scoreViewModel.studentInfoList.value = PackageData.loading()
@@ -53,7 +53,7 @@ object ScoreRepository {
 		QueryCetScoreViewModelHelper.studentInfoList.addSource(QueryCetScoreViewModelHelper.studentList) {
 			when (it.status) {
 				Content -> if (it.data!!.isNotEmpty())
-					StudentLocalDataSource.queryManyStudentInfo(QueryCetScoreViewModelHelper.studentInfoList, it.data)
+					StudentLocalDataSource.queryManyStudentInfo(QueryCetScoreViewModelHelper.studentInfoList, it.data!!)
 				Error -> QueryCetScoreViewModelHelper.studentInfoList.value = PackageData.error(it.error)
 				Empty -> QueryCetScoreViewModelHelper.studentInfoList.value = PackageData.empty()
 				Loading -> QueryCetScoreViewModelHelper.studentInfoList.value = PackageData.loading()

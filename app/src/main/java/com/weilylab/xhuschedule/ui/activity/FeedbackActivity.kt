@@ -5,13 +5,13 @@ import android.os.Build
 import androidx.core.content.ContextCompat
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.base.XhuBaseActivity
-import com.weilylab.xhuschedule.config.Status
 import com.weilylab.xhuschedule.listener.RequestListener
 import com.weilylab.xhuschedule.model.Student
 import com.weilylab.xhuschedule.repository.local.StudentLocalDataSource
 import com.weilylab.xhuschedule.utils.UserUtil
 import com.zyao89.view.zloading.ZLoadingDialog
 import com.zyao89.view.zloading.Z_TYPE
+import vip.mystery0.rxpackagedata.Status
 
 import kotlinx.android.synthetic.main.activity_feedback.*
 import kotlinx.android.synthetic.main.content_feedback.*
@@ -33,7 +33,7 @@ class FeedbackActivity : XhuBaseActivity(R.layout.activity_feedback) {
 			when (it.status) {
 				Status.Content -> {
 					if (it.data != null)
-						student = it.data
+						student = it.data!!
 					else {
 						toastMessage(R.string.hint_feedback_null_student)
 						finish()

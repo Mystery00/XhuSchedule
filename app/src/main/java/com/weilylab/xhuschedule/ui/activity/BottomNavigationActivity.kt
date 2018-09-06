@@ -27,7 +27,6 @@ import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.signature.MediaStoreSignature
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.base.XhuBaseActivity
-import com.weilylab.xhuschedule.config.Status.*
 import com.weilylab.xhuschedule.databinding.DialogShowCourseBinding
 import com.weilylab.xhuschedule.model.Student
 import com.weilylab.xhuschedule.repository.BottomNavigationRepository
@@ -38,7 +37,6 @@ import com.weilylab.xhuschedule.ui.fragment.ProfileFragment
 import com.weilylab.xhuschedule.ui.fragment.TableFragment
 import com.weilylab.xhuschedule.ui.fragment.TodayFragment
 import com.weilylab.xhuschedule.utils.*
-import com.weilylab.xhuschedule.utils.rxAndroid.PackageData
 import com.weilylab.xhuschedule.viewModel.BottomNavigationViewModel
 import com.zhuangfei.timetable.listener.IWeekView
 import com.zhuangfei.timetable.model.Schedule
@@ -53,6 +51,8 @@ import kotlinx.android.synthetic.main.activity_bottom_navigation.*
 import kotlinx.android.synthetic.main.content_bottom_navigation.*
 import vip.mystery0.bottomTabView.BottomTabItem
 import vip.mystery0.logs.Logs
+import vip.mystery0.rxpackagedata.PackageData
+import vip.mystery0.rxpackagedata.Status.*
 import vip.mystery0.tools.utils.DensityTools
 import java.io.File
 import java.text.SimpleDateFormat
@@ -139,8 +139,8 @@ class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_naviga
 			Content -> {
 				val week = when {
 					it.data!! < 1 -> 1
-					it.data > 20 -> 20
-					else -> it.data
+					it.data!! > 20 -> 20
+					else -> it.data!!
 				}
 				weekView.curWeek(week).showView()
 				bottomNavigationViewModel.week.value = week

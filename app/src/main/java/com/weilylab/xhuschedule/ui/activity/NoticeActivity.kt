@@ -42,11 +42,11 @@ import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.ui.adapter.NoticeAdapter
 import com.weilylab.xhuschedule.model.Notice
 import com.weilylab.xhuschedule.base.XhuBaseActivity
-import com.weilylab.xhuschedule.config.Status.*
 import com.weilylab.xhuschedule.repository.NoticeRepository
 import com.weilylab.xhuschedule.utils.LayoutRefreshConfigUtil
-import com.weilylab.xhuschedule.utils.rxAndroid.PackageData
 import com.weilylab.xhuschedule.viewModel.NoticeViewModel
+import vip.mystery0.rxpackagedata.PackageData
+import vip.mystery0.rxpackagedata.Status.*
 import kotlinx.android.synthetic.main.activity_notice.*
 import vip.mystery0.logs.Logs
 

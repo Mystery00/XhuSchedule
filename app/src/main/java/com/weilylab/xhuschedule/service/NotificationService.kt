@@ -6,13 +6,12 @@ import android.os.IBinder
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.weilylab.xhuschedule.R
-import com.weilylab.xhuschedule.config.Status.*
 import com.weilylab.xhuschedule.constant.Constants
 import com.weilylab.xhuschedule.repository.NotificationRepository
 import com.weilylab.xhuschedule.repository.local.StudentLocalDataSource
 import com.weilylab.xhuschedule.ui.notification.TomorrowNotification
 import com.weilylab.xhuschedule.utils.ConfigurationUtil
-import vip.mystery0.logs.Logs
+import vip.mystery0.rxpackagedata.Status.*
 
 class NotificationService : Service() {
 	override fun onBind(intent: Intent?): IBinder? = null

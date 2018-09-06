@@ -7,10 +7,10 @@ import com.weilylab.xhuschedule.factory.RetrofitFactory
 import com.weilylab.xhuschedule.model.response.SplashResponse
 import com.weilylab.xhuschedule.repository.dataSource.SplashDataSource
 import com.weilylab.xhuschedule.repository.local.SplashLocalDataSource
-import com.weilylab.xhuschedule.utils.rxAndroid.PackageData
-import com.weilylab.xhuschedule.utils.rxAndroid.RxObserver
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import vip.mystery0.rxpackagedata.PackageData
+import vip.mystery0.rxpackagedata.rx.RxObserver
 
 object SplashRemoteDataSource : SplashDataSource {
 	override fun requestSplash(splashPackageLiveData: MediatorLiveData<PackageData<SplashResponse.Splash>>) {

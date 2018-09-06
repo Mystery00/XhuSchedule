@@ -52,9 +52,9 @@ import com.weilylab.xhuschedule.model.Student
 import com.weilylab.xhuschedule.repository.LoginRepository
 import com.weilylab.xhuschedule.viewModel.LoginViewModel
 import android.view.WindowManager
-import com.weilylab.xhuschedule.config.Status.*
-import com.weilylab.xhuschedule.utils.rxAndroid.PackageData
 import vip.mystery0.logs.Logs
+import vip.mystery0.rxpackagedata.PackageData
+import vip.mystery0.rxpackagedata.Status.*
 
 class LoginActivity : XhuBaseActivity(R.layout.activity_login) {
 	private lateinit var loginViewModel: LoginViewModel
@@ -65,7 +65,7 @@ class LoginActivity : XhuBaseActivity(R.layout.activity_login) {
 			Content -> {
 				hideDialog()
 				if (it.data != null) {
-					LoginRepository.queryStudentInfo(it.data)
+					LoginRepository.queryStudentInfo(it.data!!)
 					toastMessage(getString(R.string.success_login, getString(R.string.app_name)))
 					setResult(Activity.RESULT_OK, intent)
 					finish()

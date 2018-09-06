@@ -10,9 +10,9 @@ import com.weilylab.xhuschedule.repository.dataSource.CourseDataSource
 import com.weilylab.xhuschedule.repository.local.CourseLocalDataSource
 import com.weilylab.xhuschedule.utils.CourseUtil
 import com.weilylab.xhuschedule.utils.NetworkUtil
-import com.weilylab.xhuschedule.utils.rxAndroid.PackageData
 import com.zhuangfei.timetable.model.Schedule
 import vip.mystery0.logs.Logs
+import vip.mystery0.rxpackagedata.PackageData
 
 object CourseRemoteDataSource : CourseDataSource {
 	override fun queryCourseByUsername(courseListLiveData: MutableLiveData<PackageData<List<Schedule>>>, student: Student, year: String?, term: String?, isFromCache: Boolean) {

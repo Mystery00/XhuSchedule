@@ -4,8 +4,8 @@ import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import com.weilylab.xhuschedule.model.Student
 import com.weilylab.xhuschedule.model.Test
-import com.weilylab.xhuschedule.utils.rxAndroid.PackageData
 import com.zhuangfei.timetable.model.Schedule
+import vip.mystery0.rxpackagedata.PackageData
 
 object WidgetViewModelHelper {
 	val studentList = MutableLiveData<PackageData<List<Student>>>()

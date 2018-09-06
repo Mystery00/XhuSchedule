@@ -4,15 +4,15 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.base.XhuBaseActivity
-import com.weilylab.xhuschedule.config.Status
 import com.weilylab.xhuschedule.databinding.ActivityQueryCetScoreShowBinding
 import com.weilylab.xhuschedule.model.CetScore
-import com.weilylab.xhuschedule.utils.rxAndroid.PackageData
-import com.weilylab.xhuschedule.utils.rxAndroid.RxObservable
-import com.weilylab.xhuschedule.utils.rxAndroid.RxObserver
 import com.weilylab.xhuschedule.viewModel.QueryCetScoreViewModelHelper
 import kotlinx.android.synthetic.main.activity_query_cet_score_show.*
 import vip.mystery0.logs.Logs
+import vip.mystery0.rxpackagedata.PackageData
+import vip.mystery0.rxpackagedata.Status
+import vip.mystery0.rxpackagedata.rx.RxObservable
+import vip.mystery0.rxpackagedata.rx.RxObserver
 
 class QueryCetScoreShowActivity : XhuBaseActivity(R.layout.activity_query_cet_score_show) {
 	private lateinit var activityQueryCetScoreShowBinding: ActivityQueryCetScoreShowBinding

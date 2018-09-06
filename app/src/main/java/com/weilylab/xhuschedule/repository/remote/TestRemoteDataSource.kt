@@ -10,8 +10,7 @@ import com.weilylab.xhuschedule.repository.dataSource.TestDataSource
 import com.weilylab.xhuschedule.repository.local.TestLocalDataSource
 import com.weilylab.xhuschedule.utils.NetworkUtil
 import com.weilylab.xhuschedule.utils.TestUtil
-import com.weilylab.xhuschedule.utils.rxAndroid.PackageData
-import vip.mystery0.logs.Logs
+import vip.mystery0.rxpackagedata.PackageData
 
 object TestRemoteDataSource : TestDataSource {
 	override fun queryAllTestsByUsername(testLiveData: MediatorLiveData<PackageData<List<Test>>>, student: Student) {

@@ -8,10 +8,10 @@ import com.weilylab.xhuschedule.repository.dataSource.StudentDataSource
 import com.weilylab.xhuschedule.repository.local.service.StudentService
 import com.weilylab.xhuschedule.repository.local.service.impl.StudentServiceImpl
 import com.weilylab.xhuschedule.repository.remote.StudentRemoteDataSource
-import com.weilylab.xhuschedule.utils.rxAndroid.PackageData
-import com.weilylab.xhuschedule.utils.rxAndroid.RxObservable
-import com.weilylab.xhuschedule.utils.rxAndroid.RxObserver
 import io.reactivex.Observer
+import vip.mystery0.rxpackagedata.PackageData
+import vip.mystery0.rxpackagedata.rx.RxObservable
+import vip.mystery0.rxpackagedata.rx.RxObserver
 
 object StudentLocalDataSource : StudentDataSource {
 	private val studentService: StudentService = StudentServiceImpl()

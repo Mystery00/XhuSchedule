@@ -10,13 +10,13 @@ import androidx.lifecycle.Observer
 import com.android.setupwizardlib.view.NavigationBar
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.base.XhuBaseActivity
-import com.weilylab.xhuschedule.config.Status.*
 import com.weilylab.xhuschedule.model.CetScore
 import com.weilylab.xhuschedule.repository.ScoreRepository
-import com.weilylab.xhuschedule.utils.rxAndroid.PackageData
 import com.weilylab.xhuschedule.viewModel.QueryCetScoreViewModelHelper
 import com.zyao89.view.zloading.ZLoadingDialog
 import com.zyao89.view.zloading.Z_TYPE
+import vip.mystery0.rxpackagedata.PackageData
+import vip.mystery0.rxpackagedata.Status.*
 import kotlinx.android.synthetic.main.activity_query_cet_score_second.*
 import vip.mystery0.logs.Logs
 
