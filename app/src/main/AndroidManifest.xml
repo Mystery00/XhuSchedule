@@ -197,7 +197,8 @@
 			android:enabled="true"
 			android:exported="false" />
 
-		<activity android:name=".ui.activity.ClassCourseColorActivity"></activity>
+		<activity android:name=".ui.activity.ClassCourseColorActivity" />
+		<activity android:name=".ui.activity.CustomStartTimeActivity"></activity>
 	</application>
 
 </manifest>

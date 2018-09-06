@@ -13,7 +13,12 @@
 
 	<Preference
 		android:key="key_custom_start_time"
-		android:title="@string/title_custom_start_time" />
+		android:title="@string/title_custom_start_time">
+		<intent
+			android:action="android.intent.action.VIEW"
+			android:targetClass="com.weilylab.xhuschedule.ui.activity.CustomStartTimeActivity"
+			android:targetPackage="com.weilylab.xhuschedule" />
+	</Preference>
 
 	<Preference
 		android:key="@string/key_custom_course_color"

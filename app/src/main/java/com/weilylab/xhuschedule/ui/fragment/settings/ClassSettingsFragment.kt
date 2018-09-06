@@ -2,14 +2,9 @@ package com.weilylab.xhuschedule.ui.fragment.settings
 
 import android.preference.CheckBoxPreference
 import android.preference.Preference
-import android.widget.DatePicker
-import androidx.appcompat.app.AlertDialog
 import com.weilylab.xhuschedule.R
-import com.weilylab.xhuschedule.repository.local.InitLocalDataSource
-import com.weilylab.xhuschedule.utils.CalendarUtil
 import com.weilylab.xhuschedule.utils.ConfigurationUtil
 import com.weilylab.xhuschedule.utils.LayoutRefreshConfigUtil
-import java.util.*
 
 class ClassSettingsFragment : BasePreferenceFragment(R.xml.preference_class) {
 	private lateinit var showNotWeekPreference: CheckBoxPreference
@@ -31,30 +26,11 @@ class ClassSettingsFragment : BasePreferenceFragment(R.xml.preference_class) {
 			LayoutRefreshConfigUtil.isRefreshTableFragment = true
 			true
 		}
-		customStartTimePreference.setOnPreferenceClickListener {
-			val datePicker = DatePicker(activity)
-			val startTime = InitLocalDataSource.getStartDateTime()
-			datePicker.init(startTime.get(Calendar.YEAR), startTime.get(Calendar.MONTH), startTime.get(Calendar.DAY_OF_MONTH)) { _, year, monthOfYear, dayOfMonth ->
-				startTime.set(year, monthOfYear, dayOfMonth)
-			}
-			AlertDialog.Builder(activity!!)
-					.setView(datePicker)
-					.setPositiveButton(R.string.action_ok) { _, _ ->
-						CalendarUtil.setCustomStartTime(startTime)
-						updateCustomStartTimeSummary()
-						LayoutRefreshConfigUtil.isRefreshStartTime = true
-						LayoutRefreshConfigUtil.isRefreshBottomNavigationActivity = true
-					}
-					.setNegativeButton(R.string.action_cancel, null)
-					.setNeutralButton(R.string.action_default) { _, _ ->
-						CalendarUtil.setCustomStartTime(null)
-						updateCustomStartTimeSummary()
-						LayoutRefreshConfigUtil.isRefreshStartTime = true
-						LayoutRefreshConfigUtil.isRefreshBottomNavigationActivity = true
-					}
-					.show()
-			true
-		}
+	}
+
+	override fun onResume() {
+		super.onResume()
+		updateCustomStartTimeSummary()
 	}
 
 	private fun updateCustomStartTimeSummary() {

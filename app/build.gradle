@@ -150,6 +150,8 @@ dependencies {
 	implementation "com.mikepenz:aboutlibraries:6.2.0-rc01"
 	//Color Picker
 	implementation "com.jrummyapps:colorpicker:2.1.6"
+	//CosmoCalendar
+	implementation 'com.github.applikeysolutions:cosmocalendar:1.0.4'
 
 	implementation 'de.hdodenhof:circleimageview:2.2.0'
 	//微信
