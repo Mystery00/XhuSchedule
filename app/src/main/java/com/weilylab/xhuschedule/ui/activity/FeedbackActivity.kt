@@ -1,24 +1,71 @@
 package com.weilylab.xhuschedule.ui.activity
 
 import android.app.Dialog
-import android.os.Build
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.base.XhuBaseActivity
-import com.weilylab.xhuschedule.listener.RequestListener
+import com.weilylab.xhuschedule.model.FeedBackMessage
 import com.weilylab.xhuschedule.model.Student
+import com.weilylab.xhuschedule.repository.FeedBackRepository
 import com.weilylab.xhuschedule.repository.local.StudentLocalDataSource
-import com.weilylab.xhuschedule.utils.UserUtil
+import com.weilylab.xhuschedule.viewModel.FeedBackViewModel
 import com.zyao89.view.zloading.ZLoadingDialog
 import com.zyao89.view.zloading.Z_TYPE
-import vip.mystery0.rxpackagedata.Status
 
 import kotlinx.android.synthetic.main.activity_feedback.*
 import kotlinx.android.synthetic.main.content_feedback.*
+import vip.mystery0.rxpackagedata.PackageData
+import vip.mystery0.rxpackagedata.Status.*
 
 class FeedbackActivity : XhuBaseActivity(R.layout.activity_feedback) {
-	private lateinit var student: Student
+	private lateinit var feedBackViewModel: FeedBackViewModel
 	private lateinit var dialog: Dialog
+
+	private val mainStudentObserver = Observer<PackageData<Student>> {
+		when (it.status) {
+			Content -> FeedBackRepository.queryFeedBackToken(feedBackViewModel)
+			Loading -> showInitDialog()
+			Empty -> {
+				hideInitDialog()
+				toastMessage(R.string.hint_feedback_null_student)
+				finish()
+			}
+			Error -> {
+				hideInitDialog()
+				toastMessage(it.error?.message)
+			}
+		}
+	}
+
+	private val feedBackTokenObserver = Observer<PackageData<String>> {
+		when (it.status) {
+			Content -> FeedBackRepository.getMessageFromLocal(feedBackViewModel)
+			Loading -> showInitDialog()
+			Empty -> {
+				hideInitDialog()
+			}
+			Error -> {
+				hideInitDialog()
+			}
+		}
+
+	}
+
+	private val feedBackMessageObserver = Observer<PackageData<List<FeedBackMessage>>> {
+		when (it.status) {
+			Content -> FeedBackRepository.queryFeedBackToken(feedBackViewModel)
+			Loading -> showRefresh()
+			Empty -> {
+				hideRefresh()
+			}
+			Error -> {
+				hideRefresh()
+			}
+		}
+
+	}
 
 	override fun initView() {
 		super.initView()
@@ -27,31 +74,28 @@ class FeedbackActivity : XhuBaseActivity(R.layout.activity_feedback) {
 		initDialog()
 	}
 
-	override fun initData() {
-		super.initData()
-		StudentLocalDataSource.queryMainStudent {
-			when (it.status) {
-				Status.Content -> {
-					if (it.data != null)
-						student = it.data!!
-					else {
-						toastMessage(R.string.hint_feedback_null_student)
-						finish()
-					}
-				}
-			}
-		}
-	}
-
 	private fun initDialog() {
 		dialog = ZLoadingDialog(this)
 				.setLoadingBuilder(Z_TYPE.SINGLE_CIRCLE)
-				.setHintText(getString(R.string.hint_dialog_feedback))
+				.setHintText(getString(R.string.hint_dialog_init))
 				.setHintTextSize(16F)
 				.setCanceledOnTouchOutside(false)
 				.setLoadingColor(ContextCompat.getColor(this, R.color.colorAccent))
 				.setHintTextColor(ContextCompat.getColor(this, R.color.colorAccent))
 				.create()
+	}
+
+	override fun initData() {
+		super.initData()
+		initViewModel()
+		StudentLocalDataSource.queryMainStudent(feedBackViewModel.mainStudent)
+	}
+
+	private fun initViewModel() {
+		feedBackViewModel = ViewModelProviders.of(this).get(FeedBackViewModel::class.java)
+		feedBackViewModel.mainStudent.observe(this, mainStudentObserver)
+		feedBackViewModel.feedBackToken.observe(this, feedBackTokenObserver)
+		feedBackViewModel.feedBackMessageList.observe(this, feedBackMessageObserver)
 	}
 
 	override fun monitor() {
@@ -60,43 +104,39 @@ class FeedbackActivity : XhuBaseActivity(R.layout.activity_feedback) {
 			finish()
 		}
 		buttonSubmit.setOnClickListener {
-			val feedbackString = editTextFeedback.text.toString()
-			if (feedbackString == "") {
-				toastMessage(R.string.hint_feedback_empty)
-				return@setOnClickListener
-			}
-			feedback(feedbackString)
+
 		}
 	}
 
 	private fun feedback(message: String) {
-		showDialog()
-		val appVersion = "${getString(R.string.app_version_name)}-${getString(R.string.app_version_code)}"
-		val systemVersion = "Android ${Build.VERSION.RELEASE}-${Build.VERSION.SDK_INT}"
-		val manufacturer = Build.MANUFACTURER
-		val model = Build.MODEL
-		val rom = Build.DISPLAY
-		val other = ""
-		UserUtil.feedback(student, object : RequestListener<Boolean> {
-			override fun done(t: Boolean) {
-				hideDialog()
-				toastMessage(R.string.hint_feedback_done)
-			}
-
-			override fun error(rt: String, msg: String?) {
-				hideDialog()
-				toastMessage(msg)
-			}
-		}, appVersion, systemVersion, manufacturer, model, rom, other, message)
+		showRefresh()
 	}
 
-	private fun showDialog() {
+	private fun showInitDialog() {
 		if (!dialog.isShowing)
 			dialog.show()
 	}
 
-	private fun hideDialog() {
+	private fun hideInitDialog() {
 		if (dialog.isShowing)
 			dialog.dismiss()
+	}
+
+	private fun showRefresh() {
+		if (!swipeRefreshLayout.isRefreshing)
+			swipeRefreshLayout.isRefreshing = true
+	}
+
+	private fun hideRefresh() {
+		if (swipeRefreshLayout.isRefreshing)
+			swipeRefreshLayout.isRefreshing = false
+	}
+
+	private fun showSendRefresh() {
+
+	}
+
+	private fun hideSendRefresh() {
+
 	}
 }

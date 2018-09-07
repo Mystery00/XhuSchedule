@@ -48,6 +48,8 @@ object ResponseCodeConstants {
 	const val SERVER_EXAM_ANALYZE_ERROR = "203"
 	const val SERVER_SCORE_ANALYZE_ERROR = "204"
 	const val SERVER_PROFILE_ANALYZE_ERROR = "205"
+	const val SERVER_TOKEN_INVALID_ERROR = "206"
+	const val SERVER_TOKEN_ERROR = "207"
 
 	const val VERIFY_SERVER_TIMEOUT = "301"
 	const val VERIFY_SERVER_ANAYLYZE_ERROR = "302"

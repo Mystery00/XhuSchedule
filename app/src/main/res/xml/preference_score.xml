@@ -6,7 +6,7 @@
 		<intent
 			android:action="android.intent.action.VIEW"
 			android:targetClass="com.weilylab.xhuschedule.ui.activity.QueryClassScoreActivity"
-			android:targetPackage="com.weilylab.xhuschedule" />
+			android:targetPackage="@string/app_package_name" />
 	</Preference>
 	<Preference
 		android:key="@string/key_query_score_experiment"
@@ -14,7 +14,7 @@
 		<intent
 			android:action="android.intent.action.VIEW"
 			android:targetClass="com.weilylab.xhuschedule.ui.activity.QueryExpScoreActivity"
-			android:targetPackage="com.weilylab.xhuschedule" />
+			android:targetPackage="@string/app_package_name" />
 	</Preference>
 	<Preference
 		android:key="@string/key_query_score_cet"
@@ -22,6 +22,6 @@
 		<intent
 			android:action="android.intent.action.VIEW"
 			android:targetClass="com.weilylab.xhuschedule.ui.activity.QueryCetScoreFirstActivity"
-			android:targetPackage="com.weilylab.xhuschedule" />
+			android:targetPackage="@string/app_package_name" />
 	</Preference>
 </PreferenceScreen>

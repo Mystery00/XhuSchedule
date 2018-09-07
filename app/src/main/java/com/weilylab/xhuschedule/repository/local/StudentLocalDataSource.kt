@@ -2,6 +2,7 @@ package com.weilylab.xhuschedule.repository.local
 
 import androidx.lifecycle.MutableLiveData
 import com.weilylab.xhuschedule.constant.StringConstant
+import com.weilylab.xhuschedule.model.FeedBackToken
 import com.weilylab.xhuschedule.model.Student
 import com.weilylab.xhuschedule.model.StudentInfo
 import com.weilylab.xhuschedule.repository.dataSource.StudentDataSource
@@ -63,6 +64,13 @@ object StudentLocalDataSource : StudentDataSource {
 						studentInfoLiveData.value = PackageData.error(e)
 					}
 				})
+	}
+
+	fun queryMainStudent(studentLiveData: MutableLiveData<PackageData<Student>>) {
+		studentLiveData.value = PackageData.loading()
+		queryMainStudent {
+			studentLiveData.value = it
+		}
 	}
 
 	fun queryMainStudent(listener: (PackageData<Student>) -> Unit) {
@@ -151,6 +159,43 @@ object StudentLocalDataSource : StudentDataSource {
 
 					override fun onError(e: Throwable) {
 						listener.invoke(PackageData.error(e))
+					}
+				})
+	}
+
+	fun registerFeedBackToken(student: Student, feedBackToken: String) {
+		var fbToken = studentService.queryFeedBackTokenForUsername(student.username)
+		if (fbToken == null) {
+			fbToken = FeedBackToken()
+			fbToken.username = student.username
+			fbToken.fbToken = feedBackToken
+		} else
+			fbToken.fbToken = feedBackToken
+		studentService.registerFeedBackToken(fbToken)
+	}
+
+	fun queryFeedBackTokenForUsername(username: String, feedBackTokenLiveData: MutableLiveData<PackageData<String>>) {
+		feedBackTokenLiveData.value = PackageData.loading()
+		queryFeedBackTokenForUsername(username) {
+			feedBackTokenLiveData.value = it
+		}
+	}
+
+	fun queryFeedBackTokenForUsername(username: String, listener: (PackageData<String>) -> Unit) {
+		RxObservable<FeedBackToken?>()
+				.doThings {
+					it.onFinish(studentService.queryFeedBackTokenForUsername(username))
+				}
+				.subscribe(object : RxObserver<FeedBackToken?>() {
+					override fun onError(e: Throwable) {
+						listener.invoke(PackageData.error(e))
+					}
+
+					override fun onFinish(data: FeedBackToken?) {
+						if (data != null)
+							listener.invoke(PackageData.content(data.fbToken))
+						else
+							listener.invoke(PackageData.empty())
 					}
 				})
 	}

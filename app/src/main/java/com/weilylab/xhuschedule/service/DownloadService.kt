@@ -41,6 +41,7 @@ import android.os.Build
 import android.os.Environment
 import androidx.core.content.FileProvider
 import android.text.TextUtils
+import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.api.QiniuAPI
 import com.weilylab.xhuschedule.listener.DownloadProgressListener
 import com.weilylab.xhuschedule.utils.BsPatch
@@ -171,7 +172,7 @@ class DownloadService : IntentService("DownloadService") {
 						else
 							file
 						val uri = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
-							FileProvider.getUriForFile(context, packageName, installFile)
+							FileProvider.getUriForFile(context, getString(R.string.app_package_name), installFile)
 						else
 							Uri.fromFile(installFile)
 						installIntent.setDataAndType(uri, "application/vnd.android.package-archive")

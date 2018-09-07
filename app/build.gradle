@@ -81,12 +81,12 @@ android {
 		debug {
 			resValue "string", "app_version_name", autoVersion.name
 			resValue "string", "app_version_code", autoVersion.code + ''
-			//为debug版本的包名添加.debug后缀
-			applicationIdSuffix ".debug"
+			resValue "string", "app_package_name", android.defaultConfig.applicationId
 		}
 		release {
 			resValue "string", "app_version_name", autoVersion.name
 			resValue "string", "app_version_code", autoVersion.code + ''
+			resValue "string", "app_package_name", android.defaultConfig.applicationId
 			minifyEnabled false
 			proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
 		}
@@ -110,61 +110,82 @@ dependencies {
 	implementation 'androidx.legacy:legacy-support-v4:1.0.0-rc02'
 	implementation 'androidx.vectordrawable:vectordrawable:1.0.0-rc02'
 	implementation 'androidx.preference:preference:1.0.0-rc02'
-	implementation "androidx.recyclerview:recyclerview:1.0.0-rc02"
+	implementation 'androidx.recyclerview:recyclerview:1.0.0-rc02'
 	implementation 'androidx.constraintlayout:constraintlayout:2.0.0-alpha2'
+
 	//Retrofit
 	implementation 'com.squareup.retrofit2:retrofit:2.4.0'
 	implementation 'com.squareup.retrofit2:adapter-rxjava2:2.4.0'
 	implementation 'com.squareup.retrofit2:converter-gson:2.4.0'
 	implementation 'com.squareup.okhttp3:logging-interceptor:3.10.0'
+
 	//Mystery0Tools
 	implementation 'com.github.Mystery0Tools:Logs:1.3.0'
 	implementation 'com.github.Mystery0Tools:Tools:1.6.1'
 	implementation 'com.github.Mystery0Tools:CrashHandler:1.0.0'
 	implementation 'com.github.Mystery0Tools:BottomTabView:1.0.3'
 	implementation 'com.github.Mystery0Tools:RxPackageData:1.0.2'
+
 	//Glide
 	implementation 'com.github.bumptech.glide:glide:4.7.1'
 	annotationProcessor 'com.github.bumptech.glide:compiler:4.7.1'
+
 	//RxAndroid
 	implementation 'io.reactivex.rxjava2:rxandroid:2.0.2'
 	implementation 'io.reactivex.rxjava2:rxjava:2.1.16'
+
 	//ZLoading
 	implementation 'com.zyao89:zloading:1.1.2'
+
 	//Lifecycle
-	implementation "androidx.lifecycle:lifecycle-extensions:2.0.0-rc01"
+	implementation 'androidx.lifecycle:lifecycle-extensions:2.0.0-rc01'
 	kapt "androidx.lifecycle:lifecycle-compiler:2.0.0-rc01"
+
 	//Room
-	implementation "androidx.room:room-runtime:2.0.0-rc01"
+	implementation 'androidx.room:room-runtime:2.0.0-rc01'
 	kapt "androidx.room:room-compiler:2.0.0-rc01"
+
 	//Condom
 	implementation 'com.oasisfeng.condom:library:2.2.0'
+
 	//MultiDex
 	implementation 'androidx.multidex:multidex:2.0.0'
+
 	//TimetableView
 	implementation 'com.zhuangfei:TimetableView:2.0.5'
-//	implementation 'com.github.Mystery00:TimetableView:2.0.2-prerelease-20180901'
+
+	//	implementation 'com.github.Mystery00:TimetableView:2.0.2-prerelease-20180901'
+
 	//Matisse
 	implementation 'com.zhihu.android:matisse:0.5.2-beta2'
+
 	//UCrop
 	implementation 'com.github.yalantis:ucrop:2.2.2'
+
 	//SetupWizardLayout
 	implementation 'com.github.iMeiji:SetupWizardLayout:0.1'
+
 	//About Library
-	implementation "com.mikepenz:aboutlibraries:6.2.0-rc01"
+	implementation 'com.mikepenz:aboutlibraries:6.2.0-rc01'
+
 	//Color Picker
-	implementation "com.jrummyapps:colorpicker:2.1.6"
+	implementation 'com.jrummyapps:colorpicker:2.1.6'
+
 	//CosmoCalendar
 	implementation 'com.github.applikeysolutions:cosmocalendar:1.0.4'
+
 	//CircleImageView
 	implementation 'de.hdodenhof:circleimageview:2.2.0'
 
 	//Bugly
 	implementation 'com.tencent.bugly:crashreport:latest.release'
+
 	//微信
 	implementation 'com.tencent.mm.opensdk:wechat-sdk-android-without-mta:5.1.4'
+
 	//微博
 	implementation 'com.sina.weibo.sdk:core:4.3.0:openDefaultRelease@aar'
+
 	//qq
 	implementation files('libs/tencent_sdk.jar')
 }

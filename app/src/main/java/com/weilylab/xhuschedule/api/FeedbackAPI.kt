@@ -8,13 +8,16 @@ import retrofit2.http.POST
 
 interface FeedbackAPI {
 	@FormUrlEncoded
-	@POST("/Common/feedback")
-	fun feedback(@Field("username") username: String,
-				 @Field("appVersion") appVersion: String,
-				 @Field("systemVersion") systemVersion: String,
-				 @Field("factory") vendor: String,
-				 @Field("model") model: String,
-				 @Field("rom") rom: String,
-				 @Field("other") other: String,
-				 @Field("message") message: String): Observable<ResponseBody>
+	@POST("/Common/sendFBMessage")
+	fun sendFBMessage(@Field("username") username: String,
+					  @Field("fbToken") fbToken: String,
+					  @Field("content") content: String,
+					  @Field("platform") platform: String = "Android"): Observable<ResponseBody>
+
+	@FormUrlEncoded
+	@POST("/Common/getFBMessage")
+	fun getFBMessage(@Field("username") username: String,
+					 @Field("fbToken") fbToken: String,
+					 @Field("lastId") lastId: String,
+					 @Field("platform") platform: String = "Android"): Observable<ResponseBody>
 }
