@@ -85,6 +85,18 @@ class ProfileFragment : BaseBottomNavigationFragment<FragmentProfileBinding>(R.l
 					binding.redDotView.visibility = View.GONE
 			}
 		})
+		bottomNavigationViewModel.newFeedBackMessageList.observe(activity!!, Observer { packageData ->
+			when (packageData.status) {
+				Content -> {
+					if (packageData.data != null && packageData.data!!.isNotEmpty())
+						binding.feedBackRedDotView.visibility = View.VISIBLE
+					else
+						binding.feedBackRedDotView.visibility = View.GONE
+				}
+				Loading, Empty, Error ->
+					binding.feedBackRedDotView.visibility = View.GONE
+			}
+		})
 	}
 
 	override fun monitor() {
@@ -121,11 +133,15 @@ class ProfileFragment : BaseBottomNavigationFragment<FragmentProfileBinding>(R.l
 			showUserImage()
 			LayoutRefreshConfigUtil.isChangeUserImage = false
 		}
+		if (LayoutRefreshConfigUtil.isRefreshFeedBackDot) {
+			binding.feedBackRedDotView.visibility = View.GONE
+			LayoutRefreshConfigUtil.isRefreshFeedBackDot = false
+		}
 	}
 
 	private fun initShareMenu() {
 		val binding = DialogShareWithFriendsBinding.inflate(LayoutInflater.from(activity))
-		 bottomSheetDialog = BottomSheetDialog(activity!!)
+		bottomSheetDialog = BottomSheetDialog(activity!!)
 		bottomSheetDialog.setContentView(binding.root)
 		bottomSheetDialog.setCancelable(true)
 		bottomSheetDialog.setCanceledOnTouchOutside(true)

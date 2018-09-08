@@ -29,6 +29,22 @@ object FeedBackRemoteDataSource {
 		})
 	}
 
+	fun onlyQueryFeedBackMessage(feedBackMessageListLiveData: MutableLiveData<PackageData<List<FeedBackMessage>>>, student: Student, feedBackToken: String, maxId: Int) {
+		FeedBackUtil.getFeedBackMessage(student, feedBackToken, maxId, object : DoSaveListener<List<FeedBackMessage>> {
+			override fun doSave(t: List<FeedBackMessage>) {
+				FeedBackLocalDataSource.saveFeedBackMessage(student.username, t)
+			}
+		}, object : RequestListener<List<FeedBackMessage>> {
+			override fun done(t: List<FeedBackMessage>) {
+				feedBackMessageListLiveData.value = PackageData.content(t)
+			}
+
+			override fun error(rt: String, msg: String?) {
+				feedBackMessageListLiveData.value = PackageData.error(Exception(msg))
+			}
+		})
+	}
+
 	fun sendFeedBackMessage(feedBackMessageListLiveData: MutableLiveData<PackageData<List<FeedBackMessage>>>, maxId: MutableLiveData<Int>, student: Student, content: String, feedBackToken: String) {
 		val list = feedBackMessageListLiveData.value?.data
 		if (list != null) {

@@ -4,7 +4,6 @@ import com.weilylab.xhuschedule.model.Student
 import com.weilylab.xhuschedule.repository.local.CourseLocalDataSource
 import com.weilylab.xhuschedule.repository.local.StudentLocalDataSource
 import com.weilylab.xhuschedule.repository.remote.CourseRemoteDataSource
-import com.weilylab.xhuschedule.repository.remote.InitRemoteDataSource
 import com.weilylab.xhuschedule.utils.CalendarUtil
 import com.weilylab.xhuschedule.utils.CourseUtil
 import com.weilylab.xhuschedule.utils.LayoutRefreshConfigUtil
@@ -141,4 +140,6 @@ object BottomNavigationRepository {
 					}
 				})
 	}
+
+	fun queryFeedBack(bottomNavigationViewModel: BottomNavigationViewModel) = FeedBackRepository.queryFeedBackMessageInMainActivity(bottomNavigationViewModel)
 }

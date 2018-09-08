@@ -101,6 +101,7 @@ class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_naviga
 					BottomNavigationRepository.queryCacheCourses(bottomNavigationViewModel)
 				}
 				BottomNavigationRepository.queryCurrentWeek(bottomNavigationViewModel)
+				BottomNavigationRepository.queryFeedBack(bottomNavigationViewModel)
 			}
 			Empty -> {
 				startActivityForResult(Intent(this, LoginActivity::class.java), ADD_ACCOUNT_CODE)
@@ -292,8 +293,8 @@ class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_naviga
 		}
 	}
 
-	override fun onRestart() {
-		super.onRestart()
+	override fun onResume() {
+		super.onResume()
 		if (LayoutRefreshConfigUtil.isChangeBackgroundImage) {
 			showBackground()
 			LayoutRefreshConfigUtil.isChangeBackgroundImage = false

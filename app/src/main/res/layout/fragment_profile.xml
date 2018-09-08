@@ -455,6 +455,17 @@
 					app:layout_constraintTop_toTopOf="parent"
 					app:srcCompat="@drawable/ic_more" />
 
+				<View
+					android:id="@+id/feedBackRedDotView"
+					android:layout_width="6dp"
+					android:layout_height="6dp"
+					android:layout_marginEnd="5dp"
+					android:background="@drawable/drawable_badge_view"
+					android:contentDescription="@string/app_name"
+					app:layout_constraintBottom_toBottomOf="parent"
+					app:layout_constraintEnd_toStartOf="@id/imageViewMoreFeedback"
+					app:layout_constraintTop_toTopOf="parent" />
+
 			</androidx.constraintlayout.widget.ConstraintLayout>
 
 			<View

@@ -5,8 +5,11 @@ import com.weilylab.xhuschedule.repository.local.FeedBackLocalDataSource
 import com.weilylab.xhuschedule.repository.local.StudentLocalDataSource
 import com.weilylab.xhuschedule.repository.remote.FeedBackRemoteDataSource
 import com.weilylab.xhuschedule.utils.NetworkUtil
+import com.weilylab.xhuschedule.utils.UserUtil
+import com.weilylab.xhuschedule.viewModel.BottomNavigationViewModel
 import com.weilylab.xhuschedule.viewModel.FeedBackViewModel
 import vip.mystery0.rxpackagedata.PackageData
+import vip.mystery0.rxpackagedata.Status.*
 
 object FeedBackRepository {
 	fun sendMessage(content: String, feedBackViewModel: FeedBackViewModel) {
@@ -34,5 +37,33 @@ object FeedBackRepository {
 	fun queryFeedBackToken(feedBackViewModel: FeedBackViewModel) {
 		feedBackViewModel.feedBackToken.value = PackageData.loading()
 		StudentLocalDataSource.queryFeedBackTokenForUsername(feedBackViewModel.mainStudent.value!!.data!!, feedBackViewModel.feedBackToken)
+	}
+
+	fun queryFeedBackMessageInMainActivity(bottomNavigationViewModel: BottomNavigationViewModel) {
+		if (!NetworkUtil.isConnectInternet()) {
+			bottomNavigationViewModel.newFeedBackMessageList.value = PackageData.empty()
+			return
+		}
+		if (bottomNavigationViewModel.studentList.value?.data == null) {
+			bottomNavigationViewModel.newFeedBackMessageList.value = PackageData.empty()
+			return
+		}
+		if (bottomNavigationViewModel.feedBackToken.value == null) {
+			val mainStudent = UserUtil.findMainStudent(bottomNavigationViewModel.studentList.value!!.data!!)
+			if (mainStudent == null) {
+				bottomNavigationViewModel.newFeedBackMessageList.value = PackageData.empty()
+				return
+			}
+			StudentLocalDataSource.queryFeedBackTokenForUsername(mainStudent) { packageData ->
+				when (packageData.status) {
+					Content ->
+						FeedBackLocalDataSource.queryMaxId(mainStudent.username) {
+							FeedBackRemoteDataSource.onlyQueryFeedBackMessage(bottomNavigationViewModel.newFeedBackMessageList, mainStudent, packageData.data!!, it)
+						}
+					Empty -> bottomNavigationViewModel.newFeedBackMessageList.value = PackageData.empty()
+					Error -> bottomNavigationViewModel.newFeedBackMessageList.value = PackageData.error(packageData.error)
+				}
+			}
+		}
 	}
 }

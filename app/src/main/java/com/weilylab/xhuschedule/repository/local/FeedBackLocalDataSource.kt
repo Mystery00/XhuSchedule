@@ -4,6 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import com.weilylab.xhuschedule.model.FeedBackMessage
 import com.weilylab.xhuschedule.model.Student
 import com.weilylab.xhuschedule.repository.local.service.impl.FeedBackMessageServiceImpl
+import vip.mystery0.logs.Logs
 import vip.mystery0.rxpackagedata.PackageData
 import vip.mystery0.rxpackagedata.rx.RxObservable
 import vip.mystery0.rxpackagedata.rx.RxObserver
@@ -28,6 +29,26 @@ object FeedBackLocalDataSource {
 							maxId.value = data.sortedBy { it.id }.last().id
 							feedBackMessageListLiveData.value = PackageData.content(data)
 						}
+					}
+				})
+	}
+
+	fun queryMaxId(username: String, listener: (Int) -> Unit) {
+		RxObservable<Int?>()
+				.doThings {
+					it.onFinish(feedBackMessageService.queryMaxId(username))
+				}
+				.subscribe(object : RxObserver<Int?>() {
+					override fun onError(e: Throwable) {
+						Logs.wtfm("onError: ", e)
+						listener.invoke(0)
+					}
+
+					override fun onFinish(data: Int?) {
+						if (data == null)
+							listener.invoke(0)
+						else
+							listener.invoke(data)
 					}
 				})
 	}

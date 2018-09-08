@@ -10,4 +10,6 @@ interface FeedBackMessageService {
 	fun update(feedBackMessage: FeedBackMessage)
 
 	fun queryMessageForStudent(username: String, maxId: Int): List<FeedBackMessage>
+
+	fun queryMaxId(username: String): Int?
 }

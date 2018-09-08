@@ -3,6 +3,7 @@ package com.weilylab.xhuschedule.viewModel
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.weilylab.xhuschedule.model.FeedBackMessage
 import com.weilylab.xhuschedule.model.Notice
 import com.weilylab.xhuschedule.model.Student
 import com.weilylab.xhuschedule.model.StudentInfo
@@ -21,7 +22,11 @@ class BottomNavigationViewModel : ViewModel() {
 	val showCourse = MediatorLiveData<List<Schedule>>()
 	val week = MutableLiveData<Int>()
 	val startDateTime = MutableLiveData<PackageData<Calendar>>()
+
 	val noticeList = MutableLiveData<PackageData<List<Notice>>>()
+
+	val feedBackToken = MutableLiveData<PackageData<String>>()
+	val newFeedBackMessageList = MutableLiveData<PackageData<List<FeedBackMessage>>>()
 
 	val itemHeight = MutableLiveData<Int>()
 }

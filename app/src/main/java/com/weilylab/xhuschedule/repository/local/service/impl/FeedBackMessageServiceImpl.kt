@@ -14,4 +14,6 @@ class FeedBackMessageServiceImpl : FeedBackMessageService {
 	override fun update(feedBackMessage: FeedBackMessage) = feedBackMessageDao.update(feedBackMessage)
 
 	override fun queryMessageForStudent(username: String, maxId: Int): List<FeedBackMessage> = feedBackMessageDao.queryMessageForStudent(username, maxId)
+
+	override fun queryMaxId(username: String): Int? = feedBackMessageDao.queryMaxId(username)
 }
