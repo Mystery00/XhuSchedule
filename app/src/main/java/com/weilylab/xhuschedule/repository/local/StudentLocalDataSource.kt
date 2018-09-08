@@ -2,6 +2,7 @@ package com.weilylab.xhuschedule.repository.local
 
 import androidx.lifecycle.MutableLiveData
 import com.weilylab.xhuschedule.constant.StringConstant
+import com.weilylab.xhuschedule.listener.RequestListener
 import com.weilylab.xhuschedule.model.FeedBackToken
 import com.weilylab.xhuschedule.model.Student
 import com.weilylab.xhuschedule.model.StudentInfo
@@ -9,10 +10,12 @@ import com.weilylab.xhuschedule.repository.dataSource.StudentDataSource
 import com.weilylab.xhuschedule.repository.local.service.StudentService
 import com.weilylab.xhuschedule.repository.local.service.impl.StudentServiceImpl
 import com.weilylab.xhuschedule.repository.remote.StudentRemoteDataSource
+import com.weilylab.xhuschedule.utils.UserUtil
 import io.reactivex.Observer
 import vip.mystery0.rxpackagedata.PackageData
 import vip.mystery0.rxpackagedata.rx.RxObservable
 import vip.mystery0.rxpackagedata.rx.RxObserver
+import java.util.*
 
 object StudentLocalDataSource : StudentDataSource {
 	private val studentService: StudentService = StudentServiceImpl()
@@ -169,22 +172,24 @@ object StudentLocalDataSource : StudentDataSource {
 			fbToken = FeedBackToken()
 			fbToken.username = student.username
 			fbToken.fbToken = feedBackToken
-		} else
+			studentService.registerFeedBackToken(fbToken)
+		} else {
 			fbToken.fbToken = feedBackToken
-		studentService.registerFeedBackToken(fbToken)
+			studentService.updateFeedBackToken(fbToken)
+		}
 	}
 
-	fun queryFeedBackTokenForUsername(username: String, feedBackTokenLiveData: MutableLiveData<PackageData<String>>) {
+	fun queryFeedBackTokenForUsername(student: Student, feedBackTokenLiveData: MutableLiveData<PackageData<String>>) {
 		feedBackTokenLiveData.value = PackageData.loading()
-		queryFeedBackTokenForUsername(username) {
+		queryFeedBackTokenForUsername(student) {
 			feedBackTokenLiveData.value = it
 		}
 	}
 
-	fun queryFeedBackTokenForUsername(username: String, listener: (PackageData<String>) -> Unit) {
+	fun queryFeedBackTokenForUsername(student: Student, listener: (PackageData<String>) -> Unit) {
 		RxObservable<FeedBackToken?>()
 				.doThings {
-					it.onFinish(studentService.queryFeedBackTokenForUsername(username))
+					it.onFinish(studentService.queryFeedBackTokenForUsername(student.username))
 				}
 				.subscribe(object : RxObserver<FeedBackToken?>() {
 					override fun onError(e: Throwable) {
@@ -192,9 +197,23 @@ object StudentLocalDataSource : StudentDataSource {
 					}
 
 					override fun onFinish(data: FeedBackToken?) {
-						if (data != null)
-							listener.invoke(PackageData.content(data.fbToken))
-						else
+						if (data != null) {
+							val tokenTimeString = data.fbToken.substring(data.fbToken.indexOf('_') + 1)
+							val tokenTime = Calendar.getInstance()
+							tokenTime.timeInMillis = tokenTimeString.toLong() - 30 * 60 * 1000
+							if (tokenTime.timeInMillis > Calendar.getInstance().timeInMillis)
+								listener.invoke(PackageData.content(data.fbToken))
+							else
+								UserUtil.login(student, null, object : RequestListener<Boolean> {
+									override fun done(t: Boolean) {
+										queryFeedBackTokenForUsername(student, listener)
+									}
+
+									override fun error(rt: String, msg: String?) {
+										listener.invoke(PackageData.error(Exception(msg)))
+									}
+								})
+						} else
 							listener.invoke(PackageData.empty())
 					}
 				})

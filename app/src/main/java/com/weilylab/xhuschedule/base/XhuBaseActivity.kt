@@ -38,6 +38,7 @@ import android.widget.Toast
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatDelegate
 import com.weilylab.xhuschedule.utils.APPActivityManager
+import vip.mystery0.logs.Logs
 import vip.mystery0.tools.base.BaseActivity
 
 abstract class XhuBaseActivity(layoutId: Int?) : BaseActivity(layoutId) {

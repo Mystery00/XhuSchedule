@@ -6,6 +6,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.SimpleItemAnimator
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.base.XhuBaseActivity
 import com.weilylab.xhuschedule.model.FeedBackMessage
@@ -16,9 +17,14 @@ import com.weilylab.xhuschedule.ui.adapter.FeedBackMessageAdapter
 import com.weilylab.xhuschedule.viewModel.FeedBackViewModel
 import com.zyao89.view.zloading.ZLoadingDialog
 import com.zyao89.view.zloading.Z_TYPE
+import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
+import io.reactivex.schedulers.Schedulers
 
 import kotlinx.android.synthetic.main.activity_feedback.*
 import kotlinx.android.synthetic.main.content_feedback.*
+import vip.mystery0.logs.Logs
 import vip.mystery0.rxpackagedata.PackageData
 import vip.mystery0.rxpackagedata.Status.*
 
@@ -26,6 +32,10 @@ class FeedbackActivity : XhuBaseActivity(R.layout.activity_feedback) {
 	private lateinit var feedBackViewModel: FeedBackViewModel
 	private lateinit var dialog: Dialog
 	private lateinit var feedBackMessageAdapter: FeedBackMessageAdapter
+	private var isRefreshByManual = false
+	private var isRefreshPause = false
+	private var isRefreshDone = true
+	private var isRefreshFinish = true
 
 	private val mainStudentObserver = Observer<PackageData<Student>> {
 		when (it.status) {
@@ -47,16 +57,19 @@ class FeedbackActivity : XhuBaseActivity(R.layout.activity_feedback) {
 		when (it.status) {
 			Content -> {
 				hideInitDialog()
-				FeedBackRepository.getMessageFromServer(feedBackViewModel, 0)
+				initAutoRefreshMessage()
+				FeedBackRepository.getMessage(feedBackViewModel)
 			}
 			Loading -> showInitDialog()
 			Empty -> {
 				hideInitDialog()
 				toastMessage(R.string.hint_feedback_null_student)
+				disableInput()
 			}
 			Error -> {
 				hideInitDialog()
 				toastMessage(it.error?.message)
+				disableInput()
 			}
 		}
 	}
@@ -68,7 +81,8 @@ class FeedbackActivity : XhuBaseActivity(R.layout.activity_feedback) {
 				addMessage(it.data!!)
 				recyclerView.scrollToPosition(feedBackMessageAdapter.items.lastIndex)
 			}
-			Loading -> showRefresh()
+			Loading -> if (isRefreshByManual)
+				showRefresh()
 			Empty -> {
 				hideRefresh()
 			}
@@ -88,6 +102,7 @@ class FeedbackActivity : XhuBaseActivity(R.layout.activity_feedback) {
 		feedBackMessageAdapter = FeedBackMessageAdapter()
 		recyclerView.adapter = feedBackMessageAdapter
 		recyclerView.itemAnimator = DefaultItemAnimator()
+		(recyclerView.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
 		swipeRefreshLayout.setColorSchemeResources(
 				android.R.color.holo_blue_light,
 				android.R.color.holo_green_light,
@@ -119,13 +134,46 @@ class FeedbackActivity : XhuBaseActivity(R.layout.activity_feedback) {
 		feedBackViewModel.feedBackMessageList.observe(this, feedBackMessageObserver)
 	}
 
+	private fun initAutoRefreshMessage() {
+		if (!isRefreshFinish)
+			return
+		isRefreshFinish = false
+		Observable.create<Boolean> {
+			while (!isRefreshFinish) {
+				if (!isRefreshPause)
+					it.onNext(isRefreshDone)
+				Thread.sleep(10000)
+			}
+			it.onComplete()
+		}
+				.subscribeOn(Schedulers.newThread())
+				.unsubscribeOn(Schedulers.newThread())
+				.observeOn(AndroidSchedulers.mainThread())
+				.subscribe(object : io.reactivex.Observer<Boolean> {
+					override fun onComplete() {
+					}
+
+					override fun onSubscribe(d: Disposable) {
+					}
+
+					override fun onNext(t: Boolean) {
+						if (t) FeedBackRepository.getMessage(feedBackViewModel)
+					}
+
+					override fun onError(e: Throwable) {
+						Logs.wtfm("onError: ", e)
+					}
+				})
+	}
+
 	override fun monitor() {
 		super.monitor()
 		toolbar.setNavigationOnClickListener {
 			finish()
 		}
 		swipeRefreshLayout.setOnRefreshListener {
-			FeedBackRepository.getMessageFromServer(feedBackViewModel, 0)
+			isRefreshByManual = true
+			FeedBackRepository.getMessage(feedBackViewModel)
 		}
 		buttonSubmit.setOnClickListener {
 			if (inputEditText.text.toString().trim() == "")
@@ -135,6 +183,21 @@ class FeedbackActivity : XhuBaseActivity(R.layout.activity_feedback) {
 				inputEditText.setText("")
 			}
 		}
+	}
+
+	override fun onStart() {
+		super.onStart()
+		isRefreshPause = false
+	}
+
+	override fun onStop() {
+		super.onStop()
+		isRefreshPause = true
+	}
+
+	override fun onDestroy() {
+		super.onDestroy()
+		isRefreshFinish = true
 	}
 
 	private fun showInitDialog() {
@@ -155,6 +218,11 @@ class FeedbackActivity : XhuBaseActivity(R.layout.activity_feedback) {
 	private fun hideRefresh() {
 		if (swipeRefreshLayout.isRefreshing)
 			swipeRefreshLayout.isRefreshing = false
+		isRefreshByManual = false
+	}
+
+	private fun disableInput() {
+		buttonSubmit.isEnabled = false
 	}
 
 	private fun addMessage(messageList: List<FeedBackMessage>) {
