@@ -7,6 +7,9 @@
 	<color name="colorBackground">#fafafa</color>
 	<color name="colorDivider">#dddddd</color>
 
+	<color name="colorSender">#2e85df</color>
+	<color name="colorReceiver">#ff3a6b</color>
+
 	<color name="login_color_label">#cccccc</color>
 	<color name="login_color_text">#4ea5ff</color>
 	<color name="colorWhite">#FFFFFF</color>

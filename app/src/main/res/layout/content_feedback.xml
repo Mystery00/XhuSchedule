@@ -13,7 +13,7 @@
 		android:id="@+id/swipeRefreshLayout"
 		android:layout_width="0dp"
 		android:layout_height="0dp"
-		app:layout_constraintBottom_toTopOf="@id/buttonSubmit"
+		app:layout_constraintBottom_toTopOf="@id/sendLayout"
 		app:layout_constraintEnd_toEndOf="parent"
 		app:layout_constraintStart_toStartOf="parent"
 		app:layout_constraintTop_toTopOf="parent">
@@ -25,16 +25,30 @@
 
 	</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
-	<Button
-		android:id="@+id/buttonSubmit"
+	<LinearLayout
+		android:id="@+id/sendLayout"
 		android:layout_width="0dp"
 		android:layout_height="wrap_content"
-		android:layout_marginTop="55dp"
-		android:backgroundTint="@color/colorAccent"
-		android:text="@string/action_feedback"
-		android:textColor="@android:color/white"
+		android:orientation="horizontal"
 		app:layout_constraintBottom_toBottomOf="parent"
 		app:layout_constraintEnd_toEndOf="parent"
-		app:layout_constraintStart_toStartOf="parent" />
+		app:layout_constraintStart_toStartOf="parent">
+
+		<EditText
+			android:id="@+id/inputEditText"
+			android:layout_width="0dp"
+			android:layout_height="match_parent"
+			android:layout_weight="1"
+			android:hint="请输入" />
+
+		<ImageButton
+			android:id="@+id/buttonSubmit"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:backgroundTint="@color/colorAccent"
+			android:src="@drawable/ic_send_black"
+			android:textColor="@android:color/white" />
+
+	</LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

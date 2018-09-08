@@ -121,7 +121,7 @@ dependencies {
 
 	//Mystery0Tools
 	implementation 'com.github.Mystery0Tools:Logs:1.3.0'
-	implementation 'com.github.Mystery0Tools:Tools:1.6.1'
+	implementation 'com.github.Mystery0Tools:Tools:1.6.3'
 	implementation 'com.github.Mystery0Tools:CrashHandler:1.0.0'
 	implementation 'com.github.Mystery0Tools:BottomTabView:1.0.3'
 	implementation 'com.github.Mystery0Tools:RxPackageData:1.0.2'

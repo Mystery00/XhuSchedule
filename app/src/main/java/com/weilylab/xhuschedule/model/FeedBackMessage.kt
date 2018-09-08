@@ -17,8 +17,11 @@ class FeedBackMessage {
 	 * platform : a
 	 * status : 0
 	 */
-	@PrimaryKey
-	var id: Int = 0
+	@PrimaryKey(autoGenerate = true)
+	var dataBaseId = 0
+
+	@ColumnInfo(name = "origin_id")
+	var id = 0
 	@ColumnInfo(name = "receiver")
 	lateinit var receiver: String
 	@ColumnInfo(name = "create_time")

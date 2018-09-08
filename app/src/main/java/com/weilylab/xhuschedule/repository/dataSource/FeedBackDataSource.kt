@@ -6,5 +6,5 @@ import com.weilylab.xhuschedule.model.Student
 import vip.mystery0.rxpackagedata.PackageData
 
 interface FeedBackDataSource {
-	fun queryFeedBackForStudent(feedBackMessageListLiveData: MutableLiveData<PackageData<List<FeedBackMessage>>>, student: Student, feedBackToken: String)
+	fun queryFeedBackForStudent(feedBackMessageListLiveData: MutableLiveData<PackageData<List<FeedBackMessage>>>, student: Student, feedBackToken: String, lastId: Int)
 }

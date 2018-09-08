@@ -18,6 +18,6 @@ interface FeedbackAPI {
 	@POST("/Common/getFBMessage")
 	fun getFBMessage(@Field("username") username: String,
 					 @Field("fbToken") fbToken: String,
-					 @Field("lastId") lastId: String,
+					 @Field("lastId") lastId: Int,
 					 @Field("platform") platform: String = "Android"): Observable<ResponseBody>
 }

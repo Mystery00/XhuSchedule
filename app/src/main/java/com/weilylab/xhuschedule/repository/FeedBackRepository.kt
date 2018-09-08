@@ -20,15 +20,15 @@ object FeedBackRepository {
 		if (feedBackViewModel.mainStudent.value?.data == null)
 			feedBackViewModel.feedBackMessageList.value = PackageData.error(Exception(StringConstant.hint_feedback_null_student))
 		else
-			FeedBackLocalDataSource.queryFeedBackForStudent(feedBackViewModel.feedBackMessageList, feedBackViewModel.mainStudent.value!!.data!!, feedBackViewModel.feedBackToken.value!!.data!!)
+			FeedBackLocalDataSource.queryFeedBackForStudent(feedBackViewModel.feedBackMessageList, feedBackViewModel.mainStudent.value!!.data!!, feedBackViewModel.feedBackToken.value!!.data!!, 0)
 	}
 
-	fun getMessageFromServer(feedBackViewModel: FeedBackViewModel) {
+	fun getMessageFromServer(feedBackViewModel: FeedBackViewModel, lastId: Int) {
 		feedBackViewModel.feedBackMessageList.value = PackageData.loading()
 		if (feedBackViewModel.mainStudent.value?.data == null)
 			feedBackViewModel.feedBackMessageList.value = PackageData.error(Exception(StringConstant.hint_feedback_null_student))
 		else
-			FeedBackRemoteDataSource.queryFeedBackForStudent(feedBackViewModel.feedBackMessageList, feedBackViewModel.mainStudent.value!!.data!!, feedBackViewModel.feedBackToken.value!!.data!!)
+			FeedBackRemoteDataSource.queryFeedBackForStudent(feedBackViewModel.feedBackMessageList, feedBackViewModel.mainStudent.value!!.data!!, feedBackViewModel.feedBackToken.value!!.data!!, lastId)
 	}
 
 	fun queryFeedBackToken(feedBackViewModel: FeedBackViewModel) {

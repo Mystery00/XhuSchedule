@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+	<data>
+
+		<import type="android.view.View" />
+
+		<variable
+			name="message"
+			type="com.weilylab.xhuschedule.model.FeedBackMessage" />
+	</data>
+
+	<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:orientation="vertical"
+		android:padding="8dp">
+
+		<TextView
+			android:id="@+id/receivedTextView"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_gravity="start"
+			android:background="@color/colorReceiver"
+			android:padding="8dp"
+			android:text="@{message.content}" />
+
+		<TextView
+			android:id="@+id/sendTextView"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_gravity="end"
+			android:background="@color/colorSender"
+			android:padding="8dp"
+			android:text="@{message.content}" />
+
+	</LinearLayout>
+
+</layout>

@@ -12,7 +12,7 @@ import vip.mystery0.rxpackagedata.rx.RxObserver
 object FeedBackLocalDataSource : FeedBackDataSource {
 	private val feedBackMessageService = FeedBackMessageServiceImpl()
 
-	override fun queryFeedBackForStudent(feedBackMessageListLiveData: MutableLiveData<PackageData<List<FeedBackMessage>>>, student: Student, feedBackToken: String) {
+	override fun queryFeedBackForStudent(feedBackMessageListLiveData: MutableLiveData<PackageData<List<FeedBackMessage>>>, student: Student, feedBackToken: String, lastId: Int) {
 		RxObservable<List<FeedBackMessage>>()
 				.doThings {
 					it.onFinish(feedBackMessageService.queryMessageForStudent(student.username))
@@ -29,5 +29,11 @@ object FeedBackLocalDataSource : FeedBackDataSource {
 							feedBackMessageListLiveData.value = PackageData.content(data)
 					}
 				})
+	}
+
+	fun saveFeedBackMessage(feedBackMessageList: List<FeedBackMessage>) {
+		feedBackMessageList.forEach {
+			feedBackMessageService.insert(it)
+		}
 	}
 }

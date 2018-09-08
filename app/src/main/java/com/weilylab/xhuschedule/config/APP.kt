@@ -36,7 +36,6 @@ package com.weilylab.xhuschedule.config
 import android.annotation.SuppressLint
 import android.app.Application
 import android.content.Context
-import androidx.multidex.BuildConfig
 import androidx.multidex.MultiDexApplication
 import com.oasisfeng.condom.CondomContext
 import com.sina.weibo.sdk.WbSdk
@@ -45,6 +44,7 @@ import com.tencent.bugly.crashreport.CrashReport
 import com.tencent.mm.opensdk.openapi.IWXAPI
 import com.tencent.mm.opensdk.openapi.WXAPIFactory
 import com.tencent.tauth.Tencent
+import com.weilylab.xhuschedule.BuildConfig
 import com.weilylab.xhuschedule.repository.local.db.DBHelper
 import com.weilylab.xhuschedule.utils.NotificationUtil
 import com.weilylab.xhuschedule.utils.PackageUtil
