@@ -5,25 +5,22 @@ import com.weilylab.xhuschedule.listener.DoSaveListener
 import com.weilylab.xhuschedule.listener.RequestListener
 import com.weilylab.xhuschedule.model.FeedBackMessage
 import com.weilylab.xhuschedule.model.Student
-import com.weilylab.xhuschedule.repository.dataSource.FeedBackDataSource
 import com.weilylab.xhuschedule.repository.local.FeedBackLocalDataSource
 import com.weilylab.xhuschedule.utils.FeedBackUtil
-import vip.mystery0.logs.Logs
 import vip.mystery0.rxpackagedata.PackageData
 import java.util.ArrayList
 
-object FeedBackRemoteDataSource : FeedBackDataSource {
-	override fun queryFeedBackForStudent(feedBackMessageListLiveData: MutableLiveData<PackageData<List<FeedBackMessage>>>, student: Student, feedBackToken: String, lastId: Int) {
-		FeedBackUtil.getFeedBackMessage(student, feedBackToken, lastId, object : DoSaveListener<List<FeedBackMessage>> {
+object FeedBackRemoteDataSource {
+	fun queryFeedBackForStudent(feedBackMessageListLiveData: MutableLiveData<PackageData<List<FeedBackMessage>>>, maxId: MutableLiveData<Int>, student: Student, feedBackToken: String) {
+		FeedBackUtil.getFeedBackMessage(student, feedBackToken, maxId.value
+				?: 0, object : DoSaveListener<List<FeedBackMessage>> {
 			override fun doSave(t: List<FeedBackMessage>) {
-				FeedBackLocalDataSource.saveFeedBackMessage(t)
+				FeedBackLocalDataSource.saveFeedBackMessage(student.username, t)
+				Thread.sleep(100)
 			}
 		}, object : RequestListener<List<FeedBackMessage>> {
 			override fun done(t: List<FeedBackMessage>) {
-				if (t.isEmpty())
-					feedBackMessageListLiveData.value = PackageData.empty()
-				else
-					feedBackMessageListLiveData.value = PackageData.content(t)
+				FeedBackLocalDataSource.queryFeedBackForStudent(feedBackMessageListLiveData, maxId, student)
 			}
 
 			override fun error(rt: String, msg: String?) {
@@ -32,7 +29,7 @@ object FeedBackRemoteDataSource : FeedBackDataSource {
 		})
 	}
 
-	fun sendFeedBackMessage(feedBackMessageListLiveData: MutableLiveData<PackageData<List<FeedBackMessage>>>, student: Student, content: String, feedBackToken: String) {
+	fun sendFeedBackMessage(feedBackMessageListLiveData: MutableLiveData<PackageData<List<FeedBackMessage>>>, maxId: MutableLiveData<Int>, student: Student, content: String, feedBackToken: String) {
 		val list = feedBackMessageListLiveData.value?.data
 		if (list != null) {
 			val feedBackMessage = FeedBackMessage.newLoadingMessage(student.username, content)
@@ -43,7 +40,7 @@ object FeedBackRemoteDataSource : FeedBackDataSource {
 		}
 		FeedBackUtil.sendFeedBackMessage(student, feedBackToken, content, object : RequestListener<Boolean> {
 			override fun done(t: Boolean) {
-				queryFeedBackForStudent(feedBackMessageListLiveData, student, feedBackToken, 0)
+				queryFeedBackForStudent(feedBackMessageListLiveData, maxId, student, feedBackToken)
 			}
 
 			override fun error(rt: String, msg: String?) {

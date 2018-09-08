@@ -14,6 +14,6 @@ interface FeedBackMessageDao {
 	@Update
 	fun update(feedBackMessage: FeedBackMessage)
 
-	@Query("select * from tb_feedback_message where sender = :username or receiver = :username")
-	fun queryMessageForStudent(username: String): List<FeedBackMessage>
+	@Query("select * from tb_feedback_message where (sender = :username or receiver = :username) and origin_id > :maxId")
+	fun queryMessageForStudent(username: String, maxId: Int): List<FeedBackMessage>
 }

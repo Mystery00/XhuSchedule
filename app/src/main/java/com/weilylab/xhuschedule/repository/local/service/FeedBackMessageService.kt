@@ -9,5 +9,5 @@ interface FeedBackMessageService {
 
 	fun update(feedBackMessage: FeedBackMessage)
 
-	fun queryMessageForStudent(username: String): List<FeedBackMessage>
+	fun queryMessageForStudent(username: String, maxId: Int): List<FeedBackMessage>
 }

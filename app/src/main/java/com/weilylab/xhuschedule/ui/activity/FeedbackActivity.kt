@@ -32,7 +32,7 @@ class FeedbackActivity : XhuBaseActivity(R.layout.activity_feedback) {
 	private lateinit var feedBackViewModel: FeedBackViewModel
 	private lateinit var dialog: Dialog
 	private lateinit var feedBackMessageAdapter: FeedBackMessageAdapter
-	private var isRefreshByManual = false
+	private var isRefreshByManual = true
 	private var isRefreshPause = false
 	private var isRefreshDone = true
 	private var isRefreshFinish = true
@@ -58,7 +58,7 @@ class FeedbackActivity : XhuBaseActivity(R.layout.activity_feedback) {
 			Content -> {
 				hideInitDialog()
 				initAutoRefreshMessage()
-				FeedBackRepository.getMessage(feedBackViewModel)
+				FeedBackRepository.getMessageFromLocal(feedBackViewModel)
 			}
 			Loading -> showInitDialog()
 			Empty -> {
@@ -79,6 +79,7 @@ class FeedbackActivity : XhuBaseActivity(R.layout.activity_feedback) {
 			Content -> {
 				hideRefresh()
 				addMessage(it.data!!)
+				isRefreshByManual = false
 				recyclerView.scrollToPosition(feedBackMessageAdapter.items.lastIndex)
 			}
 			Loading -> if (isRefreshByManual)
@@ -142,7 +143,7 @@ class FeedbackActivity : XhuBaseActivity(R.layout.activity_feedback) {
 			while (!isRefreshFinish) {
 				if (!isRefreshPause)
 					it.onNext(isRefreshDone)
-				Thread.sleep(10000)
+				Thread.sleep(30 * 1000)
 			}
 			it.onComplete()
 		}
@@ -157,7 +158,7 @@ class FeedbackActivity : XhuBaseActivity(R.layout.activity_feedback) {
 					}
 
 					override fun onNext(t: Boolean) {
-						if (t) FeedBackRepository.getMessage(feedBackViewModel)
+						if (t) FeedBackRepository.getMessageFromServer(feedBackViewModel)
 					}
 
 					override fun onError(e: Throwable) {
@@ -173,7 +174,7 @@ class FeedbackActivity : XhuBaseActivity(R.layout.activity_feedback) {
 		}
 		swipeRefreshLayout.setOnRefreshListener {
 			isRefreshByManual = true
-			FeedBackRepository.getMessage(feedBackViewModel)
+			FeedBackRepository.getMessageFromLocal(feedBackViewModel)
 		}
 		buttonSubmit.setOnClickListener {
 			if (inputEditText.text.toString().trim() == "")
@@ -182,6 +183,10 @@ class FeedbackActivity : XhuBaseActivity(R.layout.activity_feedback) {
 				FeedBackRepository.sendMessage(inputEditText.text.toString(), feedBackViewModel)
 				inputEditText.setText("")
 			}
+		}
+		recyclerView.addOnLayoutChangeListener { _, _, top, _, bottom, _, oldTop, _, oldBottom ->
+			if (top != oldTop || bottom != oldBottom)
+				recyclerView.scrollToPosition(feedBackMessageAdapter.items.lastIndex)
 		}
 	}
 
@@ -223,18 +228,19 @@ class FeedbackActivity : XhuBaseActivity(R.layout.activity_feedback) {
 
 	private fun disableInput() {
 		buttonSubmit.isEnabled = false
+		buttonSubmit.isClickable = false
+		buttonSubmit.setOnClickListener(null)
 	}
 
 	private fun addMessage(messageList: List<FeedBackMessage>) {
 		if (feedBackMessageAdapter.items.isEmpty()) {
-			feedBackMessageAdapter.replaceAll(messageList, false)
+			feedBackMessageAdapter.replaceAll(messageList)
 			return
 		}
-		val lastMessageIndex = feedBackMessageAdapter.items.lastIndex
-		val lastShowMessage = feedBackMessageAdapter.items.last()
-		val sameMessage = messageList[lastMessageIndex]
+		val lastShowMessage = feedBackMessageAdapter.items[feedBackMessageAdapter.items.size - 1]
+		val sameMessage = messageList[feedBackMessageAdapter.items.size - 1]
 		if (lastShowMessage.id == sameMessage.id && lastShowMessage.createTime == sameMessage.createTime)
-			feedBackMessageAdapter.addAll(messageList.subList(lastMessageIndex + 1, messageList.lastIndex + 1))
+			feedBackMessageAdapter.addAll(messageList.subList(feedBackMessageAdapter.items.size, messageList.lastIndex + 1))
 		else
 			feedBackMessageAdapter.replaceAll(messageList, false)
 	}

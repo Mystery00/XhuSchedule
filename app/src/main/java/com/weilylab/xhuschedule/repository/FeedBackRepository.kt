@@ -13,19 +13,22 @@ object FeedBackRepository {
 		if (feedBackViewModel.mainStudent.value?.data == null)
 			feedBackViewModel.feedBackMessageList.value = PackageData.error(Exception(StringConstant.hint_feedback_null_student))
 		else
-			FeedBackRemoteDataSource.sendFeedBackMessage(feedBackViewModel.feedBackMessageList, feedBackViewModel.mainStudent.value!!.data!!, content, feedBackViewModel.feedBackToken.value!!.data!!)
+			FeedBackRemoteDataSource.sendFeedBackMessage(feedBackViewModel.feedBackMessageList, feedBackViewModel.maxId, feedBackViewModel.mainStudent.value!!.data!!, content, feedBackViewModel.feedBackToken.value!!.data!!)
 	}
 
-	fun getMessage(feedBackViewModel: FeedBackViewModel) {
+	fun getMessageFromLocal(feedBackViewModel: FeedBackViewModel) {
+		if (feedBackViewModel.mainStudent.value?.data == null)
+			feedBackViewModel.feedBackMessageList.value = PackageData.error(Exception(StringConstant.hint_feedback_null_student))
+		else
+			FeedBackLocalDataSource.queryFeedBackForStudent(feedBackViewModel.feedBackMessageList, feedBackViewModel.maxId, feedBackViewModel.mainStudent.value!!.data!!)
+	}
+
+	fun getMessageFromServer(feedBackViewModel: FeedBackViewModel) {
 		feedBackViewModel.feedBackMessageList.value = PackageData.loading()
 		if (feedBackViewModel.mainStudent.value?.data == null)
 			feedBackViewModel.feedBackMessageList.value = PackageData.error(Exception(StringConstant.hint_feedback_null_student))
-		else {
-			if (NetworkUtil.isConnectInternet())
-				FeedBackRemoteDataSource.queryFeedBackForStudent(feedBackViewModel.feedBackMessageList, feedBackViewModel.mainStudent.value!!.data!!, feedBackViewModel.feedBackToken.value!!.data!!, 0)
-			else
-				FeedBackLocalDataSource.queryFeedBackForStudent(feedBackViewModel.feedBackMessageList, feedBackViewModel.mainStudent.value!!.data!!, feedBackViewModel.feedBackToken.value!!.data!!, 0)
-		}
+		else
+			FeedBackRemoteDataSource.queryFeedBackForStudent(feedBackViewModel.feedBackMessageList, feedBackViewModel.maxId, feedBackViewModel.mainStudent.value!!.data!!, feedBackViewModel.feedBackToken.value!!.data!!)
 	}
 
 	fun queryFeedBackToken(feedBackViewModel: FeedBackViewModel) {

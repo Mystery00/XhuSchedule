@@ -10,4 +10,5 @@ class FeedBackViewModel : ViewModel() {
 	val mainStudent = MutableLiveData<PackageData<Student>>()
 	val feedBackToken = MutableLiveData<PackageData<String>>()
 	val feedBackMessageList = MutableLiveData<PackageData<List<FeedBackMessage>>>()
+	val maxId = MutableLiveData<Int>()
 }

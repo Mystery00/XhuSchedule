@@ -38,6 +38,7 @@ class FeedBackMessage {
 	companion object {
 		@JvmStatic
 		fun newLoadingMessage(username: String, content: String): FeedBackMessage {
+			val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S", Locale.CHINA)
 			val feedBackMessage = FeedBackMessage()
 			feedBackMessage.receiver = "System"
 			feedBackMessage.sender = username
@@ -45,7 +46,7 @@ class FeedBackMessage {
 			feedBackMessage.id = -1
 			feedBackMessage.platform = "Android"
 			feedBackMessage.status = -1//表示发送中
-			feedBackMessage.createTime = Calendar.getInstance().time.toString()
+			feedBackMessage.createTime = simpleDateFormat.format(Calendar.getInstance().time)
 			return feedBackMessage
 		}
 	}

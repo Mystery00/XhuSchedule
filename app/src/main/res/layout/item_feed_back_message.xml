@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto">
 
 	<data>
 
@@ -10,30 +10,50 @@
 			type="com.weilylab.xhuschedule.model.FeedBackMessage" />
 	</data>
 
-	<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:orientation="vertical"
 		android:padding="8dp">
+
+		<TextView
+			android:id="@+id/dateTextView"
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:gravity="center"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintTop_toTopOf="parent" />
 
 		<TextView
 			android:id="@+id/receivedTextView"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:layout_gravity="start"
-			android:background="@color/colorReceiver"
+			android:background="@drawable/message_receive_bubble"
 			android:padding="8dp"
-			android:text="@{message.content}" />
+			android:text="@{message.content}"
+			app:layout_constraintBottom_toBottomOf="parent"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintTop_toBottomOf="@id/dateTextView" />
+
+		<ProgressBar
+			android:id="@+id/progressBar"
+			android:layout_width="12dp"
+			android:layout_height="12dp"
+			app:layout_constraintBottom_toBottomOf="@id/sendTextView"
+			app:layout_constraintEnd_toStartOf="@id/sendTextView"
+			app:layout_constraintTop_toTopOf="@id/sendTextView" />
 
 		<TextView
 			android:id="@+id/sendTextView"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:layout_gravity="end"
-			android:background="@color/colorSender"
+			android:background="@drawable/message_send_bubble"
 			android:padding="8dp"
-			android:text="@{message.content}" />
+			android:text="@{message.content}"
+			app:layout_constraintBottom_toBottomOf="parent"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintTop_toBottomOf="@id/dateTextView" />
 
-	</LinearLayout>
+	</androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>
