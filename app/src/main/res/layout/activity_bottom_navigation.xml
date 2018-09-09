@@ -72,8 +72,8 @@
 
 			<ImageView
 				android:id="@+id/imageSync"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
+				android:layout_width="22dp"
+				android:layout_height="22dp"
 				android:layout_marginEnd="18dp"
 				android:contentDescription="@string/app_name"
 				app:layout_constraintBottom_toBottomOf="parent"

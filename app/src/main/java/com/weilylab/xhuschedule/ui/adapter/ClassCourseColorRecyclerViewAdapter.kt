@@ -21,6 +21,7 @@ class ClassCourseColorRecyclerViewAdapter(private val context: Context) : BaseBi
 					.setDialogType(ColorPickerDialog.TYPE_PRESETS)
 					.setColor(data.schedule.extras["colorInt"] as Int)
 					.setShowAlphaSlider(false)
+					.setShowColorShades(false)
 					.create()
 			colorPickerDialog.setColorPickerDialogListener(object : ColorPickerDialogListener {
 				override fun onDialogDismissed(dialogId: Int) {

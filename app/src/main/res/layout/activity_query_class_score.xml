@@ -9,10 +9,13 @@
 
 	<androidx.appcompat.widget.Toolbar
 		android:id="@+id/toolbar"
+		style="@style/NoSpaceActionBarTheme"
 		android:layout_width="match_parent"
 		android:layout_height="45dp"
 		android:background="?attr/colorPrimary"
-		app:popupTheme="@style/AppTheme.PopupOverlay" />
+		app:navigationIcon="@drawable/ic_chevron_left_black"
+		app:popupTheme="@style/AppTheme.PopupOverlay"
+		app:titleTextAppearance="@style/ToolbarTitleText" />
 
 	<View
 		android:id="@+id/line"

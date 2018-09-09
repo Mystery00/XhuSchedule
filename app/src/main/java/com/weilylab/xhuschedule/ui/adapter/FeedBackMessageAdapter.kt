@@ -41,7 +41,7 @@ class FeedBackMessageAdapter : BaseBindingRecyclerViewAdapter<FeedBackMessage, I
 			if (thisMessageTime - lastMessageTime > 10 * 60 * 1000)
 				showDateAndTime(binding.dateTextView, thisMessageTime)
 			else
-				binding.dateTextView.text = ""
+				binding.dateTextView.alpha = 0F
 		} else
 			showDateAndTime(binding.dateTextView, simpleDateFormat.parse(data.createTime).time)
 	}
@@ -53,5 +53,6 @@ class FeedBackMessageAdapter : BaseBindingRecyclerViewAdapter<FeedBackMessage, I
 			textView.text = showTimeFormat.format(calendar.time)
 		else
 			textView.text = showDateFormat.format(calendar.time)
+		textView.alpha = 1F
 	}
 }

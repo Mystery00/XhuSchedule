@@ -21,7 +21,16 @@
 		<item name="windowNoTitle">true</item>
 	</style>
 
-	<style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+	<style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
+
+	<style name="ToolbarTitleText" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
+		<item name="android:textSize">17sp</item>
+	</style>
+
+	<style name="NoSpaceActionBarTheme" parent="Base.Widget.AppCompat.Toolbar">
+		<item name="contentInsetStart">0dp</item>
+		<item name="contentInsetStartWithNavigation">0dp</item>
+	</style>
 
 	<style name="SplashTheme" parent="Theme.AppCompat.Light.NoActionBar">
 		<item name="android:windowBackground">@drawable/drawable_splash</item>
