@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.base.XhuBaseActivity
+import com.weilylab.xhuschedule.config.ColorPoolHelper
 import com.weilylab.xhuschedule.model.FeedBackMessage
 import com.weilylab.xhuschedule.model.Student
 import com.weilylab.xhuschedule.repository.FeedBackRepository
@@ -102,13 +103,12 @@ class FeedbackActivity : XhuBaseActivity(R.layout.activity_feedback) {
 		recyclerView.layoutManager = LinearLayoutManager(this)
 		feedBackMessageAdapter = FeedBackMessageAdapter()
 		recyclerView.adapter = feedBackMessageAdapter
-//		recyclerView.itemAnimator = DefaultItemAnimator()
-//		(recyclerView.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
 		swipeRefreshLayout.setColorSchemeResources(
 				android.R.color.holo_blue_light,
 				android.R.color.holo_green_light,
 				android.R.color.holo_orange_light,
 				android.R.color.holo_red_light)
+		disableInput()
 	}
 
 	private fun initDialog() {
@@ -240,11 +240,13 @@ class FeedbackActivity : XhuBaseActivity(R.layout.activity_feedback) {
 	private fun enableInput() {
 		buttonSubmit.isEnabled = true
 		buttonSubmit.isClickable = true
+		buttonSubmit.setColorFilter(ContextCompat.getColor(this, R.color.colorAccent))
 	}
 
 	private fun disableInput() {
 		buttonSubmit.isEnabled = false
 		buttonSubmit.isClickable = false
+		buttonSubmit.setColorFilter(ColorPoolHelper.colorPool.uselessColor)
 	}
 
 	private fun addMessage(messageList: List<FeedBackMessage>) {
