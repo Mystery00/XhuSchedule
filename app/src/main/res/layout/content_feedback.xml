@@ -13,7 +13,7 @@
 		android:id="@+id/swipeRefreshLayout"
 		android:layout_width="0dp"
 		android:layout_height="0dp"
-		app:layout_constraintBottom_toTopOf="@id/sendLayout"
+		app:layout_constraintBottom_toTopOf="@id/bottomLine"
 		app:layout_constraintEnd_toEndOf="parent"
 		app:layout_constraintStart_toStartOf="parent"
 		app:layout_constraintTop_toTopOf="parent">
@@ -24,6 +24,15 @@
 			android:layout_height="match_parent" />
 
 	</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+	<View
+		android:id="@+id/bottomLine"
+		android:layout_width="0dp"
+		android:layout_height="1dp"
+		android:background="@color/colorDivider"
+		app:layout_constraintBottom_toTopOf="@id/sendLayout"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintStart_toStartOf="parent" />
 
 	<LinearLayout
 		android:id="@+id/sendLayout"
@@ -38,14 +47,21 @@
 			android:id="@+id/inputEditText"
 			android:layout_width="0dp"
 			android:layout_height="match_parent"
+			android:layout_margin="6dp"
 			android:layout_weight="1"
-			android:hint="请输入" />
+			android:background="@null"
+			android:hint="@string/hint_feedback_hint"
+			android:inputType="text" />
 
 		<ImageButton
 			android:id="@+id/buttonSubmit"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
+			android:layout_margin="6dp"
+			android:background="@drawable/drawable_login_button"
 			android:backgroundTint="@color/colorAccent"
+			android:contentDescription="@string/app_name"
+			android:padding="8dp"
 			android:src="@drawable/ic_send_black"
 			android:textColor="@android:color/white" />
 

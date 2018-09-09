@@ -1,6 +1,8 @@
 package com.weilylab.xhuschedule.ui.activity
 
 import android.app.Dialog
+import android.text.Editable
+import android.text.TextWatcher
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -182,6 +184,20 @@ class FeedbackActivity : XhuBaseActivity(R.layout.activity_feedback) {
 				inputEditText.setText("")
 			}
 		}
+		inputEditText.addTextChangedListener(object : TextWatcher {
+			override fun afterTextChanged(s: Editable?) {
+				if (s?.length == 0)
+					disableInput()
+				else
+					enableInput()
+			}
+
+			override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+			}
+
+			override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+			}
+		})
 	}
 
 	override fun onStart() {
@@ -221,10 +237,14 @@ class FeedbackActivity : XhuBaseActivity(R.layout.activity_feedback) {
 		isRefreshByManual = false
 	}
 
+	private fun enableInput() {
+		buttonSubmit.isEnabled = true
+		buttonSubmit.isClickable = true
+	}
+
 	private fun disableInput() {
 		buttonSubmit.isEnabled = false
 		buttonSubmit.isClickable = false
-		buttonSubmit.setOnClickListener(null)
 	}
 
 	private fun addMessage(messageList: List<FeedBackMessage>) {

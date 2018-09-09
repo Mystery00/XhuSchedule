@@ -1,16 +1,13 @@
 package com.weilylab.xhuschedule.model
 
-import androidx.databinding.BaseObservable
-import androidx.databinding.Bindable
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.weilylab.xhuschedule.BR
 import java.text.SimpleDateFormat
 import java.util.*
 
 @Entity(tableName = "tb_feedback_message")
-class FeedBackMessage : BaseObservable() {
+class FeedBackMessage {
 	/**
 	 * receiver : System
 	 * createTime : 2018-09-07 12:36:08.0
@@ -32,21 +29,11 @@ class FeedBackMessage : BaseObservable() {
 	@ColumnInfo(name = "sender")
 	lateinit var sender: String
 	@ColumnInfo(name = "content")
-	@get:Bindable
 	var content: String = ""
-		set(value) {
-			field = value
-			notifyPropertyChanged(BR.content)
-		}
 	@ColumnInfo(name = "platform")
 	lateinit var platform: String
 	@ColumnInfo(name = "status")
-	@get:Bindable
 	var status: Int = 0
-		set(value) {
-			field = value
-			notifyPropertyChanged(BR.status)
-		}
 
 	companion object {
 		@JvmStatic
