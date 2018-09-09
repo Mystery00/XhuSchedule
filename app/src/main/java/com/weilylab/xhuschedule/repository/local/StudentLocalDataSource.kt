@@ -11,7 +11,10 @@ import com.weilylab.xhuschedule.repository.local.service.StudentService
 import com.weilylab.xhuschedule.repository.local.service.impl.StudentServiceImpl
 import com.weilylab.xhuschedule.repository.remote.StudentRemoteDataSource
 import com.weilylab.xhuschedule.utils.UserUtil
+import io.reactivex.Observable
 import io.reactivex.Observer
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import vip.mystery0.rxpackagedata.PackageData
 import vip.mystery0.rxpackagedata.rx.RxObservable
 import vip.mystery0.rxpackagedata.rx.RxObserver
@@ -187,11 +190,16 @@ object StudentLocalDataSource : StudentDataSource {
 	}
 
 	fun queryFeedBackTokenForUsername(student: Student, listener: (PackageData<String>) -> Unit) {
-		RxObservable<FeedBackToken?>()
-				.doThings {
-					it.onFinish(studentService.queryFeedBackTokenForUsername(student.username))
-				}
-				.subscribe(object : RxObserver<FeedBackToken?>() {
+		Observable.create<FeedBackToken> {
+			val token = studentService.queryFeedBackTokenForUsername(student.username)
+			if (token != null)
+				it.onNext(token)
+			it.onComplete()
+		}
+				.subscribeOn(Schedulers.newThread())
+				.unsubscribeOn(Schedulers.newThread())
+				.observeOn(AndroidSchedulers.mainThread())
+				.subscribe(object : RxObserver<FeedBackToken>() {
 					override fun onError(e: Throwable) {
 						listener.invoke(PackageData.error(e))
 					}
@@ -214,7 +222,15 @@ object StudentLocalDataSource : StudentDataSource {
 									}
 								})
 						} else
-							listener.invoke(PackageData.empty())
+							UserUtil.login(student, null, object : RequestListener<Boolean> {
+								override fun done(t: Boolean) {
+									queryFeedBackTokenForUsername(student, listener)
+								}
+
+								override fun error(rt: String, msg: String?) {
+									listener.invoke(PackageData.error(Exception(msg)))
+								}
+							})
 					}
 				})
 	}

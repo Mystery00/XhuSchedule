@@ -49,6 +49,7 @@ class FeedbackActivity : XhuBaseActivity(R.layout.activity_feedback) {
 				finish()
 			}
 			Error -> {
+				Logs.wtfm("mainStudentObserver: ", it.error)
 				hideInitDialog()
 				toastMessage(it.error?.message)
 			}
@@ -69,6 +70,7 @@ class FeedbackActivity : XhuBaseActivity(R.layout.activity_feedback) {
 				disableInput()
 			}
 			Error -> {
+				Logs.wtfm("feedBackTokenObserver: ", it.error)
 				hideInitDialog()
 				toastMessage(it.error?.message)
 				disableInput()
@@ -89,6 +91,7 @@ class FeedbackActivity : XhuBaseActivity(R.layout.activity_feedback) {
 				hideRefresh()
 			}
 			Error -> {
+				Logs.wtfm("feedBackMessageObserver: ", it.error)
 				hideRefresh()
 				toastMessage(it.error?.message)
 			}
