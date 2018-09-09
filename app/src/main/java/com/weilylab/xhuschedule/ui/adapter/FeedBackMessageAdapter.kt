@@ -38,7 +38,7 @@ class FeedBackMessageAdapter : BaseBindingRecyclerViewAdapter<FeedBackMessage, I
 			val lastMessageTime = simpleDateFormat.parse(lastMessageTimeString).time
 			val thisMessageTimeString = data.createTime
 			val thisMessageTime = simpleDateFormat.parse(thisMessageTimeString).time
-			if (thisMessageTime - lastMessageTime > 60 * 60 * 1000)
+			if (thisMessageTime - lastMessageTime > 10 * 60 * 1000)
 				showDateAndTime(binding.dateTextView, thisMessageTime)
 			else
 				binding.dateTextView.text = ""

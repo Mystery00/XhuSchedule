@@ -1,13 +1,16 @@
 package com.weilylab.xhuschedule.model
 
+import androidx.databinding.BaseObservable
+import androidx.databinding.Bindable
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.weilylab.xhuschedule.BR
 import java.text.SimpleDateFormat
 import java.util.*
 
 @Entity(tableName = "tb_feedback_message")
-class FeedBackMessage {
+class FeedBackMessage : BaseObservable() {
 	/**
 	 * receiver : System
 	 * createTime : 2018-09-07 12:36:08.0
@@ -29,11 +32,21 @@ class FeedBackMessage {
 	@ColumnInfo(name = "sender")
 	lateinit var sender: String
 	@ColumnInfo(name = "content")
-	lateinit var content: String
+	@get:Bindable
+	var content: String = ""
+		set(value) {
+			field = value
+			notifyPropertyChanged(BR.content)
+		}
 	@ColumnInfo(name = "platform")
 	lateinit var platform: String
 	@ColumnInfo(name = "status")
+	@get:Bindable
 	var status: Int = 0
+		set(value) {
+			field = value
+			notifyPropertyChanged(BR.status)
+		}
 
 	companion object {
 		@JvmStatic
@@ -49,5 +62,16 @@ class FeedBackMessage {
 			feedBackMessage.createTime = simpleDateFormat.format(Calendar.getInstance().time)
 			return feedBackMessage
 		}
+	}
+
+	fun replace(newFeedBackMessage: FeedBackMessage) {
+		dataBaseId = newFeedBackMessage.dataBaseId
+		id = newFeedBackMessage.id
+		receiver = newFeedBackMessage.receiver
+		createTime = newFeedBackMessage.createTime
+		sender = newFeedBackMessage.sender
+		content = newFeedBackMessage.content
+		platform = newFeedBackMessage.platform
+		status = newFeedBackMessage.status
 	}
 }

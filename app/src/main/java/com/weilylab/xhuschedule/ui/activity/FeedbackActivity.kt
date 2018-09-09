@@ -4,9 +4,7 @@ import android.app.Dialog
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.SimpleItemAnimator
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.base.XhuBaseActivity
 import com.weilylab.xhuschedule.model.FeedBackMessage
@@ -81,7 +79,6 @@ class FeedbackActivity : XhuBaseActivity(R.layout.activity_feedback) {
 				hideRefresh()
 				addMessage(it.data!!)
 				isRefreshByManual = false
-				recyclerView.scrollToPosition(feedBackMessageAdapter.items.lastIndex)
 			}
 			Loading -> if (isRefreshByManual)
 				showRefresh()
@@ -103,8 +100,8 @@ class FeedbackActivity : XhuBaseActivity(R.layout.activity_feedback) {
 		recyclerView.layoutManager = LinearLayoutManager(this)
 		feedBackMessageAdapter = FeedBackMessageAdapter()
 		recyclerView.adapter = feedBackMessageAdapter
-		recyclerView.itemAnimator = DefaultItemAnimator()
-		(recyclerView.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
+//		recyclerView.itemAnimator = DefaultItemAnimator()
+//		(recyclerView.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
 		swipeRefreshLayout.setColorSchemeResources(
 				android.R.color.holo_blue_light,
 				android.R.color.holo_green_light,
@@ -185,10 +182,6 @@ class FeedbackActivity : XhuBaseActivity(R.layout.activity_feedback) {
 				inputEditText.setText("")
 			}
 		}
-		recyclerView.addOnLayoutChangeListener { _, _, top, _, bottom, _, oldTop, _, oldBottom ->
-			if (top != oldTop || bottom != oldBottom)
-				recyclerView.scrollToPosition(feedBackMessageAdapter.items.lastIndex)
-		}
 	}
 
 	override fun onStart() {
@@ -237,13 +230,37 @@ class FeedbackActivity : XhuBaseActivity(R.layout.activity_feedback) {
 	private fun addMessage(messageList: List<FeedBackMessage>) {
 		if (feedBackMessageAdapter.items.isEmpty()) {
 			feedBackMessageAdapter.replaceAll(messageList)
+			recyclerView.scrollToPosition(messageList.size - 1)
+			return
+		}
+		if (feedBackMessageAdapter.items.size == messageList.size) {
+			var startIndex = -1
+			for (i in 0 until messageList.size) {
+				val oldMessage = feedBackMessageAdapter.items[i]
+				val newMessage = messageList[i]
+				if (oldMessage.createTime == newMessage.createTime && oldMessage.id == newMessage.id && oldMessage.id != -1)
+					continue
+				else {
+					startIndex = i
+					break
+				}
+			}
+			if (startIndex == -1)
+				return
+			for (i in startIndex until messageList.size) {
+				feedBackMessageAdapter.items[i].replace(messageList[i])
+			}
+			feedBackMessageAdapter.notifyItemRangeChanged(startIndex, messageList.size - startIndex)
 			return
 		}
 		val lastShowMessage = feedBackMessageAdapter.items[feedBackMessageAdapter.items.size - 1]
 		val sameMessage = messageList[feedBackMessageAdapter.items.size - 1]
-		if (lastShowMessage.id == sameMessage.id && lastShowMessage.createTime == sameMessage.createTime)
+		if (lastShowMessage.id == sameMessage.id && lastShowMessage.createTime == sameMessage.createTime) {
 			feedBackMessageAdapter.addAll(messageList.subList(feedBackMessageAdapter.items.size, messageList.lastIndex + 1))
-		else
+			recyclerView.scrollToPosition(feedBackMessageAdapter.items.size - 1)
+		} else {
 			feedBackMessageAdapter.replaceAll(messageList, false)
+			recyclerView.scrollToPosition(messageList.size - 1)
+		}
 	}
 }
