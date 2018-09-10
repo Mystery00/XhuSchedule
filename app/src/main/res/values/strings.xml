@@ -68,7 +68,7 @@
 	<string name="hint_no_weibo">微博未安装！</string>
 	<string name="hint_foreground_notification">正在初始化数据</string>
 	<string name="hint_network_error">网络无法使用，请检查网络连接！</string>
-	<string name="hint_data_null">返回的数据为空！</string>
+	<string name="hint_data_null">数据为空！</string>
 	<string name="hint_do_too_many">频繁操作！</string>
 	<string name="hint_action_not_login">请登录后再使用此功能！</string>
 	<string name="hint_course_sync_done">数据同步成功！</string>
@@ -79,10 +79,6 @@
 	<string name="hint_feedback_hint">请输入…</string>
 
 	<string name="hint_null_course_data">这里什么都没有(ŎдŎ;)</string>
-
-	<string name="hint_feedback_title">请问您的意见或建议是？</string>
-	<string name="hint_feedback">您的意见或建议：</string>
-	<string name="hint_feedback_submit">感谢您对西瓜课表提出的宝贵意见或建议，我们将认真阅读并积极改正！您还可以加入西瓜课表用户交流QQ群 426878786 哟(o°ω°o) </string>
 
 	<string name="hint_dialog_login">登录中……</string>
 	<string name="hint_dialog_init">正在初始化……</string>

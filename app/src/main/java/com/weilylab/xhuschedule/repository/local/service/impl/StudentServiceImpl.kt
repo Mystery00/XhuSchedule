@@ -28,6 +28,8 @@ class StudentServiceImpl : StudentService {
 
 	override fun queryStudentInfoByUsername(username: String): StudentInfo? = studentDao.queryStudentInfoByUsername(username)
 
+	override fun queryAllStudentInfo(): List<StudentInfo> = studentDao.queryAllStudentInfo()
+
 	override fun registerFeedBackToken(feedBackToken: FeedBackToken): Long = fbTokenDao.register(feedBackToken)
 
 	override fun unRegisterFeedBackToken(feedBackToken: FeedBackToken): Int = fbTokenDao.unRegister(feedBackToken)

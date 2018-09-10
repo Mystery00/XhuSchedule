@@ -93,4 +93,19 @@ object ConfigurationUtil {
 				.putBoolean(SharedPreferenceConstant.FIELD_IS_CUSTOM_START_DATE_TIME, value)
 				.apply()
 		get() = sharedPreferences.getBoolean(SharedPreferenceConstant.FIELD_IS_CUSTOM_START_DATE_TIME, false)
+	var currentYear: String
+		set(value) = sharedPreferences.edit()
+				.putString(SharedPreferenceConstant.FIELD_CURRENT_YEAR, value)
+				.apply()
+		get() = sharedPreferences.getString(SharedPreferenceConstant.FIELD_CURRENT_YEAR, "")!!
+	var currentTerm: String
+		set(value) = sharedPreferences.edit()
+				.putString(SharedPreferenceConstant.FIELD_CURRENT_TERM, value)
+				.apply()
+		get() = sharedPreferences.getString(SharedPreferenceConstant.FIELD_CURRENT_TERM, "")!!
+	var isCustomYearAndTerm: Boolean
+		set(value) = sharedPreferences.edit()
+				.putBoolean(SharedPreferenceConstant.FIELD_CUSTOM_YEAR_AND_TERM, value)
+				.apply()
+		get() = sharedPreferences.getBoolean(SharedPreferenceConstant.FIELD_CUSTOM_YEAR_AND_TERM, false)
 }

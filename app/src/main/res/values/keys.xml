@@ -16,6 +16,7 @@
 
 	<string name="key_show_not_week" translatable="false">key_show_not_week</string>
 	<string name="key_custom_start_time" translatable="false">key_custom_start_time</string>
+	<string name="key_current_year_and_term" translatable="false">key_current_year_and_term</string>
 	<string name="key_custom_course_color" translatable="false">key_custom_course_color</string>
 	<string name="key_logged_account" translatable="false">key_logged_account</string>
 	<string name="key_add_account" translatable="false">key_add_account</string>
@@ -46,6 +47,7 @@
 	<string name="title_developer">开发者</string>
 	<string name="title_show_not">显示非本周课程</string>
 	<string name="title_custom_start_time">更改开学时间</string>
+	<string name="title_current_year_and_term">更改当前学期</string>
 	<string name="title_custom_course_color">自定义课程颜色</string>
 	<string name="title_reset_user_img">重置个人头像</string>
 	<string name="title_reset_background_img">重置背景图片</string>
@@ -76,7 +78,8 @@
 	<string name="title_version_name">版本名称</string>
 	<string name="title_open_source_license_about">开源许可</string>
 
-	<string name="summaru_custom_start_time">当前开学时间是：%1$s</string>
+	<string name="summary_current_year_and_term">当前学期：%1$s学年 第%2$s学期</string>
+	<string name="summary_custom_start_time">当前开学时间：%1$s</string>
 	<string name="summary_enable_multi_user_mode">注意：如果多个用户的课表存在冲突的情况，表格可能会变得很乱，请确定您开启这个模式的意义！</string>
 	<string name="summary_icon" translatable="false">\@爱吃饭的越越</string>
 	<string name="summary_back" translatable="false">\@pan</string>

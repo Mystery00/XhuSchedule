@@ -33,4 +33,7 @@ object SharedPreferenceConstant {
 	const val FIELD_NOTIFICATION_EXAM = "config_notification_exam"
 	const val FIELD_NOTIFICATION_TIME = "config_notification_time"
 	const val FIELD_IGNORE_UPDATE_VERSION = "config_ignore_update_version"
+	const val FIELD_CURRENT_YEAR = "config_current_year"
+	const val FIELD_CURRENT_TERM = "config_current_term"
+	const val FIELD_CUSTOM_YEAR_AND_TERM = "config_custom_year_and_term"
 }

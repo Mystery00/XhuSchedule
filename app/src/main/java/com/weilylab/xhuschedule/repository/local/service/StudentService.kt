@@ -30,4 +30,6 @@ interface StudentService {
 	fun updateFeedBackToken(feedBackToken: FeedBackToken)
 
 	fun queryFeedBackTokenForUsername(username: String): FeedBackToken?
+
+	fun queryAllStudentInfo(): List<StudentInfo>
 }

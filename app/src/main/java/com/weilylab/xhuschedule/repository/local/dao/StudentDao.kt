@@ -32,4 +32,7 @@ interface StudentDao {
 
 	@Query("select * from tb_student_info where student_id = :username limit 1")
 	fun queryStudentInfoByUsername(username: String): StudentInfo?
+
+	@Query("select tb_student_info.* from tb_student join tb_student_info on tb_student.username=tb_student_info.student_id")
+	fun queryAllStudentInfo(): List<StudentInfo>
 }

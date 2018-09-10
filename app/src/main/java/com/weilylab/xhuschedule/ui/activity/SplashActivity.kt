@@ -34,7 +34,6 @@
 package com.weilylab.xhuschedule.ui.activity
 
 import android.content.Intent
-import android.os.Build
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -91,6 +90,7 @@ class SplashActivity : XhuBaseActivity(null) {
 		if (ConfigurationUtil.autoCheckUpdate)
 			ContextCompat.startForegroundService(this, Intent(APP.context, CheckUpdateService::class.java))
 		ConfigUtil.setTrigger(this)
+		ConfigUtil.getCurrentYearAndTerm()
 	}
 
 	private fun initViewModel() {

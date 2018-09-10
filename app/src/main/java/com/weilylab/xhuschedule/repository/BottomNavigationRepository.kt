@@ -4,10 +4,7 @@ import com.weilylab.xhuschedule.model.Student
 import com.weilylab.xhuschedule.repository.local.CourseLocalDataSource
 import com.weilylab.xhuschedule.repository.local.StudentLocalDataSource
 import com.weilylab.xhuschedule.repository.remote.CourseRemoteDataSource
-import com.weilylab.xhuschedule.utils.CalendarUtil
-import com.weilylab.xhuschedule.utils.CourseUtil
-import com.weilylab.xhuschedule.utils.LayoutRefreshConfigUtil
-import com.weilylab.xhuschedule.utils.UserUtil
+import com.weilylab.xhuschedule.utils.*
 import vip.mystery0.rxpackagedata.PackageData
 import vip.mystery0.rxpackagedata.rx.RxObservable
 import vip.mystery0.rxpackagedata.rx.RxObserver
@@ -78,7 +75,7 @@ object BottomNavigationRepository {
 				}
 			}
 			val mainStudent = UserUtil.findMainStudent(bottomNavigationViewModel.studentList.value!!.data)!!
-			CourseLocalDataSource.queryCourseByUsername(bottomNavigationViewModel.courseList, mainStudent, null, null, true)
+			CourseLocalDataSource.queryCourseByUsername(bottomNavigationViewModel.courseList, mainStudent, ConfigurationUtil.currentYear, ConfigurationUtil.currentTerm, true)
 		}
 	}
 
@@ -103,19 +100,19 @@ object BottomNavigationRepository {
 					Error -> bottomNavigationViewModel.todayCourseList.value = PackageData.error(packageData.error)
 				}
 			}
-			CourseLocalDataSource.queryCourseWithManyStudent(bottomNavigationViewModel.courseList, bottomNavigationViewModel.studentList.value!!.data!!, null, null, true)
+			CourseLocalDataSource.queryCourseWithManyStudent(bottomNavigationViewModel.courseList, bottomNavigationViewModel.studentList.value!!.data!!, ConfigurationUtil.currentYear, ConfigurationUtil.currentTerm, true)
 		}
 	}
 
 	fun queryCoursesOnline(bottomNavigationViewModel: BottomNavigationViewModel) {
 		bottomNavigationViewModel.courseList.value = PackageData.loading()
 		val mainStudent = UserUtil.findMainStudent(bottomNavigationViewModel.studentList.value!!.data)!!
-		CourseRemoteDataSource.queryCourseByUsername(bottomNavigationViewModel.courseList, mainStudent, null, null, false)
+		CourseRemoteDataSource.queryCourseByUsername(bottomNavigationViewModel.courseList, mainStudent, ConfigurationUtil.currentYear, ConfigurationUtil.currentTerm, false)
 	}
 
 	fun queryCoursesOnlineForManyStudent(bottomNavigationViewModel: BottomNavigationViewModel) {
 		bottomNavigationViewModel.courseList.value = PackageData.loading()
-		CourseRemoteDataSource.queryCourseWithManyStudent(bottomNavigationViewModel.courseList, bottomNavigationViewModel.studentList.value!!.data!!, null, null, false)
+		CourseRemoteDataSource.queryCourseWithManyStudent(bottomNavigationViewModel.courseList, bottomNavigationViewModel.studentList.value!!.data!!, ConfigurationUtil.currentYear, ConfigurationUtil.currentTerm, false)
 	}
 
 	fun queryStudentList(bottomNavigationViewModel: BottomNavigationViewModel) {

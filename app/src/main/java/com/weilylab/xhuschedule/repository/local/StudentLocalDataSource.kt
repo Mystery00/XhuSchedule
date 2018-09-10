@@ -169,6 +169,25 @@ object StudentLocalDataSource : StudentDataSource {
 				})
 	}
 
+	fun queryAllStudentInfo(listener: (PackageData<List<StudentInfo>>) -> Unit) {
+		RxObservable<List<StudentInfo>>()
+				.doThings {
+					it.onFinish(studentService.queryAllStudentInfo())
+				}
+				.subscribe(object : RxObserver<List<StudentInfo>>() {
+					override fun onError(e: Throwable) {
+						listener.invoke(PackageData.error(e))
+					}
+
+					override fun onFinish(data: List<StudentInfo>?) {
+						if (data == null || data.isEmpty())
+							listener.invoke(PackageData.empty())
+						else
+							listener.invoke(PackageData.content(data))
+					}
+				})
+	}
+
 	fun registerFeedBackToken(student: Student, feedBackToken: String) {
 		var fbToken = studentService.queryFeedBackTokenForUsername(student.username)
 		if (fbToken == null) {

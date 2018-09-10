@@ -12,7 +12,11 @@
 		android:title="@string/title_show_not" />
 
 	<Preference
-		android:key="key_custom_start_time"
+		android:key="@string/key_current_year_and_term"
+		android:title="@string/title_current_year_and_term" />
+
+	<Preference
+		android:key="@string/key_custom_start_time"
 		android:title="@string/title_custom_start_time">
 		<intent
 			android:action="android.intent.action.VIEW"

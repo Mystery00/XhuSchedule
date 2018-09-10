@@ -9,9 +9,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ListView
+import android.widget.Toast
 import androidx.annotation.StringRes
 
 abstract class BasePreferenceFragment(@XmlRes private val preferencesResId: Int) : PreferenceFragment() {
+	private var toast: Toast? = null
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 		addPreferencesFromResource(preferencesResId)
@@ -35,4 +37,12 @@ abstract class BasePreferenceFragment(@XmlRes private val preferencesResId: Int)
 	open fun monitor() {}
 
 	fun findPreferenceById(@StringRes id: Int): Preference = findPreference(getString(id))
+
+	fun toastMessage(@StringRes stringRes: Int, isShowLong: Boolean = false) = toastMessage(getString(stringRes), isShowLong)
+
+	fun toastMessage(message: String?, isShowLong: Boolean = false) {
+		toast?.cancel()
+		toast = Toast.makeText(activity, message, if (isShowLong) Toast.LENGTH_LONG else Toast.LENGTH_SHORT)
+		toast?.show()
+	}
 }

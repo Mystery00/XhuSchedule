@@ -85,4 +85,17 @@ object ConfigUtil {
 		sb.append(b)
 		return sb.toString()
 	}
+
+	fun getCurrentYearAndTerm() {
+		if (ConfigurationUtil.isCustomYearAndTerm)
+			return
+		val calendar = Calendar.getInstance()
+		val year = calendar.get(Calendar.YEAR)
+		val month = calendar.get(Calendar.MONTH)
+		if (month < Calendar.SEPTEMBER)
+			ConfigurationUtil.currentYear = "${year - 1}-$year"
+		else
+			ConfigurationUtil.currentYear = "$year-${year + 1}"
+		ConfigurationUtil.currentTerm = if (month in Calendar.MARCH until Calendar.SEPTEMBER) "2" else "1"
+	}
 }
