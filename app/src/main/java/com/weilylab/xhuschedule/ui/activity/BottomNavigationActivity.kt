@@ -120,6 +120,13 @@ class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_naviga
 			Content -> {
 				cancelLoading()
 				hideDialog()
+				val nowString = CalendarUtil.getTodayDateString()
+				if (nowString != ConfigurationUtil.lastUpdateDate) {
+					if (ConfigurationUtil.isEnableMultiUserMode)
+						BottomNavigationRepository.queryCoursesOnlineForManyStudent(bottomNavigationViewModel, false)
+					else
+						BottomNavigationRepository.queryCoursesOnline(bottomNavigationViewModel, false)
+				}
 			}
 			Loading -> showLoading()
 			Error -> {

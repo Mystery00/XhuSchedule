@@ -15,7 +15,7 @@ import vip.mystery0.logs.Logs
 import vip.mystery0.rxpackagedata.PackageData
 
 object CourseRemoteDataSource : CourseDataSource {
-	override fun queryCourseByUsername(courseListLiveData: MutableLiveData<PackageData<List<Schedule>>>, student: Student, year: String?, term: String?, isFromCache: Boolean) {
+	override fun queryCourseByUsername(courseListLiveData: MutableLiveData<PackageData<List<Schedule>>>, student: Student, year: String?, term: String?, isFromCache: Boolean, isShowError: Boolean) {
 		if (NetworkUtil.isConnectInternet()) {
 			CourseUtil.getCourse(student, year, term, object : DoSaveListener<List<Course>> {
 				override fun doSave(t: List<Course>) {
@@ -29,7 +29,8 @@ object CourseRemoteDataSource : CourseDataSource {
 							it.term = "current"
 						}
 					}
-					CourseLocalDataSource.saveCourseList(student.username, year?:"current", term?:"current", t)
+					CourseLocalDataSource.saveCourseList(student.username, year ?: "current", term
+							?: "current", t)
 				}
 			}, object : RequestListener<List<Course>> {
 				override fun done(t: List<Course>) {
@@ -38,19 +39,23 @@ object CourseRemoteDataSource : CourseDataSource {
 
 				override fun error(rt: String, msg: String?) {
 					Logs.em("error: ", msg)
-					courseListLiveData.value = PackageData.error(Exception(msg))
-					if (!isFromCache)
-						CourseLocalDataSource.queryCourseByUsername(courseListLiveData, student, year, term, isFromCache)
+					if (isShowError) {
+						courseListLiveData.value = PackageData.error(Exception(msg))
+						if (!isFromCache)
+							CourseLocalDataSource.queryCourseByUsername(courseListLiveData, student, year, term, isFromCache, isShowError)
+					}
 				}
 			})
 		} else {
-			courseListLiveData.value = PackageData.error(Exception(StringConstant.hint_network_error))
-			if (!isFromCache)
-				CourseLocalDataSource.queryCourseByUsername(courseListLiveData, student, year, term, isFromCache)
+			if (isShowError) {
+				courseListLiveData.value = PackageData.error(Exception(StringConstant.hint_network_error))
+				if (!isFromCache)
+					CourseLocalDataSource.queryCourseByUsername(courseListLiveData, student, year, term, isFromCache, isShowError)
+			}
 		}
 	}
 
-	override fun queryCourseWithManyStudent(courseListLiveData: MutableLiveData<PackageData<List<Schedule>>>, studentList: List<Student>, year: String?, term: String?, isFromCache: Boolean) {
+	override fun queryCourseWithManyStudent(courseListLiveData: MutableLiveData<PackageData<List<Schedule>>>, studentList: List<Student>, year: String?, term: String?, isFromCache: Boolean, isShowError: Boolean) {
 		if (NetworkUtil.isConnectInternet()) {
 			CourseUtil.getCoursesForManyStudent(studentList, year, term, object : DoSaveListener<Map<String, List<Course>>> {
 				override fun doSave(t: Map<String, List<Course>>) {
@@ -66,7 +71,8 @@ object CourseRemoteDataSource : CourseDataSource {
 							it.term = "current"
 						}
 					}
-					CourseLocalDataSource.saveCourseList(username, year?:"current", term?:"current", courseList)
+					CourseLocalDataSource.saveCourseList(username, year ?: "current", term
+							?: "current", courseList)
 				}
 			}, object : RequestListener<List<Course>> {
 				override fun done(t: List<Course>) {
@@ -75,15 +81,19 @@ object CourseRemoteDataSource : CourseDataSource {
 
 				override fun error(rt: String, msg: String?) {
 					Logs.em("error: ", msg)
-					courseListLiveData.value = PackageData.error(Exception(msg))
-					if (!isFromCache)
-						CourseLocalDataSource.queryCourseWithManyStudent(courseListLiveData, studentList, year, term, isFromCache)
+					if (isShowError) {
+						courseListLiveData.value = PackageData.error(Exception(msg))
+						if (!isFromCache)
+							CourseLocalDataSource.queryCourseWithManyStudent(courseListLiveData, studentList, year, term, isFromCache, isShowError)
+					}
 				}
 			})
 		} else {
-			courseListLiveData.value = PackageData.error(Exception(StringConstant.hint_network_error))
-			if (!isFromCache)
-				CourseLocalDataSource.queryCourseWithManyStudent(courseListLiveData, studentList, year, term, isFromCache)
+			if (isShowError) {
+				courseListLiveData.value = PackageData.error(Exception(StringConstant.hint_network_error))
+				if (!isFromCache)
+					CourseLocalDataSource.queryCourseWithManyStudent(courseListLiveData, studentList, year, term, isFromCache, isShowError)
+			}
 		}
 	}
 }

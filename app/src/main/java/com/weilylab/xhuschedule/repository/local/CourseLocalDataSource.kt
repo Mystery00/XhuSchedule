@@ -6,6 +6,8 @@ import com.weilylab.xhuschedule.model.Student
 import com.weilylab.xhuschedule.repository.dataSource.CourseDataSource
 import com.weilylab.xhuschedule.repository.local.service.impl.CourseServiceImpl
 import com.weilylab.xhuschedule.repository.remote.CourseRemoteDataSource
+import com.weilylab.xhuschedule.utils.CalendarUtil
+import com.weilylab.xhuschedule.utils.ConfigurationUtil
 import com.weilylab.xhuschedule.utils.CourseUtil
 import com.zhuangfei.timetable.model.Schedule
 import vip.mystery0.logs.Logs
@@ -17,7 +19,7 @@ import vip.mystery0.rxpackagedata.rx.RxObserver
 object CourseLocalDataSource : CourseDataSource {
 	private val courseService = CourseServiceImpl()
 
-	override fun queryCourseByUsername(courseListLiveData: MutableLiveData<PackageData<List<Schedule>>>, student: Student, year: String?, term: String?, isFromCache: Boolean) {
+	override fun queryCourseByUsername(courseListLiveData: MutableLiveData<PackageData<List<Schedule>>>, student: Student, year: String?, term: String?, isFromCache: Boolean, isShowError: Boolean) {
 		RxObservable<List<Schedule>>()
 				.doThings {
 					it.onFinish(CourseUtil.convertCourseToSchedule(courseService.queryCourseByUsernameAndTerm(student.username, year
@@ -26,7 +28,7 @@ object CourseLocalDataSource : CourseDataSource {
 				.subscribe(object : RxObserver<List<Schedule>>() {
 					override fun onFinish(data: List<Schedule>?) {
 						if (data == null || data.isEmpty())
-							CourseRemoteDataSource.queryCourseByUsername(courseListLiveData, student, year, term, isFromCache)
+							CourseRemoteDataSource.queryCourseByUsername(courseListLiveData, student, year, term, isFromCache, isShowError)
 						else {
 							courseListLiveData.value = PackageData.content(data)
 						}
@@ -35,7 +37,7 @@ object CourseLocalDataSource : CourseDataSource {
 					override fun onError(e: Throwable) {
 						Logs.wtf("onError: ", e)
 						if (isFromCache) {
-							CourseRemoteDataSource.queryCourseByUsername(courseListLiveData, student, year, term, isFromCache)
+							CourseRemoteDataSource.queryCourseByUsername(courseListLiveData, student, year, term, isFromCache, isShowError)
 						} else {
 							courseListLiveData.value = PackageData.error(e)
 						}
@@ -43,7 +45,7 @@ object CourseLocalDataSource : CourseDataSource {
 				})
 	}
 
-	override fun queryCourseWithManyStudent(courseListLiveData: MutableLiveData<PackageData<List<Schedule>>>, studentList: List<Student>, year: String?, term: String?, isFromCache: Boolean) {
+	override fun queryCourseWithManyStudent(courseListLiveData: MutableLiveData<PackageData<List<Schedule>>>, studentList: List<Student>, year: String?, term: String?, isFromCache: Boolean, isShowError: Boolean) {
 		RxObservable<List<Schedule>>()
 				.doThings { emitter ->
 					val courses = ArrayList<Schedule>()
@@ -56,7 +58,7 @@ object CourseLocalDataSource : CourseDataSource {
 				.subscribe(object : RxObserver<List<Schedule>>() {
 					override fun onFinish(data: List<Schedule>?) {
 						if (data == null || data.isEmpty())
-							CourseRemoteDataSource.queryCourseWithManyStudent(courseListLiveData, studentList, year, term, isFromCache)
+							CourseRemoteDataSource.queryCourseWithManyStudent(courseListLiveData, studentList, year, term, isFromCache, isShowError)
 						else {
 							courseListLiveData.value = PackageData.content(data)
 						}
@@ -65,7 +67,7 @@ object CourseLocalDataSource : CourseDataSource {
 					override fun onError(e: Throwable) {
 						Logs.wtf("onError: ", e)
 						if (isFromCache) {
-							CourseRemoteDataSource.queryCourseWithManyStudent(courseListLiveData, studentList, year, term, isFromCache)
+							CourseRemoteDataSource.queryCourseWithManyStudent(courseListLiveData, studentList, year, term, isFromCache, isShowError)
 						} else {
 							courseListLiveData.value = PackageData.error(e)
 						}
@@ -120,5 +122,6 @@ object CourseLocalDataSource : CourseDataSource {
 				course.color = has.color
 			courseService.addCourse(course)
 		}
+		ConfigurationUtil.lastUpdateDate = CalendarUtil.getTodayDateString()
 	}
 }

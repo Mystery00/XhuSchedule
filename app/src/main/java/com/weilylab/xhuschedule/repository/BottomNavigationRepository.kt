@@ -75,7 +75,7 @@ object BottomNavigationRepository {
 				}
 			}
 			val mainStudent = UserUtil.findMainStudent(bottomNavigationViewModel.studentList.value!!.data)!!
-			CourseLocalDataSource.queryCourseByUsername(bottomNavigationViewModel.courseList, mainStudent, ConfigurationUtil.currentYear, ConfigurationUtil.currentTerm, true)
+			CourseLocalDataSource.queryCourseByUsername(bottomNavigationViewModel.courseList, mainStudent, ConfigurationUtil.currentYear, ConfigurationUtil.currentTerm, true, true)
 		}
 	}
 
@@ -100,19 +100,21 @@ object BottomNavigationRepository {
 					Error -> bottomNavigationViewModel.todayCourseList.value = PackageData.error(packageData.error)
 				}
 			}
-			CourseLocalDataSource.queryCourseWithManyStudent(bottomNavigationViewModel.courseList, bottomNavigationViewModel.studentList.value!!.data!!, ConfigurationUtil.currentYear, ConfigurationUtil.currentTerm, true)
+			CourseLocalDataSource.queryCourseWithManyStudent(bottomNavigationViewModel.courseList, bottomNavigationViewModel.studentList.value!!.data!!, ConfigurationUtil.currentYear, ConfigurationUtil.currentTerm, true, true)
 		}
 	}
 
-	fun queryCoursesOnline(bottomNavigationViewModel: BottomNavigationViewModel) {
-		bottomNavigationViewModel.courseList.value = PackageData.loading()
+	fun queryCoursesOnline(bottomNavigationViewModel: BottomNavigationViewModel, isShowError: Boolean = true) {
+		if (isShowError)
+			bottomNavigationViewModel.courseList.value = PackageData.loading()
 		val mainStudent = UserUtil.findMainStudent(bottomNavigationViewModel.studentList.value!!.data)!!
-		CourseRemoteDataSource.queryCourseByUsername(bottomNavigationViewModel.courseList, mainStudent, ConfigurationUtil.currentYear, ConfigurationUtil.currentTerm, false)
+		CourseRemoteDataSource.queryCourseByUsername(bottomNavigationViewModel.courseList, mainStudent, ConfigurationUtil.currentYear, ConfigurationUtil.currentTerm, false, isShowError)
 	}
 
-	fun queryCoursesOnlineForManyStudent(bottomNavigationViewModel: BottomNavigationViewModel) {
-		bottomNavigationViewModel.courseList.value = PackageData.loading()
-		CourseRemoteDataSource.queryCourseWithManyStudent(bottomNavigationViewModel.courseList, bottomNavigationViewModel.studentList.value!!.data!!, ConfigurationUtil.currentYear, ConfigurationUtil.currentTerm, false)
+	fun queryCoursesOnlineForManyStudent(bottomNavigationViewModel: BottomNavigationViewModel, isShowError: Boolean = true) {
+		if (isShowError)
+			bottomNavigationViewModel.courseList.value = PackageData.loading()
+		CourseRemoteDataSource.queryCourseWithManyStudent(bottomNavigationViewModel.courseList, bottomNavigationViewModel.studentList.value!!.data!!, ConfigurationUtil.currentYear, ConfigurationUtil.currentTerm, false, isShowError)
 	}
 
 	fun queryStudentList(bottomNavigationViewModel: BottomNavigationViewModel) {

@@ -108,4 +108,9 @@ object ConfigurationUtil {
 				.putBoolean(SharedPreferenceConstant.FIELD_CUSTOM_YEAR_AND_TERM, value)
 				.apply()
 		get() = sharedPreferences.getBoolean(SharedPreferenceConstant.FIELD_CUSTOM_YEAR_AND_TERM, false)
+	var lastUpdateDate: String
+		set(value) = sharedPreferences.edit()
+				.putString(SharedPreferenceConstant.FIELD_LAST_UPDATE_DATE, value)
+				.apply()
+		get() = sharedPreferences.getString(SharedPreferenceConstant.FIELD_LAST_UPDATE_DATE, "")!!
 }

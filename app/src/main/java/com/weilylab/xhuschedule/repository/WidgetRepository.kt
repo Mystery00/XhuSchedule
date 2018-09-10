@@ -32,7 +32,7 @@ object WidgetRepository {
 				}
 			}
 			val mainStudent = UserUtil.findMainStudent(WidgetViewModelHelper.studentList.value!!.data)!!
-			CourseLocalDataSource.queryCourseByUsername(WidgetViewModelHelper.courseList, mainStudent, null, null, true)
+			CourseLocalDataSource.queryCourseByUsername(WidgetViewModelHelper.courseList, mainStudent, null, null, true, true)
 		}
 	}
 
@@ -57,7 +57,7 @@ object WidgetRepository {
 					Error -> WidgetViewModelHelper.todayCourseList.value = PackageData.error(packageData.error)
 				}
 			}
-			CourseLocalDataSource.queryCourseWithManyStudent(WidgetViewModelHelper.courseList, WidgetViewModelHelper.studentList.value!!.data!!, null, null, true)
+			CourseLocalDataSource.queryCourseWithManyStudent(WidgetViewModelHelper.courseList, WidgetViewModelHelper.studentList.value!!.data!!, null, null, true, true)
 		}
 	}
 

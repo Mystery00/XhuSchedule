@@ -36,4 +36,5 @@ object SharedPreferenceConstant {
 	const val FIELD_CURRENT_YEAR = "config_current_year"
 	const val FIELD_CURRENT_TERM = "config_current_term"
 	const val FIELD_CUSTOM_YEAR_AND_TERM = "config_custom_year_and_term"
+	const val FIELD_LAST_UPDATE_DATE = "config_last_update_date"
 }

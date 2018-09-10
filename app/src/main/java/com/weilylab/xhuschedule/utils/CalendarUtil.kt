@@ -191,4 +191,9 @@ object CalendarUtil {
 		ConfigurationUtil.customStartTime = simpleDateFormat.format(startDateTime.time)
 		ConfigurationUtil.isCustomStartTime = true
 	}
+
+	fun getTodayDateString(): String {
+		val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.CHINA)
+		return simpleDateFormat.format(Calendar.getInstance().time)
+	}
 }
