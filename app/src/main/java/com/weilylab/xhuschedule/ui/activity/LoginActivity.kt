@@ -43,7 +43,6 @@ import kotlinx.android.synthetic.main.activity_login.*
 import android.app.Activity
 import android.app.Dialog
 import android.graphics.Color
-import android.os.Build
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -56,7 +55,7 @@ import vip.mystery0.logs.Logs
 import vip.mystery0.rxpackagedata.PackageData
 import vip.mystery0.rxpackagedata.Status.*
 
-class LoginActivity : XhuBaseActivity(R.layout.activity_login) {
+class LoginActivity : XhuBaseActivity(R.layout.activity_login, false) {
 	private lateinit var loginViewModel: LoginViewModel
 	private lateinit var dialog: Dialog
 
@@ -82,12 +81,10 @@ class LoginActivity : XhuBaseActivity(R.layout.activity_login) {
 
 	override fun initView() {
 		super.initView()
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-			window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
-			window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION)
-			window.statusBarColor = Color.TRANSPARENT
-			window.navigationBarColor = Color.TRANSPARENT
-		}
+		window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+		window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION)
+		window.statusBarColor = Color.TRANSPARENT
+		window.navigationBarColor = Color.TRANSPARENT
 		dialog = ZLoadingDialog(this)
 				.setLoadingBuilder(Z_TYPE.SINGLE_CIRCLE)
 				.setHintText(getString(R.string.hint_dialog_login))

@@ -38,13 +38,15 @@ import android.widget.Toast
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatDelegate
 import com.weilylab.xhuschedule.utils.APPActivityManager
-import vip.mystery0.logs.Logs
+import com.weilylab.xhuschedule.utils.ConfigUtil
 import vip.mystery0.tools.base.BaseActivity
 
-abstract class XhuBaseActivity(layoutId: Int?) : BaseActivity(layoutId) {
+abstract class XhuBaseActivity(layoutId: Int?, private val isSetStatusBar: Boolean = true) : BaseActivity(layoutId) {
 	private var toast: Toast? = null
 
 	override fun onCreate(savedInstanceState: Bundle?) {
+		if (isSetStatusBar)
+			ConfigUtil.setStatusBar(this)
 		AppCompatDelegate.setCompatVectorFromResourcesEnabled(true)
 		APPActivityManager.addActivity(this)
 		super.onCreate(savedInstanceState)

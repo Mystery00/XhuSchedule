@@ -135,6 +135,17 @@
 
 		</androidx.constraintlayout.widget.ConstraintLayout>
 
+		<TextView
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:layout_marginTop="4dp"
+			android:text="@string/hint_login_password"
+			android:textColor="@color/login_color_label"
+			android:textSize="12sp"
+			app:layout_constraintEnd_toEndOf="@id/password_layout"
+			app:layout_constraintStart_toStartOf="@id/password_layout"
+			app:layout_constraintTop_toBottomOf="@id/password_layout" />
+
 		<Button
 			android:id="@+id/login_button"
 			android:layout_width="0dp"

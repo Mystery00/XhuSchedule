@@ -11,6 +11,9 @@ import androidx.appcompat.app.AlertDialog
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.service.NotificationService
 import java.util.*
+import android.app.Activity
+import android.view.View
+
 
 object ConfigUtil {
 	private var lastClick = 0L
@@ -97,5 +100,14 @@ object ConfigUtil {
 		else
 			ConfigurationUtil.currentYear = "$year-${year + 1}"
 		ConfigurationUtil.currentTerm = if (month in Calendar.MARCH until Calendar.SEPTEMBER) "2" else "1"
+	}
+
+	fun setStatusBar(activity: Activity) {
+		when {
+			Build.VERSION.SDK_INT >= Build.VERSION_CODES.M -> {//6.0
+				activity.window.statusBarColor = Color.WHITE
+				activity.window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+			}
+		}
 	}
 }

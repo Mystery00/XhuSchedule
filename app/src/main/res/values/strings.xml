@@ -61,6 +61,7 @@
 	<string name="hint_input_cet_name">请输入考生姓名</string>
 	<string name="hint_input_cet_vcode">请输入验证码</string>
 
+	<string name="hint_login_password">* 密码为教务系统密码(默认为18位身份证号)</string>
 	<string name="hint_twice_press_exit">再按一次退出西瓜课表</string>
 	<string name="hint_custom_img">自定义图片设置成功！</string>
 	<string name="hint_no_qq">QQ未安装！</string>
