@@ -8,8 +8,8 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
-import android.preference.CheckBoxPreference
-import android.preference.Preference
+import androidx.preference.CheckBoxPreference
+import androidx.preference.Preference
 import com.weilylab.xhuschedule.R
 import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
@@ -22,6 +22,7 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.google.android.material.snackbar.Snackbar
 import com.mikepenz.aboutlibraries.Libs
 import com.mikepenz.aboutlibraries.LibsBuilder
+import com.weilylab.xhuschedule.base.BasePreferenceFragment
 import com.weilylab.xhuschedule.service.CheckUpdateService
 import com.weilylab.xhuschedule.ui.custom.CustomGlideEngine
 import com.weilylab.xhuschedule.utils.*
@@ -30,6 +31,7 @@ import com.zhihu.matisse.Matisse
 import com.zhihu.matisse.MimeType
 import com.zyao89.view.zloading.ZLoadingDialog
 import com.zyao89.view.zloading.Z_TYPE
+import vip.mystery0.logs.Logs
 import vip.mystery0.tools.utils.DensityTools
 import java.io.File
 import java.util.*
@@ -90,7 +92,7 @@ class SettingsPreferenceFragment : BasePreferenceFragment(R.xml.preference_setti
 			true
 		}
 		resetUserImgPreference.setOnPreferenceClickListener {
-			AlertDialog.Builder(activity)
+			AlertDialog.Builder(activity!!)
 					.setTitle(R.string.hint_confirm_reset_user_img)
 					.setMessage("")
 					.setPositiveButton(R.string.action_ok) { _, _ ->
@@ -102,7 +104,7 @@ class SettingsPreferenceFragment : BasePreferenceFragment(R.xml.preference_setti
 			true
 		}
 		resetBackgroundPreference.setOnPreferenceClickListener {
-			AlertDialog.Builder(activity)
+			AlertDialog.Builder(activity!!)
 					.setTitle(R.string.hint_confirm_reset_background_img)
 					.setMessage("")
 					.setPositiveButton(R.string.action_ok) { _, _ ->
@@ -134,13 +136,13 @@ class SettingsPreferenceFragment : BasePreferenceFragment(R.xml.preference_setti
 				oldHour = array[0].toInt()
 				oldMinute = array[1].toInt()
 			}
-			TimePickerDialog(activity, TimePickerDialog.OnTimeSetListener { _, hourOfDay, minute ->
+			TimePickerDialog(activity!!, TimePickerDialog.OnTimeSetListener { _, hourOfDay, minute ->
 				val hourString = if (hourOfDay < 10) "0$hourOfDay" else hourOfDay.toString()
 				val minuteString = if (minute < 10) "0$minute" else minute.toString()
 				val newString = "$hourString:$minuteString"
 				ConfigurationUtil.notificationTime = newString
 				notificationTimePreference.summary = getString(R.string.summary_notification_time, ConfigurationUtil.notificationTime)
-				ConfigUtil.setTrigger(activity)
+				ConfigUtil.setTrigger(activity!!)
 			}, oldHour, oldMinute, true)
 					.show()
 			true
@@ -150,22 +152,22 @@ class SettingsPreferenceFragment : BasePreferenceFragment(R.xml.preference_setti
 			true
 		}
 		weixinPreference.setOnPreferenceClickListener {
-			ShareUtil.linkWeiXinMiniProgram(activity)
+			ShareUtil.linkWeiXinMiniProgram(activity!!)
 			true
 		}
 		checkUpdatePreference.setOnPreferenceClickListener {
 			showCheckUpdateDialog()
 			val intentFilter = IntentFilter(ACTION_CHECK_UPDATE_DONE)
 			if (!::localBroadcastManager.isInitialized)
-				localBroadcastManager = LocalBroadcastManager.getInstance(activity)
+				localBroadcastManager = LocalBroadcastManager.getInstance(activity!!)
 			localBroadcastManager.registerReceiver(CheckUpdateLocalBroadcastReceiver(), intentFilter)
-			val intent = Intent(activity, CheckUpdateService::class.java)
+			val intent = Intent(activity!!, CheckUpdateService::class.java)
 			intent.putExtra(CheckUpdateService.CHECK_ACTION_BY_MANUAL, true)
-			activity.startService(intent)
+			activity!!.startService(intent)
 			true
 		}
 		updateLogPreference.setOnPreferenceClickListener {
-			ConfigUtil.showUpdateLog(activity)
+			ConfigUtil.showUpdateLog(activity!!)
 			true
 		}
 		openSourceLicenseAboutPreference.setOnPreferenceClickListener {
@@ -191,17 +193,17 @@ class SettingsPreferenceFragment : BasePreferenceFragment(R.xml.preference_setti
 							"uCrop",
 							"ViewModel",
 							"ZLoading")
-					.start(activity)
+					.start(activity!!)
 			true
 		}
 	}
 
 	private fun requestImageChoose(requestCode: Int) {
-		if (ContextCompat.checkSelfPermission(activity, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+		if (ContextCompat.checkSelfPermission(activity!!, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
 			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
 				requestPermissions(arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), requestCode)
 		} else
-			Matisse.from(activity)
+			Matisse.from(activity!!)
 					.choose(MimeType.of(MimeType.JPEG, MimeType.PNG, MimeType.BMP))
 					.showSingleMediaType(true)
 					.countable(false)
@@ -217,7 +219,7 @@ class SettingsPreferenceFragment : BasePreferenceFragment(R.xml.preference_setti
 		if (grantResults[0] == PackageManager.PERMISSION_GRANTED)
 			requestImageChoose(requestCode)
 		else
-			Snackbar.make(activity.window.decorView, "权限被拒绝，无法使用", Snackbar.LENGTH_LONG)
+			Snackbar.make(activity!!.window.decorView, "权限被拒绝，无法使用", Snackbar.LENGTH_LONG)
 					.setAction("重新申请") {
 						requestImageChoose(requestCode)
 					}
@@ -225,29 +227,26 @@ class SettingsPreferenceFragment : BasePreferenceFragment(R.xml.preference_setti
 	}
 
 	override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-		getResult(requestCode, resultCode, data)
-	}
-
-	fun getResult(requestCode: Int, resultCode: Int, data: Intent?) {
+		Logs.i("onActivityResult: ")
 		when (requestCode) {
 			REQUEST_CHOOSE_USER -> if (resultCode == Activity.RESULT_OK) {
 				cropImage(Matisse.obtainResult(data)[0], REQUEST_CROP_USER, 500, 500)
 			}
 			REQUEST_CHOOSE_BACKGROUND -> if (resultCode == Activity.RESULT_OK) {
-				cropImage(Matisse.obtainResult(data)[0], REQUEST_CROP_BACKGROUND, DensityTools.getScreenWidth(activity), DensityTools.getScreenHeight(activity))
+				cropImage(Matisse.obtainResult(data)[0], REQUEST_CROP_BACKGROUND, DensityTools.getScreenWidth(activity!!), DensityTools.getScreenHeight(activity!!))
 			}
 			REQUEST_CROP_USER -> if (resultCode == Activity.RESULT_OK) {
 				val file = getFile(requestCode)
 				ConfigurationUtil.customUserImage = file.absolutePath
 				LayoutRefreshConfigUtil.isChangeUserImage = true
-				Toast.makeText(activity, R.string.hint_custom_img, Toast.LENGTH_SHORT)
+				Toast.makeText(activity!!, R.string.hint_custom_img, Toast.LENGTH_SHORT)
 						.show()
 			}
 			REQUEST_CROP_BACKGROUND -> if (resultCode == Activity.RESULT_OK) {
 				val file = getFile(requestCode)
 				ConfigurationUtil.customBackgroundImage = file.absolutePath
 				LayoutRefreshConfigUtil.isChangeBackgroundImage = true
-				Toast.makeText(activity, R.string.hint_custom_img, Toast.LENGTH_SHORT)
+				Toast.makeText(activity!!, R.string.hint_custom_img, Toast.LENGTH_SHORT)
 						.show()
 			}
 		}
@@ -267,18 +266,18 @@ class SettingsPreferenceFragment : BasePreferenceFragment(R.xml.preference_setti
 		UCrop.of(uri, destinationUri)
 				.withAspectRatio(width.toFloat(), height.toFloat())
 				.withMaxResultSize(width * 10, height * 10)
-				.start(activity, this, cropCode)
+				.start(activity!!, this, cropCode)
 	}
 
 	private fun showCheckUpdateDialog() {
 		if (!::dialog.isInitialized)
-			dialog = ZLoadingDialog(activity)
+			dialog = ZLoadingDialog(activity!!)
 					.setLoadingBuilder(Z_TYPE.SINGLE_CIRCLE)
 					.setHintText(getString(R.string.hint_dialog_check_update))
 					.setHintTextSize(16F)
 					.setCanceledOnTouchOutside(false)
-					.setLoadingColor(ContextCompat.getColor(activity, R.color.colorAccent))
-					.setHintTextColor(ContextCompat.getColor(activity, R.color.colorAccent))
+					.setLoadingColor(ContextCompat.getColor(activity!!, R.color.colorAccent))
+					.setHintTextColor(ContextCompat.getColor(activity!!, R.color.colorAccent))
 					.create()
 		if (!dialog.isShowing)
 			dialog.show()
@@ -287,7 +286,7 @@ class SettingsPreferenceFragment : BasePreferenceFragment(R.xml.preference_setti
 	private fun dismissCheckUpdateDialog() {
 		if (dialog.isShowing)
 			dialog.dismiss()
-		Toast.makeText(activity, "检查更新完成！", Toast.LENGTH_SHORT)
+		Toast.makeText(activity!!, "检查更新完成！", Toast.LENGTH_SHORT)
 				.show()
 	}
 

@@ -36,13 +36,10 @@ package com.weilylab.xhuschedule.ui.activity
 import android.content.Context
 import android.content.Intent
 import android.view.MenuItem
-import android.preference.PreferenceFragment
 import com.weilylab.xhuschedule.R
+import com.weilylab.xhuschedule.base.BasePreferenceFragment
 import com.weilylab.xhuschedule.base.XhuBaseActivity
-import com.weilylab.xhuschedule.ui.fragment.settings.QueryScoreFragment
-import com.weilylab.xhuschedule.ui.fragment.settings.AccountSettingsFragment
-import com.weilylab.xhuschedule.ui.fragment.settings.ClassSettingsFragment
-import com.weilylab.xhuschedule.ui.fragment.settings.SettingsPreferenceFragment
+import com.weilylab.xhuschedule.ui.fragment.settings.*
 import com.weilylab.xhuschedule.utils.APPActivityManager
 import kotlinx.android.synthetic.main.activity_settings.*
 
@@ -61,11 +58,14 @@ class SettingsActivity : XhuBaseActivity(R.layout.activity_settings) {
 		}
 	}
 
+	private lateinit var accountSettingsFragment: AccountSettingsFragment
+	private lateinit var classSettingsFragment: ClassSettingsFragment
+	private lateinit var queryScoreFragment: QueryScoreFragment
 	private lateinit var settingsPreferenceFragment: SettingsPreferenceFragment
 
 	override fun initView() {
 		super.initView()
-		fragmentManager.beginTransaction()
+		supportFragmentManager.beginTransaction()
 				.replace(R.id.content_wrapper, getFragment())
 				.commit()
 		setTitleString()
@@ -73,13 +73,26 @@ class SettingsActivity : XhuBaseActivity(R.layout.activity_settings) {
 		supportActionBar?.setDisplayHomeAsUpEnabled(true)
 	}
 
-	private fun getFragment(): PreferenceFragment {
+	private fun getFragment(): BasePreferenceFragment {
 		return when (intent.getIntExtra(INTENT_FRAGMENT, 0)) {
-			TYPE_ACCOUNT -> AccountSettingsFragment()
-			TYPE_CLASS -> ClassSettingsFragment()
-			TYPE_QUERY_SCORE -> QueryScoreFragment()
+			TYPE_ACCOUNT -> {
+				if (!::accountSettingsFragment.isInitialized)
+					accountSettingsFragment = AccountSettingsFragment()
+				accountSettingsFragment
+			}
+			TYPE_CLASS -> {
+				if (!::classSettingsFragment.isInitialized)
+					classSettingsFragment = ClassSettingsFragment()
+				classSettingsFragment
+			}
+			TYPE_QUERY_SCORE -> {
+				if (!::queryScoreFragment.isInitialized)
+					queryScoreFragment = QueryScoreFragment()
+				queryScoreFragment
+			}
 			TYPE_SETTINGS -> {
-				settingsPreferenceFragment = SettingsPreferenceFragment()
+				if (!::settingsPreferenceFragment.isInitialized)
+					settingsPreferenceFragment = SettingsPreferenceFragment()
 				settingsPreferenceFragment
 			}
 			else -> throw NullPointerException("null")
@@ -102,10 +115,6 @@ class SettingsActivity : XhuBaseActivity(R.layout.activity_settings) {
 				onBackPressed()
 		}
 		return true
-	}
-
-	override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-		settingsPreferenceFragment.getResult(requestCode, resultCode, data)
 	}
 
 	override fun onDestroy() {

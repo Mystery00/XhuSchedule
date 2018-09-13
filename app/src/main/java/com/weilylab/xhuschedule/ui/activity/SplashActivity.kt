@@ -56,7 +56,7 @@ import vip.mystery0.tools.utils.FileTools
 /**
  * Created by mystery0.
  */
-class SplashActivity : XhuBaseActivity(null) {
+class SplashActivity : XhuBaseActivity(null, false) {
 	private lateinit var splashViewModel: SplashViewModel
 
 	private val splashObserver = Observer<PackageData<SplashResponse.Splash>> {
@@ -86,11 +86,12 @@ class SplashActivity : XhuBaseActivity(null) {
 	override fun initData() {
 		super.initData()
 		initViewModel()
-		SplashRepository.requestSplash(splashViewModel)
+//		SplashRepository.requestSplash(splashViewModel)
 		if (ConfigurationUtil.autoCheckUpdate)
 			ContextCompat.startForegroundService(this, Intent(APP.context, CheckUpdateService::class.java))
 		ConfigUtil.setTrigger(this)
 		ConfigUtil.getCurrentYearAndTerm()
+		gotoSplashImage()
 	}
 
 	private fun initViewModel() {

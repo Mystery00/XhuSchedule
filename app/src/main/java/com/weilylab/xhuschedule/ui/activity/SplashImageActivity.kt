@@ -47,9 +47,8 @@ import com.weilylab.xhuschedule.utils.FileUtil
 import kotlinx.android.synthetic.main.activity_splash_image.*
 import vip.mystery0.tools.utils.DensityTools
 import java.io.File
-import java.util.*
 
-class SplashImageActivity : XhuBaseActivity(R.layout.activity_splash_image) {
+class SplashImageActivity : XhuBaseActivity(R.layout.activity_splash_image, false) {
 	private lateinit var splash: SplashResponse.Splash
 	private var splashFile: File? = null
 
@@ -82,18 +81,22 @@ class SplashImageActivity : XhuBaseActivity(R.layout.activity_splash_image) {
 						.override(DensityTools.getScreenWidth(this), DensityTools.getScreenHeight(this))
 						.diskCacheStrategy(DiskCacheStrategy.NONE))
 				.into(imageView)
-		val timer = Timer()
-		timer.schedule(object : TimerTask() {
-			override fun run() {
-				gotoMain()
-			}
-		}, splash.splashTime)
+		skipView.setTotalTime(splash.splashTime)
+				.setUpdateTime(50)
+				.setText(R.string.action_bypass)
+				.setFinishAction {
+					gotoMain()
+				}
+				.start()
+	}
+
+	override fun monitor() {
+		super.monitor()
 		imageView.setOnClickListener {
 			if (splash.locationUrl != "")
 				startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(splash.locationUrl)))
 		}
-		button.setOnClickListener {
-			timer.cancel()
+		skipView.setOnClickListener {
 			gotoMain()
 		}
 	}

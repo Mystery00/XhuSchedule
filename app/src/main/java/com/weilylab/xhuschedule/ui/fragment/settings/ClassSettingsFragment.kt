@@ -1,9 +1,10 @@
 package com.weilylab.xhuschedule.ui.fragment.settings
 
-import android.preference.CheckBoxPreference
-import android.preference.Preference
+import androidx.preference.CheckBoxPreference
+import androidx.preference.Preference
 import androidx.appcompat.app.AlertDialog
 import com.weilylab.xhuschedule.R
+import com.weilylab.xhuschedule.base.BasePreferenceFragment
 import com.weilylab.xhuschedule.repository.local.StudentLocalDataSource
 import com.weilylab.xhuschedule.utils.ConfigUtil
 import com.weilylab.xhuschedule.utils.ConfigurationUtil
@@ -49,7 +50,7 @@ class ClassSettingsFragment : BasePreferenceFragment(R.xml.preference_class) {
 						val selectArray = tempArrayList.toTypedArray()
 						val currentString = "${ConfigurationUtil.currentYear}学年 第${ConfigurationUtil.currentTerm}学期"
 						var selectedIndex = if (ConfigurationUtil.isCustomYearAndTerm) selectArray.indexOf(currentString) else 0
-						AlertDialog.Builder(activity)
+						AlertDialog.Builder(activity!!)
 								.setTitle(R.string.title_current_year_and_term)
 								.setSingleChoiceItems(selectArray, selectedIndex) { _, checkItem ->
 									selectedIndex = checkItem

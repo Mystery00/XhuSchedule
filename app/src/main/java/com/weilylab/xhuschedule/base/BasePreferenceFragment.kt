@@ -1,28 +1,27 @@
-package com.weilylab.xhuschedule.ui.fragment.settings
+package com.weilylab.xhuschedule.base
 
 import android.graphics.Color
 import android.os.Bundle
-import android.preference.Preference
+import androidx.preference.Preference
 import androidx.annotation.XmlRes
-import android.preference.PreferenceFragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ListView
 import android.widget.Toast
 import androidx.annotation.StringRes
+import androidx.preference.PreferenceFragmentCompat
 
-abstract class BasePreferenceFragment(@XmlRes private val preferencesResId: Int) : PreferenceFragment() {
+abstract class BasePreferenceFragment(@XmlRes private val preferencesResId: Int) : PreferenceFragmentCompat() {
 	private var toast: Toast? = null
-	override fun onCreate(savedInstanceState: Bundle?) {
-		super.onCreate(savedInstanceState)
-		addPreferencesFromResource(preferencesResId)
+
+	override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
+		setPreferencesFromResource(preferencesResId, rootKey)
 	}
 
-	override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+	override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 		val view = super.onCreateView(inflater, container, savedInstanceState) ?: return null
-		val list = view.findViewById<ListView>(android.R.id.list)
-		list.setBackgroundColor(Color.WHITE)
+		listView.setBackgroundColor(Color.WHITE)
+		setDividerHeight(1)
 		return view
 	}
 

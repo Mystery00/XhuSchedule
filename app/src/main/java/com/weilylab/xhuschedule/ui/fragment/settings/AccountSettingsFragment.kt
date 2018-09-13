@@ -2,12 +2,13 @@ package com.weilylab.xhuschedule.ui.fragment.settings
 
 import android.app.Activity
 import android.content.Intent
-import android.preference.CheckBoxPreference
-import android.preference.Preference
-import android.preference.PreferenceCategory
+import androidx.preference.CheckBoxPreference
+import androidx.preference.Preference
+import androidx.preference.PreferenceCategory
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import com.weilylab.xhuschedule.R
+import com.weilylab.xhuschedule.base.BasePreferenceFragment
 import vip.mystery0.rxpackagedata.Status.*
 import com.weilylab.xhuschedule.model.Student
 import com.weilylab.xhuschedule.repository.local.StudentLocalDataSource
@@ -52,7 +53,7 @@ class AccountSettingsFragment : BasePreferenceFragment(R.xml.preference_account)
 			LayoutRefreshConfigUtil.isRefreshBottomNavigationActivity = true
 			val valueArray = Array(studentList.size) { i -> "${studentList[i].username}(${studentList[i].studentName})" }
 			val checkedArray = BooleanArray(studentList.size) { false }
-			AlertDialog.Builder(activity)
+			AlertDialog.Builder(activity!!)
 					.setTitle(R.string.title_del_account)
 					.setMultiChoiceItems(valueArray, checkedArray) { _, which, isChecked ->
 						checkedArray[which] = isChecked
@@ -84,7 +85,7 @@ class AccountSettingsFragment : BasePreferenceFragment(R.xml.preference_account)
 			val valueArray = Array(studentList.size) { i -> studentList[i].username }
 			val oldMainIndex = studentList.indexOfFirst { it.isMain }
 			var newMainIndex = oldMainIndex
-			AlertDialog.Builder(activity)
+			AlertDialog.Builder(activity!!)
 					.setTitle(R.string.title_set_main_account)
 					.setSingleChoiceItems(valueArray, oldMainIndex) { _, which ->
 						newMainIndex = which
@@ -154,6 +155,14 @@ class AccountSettingsFragment : BasePreferenceFragment(R.xml.preference_account)
 		}
 	}
 
+	override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+		Logs.i("onActivityResult: ")
+		if (requestCode == ADD_ACCOUNT_CODE && resultCode == Activity.RESULT_OK) {
+			LayoutRefreshConfigUtil.isRefreshBottomNavigationActivity = true
+			initStudentList()
+		}
+	}
+
 	private fun initStudentCategory() {
 		loggedStudentCategory.removeAll()
 		studentList.forEach {
@@ -163,14 +172,6 @@ class AccountSettingsFragment : BasePreferenceFragment(R.xml.preference_account)
 			else
 				preference.title = "${it.username}(${it.studentName})"
 			loggedStudentCategory.addPreference(preference)
-		}
-	}
-
-	override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-		super.onActivityResult(requestCode, resultCode, data)
-		if (requestCode == ADD_ACCOUNT_CODE && resultCode == Activity.RESULT_OK) {
-			LayoutRefreshConfigUtil.isRefreshBottomNavigationActivity = true
-			initStudentList()
 		}
 	}
 }
