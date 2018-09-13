@@ -10,6 +10,7 @@ import vip.mystery0.rxpackagedata.Status.*
 object TestRepository {
 	fun queryTests(queryTestViewModel: QueryTestViewModel) {
 		queryTestViewModel.testList.value = PackageData.loading()
+		queryTestViewModel.testList.removeSource(queryTestViewModel.studentList)
 		queryTestViewModel.testList.addSource(queryTestViewModel.studentList) { packageData ->
 			when (packageData.status) {
 				Content -> {
@@ -29,6 +30,7 @@ object TestRepository {
 
 	fun queryTestsForManyStudent(queryTestViewModel: QueryTestViewModel) {
 		queryTestViewModel.testList.value = PackageData.loading()
+		queryTestViewModel.testList.removeSource(queryTestViewModel.studentList)
 		queryTestViewModel.testList.addSource(queryTestViewModel.studentList) {
 			when (it.status) {
 				Content -> if (it.data!!.isNotEmpty()) TestRemoteDataSource.queryAllTestsForManyStudent(queryTestViewModel.testList, it.data!!)

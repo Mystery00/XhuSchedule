@@ -22,6 +22,7 @@ object ScoreRepository {
 
 	fun queryAllStudentInfo(scoreViewModel: QueryClassScoreViewModel) {
 		scoreViewModel.studentInfoList.value = PackageData.loading()
+		scoreViewModel.studentInfoList.removeSource(scoreViewModel.studentList)
 		scoreViewModel.studentInfoList.addSource(scoreViewModel.studentList) {
 			when (it.status) {
 				Content -> if (it.data!!.isNotEmpty())
@@ -34,8 +35,9 @@ object ScoreRepository {
 		StudentLocalDataSource.queryAllStudentList(scoreViewModel.studentList)
 	}
 
-	fun queryAllStudentInfo(scoreViewModel: QueryExpScoreViewModel){
+	fun queryAllStudentInfo(scoreViewModel: QueryExpScoreViewModel) {
 		scoreViewModel.studentInfoList.value = PackageData.loading()
+		scoreViewModel.studentInfoList.removeSource(scoreViewModel.studentList)
 		scoreViewModel.studentInfoList.addSource(scoreViewModel.studentList) {
 			when (it.status) {
 				Content -> if (it.data!!.isNotEmpty())
@@ -50,6 +52,7 @@ object ScoreRepository {
 
 	fun queryAllStudentInfo() {
 		QueryCetScoreViewModelHelper.studentInfoList.value = PackageData.loading()
+		QueryCetScoreViewModelHelper.studentInfoList.removeSource(QueryCetScoreViewModelHelper.studentList)
 		QueryCetScoreViewModelHelper.studentInfoList.addSource(QueryCetScoreViewModelHelper.studentList) {
 			when (it.status) {
 				Content -> if (it.data!!.isNotEmpty())
