@@ -32,15 +32,14 @@ object ShareUtil {
 	fun shareApplication(context: Context, type: ShareType) {
 		when (type) {
 			ShareType.QQ -> {//分享到qq
-				if (PackageUtil.isQQApplicationAvailable()) {
+				if (PackageUtil.isQQApplicationAvailable() || APP.tencent != null) {
 					val params = Bundle()
-					params.putInt(QQShare.SHARE_TO_QQ_KEY_TYPE, QQShare.SHARE_TO_QQ_TYPE_APP)
 					params.putString(QQShare.SHARE_TO_QQ_TITLE, context.getString(R.string.app_name))
 					params.putString(QQShare.SHARE_TO_QQ_SUMMARY, getRandomText(context))
 					params.putString(QQShare.SHARE_TO_QQ_TARGET_URL, Constants.SHARE_TARGET_URL)
 					params.putString(QQShare.SHARE_TO_QQ_IMAGE_URL, Constants.SHARE_IMAGE_URL)
 					params.putString(QQShare.SHARE_TO_QQ_APP_NAME, context.getString(R.string.app_name))
-					APP.tencent.shareToQQ(APPActivityManager.currentActivity(), params, object : IUiListener {
+					APP.tencent!!.shareToQQ(APPActivityManager.currentActivity(), params, object : IUiListener {
 						override fun onComplete(p0: Any?) {
 						}
 
@@ -56,16 +55,15 @@ object ShareUtil {
 				}
 			}
 			ShareType.QZONE -> {//分享到空间
-				if (PackageUtil.isQQApplicationAvailable()) {
+				if (PackageUtil.isQQApplicationAvailable() || APP.tencent != null) {
 					val params = Bundle()
-					params.putInt(QQShare.SHARE_TO_QQ_KEY_TYPE, QQShare.SHARE_TO_QQ_TYPE_APP)
 					params.putString(QQShare.SHARE_TO_QQ_TITLE, context.getString(R.string.app_name))
 					params.putString(QQShare.SHARE_TO_QQ_SUMMARY, getRandomText(context))
 					params.putString(QQShare.SHARE_TO_QQ_TARGET_URL, Constants.SHARE_TARGET_URL)
 					params.putString(QQShare.SHARE_TO_QQ_IMAGE_URL, Constants.SHARE_IMAGE_URL)
 					params.putString(QQShare.SHARE_TO_QQ_APP_NAME, context.getString(R.string.app_name))
 					params.putInt(QQShare.SHARE_TO_QQ_EXT_INT, QQShare.SHARE_TO_QQ_FLAG_QZONE_AUTO_OPEN)
-					APP.tencent.shareToQQ(APPActivityManager.currentActivity(), params, object : IUiListener {
+					APP.tencent!!.shareToQQ(APPActivityManager.currentActivity(), params, object : IUiListener {
 						override fun onComplete(p0: Any?) {
 						}
 
@@ -98,7 +96,7 @@ object ShareUtil {
 				}
 			}
 			ShareType.WEIXIN -> {//分享到微信
-				if (PackageUtil.isWeiXinApplicationAvailable()) {
+				if (PackageUtil.isWeiXinApplicationAvailable() || APP.wxAPI != null) {
 					val wxAPI = APP.wxAPI
 					val bitmap = BitmapFactory.decodeResource(context.resources, R.mipmap.share_launcher)
 					val wxWebpageObject = WXWebpageObject()
@@ -115,14 +113,14 @@ object ShareUtil {
 					request.transaction = "ShareWithWeiXin${System.currentTimeMillis()}"
 					request.message = wxMediaMessage
 					request.scene = SendMessageToWX.Req.WXSceneSession
-					wxAPI.sendReq(request)
+					wxAPI!!.sendReq(request)
 				} else {
 					Toast.makeText(context, R.string.hint_no_weixin, Toast.LENGTH_SHORT)
 							.show()
 				}
 			}
 			ShareType.FRIEND -> {//分享到朋友圈
-				if (PackageUtil.isWeiXinApplicationAvailable()) {
+				if (PackageUtil.isWeiXinApplicationAvailable() || APP.wxAPI != null) {
 					val wxAPI = APP.wxAPI
 					val bitmap = BitmapFactory.decodeResource(context.resources, R.mipmap.share_launcher)
 					val wxWebpageObject = WXWebpageObject()
@@ -139,7 +137,7 @@ object ShareUtil {
 					req.transaction = "ShareWithFriends${System.currentTimeMillis()}"
 					req.message = wxMediaMessage
 					req.scene = SendMessageToWX.Req.WXSceneTimeline
-					wxAPI.sendReq(req)
+					wxAPI!!.sendReq(req)
 				} else {
 					Toast.makeText(context, R.string.hint_no_weixin, Toast.LENGTH_SHORT)
 							.show()

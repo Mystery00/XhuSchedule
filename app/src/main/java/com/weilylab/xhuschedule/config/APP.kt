@@ -62,17 +62,28 @@ class APP : MultiDexApplication() {
 		DBHelper.init(this)
 		NotificationUtil.initChannelID(APP.context)//初始化NotificationChannelID
 		if (PackageUtil.isQQApplicationAvailable())
-			tencent = Tencent.createInstance("1106663023", CondomContext.wrap(applicationContext, "Tencent"))
+			tencent = try {
+				Tencent.createInstance("1106663023", CondomContext.wrap(applicationContext, "Tencent"))
+			} catch (ignore: Exception) {
+				Tencent.createInstance("1106663023", applicationContext)
+			}
 		if (PackageUtil.isWeiXinApplicationAvailable())
-			wxAPI = WXAPIFactory.createWXAPI(CondomContext.wrap(applicationContext, "WeiXin"), "wx41799887957cbba8", false)
+			wxAPI = try {
+				WXAPIFactory.createWXAPI(CondomContext.wrap(applicationContext, "WeiXin"), "wx41799887957cbba8", false)
+			} catch (ignore: Exception) {
+				WXAPIFactory.createWXAPI(applicationContext, "wx41799887957cbba8", false)
+			}
 		if (PackageUtil.isWeiBoApplicationAvailable())
-			WbSdk.install(CondomContext.wrap(applicationContext, "WeiBo"), AuthInfo(CondomContext.wrap(applicationContext, "WeiBo"), "2170085314", "https://api.weibo.com/oauth2/default.html", "statuses/share"))
-//		CrashHandler.getInstance(this)
-//				.setDir(getExternalFilesDir("log")!!)
-//				.setPrefix("log")
-//				.setSuffix("txt")
-//				.init()
-		CrashReport.initCrashReport(CondomContext.wrap(applicationContext, "Bugly"), "7fe1820ab7", BuildConfig.DEBUG)
+			try {
+				WbSdk.install(CondomContext.wrap(applicationContext, "WeiBo"), AuthInfo(CondomContext.wrap(applicationContext, "WeiBo"), "2170085314", "https://api.weibo.com/oauth2/default.html", "statuses/share"))
+			} catch (ignore: Exception) {
+				WbSdk.install(CondomContext.wrap(applicationContext, "WeiBo"), AuthInfo(applicationContext, "2170085314", "https://api.weibo.com/oauth2/default.html", "statuses/share"))
+			}
+		try {
+			CrashReport.initCrashReport(CondomContext.wrap(applicationContext, "Bugly"), "7fe1820ab7", BuildConfig.DEBUG)
+		} catch (ignore: Exception) {
+			CrashReport.initCrashReport(applicationContext, "7fe1820ab7", BuildConfig.DEBUG)
+		}
 		Logs.setConfig {
 			it.setShowLog(BuildConfig.DEBUG)
 		}
@@ -86,10 +97,10 @@ class APP : MultiDexApplication() {
 		lateinit var instance: Application
 			private set
 
-		lateinit var tencent: Tencent
+		var tencent: Tencent? = null
 			private set
 
-		lateinit var wxAPI: IWXAPI
+		var wxAPI: IWXAPI? = null
 			private set
 	}
 }
