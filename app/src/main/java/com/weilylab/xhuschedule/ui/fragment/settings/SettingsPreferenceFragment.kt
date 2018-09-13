@@ -20,10 +20,9 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.google.android.material.snackbar.Snackbar
-import com.mikepenz.aboutlibraries.Libs
-import com.mikepenz.aboutlibraries.LibsBuilder
 import com.weilylab.xhuschedule.base.BasePreferenceFragment
 import com.weilylab.xhuschedule.service.CheckUpdateService
+import com.weilylab.xhuschedule.ui.activity.SettingsActivity
 import com.weilylab.xhuschedule.ui.custom.CustomGlideEngine
 import com.weilylab.xhuschedule.utils.*
 import com.yalantis.ucrop.UCrop
@@ -55,8 +54,7 @@ class SettingsPreferenceFragment : BasePreferenceFragment(R.xml.preference_setti
 	private lateinit var autoCheckUpdatePreference: CheckBoxPreference
 	private lateinit var weixinPreference: Preference
 	private lateinit var checkUpdatePreference: Preference
-	private lateinit var updateLogPreference: Preference
-	private lateinit var openSourceLicenseAboutPreference: Preference
+	private lateinit var aboutPreference: Preference
 	private lateinit var dialog: Dialog
 	private lateinit var localBroadcastManager: LocalBroadcastManager
 
@@ -72,8 +70,7 @@ class SettingsPreferenceFragment : BasePreferenceFragment(R.xml.preference_setti
 		autoCheckUpdatePreference = findPreferenceById(R.string.key_auto_check_update) as CheckBoxPreference
 		weixinPreference = findPreferenceById(R.string.key_weixin)
 		checkUpdatePreference = findPreferenceById(R.string.key_check_update)
-		updateLogPreference = findPreferenceById(R.string.key_update_log)
-		openSourceLicenseAboutPreference = findPreferenceById(R.string.key_open_source_license_about)
+		aboutPreference = findPreferenceById(R.string.key_about)
 
 		autoCheckUpdatePreference.isChecked = ConfigurationUtil.autoCheckUpdate
 		notificationCoursePreference.isChecked = ConfigurationUtil.notificationCourse
@@ -166,34 +163,8 @@ class SettingsPreferenceFragment : BasePreferenceFragment(R.xml.preference_setti
 			activity!!.startService(intent)
 			true
 		}
-		updateLogPreference.setOnPreferenceClickListener {
-			ConfigUtil.showUpdateLog(activity!!)
-			true
-		}
-		openSourceLicenseAboutPreference.setOnPreferenceClickListener {
-			LibsBuilder()
-					.withActivityStyle(Libs.ActivityStyle.LIGHT)
-					.withAboutAppName(getString(R.string.app_name))
-					.withAboutIconShown(true)
-					.withAboutVersionShown(true)
-					.withLicenseShown(true)
-					.withLicenseDialog(true)
-					.withShowLoadingProgress(true)
-					.withLibraries(
-							"BottomTabView",
-							"ColorPicker",
-							"Condom",
-							"CosmoCalendar",
-							"DataBinding",
-							"Lifecycles",
-							"Matisse",
-							"Mystery0Tools",
-							"Room",
-							"TimetableView",
-							"uCrop",
-							"ViewModel",
-							"ZLoading")
-					.start(activity!!)
+		aboutPreference.setOnPreferenceClickListener {
+			SettingsActivity.intentTo(activity, SettingsActivity.TYPE_ABOUT)
 			true
 		}
 	}
@@ -203,7 +174,7 @@ class SettingsPreferenceFragment : BasePreferenceFragment(R.xml.preference_setti
 			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
 				requestPermissions(arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), requestCode)
 		} else
-			Matisse.from(activity!!)
+			Matisse.from(this)
 					.choose(MimeType.of(MimeType.JPEG, MimeType.PNG, MimeType.BMP))
 					.showSingleMediaType(true)
 					.countable(false)
@@ -227,7 +198,7 @@ class SettingsPreferenceFragment : BasePreferenceFragment(R.xml.preference_setti
 	}
 
 	override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-		Logs.i("onActivityResult: ")
+		Logs.i("onActivityResult: $requestCode")
 		when (requestCode) {
 			REQUEST_CHOOSE_USER -> if (resultCode == Activity.RESULT_OK) {
 				cropImage(Matisse.obtainResult(data)[0], REQUEST_CROP_USER, 500, 500)

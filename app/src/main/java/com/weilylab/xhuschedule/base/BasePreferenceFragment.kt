@@ -41,7 +41,7 @@ abstract class BasePreferenceFragment(@XmlRes private val preferencesResId: Int)
 
 	fun toastMessage(message: String?, isShowLong: Boolean = false) {
 		toast?.cancel()
-		toast = Toast.makeText(activity, message, if (isShowLong) Toast.LENGTH_LONG else Toast.LENGTH_SHORT)
+		toast = Toast.makeText(activity!!, message, if (isShowLong) Toast.LENGTH_LONG else Toast.LENGTH_SHORT)
 		toast?.show()
 	}
 }

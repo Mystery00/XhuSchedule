@@ -126,4 +126,5 @@
 	<string name="title_activity_notice">通知公告</string>
 	<string name="title_activity_query_test">考试查询</string>
 	<string name="title_activity_feedback">意见反馈</string>
+	<string name="title_activity_settings2">Settings</string>
 </resources>

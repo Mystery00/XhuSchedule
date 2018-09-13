@@ -61,6 +61,7 @@ class QueryCetScoreFirstActivity : XhuBaseActivity(R.layout.activity_query_cet_s
 		super.initView()
 		initDialog()
 		setupLayout.setIllustration(ContextCompat.getDrawable(this, R.mipmap.background_cet))
+		setupLayout.setIllustrationAspectRatio(2F)
 		setupLayout.navigationBar.moreButton.setText(R.string.action_more)
 		setupLayout.navigationBar.nextButton.setText(R.string.action_next)
 	}

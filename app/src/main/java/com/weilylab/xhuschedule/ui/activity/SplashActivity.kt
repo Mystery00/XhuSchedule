@@ -86,12 +86,11 @@ class SplashActivity : XhuBaseActivity(null, false) {
 	override fun initData() {
 		super.initData()
 		initViewModel()
-//		SplashRepository.requestSplash(splashViewModel)
+		SplashRepository.requestSplash(splashViewModel)
 		if (ConfigurationUtil.autoCheckUpdate)
 			ContextCompat.startForegroundService(this, Intent(APP.context, CheckUpdateService::class.java))
 		ConfigUtil.setTrigger(this)
 		ConfigUtil.getCurrentYearAndTerm()
-		gotoSplashImage()
 	}
 
 	private fun initViewModel() {

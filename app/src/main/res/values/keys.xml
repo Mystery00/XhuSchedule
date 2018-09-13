@@ -39,7 +39,8 @@
 	<string name="key_query_score_class" translatable="false">key_query_score_class</string>
 	<string name="key_query_score_experiment" translatable="false">key_query_score_experiment</string>
 	<string name="key_query_score_cet" translatable="false">key_query_score_cet</string>
-	<string name="key_open_source_license_about" translatable="true">key_open_source_license_about</string>
+	<string name="key_open_source_license_about" translatable="false">key_open_source_license_about</string>
+	<string name="key_about" translatable="false">key_about</string>
 
 	<string name="title_icon_ui">图标以及界面设计</string>
 	<string name="title_back">数据提供</string>
@@ -66,9 +67,10 @@
 	<string name="title_notification_exam">考试提醒</string>
 	<string name="title_notification_time">提醒时间</string>
 	<string name="title_other">其他设置</string>
+	<string name="title_auto_check_update">自动检查更新</string>
 	<string name="title_weily_product">微力实验室出品</string>
 	<string name="title_community_link">点击加入群【西瓜课表用户交流反馈】</string>
-	<string name="title_auto_check_update">自动检查更新</string>
+	<string name="title_about">关于</string>
 	<string name="title_source_code">开源地址</string>
 	<string name="title_open_source_license">开源协议</string>
 	<string name="title_weixin">微信小程序</string>

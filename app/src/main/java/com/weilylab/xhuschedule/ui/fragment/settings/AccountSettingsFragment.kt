@@ -156,7 +156,7 @@ class AccountSettingsFragment : BasePreferenceFragment(R.xml.preference_account)
 	}
 
 	override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-		Logs.i("onActivityResult: ")
+		super.onActivityResult(requestCode, resultCode, data)
 		if (requestCode == ADD_ACCOUNT_CODE && resultCode == Activity.RESULT_OK) {
 			LayoutRefreshConfigUtil.isRefreshBottomNavigationActivity = true
 			initStudentList()

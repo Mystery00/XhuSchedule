@@ -49,7 +49,6 @@ class TableFragment : BaseBottomNavigationFragment<FragmentTableBinding>(R.layou
 	}
 
 	private val itemHeightObserver = Observer<Int> {
-		Logs.i(": $it")
 		binding.timeTableView.itemHeight(it).updateView()
 	}
 
