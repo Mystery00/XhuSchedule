@@ -13,7 +13,7 @@
 	<!--所有界面需要是黑色的颜色 文本-->
 	<color name="colorBlackText">#FF000000</color>
 	<!--无数据页面文本颜色-->
-	<color name="textColorNullDataView">#FFFFFF</color>
+	<color name="textColorNullDataView">#000000</color>
 
 	<!--主页面标题栏图标颜色-->
 	<color name="colorCustomToolbarTextIcon">#000000</color>

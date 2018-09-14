@@ -7,11 +7,12 @@
 
 <resources>
 	<string-array name="update_log">
-		<item>新增：更改当前学期</item>
-		<item>新增：更改开学时间</item>
-		<item>新增：自定义课程颜色</item>
-		<item> </item>
-		<item>优化：意见反馈</item>
-		<item>优化：崩溃日志记录</item>
+		<item>待更改</item>
+		<!--<item>新增：更改当前学期</item>-->
+		<!--<item>新增：更改开学时间</item>-->
+		<!--<item>新增：自定义课程颜色</item>-->
+		<!--<item> </item>-->
+		<!--<item>优化：意见反馈</item>-->
+		<!--<item>优化：崩溃日志记录</item>-->
 	</string-array>
 </resources>

@@ -99,11 +99,6 @@ android {
 			path 'src/main/jni/CMakeLists.txt'
 		}
 	}
-	sourceSets {
-		main {
-			res.srcDirs = ['src/main/res', 'src/main/res-night']
-		}
-	}
 }
 
 dependencies {

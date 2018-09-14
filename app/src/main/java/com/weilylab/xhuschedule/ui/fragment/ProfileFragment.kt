@@ -42,7 +42,7 @@ class ProfileFragment : BaseBottomNavigationFragment<FragmentProfileBinding>(R.l
 	private fun showUserImage() {
 		val path = ConfigurationUtil.customUserImage
 		if (path == "" || !File(path).exists()) {
-			binding.studentProfileImage.setImageResource(R.mipmap.image_profile)
+			binding.studentProfileImage.setImageResource(R.mipmap.share_launcher)
 		} else {
 			val options = RequestOptions()
 					.signature(MediaStoreSignature("image/*", File(path).lastModified(), 0))
