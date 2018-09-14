@@ -7,12 +7,15 @@
 
 <resources>
 	<string-array name="update_log">
-		<item>待更改</item>
-		<!--<item>新增：更改当前学期</item>-->
-		<!--<item>新增：更改开学时间</item>-->
-		<!--<item>新增：自定义课程颜色</item>-->
-		<!--<item> </item>-->
-		<!--<item>优化：意见反馈</item>-->
-		<!--<item>优化：崩溃日志记录</item>-->
+		<item>西瓜课表目前已在 小米应用商店、魅族应用商店 上架，小米用户和魅族用户可以直接在应用商店搜索 “西瓜课表” 下载使用！</item>
+		<item> </item>
+		<item>新增：夜间模式</item>
+		<item> </item>
+		<item>优化：状态栏颜色显示</item>
+		<item>优化：主界面滑动体验</item>
+		<item> </item>
+		<item>修复：部分设备无法使用</item>
+		<item>修复：分享到QQ的链接无法打开</item>
+		<item>修复：Shortcuts提示应用未安装</item>
 	</string-array>
 </resources>

@@ -1,6 +1,7 @@
 package com.weilylab.xhuschedule.ui.custom
 
 import android.content.Context
+import android.graphics.Color
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
@@ -15,7 +16,6 @@ import com.zhuangfei.timetable.model.Schedule
 import com.zhuangfei.timetable.model.ScheduleEnable
 import com.zhuangfei.timetable.model.ScheduleSupport
 import com.zhuangfei.timetable.model.WeekViewEnable
-import com.zhuangfei.timetable.view.WeekView
 import java.util.ArrayList
 
 class CustomWeekView : LinearLayout, WeekViewEnable<CustomWeekView> {
@@ -69,6 +69,8 @@ class CustomWeekView : LinearLayout, WeekViewEnable<CustomWeekView> {
 				itemCourseWeekBinding.perWeekViewLayout.background = ContextCompat.getDrawable(context, R.drawable.weekview_white)
 				onWeekItemClickedListener.onWeekClicked(i)
 			}
+			itemCourseWeekBinding.weekTextView.setTextColor(Color.parseColor("#8A000000"))
+			itemCourseWeekBinding.weekTextViewBottom.setTextColor(Color.parseColor("#8A000000"))
 			layoutWeekViewBinding.weekViewContainer.addView(itemCourseWeekBinding.root)
 		}
 		if (curWeek in 1..itemCount)
