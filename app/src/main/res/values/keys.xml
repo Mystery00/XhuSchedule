@@ -34,6 +34,7 @@
 	<string name="key_version_code" translatable="false">key_version_code</string>
 	<string name="key_user_img" translatable="false">key_user_img</string>
 	<string name="key_background_img" translatable="false">key_background_img</string>
+	<string name="key_night_mode" translatable="false">key_night_mode</string>
 	<string name="key_reset_user_img" translatable="false">key_reset_user_img</string>
 	<string name="key_reset_background_img" translatable="false">key_reset_background_img</string>
 	<string name="key_query_score_class" translatable="false">key_query_score_class</string>
@@ -63,6 +64,7 @@
 	<string name="title_query_score_cet">四六级成绩</string>
 	<string name="title_user_img">自定义个人头像</string>
 	<string name="title_background_img">自定义背景图片</string>
+	<string name="title_night_mode">夜间模式</string>
 	<string name="title_notification_course">课程提醒</string>
 	<string name="title_notification_exam">考试提醒</string>
 	<string name="title_notification_time">提醒时间</string>

@@ -38,6 +38,11 @@ object ConfigurationUtil {
 				.putString(SharedPreferenceConstant.FIELD_CUSTOM_BACKGROUND_IMAGE, value)
 				.apply()
 		get() = sharedPreferences.getString(SharedPreferenceConstant.FIELD_CUSTOM_BACKGROUND_IMAGE, "")!!
+	var nightMode: Int
+		set(value) = sharedPreferences.edit()
+				.putInt(SharedPreferenceConstant.FIELD_NIGHT_MODE, value)
+				.apply()
+		get() = sharedPreferences.getInt(SharedPreferenceConstant.FIELD_NIGHT_MODE, 2)
 	var isShowGpa: Boolean
 		set(value) = sharedPreferences.edit()
 				.putBoolean(SharedPreferenceConstant.FIELD_SHOW_GPA, value)

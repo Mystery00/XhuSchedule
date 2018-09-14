@@ -1,6 +1,5 @@
 package com.weilylab.xhuschedule.base
 
-import android.graphics.Color
 import android.os.Bundle
 import androidx.preference.Preference
 import androidx.annotation.XmlRes

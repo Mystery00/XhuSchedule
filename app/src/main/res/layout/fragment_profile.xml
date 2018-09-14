@@ -105,6 +105,7 @@
 						android:layout_gravity="center"
 						android:contentDescription="@string/app_name"
 						android:src="@mipmap/ic_query_test"
+						android:tint="@color/colorBlackText"
 						app:layout_constraintBottom_toBottomOf="parent"
 						app:layout_constraintStart_toStartOf="parent"
 						app:layout_constraintTop_toTopOf="parent" />
@@ -158,6 +159,7 @@
 						android:layout_gravity="center"
 						android:contentDescription="@string/app_name"
 						android:src="@mipmap/ic_query_score"
+						android:tint="@color/colorBlackText"
 						app:layout_constraintBottom_toBottomOf="parent"
 						app:layout_constraintStart_toStartOf="parent"
 						app:layout_constraintTop_toTopOf="parent" />
@@ -211,6 +213,7 @@
 						android:layout_gravity="center"
 						android:contentDescription="@string/app_name"
 						android:src="@mipmap/ic_account_settings"
+						android:tint="@color/colorBlackText"
 						app:layout_constraintBottom_toBottomOf="parent"
 						app:layout_constraintStart_toStartOf="parent"
 						app:layout_constraintTop_toTopOf="parent" />
@@ -264,6 +267,7 @@
 						android:layout_gravity="center"
 						android:contentDescription="@string/app_name"
 						android:src="@mipmap/ic_class_settings"
+						android:tint="@color/colorBlackText"
 						app:layout_constraintBottom_toBottomOf="parent"
 						app:layout_constraintStart_toStartOf="parent"
 						app:layout_constraintTop_toTopOf="parent" />
@@ -317,6 +321,7 @@
 						android:layout_gravity="center"
 						android:contentDescription="@string/app_name"
 						android:src="@mipmap/ic_software_settings"
+						android:tint="@color/colorBlackText"
 						app:layout_constraintBottom_toBottomOf="parent"
 						app:layout_constraintStart_toStartOf="parent"
 						app:layout_constraintTop_toTopOf="parent" />
@@ -370,6 +375,7 @@
 						android:layout_gravity="center"
 						android:contentDescription="@string/app_name"
 						android:src="@mipmap/ic_notice"
+						android:tint="@color/colorBlackText"
 						app:layout_constraintBottom_toBottomOf="parent"
 						app:layout_constraintStart_toStartOf="parent"
 						app:layout_constraintTop_toTopOf="parent" />
@@ -434,6 +440,7 @@
 						android:layout_gravity="center"
 						android:contentDescription="@string/app_name"
 						android:src="@mipmap/ic_feedback"
+						android:tint="@color/colorBlackText"
 						app:layout_constraintBottom_toBottomOf="parent"
 						app:layout_constraintStart_toStartOf="parent"
 						app:layout_constraintTop_toTopOf="parent" />
@@ -498,6 +505,7 @@
 						android:layout_gravity="center"
 						android:contentDescription="@string/app_name"
 						android:src="@mipmap/ic_share_with_friends"
+						android:tint="@color/colorBlackText"
 						app:layout_constraintBottom_toBottomOf="parent"
 						app:layout_constraintStart_toStartOf="parent"
 						app:layout_constraintTop_toTopOf="parent" />

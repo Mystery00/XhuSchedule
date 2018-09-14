@@ -1,8 +1,8 @@
 package com.weilylab.xhuschedule.ui.activity
 
-import android.view.Gravity
 import android.view.View
 import androidx.appcompat.app.AlertDialog
+import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -119,7 +119,7 @@ class QueryExpScoreActivity : XhuBaseActivity(R.layout.activity_query_exp_score)
 
 			override fun onDrawerOpened(drawerView: View) {
 				if (!hasData)
-					drawerLayout.closeDrawer(Gravity.END)
+					drawerLayout.closeDrawer(GravityCompat.END)
 			}
 		})
 		textViewStudent.setOnClickListener {
@@ -180,8 +180,8 @@ class QueryExpScoreActivity : XhuBaseActivity(R.layout.activity_query_exp_score)
 	}
 
 	override fun onBackPressed() {
-		if (drawerLayout.isDrawerOpen(Gravity.END))
-			drawerLayout.closeDrawer(Gravity.END)
+		if (drawerLayout.isDrawerOpen(GravityCompat.END))
+			drawerLayout.closeDrawer(GravityCompat.END)
 		else
 			super.onBackPressed()
 	}
@@ -211,6 +211,6 @@ class QueryExpScoreActivity : XhuBaseActivity(R.layout.activity_query_exp_score)
 
 	private fun showContent() {
 		dismissLoading()
-		drawerLayout.openDrawer(Gravity.END)
+		drawerLayout.openDrawer(GravityCompat.END)
 	}
 }

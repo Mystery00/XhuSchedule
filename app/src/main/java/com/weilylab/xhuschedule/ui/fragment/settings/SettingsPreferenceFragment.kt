@@ -46,6 +46,7 @@ class SettingsPreferenceFragment : BasePreferenceFragment(R.xml.preference_setti
 
 	private lateinit var userImgPreference: Preference
 	private lateinit var backgroundImgPreference: Preference
+	private lateinit var nightModePreference: Preference
 	private lateinit var resetUserImgPreference: Preference
 	private lateinit var resetBackgroundPreference: Preference
 	private lateinit var notificationCoursePreference: CheckBoxPreference
@@ -62,6 +63,7 @@ class SettingsPreferenceFragment : BasePreferenceFragment(R.xml.preference_setti
 		super.initPreference()
 		userImgPreference = findPreferenceById(R.string.key_user_img)
 		backgroundImgPreference = findPreferenceById(R.string.key_background_img)
+		nightModePreference = findPreferenceById(R.string.key_night_mode)
 		resetUserImgPreference = findPreferenceById(R.string.key_reset_user_img)
 		resetBackgroundPreference = findPreferenceById(R.string.key_reset_background_img)
 		notificationCoursePreference = findPreferenceById(R.string.key_notification_course) as CheckBoxPreference
@@ -86,6 +88,24 @@ class SettingsPreferenceFragment : BasePreferenceFragment(R.xml.preference_setti
 		}
 		backgroundImgPreference.setOnPreferenceClickListener {
 			requestImageChoose(REQUEST_CHOOSE_BACKGROUND)
+			true
+		}
+		nightModePreference.setOnPreferenceClickListener {
+			val itemArray = resources.getStringArray(R.array.night_mode)
+			var selectedIndex = ConfigurationUtil.nightMode
+			AlertDialog.Builder(activity!!)
+					.setTitle(R.string.hint_dialog_choose_student)
+					.setSingleChoiceItems(itemArray, selectedIndex) { _, index ->
+						selectedIndex = index
+					}
+					.setPositiveButton(R.string.action_ok) { _, _ ->
+						if (ConfigurationUtil.nightMode != selectedIndex) {
+							ConfigurationUtil.nightMode = selectedIndex
+							toastMessage("请重启APP以应用新的设置", true)
+						}
+					}
+					.setNegativeButton(R.string.action_cancel, null)
+					.show()
 			true
 		}
 		resetUserImgPreference.setOnPreferenceClickListener {

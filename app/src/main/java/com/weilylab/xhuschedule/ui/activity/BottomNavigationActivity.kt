@@ -233,6 +233,7 @@ class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_naviga
 				.setHintText(getString(R.string.hint_dialog_init))
 				.setHintTextSize(16F)
 				.setCanceledOnTouchOutside(false)
+				.setDialogBackgroundColor(ContextCompat.getColor(this, R.color.colorWhiteBackground))
 				.setLoadingColor(ContextCompat.getColor(this, R.color.colorAccent))
 				.setHintTextColor(ContextCompat.getColor(this, R.color.colorAccent))
 				.create()

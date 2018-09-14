@@ -72,6 +72,7 @@ class QueryCetScoreFirstActivity : XhuBaseActivity(R.layout.activity_query_cet_s
 				.setHintText(getString(R.string.hint_dialog_get_cet_vcode))
 				.setHintTextSize(16F)
 				.setCanceledOnTouchOutside(false)
+				.setDialogBackgroundColor(ContextCompat.getColor(this, R.color.colorWhiteBackground))
 				.setLoadingColor(ContextCompat.getColor(this, R.color.colorAccent))
 				.setHintTextColor(ContextCompat.getColor(this, R.color.colorAccent))
 				.create()

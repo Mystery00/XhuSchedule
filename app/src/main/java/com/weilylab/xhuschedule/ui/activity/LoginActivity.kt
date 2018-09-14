@@ -90,6 +90,7 @@ class LoginActivity : XhuBaseActivity(R.layout.activity_login, false) {
 				.setHintText(getString(R.string.hint_dialog_login))
 				.setHintTextSize(16F)
 				.setCanceledOnTouchOutside(false)
+				.setDialogBackgroundColor(ContextCompat.getColor(this, R.color.colorWhiteBackground))
 				.setLoadingColor(ContextCompat.getColor(this, R.color.colorAccent))
 				.setHintTextColor(ContextCompat.getColor(this, R.color.colorAccent))
 				.create()

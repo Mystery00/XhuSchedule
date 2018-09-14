@@ -20,13 +20,15 @@
 	<!--主界面底部未选中颜色-->
 	<color name="colorUnSelectedText">#FFFFFF</color>
 	<!--所有界面分割线颜色-->
-	<color name="colorDivider">#BDBDBD</color>
+	<color name="colorDivider">#424242</color>
 	<!--个人界面分割线颜色-->
-	<color name="colorDividerProfile">#BDBDBD</color>
+	<color name="colorDividerProfile">#424242</color>
 	<!--个人页面更多图标颜色-->
 	<color name="colorMoreProfile">#424242</color>
 	<!--个人页面每项背景色-->
 	<color name="colorItemBackgroundProfile">#212121</color>
 	<!--意见反馈页面背景颜色-->
 	<color name="colorFeedBackBackground">#212121</color>
+	<!--设置页面图标颜色-->
+	<color name="colorPreferenceIcon">#FFFFFF</color>
 </resources>

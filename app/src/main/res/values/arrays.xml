@@ -28,6 +28,13 @@
 		<item>21:35</item>
 	</string-array>
 
+	<string-array name="night_mode">
+		<item>自动</item>
+		<item>开</item>
+		<item>关</item>
+		<item>跟随系统</item>
+	</string-array>
+
 	<string-array name="hint_share_message">
 		<item>查课查课表，我就用西瓜课表~ 下载链接：https://www.coolapk.com/apk/com.weilylab.xhuschedule</item>
 		<item>西瓜子都在用的课表~ 下载链接：https://www.coolapk.com/apk/com.weilylab.xhuschedule</item>

@@ -69,6 +69,7 @@ class QueryTestActivity : XhuBaseActivity(R.layout.activity_query_test) {
 				.setHintText(getString(R.string.hint_dialog_get_tests))
 				.setHintTextSize(16F)
 				.setCanceledOnTouchOutside(false)
+				.setDialogBackgroundColor(ContextCompat.getColor(this, R.color.colorWhiteBackground))
 				.setLoadingColor(ContextCompat.getColor(this, R.color.colorAccent))
 				.setHintTextColor(ContextCompat.getColor(this, R.color.colorAccent))
 				.create()

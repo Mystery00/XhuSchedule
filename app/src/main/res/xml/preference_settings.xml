@@ -11,6 +11,11 @@
 			android:key="@string/key_background_img"
 			android:title="@string/title_background_img" />
 
+		<Preference
+			android:icon="@drawable/ic_night_mode"
+			android:key="@string/key_night_mode"
+			android:title="@string/title_night_mode" />
+
 	</PreferenceCategory>
 
 	<PreferenceCategory android:title="@string/screen_category_reset_ui">
@@ -57,11 +62,13 @@
 		</Preference>
 
 		<Preference
+			android:icon="@drawable/ic_mini_program"
 			android:key="@string/key_weixin"
 			android:summary="@string/summary_weixin"
 			android:title="@string/title_weixin" />
 
 		<Preference
+			android:icon="@drawable/ic_check_update"
 			android:key="@string/key_check_update"
 			android:title="@string/title_check_update" />
 

@@ -67,6 +67,7 @@ class ClassCourseColorActivity : XhuBaseActivity(R.layout.activity_class_course_
 				.setLoadingBuilder(Z_TYPE.SINGLE_CIRCLE)
 				.setHintText(" ")
 				.setCanceledOnTouchOutside(false)
+				.setDialogBackgroundColor(ContextCompat.getColor(this, R.color.colorWhiteBackground))
 				.setLoadingColor(ContextCompat.getColor(this, R.color.colorAccent))
 				.setHintTextColor(ContextCompat.getColor(this, R.color.colorAccent))
 				.create()

@@ -16,6 +16,7 @@
 	<string name="profile_action_notice">通知公告</string>
 	<string name="profile_action_feedback">意见反馈</string>
 	<string name="profile_action_share_with_friends">分享应用</string>
+	<string name="profile_action_night_mode">夜间模式</string>
 
 	<string name="action_login">登\t录</string>
 	<string name="action_settings">设置</string>
