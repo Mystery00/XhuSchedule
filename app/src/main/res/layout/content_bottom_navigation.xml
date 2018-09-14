@@ -24,7 +24,7 @@
 		app:layout_constraintBottom_toBottomOf="parent"
 		app:layout_constraintEnd_toEndOf="parent"
 		app:layout_constraintStart_toStartOf="parent"
-		app:line_height="1dp"
+		app:line_height="0dp"
 		app:margin_bottom="6dp"
 		app:margin_top="6dp"
 		app:selected_color="#0fc8ff"

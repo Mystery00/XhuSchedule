@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<color name="colorPrimary">#424242</color>
+	<color name="colorPrimary">#484848</color>
 	<color name="colorPrimaryDark">#212121</color>
-	<color name="colorAccent">#BDBDBD</color>
+	<color name="colorAccent">#2e85df</color>
 
 	<!--所有界面需要是灰色的颜色 背景-->
 	<color name="colorGrayBackground">#212121</color>
 	<!--所有界面需要是白色的颜色 背景-->
-	<color name="colorWhiteBackground">#212121</color>
+	<color name="colorWhiteBackground">#242424</color>
 	<!--所有界面需要是默认色的颜色 文本-->
 	<color name="colorGrayText">#FFFFFF</color>
 	<!--所有界面需要是黑色的颜色 文本-->
@@ -20,15 +20,17 @@
 	<!--主界面底部未选中颜色-->
 	<color name="colorUnSelectedText">#FFFFFF</color>
 	<!--所有界面分割线颜色-->
-	<color name="colorDivider">#424242</color>
+	<color name="colorDivider">#616161</color>
 	<!--个人界面分割线颜色-->
-	<color name="colorDividerProfile">#424242</color>
+	<color name="colorDividerProfile">#363636</color>
 	<!--个人页面更多图标颜色-->
-	<color name="colorMoreProfile">#424242</color>
+	<color name="colorMoreProfile">#FFFFFF</color>
 	<!--个人页面每项背景色-->
-	<color name="colorItemBackgroundProfile">#212121</color>
+	<color name="colorItemBackgroundProfile">#242424</color>
 	<!--意见反馈页面背景颜色-->
-	<color name="colorFeedBackBackground">#212121</color>
+	<color name="colorFeedBackBackground">#3d3d3d</color>
 	<!--设置页面图标颜色-->
 	<color name="colorPreferenceIcon">#FFFFFF</color>
+	<!--课程页面背景色-->
+	<color name="colorTableBackground">#242424</color>
 </resources>

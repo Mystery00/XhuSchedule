@@ -10,12 +10,16 @@
 		android:id="@+id/calendarView"
 		android:layout_width="0dp"
 		android:layout_height="0dp"
+		app:calendarBackgroundColor="@color/colorGrayBackground"
+		app:dayTextColor="@color/colorBlackText"
 		app:firstDayOfTheWeek="sunday"
 		app:layout_constraintBottom_toBottomOf="@id/barrier"
 		app:layout_constraintEnd_toEndOf="parent"
 		app:layout_constraintStart_toStartOf="parent"
 		app:layout_constraintTop_toTopOf="parent"
+		app:monthTextColor="@color/colorBlackText"
 		app:orientation="vertical"
+		app:otherDayTextColor="@color/colorGrayText"
 		app:selectionType="single" />
 
 	<Button
