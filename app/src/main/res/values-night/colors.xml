@@ -33,4 +33,6 @@
 	<color name="colorPreferenceIcon">#FFFFFF</color>
 	<!--课程页面背景色-->
 	<color name="colorTableBackground">#242424</color>
+	<!--今日课程页面卡片背景色-->
+	<color name="colorTodayBackground">#484848</color>
 </resources>

@@ -17,5 +17,6 @@
 		<item>修复：部分设备无法使用</item>
 		<item>修复：分享到QQ的链接无法打开</item>
 		<item>修复：Shortcuts提示应用未安装</item>
+		<item>修复：上一版本今日课程页面颜色错误</item>
 	</string-array>
 </resources>

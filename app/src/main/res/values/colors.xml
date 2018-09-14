@@ -33,6 +33,8 @@
 	<color name="colorPreferenceIcon">#000000</color>
 	<!--课程页面背景色-->
 	<color name="colorTableBackground">#00000000</color>
+	<!--今日课程页面卡片背景色-->
+	<color name="colorTodayBackground">#FFFFFF</color>
 
 	<!--登录页标签颜色-->
 	<color name="login_color_label">#cccccc</color>
