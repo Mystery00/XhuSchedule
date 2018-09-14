@@ -15,11 +15,11 @@
 		android:id="@+id/course_name_textView"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:paddingBottom="4dp"
-		android:paddingEnd="8dp"
 		android:paddingStart="8dp"
 		android:paddingTop="8dp"
-		android:textColor="@color/colorWhite"
+		android:paddingEnd="8dp"
+		android:paddingBottom="4dp"
+		android:textColor="@android:color/white"
 		android:textStyle="bold" />
 
 	<TextView
@@ -27,11 +27,11 @@
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
 		android:layout_below="@id/course_name_textView"
-		android:paddingBottom="4dp"
-		android:paddingEnd="8dp"
 		android:paddingStart="8dp"
 		android:paddingTop="4dp"
-		android:textColor="@color/colorWhite" />
+		android:paddingEnd="8dp"
+		android:paddingBottom="4dp"
+		android:textColor="@android:color/white" />
 
 
 	<TextView
@@ -39,10 +39,10 @@
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
 		android:layout_below="@id/course_teacher_textView"
-		android:paddingBottom="8dp"
-		android:paddingEnd="8dp"
 		android:paddingStart="8dp"
 		android:paddingTop="4dp"
-		android:textColor="@color/colorWhite" />
+		android:paddingEnd="8dp"
+		android:paddingBottom="8dp"
+		android:textColor="@android:color/white" />
 
 </RelativeLayout>

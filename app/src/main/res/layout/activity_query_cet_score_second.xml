@@ -28,7 +28,9 @@
 			android:layout_margin="16dp"
 			android:background="@drawable/drawable_background_cet"
 			android:hint="@string/hint_input_cet_vcode"
+			android:inputType="text"
 			android:padding="16dp"
+			android:textColor="@color/colorGrayText"
 			app:layout_constraintBottom_toBottomOf="parent"
 			app:layout_constraintEnd_toEndOf="parent"
 			app:layout_constraintStart_toStartOf="parent"
@@ -38,9 +40,11 @@
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:text="图片来自网络，如果存在侵权行为，请联系作者"
-			android:textSize="8dp"
+			android:textColor="@color/colorGrayText"
+			android:textSize="8sp"
 			app:layout_constraintBottom_toBottomOf="parent"
-			app:layout_constraintEnd_toEndOf="parent" />
+			app:layout_constraintEnd_toEndOf="parent"
+			tools:ignore="SmallSp,SpUsage" />
 
 	</androidx.constraintlayout.widget.ConstraintLayout>
 

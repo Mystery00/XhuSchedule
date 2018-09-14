@@ -31,7 +31,7 @@
 				android:gravity="center_vertical"
 				android:labelFor="@id/cetNoEditText"
 				android:text="@string/prompt_cet_no"
-				android:textColor="@android:color/black"
+				android:textColor="@color/colorBlackText"
 				app:layout_constraintBottom_toBottomOf="@id/cetNoEditText"
 				app:layout_constraintStart_toStartOf="parent"
 				app:layout_constraintTop_toTopOf="@id/cetNoEditText" />
@@ -45,7 +45,7 @@
 				android:gravity="center_vertical"
 				android:labelFor="@id/cetNameEditText"
 				android:text="@string/prompt_cet_name"
-				android:textColor="@android:color/black"
+				android:textColor="@color/colorBlackText"
 				app:layout_constraintBottom_toBottomOf="@id/cetNameEditText"
 				app:layout_constraintStart_toStartOf="parent"
 				app:layout_constraintTop_toTopOf="@id/cetNameEditText" />
@@ -75,6 +75,7 @@
 				android:background="@null"
 				android:hint="@string/hint_input_cet_no"
 				android:inputType="number"
+				android:textColor="@color/colorGrayText"
 				app:layout_constraintBottom_toBottomOf="@id/cet_line"
 				app:layout_constraintEnd_toEndOf="parent"
 				app:layout_constraintStart_toEndOf="@id/barrier"
@@ -88,6 +89,7 @@
 				android:background="@null"
 				android:hint="@string/hint_input_cet_name"
 				android:inputType="text"
+				android:textColor="@color/colorGrayText"
 				app:layout_constraintBottom_toBottomOf="parent"
 				app:layout_constraintEnd_toEndOf="parent"
 				app:layout_constraintStart_toEndOf="@id/barrier"

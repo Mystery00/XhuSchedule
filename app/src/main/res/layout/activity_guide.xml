@@ -72,7 +72,7 @@
 			android:layout_width="10dp"
 			android:layout_height="10dp"
 			android:background="@drawable/drawable_point_view"
-			android:backgroundTint="@color/colorWhite"
+			android:backgroundTint="@android:color/white"
 			app:layout_constraintBottom_toBottomOf="parent"
 			app:layout_constraintStart_toStartOf="@id/pointLayout"
 			app:layout_constraintTop_toTopOf="parent" />

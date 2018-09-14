@@ -9,7 +9,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.annotation.StringRes
+import androidx.core.content.ContextCompat
 import androidx.preference.PreferenceFragmentCompat
+import com.weilylab.xhuschedule.R
 
 abstract class BasePreferenceFragment(@XmlRes private val preferencesResId: Int) : PreferenceFragmentCompat() {
 	private var toast: Toast? = null
@@ -20,7 +22,7 @@ abstract class BasePreferenceFragment(@XmlRes private val preferencesResId: Int)
 
 	override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 		val view = super.onCreateView(inflater, container, savedInstanceState) ?: return null
-		listView.setBackgroundColor(Color.WHITE)
+		listView.setBackgroundColor(ContextCompat.getColor(activity!!, R.color.colorWhiteBackground))
 		setDividerHeight(1)
 		return view
 	}

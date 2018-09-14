@@ -4,17 +4,40 @@
 	<color name="colorPrimaryDark">#000000</color>
 	<color name="colorAccent">#2e85df</color>
 
-	<color name="colorBackground">#fafafa</color>
+	<!--所有界面需要是灰色的颜色 背景-->
+	<color name="colorGrayBackground">#fafafa</color>
+	<!--所有界面需要是白色的颜色 背景-->
+	<color name="colorWhiteBackground">#FFFFFF</color>
+	<!--所有界面需要是默认色的颜色 文本-->
+	<color name="colorGrayText">#8A000000</color>
+	<!--所有界面需要是黑色的颜色 文本-->
+	<color name="colorBlackText">#FF000000</color>
+	<!--无数据页面文本颜色-->
+	<color name="textColorNullDataView">#FFFFFF</color>
+
+	<!--主页面标题栏图标颜色-->
+	<color name="colorCustomToolbarTextIcon">#000000</color>
+	<!--主界面底部未选中颜色-->
+	<color name="colorUnSelectedText">#333333</color>
+	<!--所有界面分割线颜色-->
 	<color name="colorDivider">#dddddd</color>
+	<!--个人界面分割线颜色-->
+	<color name="colorDividerProfile">#f0f0f0</color>
+	<!--个人页面更多图标颜色-->
+	<color name="colorMoreProfile">#979797</color>
+	<!--个人页面每项背景色-->
+	<color name="colorItemBackgroundProfile">#eaeaea</color>
+	<!--意见反馈页面背景颜色-->
+	<color name="colorFeedBackBackground">#f2f2f2</color>
 
-	<color name="colorSender">#2e85df</color>
-	<color name="colorReceiver">#ff3a6b</color>
-
+	<!--登录页标签颜色-->
 	<color name="login_color_label">#cccccc</color>
+	<!--登录页文本颜色-->
 	<color name="login_color_text">#4ea5ff</color>
-	<color name="colorWhite">#FFFFFF</color>
+	<!--启动页背景色-->
 	<color name="splashColor">#2e85df</color>
 
+	<!--颜色池颜色-->
 	<color name="colorPool1">#7c4dff</color>
 	<color name="colorPool15">#536dfe</color>
 	<color name="colorPool16">#03a9f4</color>

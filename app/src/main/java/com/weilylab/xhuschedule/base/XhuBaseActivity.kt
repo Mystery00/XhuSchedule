@@ -33,6 +33,7 @@
 
 package com.weilylab.xhuschedule.base
 
+import android.content.res.Configuration
 import android.os.Bundle
 import android.widget.Toast
 import androidx.annotation.StringRes
@@ -49,6 +50,12 @@ abstract class XhuBaseActivity(layoutId: Int?, private val isSetStatusBar: Boole
 			ConfigUtil.setStatusBar(this)
 		AppCompatDelegate.setCompatVectorFromResourcesEnabled(true)
 		APPActivityManager.addActivity(this)
+		val currentNightMode = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
+		delegate.setLocalNightMode(
+//				if (currentNightMode == Configuration.UI_MODE_NIGHT_NO)
+					AppCompatDelegate.MODE_NIGHT_YES)
+//				else
+//					AppCompatDelegate.MODE_NIGHT_NO)
 		super.onCreate(savedInstanceState)
 	}
 

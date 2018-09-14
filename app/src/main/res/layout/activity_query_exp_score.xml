@@ -32,7 +32,7 @@
 		<androidx.constraintlayout.widget.ConstraintLayout
 			android:layout_width="match_parent"
 			android:layout_height="match_parent"
-			android:background="@color/colorBackground">
+			android:background="@color/colorGrayBackground">
 
 			<TextView
 				android:id="@+id/textViewStudent"
@@ -113,7 +113,7 @@
 			android:layout_width="match_parent"
 			android:layout_height="match_parent"
 			android:layout_gravity="end"
-			android:background="@color/colorBackground" />
+			android:background="@color/colorGrayBackground" />
 
 	</androidx.drawerlayout.widget.DrawerLayout>
 

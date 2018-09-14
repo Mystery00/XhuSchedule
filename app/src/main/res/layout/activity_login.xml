@@ -154,7 +154,7 @@
 			android:layout_marginEnd="32dp"
 			android:background="@drawable/drawable_login_button"
 			android:text="@string/action_login"
-			android:textColor="@color/colorWhite"
+			android:textColor="@android:color/white"
 			android:textSize="16sp"
 			app:layout_constraintBottom_toBottomOf="parent"
 			app:layout_constraintEnd_toEndOf="parent"

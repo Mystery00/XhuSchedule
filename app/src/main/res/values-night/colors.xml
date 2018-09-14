@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<color name="colorPrimary">#424242</color>
+	<color name="colorPrimaryDark">#212121</color>
+	<color name="colorAccent">#BDBDBD</color>
+
+	<!--所有界面需要是灰色的颜色 背景-->
+	<color name="colorGrayBackground">#212121</color>
+	<!--所有界面需要是白色的颜色 背景-->
+	<color name="colorWhiteBackground">#212121</color>
+	<!--所有界面需要是默认色的颜色 文本-->
+	<color name="colorGrayText">#FFFFFF</color>
+	<!--所有界面需要是黑色的颜色 文本-->
+	<color name="colorBlackText">#FFFFFF</color>
+	<!--无数据页面文本颜色-->
+	<color name="textColorNullDataView">#FFFFFF</color>
+
+	<!--主页面标题栏图标颜色-->
+	<color name="colorCustomToolbarTextIcon">#FFFFFF</color>
+	<!--主界面底部未选中颜色-->
+	<color name="colorUnSelectedText">#FFFFFF</color>
+	<!--所有界面分割线颜色-->
+	<color name="colorDivider">#BDBDBD</color>
+	<!--个人界面分割线颜色-->
+	<color name="colorDividerProfile">#BDBDBD</color>
+	<!--个人页面更多图标颜色-->
+	<color name="colorMoreProfile">#424242</color>
+	<!--个人页面每项背景色-->
+	<color name="colorItemBackgroundProfile">#212121</color>
+	<!--意见反馈页面背景颜色-->
+	<color name="colorFeedBackBackground">#212121</color>
+</resources>

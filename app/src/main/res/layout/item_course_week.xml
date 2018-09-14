@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:tools="http://schemas.android.com/tools">
 
 	<data />
 
@@ -34,7 +34,8 @@
 			android:id="@+id/weekTextViewBottom"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:textSize="10sp" />
+			android:textSize="10sp"
+			tools:ignore="SmallSp" />
 
 	</LinearLayout>
 

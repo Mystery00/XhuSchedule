@@ -44,6 +44,7 @@
 			android:layout_marginStart="44dp"
 			android:layout_marginTop="20dp"
 			android:layout_marginEnd="44dp"
+			android:textColor="@color/colorGrayText"
 			app:layout_constraintEnd_toEndOf="parent"
 			app:layout_constraintStart_toStartOf="parent"
 			app:layout_constraintTop_toBottomOf="@+id/line" />
@@ -55,6 +56,7 @@
 			android:layout_marginStart="44dp"
 			android:layout_marginTop="15dp"
 			android:layout_marginEnd="44dp"
+			android:textColor="@color/colorGrayText"
 			app:layout_constraintEnd_toEndOf="parent"
 			app:layout_constraintStart_toStartOf="parent"
 			app:layout_constraintTop_toBottomOf="@+id/textViewName" />
@@ -87,6 +89,7 @@
 				android:layout_width="wrap_content"
 				android:layout_height="0dp"
 				android:text="总"
+				android:textColor="@color/colorGrayText"
 				app:layout_constraintBottom_toBottomOf="@id/hintScoreSum2"
 				app:layout_constraintStart_toStartOf="@id/hintScoreWrite"
 				app:layout_constraintTop_toTopOf="@id/hintScoreSum2" />
@@ -97,6 +100,7 @@
 				android:layout_height="wrap_content"
 				android:layout_marginTop="13dp"
 				android:text="分："
+				android:textColor="@color/colorGrayText"
 				app:layout_constraintEnd_toEndOf="@id/hintScoreWrite"
 				app:layout_constraintTop_toBottomOf="@id/textViewPaperScoreHint" />
 
@@ -105,6 +109,7 @@
 				android:layout_width="wrap_content"
 				android:layout_height="0dp"
 				android:text="听"
+				android:textColor="@color/colorGrayText"
 				app:layout_constraintBottom_toBottomOf="@id/hintScoreListen2"
 				app:layout_constraintStart_toStartOf="@id/hintScoreWrite"
 				app:layout_constraintTop_toTopOf="@id/hintScoreListen2" />
@@ -115,6 +120,7 @@
 				android:layout_height="wrap_content"
 				android:layout_marginTop="6dp"
 				android:text="力："
+				android:textColor="@color/colorGrayText"
 				app:layout_constraintEnd_toEndOf="@id/hintScoreWrite"
 				app:layout_constraintTop_toBottomOf="@id/hintScoreSum2" />
 
@@ -123,6 +129,7 @@
 				android:layout_width="wrap_content"
 				android:layout_height="0dp"
 				android:text="阅"
+				android:textColor="@color/colorGrayText"
 				app:layout_constraintBottom_toBottomOf="@id/hintScoreRead2"
 				app:layout_constraintStart_toStartOf="@id/hintScoreWrite"
 				app:layout_constraintTop_toTopOf="@id/hintScoreRead2" />
@@ -133,6 +140,7 @@
 				android:layout_height="wrap_content"
 				android:layout_marginTop="6dp"
 				android:text="读："
+				android:textColor="@color/colorGrayText"
 				app:layout_constraintEnd_toEndOf="@id/hintScoreWrite"
 				app:layout_constraintTop_toBottomOf="@id/hintScoreListen2" />
 
@@ -143,6 +151,7 @@
 				android:layout_marginStart="6dp"
 				android:layout_marginTop="6dp"
 				android:text="写作和翻译："
+				android:textColor="@color/colorGrayText"
 				app:layout_constraintBottom_toBottomOf="parent"
 				app:layout_constraintStart_toStartOf="parent"
 				app:layout_constraintTop_toBottomOf="@id/hintScoreRead2" />
@@ -153,6 +162,7 @@
 				android:layout_height="0dp"
 				android:layout_marginStart="16dp"
 				android:text="@{cetScore.total}"
+				android:textColor="@color/colorGrayText"
 				app:layout_constraintBottom_toBottomOf="@id/hintScoreSum2"
 				app:layout_constraintStart_toEndOf="@id/hintScoreWrite"
 				app:layout_constraintTop_toTopOf="@id/hintScoreSum2" />
@@ -163,6 +173,7 @@
 				android:layout_height="wrap_content"
 				android:layout_marginStart="16dp"
 				android:text="@{cetScore.listen}"
+				android:textColor="@color/colorGrayText"
 				app:layout_constraintBottom_toBottomOf="@id/hintScoreListen2"
 				app:layout_constraintStart_toEndOf="@id/hintScoreWrite"
 				app:layout_constraintTop_toTopOf="@id/hintScoreListen2" />
@@ -173,6 +184,7 @@
 				android:layout_height="wrap_content"
 				android:layout_marginStart="16dp"
 				android:text="@{cetScore.read}"
+				android:textColor="@color/colorGrayText"
 				app:layout_constraintBottom_toBottomOf="@id/hintScoreRead2"
 				app:layout_constraintStart_toEndOf="@id/hintScoreWrite"
 				app:layout_constraintTop_toTopOf="@id/hintScoreRead2" />
@@ -183,6 +195,7 @@
 				android:layout_height="wrap_content"
 				android:layout_marginStart="16dp"
 				android:text="@{cetScore.write}"
+				android:textColor="@color/colorGrayText"
 				app:layout_constraintBottom_toBottomOf="@id/hintScoreWrite"
 				app:layout_constraintStart_toEndOf="@id/hintScoreWrite"
 				app:layout_constraintTop_toTopOf="@id/hintScoreWrite" />
@@ -217,6 +230,7 @@
 				android:layout_width="wrap_content"
 				android:layout_height="0dp"
 				android:text="等"
+				android:textColor="@color/colorGrayText"
 				app:layout_constraintBottom_toBottomOf="@id/hintScoreLevel2"
 				app:layout_constraintStart_toStartOf="@id/hintHintHintScoreWrite"
 				app:layout_constraintTop_toTopOf="@id/hintScoreLevel2" />
@@ -227,6 +241,7 @@
 				android:layout_height="wrap_content"
 				android:layout_marginTop="13dp"
 				android:text="级："
+				android:textColor="@color/colorGrayText"
 				app:layout_constraintBottom_toBottomOf="parent"
 				app:layout_constraintEnd_toEndOf="@id/hintHintHintScoreWrite"
 				app:layout_constraintTop_toBottomOf="@id/textViewSpeakScoreHint" />
@@ -237,6 +252,7 @@
 				android:layout_height="wrap_content"
 				android:layout_marginStart="16dp"
 				android:text="@{cetScore.oralGrade}"
+				android:textColor="@color/colorGrayText"
 				app:layout_constraintBottom_toBottomOf="@id/hintScoreLevel2"
 				app:layout_constraintStart_toEndOf="@id/hintScoreLevel2"
 				app:layout_constraintTop_toTopOf="@id/hintScoreLevel2" />
@@ -248,6 +264,7 @@
 				android:layout_marginStart="6dp"
 				android:alpha="0"
 				android:text="写作和翻译："
+				android:textColor="@color/colorGrayText"
 				app:layout_constraintBottom_toBottomOf="parent"
 				app:layout_constraintStart_toStartOf="parent"
 				app:layout_constraintTop_toTopOf="parent" />
