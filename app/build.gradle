@@ -102,9 +102,9 @@ android {
 }
 
 dependencies {
-	kapt "androidx.databinding:databinding-compiler:3.2.0-beta05"
+	kapt "androidx.databinding:databinding-compiler:3.2.0-rc03"
 	implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-	implementation 'com.google.android.material:material:1.0.0-rc01'
+	implementation 'com.google.android.material:material:1.0.0-rc02'
 	implementation 'androidx.appcompat:appcompat:1.0.0-rc02'
 	implementation 'androidx.cardview:cardview:1.0.0-rc02'
 	implementation 'androidx.legacy:legacy-support-v4:1.0.0-rc02'
@@ -178,7 +178,7 @@ dependencies {
 	implementation 'de.hdodenhof:circleimageview:2.2.0'
 
 	//Bugly
-	implementation 'com.tencent.bugly:crashreport:latest.release'
+	implementation 'com.tencent.bugly:crashreport:2.6.6.1'
 
 	//微信
 	implementation 'com.tencent.mm.opensdk:wechat-sdk-android-without-mta:5.1.4'
