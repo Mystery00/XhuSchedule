@@ -117,6 +117,10 @@ class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_naviga
 	private val courseListObserver = Observer<PackageData<List<Schedule>>> { packageData ->
 		when (packageData.status) {
 			Content -> {
+				if (action == ACTION_REFRESH) {
+					toastMessage(R.string.hint_course_sync_done)
+					action = ACTION_NONE
+				}
 				cancelLoading()
 				hideDialog()
 				val nowString = CalendarUtil.getTodayDateString()
@@ -135,6 +139,10 @@ class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_naviga
 				hideDialog()
 			}
 			Empty -> {
+				if (action == ACTION_REFRESH) {
+					toastMessage(R.string.hint_course_sync_done)
+					action = ACTION_NONE
+				}
 				cancelLoading()
 				hideDialog()
 			}
@@ -387,10 +395,6 @@ class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_naviga
 					.observeOn(AndroidSchedulers.mainThread())
 					.subscribe(object : io.reactivex.Observer<Boolean> {
 						override fun onComplete() {
-							if (action == ACTION_REFRESH) {
-								toastMessage(R.string.hint_course_sync_done)
-								action = ACTION_NONE
-							}
 							if (bottomNavigationViewModel.courseList.value != null && bottomNavigationViewModel.courseList.value!!.data != null) {
 								courseList.clear()
 								courseList.addAll(bottomNavigationViewModel.courseList.value!!.data!!)
