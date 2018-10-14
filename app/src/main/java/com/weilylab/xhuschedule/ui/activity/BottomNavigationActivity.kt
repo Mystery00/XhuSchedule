@@ -134,6 +134,7 @@ class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_naviga
 			Loading -> showLoading()
 			Error -> {
 				Logs.wtfm("courseListObserver: ", packageData.error)
+				action = ACTION_NONE
 				toastMessage(packageData.error?.message)
 				cancelLoading()
 				hideDialog()
