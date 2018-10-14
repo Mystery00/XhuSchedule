@@ -76,7 +76,7 @@
 	<string name="hint_course_sync_done">数据同步成功！</string>
 	<string name="hint_student_logged">该用户已登录！</string>
 
-	<string name="hint_feedback_null_student">用户数据获取错误！</string>
+	<string name="hint_null_student">用户数据获取错误！</string>
 	<string name="hint_feedback_empty">信息不能为空！</string>
 	<string name="hint_feedback_hint">请输入…</string>
 

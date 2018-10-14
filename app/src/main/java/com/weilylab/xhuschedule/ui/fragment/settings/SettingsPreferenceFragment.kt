@@ -207,6 +207,8 @@ class SettingsPreferenceFragment : BasePreferenceFragment(R.xml.preference_setti
 
 	override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
 		super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+		if (grantResults.isEmpty())
+			return
 		if (grantResults[0] == PackageManager.PERMISSION_GRANTED)
 			requestImageChoose(requestCode)
 		else

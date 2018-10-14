@@ -1,5 +1,6 @@
 package com.weilylab.xhuschedule.repository
 
+import com.weilylab.xhuschedule.constant.StringConstant
 import com.weilylab.xhuschedule.model.Student
 import com.weilylab.xhuschedule.repository.local.CourseLocalDataSource
 import com.weilylab.xhuschedule.repository.local.StudentLocalDataSource
@@ -107,7 +108,17 @@ object BottomNavigationRepository {
 	fun queryCoursesOnline(bottomNavigationViewModel: BottomNavigationViewModel, isShowError: Boolean = true) {
 		if (isShowError)
 			bottomNavigationViewModel.courseList.value = PackageData.loading()
-		val mainStudent = UserUtil.findMainStudent(bottomNavigationViewModel.studentList.value!!.data)!!
+		if (bottomNavigationViewModel.studentList.value == null) {
+			if (isShowError)
+				bottomNavigationViewModel.courseList.value = PackageData.error(Exception(StringConstant.hint_null_student))
+			return
+		}
+		val mainStudent = UserUtil.findMainStudent(bottomNavigationViewModel.studentList.value!!.data)
+		if (mainStudent == null) {
+			if (isShowError)
+				bottomNavigationViewModel.courseList.value = PackageData.error(Exception(StringConstant.hint_null_student))
+			return
+		}
 		CourseRemoteDataSource.queryCourseByUsername(bottomNavigationViewModel.courseList, mainStudent, ConfigurationUtil.currentYear, ConfigurationUtil.currentTerm, false, isShowError)
 	}
 

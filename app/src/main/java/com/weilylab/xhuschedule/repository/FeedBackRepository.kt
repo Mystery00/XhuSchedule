@@ -14,14 +14,14 @@ import vip.mystery0.rxpackagedata.Status.*
 object FeedBackRepository {
 	fun sendMessage(content: String, feedBackViewModel: FeedBackViewModel) {
 		if (feedBackViewModel.mainStudent.value?.data == null)
-			feedBackViewModel.feedBackMessageList.value = PackageData.error(Exception(StringConstant.hint_feedback_null_student))
+			feedBackViewModel.feedBackMessageList.value = PackageData.error(Exception(StringConstant.hint_null_student))
 		else
 			FeedBackRemoteDataSource.sendFeedBackMessage(feedBackViewModel.feedBackMessageList, feedBackViewModel.maxId, feedBackViewModel.mainStudent.value!!.data!!, content, feedBackViewModel.feedBackToken.value!!.data!!)
 	}
 
 	fun getMessageFromLocal(feedBackViewModel: FeedBackViewModel) {
 		if (feedBackViewModel.mainStudent.value?.data == null)
-			feedBackViewModel.feedBackMessageList.value = PackageData.error(Exception(StringConstant.hint_feedback_null_student))
+			feedBackViewModel.feedBackMessageList.value = PackageData.error(Exception(StringConstant.hint_null_student))
 		else
 			FeedBackLocalDataSource.queryFeedBackForStudent(feedBackViewModel.feedBackMessageList, feedBackViewModel.maxId, feedBackViewModel.mainStudent.value!!.data!!)
 	}
@@ -29,7 +29,7 @@ object FeedBackRepository {
 	fun getMessageFromServer(feedBackViewModel: FeedBackViewModel) {
 		feedBackViewModel.feedBackMessageList.value = PackageData.loading()
 		if (feedBackViewModel.mainStudent.value?.data == null)
-			feedBackViewModel.feedBackMessageList.value = PackageData.error(Exception(StringConstant.hint_feedback_null_student))
+			feedBackViewModel.feedBackMessageList.value = PackageData.error(Exception(StringConstant.hint_null_student))
 		else
 			FeedBackRemoteDataSource.queryFeedBackForStudent(feedBackViewModel.feedBackMessageList, feedBackViewModel.maxId, feedBackViewModel.mainStudent.value!!.data!!, feedBackViewModel.feedBackToken.value!!.data!!)
 	}

@@ -11,7 +11,7 @@ object StringConstant {
 	val hint_data_null = getString(R.string.hint_data_null)
 	val hint_do_too_many = getString(R.string.hint_do_too_many)
 	val hint_student_logged = getString(R.string.hint_student_logged)
-	val hint_feedback_null_student = getString(R.string.hint_feedback_null_student)
+	val hint_null_student = getString(R.string.hint_null_student)
 
 	private fun getString(@StringRes id: Int): String = context.getString(id)
 }
