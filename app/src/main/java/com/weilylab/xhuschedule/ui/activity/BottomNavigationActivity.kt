@@ -466,7 +466,8 @@ class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_naviga
 		dialogShowCourseBinding.point.layoutParams = params
 		dialogShowCourseBinding.recyclerView.scrollToPosition(0)
 		AnimationUtil.setWindowAlpha(this, 0.5F)
-		popupWindow.showAtLocation(weekView, Gravity.CENTER, 0, 0)
+		if (!isFinishing&&!isDestroyed)
+			popupWindow.showAtLocation(weekView, Gravity.CENTER, 0, 0)
 	}
 
 	private fun generatePoint() {
