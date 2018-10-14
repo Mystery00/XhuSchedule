@@ -102,10 +102,9 @@ android {
 }
 
 dependencies {
-	kapt "androidx.databinding:databinding-compiler:3.2.0-rc03"
 	implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-	implementation 'com.google.android.material:material:1.0.0-rc02'
-	implementation 'androidx.appcompat:appcompat:1.0.0-rc02'
+	implementation 'com.google.android.material:material:1.0.0'
+	implementation 'androidx.appcompat:appcompat:1.0.0'
 	implementation 'androidx.cardview:cardview:1.0.0-rc02'
 	implementation 'androidx.legacy:legacy-support-v4:1.0.0-rc02'
 	implementation 'androidx.vectordrawable:vectordrawable:1.0.0-rc02'
@@ -127,23 +126,23 @@ dependencies {
 	implementation 'com.github.Mystery0Tools:RxPackageData:1.0.2'
 
 	//Glide
-	implementation 'com.github.bumptech.glide:glide:4.7.1'
-	annotationProcessor 'com.github.bumptech.glide:compiler:4.7.1'
+	implementation 'com.github.bumptech.glide:glide:4.8.0'
+	annotationProcessor 'com.github.bumptech.glide:compiler:4.8.0'
 
 	//RxAndroid
-	implementation 'io.reactivex.rxjava2:rxandroid:2.0.2'
-	implementation 'io.reactivex.rxjava2:rxjava:2.1.16'
+	implementation 'io.reactivex.rxjava2:rxandroid:2.1.0'
+	implementation 'io.reactivex.rxjava2:rxjava:2.2.2'
 
 	//ZLoading
 	implementation 'com.zyao89:zloading:1.1.2'
 
 	//Lifecycle
-	implementation 'androidx.lifecycle:lifecycle-extensions:2.0.0-rc01'
-	kapt "androidx.lifecycle:lifecycle-compiler:2.0.0-rc01"
+	implementation 'androidx.lifecycle:lifecycle-extensions:2.0.0'
+	kapt "androidx.lifecycle:lifecycle-compiler:2.0.0"
 
 	//Room
-	implementation 'androidx.room:room-runtime:2.0.0-rc01'
-	kapt "androidx.room:room-compiler:2.0.0-rc01"
+	implementation 'androidx.room:room-runtime:2.0.0'
+	kapt "androidx.room:room-compiler:2.0.0"
 
 	//Condom
 	implementation 'com.oasisfeng.condom:library:2.2.0'
@@ -152,12 +151,12 @@ dependencies {
 	implementation 'androidx.multidex:multidex:2.0.0'
 
 	//TimetableView
-	implementation 'com.zhuangfei:TimetableView:2.0.5'
+	implementation 'com.zhuangfei:TimetableView:2.0.6'
 
 	//	implementation 'com.github.Mystery00:TimetableView:2.0.2-prerelease-20180901'
 
 	//Matisse
-	implementation 'com.zhihu.android:matisse:0.5.2-beta2'
+	implementation 'com.zhihu.android:matisse:0.5.2-beta3'
 
 	//UCrop
 	implementation 'com.github.yalantis:ucrop:2.2.2'
@@ -166,7 +165,7 @@ dependencies {
 	implementation 'com.github.iMeiji:SetupWizardLayout:0.1'
 
 	//About Library
-	implementation 'com.mikepenz:aboutlibraries:6.2.0-rc01'
+	implementation 'com.mikepenz:aboutlibraries:6.2.0'
 
 	//Color Picker
 	implementation 'com.jrummyapps:colorpicker:2.1.6'
