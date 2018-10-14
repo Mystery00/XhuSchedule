@@ -24,8 +24,10 @@ class TodayCourseWidgetService : RemoteViewsService() {
 		override fun hasStableIds(): Boolean = true
 
 		override fun getViewAt(position: Int): RemoteViews {
-			val course = WidgetViewModelHelper.todayCourseList.value!!.data!![position]
 			val remotesView = RemoteViews(context.packageName, R.layout.item_widget_today)
+			if (WidgetViewModelHelper.todayCourseList.value == null || WidgetViewModelHelper.todayCourseList.value!!.data == null)
+				return remotesView
+			val course = WidgetViewModelHelper.todayCourseList.value!!.data!![position]
 			remotesView.setTextViewText(R.id.course_name_textView, course.name)
 			remotesView.setTextViewText(R.id.course_teacher_textView, course.teacher)
 			val startTimeArray = context.resources.getStringArray(R.array.start_time)
