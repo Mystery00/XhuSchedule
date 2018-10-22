@@ -45,7 +45,7 @@ class FeedbackActivity : XhuBaseActivity(R.layout.activity_feedback) {
 			Loading -> showInitDialog()
 			Empty -> {
 				hideInitDialog()
-				toastMessage(R.string.hint_feedback_null_student)
+				toastMessage(R.string.hint_null_student)
 				finish()
 			}
 			Error -> {
@@ -66,7 +66,7 @@ class FeedbackActivity : XhuBaseActivity(R.layout.activity_feedback) {
 			Loading -> showInitDialog()
 			Empty -> {
 				hideInitDialog()
-				toastMessage(R.string.hint_feedback_null_student)
+				toastMessage(R.string.hint_null_student)
 				disableInput()
 			}
 			Error -> {

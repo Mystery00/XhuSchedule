@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<color name="colorPrimary_night">#424242</color>
+	<color name="colorPrimaryDark_night">#212121</color>
+	<color name="colorAccent_night">#BDBDBD</color>
+
+	<!--所有界面需要是灰色的颜色 背景-->
+	<color name="colorGrayBackground_night">#212121</color>
+	<!--所有界面需要是白色的颜色 背景-->
+	<color name="colorWhiteBackground_night">#212121</color>
+	<!--所有界面需要是默认色的颜色 文本-->
+	<color name="colorGrayText_night">#FFFFFF</color>
+	<!--所有界面需要是黑色的颜色 文本-->
+	<color name="colorBlackText_night">#FFFFFF</color>
+	<!--无数据页面文本颜色-->
+	<color name="textColorNullDataView_night">#FFFFFF</color>
+
+	<!--主页面标题栏图标颜色-->
+	<color name="colorCustomToolbarTextIcon_night">#FFFFFF</color>
+	<!--主界面底部未选中颜色-->
+	<color name="colorUnSelectedText_night">#FFFFFF</color>
+	<!--所有界面分割线颜色-->
+	<color name="colorDivider_night">#BDBDBD</color>
+	<!--个人界面分割线颜色-->
+	<color name="colorDividerProfile_night">#BDBDBD</color>
+	<!--个人页面更多图标颜色-->
+	<color name="colorMoreProfile_night">#424242</color>
+	<!--个人页面每项背景色-->
+	<color name="colorItemBackgroundProfile_night">#212121</color>
+	<!--意见反馈页面背景颜色-->
+	<color name="colorFeedBackBackground_night">#212121</color>
+
+	<!-- Base application theme. -->
+	<style name="AppTheme_night" parent="Theme.AppCompat.DayNight.NoActionBar">
+		<!-- Customize your theme here. -->
+		<item name="colorPrimary">@color/colorPrimary_night</item>
+		<item name="colorPrimaryDark">@color/colorPrimaryDark_night</item>
+		<item name="colorAccent">@color/colorAccent_night</item>
+		<item name="android:navigationBarColor">@color/colorPrimaryDark_night</item>
+	</style>
+</resources>
