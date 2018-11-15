@@ -1,21 +1,15 @@
-# Add project specific ProGuard rules here.
-# You can control the set of applied configuration files using the
-# proguardFiles setting in build.gradle.
-#
-# For more details, see
-#   http://developer.android.com/guide/developing/tools/proguard.html
-
-# If your project uses WebView with JS, uncomment the following
-# and specify the fully qualified class name to the JavaScript interface
-# class:
-#-keepclassmembers class fqcn.of.javascript.interface.for.webview {
-#   public *;
-#}
-
-# Uncomment this to preserve the line number information for
-# debugging stack traces.
-#-keepattributes SourceFile,LineNumberTable
-
-# If you keep the line number information, uncomment this to
-# hide the original source file name.
-#-renamesourcefileattribute SourceFile
+#<?xml version="1.0" encoding="UTF-8"?>
+#<module external.linked.project.id=":mpreference" external.linked.project.path="$MODULE_DIR$" external.root.project.path="$MODULE_DIR$/.." external.system.id="GRADLE" type="JAVA_MODULE" version="4">
+#  <component name="FacetManager">
+#    <facet type="android-gradle" name="Android-Gradle">
+#      <configuration>
+#        <option name="GRADLE_PROJECT_PATH" value=":mpreference" />
+#      </configuration>
+#    </facet>
+#    <facet type="android" name="Android">
+#      <configuration>
+#        <option name="SELECTED_BUILD_VARIANT" value="debug" />
+#        <option name="ASSEMBLE_TASK_NAME" value="assembleDebug" />
+#        <option name="COMPILE_JAVA_TASK_NAME" value="compileDebugSources" />
+#        <afterSyncTasks>
+#          <task>generat
