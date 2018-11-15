@@ -59,6 +59,17 @@ class APP : MultiDexApplication() {
 		super.onCreate()
 		context = applicationContext
 		instance = this
+		CrashHandler.getInstance(this)
+				.config {
+					it.setFileNameSuffix("log")
+							.setDebug(BuildConfig.DEBUG)
+				}
+				.init()
+		try {
+			CrashReport.initCrashReport(CondomContext.wrap(applicationContext, "Bugly"), "7fe1820ab7", BuildConfig.DEBUG)
+		} catch (ignore: Exception) {
+			CrashReport.initCrashReport(applicationContext, "7fe1820ab7", BuildConfig.DEBUG)
+		}
 		DBHelper.init(this)
 		NotificationUtil.initChannelID(APP.context)//初始化NotificationChannelID
 		if (PackageUtil.isQQApplicationAvailable())
@@ -79,17 +90,6 @@ class APP : MultiDexApplication() {
 			} catch (ignore: Exception) {
 				WbSdk.install(CondomContext.wrap(applicationContext, "WeiBo"), AuthInfo(applicationContext, "2170085314", "https://api.weibo.com/oauth2/default.html", "statuses/share"))
 			}
-		CrashHandler.getInstance(this)
-				.config {
-					it.setFileNameSuffix("log")
-							.setDebug(BuildConfig.DEBUG)
-				}
-				.init()
-		try {
-			CrashReport.initCrashReport(CondomContext.wrap(applicationContext, "Bugly"), "7fe1820ab7", BuildConfig.DEBUG)
-		} catch (ignore: Exception) {
-			CrashReport.initCrashReport(applicationContext, "7fe1820ab7", BuildConfig.DEBUG)
-		}
 		Logs.setConfig {
 			it.setShowLog(BuildConfig.DEBUG)
 		}
