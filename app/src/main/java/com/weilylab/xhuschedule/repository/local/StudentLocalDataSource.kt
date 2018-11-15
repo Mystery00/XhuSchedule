@@ -21,7 +21,7 @@ import vip.mystery0.rxpackagedata.rx.RxObserver
 import java.util.*
 
 object StudentLocalDataSource : StudentDataSource {
-	private val studentService: StudentService = StudentServiceImpl()
+	private val studentService: StudentService by lazy { StudentServiceImpl() }
 
 	fun queryAllStudentList(studentListLiveData: MutableLiveData<PackageData<List<Student>>>) {
 		studentListLiveData.value = PackageData.loading()

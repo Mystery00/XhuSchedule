@@ -31,9 +31,22 @@ import vip.mystery0.rxpackagedata.PackageData
 import vip.mystery0.rxpackagedata.Status.*
 
 class FeedbackActivity : XhuBaseActivity(R.layout.activity_feedback) {
-	private lateinit var feedBackViewModel: FeedBackViewModel
-	private lateinit var dialog: Dialog
-	private lateinit var feedBackMessageAdapter: FeedBackMessageAdapter
+	private val feedBackViewModel: FeedBackViewModel by lazy {
+		ViewModelProviders.of(this)
+				.get(FeedBackViewModel::class.java)
+	}
+	private val dialog: Dialog by lazy {
+		ZLoadingDialog(this)
+				.setLoadingBuilder(Z_TYPE.SINGLE_CIRCLE)
+				.setHintText(getString(R.string.hint_dialog_init))
+				.setHintTextSize(16F)
+				.setCanceledOnTouchOutside(false)
+				.setDialogBackgroundColor(ContextCompat.getColor(this, R.color.colorWhiteBackground))
+				.setLoadingColor(ContextCompat.getColor(this, R.color.colorAccent))
+				.setHintTextColor(ContextCompat.getColor(this, R.color.colorAccent))
+				.create()
+	}
+	private val feedBackMessageAdapter: FeedBackMessageAdapter by lazy { FeedBackMessageAdapter() }
 	private var isRefreshByManual = true
 	private var isRefreshPause = false
 	private var isRefreshDone = true
@@ -102,9 +115,7 @@ class FeedbackActivity : XhuBaseActivity(R.layout.activity_feedback) {
 		super.initView()
 		setSupportActionBar(toolbar)
 		supportActionBar?.setDisplayHomeAsUpEnabled(true)
-		initDialog()
 		recyclerView.layoutManager = LinearLayoutManager(this)
-		feedBackMessageAdapter = FeedBackMessageAdapter()
 		recyclerView.adapter = feedBackMessageAdapter
 		swipeRefreshLayout.setColorSchemeResources(
 				android.R.color.holo_blue_light,
@@ -114,18 +125,6 @@ class FeedbackActivity : XhuBaseActivity(R.layout.activity_feedback) {
 		disableInput()
 	}
 
-	private fun initDialog() {
-		dialog = ZLoadingDialog(this)
-				.setLoadingBuilder(Z_TYPE.SINGLE_CIRCLE)
-				.setHintText(getString(R.string.hint_dialog_init))
-				.setHintTextSize(16F)
-				.setCanceledOnTouchOutside(false)
-				.setDialogBackgroundColor(ContextCompat.getColor(this, R.color.colorWhiteBackground))
-				.setLoadingColor(ContextCompat.getColor(this, R.color.colorAccent))
-				.setHintTextColor(ContextCompat.getColor(this, R.color.colorAccent))
-				.create()
-	}
-
 	override fun initData() {
 		super.initData()
 		initViewModel()
@@ -133,7 +132,6 @@ class FeedbackActivity : XhuBaseActivity(R.layout.activity_feedback) {
 	}
 
 	private fun initViewModel() {
-		feedBackViewModel = ViewModelProviders.of(this).get(FeedBackViewModel::class.java)
 		feedBackViewModel.mainStudent.observe(this, mainStudentObserver)
 		feedBackViewModel.feedBackToken.observe(this, feedBackTokenObserver)
 		feedBackViewModel.feedBackMessageList.observe(this, feedBackMessageObserver)

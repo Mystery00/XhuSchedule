@@ -7,8 +7,8 @@ import com.weilylab.xhuschedule.model.Student
 import vip.mystery0.rxpackagedata.PackageData
 
 class FeedBackViewModel : ViewModel() {
-	val mainStudent = MutableLiveData<PackageData<Student>>()
-	val feedBackToken = MutableLiveData<PackageData<String>>()
-	val feedBackMessageList = MutableLiveData<PackageData<List<FeedBackMessage>>>()
-	val maxId = MutableLiveData<Int>()
+	val mainStudent by lazy { MutableLiveData<PackageData<Student>>() }
+	val feedBackToken by lazy { MutableLiveData<PackageData<String>>() }
+	val feedBackMessageList by lazy { MutableLiveData<PackageData<List<FeedBackMessage>>>() }
+	val maxId by lazy { MutableLiveData<Int>() }
 }

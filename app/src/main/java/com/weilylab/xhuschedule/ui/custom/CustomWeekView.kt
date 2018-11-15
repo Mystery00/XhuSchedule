@@ -20,7 +20,7 @@ import java.util.ArrayList
 
 class CustomWeekView : LinearLayout, WeekViewEnable<CustomWeekView> {
 	private var layoutWeekViewBinding: LayoutWeekViewBinding
-	private lateinit var courseList: ArrayList<Schedule>
+	private val courseList by lazy { ArrayList<Schedule>() }
 	//当前周
 	private var curWeek = 1
 	private var preIndex = 1
@@ -63,8 +63,10 @@ class CustomWeekView : LinearLayout, WeekViewEnable<CustomWeekView> {
 				itemCourseWeekBinding.weekTextViewBottom.text = "(本周)"
 			itemCourseWeekBinding.perWeekView.setData(dataSource(), i)
 			itemCourseWeekBinding.perWeekViewLayout.setOnClickListener {
-				layoutWeekViewBinding.weekViewContainer.getChildAt(preIndex - 1).setBackgroundColor(ContextCompat.getColor(context, R.color.app_course_chooseweek_bg))
-				layoutWeekViewBinding.weekViewContainer.getChildAt(curWeek - 1).background = ContextCompat.getDrawable(context, R.drawable.weekview_thisweek)
+				layoutWeekViewBinding.weekViewContainer.getChildAt(preIndex - 1)
+						.setBackgroundColor(ContextCompat.getColor(context, R.color.app_course_chooseweek_bg))
+				layoutWeekViewBinding.weekViewContainer.getChildAt(curWeek - 1)
+						.background = ContextCompat.getDrawable(context, R.drawable.weekview_thisweek)
 				preIndex = i
 				itemCourseWeekBinding.perWeekViewLayout.background = ContextCompat.getDrawable(context, R.drawable.weekview_white)
 				onWeekItemClickedListener.onWeekClicked(i)
@@ -74,7 +76,8 @@ class CustomWeekView : LinearLayout, WeekViewEnable<CustomWeekView> {
 			layoutWeekViewBinding.weekViewContainer.addView(itemCourseWeekBinding.root)
 		}
 		if (curWeek in 1..itemCount)
-			layoutWeekViewBinding.weekViewContainer.getChildAt(curWeek - 1).background = ContextCompat.getDrawable(context, R.drawable.weekview_thisweek)
+			layoutWeekViewBinding.weekViewContainer.getChildAt(curWeek - 1)
+					.background = ContextCompat.getDrawable(context, R.drawable.weekview_thisweek)
 		return this
 	}
 
@@ -83,11 +86,7 @@ class CustomWeekView : LinearLayout, WeekViewEnable<CustomWeekView> {
 		return this
 	}
 
-	override fun dataSource(): List<Schedule> {
-		if (!::courseList.isInitialized)
-			courseList = ArrayList()
-		return courseList
-	}
+	override fun dataSource(): List<Schedule> = courseList
 
 	override fun source(list: List<ScheduleEnable>): CustomWeekView {
 		return updateSourceList(ScheduleSupport.transform(list))
@@ -98,13 +97,8 @@ class CustomWeekView : LinearLayout, WeekViewEnable<CustomWeekView> {
 	}
 
 	private fun updateSourceList(list: List<Schedule>): CustomWeekView {
-		if (::courseList.isInitialized) {
-			courseList.clear()
-			courseList.addAll(list)
-		} else {
-			courseList = ArrayList()
-			courseList.addAll(list)
-		}
+		courseList.clear()
+		courseList.addAll(list)
 		return this
 	}
 
@@ -122,7 +116,8 @@ class CustomWeekView : LinearLayout, WeekViewEnable<CustomWeekView> {
 			itemCourseWeekBinding.root.setBackgroundColor(ContextCompat.getColor(context, R.color.app_course_chooseweek_bg))
 		}
 		if (curWeek in 1..layoutWeekViewBinding.weekViewContainer.childCount)
-			layoutWeekViewBinding.weekViewContainer.getChildAt(curWeek - 1).background = ContextCompat.getDrawable(context, R.drawable.weekview_thisweek)
+			layoutWeekViewBinding.weekViewContainer.getChildAt(curWeek - 1)
+					.background = ContextCompat.getDrawable(context, R.drawable.weekview_thisweek)
 		return this
 	}
 }

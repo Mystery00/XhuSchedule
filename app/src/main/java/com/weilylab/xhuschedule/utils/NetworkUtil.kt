@@ -5,7 +5,7 @@ import android.net.ConnectivityManager
 import com.weilylab.xhuschedule.config.APP
 
 object NetworkUtil {
-	private val connectivityManager = APP.context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+	private val connectivityManager by lazy { APP.context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager }
 
 	@JvmStatic
 	fun isConnectInternet(): Boolean {

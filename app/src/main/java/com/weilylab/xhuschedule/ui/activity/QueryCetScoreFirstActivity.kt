@@ -23,7 +23,17 @@ import vip.mystery0.rxpackagedata.Status.*
 import vip.mystery0.logs.Logs
 
 class QueryCetScoreFirstActivity : XhuBaseActivity(R.layout.activity_query_cet_score_first) {
-	private lateinit var dialog: Dialog
+	private val dialog: Dialog by lazy {
+		ZLoadingDialog(this)
+				.setLoadingBuilder(Z_TYPE.SINGLE_CIRCLE)
+				.setHintText(getString(R.string.hint_dialog_get_cet_vcode))
+				.setHintTextSize(16F)
+				.setCanceledOnTouchOutside(false)
+				.setDialogBackgroundColor(ContextCompat.getColor(this, R.color.colorWhiteBackground))
+				.setLoadingColor(ContextCompat.getColor(this, R.color.colorAccent))
+				.setHintTextColor(ContextCompat.getColor(this, R.color.colorAccent))
+				.create()
+	}
 
 	private val studentInfoListObserver = Observer<PackageData<Map<Student, StudentInfo?>>> { data ->
 		when (data.status) {
@@ -59,23 +69,10 @@ class QueryCetScoreFirstActivity : XhuBaseActivity(R.layout.activity_query_cet_s
 
 	override fun initView() {
 		super.initView()
-		initDialog()
 		setupLayout.setIllustration(ContextCompat.getDrawable(this, R.mipmap.background_cet))
 		setupLayout.setIllustrationAspectRatio(2F)
 		setupLayout.navigationBar.moreButton.setText(R.string.action_more)
 		setupLayout.navigationBar.nextButton.setText(R.string.action_next)
-	}
-
-	private fun initDialog() {
-		dialog = ZLoadingDialog(this)
-				.setLoadingBuilder(Z_TYPE.SINGLE_CIRCLE)
-				.setHintText(getString(R.string.hint_dialog_get_cet_vcode))
-				.setHintTextSize(16F)
-				.setCanceledOnTouchOutside(false)
-				.setDialogBackgroundColor(ContextCompat.getColor(this, R.color.colorWhiteBackground))
-				.setLoadingColor(ContextCompat.getColor(this, R.color.colorAccent))
-				.setHintTextColor(ContextCompat.getColor(this, R.color.colorAccent))
-				.create()
 	}
 
 	override fun initData() {

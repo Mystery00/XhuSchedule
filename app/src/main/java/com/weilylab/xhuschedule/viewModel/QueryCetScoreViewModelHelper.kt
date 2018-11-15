@@ -11,9 +11,9 @@ import vip.mystery0.rxpackagedata.PackageData
 object QueryCetScoreViewModelHelper {
 	var no = MutableLiveData<String>()
 	var name = MutableLiveData<String>()
-	val student = MutableLiveData<Student>()
-	val studentList = MutableLiveData<PackageData<List<Student>>>()
-	val studentInfoList = MediatorLiveData<PackageData<Map<Student, StudentInfo?>>>()
+	val student by lazy { MutableLiveData<Student>() }
+	val studentList by lazy { MutableLiveData<PackageData<List<Student>>>() }
+	val studentInfoList by lazy { MediatorLiveData<PackageData<Map<Student, StudentInfo?>>>() }
 	var cetVCodeLiveData = MutableLiveData<PackageData<Bitmap>>()
 	var cetScoreLiveData = MutableLiveData<PackageData<CetScore>>()
 }

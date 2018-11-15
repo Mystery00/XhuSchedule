@@ -11,7 +11,7 @@ import vip.mystery0.rxpackagedata.rx.RxObservable
 import vip.mystery0.rxpackagedata.rx.RxObserver
 
 object NoticeLocalDataSource : NoticeDataSource {
-	private val noticeService: NoticeService = NoticeServiceImpl()
+	private val noticeService: NoticeService by lazy { NoticeServiceImpl() }
 	override fun queryNotice(noticeLiveData: MutableLiveData<PackageData<List<Notice>>>, platform: String?) {
 		noticeLiveData.value = PackageData.loading()
 		RxObservable<List<Notice>>()

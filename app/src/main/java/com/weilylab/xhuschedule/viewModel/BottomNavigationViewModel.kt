@@ -12,21 +12,21 @@ import vip.mystery0.rxpackagedata.PackageData
 import java.util.*
 
 class BottomNavigationViewModel : ViewModel() {
-	val studentList = MutableLiveData<PackageData<List<Student>>>()
-	val studentInfo = MediatorLiveData<PackageData<StudentInfo>>()
-	val courseList = MediatorLiveData<PackageData<List<Schedule>>>()
-	val todayCourseList = MediatorLiveData<PackageData<List<Schedule>>>()
-	val currentWeek = MediatorLiveData<PackageData<Int>>()
+	val studentList by lazy { MutableLiveData<PackageData<List<Student>>>() }
+	val studentInfo by lazy { MediatorLiveData<PackageData<StudentInfo>>() }
+	val courseList by lazy { MediatorLiveData<PackageData<List<Schedule>>>() }
+	val todayCourseList by lazy { MediatorLiveData<PackageData<List<Schedule>>>() }
+	val currentWeek by lazy { MediatorLiveData<PackageData<Int>>() }
 
-	val title = MutableLiveData<String>()
-	val showCourse = MediatorLiveData<List<Schedule>>()
-	val week = MutableLiveData<Int>()
-	val startDateTime = MutableLiveData<PackageData<Calendar>>()
+	val title by lazy { MutableLiveData<String>() }
+	val showCourse by lazy { MediatorLiveData<List<Schedule>>() }
+	val week by lazy { MutableLiveData<Int>() }
+	val startDateTime by lazy { MutableLiveData<PackageData<Calendar>>() }
 
-	val noticeList = MutableLiveData<PackageData<List<Notice>>>()
+	val noticeList by lazy { MutableLiveData<PackageData<List<Notice>>>() }
 
-	val feedBackToken = MutableLiveData<PackageData<String>>()
-	val newFeedBackMessageList = MutableLiveData<PackageData<List<FeedBackMessage>>>()
+	val feedBackToken by lazy { MutableLiveData<PackageData<String>>() }
+	val newFeedBackMessageList by lazy { MutableLiveData<PackageData<List<FeedBackMessage>>>() }
 
-	val itemHeight = MutableLiveData<Int>()
+	val itemHeight by lazy { MutableLiveData<Int>() }
 }

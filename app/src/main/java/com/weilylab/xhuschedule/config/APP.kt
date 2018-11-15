@@ -48,13 +48,13 @@ import com.weilylab.xhuschedule.BuildConfig
 import com.weilylab.xhuschedule.repository.local.db.DBHelper
 import com.weilylab.xhuschedule.utils.NotificationUtil
 import com.weilylab.xhuschedule.utils.PackageUtil
+import vip.mystery0.crashhandler.CrashHandler
 import vip.mystery0.logs.Logs
 
 /**
  * Created by myste.
  */
 class APP : MultiDexApplication() {
-
 	override fun onCreate() {
 		super.onCreate()
 		context = applicationContext
@@ -79,6 +79,12 @@ class APP : MultiDexApplication() {
 			} catch (ignore: Exception) {
 				WbSdk.install(CondomContext.wrap(applicationContext, "WeiBo"), AuthInfo(applicationContext, "2170085314", "https://api.weibo.com/oauth2/default.html", "statuses/share"))
 			}
+		CrashHandler.getInstance(this)
+				.config {
+					it.setFileNameSuffix("log")
+							.setDebug(BuildConfig.DEBUG)
+				}
+				.init()
 		try {
 			CrashReport.initCrashReport(CondomContext.wrap(applicationContext, "Bugly"), "7fe1820ab7", BuildConfig.DEBUG)
 		} catch (ignore: Exception) {

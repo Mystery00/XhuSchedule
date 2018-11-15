@@ -57,7 +57,9 @@ import vip.mystery0.tools.utils.FileTools
  * Created by mystery0.
  */
 class SplashActivity : XhuBaseActivity(null, false) {
-	private lateinit var splashViewModel: SplashViewModel
+	private val splashViewModel: SplashViewModel by lazy {
+		ViewModelProviders.of(this).get(SplashViewModel::class.java)
+	}
 
 	private val splashObserver = Observer<PackageData<SplashResponse.Splash>> {
 		when (it.status) {
@@ -94,7 +96,6 @@ class SplashActivity : XhuBaseActivity(null, false) {
 	}
 
 	private fun initViewModel() {
-		splashViewModel = ViewModelProviders.of(this).get(SplashViewModel::class.java)
 		splashViewModel.splash.observe(this, splashObserver)
 	}
 

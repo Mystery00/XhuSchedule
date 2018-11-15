@@ -6,7 +6,7 @@ import com.weilylab.xhuschedule.constant.SharedPreferenceConstant
 
 
 object ConfigurationUtil {
-	private val sharedPreferences = APP.context.getSharedPreferences(SharedPreferenceConstant.FILE_NAME_CONFIG, Context.MODE_PRIVATE)
+	private val sharedPreferences by lazy { APP.context.getSharedPreferences(SharedPreferenceConstant.FILE_NAME_CONFIG, Context.MODE_PRIVATE) }
 
 	var firstEnter: Boolean
 		set(value) = sharedPreferences.edit()

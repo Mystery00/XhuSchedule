@@ -10,9 +10,9 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 class FeedBackMessageAdapter : BaseBindingRecyclerViewAdapter<FeedBackMessage, ItemFeedBackMessageBinding>(R.layout.item_feed_back_message) {
-	private val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S", Locale.CHINA)
-	private val showDateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.CHINA)
-	private val showTimeFormat = SimpleDateFormat("HH:mm:ss", Locale.CHINA)
+	private val simpleDateFormat by lazy { SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S", Locale.CHINA) }
+	private val showDateFormat by lazy { SimpleDateFormat("yyyy-MM-dd", Locale.CHINA) }
+	private val showTimeFormat by lazy { SimpleDateFormat("HH:mm:ss", Locale.CHINA) }
 
 	override fun setItemView(binding: ItemFeedBackMessageBinding, position: Int, data: FeedBackMessage) {
 		binding.message = data

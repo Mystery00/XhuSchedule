@@ -51,8 +51,11 @@ import kotlinx.android.synthetic.main.activity_notice.*
 import vip.mystery0.logs.Logs
 
 class NoticeActivity : XhuBaseActivity(R.layout.activity_notice) {
-	private lateinit var noticeViewModel: NoticeViewModel
-	private lateinit var noticeAdapter: NoticeAdapter
+	private val noticeViewModel: NoticeViewModel by lazy {
+		ViewModelProviders.of(this)
+				.get(NoticeViewModel::class.java)
+	}
+	private val noticeAdapter: NoticeAdapter by lazy { NoticeAdapter(this) }
 
 	private val noticeObserver = Observer<PackageData<List<Notice>>> {
 		when (it.status) {
@@ -82,7 +85,6 @@ class NoticeActivity : XhuBaseActivity(R.layout.activity_notice) {
 		setSupportActionBar(toolbar)
 		supportActionBar?.setDisplayHomeAsUpEnabled(true)
 		recyclerView.layoutManager = LinearLayoutManager(this)
-		noticeAdapter = NoticeAdapter(this)
 		recyclerView.adapter = noticeAdapter
 		recyclerView.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
 		swipeRefreshLayout.setColorSchemeResources(
@@ -115,7 +117,6 @@ class NoticeActivity : XhuBaseActivity(R.layout.activity_notice) {
 	}
 
 	private fun initViewModel() {
-		noticeViewModel = ViewModelProviders.of(this).get(NoticeViewModel::class.java)
 		noticeViewModel.noticeList.observe(this, noticeObserver)
 	}
 

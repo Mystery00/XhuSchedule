@@ -6,7 +6,7 @@ import com.weilylab.xhuschedule.repository.local.db.DBHelper
 import com.weilylab.xhuschedule.repository.local.service.ScoreService
 
 class ScoreServiceImpl : ScoreService {
-	private val scoreDao = DBHelper.db.getScoreDao()
+	private val scoreDao by lazy { DBHelper.db.getScoreDao() }
 
 	override fun saveClassScore(classScore: ClassScore): Long = scoreDao.saveClassScore(classScore)
 

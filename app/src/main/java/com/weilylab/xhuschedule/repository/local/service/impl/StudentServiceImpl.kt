@@ -7,8 +7,8 @@ import com.weilylab.xhuschedule.repository.local.db.DBHelper
 import com.weilylab.xhuschedule.repository.local.service.StudentService
 
 class StudentServiceImpl : StudentService {
-	private val studentDao = DBHelper.db.getStudentDao()
-	private val fbTokenDao = DBHelper.db.getFBTokenDao()
+	private val studentDao by lazy { DBHelper.db.getStudentDao() }
+	private val fbTokenDao by lazy { DBHelper.db.getFBTokenDao() }
 
 	override fun studentLogin(student: Student): Long = studentDao.studentLogin(student)
 

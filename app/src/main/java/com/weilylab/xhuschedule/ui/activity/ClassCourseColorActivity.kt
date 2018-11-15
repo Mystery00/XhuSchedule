@@ -22,9 +22,20 @@ import vip.mystery0.rxpackagedata.PackageData
 import vip.mystery0.rxpackagedata.Status.*
 
 class ClassCourseColorActivity : XhuBaseActivity(R.layout.activity_class_course_color) {
-	private lateinit var classCourseColorViewModel: ClassCourseColorViewModel
-	private lateinit var classCourseColorRecyclerViewAdapter: ClassCourseColorRecyclerViewAdapter
-	private lateinit var dialog: Dialog
+	private val classCourseColorViewModel: ClassCourseColorViewModel by lazy {
+		ViewModelProviders.of(this).get(ClassCourseColorViewModel::class.java)
+	}
+	private val classCourseColorRecyclerViewAdapter: ClassCourseColorRecyclerViewAdapter by lazy { ClassCourseColorRecyclerViewAdapter(this) }
+	private val dialog: Dialog by lazy {
+		ZLoadingDialog(this)
+				.setLoadingBuilder(Z_TYPE.SINGLE_CIRCLE)
+				.setHintText(" ")
+				.setCanceledOnTouchOutside(false)
+				.setDialogBackgroundColor(ContextCompat.getColor(this, R.color.colorWhiteBackground))
+				.setLoadingColor(ContextCompat.getColor(this, R.color.colorAccent))
+				.setHintTextColor(ContextCompat.getColor(this, R.color.colorAccent))
+				.create()
+	}
 
 	private val classCourseColorObserver = Observer<PackageData<List<Course>>> {
 		when (it.status) {
@@ -53,24 +64,11 @@ class ClassCourseColorActivity : XhuBaseActivity(R.layout.activity_class_course_
 		super.initView()
 		setSupportActionBar(toolbar)
 		supportActionBar?.setDisplayHomeAsUpEnabled(true)
-		initDialog()
 		recyclerView.layoutManager = LinearLayoutManager(this)
 		val dividerItemDecoration = DividerItemDecoration(this, DividerItemDecoration.VERTICAL)
 		dividerItemDecoration.setDrawable(ContextCompat.getDrawable(this, R.drawable.divider_query_test)!!)
 		recyclerView.addItemDecoration(dividerItemDecoration)
-		classCourseColorRecyclerViewAdapter = ClassCourseColorRecyclerViewAdapter(this)
 		recyclerView.adapter = classCourseColorRecyclerViewAdapter
-	}
-
-	private fun initDialog() {
-		dialog = ZLoadingDialog(this)
-				.setLoadingBuilder(Z_TYPE.SINGLE_CIRCLE)
-				.setHintText(" ")
-				.setCanceledOnTouchOutside(false)
-				.setDialogBackgroundColor(ContextCompat.getColor(this, R.color.colorWhiteBackground))
-				.setLoadingColor(ContextCompat.getColor(this, R.color.colorAccent))
-				.setHintTextColor(ContextCompat.getColor(this, R.color.colorAccent))
-				.create()
 	}
 
 	override fun initData() {
@@ -80,7 +78,6 @@ class ClassCourseColorActivity : XhuBaseActivity(R.layout.activity_class_course_
 	}
 
 	private fun initViewModel() {
-		classCourseColorViewModel = ViewModelProviders.of(this).get(ClassCourseColorViewModel::class.java)
 		classCourseColorViewModel.classCourseList.observe(this, classCourseColorObserver)
 	}
 

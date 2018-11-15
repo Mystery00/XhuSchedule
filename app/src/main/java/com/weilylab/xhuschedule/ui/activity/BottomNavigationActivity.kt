@@ -65,14 +65,27 @@ class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_naviga
 		private const val ACTION_REFRESH = 32
 	}
 
-	private lateinit var bottomNavigationViewModel: BottomNavigationViewModel
-	private lateinit var viewPagerAdapter: ViewPagerAdapter
-	private lateinit var dialog: Dialog
+	private val bottomNavigationViewModel: BottomNavigationViewModel by lazy {
+		ViewModelProviders.of(this)
+				.get(BottomNavigationViewModel::class.java)
+	}
+	private val viewPagerAdapter: ViewPagerAdapter by lazy { ViewPagerAdapter(supportFragmentManager) }
+	private val dialog: Dialog by lazy {
+		ZLoadingDialog(this)
+				.setLoadingBuilder(Z_TYPE.SINGLE_CIRCLE)
+				.setHintText(getString(R.string.hint_dialog_init))
+				.setHintTextSize(16F)
+				.setCanceledOnTouchOutside(false)
+				.setDialogBackgroundColor(ContextCompat.getColor(this, R.color.colorWhiteBackground))
+				.setLoadingColor(ContextCompat.getColor(this, R.color.colorAccent))
+				.setHintTextColor(ContextCompat.getColor(this, R.color.colorAccent))
+				.create()
+	}
 	private val courseList = ArrayList<Schedule>()
 	private var animation: ObjectAnimator? = null
 	private var arrowAnimation: ObjectAnimator? = null
 	private var isShowWeekView = false
-	private lateinit var showAdapter: ShowCourseRecyclerViewAdapter
+	private val showAdapter: ShowCourseRecyclerViewAdapter by lazy { ShowCourseRecyclerViewAdapter(this) }
 	private lateinit var loadingAnimation: ObjectAnimator
 	private var action = ACTION_NONE
 
@@ -196,9 +209,7 @@ class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_naviga
 		super.initView()
 		titleTextView.text = title
 		showBackground()
-		initDialog()
 		initPopupWindow()
-		viewPagerAdapter = ViewPagerAdapter(supportFragmentManager)
 		viewPagerAdapter.addFragment(TodayFragment.newInstance())
 		viewPagerAdapter.addFragment(TableFragment.newInstance())
 		viewPagerAdapter.addFragment(ProfileFragment.newInstance())
@@ -236,18 +247,6 @@ class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_naviga
 		}
 	}
 
-	private fun initDialog() {
-		dialog = ZLoadingDialog(this)
-				.setLoadingBuilder(Z_TYPE.SINGLE_CIRCLE)
-				.setHintText(getString(R.string.hint_dialog_init))
-				.setHintTextSize(16F)
-				.setCanceledOnTouchOutside(false)
-				.setDialogBackgroundColor(ContextCompat.getColor(this, R.color.colorWhiteBackground))
-				.setLoadingColor(ContextCompat.getColor(this, R.color.colorAccent))
-				.setHintTextColor(ContextCompat.getColor(this, R.color.colorAccent))
-				.create()
-	}
-
 	override fun initData() {
 		super.initData()
 		initViewModel()
@@ -258,7 +257,6 @@ class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_naviga
 	}
 
 	private fun initViewModel() {
-		bottomNavigationViewModel = ViewModelProviders.of(this).get(BottomNavigationViewModel::class.java)
 		bottomNavigationViewModel.studentList.observe(this, studentListObserver)
 		bottomNavigationViewModel.currentWeek.observe(this, currentWeekObserver)
 		bottomNavigationViewModel.courseList.observe(this, courseListObserver)
@@ -436,7 +434,6 @@ class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_naviga
 		dialogShowCourseBinding = DialogShowCourseBinding.inflate(LayoutInflater.from(this))
 		val linearLayoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
 		dialogShowCourseBinding.recyclerView.layoutManager = linearLayoutManager
-		showAdapter = ShowCourseRecyclerViewAdapter(this)
 		dialogShowCourseBinding.recyclerView.adapter = showAdapter
 		dialogShowCourseBinding.recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
 			override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
@@ -466,7 +463,7 @@ class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_naviga
 		dialogShowCourseBinding.point.layoutParams = params
 		dialogShowCourseBinding.recyclerView.scrollToPosition(0)
 		AnimationUtil.setWindowAlpha(this, 0.5F)
-		if (!isFinishing&&!isDestroyed)
+		if (!isFinishing && !isDestroyed)
 			popupWindow.showAtLocation(weekView, Gravity.CENTER, 0, 0)
 	}
 

@@ -37,35 +37,17 @@ import android.app.IntentService
 import android.content.Intent
 import com.weilylab.xhuschedule.api.QiniuAPI
 import com.weilylab.xhuschedule.constant.IntentConstant
+import com.weilylab.xhuschedule.factory.RetrofitFactory
 import com.weilylab.xhuschedule.utils.FileUtil
 import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
-import okhttp3.OkHttpClient
-import retrofit2.Retrofit
-import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import vip.mystery0.logs.Logs
 import vip.mystery0.tools.utils.FileTools
 import java.io.InputStream
-import java.util.concurrent.TimeUnit
 
 class DownloadSplashIntentService : IntentService("DownloadSplashIntentService") {
-	private lateinit var retrofit: Retrofit
-
-	override fun onCreate() {
-		super.onCreate()
-		val client = OkHttpClient.Builder()
-				.retryOnConnectionFailure(true)
-				.connectTimeout(15, TimeUnit.SECONDS)
-				.build()
-		retrofit = Retrofit.Builder()
-				.baseUrl("https://download.xhuschedule.mostpan.com")
-				.client(client)
-				.addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-				.build()
-	}
-
 	override fun onHandleIntent(intent: Intent?) {
 		if (intent == null)
 			return
@@ -76,7 +58,8 @@ class DownloadSplashIntentService : IntentService("DownloadSplashIntentService")
 		if (!file.parentFile.exists())
 			file.parentFile.mkdirs()
 		if (!file.exists())
-			retrofit.create(QiniuAPI::class.java)
+			RetrofitFactory.qiniuRetrofit
+					.create(QiniuAPI::class.java)
 					.download(qiniuPath)
 					.subscribeOn(Schedulers.newThread())
 					.unsubscribeOn(Schedulers.newThread())

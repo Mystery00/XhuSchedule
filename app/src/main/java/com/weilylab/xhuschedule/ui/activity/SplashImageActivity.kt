@@ -49,7 +49,7 @@ import vip.mystery0.tools.utils.DensityTools
 import java.io.File
 
 class SplashImageActivity : XhuBaseActivity(R.layout.activity_splash_image, false) {
-	private lateinit var splash: SplashResponse.Splash
+	private val splash: SplashResponse.Splash by lazy { SplashRepository.getSplash() }
 	private var splashFile: File? = null
 
 	override fun inflateView(layoutId: Int) {
@@ -64,7 +64,6 @@ class SplashImageActivity : XhuBaseActivity(R.layout.activity_splash_image, fals
 
 	override fun initView() {
 		super.initView()
-		splash = SplashRepository.getSplash()
 		if (!splash.isEnable) {
 			gotoMain()
 			return

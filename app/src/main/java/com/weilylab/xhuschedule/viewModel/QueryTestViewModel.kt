@@ -7,6 +7,6 @@ import com.weilylab.xhuschedule.model.Test
 import vip.mystery0.rxpackagedata.PackageData
 
 class QueryTestViewModel : ViewModel() {
-	val studentList = MediatorLiveData<PackageData<List<Student>>>()
-	val testList = MediatorLiveData<PackageData<List<Test>>>()
+	val studentList by lazy { MediatorLiveData<PackageData<List<Student>>>() }
+	val testList by lazy { MediatorLiveData<PackageData<List<Test>>>() }
 }

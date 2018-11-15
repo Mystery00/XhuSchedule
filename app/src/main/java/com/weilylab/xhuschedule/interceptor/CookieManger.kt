@@ -38,7 +38,7 @@ import com.weilylab.xhuschedule.config.APP
 
 object CookieManger {
     private const val COOKIE_PREFS = "cookies"
-    private val cookiePreferences = APP.context.getSharedPreferences(COOKIE_PREFS, Context.MODE_PRIVATE)
+    private val cookiePreferences by lazy { APP.context.getSharedPreferences(COOKIE_PREFS, Context.MODE_PRIVATE) }
 
     fun putCookie(username: String, host: String, cookie: String?) {
         val name = getCookieToken(username, host)
@@ -53,5 +53,5 @@ object CookieManger {
         return cookiePreferences.getString(name, null)
     }
 
-    private fun getCookieToken(username: String, host: String): String = username + '@' + host
+    private fun getCookieToken(username: String, host: String): String = "$username@$host"
 }

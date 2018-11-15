@@ -5,7 +5,7 @@ import com.weilylab.xhuschedule.repository.local.db.DBHelper
 import com.weilylab.xhuschedule.repository.local.service.FeedBackMessageService
 
 class FeedBackMessageServiceImpl : FeedBackMessageService {
-	private val feedBackMessageDao = DBHelper.db.getFeedBackMessageDao()
+	private val feedBackMessageDao by lazy { DBHelper.db.getFeedBackMessageDao() }
 
 	override fun insert(feedBackMessage: FeedBackMessage): Long = feedBackMessageDao.insert(feedBackMessage)
 

@@ -10,11 +10,9 @@ import kotlinx.android.synthetic.main.activity_custom_start_time.*
 import java.util.*
 
 class CustomStartTimeActivity : XhuBaseActivity(R.layout.activity_custom_start_time) {
-	private var startTime = InitLocalDataSource.getStartDateTime()
-
 	override fun initData() {
 		super.initData()
-		calendarView.selectionManager.toggleDay(Day(startTime))
+		calendarView.selectionManager.toggleDay(Day(InitLocalDataSource.getStartDateTime()))
 	}
 
 	override fun monitor() {

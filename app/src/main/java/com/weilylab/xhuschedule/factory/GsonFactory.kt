@@ -6,7 +6,7 @@ import java.io.InputStream
 import java.io.InputStreamReader
 
 object GsonFactory {
-	private val gson = Gson()
+	private val gson by lazy { Gson() }
 
 	fun <T> parseInputStream(inputStream: InputStream, clazz: Class<T>): T = gson.fromJson(InputStreamReader(inputStream), clazz)
 

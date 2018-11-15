@@ -1,14 +1,12 @@
 package com.weilylab.xhuschedule.config
 
-import android.annotation.SuppressLint
 import android.graphics.Color
 import androidx.core.content.ContextCompat
 import com.weilylab.xhuschedule.R
 import com.zhuangfei.timetable.model.ScheduleColorPool
 
 object ColorPoolHelper {
-	@SuppressLint("StaticFieldLeak")
-	val colorPool = ScheduleColorPool(APP.context)
+	val colorPool by lazy { ScheduleColorPool(APP.context) }
 
 	init {
 		initColorPool(colorPool)

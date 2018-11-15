@@ -31,7 +31,7 @@ class ProfileFragment : BaseBottomNavigationFragment<FragmentProfileBinding>(R.l
 	}
 
 	private lateinit var bottomNavigationViewModel: BottomNavigationViewModel
-	private lateinit var bottomSheetDialog: BottomSheetDialog
+	private val bottomSheetDialog: BottomSheetDialog by lazy { BottomSheetDialog(activity!!) }
 
 	override fun initView() {
 		showUserImage()
@@ -55,7 +55,8 @@ class ProfileFragment : BaseBottomNavigationFragment<FragmentProfileBinding>(R.l
 	}
 
 	private fun initViewModel() {
-		bottomNavigationViewModel = ViewModelProviders.of(activity!!).get(BottomNavigationViewModel::class.java)
+		bottomNavigationViewModel = ViewModelProviders.of(activity!!)
+				.get(BottomNavigationViewModel::class.java)
 		bottomNavigationViewModel.studentInfo.observe(activity!!, Observer {
 			when (it.status) {
 				Content -> binding.studentInfo = it.data
@@ -141,7 +142,6 @@ class ProfileFragment : BaseBottomNavigationFragment<FragmentProfileBinding>(R.l
 
 	private fun initShareMenu() {
 		val binding = DialogShareWithFriendsBinding.inflate(LayoutInflater.from(activity))
-		bottomSheetDialog = BottomSheetDialog(activity!!)
 		bottomSheetDialog.setContentView(binding.root)
 		bottomSheetDialog.setCancelable(true)
 		bottomSheetDialog.setCanceledOnTouchOutside(true)

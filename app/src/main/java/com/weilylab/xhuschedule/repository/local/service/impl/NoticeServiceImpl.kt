@@ -5,7 +5,7 @@ import com.weilylab.xhuschedule.repository.local.db.DBHelper
 import com.weilylab.xhuschedule.repository.local.service.NoticeService
 
 class NoticeServiceImpl : NoticeService {
-	private val noticeDao = DBHelper.db.getNoticeDao()
+	private val noticeDao by lazy { DBHelper.db.getNoticeDao() }
 
 	override fun add(notice: Notice): Long = noticeDao.add(notice)
 

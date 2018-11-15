@@ -6,5 +6,5 @@ import com.weilylab.xhuschedule.model.Course
 import vip.mystery0.rxpackagedata.PackageData
 
 class ClassCourseColorViewModel : ViewModel() {
-	val classCourseList = MutableLiveData<PackageData<List<Course>>>()
+	val classCourseList by lazy { MutableLiveData<PackageData<List<Course>>>() }
 }

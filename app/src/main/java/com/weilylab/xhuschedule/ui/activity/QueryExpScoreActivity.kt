@@ -25,8 +25,10 @@ import vip.mystery0.tools.utils.DensityTools
 import java.util.*
 
 class QueryExpScoreActivity : XhuBaseActivity(R.layout.activity_query_exp_score) {
-	private lateinit var queryExpScoreViewModel: QueryExpScoreViewModel
-	private lateinit var queryExpScoreRecyclerViewAdapter: QueryExpScoreRecyclerViewAdapter
+	private val queryExpScoreViewModel: QueryExpScoreViewModel by lazy {
+		ViewModelProviders.of(this).get(QueryExpScoreViewModel::class.java)
+	}
+	private val queryExpScoreRecyclerViewAdapter: QueryExpScoreRecyclerViewAdapter by lazy { QueryExpScoreRecyclerViewAdapter(this) }
 	private var hasData = false
 
 	private val studentInfoListObserver = Observer<PackageData<Map<Student, StudentInfo?>>> { data ->
@@ -80,7 +82,6 @@ class QueryExpScoreActivity : XhuBaseActivity(R.layout.activity_query_exp_score)
 		scoreListRecyclerView.layoutManager = LinearLayoutManager(this)
 		val dividerItemDecoration = DividerItemDecoration(this, DividerItemDecoration.VERTICAL)
 		scoreListRecyclerView.addItemDecoration(dividerItemDecoration)
-		queryExpScoreRecyclerViewAdapter = QueryExpScoreRecyclerViewAdapter(this)
 		scoreListRecyclerView.adapter = queryExpScoreRecyclerViewAdapter
 		val layoutParams = scoreListRecyclerView.layoutParams
 		layoutParams.width = DensityTools.getScreenWidth(this)
@@ -94,7 +95,6 @@ class QueryExpScoreActivity : XhuBaseActivity(R.layout.activity_query_exp_score)
 	}
 
 	private fun initViewModel() {
-		queryExpScoreViewModel = ViewModelProviders.of(this).get(QueryExpScoreViewModel::class.java)
 		queryExpScoreViewModel.studentInfoList.observe(this, studentInfoListObserver)
 		queryExpScoreViewModel.student.observe(this, studentObserver)
 		queryExpScoreViewModel.year.observe(this, yearObserver)

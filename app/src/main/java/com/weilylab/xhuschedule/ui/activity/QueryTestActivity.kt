@@ -23,9 +23,22 @@ import kotlinx.android.synthetic.main.content_query_test.*
 import vip.mystery0.logs.Logs
 
 class QueryTestActivity : XhuBaseActivity(R.layout.activity_query_test) {
-	private lateinit var queryTestViewModel: QueryTestViewModel
-	private lateinit var dialog: Dialog
-	private lateinit var queryTestRecyclerViewAdapter: QueryTestRecyclerViewAdapter
+	private val queryTestViewModel: QueryTestViewModel by lazy {
+		ViewModelProviders.of(this)
+				.get(QueryTestViewModel::class.java)
+	}
+	private val dialog: Dialog by lazy {
+		ZLoadingDialog(this)
+				.setLoadingBuilder(Z_TYPE.SINGLE_CIRCLE)
+				.setHintText(getString(R.string.hint_dialog_get_tests))
+				.setHintTextSize(16F)
+				.setCanceledOnTouchOutside(false)
+				.setDialogBackgroundColor(ContextCompat.getColor(this, R.color.colorWhiteBackground))
+				.setLoadingColor(ContextCompat.getColor(this, R.color.colorAccent))
+				.setHintTextColor(ContextCompat.getColor(this, R.color.colorAccent))
+				.create()
+	}
+	private val queryTestRecyclerViewAdapter: QueryTestRecyclerViewAdapter by lazy { QueryTestRecyclerViewAdapter(this) }
 
 	private val queryTestListObserver = Observer<PackageData<List<Test>>> {
 		when (it.status) {
@@ -54,25 +67,11 @@ class QueryTestActivity : XhuBaseActivity(R.layout.activity_query_test) {
 		super.initView()
 		setSupportActionBar(toolbar)
 		supportActionBar?.setDisplayHomeAsUpEnabled(true)
-		initDialog()
 		recyclerView.layoutManager = LinearLayoutManager(this)
 		val dividerItemDecoration = DividerItemDecoration(this, DividerItemDecoration.VERTICAL)
 		dividerItemDecoration.setDrawable(ContextCompat.getDrawable(this, R.drawable.divider_query_test)!!)
 		recyclerView.addItemDecoration(dividerItemDecoration)
-		queryTestRecyclerViewAdapter = QueryTestRecyclerViewAdapter(this)
 		recyclerView.adapter = queryTestRecyclerViewAdapter
-	}
-
-	private fun initDialog() {
-		dialog = ZLoadingDialog(this)
-				.setLoadingBuilder(Z_TYPE.SINGLE_CIRCLE)
-				.setHintText(getString(R.string.hint_dialog_get_tests))
-				.setHintTextSize(16F)
-				.setCanceledOnTouchOutside(false)
-				.setDialogBackgroundColor(ContextCompat.getColor(this, R.color.colorWhiteBackground))
-				.setLoadingColor(ContextCompat.getColor(this, R.color.colorAccent))
-				.setHintTextColor(ContextCompat.getColor(this, R.color.colorAccent))
-				.create()
 	}
 
 	override fun initData() {
@@ -89,7 +88,6 @@ class QueryTestActivity : XhuBaseActivity(R.layout.activity_query_test) {
 	}
 
 	private fun initViewModel() {
-		queryTestViewModel = ViewModelProviders.of(this).get(QueryTestViewModel::class.java)
 		queryTestViewModel.testList.observe(this, queryTestListObserver)
 	}
 

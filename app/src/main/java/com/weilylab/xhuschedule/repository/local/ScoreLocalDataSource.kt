@@ -5,13 +5,14 @@ import com.weilylab.xhuschedule.model.ClassScore
 import com.weilylab.xhuschedule.model.ExpScore
 import com.weilylab.xhuschedule.model.Student
 import com.weilylab.xhuschedule.repository.dataSource.ScoreDataSource
+import com.weilylab.xhuschedule.repository.local.service.ScoreService
 import com.weilylab.xhuschedule.repository.local.service.impl.ScoreServiceImpl
 import vip.mystery0.rxpackagedata.PackageData
 import vip.mystery0.rxpackagedata.rx.RxObservable
 import vip.mystery0.rxpackagedata.rx.RxObserver
 
 object ScoreLocalDataSource : ScoreDataSource {
-	private val scoreService = ScoreServiceImpl()
+	private val scoreService: ScoreService by lazy { ScoreServiceImpl() }
 	override fun queryClassScoreByUsername(scoreLiveData: MutableLiveData<PackageData<List<ClassScore>>>, student: Student, year: String, term: String) {
 		RxObservable<List<ClassScore>>()
 				.doThings {

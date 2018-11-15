@@ -6,5 +6,5 @@ import com.weilylab.xhuschedule.model.response.SplashResponse
 import vip.mystery0.rxpackagedata.PackageData
 
 class SplashViewModel : ViewModel() {
-	val splash = MediatorLiveData<PackageData<SplashResponse.Splash>>()
+	val splash by lazy { MediatorLiveData<PackageData<SplashResponse.Splash>>()}
 }

@@ -4,6 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import com.weilylab.xhuschedule.model.Course
 import com.weilylab.xhuschedule.model.Student
 import com.weilylab.xhuschedule.repository.dataSource.CourseDataSource
+import com.weilylab.xhuschedule.repository.local.service.CourseService
 import com.weilylab.xhuschedule.repository.local.service.impl.CourseServiceImpl
 import com.weilylab.xhuschedule.repository.remote.CourseRemoteDataSource
 import com.weilylab.xhuschedule.utils.CalendarUtil
@@ -17,7 +18,7 @@ import vip.mystery0.rxpackagedata.rx.RxObservable
 import vip.mystery0.rxpackagedata.rx.RxObserver
 
 object CourseLocalDataSource : CourseDataSource {
-	private val courseService = CourseServiceImpl()
+	private val courseService:CourseService by lazy { CourseServiceImpl() }
 
 	override fun queryCourseByUsername(courseListLiveData: MutableLiveData<PackageData<List<Schedule>>>, student: Student, year: String?, term: String?, isFromCache: Boolean, isShowError: Boolean) {
 		RxObservable<List<Schedule>>()

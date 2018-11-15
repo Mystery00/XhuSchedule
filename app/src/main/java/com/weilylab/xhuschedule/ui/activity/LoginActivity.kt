@@ -56,8 +56,21 @@ import vip.mystery0.rxpackagedata.PackageData
 import vip.mystery0.rxpackagedata.Status.*
 
 class LoginActivity : XhuBaseActivity(R.layout.activity_login, false) {
-	private lateinit var loginViewModel: LoginViewModel
-	private lateinit var dialog: Dialog
+	private val loginViewModel: LoginViewModel by lazy {
+		ViewModelProviders.of(this)
+				.get(LoginViewModel::class.java)
+	}
+	private val dialog: Dialog by lazy {
+		ZLoadingDialog(this)
+				.setLoadingBuilder(Z_TYPE.SINGLE_CIRCLE)
+				.setHintText(getString(R.string.hint_dialog_login))
+				.setHintTextSize(16F)
+				.setCanceledOnTouchOutside(false)
+				.setDialogBackgroundColor(ContextCompat.getColor(this, R.color.colorWhiteBackground))
+				.setLoadingColor(ContextCompat.getColor(this, R.color.colorAccent))
+				.setHintTextColor(ContextCompat.getColor(this, R.color.colorAccent))
+				.create()
+	}
 
 	private val loginObserver = Observer<PackageData<Student>> {
 		when (it.status) {
@@ -85,15 +98,6 @@ class LoginActivity : XhuBaseActivity(R.layout.activity_login, false) {
 		window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION)
 		window.statusBarColor = Color.TRANSPARENT
 		window.navigationBarColor = Color.TRANSPARENT
-		dialog = ZLoadingDialog(this)
-				.setLoadingBuilder(Z_TYPE.SINGLE_CIRCLE)
-				.setHintText(getString(R.string.hint_dialog_login))
-				.setHintTextSize(16F)
-				.setCanceledOnTouchOutside(false)
-				.setDialogBackgroundColor(ContextCompat.getColor(this, R.color.colorWhiteBackground))
-				.setLoadingColor(ContextCompat.getColor(this, R.color.colorAccent))
-				.setHintTextColor(ContextCompat.getColor(this, R.color.colorAccent))
-				.create()
 	}
 
 	override fun initData() {
@@ -102,7 +106,6 @@ class LoginActivity : XhuBaseActivity(R.layout.activity_login, false) {
 	}
 
 	private fun initViewModel() {
-		loginViewModel = ViewModelProviders.of(this).get(LoginViewModel::class.java)
 		loginViewModel.loginLiveData.observe(this, loginObserver)
 	}
 

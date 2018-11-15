@@ -21,8 +21,28 @@ import kotlinx.android.synthetic.main.activity_query_cet_score_second.*
 import vip.mystery0.logs.Logs
 
 class QueryCetScoreSecondActivity : XhuBaseActivity(R.layout.activity_query_cet_score_second) {
-	private lateinit var vCodeDialog: Dialog
-	private lateinit var dialog: Dialog
+	private val vCodeDialog: Dialog by lazy {
+		ZLoadingDialog(this)
+				.setLoadingBuilder(Z_TYPE.SINGLE_CIRCLE)
+				.setHintText(getString(R.string.hint_dialog_get_cet_vcode))
+				.setHintTextSize(16F)
+				.setCanceledOnTouchOutside(false)
+				.setDialogBackgroundColor(ContextCompat.getColor(this, R.color.colorWhiteBackground))
+				.setLoadingColor(ContextCompat.getColor(this, R.color.colorAccent))
+				.setHintTextColor(ContextCompat.getColor(this, R.color.colorAccent))
+				.create()
+	}
+	private val dialog: Dialog by lazy {
+		ZLoadingDialog(this)
+				.setLoadingBuilder(Z_TYPE.SINGLE_CIRCLE)
+				.setHintText(getString(R.string.hint_dialog_query_cet_score))
+				.setHintTextSize(16F)
+				.setCanceledOnTouchOutside(false)
+				.setDialogBackgroundColor(ContextCompat.getColor(this, R.color.colorWhiteBackground))
+				.setLoadingColor(ContextCompat.getColor(this, R.color.colorAccent))
+				.setHintTextColor(ContextCompat.getColor(this, R.color.colorAccent))
+				.create()
+	}
 
 	private val cetVCodeObserver = Observer<PackageData<Bitmap>> {
 		when (it.status) {
@@ -65,33 +85,11 @@ class QueryCetScoreSecondActivity : XhuBaseActivity(R.layout.activity_query_cet_
 
 	override fun initView() {
 		super.initView()
-		initDialog()
 		setupLayout.setIllustrationAspectRatio(3F)
 		setupLayout.setIllustration(ContextCompat.getDrawable(this, R.mipmap.header_cet))
 		setupLayout.navigationBar.backButton.setText(R.string.action_last)
 		setupLayout.navigationBar.moreButton.setText(R.string.action_more)
 		setupLayout.navigationBar.nextButton.setText(R.string.action_query)
-	}
-
-	private fun initDialog() {
-		vCodeDialog = ZLoadingDialog(this)
-				.setLoadingBuilder(Z_TYPE.SINGLE_CIRCLE)
-				.setHintText(getString(R.string.hint_dialog_get_cet_vcode))
-				.setHintTextSize(16F)
-				.setCanceledOnTouchOutside(false)
-				.setDialogBackgroundColor(ContextCompat.getColor(this, R.color.colorWhiteBackground))
-				.setLoadingColor(ContextCompat.getColor(this, R.color.colorAccent))
-				.setHintTextColor(ContextCompat.getColor(this, R.color.colorAccent))
-				.create()
-		dialog = ZLoadingDialog(this)
-				.setLoadingBuilder(Z_TYPE.SINGLE_CIRCLE)
-				.setHintText(getString(R.string.hint_dialog_query_cet_score))
-				.setHintTextSize(16F)
-				.setCanceledOnTouchOutside(false)
-				.setDialogBackgroundColor(ContextCompat.getColor(this, R.color.colorWhiteBackground))
-				.setLoadingColor(ContextCompat.getColor(this, R.color.colorAccent))
-				.setHintTextColor(ContextCompat.getColor(this, R.color.colorAccent))
-				.create()
 	}
 
 	override fun initData() {
@@ -161,12 +159,12 @@ class QueryCetScoreSecondActivity : XhuBaseActivity(R.layout.activity_query_cet_
 	}
 
 	private fun showDialog() {
-		if (!vCodeDialog.isShowing)
-			vCodeDialog.show()
+		if (!dialog.isShowing)
+			dialog.show()
 	}
 
 	private fun hideDialog() {
-		if (vCodeDialog.isShowing)
-			vCodeDialog.dismiss()
+		if (dialog.isShowing)
+			dialog.dismiss()
 	}
 }

@@ -50,13 +50,11 @@ import com.weilylab.xhuschedule.ui.fragment.PlaceholderFragment
 import com.weilylab.xhuschedule.base.XhuBaseActivity
 import com.weilylab.xhuschedule.utils.ConfigurationUtil
 import kotlinx.android.synthetic.main.activity_guide.*
-import vip.mystery0.logs.Logs
-import vip.mystery0.tools.utils.DensityTools
 
 class GuideActivity : XhuBaseActivity(R.layout.activity_guide) {
 	private val imageArray = arrayOf(R.mipmap.welcome1, R.mipmap.welcome2, R.mipmap.welcome3, R.mipmap.welcome4)
-	private lateinit var mSectionsPagerAdapter: SectionsPagerAdapter
-	private lateinit var grayPointDrawable: VectorDrawableCompat
+	private val sectionsPagerAdapter: SectionsPagerAdapter by lazy { SectionsPagerAdapter(supportFragmentManager) }
+	private val grayPointDrawable: VectorDrawableCompat by lazy { VectorDrawableCompat.create(resources, R.drawable.ic_point, null)!! }
 	private var distance = 0
 	private var currentIndex = 0
 
@@ -72,13 +70,10 @@ class GuideActivity : XhuBaseActivity(R.layout.activity_guide) {
 
 	override fun initData() {
 		super.initData()
-		grayPointDrawable = VectorDrawableCompat.create(resources, R.drawable.ic_point, null)!!
 		grayPointDrawable.setBounds(0, 0, 20, 20)
 		grayPointDrawable.setTint(Color.LTGRAY)
 
-		mSectionsPagerAdapter = SectionsPagerAdapter(supportFragmentManager)
-
-		container.adapter = mSectionsPagerAdapter
+		container.adapter = sectionsPagerAdapter
 		for (i in 0 until imageArray.size) {
 			val view = View(applicationContext)
 			view.background = grayPointDrawable

@@ -8,8 +8,8 @@ import com.zhuangfei.timetable.model.Schedule
 import vip.mystery0.rxpackagedata.PackageData
 
 object WidgetViewModelHelper {
-	val studentList = MutableLiveData<PackageData<List<Student>>>()
-	val courseList = MediatorLiveData<PackageData<List<Schedule>>>()
-	val todayCourseList = MediatorLiveData<PackageData<List<Schedule>>>()
-	val testList = MediatorLiveData<PackageData<List<Test>>>()
+	val studentList by lazy { MutableLiveData<PackageData<List<Student>>>() }
+	val courseList by lazy { MediatorLiveData<PackageData<List<Schedule>>>() }
+	val todayCourseList by lazy { MediatorLiveData<PackageData<List<Schedule>>>() }
+	val testList by lazy { MediatorLiveData<PackageData<List<Test>>>() }
 }

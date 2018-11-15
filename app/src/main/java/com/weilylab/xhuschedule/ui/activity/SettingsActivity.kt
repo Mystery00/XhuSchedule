@@ -58,11 +58,11 @@ class SettingsActivity : XhuBaseActivity(R.layout.activity_settings) {
 		}
 	}
 
-	private lateinit var accountSettingsFragment: AccountSettingsFragment
-	private lateinit var classSettingsFragment: ClassSettingsFragment
-	private lateinit var queryScoreFragment: QueryScoreFragment
-	private lateinit var settingsPreferenceFragment: SettingsPreferenceFragment
-	private lateinit var aboutSettingFragment: AboutSettingFragment
+	private val accountSettingsFragment: AccountSettingsFragment by lazy { AccountSettingsFragment() }
+	private val classSettingsFragment: ClassSettingsFragment by lazy { ClassSettingsFragment() }
+	private val queryScoreFragment: QueryScoreFragment by lazy { QueryScoreFragment() }
+	private val settingsPreferenceFragment: SettingsPreferenceFragment by lazy { SettingsPreferenceFragment() }
+	private val aboutSettingFragment: AboutSettingFragment by lazy { AboutSettingFragment() }
 
 	override fun initView() {
 		super.initView()
@@ -76,31 +76,11 @@ class SettingsActivity : XhuBaseActivity(R.layout.activity_settings) {
 
 	private fun getFragment(): BasePreferenceFragment {
 		return when (intent.getIntExtra(INTENT_FRAGMENT, 0)) {
-			TYPE_ACCOUNT -> {
-				if (!::accountSettingsFragment.isInitialized)
-					accountSettingsFragment = AccountSettingsFragment()
-				accountSettingsFragment
-			}
-			TYPE_CLASS -> {
-				if (!::classSettingsFragment.isInitialized)
-					classSettingsFragment = ClassSettingsFragment()
-				classSettingsFragment
-			}
-			TYPE_QUERY_SCORE -> {
-				if (!::queryScoreFragment.isInitialized)
-					queryScoreFragment = QueryScoreFragment()
-				queryScoreFragment
-			}
-			TYPE_SETTINGS -> {
-				if (!::settingsPreferenceFragment.isInitialized)
-					settingsPreferenceFragment = SettingsPreferenceFragment()
-				settingsPreferenceFragment
-			}
-			TYPE_ABOUT -> {
-				if (!::aboutSettingFragment.isInitialized)
-					aboutSettingFragment = AboutSettingFragment()
-				aboutSettingFragment
-			}
+			TYPE_ACCOUNT -> accountSettingsFragment
+			TYPE_CLASS -> classSettingsFragment
+			TYPE_QUERY_SCORE -> queryScoreFragment
+			TYPE_SETTINGS -> settingsPreferenceFragment
+			TYPE_ABOUT -> aboutSettingFragment
 			else -> throw NullPointerException("null")
 		}
 	}

@@ -6,5 +6,5 @@ import com.weilylab.xhuschedule.model.Student
 import vip.mystery0.rxpackagedata.PackageData
 
 class LoginViewModel : ViewModel() {
-	val loginLiveData = MutableLiveData<PackageData<Student>>()
+	val loginLiveData by lazy { MutableLiveData<PackageData<Student>>() }
 }

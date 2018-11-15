@@ -3,6 +3,7 @@ package com.weilylab.xhuschedule.repository.local
 import androidx.lifecycle.MutableLiveData
 import com.weilylab.xhuschedule.model.FeedBackMessage
 import com.weilylab.xhuschedule.model.Student
+import com.weilylab.xhuschedule.repository.local.service.FeedBackMessageService
 import com.weilylab.xhuschedule.repository.local.service.impl.FeedBackMessageServiceImpl
 import vip.mystery0.logs.Logs
 import vip.mystery0.rxpackagedata.PackageData
@@ -10,7 +11,7 @@ import vip.mystery0.rxpackagedata.rx.RxObservable
 import vip.mystery0.rxpackagedata.rx.RxObserver
 
 object FeedBackLocalDataSource {
-	private val feedBackMessageService = FeedBackMessageServiceImpl()
+	private val feedBackMessageService: FeedBackMessageService by lazy { FeedBackMessageServiceImpl() }
 
 	fun queryFeedBackForStudent(feedBackMessageListLiveData: MutableLiveData<PackageData<List<FeedBackMessage>>>, maxId: MutableLiveData<Int>, student: Student) {
 		RxObservable<List<FeedBackMessage>>()
