@@ -1,22 +1,9 @@
-<?xml version="1.0" encoding="utf-8"?><!--
-  ~ Created by Mystery0 on 17-12-21 上午3:41.
-  ~ Copyright (c) 2017. All Rights reserved.
-  ~
-  ~ Last modified 17-12-21 上午3:10
-  -->
-
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
 	<string-array name="update_log">
-		<item>西瓜课表目前已在 小米应用商店、魅族应用商店 上架，小米用户和魅族用户可以直接在应用商店搜索 “西瓜课表” 下载使用！</item>
+		<item>修复：部分Android 9.0设备崩溃</item>
+		<item>修复：数据请求出错时弹出两次Toast</item>
 		<item> </item>
-		<item>新增：夜间模式</item>
-		<item> </item>
-		<item>优化：状态栏颜色显示</item>
-		<item>优化：主界面滑动体验</item>
-		<item> </item>
-		<item>修复：部分设备无法使用</item>
-		<item>修复：分享到QQ的链接无法打开</item>
-		<item>修复：Shortcuts提示应用未安装</item>
-		<item>修复：上一版本今日课程页面颜色错误</item>
+		<item>优化：部分细节</item>
 	</string-array>
 </resources>
