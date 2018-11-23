@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 	<string-array name="update_log">
+		<item>新增：崩溃记录，如果在使用过程中出现崩溃，欢迎加入西瓜课表交流反馈群反馈</item>
+		<item> </item>
 		<item>修复：部分Android 9.0设备崩溃</item>
 		<item>修复：数据请求出错时弹出两次Toast</item>
 		<item> </item>

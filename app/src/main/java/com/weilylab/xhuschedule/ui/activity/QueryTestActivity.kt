@@ -24,8 +24,7 @@ import vip.mystery0.logs.Logs
 
 class QueryTestActivity : XhuBaseActivity(R.layout.activity_query_test) {
 	private val queryTestViewModel: QueryTestViewModel by lazy {
-		ViewModelProviders.of(this)
-				.get(QueryTestViewModel::class.java)
+		ViewModelProviders.of(this).get(QueryTestViewModel::class.java)
 	}
 	private val dialog: Dialog by lazy {
 		ZLoadingDialog(this)

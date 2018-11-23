@@ -11,88 +11,57 @@
 	<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
 		xmlns:app="http://schemas.android.com/apk/res-auto"
 		android:layout_width="match_parent"
-		android:layout_height="wrap_content">
+		android:layout_height="wrap_content"
+		android:background="@color/colorWhiteBackground"
+		android:padding="8dp">
 
-		<View
-			android:id="@+id/lineTop"
+		<TextView
+			android:id="@+id/textViewTestTitle"
 			android:layout_width="0dp"
-			android:layout_height="0.5dp"
-			android:background="#dedede"
-			app:layout_constraintBottom_toTopOf="@id/contentLayout"
+			android:layout_height="wrap_content"
+			android:text="@{test.name}"
+			android:textColor="@color/colorBlackText"
+			android:textSize="16sp"
+			app:layout_constraintBottom_toTopOf="@id/textViewTestDate"
 			app:layout_constraintEnd_toEndOf="parent"
 			app:layout_constraintStart_toStartOf="parent"
 			app:layout_constraintTop_toTopOf="parent" />
 
-		<View
-			android:id="@+id/lineBottom"
+		<TextView
+			android:id="@+id/textViewTestDate"
 			android:layout_width="0dp"
-			android:layout_height="0.5dp"
-			android:background="#dedede"
+			android:layout_height="wrap_content"
+			app:layout_constraintBottom_toTopOf="@id/textViewTestTime"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintTop_toBottomOf="@id/textViewTestTitle" />
+
+		<TextView
+			android:id="@+id/textViewTestTime"
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			app:layout_constraintBottom_toTopOf="@id/textViewTestLocation"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintTop_toBottomOf="@id/textViewTestDate" />
+
+		<TextView
+			android:id="@+id/textViewTestLocation"
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			app:layout_constraintBottom_toTopOf="@id/textViewTestNo"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintTop_toBottomOf="@id/textViewTestTime" />
+
+		<TextView
+			android:id="@+id/textViewTestNo"
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
 			app:layout_constraintBottom_toBottomOf="parent"
 			app:layout_constraintEnd_toEndOf="parent"
 			app:layout_constraintStart_toStartOf="parent"
-			app:layout_constraintTop_toBottomOf="@id/contentLayout" />
-
-		<androidx.constraintlayout.widget.ConstraintLayout
-			android:id="@+id/contentLayout"
-			android:layout_width="0dp"
-			android:layout_height="wrap_content"
-			android:background="@android:color/white"
-			android:padding="8dp"
-			app:layout_constraintBottom_toTopOf="@id/lineBottom"
-			app:layout_constraintEnd_toEndOf="parent"
-			app:layout_constraintStart_toStartOf="parent"
-			app:layout_constraintTop_toBottomOf="@id/lineTop">
-
-			<TextView
-				android:id="@+id/textViewTestTitle"
-				android:layout_width="0dp"
-				android:layout_height="wrap_content"
-				android:text="@{test.name}"
-				android:textColor="@android:color/black"
-				android:textSize="16sp"
-				app:layout_constraintBottom_toTopOf="@id/textViewTestDate"
-				app:layout_constraintEnd_toEndOf="parent"
-				app:layout_constraintStart_toStartOf="parent"
-				app:layout_constraintTop_toTopOf="parent" />
-
-			<TextView
-				android:id="@+id/textViewTestDate"
-				android:layout_width="0dp"
-				android:layout_height="wrap_content"
-				app:layout_constraintBottom_toTopOf="@id/textViewTestTime"
-				app:layout_constraintEnd_toEndOf="parent"
-				app:layout_constraintStart_toStartOf="parent"
-				app:layout_constraintTop_toBottomOf="@id/textViewTestTitle" />
-
-			<TextView
-				android:id="@+id/textViewTestTime"
-				android:layout_width="0dp"
-				android:layout_height="wrap_content"
-				app:layout_constraintBottom_toTopOf="@id/textViewTestLocation"
-				app:layout_constraintEnd_toEndOf="parent"
-				app:layout_constraintStart_toStartOf="parent"
-				app:layout_constraintTop_toBottomOf="@id/textViewTestDate" />
-
-			<TextView
-				android:id="@+id/textViewTestLocation"
-				android:layout_width="0dp"
-				android:layout_height="wrap_content"
-				app:layout_constraintBottom_toTopOf="@id/textViewTestNo"
-				app:layout_constraintEnd_toEndOf="parent"
-				app:layout_constraintStart_toStartOf="parent"
-				app:layout_constraintTop_toBottomOf="@id/textViewTestTime" />
-
-			<TextView
-				android:id="@+id/textViewTestNo"
-				android:layout_width="0dp"
-				android:layout_height="wrap_content"
-				app:layout_constraintBottom_toBottomOf="parent"
-				app:layout_constraintEnd_toEndOf="parent"
-				app:layout_constraintStart_toStartOf="parent"
-				app:layout_constraintTop_toBottomOf="@id/textViewTestLocation" />
-
-		</androidx.constraintlayout.widget.ConstraintLayout>
+			app:layout_constraintTop_toBottomOf="@id/textViewTestLocation" />
 
 	</androidx.constraintlayout.widget.ConstraintLayout>
 
