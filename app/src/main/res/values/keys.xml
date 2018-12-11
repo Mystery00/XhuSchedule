@@ -75,7 +75,7 @@
 	<string name="title_other">其他设置</string>
 	<string name="title_auto_check_update">自动检查更新</string>
 	<string name="title_weily_product">微力实验室出品</string>
-	<string name="title_community_link">点击加入群【西瓜课表用户交流反馈】</string>
+	<string name="title_community_link">点击加入『西瓜课表用户交流反馈』</string>
 	<string name="title_about">关于</string>
 	<string name="title_source_code">开源地址</string>
 	<string name="title_open_source_license">开源协议</string>
@@ -100,9 +100,9 @@
 	<string name="summary_version_code" translatable="false">@string/app_version_code</string>
 	<string name="summary_notification_time">将会在每天的 %1$s 提醒。</string>
 	<string name="summary_auto_check_update">在每一次启动时自动检查更新，注意，跳过某个版本将会无法使用增量更新</string>
-	<string name="summary_weily_product">点击进入实验室官网</string>
-	<string name="summary_weixin">点击跳转，也可以在微信小程序页面直接搜索“西瓜课表”即可使用</string>
-	<string name="summary_jrsc">感谢作者：xenv</string>
+	<string name="summary_weily_product">点击进入『微力实验室』官网</string>
+	<string name="summary_weixin">点击跳转，也可以在微信小程序页面直接搜索『西瓜课表』即可使用</string>
+	<string name="summary_jrsc">感谢作者@xenv，点击访问『今日诗词』官网</string>
 
 	<string name="link_developer" translatable="false">https://mystery0.vip/</string>
 	<string name="link_open_source_license" translatable="false">https://github.com/Mystery00/XhuSchedule/blob/master/LICENSE.TXT</string>
