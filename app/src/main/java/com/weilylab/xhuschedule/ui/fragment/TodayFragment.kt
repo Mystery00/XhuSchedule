@@ -1,6 +1,7 @@
 package com.weilylab.xhuschedule.ui.fragment
 
 import android.view.View
+import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -8,6 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.databinding.FragmentTodayBinding
 import com.weilylab.xhuschedule.base.BaseBottomNavigationFragment
+import com.weilylab.xhuschedule.databinding.LayoutNullDataViewBinding
 import com.weilylab.xhuschedule.repository.BottomNavigationRepository
 import com.weilylab.xhuschedule.ui.adapter.FragmentTodayRecyclerViewAdapter
 import com.weilylab.xhuschedule.utils.CalendarUtil
@@ -27,6 +29,7 @@ class TodayFragment : BaseBottomNavigationFragment<FragmentTodayBinding>(R.layou
 
 	private lateinit var viewModel: BottomNavigationViewModel
 	private lateinit var adapter: FragmentTodayRecyclerViewAdapter
+	private lateinit var viewStubBinding: LayoutNullDataViewBinding
 
 	private val todayCourseListObserver = Observer<PackageData<List<Schedule>>> {
 		when (it.status) {
@@ -59,14 +62,25 @@ class TodayFragment : BaseBottomNavigationFragment<FragmentTodayBinding>(R.layou
 		viewModel.todayCourseList.observe(activity!!, todayCourseListObserver)
 	}
 
+	override fun monitor() {
+		super.monitor()
+		binding.nullDataViewStub.setOnInflateListener { _, inflated -> viewStubBinding = DataBindingUtil.bind(inflated)!! }
+	}
+
 	private fun showNoDataLayout() {
-		binding.nullDataView.visibility = View.VISIBLE
-		binding.dataView.visibility = View.GONE
+		if (!binding.nullDataViewStub.isInflated)
+			binding.nullDataViewStub.viewStub!!.inflate()
+		else
+			viewStubBinding.root.visibility = View.VISIBLE
+		binding.line.visibility = View.GONE
+		binding.recyclerView.visibility = View.GONE
 	}
 
 	private fun hideNoDataLayout() {
-		binding.nullDataView.visibility = View.GONE
-		binding.dataView.visibility = View.VISIBLE
+		if (binding.nullDataViewStub.isInflated)
+			viewStubBinding.root.visibility = View.GONE
+		binding.line.visibility = View.VISIBLE
+		binding.recyclerView.visibility = View.VISIBLE
 	}
 
 	override fun onResume() {

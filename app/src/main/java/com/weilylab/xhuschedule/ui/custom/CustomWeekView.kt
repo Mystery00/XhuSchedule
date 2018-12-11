@@ -16,6 +16,7 @@ import com.zhuangfei.timetable.model.Schedule
 import com.zhuangfei.timetable.model.ScheduleEnable
 import com.zhuangfei.timetable.model.ScheduleSupport
 import com.zhuangfei.timetable.model.WeekViewEnable
+import vip.mystery0.tools.utils.DensityTools
 import java.util.ArrayList
 
 class CustomWeekView : LinearLayout, WeekViewEnable<CustomWeekView> {
@@ -75,9 +76,11 @@ class CustomWeekView : LinearLayout, WeekViewEnable<CustomWeekView> {
 			itemCourseWeekBinding.weekTextViewBottom.setTextColor(Color.parseColor("#8A000000"))
 			layoutWeekViewBinding.weekViewContainer.addView(itemCourseWeekBinding.root)
 		}
-		if (curWeek in 1..itemCount)
-			layoutWeekViewBinding.weekViewContainer.getChildAt(curWeek - 1)
-					.background = ContextCompat.getDrawable(context, R.drawable.weekview_thisweek)
+		if (curWeek in 1..itemCount) {
+			val itemView = layoutWeekViewBinding.weekViewContainer.getChildAt(curWeek - 1)
+			itemView.background = ContextCompat.getDrawable(context, R.drawable.weekview_thisweek)
+		}
+		layoutWeekViewBinding.nestedScrollView.scrollTo(curWeek * DensityTools.dp2px(context, 59F), 0)
 		return this
 	}
 
