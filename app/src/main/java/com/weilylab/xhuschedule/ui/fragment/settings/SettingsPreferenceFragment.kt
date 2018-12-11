@@ -44,36 +44,37 @@ class SettingsPreferenceFragment : BasePreferenceFragment(R.xml.preference_setti
 		private const val REQUEST_CROP_BACKGROUND = 32
 	}
 
-	private lateinit var userImgPreference: Preference
-	private lateinit var backgroundImgPreference: Preference
-	private lateinit var nightModePreference: Preference
-	private lateinit var resetUserImgPreference: Preference
-	private lateinit var resetBackgroundPreference: Preference
-	private lateinit var notificationCoursePreference: CheckBoxPreference
-	private lateinit var notificationExamPreference: CheckBoxPreference
-	private lateinit var notificationTimePreference: Preference
-	private lateinit var autoCheckUpdatePreference: CheckBoxPreference
-	private lateinit var weixinPreference: Preference
-	private lateinit var checkUpdatePreference: Preference
-	private lateinit var aboutPreference: Preference
-	private lateinit var dialog: Dialog
-	private lateinit var localBroadcastManager: LocalBroadcastManager
+	private val userImgPreference: Preference by lazy { findPreferenceById(R.string.key_user_img) }
+	private val backgroundImgPreference: Preference by lazy { findPreferenceById(R.string.key_background_img) }
+	private val nightModePreference: Preference by lazy { findPreferenceById(R.string.key_night_mode) }
+	private val enableViewPagerTransformPreference: CheckBoxPreference by lazy { findPreferenceById(R.string.key_enable_viewpager_transform) as CheckBoxPreference }
+	private val disableJRSCPreference: CheckBoxPreference by lazy { findPreferenceById(R.string.key_disable_jrsc) as CheckBoxPreference }
+	private val resetUserImgPreference: Preference by lazy { findPreferenceById(R.string.key_reset_user_img) }
+	private val resetBackgroundPreference: Preference by lazy { findPreferenceById(R.string.key_reset_background_img) }
+	private val notificationCoursePreference: CheckBoxPreference by lazy { findPreferenceById(R.string.key_notification_course) as CheckBoxPreference }
+	private val notificationExamPreference: CheckBoxPreference by lazy { findPreferenceById(R.string.key_notification_exam) as CheckBoxPreference }
+	private val notificationTimePreference: Preference by lazy { findPreferenceById(R.string.key_notification_time) }
+	private val autoCheckUpdatePreference: CheckBoxPreference by lazy { findPreferenceById(R.string.key_auto_check_update) as CheckBoxPreference }
+	private val weixinPreference: Preference by lazy { findPreferenceById(R.string.key_weixin) }
+	private val checkUpdatePreference: Preference by lazy { findPreferenceById(R.string.key_check_update) }
+	private val aboutPreference: Preference by lazy { findPreferenceById(R.string.key_about) }
+
+	private val dialog: Dialog by lazy {
+		ZLoadingDialog(activity!!)
+				.setLoadingBuilder(Z_TYPE.SINGLE_CIRCLE)
+				.setHintText(getString(R.string.hint_dialog_check_update))
+				.setHintTextSize(16F)
+				.setCanceledOnTouchOutside(false)
+				.setLoadingColor(ContextCompat.getColor(activity!!, R.color.colorAccent))
+				.setHintTextColor(ContextCompat.getColor(activity!!, R.color.colorAccent))
+				.create()
+	}
+	private val localBroadcastManager: LocalBroadcastManager by lazy { LocalBroadcastManager.getInstance(activity!!) }
 
 	override fun initPreference() {
 		super.initPreference()
-		userImgPreference = findPreferenceById(R.string.key_user_img)
-		backgroundImgPreference = findPreferenceById(R.string.key_background_img)
-		nightModePreference = findPreferenceById(R.string.key_night_mode)
-		resetUserImgPreference = findPreferenceById(R.string.key_reset_user_img)
-		resetBackgroundPreference = findPreferenceById(R.string.key_reset_background_img)
-		notificationCoursePreference = findPreferenceById(R.string.key_notification_course) as CheckBoxPreference
-		notificationExamPreference = findPreferenceById(R.string.key_notification_exam) as CheckBoxPreference
-		notificationTimePreference = findPreferenceById(R.string.key_notification_time)
-		autoCheckUpdatePreference = findPreferenceById(R.string.key_auto_check_update) as CheckBoxPreference
-		weixinPreference = findPreferenceById(R.string.key_weixin)
-		checkUpdatePreference = findPreferenceById(R.string.key_check_update)
-		aboutPreference = findPreferenceById(R.string.key_about)
-
+		enableViewPagerTransformPreference.isChecked = ConfigurationUtil.enableViewPagerTransform
+		disableJRSCPreference.isChecked = ConfigurationUtil.disableJRSC
 		autoCheckUpdatePreference.isChecked = ConfigurationUtil.autoCheckUpdate
 		notificationCoursePreference.isChecked = ConfigurationUtil.notificationCourse
 		notificationExamPreference.isChecked = ConfigurationUtil.notificationExam
@@ -94,7 +95,7 @@ class SettingsPreferenceFragment : BasePreferenceFragment(R.xml.preference_setti
 			val itemArray = resources.getStringArray(R.array.night_mode)
 			var selectedIndex = ConfigurationUtil.nightMode
 			AlertDialog.Builder(activity!!)
-					.setTitle(R.string.hint_dialog_choose_student)
+					.setTitle(R.string.title_night_mode)
 					.setSingleChoiceItems(itemArray, selectedIndex) { _, index ->
 						selectedIndex = index
 					}
@@ -106,6 +107,14 @@ class SettingsPreferenceFragment : BasePreferenceFragment(R.xml.preference_setti
 					}
 					.setNegativeButton(R.string.action_cancel, null)
 					.show()
+			true
+		}
+		enableViewPagerTransformPreference.setOnPreferenceChangeListener { _, _ ->
+			ConfigurationUtil.enableViewPagerTransform = !enableViewPagerTransformPreference.isChecked
+			true
+		}
+		disableJRSCPreference.setOnPreferenceChangeListener { _, _ ->
+			ConfigurationUtil.disableJRSC = !disableJRSCPreference.isChecked
 			true
 		}
 		resetUserImgPreference.setOnPreferenceClickListener {
@@ -175,8 +184,6 @@ class SettingsPreferenceFragment : BasePreferenceFragment(R.xml.preference_setti
 		checkUpdatePreference.setOnPreferenceClickListener {
 			showCheckUpdateDialog()
 			val intentFilter = IntentFilter(ACTION_CHECK_UPDATE_DONE)
-			if (!::localBroadcastManager.isInitialized)
-				localBroadcastManager = LocalBroadcastManager.getInstance(activity!!)
 			localBroadcastManager.registerReceiver(CheckUpdateLocalBroadcastReceiver(), intentFilter)
 			val intent = Intent(activity!!, CheckUpdateService::class.java)
 			intent.putExtra(CheckUpdateService.CHECK_ACTION_BY_MANUAL, true)
@@ -263,15 +270,6 @@ class SettingsPreferenceFragment : BasePreferenceFragment(R.xml.preference_setti
 	}
 
 	private fun showCheckUpdateDialog() {
-		if (!::dialog.isInitialized)
-			dialog = ZLoadingDialog(activity!!)
-					.setLoadingBuilder(Z_TYPE.SINGLE_CIRCLE)
-					.setHintText(getString(R.string.hint_dialog_check_update))
-					.setHintTextSize(16F)
-					.setCanceledOnTouchOutside(false)
-					.setLoadingColor(ContextCompat.getColor(activity!!, R.color.colorAccent))
-					.setHintTextColor(ContextCompat.getColor(activity!!, R.color.colorAccent))
-					.create()
 		if (!dialog.isShowing)
 			dialog.show()
 	}
@@ -287,8 +285,7 @@ class SettingsPreferenceFragment : BasePreferenceFragment(R.xml.preference_setti
 		override fun onReceive(context: Context?, intent: Intent?) {
 			if (intent?.action == ACTION_CHECK_UPDATE_DONE) {
 				dismissCheckUpdateDialog()
-				if (::localBroadcastManager.isInitialized)
-					localBroadcastManager.unregisterReceiver(this)
+				localBroadcastManager.unregisterReceiver(this)
 			}
 		}
 	}

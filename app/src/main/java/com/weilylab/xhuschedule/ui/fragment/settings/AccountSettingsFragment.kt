@@ -23,21 +23,15 @@ class AccountSettingsFragment : BasePreferenceFragment(R.xml.preference_account)
 		const val ADD_ACCOUNT_CODE = 233
 	}
 
-	private lateinit var loggedStudentCategory: PreferenceCategory
-	private lateinit var addAccountPreference: Preference
-	private lateinit var delAccountPreference: Preference
-	private lateinit var setMainAccountPreference: Preference
-	private lateinit var enableMultiUserModePreference: CheckBoxPreference
+	private val loggedStudentCategory: PreferenceCategory by lazy { findPreferenceById(R.string.key_logged_account) as PreferenceCategory }
+	private val addAccountPreference: Preference by lazy { findPreferenceById(R.string.key_add_account) }
+	private val delAccountPreference: Preference by lazy { findPreferenceById(R.string.key_del_account) }
+	private val setMainAccountPreference: Preference by lazy { findPreferenceById(R.string.key_set_main_account) }
+	private val enableMultiUserModePreference: CheckBoxPreference by lazy { findPreferenceById(R.string.key_enable_multi_user_mode) as CheckBoxPreference }
 	private val studentList = ArrayList<Student>()
 
 	override fun initPreference() {
 		super.initPreference()
-		loggedStudentCategory = findPreferenceById(R.string.key_logged_account) as PreferenceCategory
-		addAccountPreference = findPreferenceById(R.string.key_add_account)
-		delAccountPreference = findPreferenceById(R.string.key_del_account)
-		setMainAccountPreference = findPreferenceById(R.string.key_set_main_account)
-		enableMultiUserModePreference = findPreferenceById(R.string.key_enable_multi_user_mode) as CheckBoxPreference
-
 		initStudentList()
 		setMainAccountPreference.isEnabled = !ConfigurationUtil.isEnableMultiUserMode
 		enableMultiUserModePreference.isChecked = ConfigurationUtil.isEnableMultiUserMode
@@ -49,7 +43,7 @@ class AccountSettingsFragment : BasePreferenceFragment(R.xml.preference_account)
 			startActivityForResult(Intent(activity, LoginActivity::class.java), ADD_ACCOUNT_CODE)
 			true
 		}
-		delAccountPreference.setOnPreferenceClickListener { _ ->
+		delAccountPreference.setOnPreferenceClickListener {
 			LayoutRefreshConfigUtil.isRefreshBottomNavigationActivity = true
 			val valueArray = Array(studentList.size) { i -> "${studentList[i].username}(${studentList[i].studentName})" }
 			val checkedArray = BooleanArray(studentList.size) { false }
@@ -80,10 +74,10 @@ class AccountSettingsFragment : BasePreferenceFragment(R.xml.preference_account)
 					.show()
 			true
 		}
-		setMainAccountPreference.setOnPreferenceClickListener { _ ->
+		setMainAccountPreference.setOnPreferenceClickListener {
 			LayoutRefreshConfigUtil.isRefreshBottomNavigationActivity = true
 			val valueArray = Array(studentList.size) { i -> studentList[i].username }
-			val oldMainIndex = studentList.indexOfFirst { it.isMain }
+			val oldMainIndex = studentList.indexOfFirst { s -> s.isMain }
 			var newMainIndex = oldMainIndex
 			AlertDialog.Builder(activity!!)
 					.setTitle(R.string.title_set_main_account)

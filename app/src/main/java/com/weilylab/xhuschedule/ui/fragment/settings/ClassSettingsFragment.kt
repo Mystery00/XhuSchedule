@@ -13,16 +13,12 @@ import vip.mystery0.logs.Logs
 import vip.mystery0.rxpackagedata.Status.*
 
 class ClassSettingsFragment : BasePreferenceFragment(R.xml.preference_class) {
-	private lateinit var showNotWeekPreference: CheckBoxPreference
-	private lateinit var currentYearAndTermPreference: Preference
-	private lateinit var customStartTimePreference: Preference
+	private val showNotWeekPreference: CheckBoxPreference by lazy { findPreferenceById(R.string.key_show_not_week) as CheckBoxPreference }
+	private val currentYearAndTermPreference: Preference by lazy { findPreferenceById(R.string.key_current_year_and_term) }
+	private val customStartTimePreference: Preference by lazy { findPreferenceById(R.string.key_custom_start_time) }
 
 	override fun initPreference() {
 		super.initPreference()
-		showNotWeekPreference = findPreferenceById(R.string.key_show_not_week) as CheckBoxPreference
-		currentYearAndTermPreference = findPreferenceById(R.string.key_current_year_and_term)
-		customStartTimePreference = findPreferenceById(R.string.key_custom_start_time)
-
 		showNotWeekPreference.isChecked = ConfigurationUtil.isShowNotWeek
 		currentYearAndTermPreference.summary = getString(R.string.summary_current_year_and_term, ConfigurationUtil.currentYear, ConfigurationUtil.currentTerm)
 		updateCustomStartTimeSummary()
@@ -35,12 +31,12 @@ class ClassSettingsFragment : BasePreferenceFragment(R.xml.preference_class) {
 			LayoutRefreshConfigUtil.isRefreshTableFragment = true
 			true
 		}
-		currentYearAndTermPreference.setOnPreferenceClickListener { _ ->
+		currentYearAndTermPreference.setOnPreferenceClickListener {
 			StudentLocalDataSource.queryAllStudentInfo { packageData ->
 				when (packageData.status) {
 					Content -> {
 						val studentInfoList = packageData.data!!
-						val sortList = studentInfoList.sortedBy { it.grade.toInt() }
+						val sortList = studentInfoList.sortedBy { s -> s.grade.toInt() }
 						val oldGrade = sortList.first().grade.toInt()
 						val newGrade = sortList.last().grade.toInt()
 						val tempArray = Array(2 * (newGrade - oldGrade + 4)) { i -> "${oldGrade + i / 2}-${oldGrade + i / 2 + 1}学年 第${i % 2 + 1}学期" }.sortedArrayDescending()
