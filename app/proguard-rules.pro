@@ -5,6 +5,13 @@
 -verbose                                                                        # 混淆时是否记录日志
 -optimizations !code/simplification/arithmetic,!field/*,!class/merging/*        # 混淆时所采用的算法
 
+#指定外部模糊字典
+-obfuscationdictionary dictionary.txt
+#指定class模糊字典
+#-classobfuscationdictionary filename
+#指定package模糊字典
+#-packageobfuscationdictionary filename
+
 # 保护注解
 -keepattributes *Annotation*
 
