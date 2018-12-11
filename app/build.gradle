@@ -82,7 +82,7 @@ android {
 			resValue "string", "app_version_name", autoVersion.name
 			resValue "string", "app_version_code", autoVersion.code + ''
 			resValue "string", "app_package_name", android.defaultConfig.applicationId
-			minifyEnabled true
+			minifyEnabled false
 			proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
 		}
 		release {
