@@ -40,7 +40,7 @@ apply plugin: 'kotlin-kapt'
 autoVersion {
 	major 2
 	minor 2
-	patch 7
+	patch 8
 	beta 0
 	alpha 0
 }
@@ -82,12 +82,14 @@ android {
 			resValue "string", "app_version_name", autoVersion.name
 			resValue "string", "app_version_code", autoVersion.code + ''
 			resValue "string", "app_package_name", android.defaultConfig.applicationId
+			minifyEnabled true
+			proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
 		}
 		release {
 			resValue "string", "app_version_name", autoVersion.name
 			resValue "string", "app_version_code", autoVersion.code + ''
 			resValue "string", "app_package_name", android.defaultConfig.applicationId
-			minifyEnabled false
+			minifyEnabled true
 			proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
 		}
 	}

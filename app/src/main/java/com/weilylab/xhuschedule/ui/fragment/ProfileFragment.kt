@@ -3,6 +3,7 @@ package com.weilylab.xhuschedule.ui.fragment
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
+import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.bumptech.glide.Glide
