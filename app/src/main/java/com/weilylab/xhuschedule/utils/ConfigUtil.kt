@@ -44,7 +44,8 @@ object ConfigUtil {
 				.setMessage(stringBuilder.toString())
 				.setPositiveButton(R.string.action_ok, null)
 				.setOnDismissListener {
-					ConfigurationUtil.updatedVersion = context.getString(R.string.app_version_code).toInt()
+					ConfigurationUtil.updatedVersion = context.getString(R.string.app_version_code)
+							.toInt()
 				}
 				.show()
 	}

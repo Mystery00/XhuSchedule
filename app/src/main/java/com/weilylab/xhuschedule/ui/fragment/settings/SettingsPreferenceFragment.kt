@@ -102,7 +102,14 @@ class SettingsPreferenceFragment : BasePreferenceFragment(R.xml.preference_setti
 					.setPositiveButton(R.string.action_ok) { _, _ ->
 						if (ConfigurationUtil.nightMode != selectedIndex) {
 							ConfigurationUtil.nightMode = selectedIndex
-							toastMessage("请重启APP以应用新的设置", true)
+							snackBarMessage(R.string.hint_need_restart, { snackBar ->
+								snackBar.setAction(R.string.action_restart) {
+									val intent = activity!!.packageManager.getLaunchIntentForPackage(activity!!.packageName)
+									intent?.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+									activity!!.startActivity(intent)
+									activity!!.finish()
+								}
+							})
 						}
 					}
 					.setNegativeButton(R.string.action_cancel, null)
@@ -111,10 +118,26 @@ class SettingsPreferenceFragment : BasePreferenceFragment(R.xml.preference_setti
 		}
 		enableViewPagerTransformPreference.setOnPreferenceChangeListener { _, _ ->
 			ConfigurationUtil.enableViewPagerTransform = !enableViewPagerTransformPreference.isChecked
+			snackBarMessage(R.string.hint_need_restart, { snackBar ->
+				snackBar.setAction(R.string.action_restart) {
+					val intent = activity!!.packageManager.getLaunchIntentForPackage(activity!!.packageName)
+					intent?.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+					activity!!.startActivity(intent)
+					activity!!.finish()
+				}
+			})
 			true
 		}
 		disableJRSCPreference.setOnPreferenceChangeListener { _, _ ->
 			ConfigurationUtil.disableJRSC = !disableJRSCPreference.isChecked
+			snackBarMessage(R.string.hint_need_restart, { snackBar ->
+				snackBar.setAction(R.string.action_restart) {
+					val intent = activity!!.packageManager.getLaunchIntentForPackage(activity!!.packageName)
+					intent?.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+					activity!!.startActivity(intent)
+					activity!!.finish()
+				}
+			})
 			true
 		}
 		resetUserImgPreference.setOnPreferenceClickListener {
