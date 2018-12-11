@@ -34,7 +34,10 @@ class TableFragment : BaseBottomNavigationFragment<FragmentTableBinding>(R.layou
 		fun newInstance() = TableFragment()
 	}
 
-	private lateinit var bottomNavigationViewModel: BottomNavigationViewModel
+	private val bottomNavigationViewModel: BottomNavigationViewModel by lazy {
+		ViewModelProviders.of(activity!!)[BottomNavigationViewModel::class.java]
+	}
+	private var isInit = false
 	private var week = 1
 
 	private val courseListObserver = Observer<PackageData<List<Schedule>>> {
@@ -56,7 +59,8 @@ class TableFragment : BaseBottomNavigationFragment<FragmentTableBinding>(R.layou
 		try {
 			(binding.timeTableView.onItemBuildListener() as CustomItemBuildAdapter).week = it
 			binding.timeTableView.changeWeekOnly(it)
-			binding.timeTableView.onDateBuildListener().onUpdateDate(binding.timeTableView.curWeek(), it)
+			binding.timeTableView.onDateBuildListener()
+					.onUpdateDate(binding.timeTableView.curWeek(), it)
 		} catch (e: Exception) {
 			week = it
 		}
@@ -89,10 +93,10 @@ class TableFragment : BaseBottomNavigationFragment<FragmentTableBinding>(R.layou
 						.setTextSize(12f)
 						.setTextColor(Color.WHITE))
 				.showView()
+		isInit = true
 	}
 
 	private fun initViewModel() {
-		bottomNavigationViewModel = ViewModelProviders.of(activity!!).get(BottomNavigationViewModel::class.java)
 		bottomNavigationViewModel.courseList.observe(activity!!, courseListObserver)
 		bottomNavigationViewModel.week.observe(activity!!, weekObserver)
 		bottomNavigationViewModel.startDateTime.observe(activity!!, startDateTimeObserver)
@@ -134,7 +138,7 @@ class TableFragment : BaseBottomNavigationFragment<FragmentTableBinding>(R.layou
 					var num = 0
 					while (true) {
 						when {
-							::bottomNavigationViewModel.isInitialized -> it.onFinish(true)
+							isInit -> it.onFinish(true)
 							num >= 10 -> it.onFinish(false)
 						}
 						Thread.sleep(200)

@@ -57,8 +57,7 @@ import vip.mystery0.rxpackagedata.Status.*
 
 class LoginActivity : XhuBaseActivity(R.layout.activity_login, false) {
 	private val loginViewModel: LoginViewModel by lazy {
-		ViewModelProviders.of(this)
-				.get(LoginViewModel::class.java)
+		ViewModelProviders.of(this)[LoginViewModel::class.java]
 	}
 	private val dialog: Dialog by lazy {
 		ZLoadingDialog(this)

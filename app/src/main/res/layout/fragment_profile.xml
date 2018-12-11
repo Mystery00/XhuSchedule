@@ -97,7 +97,10 @@
 				<FrameLayout
 					android:id="@+id/imageLayoutQueryTest"
 					android:layout_width="48dp"
-					android:layout_height="match_parent">
+					android:layout_height="0dp"
+					app:layout_constraintBottom_toBottomOf="parent"
+					app:layout_constraintStart_toStartOf="parent"
+					app:layout_constraintTop_toTopOf="parent">
 
 					<ImageView
 						android:id="@+id/imageViewQueryTest"
@@ -152,7 +155,10 @@
 				<FrameLayout
 					android:id="@+id/imageViewQueryScore"
 					android:layout_width="48dp"
-					android:layout_height="match_parent">
+					android:layout_height="0dp"
+					app:layout_constraintBottom_toBottomOf="parent"
+					app:layout_constraintStart_toStartOf="parent"
+					app:layout_constraintTop_toTopOf="parent">
 
 					<ImageView
 						android:layout_width="16.67dp"
@@ -206,7 +212,10 @@
 				<FrameLayout
 					android:id="@+id/imageViewAccountSettings"
 					android:layout_width="48dp"
-					android:layout_height="match_parent">
+					android:layout_height="0dp"
+					app:layout_constraintBottom_toBottomOf="parent"
+					app:layout_constraintStart_toStartOf="parent"
+					app:layout_constraintTop_toTopOf="parent">
 
 					<ImageView
 						android:layout_width="16.67dp"
@@ -260,7 +269,10 @@
 				<FrameLayout
 					android:id="@+id/imageViewClassSettings"
 					android:layout_width="48dp"
-					android:layout_height="match_parent">
+					android:layout_height="0dp"
+					app:layout_constraintBottom_toBottomOf="parent"
+					app:layout_constraintStart_toStartOf="parent"
+					app:layout_constraintTop_toTopOf="parent">
 
 					<ImageView
 						android:layout_width="16.67dp"
@@ -314,7 +326,10 @@
 				<FrameLayout
 					android:id="@+id/imageViewSoftwareSettings"
 					android:layout_width="48dp"
-					android:layout_height="match_parent">
+					android:layout_height="0dp"
+					app:layout_constraintBottom_toBottomOf="parent"
+					app:layout_constraintStart_toStartOf="parent"
+					app:layout_constraintTop_toTopOf="parent">
 
 					<ImageView
 						android:layout_width="18.67dp"
@@ -368,7 +383,10 @@
 				<FrameLayout
 					android:id="@+id/imageViewNotice"
 					android:layout_width="48dp"
-					android:layout_height="match_parent">
+					android:layout_height="0dp"
+					app:layout_constraintBottom_toBottomOf="parent"
+					app:layout_constraintStart_toStartOf="parent"
+					app:layout_constraintTop_toTopOf="parent">
 
 					<ImageView
 						android:layout_width="17.67dp"
@@ -433,7 +451,10 @@
 				<FrameLayout
 					android:id="@+id/imageViewFeedback"
 					android:layout_width="48dp"
-					android:layout_height="match_parent">
+					android:layout_height="0dp"
+					app:layout_constraintBottom_toBottomOf="parent"
+					app:layout_constraintStart_toStartOf="parent"
+					app:layout_constraintTop_toTopOf="parent">
 
 					<ImageView
 						android:layout_width="16.67dp"
@@ -498,7 +519,10 @@
 				<FrameLayout
 					android:id="@+id/imageViewShareWithFriends"
 					android:layout_width="48dp"
-					android:layout_height="match_parent">
+					android:layout_height="0dp"
+					app:layout_constraintBottom_toBottomOf="parent"
+					app:layout_constraintStart_toStartOf="parent"
+					app:layout_constraintTop_toTopOf="parent">
 
 					<ImageView
 						android:layout_width="18dp"

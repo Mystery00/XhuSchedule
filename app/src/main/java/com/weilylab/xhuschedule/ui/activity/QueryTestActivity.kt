@@ -5,12 +5,14 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import androidx.core.content.ContextCompat
+import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.base.XhuBaseActivity
+import com.weilylab.xhuschedule.databinding.LayoutNullDataViewBinding
 import com.weilylab.xhuschedule.model.Test
 import com.weilylab.xhuschedule.repository.TestRepository
 import com.weilylab.xhuschedule.ui.adapter.QueryTestRecyclerViewAdapter
@@ -26,9 +28,10 @@ import vip.mystery0.logs.Logs
 
 class QueryTestActivity : XhuBaseActivity(R.layout.activity_query_test) {
 	private val queryTestViewModel: QueryTestViewModel by lazy {
-		ViewModelProviders.of(this).get(QueryTestViewModel::class.java)
+		ViewModelProviders.of(this)[QueryTestViewModel::class.java]
 	}
 	private lateinit var menu: Menu
+	private lateinit var viewStubBinding: LayoutNullDataViewBinding
 	private val dialog: Dialog by lazy {
 		ZLoadingDialog(this)
 				.setLoadingBuilder(Z_TYPE.SINGLE_CIRCLE)
@@ -92,6 +95,7 @@ class QueryTestActivity : XhuBaseActivity(R.layout.activity_query_test) {
 		toolbar.setNavigationOnClickListener {
 			finish()
 		}
+		nullDataViewStub.setOnInflateListener { _, inflated -> viewStubBinding = DataBindingUtil.bind(inflated)!! }
 	}
 
 	private fun initViewModel() {
@@ -110,12 +114,17 @@ class QueryTestActivity : XhuBaseActivity(R.layout.activity_query_test) {
 	}
 
 	private fun showNoDataLayout() {
+		try {
+			nullDataViewStub.inflate()
+		} catch (e: Exception) {
+			viewStubBinding.root.visibility = View.VISIBLE
+		}
 		recyclerView.visibility = View.GONE
-		nullDataView.visibility = View.VISIBLE
 	}
 
 	private fun hideNoDataLayout() {
-		nullDataView.visibility = View.GONE
+		if (::viewStubBinding.isInitialized)
+			viewStubBinding.root.visibility = View.GONE
 		recyclerView.visibility = View.VISIBLE
 	}
 

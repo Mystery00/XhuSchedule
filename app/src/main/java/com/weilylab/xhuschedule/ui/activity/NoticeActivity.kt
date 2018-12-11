@@ -34,6 +34,7 @@
 package com.weilylab.xhuschedule.ui.activity
 
 import android.view.View
+import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -42,6 +43,7 @@ import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.ui.adapter.NoticeAdapter
 import com.weilylab.xhuschedule.model.Notice
 import com.weilylab.xhuschedule.base.XhuBaseActivity
+import com.weilylab.xhuschedule.databinding.LayoutNullDataViewBinding
 import com.weilylab.xhuschedule.repository.NoticeRepository
 import com.weilylab.xhuschedule.utils.LayoutRefreshConfigUtil
 import com.weilylab.xhuschedule.viewModel.NoticeViewModel
@@ -52,10 +54,10 @@ import vip.mystery0.logs.Logs
 
 class NoticeActivity : XhuBaseActivity(R.layout.activity_notice) {
 	private val noticeViewModel: NoticeViewModel by lazy {
-		ViewModelProviders.of(this)
-				.get(NoticeViewModel::class.java)
+		ViewModelProviders.of(this).get(NoticeViewModel::class.java)
 	}
 	private val noticeAdapter: NoticeAdapter by lazy { NoticeAdapter(this) }
+	private lateinit var viewStubBinding: LayoutNullDataViewBinding
 
 	private val noticeObserver = Observer<PackageData<List<Notice>>> {
 		when (it.status) {
@@ -114,6 +116,7 @@ class NoticeActivity : XhuBaseActivity(R.layout.activity_notice) {
 		swipeRefreshLayout.setOnRefreshListener {
 			refresh()
 		}
+		nullDataViewStub.setOnInflateListener { _, inflated -> viewStubBinding = DataBindingUtil.bind(inflated)!! }
 	}
 
 	private fun initViewModel() {
@@ -135,12 +138,17 @@ class NoticeActivity : XhuBaseActivity(R.layout.activity_notice) {
 	}
 
 	private fun showNoDataLayout() {
+		try {
+			nullDataViewStub.inflate()
+		} catch (e: Exception) {
+			viewStubBinding.root.visibility = View.VISIBLE
+		}
 		recyclerView.visibility = View.GONE
-		nullDataView.visibility = View.VISIBLE
 	}
 
 	private fun hideNoDataLayout() {
-		nullDataView.visibility = View.GONE
+		if (::viewStubBinding.isInitialized)
+			viewStubBinding.root.visibility = View.GONE
 		recyclerView.visibility = View.VISIBLE
 	}
 

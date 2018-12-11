@@ -26,7 +26,7 @@ import java.util.*
 
 class QueryExpScoreActivity : XhuBaseActivity(R.layout.activity_query_exp_score) {
 	private val queryExpScoreViewModel: QueryExpScoreViewModel by lazy {
-		ViewModelProviders.of(this).get(QueryExpScoreViewModel::class.java)
+		ViewModelProviders.of(this)[QueryExpScoreViewModel::class.java]
 	}
 	private val queryExpScoreRecyclerViewAdapter: QueryExpScoreRecyclerViewAdapter by lazy { QueryExpScoreRecyclerViewAdapter(this) }
 	private var hasData = false

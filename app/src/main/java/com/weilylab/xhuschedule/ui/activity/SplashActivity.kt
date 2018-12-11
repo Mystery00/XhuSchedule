@@ -58,7 +58,7 @@ import vip.mystery0.tools.utils.FileTools
  */
 class SplashActivity : XhuBaseActivity(null, false) {
 	private val splashViewModel: SplashViewModel by lazy {
-		ViewModelProviders.of(this).get(SplashViewModel::class.java)
+		ViewModelProviders.of(this)[SplashViewModel::class.java]
 	}
 
 	private val splashObserver = Observer<PackageData<SplashResponse.Splash>> {

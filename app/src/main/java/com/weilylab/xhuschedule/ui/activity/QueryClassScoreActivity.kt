@@ -29,7 +29,7 @@ import java.util.*
 
 class QueryClassScoreActivity : XhuBaseActivity(R.layout.activity_query_class_score) {
 	private val queryClassScoreViewModel: QueryClassScoreViewModel by lazy {
-		ViewModelProviders.of(this).get(QueryClassScoreViewModel::class.java)
+		ViewModelProviders.of(this)[QueryClassScoreViewModel::class.java]
 	}
 	private val queryClassScoreRecyclerViewAdapter: QueryClassScoreRecyclerViewAdapter by lazy { QueryClassScoreRecyclerViewAdapter(this) }
 	private var hasData = false

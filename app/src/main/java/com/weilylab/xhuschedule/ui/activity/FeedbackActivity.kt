@@ -32,8 +32,7 @@ import vip.mystery0.rxpackagedata.Status.*
 
 class FeedbackActivity : XhuBaseActivity(R.layout.activity_feedback) {
 	private val feedBackViewModel: FeedBackViewModel by lazy {
-		ViewModelProviders.of(this)
-				.get(FeedBackViewModel::class.java)
+		ViewModelProviders.of(this)[FeedBackViewModel::class.java]
 	}
 	private val dialog: Dialog by lazy {
 		ZLoadingDialog(this)

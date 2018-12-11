@@ -30,13 +30,17 @@ class ProfileFragment : BaseBottomNavigationFragment<FragmentProfileBinding>(R.l
 		fun newInstance() = ProfileFragment()
 	}
 
-	private lateinit var bottomNavigationViewModel: BottomNavigationViewModel
+	private val bottomNavigationViewModel: BottomNavigationViewModel by lazy {
+		ViewModelProviders.of(activity!!)[BottomNavigationViewModel::class.java]
+	}
+	private var isInit = false
 	private val bottomSheetDialog: BottomSheetDialog by lazy { BottomSheetDialog(activity!!) }
 
 	override fun initView() {
 		showUserImage()
 		initViewModel()
 		initShareMenu()
+		isInit = true
 	}
 
 	private fun showUserImage() {
@@ -55,8 +59,6 @@ class ProfileFragment : BaseBottomNavigationFragment<FragmentProfileBinding>(R.l
 	}
 
 	private fun initViewModel() {
-		bottomNavigationViewModel = ViewModelProviders.of(activity!!)
-				.get(BottomNavigationViewModel::class.java)
 		bottomNavigationViewModel.studentInfo.observe(activity!!, Observer {
 			when (it.status) {
 				Content -> binding.studentInfo = it.data
@@ -184,7 +186,7 @@ class ProfileFragment : BaseBottomNavigationFragment<FragmentProfileBinding>(R.l
 					var num = 0
 					while (true) {
 						when {
-							::bottomNavigationViewModel.isInitialized -> it.onFinish(true)
+							isInit -> it.onFinish(true)
 							num >= 10 -> it.onFinish(false)
 						}
 						Thread.sleep(200)

@@ -27,8 +27,11 @@ class TodayFragment : BaseBottomNavigationFragment<FragmentTodayBinding>(R.layou
 		fun newInstance() = TodayFragment()
 	}
 
-	private lateinit var viewModel: BottomNavigationViewModel
-	private lateinit var adapter: FragmentTodayRecyclerViewAdapter
+	private val bottomNavigationViewModel: BottomNavigationViewModel by lazy {
+		ViewModelProviders.of(activity!!)[BottomNavigationViewModel::class.java]
+	}
+	private var isInit = false
+	private val adapter: FragmentTodayRecyclerViewAdapter by lazy { FragmentTodayRecyclerViewAdapter(activity!!) }
 	private lateinit var viewStubBinding: LayoutNullDataViewBinding
 
 	private val todayCourseListObserver = Observer<PackageData<List<Schedule>>> {
@@ -53,13 +56,12 @@ class TodayFragment : BaseBottomNavigationFragment<FragmentTodayBinding>(R.layou
 	override fun initView() {
 		initViewModel()
 		binding.recyclerView.layoutManager = LinearLayoutManager(activity)
-		adapter = FragmentTodayRecyclerViewAdapter(activity!!)
 		binding.recyclerView.adapter = adapter
+		isInit = true
 	}
 
 	private fun initViewModel() {
-		viewModel = ViewModelProviders.of(activity!!).get(BottomNavigationViewModel::class.java)
-		viewModel.todayCourseList.observe(activity!!, todayCourseListObserver)
+		bottomNavigationViewModel.todayCourseList.observe(activity!!, todayCourseListObserver)
 	}
 
 	override fun monitor() {
@@ -87,7 +89,7 @@ class TodayFragment : BaseBottomNavigationFragment<FragmentTodayBinding>(R.layou
 		super.onResume()
 		if (LayoutRefreshConfigUtil.isRefreshTodayFragment) {
 			if (!LayoutRefreshConfigUtil.isRefreshBottomNavigationActivity && !LayoutRefreshConfigUtil.isRefreshTableFragment)
-				BottomNavigationRepository.queryCacheCourses(viewModel)
+				BottomNavigationRepository.queryCacheCourses(bottomNavigationViewModel)
 			LayoutRefreshConfigUtil.isRefreshTodayFragment = false
 		}
 	}
@@ -98,7 +100,7 @@ class TodayFragment : BaseBottomNavigationFragment<FragmentTodayBinding>(R.layou
 					var num = 0
 					while (true) {
 						when {
-							::viewModel.isInitialized -> it.onFinish(true)
+							isInit -> it.onFinish(true)
 							num >= 10 -> it.onFinish(false)
 						}
 						Thread.sleep(200)
@@ -108,15 +110,15 @@ class TodayFragment : BaseBottomNavigationFragment<FragmentTodayBinding>(R.layou
 				.subscribe(object : RxObserver<Boolean>() {
 					override fun onFinish(data: Boolean?) {
 						if (data != null && data)
-							if (viewModel.currentWeek.value?.data != null && viewModel.currentWeek.value!!.data!! <= 0) {
+							if (bottomNavigationViewModel.currentWeek.value?.data != null && bottomNavigationViewModel.currentWeek.value!!.data!! <= 0) {
 								val whenTime = CalendarUtil.whenBeginSchool()
 								if (whenTime > 0)
-									viewModel.title.value = "距离开学还有${whenTime}天 ${CalendarUtil.getWeekIndexInString()}"
+									bottomNavigationViewModel.title.value = "距离开学还有${whenTime}天 ${CalendarUtil.getWeekIndexInString()}"
 								else
-									viewModel.title.value = "第${viewModel.currentWeek.value?.data
+									bottomNavigationViewModel.title.value = "第${bottomNavigationViewModel.currentWeek.value?.data
 											?: "0"}周 ${CalendarUtil.getWeekIndexInString()}"
 							} else
-								viewModel.title.value = "第${viewModel.currentWeek.value?.data
+								bottomNavigationViewModel.title.value = "第${bottomNavigationViewModel.currentWeek.value?.data
 										?: "0"}周 ${CalendarUtil.getWeekIndexInString()}"
 					}
 

@@ -3,12 +3,14 @@ package com.weilylab.xhuschedule.ui.activity
 import android.app.Dialog
 import android.view.View
 import androidx.core.content.ContextCompat
+import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.base.XhuBaseActivity
+import com.weilylab.xhuschedule.databinding.LayoutNullDataViewBinding
 import com.weilylab.xhuschedule.model.Course
 import com.weilylab.xhuschedule.repository.local.CourseLocalDataSource
 import com.weilylab.xhuschedule.ui.adapter.ClassCourseColorRecyclerViewAdapter
@@ -23,8 +25,9 @@ import vip.mystery0.rxpackagedata.Status.*
 
 class ClassCourseColorActivity : XhuBaseActivity(R.layout.activity_class_course_color) {
 	private val classCourseColorViewModel: ClassCourseColorViewModel by lazy {
-		ViewModelProviders.of(this).get(ClassCourseColorViewModel::class.java)
+		ViewModelProviders.of(this)[ClassCourseColorViewModel::class.java]
 	}
+	private lateinit var viewStubBinding: LayoutNullDataViewBinding
 	private val classCourseColorRecyclerViewAdapter: ClassCourseColorRecyclerViewAdapter by lazy { ClassCourseColorRecyclerViewAdapter(this) }
 	private val dialog: Dialog by lazy {
 		ZLoadingDialog(this)
@@ -86,6 +89,7 @@ class ClassCourseColorActivity : XhuBaseActivity(R.layout.activity_class_course_
 		toolbar.setNavigationOnClickListener {
 			finish()
 		}
+		nullDataViewStub.setOnInflateListener { _, inflated -> viewStubBinding = DataBindingUtil.bind(inflated)!! }
 	}
 
 	private fun showDialog() {
@@ -99,12 +103,17 @@ class ClassCourseColorActivity : XhuBaseActivity(R.layout.activity_class_course_
 	}
 
 	private fun showNoDataLayout() {
+		try {
+			nullDataViewStub.inflate()
+		} catch (e: Exception) {
+			viewStubBinding.root.visibility = View.VISIBLE
+		}
 		recyclerView.visibility = View.GONE
-		nullDataView.visibility = View.VISIBLE
 	}
 
 	private fun hideNoDataLayout() {
-		nullDataView.visibility = View.GONE
+		if (::viewStubBinding.isInitialized)
+			viewStubBinding.root.visibility = View.GONE
 		recyclerView.visibility = View.VISIBLE
 	}
 }

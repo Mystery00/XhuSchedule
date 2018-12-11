@@ -68,8 +68,7 @@ class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_naviga
 	}
 
 	private val bottomNavigationViewModel: BottomNavigationViewModel by lazy {
-		ViewModelProviders.of(this)
-				.get(BottomNavigationViewModel::class.java)
+		ViewModelProviders.of(this)[BottomNavigationViewModel::class.java]
 	}
 	private val viewPagerAdapter: ViewPagerAdapter by lazy { ViewPagerAdapter(supportFragmentManager) }
 	private val dialog: Dialog by lazy {
