@@ -67,7 +67,7 @@ object WidgetRepository {
 			WidgetViewModelHelper.testList.value = PackageData.empty()
 		else {
 			val mainStudent = UserUtil.findMainStudent(WidgetViewModelHelper.studentList.value!!.data)!!
-			TestLocalDataSource.queryAllTestsByUsername(WidgetViewModelHelper.testList, mainStudent)
+			TestLocalDataSource.queryAllTestsByUsername(WidgetViewModelHelper.testList, null, mainStudent)
 		}
 	}
 

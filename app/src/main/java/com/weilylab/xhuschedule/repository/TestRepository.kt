@@ -18,7 +18,7 @@ object TestRepository {
 					if (mainStudent == null)
 						queryTestViewModel.testList.value = PackageData.empty()
 					else
-						TestRemoteDataSource.queryAllTestsByUsername(queryTestViewModel.testList, mainStudent)
+						TestRemoteDataSource.queryAllTestsByUsername(queryTestViewModel.testList, queryTestViewModel.html, mainStudent)
 				}
 				Error -> queryTestViewModel.testList.value = PackageData.error(packageData.error)
 				Empty -> queryTestViewModel.testList.value = PackageData.empty()

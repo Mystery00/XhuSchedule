@@ -1,9 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><!--
-  ~ Created by Mystery0 on 17-12-21 上午3:41.
-  ~ Copyright (c) 2017. All Rights reserved.
-  ~
-  ~ Last modified 17-12-21 上午2:35
--->
+<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:tools="http://schemas.android.com/tools"
 	package="com.weilylab.xhuschedule">
@@ -27,7 +22,6 @@
 		android:roundIcon="@mipmap/ic_launcher_round"
 		android:supportsRtl="true"
 		android:theme="@style/AppTheme">
-
 		<uses-library
 			android:name="org.apache.http.legacy"
 			android:required="false" />
@@ -129,6 +123,9 @@
 			android:name=".ui.activity.CustomStartTimeActivity"
 			android:screenOrientation="portrait"
 			android:theme="@style/AppTheme.NoActionBar" />
+		<activity
+			android:name=".ui.activity.WebViewActivity"
+			android:theme="@style/AppTheme.NoActionBar"/>
 
 		<service
 			android:name=".service.DownloadSplashIntentService"
@@ -197,10 +194,10 @@
 			android:exported="true">
 			<intent-filter>
 				<action android:name="android.intent.action.VIEW" />
+
 				<category android:name="android.app.slice.category.SLICE" />
 			</intent-filter>
-		</provider>
-		<!-- 腾讯开放平台 -->
+		</provider> <!-- 腾讯开放平台 -->
 		<activity
 			android:name="com.tencent.tauth.AuthActivity"
 			android:launchMode="singleTask"
@@ -220,7 +217,6 @@
 			android:configChanges="orientation|keyboardHidden|screenSize"
 			android:process="${applicationId}.sb"
 			android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-		<!-- 腾讯开放平台 -->
 	</application>
 
 </manifest>

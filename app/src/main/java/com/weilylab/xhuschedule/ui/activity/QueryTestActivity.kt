@@ -1,6 +1,8 @@
 package com.weilylab.xhuschedule.ui.activity
 
 import android.app.Dialog
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
@@ -26,6 +28,7 @@ class QueryTestActivity : XhuBaseActivity(R.layout.activity_query_test) {
 	private val queryTestViewModel: QueryTestViewModel by lazy {
 		ViewModelProviders.of(this).get(QueryTestViewModel::class.java)
 	}
+	private lateinit var menu: Menu
 	private val dialog: Dialog by lazy {
 		ZLoadingDialog(this)
 				.setLoadingBuilder(Z_TYPE.SINGLE_CIRCLE)
@@ -62,6 +65,11 @@ class QueryTestActivity : XhuBaseActivity(R.layout.activity_query_test) {
 		}
 	}
 
+	private val queryTestHtmlObserver = Observer<String> {
+		if (::menu.isInitialized)
+			menu.findItem(R.id.action_show_html).isVisible = true
+	}
+
 	override fun initView() {
 		super.initView()
 		setSupportActionBar(toolbar)
@@ -88,6 +96,7 @@ class QueryTestActivity : XhuBaseActivity(R.layout.activity_query_test) {
 
 	private fun initViewModel() {
 		queryTestViewModel.testList.observe(this, queryTestListObserver)
+		queryTestViewModel.html.observe(this, queryTestHtmlObserver)
 	}
 
 	private fun showDialog() {
@@ -108,5 +117,24 @@ class QueryTestActivity : XhuBaseActivity(R.layout.activity_query_test) {
 	private fun hideNoDataLayout() {
 		nullDataView.visibility = View.GONE
 		recyclerView.visibility = View.VISIBLE
+	}
+
+	override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+		menuInflater.inflate(R.menu.menu_query_test, menu)
+		menu?.let {
+			this.menu = menu
+			menu.findItem(R.id.action_show_html)?.isVisible = false
+		}
+		return true
+	}
+
+	override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+		return when (item?.itemId) {
+			R.id.action_show_html -> {
+				WebViewActivity.intentTo(this, queryTestViewModel.html.value)
+				true
+			}
+			else -> super.onOptionsItemSelected(item)
+		}
 	}
 }

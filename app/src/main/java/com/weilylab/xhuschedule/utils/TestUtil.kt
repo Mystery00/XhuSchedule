@@ -24,7 +24,7 @@ import java.util.HashMap
 object TestUtil {
 	private const val RETRY_TIME = 1
 
-	fun getTests(student: Student, doSaveListener: DoSaveListener<List<Test>>?, requestListener: RequestListener<List<Test>>, index: Int = 0) {
+	fun getTests(student: Student, doSaveListener: DoSaveListener<List<Test>>?, requestListener: RequestListener<List<Test>>, htmlListener: (String) -> Unit, index: Int = 0) {
 		RetrofitFactory.retrofit
 				.create(TestAPI::class.java)
 				.getTests(student.username)
@@ -41,14 +41,17 @@ object TestUtil {
 					override fun onFinish(data: TestResponse?) {
 						when {
 							data == null -> requestListener.error(ResponseCodeConstants.UNKNOWN_ERROR, StringConstant.hint_data_null)
-							data.rt == ResponseCodeConstants.DONE -> requestListener.done(data.tests)
+							data.rt == ResponseCodeConstants.DONE -> {
+								requestListener.done(data.tests)
+								htmlListener.invoke(data.html)
+							}
 							data.rt == ResponseCodeConstants.ERROR_NOT_LOGIN -> {
 								if (index == RETRY_TIME)
 									requestListener.error(ResponseCodeConstants.DO_TOO_MANY, StringConstant.hint_do_too_many)
 								else
 									UserUtil.login(student, null, object : RequestListener<Boolean> {
 										override fun done(t: Boolean) {
-											getTests(student, doSaveListener, requestListener, index + 1)
+											getTests(student, doSaveListener, requestListener, htmlListener, index + 1)
 										}
 
 										override fun error(rt: String, msg: String?) {

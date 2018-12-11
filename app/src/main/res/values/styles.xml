@@ -47,4 +47,6 @@
 		<item name="android:windowEnterAnimation">@anim/animation_show_course_enter</item>
 		<item name="android:windowExitAnimation">@anim/animation_show_course_out</item>
 	</style>
+
+	<style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 </resources>

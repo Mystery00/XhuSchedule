@@ -1,6 +1,7 @@
 package com.weilylab.xhuschedule.repository.local
 
 import androidx.lifecycle.MediatorLiveData
+import androidx.lifecycle.MutableLiveData
 import com.weilylab.xhuschedule.model.Student
 import com.weilylab.xhuschedule.model.Test
 import com.weilylab.xhuschedule.repository.dataSource.TestDataSource
@@ -16,7 +17,7 @@ import java.util.ArrayList
 object TestLocalDataSource : TestDataSource {
 	private val testService: TestService by lazy { TestServiceImpl() }
 
-	override fun queryAllTestsByUsername(testLiveData: MediatorLiveData<PackageData<List<Test>>>, student: Student) {
+	override fun queryAllTestsByUsername(testLiveData: MediatorLiveData<PackageData<List<Test>>>, htmlLiveData: MutableLiveData<String>?, student: Student) {
 		testLiveData.value = PackageData.loading()
 		RxObservable<List<Test>>()
 				.doThings {
