@@ -1,5 +1,8 @@
 package com.weilylab.xhuschedule.ui.fragment.settings
 
+import android.graphics.Color
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.content.ContextCompat
 import androidx.preference.Preference
 import com.mikepenz.aboutlibraries.Libs
 import com.mikepenz.aboutlibraries.LibsBuilder
@@ -24,8 +27,9 @@ class AboutSettingFragment : BasePreferenceFragment(R.xml.preference_about) {
 			true
 		}
 		openSourceLicenseAboutPreference.setOnPreferenceClickListener {
+			val isNight = ContextCompat.getColor(activity!!, R.color.isNight) == Color.parseColor("#000000")
 			LibsBuilder()
-					.withActivityStyle(Libs.ActivityStyle.LIGHT)
+					.withActivityStyle(if (isNight) Libs.ActivityStyle.DARK else Libs.ActivityStyle.LIGHT)
 					.withAboutAppName(getString(R.string.app_name))
 					.withAboutIconShown(true)
 					.withAboutVersionShown(true)

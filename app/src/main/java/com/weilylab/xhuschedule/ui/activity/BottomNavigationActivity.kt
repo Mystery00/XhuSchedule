@@ -30,6 +30,7 @@ import com.weilylab.xhuschedule.base.XhuBaseActivity
 import com.weilylab.xhuschedule.databinding.DialogShowCourseBinding
 import com.weilylab.xhuschedule.model.Student
 import com.weilylab.xhuschedule.repository.BottomNavigationRepository
+import com.weilylab.xhuschedule.ui.ZoomOutPageTransformer
 import com.weilylab.xhuschedule.ui.adapter.ShowCourseRecyclerViewAdapter
 import com.weilylab.xhuschedule.ui.adapter.ViewPagerAdapter
 import com.weilylab.xhuschedule.ui.fragment.ProfileFragment
@@ -216,6 +217,8 @@ class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_naviga
 		viewPagerAdapter.addFragment(ProfileFragment.newInstance())
 		viewPager.offscreenPageLimit = 2
 		viewPager.adapter = viewPagerAdapter
+		if (ConfigurationUtil.enableViewPagerTransform)
+			viewPager.setPageTransformer(true, ZoomOutPageTransformer())
 		weekView.data(courseList)
 				.curWeek(1)
 				.callback(IWeekView.OnWeekItemClickedListener {

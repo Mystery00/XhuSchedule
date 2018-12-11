@@ -35,4 +35,6 @@
 	<color name="colorTableBackground">#242424</color>
 	<!--今日课程页面卡片背景色-->
 	<color name="colorTodayBackground">#484848</color>
+	<!--通过这个属性获取是否是夜间模式-->
+	<color name="isNight">#000000</color>
 </resources>

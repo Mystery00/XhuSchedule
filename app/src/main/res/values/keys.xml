@@ -35,6 +35,8 @@
 	<string name="key_user_img" translatable="false">key_user_img</string>
 	<string name="key_background_img" translatable="false">key_background_img</string>
 	<string name="key_night_mode" translatable="false">key_night_mode</string>
+	<string name="key_enable_viewpager_transform" translatable="false">key_enable_viewpager_transform</string>
+	<string name="key_disable_jrsc" translatable="false">key_disable_jrsc</string>
 	<string name="key_reset_user_img" translatable="false">key_reset_user_img</string>
 	<string name="key_reset_background_img" translatable="false">key_reset_background_img</string>
 	<string name="key_query_score_class" translatable="false">key_query_score_class</string>
@@ -65,6 +67,8 @@
 	<string name="title_user_img">自定义个人头像</string>
 	<string name="title_background_img">自定义背景图片</string>
 	<string name="title_night_mode">夜间模式</string>
+	<string name="title_enable_viewpager_transform">启用主页面切换动画</string>
+	<string name="title_disable_jrsc">禁用今日诗词</string>
 	<string name="title_notification_course">课程提醒</string>
 	<string name="title_notification_exam">考试提醒</string>
 	<string name="title_notification_time">提醒时间</string>

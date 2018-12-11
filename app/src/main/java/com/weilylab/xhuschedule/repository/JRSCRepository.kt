@@ -13,6 +13,8 @@ import vip.mystery0.rxpackagedata.rx.RxObserver
 
 object JRSCRepository {
 	fun load(listener: (String) -> Unit) {
+		if (ConfigurationUtil.disableJRSC)
+			return
 		if (ConfigurationUtil.jrscToken == "") {
 			RetrofitFactory.jrscRetrofit
 					.create(JRSCAPI::class.java)

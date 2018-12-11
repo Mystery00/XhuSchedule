@@ -39,4 +39,6 @@ object SharedPreferenceConstant {
 	const val FIELD_CUSTOM_YEAR_AND_TERM = "config_custom_year_and_term"
 	const val FIELD_LAST_UPDATE_DATE = "config_last_update_date"
 	const val FIELD_JRSC_TOKEN = "config_jrsc_token"
+	const val FIELD_ENABLE_VIEW_PAGER_TRANSFORM = "config_enable_view_pager_transform"
+	const val FIELD_DISABLE_JRSC = "config_disable_jrsc"
 }

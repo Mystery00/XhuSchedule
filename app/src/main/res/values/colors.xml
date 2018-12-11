@@ -43,6 +43,9 @@
 	<!--启动页背景色-->
 	<color name="splashColor">#2e85df</color>
 
+	<!--通过这个属性获取是否是夜间模式-->
+	<color name="isNight">#FFFFFF</color>
+
 	<!--颜色池颜色-->
 	<color name="colorPool1">#7c4dff</color>
 	<color name="colorPool15">#536dfe</color>

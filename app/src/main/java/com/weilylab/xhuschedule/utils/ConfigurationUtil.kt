@@ -123,4 +123,14 @@ object ConfigurationUtil {
 				.putString(SharedPreferenceConstant.FIELD_JRSC_TOKEN, value)
 				.apply()
 		get() = sharedPreferences.getString(SharedPreferenceConstant.FIELD_JRSC_TOKEN, "")!!
+	var enableViewPagerTransform: Boolean
+		set(value) = sharedPreferences.edit()
+				.putBoolean(SharedPreferenceConstant.FIELD_ENABLE_VIEW_PAGER_TRANSFORM, value)
+				.apply()
+		get() = sharedPreferences.getBoolean(SharedPreferenceConstant.FIELD_ENABLE_VIEW_PAGER_TRANSFORM, false)
+	var disableJRSC: Boolean
+		set(value) = sharedPreferences.edit()
+				.putBoolean(SharedPreferenceConstant.FIELD_DISABLE_JRSC, value)
+				.apply()
+		get() = sharedPreferences.getBoolean(SharedPreferenceConstant.FIELD_DISABLE_JRSC, false)
 }
