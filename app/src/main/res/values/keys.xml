@@ -85,6 +85,7 @@
 	<string name="title_check_update">检查更新</string>
 	<string name="title_version_name">版本名称</string>
 	<string name="title_open_source_license_about">开源许可</string>
+	<string name="title_jrsc">今日诗词</string>
 
 	<string name="summary_current_year_and_term">当前学期：%1$s学年 第%2$s学期</string>
 	<string name="summary_custom_start_time">当前开学时间：%1$s</string>
@@ -101,8 +102,10 @@
 	<string name="summary_auto_check_update">在每一次启动时自动检查更新，注意，跳过某个版本将会无法使用增量更新</string>
 	<string name="summary_weily_product">点击进入实验室官网</string>
 	<string name="summary_weixin">点击跳转，也可以在微信小程序页面直接搜索“西瓜课表”即可使用</string>
+	<string name="summary_jrsc">感谢作者：xenv</string>
 
 	<string name="link_developer" translatable="false">https://mystery0.vip/</string>
 	<string name="link_open_source_license" translatable="false">https://github.com/Mystery00/XhuSchedule/blob/master/LICENSE.TXT</string>
 	<string name="link_community_link" translatable="false">https://jq.qq.com/?_wv=1027&#038;k=5Nz3XlU</string>
+	<string name="link_jrsc">https://www.jinrishici.com</string>
 </resources>

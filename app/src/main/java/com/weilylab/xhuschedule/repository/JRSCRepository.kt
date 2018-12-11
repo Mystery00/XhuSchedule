@@ -12,7 +12,7 @@ import vip.mystery0.logs.Logs
 import vip.mystery0.rxpackagedata.rx.RxObserver
 
 object JRSCRepository {
-	fun load(listener: (String) -> Unit) {
+	fun load(listener: (String, String) -> Unit) {
 		if (ConfigurationUtil.disableJRSC)
 			return
 		if (ConfigurationUtil.jrscToken == "") {
@@ -26,6 +26,7 @@ object JRSCRepository {
 					.subscribe(object : RxObserver<Token>() {
 						override fun onError(e: Throwable) {
 							Logs.wtf("onError: ", e)
+							ConfigurationUtil.jrscToken = ""
 						}
 
 						override fun onFinish(data: Token?) {
@@ -44,11 +45,12 @@ object JRSCRepository {
 					.subscribe(object : RxObserver<JRSC>() {
 						override fun onError(e: Throwable) {
 							Logs.wtf("onError: ", e)
+							ConfigurationUtil.jrscToken = ""
 						}
 
 						override fun onFinish(data: JRSC?) {
 							if (data != null && data.status == "success")
-								listener.invoke(data.content.content)
+								listener.invoke(data.content.content, "——${data.content.origin.author}《${data.content.origin.title}》")
 						}
 					})
 		}

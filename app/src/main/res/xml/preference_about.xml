@@ -26,6 +26,16 @@
 			android:key="@string/key_open_source_license_about"
 			android:title="@string/title_open_source_license_about" />
 
+		<Preference
+			android:summary="@string/summary_jrsc"
+			android:title="@string/title_jrsc">
+
+			<intent
+				android:action="android.intent.action.VIEW"
+				android:data="@string/link_jrsc" />
+
+		</Preference>
+
 	</PreferenceCategory>
 
 	<PreferenceCategory android:title="@string/screen_category_about_version">

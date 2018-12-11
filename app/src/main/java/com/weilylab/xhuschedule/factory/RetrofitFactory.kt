@@ -47,6 +47,7 @@ object RetrofitFactory {
 				.readTimeout(2, TimeUnit.SECONDS)
 				.writeTimeout(2, TimeUnit.SECONDS)
 				.addInterceptor(JRSCInterceptor())
+				.addInterceptor(DebugInterceptor())
 				.build()
 	}
 
@@ -84,7 +85,7 @@ object RetrofitFactory {
 
 	val jrscRetrofit: Retrofit by lazy {
 		Retrofit.Builder()
-				.baseUrl("")
+				.baseUrl("https://v2.jinrishici.com")
 				.client(jrscClient)
 				.addCallAdapterFactory(RxJava2CallAdapterFactory.create())
 				.build()

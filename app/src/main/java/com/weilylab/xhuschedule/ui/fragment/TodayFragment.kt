@@ -11,6 +11,7 @@ import com.weilylab.xhuschedule.databinding.FragmentTodayBinding
 import com.weilylab.xhuschedule.base.BaseBottomNavigationFragment
 import com.weilylab.xhuschedule.databinding.LayoutNullDataViewBinding
 import com.weilylab.xhuschedule.repository.BottomNavigationRepository
+import com.weilylab.xhuschedule.repository.JRSCRepository
 import com.weilylab.xhuschedule.ui.adapter.FragmentTodayRecyclerViewAdapter
 import com.weilylab.xhuschedule.utils.CalendarUtil
 import com.weilylab.xhuschedule.utils.LayoutRefreshConfigUtil
@@ -67,6 +68,11 @@ class TodayFragment : BaseBottomNavigationFragment<FragmentTodayBinding>(R.layou
 	override fun monitor() {
 		super.monitor()
 		binding.nullDataViewStub.setOnInflateListener { _, inflated -> viewStubBinding = DataBindingUtil.bind(inflated)!! }
+		JRSCRepository.load { content, author ->
+			binding.jrscLayout.visibility = View.VISIBLE
+			binding.jrscTextView.text = content
+			binding.jrscAuthorTextView.text = author
+		}
 	}
 
 	private fun showNoDataLayout() {

@@ -66,7 +66,7 @@ class APP : MultiDexApplication() {
 							.setDebug(BuildConfig.DEBUG)
 				}
 				.init()
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)//大于指定的sdk再启用日志上传
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && !BuildConfig.DEBUG)//大于指定的sdk再启用日志上传
 			try {
 				CrashReport.initCrashReport(CondomContext.wrap(applicationContext, "Bugly"), "7fe1820ab7", BuildConfig.DEBUG)
 			} catch (ignore: Exception) {
