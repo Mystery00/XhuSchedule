@@ -1,4 +1,4 @@
-package com.weilylab.xhuschedule.utils
+package com.weilylab.xhuschedule.utils.userDo
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory

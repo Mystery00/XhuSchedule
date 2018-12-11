@@ -1,4 +1,4 @@
-package com.weilylab.xhuschedule.utils
+package com.weilylab.xhuschedule.utils.userDo
 
 import com.weilylab.xhuschedule.api.CourseAPI
 import com.weilylab.xhuschedule.constant.ResponseCodeConstants
@@ -11,6 +11,8 @@ import com.weilylab.xhuschedule.model.Course
 import com.weilylab.xhuschedule.model.Student
 import com.weilylab.xhuschedule.model.response.CourseResponse
 import com.weilylab.xhuschedule.repository.local.InitLocalDataSource
+import com.weilylab.xhuschedule.utils.CalendarUtil
+import com.weilylab.xhuschedule.utils.ConfigurationUtil
 import com.zhuangfei.timetable.model.Schedule
 import io.reactivex.Observable
 import io.reactivex.Observer

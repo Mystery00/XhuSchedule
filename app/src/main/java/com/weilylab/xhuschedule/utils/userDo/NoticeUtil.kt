@@ -1,4 +1,4 @@
-package com.weilylab.xhuschedule.utils
+package com.weilylab.xhuschedule.utils.userDo
 
 import com.weilylab.xhuschedule.api.NoticeAPI
 import com.weilylab.xhuschedule.constant.ResponseCodeConstants

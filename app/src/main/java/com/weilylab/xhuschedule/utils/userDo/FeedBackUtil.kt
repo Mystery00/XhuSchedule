@@ -1,4 +1,4 @@
-package com.weilylab.xhuschedule.utils
+package com.weilylab.xhuschedule.utils.userDo
 
 import com.weilylab.xhuschedule.api.FeedbackAPI
 import com.weilylab.xhuschedule.constant.ResponseCodeConstants
@@ -11,6 +11,7 @@ import com.weilylab.xhuschedule.model.FeedBackMessage
 import com.weilylab.xhuschedule.model.Student
 import com.weilylab.xhuschedule.model.response.GetFeedBackMessageResponse
 import com.weilylab.xhuschedule.model.response.SendFeedBackMessageResponse
+import com.weilylab.xhuschedule.utils.NetworkUtil
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import vip.mystery0.logs.Logs

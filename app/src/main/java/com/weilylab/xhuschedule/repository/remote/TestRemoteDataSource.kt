@@ -10,7 +10,7 @@ import com.weilylab.xhuschedule.model.Test
 import com.weilylab.xhuschedule.repository.dataSource.TestDataSource
 import com.weilylab.xhuschedule.repository.local.TestLocalDataSource
 import com.weilylab.xhuschedule.utils.NetworkUtil
-import com.weilylab.xhuschedule.utils.TestUtil
+import com.weilylab.xhuschedule.utils.userDo.TestUtil
 import vip.mystery0.rxpackagedata.PackageData
 
 object TestRemoteDataSource : TestDataSource {

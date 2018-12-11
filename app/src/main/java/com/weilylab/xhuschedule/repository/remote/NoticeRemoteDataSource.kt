@@ -8,7 +8,7 @@ import com.weilylab.xhuschedule.model.Notice
 import com.weilylab.xhuschedule.repository.dataSource.NoticeDataSource
 import com.weilylab.xhuschedule.repository.local.NoticeLocalDataSource
 import com.weilylab.xhuschedule.utils.NetworkUtil
-import com.weilylab.xhuschedule.utils.NoticeUtil
+import com.weilylab.xhuschedule.utils.userDo.NoticeUtil
 import vip.mystery0.rxpackagedata.PackageData
 
 object NoticeRemoteDataSource : NoticeDataSource {

@@ -8,7 +8,7 @@ import com.weilylab.xhuschedule.model.Course
 import com.weilylab.xhuschedule.model.Student
 import com.weilylab.xhuschedule.repository.dataSource.CourseDataSource
 import com.weilylab.xhuschedule.repository.local.CourseLocalDataSource
-import com.weilylab.xhuschedule.utils.CourseUtil
+import com.weilylab.xhuschedule.utils.userDo.CourseUtil
 import com.weilylab.xhuschedule.utils.NetworkUtil
 import com.zhuangfei.timetable.model.Schedule
 import vip.mystery0.logs.Logs

@@ -1,6 +1,7 @@
 package com.weilylab.xhuschedule.factory
 
 import com.weilylab.xhuschedule.interceptor.DebugInterceptor
+import com.weilylab.xhuschedule.interceptor.JRSCInterceptor
 import com.weilylab.xhuschedule.interceptor.LoadCookiesInterceptor
 import com.weilylab.xhuschedule.interceptor.SaveCookiesInterceptor
 import okhttp3.OkHttpClient
@@ -40,23 +41,32 @@ object RetrofitFactory {
 				.build()
 	}
 
-	val retrofit by lazy {
+	private val jrscClient by lazy {
+		OkHttpClient.Builder()
+				.connectTimeout(2, TimeUnit.SECONDS)
+				.readTimeout(2, TimeUnit.SECONDS)
+				.writeTimeout(2, TimeUnit.SECONDS)
+				.addInterceptor(JRSCInterceptor())
+				.build()
+	}
+
+	val retrofit: Retrofit by lazy {
 		Retrofit.Builder()
 				.baseUrl("https://xhuschedule.mostpan.com")
 				.client(client)
 				.addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-				.build()!!
+				.build()
 	}
 
-	val splashLeanCloudRetrofit by lazy {
+	val splashLeanCloudRetrofit: Retrofit by lazy {
 		Retrofit.Builder()
 				.baseUrl("https://f939ktgh.api.lncld.net")
 				.client(splashClient)
 				.addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-				.build()!!
+				.build()
 	}
 
-	val qiniuRetrofit by lazy {
+	val qiniuRetrofit: Retrofit by lazy {
 		Retrofit.Builder()
 				.baseUrl("https://download.xhuschedule.mostpan.com")
 				.client(qiniuClient)
@@ -64,11 +74,19 @@ object RetrofitFactory {
 				.build()
 	}
 
-	val leanCloudRetrofit by lazy {
+	val leanCloudRetrofit: Retrofit by lazy {
 		Retrofit.Builder()
 				.baseUrl("https://f939ktgh.api.lncld.net")
 				.client(client)
 				.addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-				.build()!!
+				.build()
+	}
+
+	val jrscRetrofit: Retrofit by lazy {
+		Retrofit.Builder()
+				.baseUrl("")
+				.client(jrscClient)
+				.addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+				.build()
 	}
 }

@@ -1,4 +1,4 @@
-package com.weilylab.xhuschedule.utils
+package com.weilylab.xhuschedule.utils.userDo
 
 import com.weilylab.xhuschedule.api.UserAPI
 import vip.mystery0.rxpackagedata.Status.*
@@ -12,6 +12,7 @@ import com.weilylab.xhuschedule.model.Student
 import com.weilylab.xhuschedule.model.StudentInfo
 import com.weilylab.xhuschedule.model.response.LoginResponse
 import com.weilylab.xhuschedule.repository.local.StudentLocalDataSource
+import com.weilylab.xhuschedule.utils.NetworkUtil
 import vip.mystery0.rxpackagedata.rx.RxObserver
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers

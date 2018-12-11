@@ -2,7 +2,7 @@ package com.weilylab.xhuschedule.repository
 
 import com.weilylab.xhuschedule.repository.local.StudentLocalDataSource
 import com.weilylab.xhuschedule.repository.remote.TestRemoteDataSource
-import com.weilylab.xhuschedule.utils.UserUtil
+import com.weilylab.xhuschedule.utils.userDo.UserUtil
 import com.weilylab.xhuschedule.viewModel.QueryTestViewModel
 import vip.mystery0.rxpackagedata.PackageData
 import vip.mystery0.rxpackagedata.Status.*

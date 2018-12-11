@@ -1,4 +1,4 @@
-package com.weilylab.xhuschedule.utils
+package com.weilylab.xhuschedule.utils.userDo
 
 import com.weilylab.xhuschedule.api.TestAPI
 import com.weilylab.xhuschedule.constant.ResponseCodeConstants
@@ -107,7 +107,7 @@ object TestUtil {
 									saveMap[studentList[position].username] = testResponse.tests
 									doSaveListener?.doSave(saveMap)
 								}
-								TestUtil.DataWithUsername(studentList[position].username, testResponse)
+								DataWithUsername(studentList[position].username, testResponse)
 							})
 				}
 		Observable.merge(needRequestArray)
@@ -130,7 +130,7 @@ object TestUtil {
 								resultArray[position] = true
 							}
 							data.rt == ResponseCodeConstants.ERROR_NOT_LOGIN -> {
-								if (index == TestUtil.RETRY_TIME)
+								if (index == RETRY_TIME)
 									resultArray[position] = false
 								else
 									UserUtil.login(studentList[position], null, object : RequestListener<Boolean> {

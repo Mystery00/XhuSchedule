@@ -6,7 +6,7 @@ import com.weilylab.xhuschedule.listener.RequestListener
 import com.weilylab.xhuschedule.model.FeedBackMessage
 import com.weilylab.xhuschedule.model.Student
 import com.weilylab.xhuschedule.repository.local.FeedBackLocalDataSource
-import com.weilylab.xhuschedule.utils.FeedBackUtil
+import com.weilylab.xhuschedule.utils.userDo.FeedBackUtil
 import vip.mystery0.rxpackagedata.PackageData
 import java.util.ArrayList
 

@@ -11,6 +11,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import vip.mystery0.rxpackagedata.PackageData
 import vip.mystery0.rxpackagedata.rx.RxObserver
+import java.util.concurrent.TimeUnit
 
 object SplashRemoteDataSource : SplashDataSource {
 	override fun requestSplash(splashPackageLiveData: MediatorLiveData<PackageData<SplashResponse.Splash>>) {
@@ -18,6 +19,7 @@ object SplashRemoteDataSource : SplashDataSource {
 		RetrofitFactory.splashLeanCloudRetrofit
 				.create(LeanCloudAPI::class.java)
 				.requestSplashInfo()
+				.timeout(2, TimeUnit.SECONDS)
 				.subscribeOn(Schedulers.newThread())
 				.unsubscribeOn(Schedulers.newThread())
 				.map {

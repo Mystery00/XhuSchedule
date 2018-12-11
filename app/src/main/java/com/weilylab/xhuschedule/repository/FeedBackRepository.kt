@@ -5,7 +5,7 @@ import com.weilylab.xhuschedule.repository.local.FeedBackLocalDataSource
 import com.weilylab.xhuschedule.repository.local.StudentLocalDataSource
 import com.weilylab.xhuschedule.repository.remote.FeedBackRemoteDataSource
 import com.weilylab.xhuschedule.utils.NetworkUtil
-import com.weilylab.xhuschedule.utils.UserUtil
+import com.weilylab.xhuschedule.utils.userDo.UserUtil
 import com.weilylab.xhuschedule.viewModel.BottomNavigationViewModel
 import com.weilylab.xhuschedule.viewModel.FeedBackViewModel
 import vip.mystery0.rxpackagedata.PackageData

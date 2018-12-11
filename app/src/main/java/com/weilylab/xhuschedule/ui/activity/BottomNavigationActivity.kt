@@ -36,6 +36,8 @@ import com.weilylab.xhuschedule.ui.fragment.ProfileFragment
 import com.weilylab.xhuschedule.ui.fragment.TableFragment
 import com.weilylab.xhuschedule.ui.fragment.TodayFragment
 import com.weilylab.xhuschedule.utils.*
+import com.weilylab.xhuschedule.utils.userDo.CourseUtil
+import com.weilylab.xhuschedule.utils.userDo.UserUtil
 import com.weilylab.xhuschedule.viewModel.BottomNavigationViewModel
 import com.zhuangfei.timetable.listener.IWeekView
 import com.zhuangfei.timetable.model.Schedule

@@ -10,7 +10,7 @@ import com.weilylab.xhuschedule.repository.dataSource.StudentDataSource
 import com.weilylab.xhuschedule.repository.local.service.StudentService
 import com.weilylab.xhuschedule.repository.local.service.impl.StudentServiceImpl
 import com.weilylab.xhuschedule.repository.remote.StudentRemoteDataSource
-import com.weilylab.xhuschedule.utils.UserUtil
+import com.weilylab.xhuschedule.utils.userDo.UserUtil
 import io.reactivex.Observable
 import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers

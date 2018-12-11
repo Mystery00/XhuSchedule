@@ -54,7 +54,7 @@ class CheckUpdateService : Service() {
 		val rom = Build.DISPLAY
 		RetrofitFactory.retrofit
 				.create(PhpAPI::class.java)
-				.checkVersion(appVersion, systemVersion, manufacturer, model, rom, ConfigUtil.getDeviceID(this))
+				.checkVersion(appVersion, systemVersion, manufacturer, model, rom, ConfigUtil.getDeviceID())
 				.subscribeOn(Schedulers.newThread())
 				.unsubscribeOn(Schedulers.newThread())
 				.map { GsonFactory.parse<Version>(it) }
