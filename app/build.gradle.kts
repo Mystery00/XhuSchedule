@@ -11,7 +11,6 @@ autoVersion {
 	patch = 8
 	beta = 0
 	alpha = 0
-	isShowBuild = false
 }
 
 android {
@@ -49,14 +48,14 @@ android {
 	buildTypes {
 		getByName("debug") {
 			resValue("string", "app_version_name", autoVersion.name)
-			resValue("string", "app_version_code", "$autoVersion.code")
+			resValue("string", "app_version_code", defaultConfig.versionCode.toString())
 			resValue("string", "app_package_name", defaultConfig.applicationId)
 			isMinifyEnabled = false
 			proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
 		}
 		getByName("release") {
 			resValue("string", "app_version_name", autoVersion.name)
-			resValue("string", "app_version_code", "$autoVersion.code")
+			resValue("string", "app_version_code", defaultConfig.versionCode.toString())
 			resValue("string", "app_package_name", defaultConfig.applicationId)
 			isMinifyEnabled = false
 			proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")

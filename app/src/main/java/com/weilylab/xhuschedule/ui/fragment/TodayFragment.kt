@@ -42,14 +42,14 @@ class TodayFragment : BaseBottomNavigationFragment<FragmentTodayBinding>(R.layou
 					adapter.items.clear()
 					adapter.items.addAll(it.data!!)
 					adapter.notifyDataSetChanged()
-					hideNoDataLayout()
+					checkNoDataLayout()
 				}
 			}
-			Empty -> showNoDataLayout()
+			Empty -> checkNoDataLayout()
 			Error -> {
 				Logs.wtfm("todayCourseListObserver: ", it.error)
 				toastMessage(it.error?.message)
-				showNoDataLayout()
+				checkNoDataLayout()
 			}
 		}
 	}
@@ -72,7 +72,15 @@ class TodayFragment : BaseBottomNavigationFragment<FragmentTodayBinding>(R.layou
 			binding.jrscLayout.visibility = View.VISIBLE
 			binding.jrscTextView.text = content
 			binding.jrscAuthorTextView.text = author
+			checkNoDataLayout()
 		}
+	}
+
+	private fun checkNoDataLayout() {
+		if (binding.jrscLayout.visibility == View.VISIBLE || adapter.items.isNotEmpty())
+			hideNoDataLayout()
+		else
+			showNoDataLayout()
 	}
 
 	private fun showNoDataLayout() {
