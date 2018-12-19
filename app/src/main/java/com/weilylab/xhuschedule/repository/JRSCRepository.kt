@@ -12,7 +12,7 @@ import vip.mystery0.logs.Logs
 import vip.mystery0.rxpackagedata.rx.RxObserver
 
 object JRSCRepository {
-	fun load(listener: (String, String) -> Unit) {
+	fun load(listener: (JRSC) -> Unit) {
 		if (ConfigurationUtil.disableJRSC)
 			return
 		if (ConfigurationUtil.jrscToken == "") {
@@ -50,7 +50,7 @@ object JRSCRepository {
 
 						override fun onFinish(data: JRSC?) {
 							if (data != null && data.status == "success")
-								listener.invoke(data.content.content, "——${data.content.origin.author}《${data.content.origin.title}》")
+								listener.invoke(data)
 						}
 					})
 		}

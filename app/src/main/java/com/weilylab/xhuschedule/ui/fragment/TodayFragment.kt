@@ -1,6 +1,8 @@
 package com.weilylab.xhuschedule.ui.fragment
 
+import android.view.LayoutInflater
 import android.view.View
+import androidx.appcompat.app.AlertDialog
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -9,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.databinding.FragmentTodayBinding
 import com.weilylab.xhuschedule.base.BaseBottomNavigationFragment
+import com.weilylab.xhuschedule.databinding.DialogShowJrscBinding
 import com.weilylab.xhuschedule.databinding.LayoutNullDataViewBinding
 import com.weilylab.xhuschedule.repository.BottomNavigationRepository
 import com.weilylab.xhuschedule.repository.JRSCRepository
@@ -68,10 +71,25 @@ class TodayFragment : BaseBottomNavigationFragment<FragmentTodayBinding>(R.layou
 	override fun monitor() {
 		super.monitor()
 		binding.nullDataViewStub.setOnInflateListener { _, inflated -> viewStubBinding = DataBindingUtil.bind(inflated)!! }
-		JRSCRepository.load { content, author ->
+		JRSCRepository.load { data ->
 			binding.jrscLayout.visibility = View.VISIBLE
-			binding.jrscTextView.text = content
-			binding.jrscAuthorTextView.text = author
+			binding.jrscTextView.text = data.content.content
+			val text = "——${data.content.origin.author}《${data.content.origin.title}》"
+			binding.jrscAuthorTextView.text = text
+			binding.jrscLayout.setOnClickListener {
+				val stringBuilder = StringBuilder()
+				data.content.origin.content.forEach { s -> stringBuilder.appendln(s) }
+				val dialogShowJrscBinding = DialogShowJrscBinding.inflate(LayoutInflater.from(activity))
+				val title = "《${data.content.origin.title}》"
+				dialogShowJrscBinding.title.text = title
+				val author = "[${data.content.origin.dynasty}] ${data.content.origin.author}"
+				dialogShowJrscBinding.author.text = author
+				dialogShowJrscBinding.content.text = stringBuilder.toString()
+				AlertDialog.Builder(activity!!)
+						.setView(dialogShowJrscBinding.root)
+						.setPositiveButton(android.R.string.ok, null)
+						.show()
+			}
 			checkNoDataLayout()
 		}
 	}

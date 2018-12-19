@@ -53,7 +53,7 @@ object RetrofitFactory {
 
 	val retrofit: Retrofit by lazy {
 		Retrofit.Builder()
-				.baseUrl("https://xhuschedule.mostpan.com")
+				.baseUrl("https://xhuschedule.mystery0.app")
 				.client(client)
 				.addCallAdapterFactory(RxJava2CallAdapterFactory.create())
 				.build()
