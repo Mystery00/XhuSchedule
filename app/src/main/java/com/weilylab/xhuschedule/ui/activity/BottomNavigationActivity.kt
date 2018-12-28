@@ -455,7 +455,7 @@ class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_naviga
 		popupWindow.isFocusable = true
 		popupWindow.animationStyle = R.style.ShowCourseAnimation
 		popupWindow.setOnDismissListener {
-			AnimationUtil.setWindowAlpha(this, 1F)
+			AnimationUtil.setWindowAlpha(this, 0.5F, 1F, 200)
 		}
 		popupWindow.setBackgroundDrawable(ColorDrawable(0x00000000))
 	}
@@ -466,7 +466,7 @@ class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_naviga
 		params.leftMargin = 0
 		dialogShowCourseBinding.point.layoutParams = params
 		dialogShowCourseBinding.recyclerView.scrollToPosition(0)
-		AnimationUtil.setWindowAlpha(this, 0.5F)
+		AnimationUtil.setWindowAlpha(this, 1F, 0.5F, 200)
 		if (!isFinishing && !isDestroyed)
 			popupWindow.showAtLocation(weekView, Gravity.CENTER, 0, 0)
 	}
