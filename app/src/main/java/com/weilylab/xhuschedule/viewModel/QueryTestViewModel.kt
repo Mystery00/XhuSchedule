@@ -9,6 +9,7 @@ import vip.mystery0.rxpackagedata.PackageData
 
 class QueryTestViewModel : ViewModel() {
 	val studentList by lazy { MediatorLiveData<PackageData<List<Student>>>() }
+	val student by lazy { MutableLiveData<String>() }
 	val testList by lazy { MediatorLiveData<PackageData<List<Test>>>() }
 	val html by lazy { MutableLiveData<String>() }
 }
