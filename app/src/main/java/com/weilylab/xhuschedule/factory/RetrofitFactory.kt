@@ -59,6 +59,14 @@ object RetrofitFactory {
 				.build()
 	}
 
+	val feedbackRetrofit: Retrofit by lazy {
+		Retrofit.Builder()
+				.baseUrl("https://xhuschedule.mostpan.com")
+				.client(client)
+				.addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+				.build()
+	}
+
 	val splashLeanCloudRetrofit: Retrofit by lazy {
 		Retrofit.Builder()
 				.baseUrl("https://f939ktgh.api.lncld.net")

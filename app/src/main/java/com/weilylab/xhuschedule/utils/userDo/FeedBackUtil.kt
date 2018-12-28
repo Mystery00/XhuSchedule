@@ -22,7 +22,7 @@ object FeedBackUtil {
 
 	fun sendFeedBackMessage(student: Student, feedBackToken: String, content: String, requestListener: RequestListener<Boolean>, index: Int = 0) {
 		if (NetworkUtil.isConnectInternet()) {
-			RetrofitFactory.retrofit
+			RetrofitFactory.feedbackRetrofit
 					.create(FeedbackAPI::class.java)
 					.sendFBMessage(student.username, feedBackToken, content)
 					.subscribeOn(Schedulers.newThread())
@@ -64,7 +64,7 @@ object FeedBackUtil {
 
 	fun getFeedBackMessage(student: Student, feedBackToken: String, lastId: Int, doSaveListener: DoSaveListener<List<FeedBackMessage>>, requestListener: RequestListener<List<FeedBackMessage>>, index: Int = 0) {
 		if (NetworkUtil.isConnectInternet()) {
-			RetrofitFactory.retrofit
+			RetrofitFactory.feedbackRetrofit
 					.create(FeedbackAPI::class.java)
 					.getFBMessage(student.username, feedBackToken, lastId)
 					.subscribeOn(Schedulers.newThread())
