@@ -26,7 +26,7 @@ android {
 		versionName = autoVersion.name
 		testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 		vectorDrawables.useSupportLibrary = true
-		setProperty("archivesBaseName", "XhuSchedule-${autoVersion.name}-${autoVersion.code}-${autoVersion.branch}")
+		setProperty("archivesBaseName", "XhuSchedule-${autoVersion.name}-${autoVersion.code}")
 		ndk {
 			moduleName = "bspatch"
 			// 设置支持的SO库架构
@@ -50,14 +50,14 @@ android {
 			resValue("string", "app_version_name", autoVersion.name)
 			resValue("string", "app_version_code", defaultConfig.versionCode.toString())
 			resValue("string", "app_package_name", defaultConfig.applicationId)
-			isMinifyEnabled = false
+			isMinifyEnabled = true
 			proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
 		}
 		getByName("release") {
 			resValue("string", "app_version_name", autoVersion.name)
 			resValue("string", "app_version_code", defaultConfig.versionCode.toString())
 			resValue("string", "app_package_name", defaultConfig.applicationId)
-			isMinifyEnabled = false
+			isMinifyEnabled = true
 			proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
 		}
 	}
