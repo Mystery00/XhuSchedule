@@ -137,7 +137,7 @@
 			android:name=".service.DownloadService"
 			android:exported="false" />
 		<service
-			android:name=".service.widget.WidgetUpdateService"
+			android:name=".service.WidgetUpdateService"
 			android:exported="false" />
 		<service
 			android:name=".service.widget.TodayCourseWidgetService"
@@ -151,33 +151,29 @@
 			android:name=".service.NotificationService"
 			android:exported="true"
 			android:permission="android.permission.BIND_JOB_SERVICE" />
-		<service
-			android:name=".service.WidgetService"
-			android:enabled="true"
-			android:exported="false" />
 
-		<!--<receiver-->
-			<!--android:name=".ui.widget.TodayCourseWidget"-->
-			<!--android:label="@string/widget_title_query_today_course">-->
-			<!--<intent-filter>-->
-				<!--<action android:name="android.appwidget.action.APPWIDGET_UPDATE" />-->
-			<!--</intent-filter>-->
+		<receiver
+			android:name=".ui.widget.TodayCourseWidget"
+			android:label="@string/widget_title_query_today_course">
+			<intent-filter>
+				<action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+			</intent-filter>
 
-			<!--<meta-data-->
-				<!--android:name="android.appwidget.provider"-->
-				<!--android:resource="@xml/today_course_widget_info" />-->
-		<!--</receiver>-->
-		<!--<receiver-->
-			<!--android:name=".ui.widget.TestListWidget"-->
-			<!--android:label="@string/widget_title_query_test">-->
-			<!--<intent-filter>-->
-				<!--<action android:name="android.appwidget.action.APPWIDGET_UPDATE" />-->
-			<!--</intent-filter>-->
+			<meta-data
+				android:name="android.appwidget.provider"
+				android:resource="@xml/today_course_widget_info" />
+		</receiver>
+		<receiver
+			android:name=".ui.widget.TestListWidget"
+			android:label="@string/widget_title_query_test">
+			<intent-filter>
+				<action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+			</intent-filter>
 
-			<!--<meta-data-->
-				<!--android:name="android.appwidget.provider"-->
-				<!--android:resource="@xml/test_list_widget_info" />-->
-		<!--</receiver>-->
+			<meta-data
+				android:name="android.appwidget.provider"
+				android:resource="@xml/test_list_widget_info" />
+		</receiver>
 
 		<provider
 			android:name="androidx.core.content.FileProvider"

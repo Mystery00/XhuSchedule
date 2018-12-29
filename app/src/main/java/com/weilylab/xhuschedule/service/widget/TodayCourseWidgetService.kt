@@ -5,12 +5,16 @@ import android.content.Intent
 import android.widget.RemoteViews
 import android.widget.RemoteViewsService
 import com.weilylab.xhuschedule.R
-import com.weilylab.xhuschedule.viewModel.WidgetViewModelHelper
+import com.weilylab.xhuschedule.constant.Constants
+import com.weilylab.xhuschedule.repository.WidgetRepository
+import com.zhuangfei.timetable.model.Schedule
 
 class TodayCourseWidgetService : RemoteViewsService() {
 	override fun onGetViewFactory(intent: Intent?): RemoteViewsFactory = ListRemoteViewFactory(this)
 
 	private inner class ListRemoteViewFactory(private val context: Context) : RemoteViewsFactory {
+		private val data by lazy { ArrayList<Schedule>() }
+
 		override fun onCreate() {
 		}
 
@@ -19,15 +23,19 @@ class TodayCourseWidgetService : RemoteViewsService() {
 		override fun getItemId(position: Int): Long = position.toLong()
 
 		override fun onDataSetChanged() {
+			data.clear()
+			data.addAll(WidgetRepository.queryTodayCourse())
+			if (data.isEmpty())
+				sendBroadcast(Intent(Constants.ACTION_WIDGET_UPDATE_BROADCAST)
+						.putExtra("name", TodayCourseWidgetService::class.java.name)
+						.putExtra("hasData", false))
 		}
 
 		override fun hasStableIds(): Boolean = true
 
 		override fun getViewAt(position: Int): RemoteViews {
 			val remotesView = RemoteViews(context.packageName, R.layout.item_widget_today)
-			if (WidgetViewModelHelper.todayCourseList.value == null || WidgetViewModelHelper.todayCourseList.value!!.data == null)
-				return remotesView
-			val course = WidgetViewModelHelper.todayCourseList.value!!.data!![position]
+			val course = data[position]
 			remotesView.setTextViewText(R.id.course_name_textView, course.name)
 			remotesView.setTextViewText(R.id.course_teacher_textView, course.teacher)
 			val startTimeArray = context.resources.getStringArray(R.array.start_time)
@@ -37,16 +45,12 @@ class TodayCourseWidgetService : RemoteViewsService() {
 			return remotesView
 		}
 
-		override fun getCount(): Int {
-			return if (WidgetViewModelHelper.todayCourseList.value == null || WidgetViewModelHelper.todayCourseList.value!!.data == null)
-				0
-			else
-				WidgetViewModelHelper.todayCourseList.value!!.data!!.size
-		}
+		override fun getCount(): Int = data.size
 
 		override fun getViewTypeCount(): Int = 1
 
 		override fun onDestroy() {
+			data.clear()
 		}
 	}
 }

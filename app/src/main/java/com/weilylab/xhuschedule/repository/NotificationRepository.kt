@@ -20,8 +20,7 @@ object NotificationRepository {
 					val startTime = InitLocalDataSource.getStartDateTime()
 					val tomorrowWeek = CalendarUtil.getTomorrowWeekFromCalendar(startTime)
 					val tomorrow = CalendarUtil.getTomorrowIndex()
-					val courseList = CourseLocalDataSource.getRowCourseList(student, year
-							?: "current", term ?: "current")
+					val courseList = CourseLocalDataSource.getRowCourseList(student, year, term)
 					val tomorrowCourseList = ArrayList<Schedule>()
 					tomorrowCourseList.addAll(courseList.filter { it.weekList.contains(tomorrowWeek) && it.day == tomorrow })
 					emitter.onFinish(tomorrowCourseList)
@@ -46,8 +45,7 @@ object NotificationRepository {
 					val tomorrow = CalendarUtil.getTomorrowIndex()
 					val courseList = ArrayList<Schedule>()
 					studentList.forEach {
-						courseList.addAll(CourseLocalDataSource.getRowCourseList(it, year
-								?: "current", term ?: "current"))
+						courseList.addAll(CourseLocalDataSource.getRowCourseList(it, year, term))
 					}
 					val tomorrowCourseList = ArrayList<Schedule>()
 					tomorrowCourseList.addAll(courseList.filter { it.weekList.contains(tomorrowWeek) && it.day == tomorrow })

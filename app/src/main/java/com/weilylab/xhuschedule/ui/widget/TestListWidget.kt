@@ -3,47 +3,41 @@ package com.weilylab.xhuschedule.ui.widget
 import android.app.PendingIntent
 import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
+import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.view.View
 import android.widget.RemoteViews
-import androidx.core.content.ContextCompat
 
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.constant.Constants
-import com.weilylab.xhuschedule.constant.IntentConstant
 import com.weilylab.xhuschedule.constant.SharedPreferenceConstant
+import com.weilylab.xhuschedule.service.WidgetUpdateService
 import com.weilylab.xhuschedule.service.widget.TestListWidgetService
-import com.weilylab.xhuschedule.service.widget.WidgetUpdateService
 import com.weilylab.xhuschedule.utils.CalendarUtil
 import com.weilylab.xhuschedule.utils.WidgetUtil
-import com.weilylab.xhuschedule.viewModel.WidgetViewModelHelper
 
 class TestListWidget : AppWidgetProvider() {
 	override fun onUpdate(context: Context, appWidgetManager: AppWidgetManager, appWidgetIds: IntArray) {
 		WidgetUtil.saveWidgetIDs(context, SharedPreferenceConstant.FIELD_IDS_EXAM, appWidgetIds)
-		ContextCompat.startForegroundService(context, Intent(context, WidgetUpdateService::class.java))
+		appWidgetIds.forEach { updateAppWidget(context, appWidgetManager, it) }
 	}
 
 	override fun onReceive(context: Context, intent: Intent?) {
 		super.onReceive(context, intent)
-		when (intent?.action) {
-			Constants.ACTION_WIDGET_UPDATE_BROADCAST ->
-				if (intent.getStringExtra(IntentConstant.INTENT_TAG_NAME_WIDGET_TAG) == IntentConstant.INTENT_VALUE_WIDGET_TEST)
-					WidgetUtil.getWidgetIDs(context, SharedPreferenceConstant.FIELD_IDS_EXAM).forEach {
-						updateAppWidget(context, AppWidgetManager.getInstance(context), it)
-					}
+		if (intent?.action == Constants.ACTION_WIDGET_UPDATE_BROADCAST) {
+			val appWidgetManager = AppWidgetManager.getInstance(context)
+			if (intent.getStringExtra("name") == TestListWidgetService::class.java.name && intent.hasExtra("hasData") && !intent.getBooleanExtra("hasData", true)) {
+				WidgetUtil.getWidgetIDs(context, SharedPreferenceConstant.FIELD_IDS_EXAM)
+						.forEach { updateAppWidget(context, appWidgetManager, it, false) }
+			} else {
+				appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetManager.getAppWidgetIds(ComponentName(context, TestListWidget::class.java)), R.id.listView)
+			}
 		}
 	}
 
-	override fun onDisabled(context: Context?) {
-		super.onDisabled(context)
-		WidgetViewModelHelper.testList.value = null
-		WidgetViewModelHelper.studentList.value = null
-	}
-
-	private fun updateAppWidget(context: Context, appWidgetManager: AppWidgetManager, appWidgetId: Int) {
+	private fun updateAppWidget(context: Context, appWidgetManager: AppWidgetManager, appWidgetId: Int, hasData: Boolean = true) {
 		val views = RemoteViews(context.packageName, R.layout.test_list_widget)
 		views.setTextViewText(R.id.appwidget_text, CalendarUtil.getFormattedText())
 		val refreshIntent = Intent(context, WidgetUpdateService::class.java)
@@ -52,7 +46,7 @@ class TestListWidget : AppWidgetProvider() {
 		else
 			PendingIntent.getService(context, 0, refreshIntent, PendingIntent.FLAG_UPDATE_CURRENT)
 		views.setOnClickPendingIntent(R.id.appwidget_text, refreshPendingIntent)
-		if (WidgetViewModelHelper.testList.value == null || WidgetViewModelHelper.testList.value!!.data == null || WidgetViewModelHelper.testList.value!!.data!!.isEmpty()) {
+		if (!hasData) {
 			views.setViewVisibility(R.id.listView, View.GONE)
 			views.setViewVisibility(R.id.nullDataView, View.VISIBLE)
 		} else {

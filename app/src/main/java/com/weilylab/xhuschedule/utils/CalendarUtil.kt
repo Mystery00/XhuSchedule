@@ -105,7 +105,7 @@ object CalendarUtil {
 			}
 		} catch (e: Exception) {
 			Logs.wtf("getTestDateText: ", e)
-			return ""
+			return test.date
 		}
 	}
 

@@ -153,7 +153,7 @@ object StudentLocalDataSource : StudentDataSource {
 	fun queryAllStudentList(listener: (PackageData<List<Student>>) -> Unit) {
 		RxObservable<List<Student>>()
 				.doThings {
-					it.onFinish(studentService.queryAllStudentList())
+					it.onFinish(queryAllStudentListDo())
 				}
 				.subscribe(object : RxObserver<List<Student>>() {
 					override fun onFinish(data: List<Student>?) {
@@ -168,6 +168,11 @@ object StudentLocalDataSource : StudentDataSource {
 					}
 				})
 	}
+
+	/**
+	 * 查询学生信息的同步方法，提供给小部件调用
+	 */
+	fun queryAllStudentListDo(): List<Student> = studentService.queryAllStudentList()
 
 	fun queryAllStudentInfo(listener: (PackageData<List<StudentInfo>>) -> Unit) {
 		RxObservable<List<StudentInfo>>()

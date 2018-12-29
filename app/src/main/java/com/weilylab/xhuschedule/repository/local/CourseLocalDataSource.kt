@@ -18,7 +18,7 @@ import vip.mystery0.rxpackagedata.rx.RxObservable
 import vip.mystery0.rxpackagedata.rx.RxObserver
 
 object CourseLocalDataSource : CourseDataSource {
-	private val courseService:CourseService by lazy { CourseServiceImpl() }
+	private val courseService: CourseService by lazy { CourseServiceImpl() }
 
 	override fun queryCourseByUsername(courseListLiveData: MutableLiveData<PackageData<List<Schedule>>>, student: Student, year: String?, term: String?, isFromCache: Boolean, isShowError: Boolean) {
 		RxObservable<List<Schedule>>()
@@ -96,6 +96,8 @@ object CourseLocalDataSource : CourseDataSource {
 				})
 	}
 
+	fun getDistinctRowCourseList(): List<Course> = courseService.queryDistinctCourseByUsernameAndTerm()
+
 	fun updateCourseColor(course: Course, color: String) {
 		RxObservable<Boolean>()
 				.doThings { observableEmitter ->
@@ -109,7 +111,8 @@ object CourseLocalDataSource : CourseDataSource {
 				.subscribe(DoNothingObserver<Boolean>())
 	}
 
-	fun getRowCourseList(student: Student, year: String, term: String): List<Schedule> = CourseUtil.convertCourseToSchedule(courseService.queryCourseByUsernameAndTerm(student.username, year, term))
+	fun getRowCourseList(student: Student, year: String? = null, term: String? = null): List<Schedule> = CourseUtil.convertCourseToSchedule(courseService.queryCourseByUsernameAndTerm(student.username, year
+			?: "current", term ?: "current"))
 
 	fun saveCourseList(username: String, year: String, term: String, courseList: List<Course>) {
 		val savedList = courseService.queryCourseByUsernameAndTerm(username, year, term)
