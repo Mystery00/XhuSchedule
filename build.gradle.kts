@@ -9,7 +9,7 @@ buildscript {
 	dependencies {
 		classpath("com.android.tools.build:gradle:3.2.1")
 		classpath(kotlin("gradle-plugin", kotlinVersion))
-		classpath("com.github.Mystery0Tools:AutoVersion:1.0.3")
+		classpath("com.github.Mystery0Tools:AutoVersion:1.0.4")
 	}
 }
 
