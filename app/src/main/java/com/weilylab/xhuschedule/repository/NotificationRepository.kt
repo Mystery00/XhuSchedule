@@ -5,8 +5,9 @@ import com.weilylab.xhuschedule.config.ColorPoolHelper
 import com.weilylab.xhuschedule.model.Student
 import com.weilylab.xhuschedule.model.Test
 import com.weilylab.xhuschedule.repository.local.CourseLocalDataSource
-import com.weilylab.xhuschedule.repository.local.StudentLocalDataSource
+import com.weilylab.xhuschedule.repository.local.InitLocalDataSource
 import com.weilylab.xhuschedule.repository.local.TestLocalDataSource
+import com.weilylab.xhuschedule.utils.CalendarUtil
 import com.weilylab.xhuschedule.utils.userDo.TestUtil
 import com.weilylab.xhuschedule.utils.userDo.UserUtil
 import com.zhuangfei.timetable.model.Schedule
@@ -15,26 +16,33 @@ import kotlin.collections.ArrayList
 
 object NotificationRepository {
 	/**
-	 * 查询学生的今日课程信息
+	 * 查询学生的明日课程信息
 	 * 查询主用户的信息
 	 * 同步方法
 	 */
 	fun queryTomorrowCourse(studentList: List<Student>): List<Schedule> {
 		val mainStudent = UserUtil.findMainStudent(studentList) ?: return emptyList()
-		return CourseLocalDataSource.getRowCourseList(mainStudent)
+		val startTime = InitLocalDataSource.getStartDateTime()
+		val tomorrowWeek = CalendarUtil.getTomorrowWeekFromCalendar(startTime)
+		val tomorrow = CalendarUtil.getTomorrowIndex()
+		val courseList = CourseLocalDataSource.getRowCourseList(mainStudent)
+		return courseList.filter { it.weekList.contains(tomorrowWeek) && it.day == tomorrow }
 	}
 
 	/**
-	 * 查询学生的今日课程信息
+	 * 查询学生的明日课程信息
 	 * 查询多个用户的信息
 	 * 同步方法
 	 */
 	fun queryTomorrowCourseForManyStudent(studentList: List<Student>): List<Schedule> {
+		val startTime = InitLocalDataSource.getStartDateTime()
+		val tomorrowWeek = CalendarUtil.getTomorrowWeekFromCalendar(startTime)
+		val tomorrow = CalendarUtil.getTomorrowIndex()
 		val list = ArrayList<Schedule>()
 		studentList.forEach {
 			list.addAll(CourseLocalDataSource.getRowCourseList(it))
 		}
-		return list
+		return list.filter { it.weekList.contains(tomorrowWeek) && it.day == tomorrow }
 	}
 
 	/**
@@ -45,6 +53,7 @@ object NotificationRepository {
 	fun queryTests(studentList: List<Student>): List<Test> {
 		val mainStudent = UserUtil.findMainStudent(studentList) ?: return emptyList()
 		return TestUtil.filterTestList(TestLocalDataSource.getRawTestList(mainStudent))
+				.filter { CalendarUtil.isTomorrowTest(it.date) }
 	}
 
 	/**
@@ -57,7 +66,7 @@ object NotificationRepository {
 		studentList.forEach {
 			tests.addAll(TestUtil.filterTestList(TestLocalDataSource.getRawTestList(it)))
 		}
-		return tests
+		return tests.filter { CalendarUtil.isTomorrowTest(it.date) }
 	}
 
 	/**
