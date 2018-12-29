@@ -7,8 +7,8 @@ plugins {
 }
 autoVersion {
 	major = 2
-	minor = 2
-	patch = 8
+	minor = 3
+	patch = 0
 	beta = 0
 	alpha = 0
 }
