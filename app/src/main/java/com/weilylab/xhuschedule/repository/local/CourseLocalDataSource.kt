@@ -23,8 +23,7 @@ object CourseLocalDataSource : CourseDataSource {
 	override fun queryCourseByUsername(courseListLiveData: MutableLiveData<PackageData<List<Schedule>>>, student: Student, year: String?, term: String?, isFromCache: Boolean, isShowError: Boolean) {
 		RxObservable<List<Schedule>>()
 				.doThings {
-					it.onFinish(CourseUtil.convertCourseToSchedule(courseService.queryCourseByUsernameAndTerm(student.username, year
-							?: "current", term ?: "current")))
+					it.onFinish(getRowCourseList(student, year, term))
 				}
 				.subscribe(object : RxObserver<List<Schedule>>() {
 					override fun onFinish(data: List<Schedule>?) {
@@ -50,10 +49,7 @@ object CourseLocalDataSource : CourseDataSource {
 		RxObservable<List<Schedule>>()
 				.doThings { emitter ->
 					val courses = ArrayList<Schedule>()
-					studentList.forEach {
-						courses.addAll(CourseUtil.convertCourseToSchedule(courseService.queryCourseByUsernameAndTerm(it.username, year
-								?: "current", term ?: "current")))
-					}
+					studentList.forEach { courses.addAll(getRowCourseList(it, year, term)) }
 					emitter.onFinish(courses)
 				}
 				.subscribe(object : RxObserver<List<Schedule>>() {
@@ -111,11 +107,15 @@ object CourseLocalDataSource : CourseDataSource {
 				.subscribe(DoNothingObserver<Boolean>())
 	}
 
-	fun getRowCourseList(student: Student, year: String? = null, term: String? = null): List<Schedule> = CourseUtil.convertCourseToSchedule(courseService.queryCourseByUsernameAndTerm(student.username, year
-			?: "current", term ?: "current"))
+	fun getRowCourseList(student: Student, year: String? = null, term: String? = null): List<Schedule> {
+		return CourseUtil.convertCourseToSchedule(courseService.queryCourseByUsernameAndTerm(student.username, year
+				?: ConfigurationUtil.currentYear, term ?: ConfigurationUtil.currentTerm))
+	}
 
-	fun saveCourseList(username: String, year: String, term: String, courseList: List<Course>) {
-		val savedList = courseService.queryCourseByUsernameAndTerm(username, year, term)
+
+	fun saveCourseList(username: String, courseList: List<Course>, year: String? = null, term: String? = null) {
+		val savedList = courseService.queryCourseByUsernameAndTerm(username, year
+				?: ConfigurationUtil.currentYear, term ?: ConfigurationUtil.currentTerm)
 		savedList.forEach {
 			courseService.deleteCourse(it)
 		}

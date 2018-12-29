@@ -8,6 +8,7 @@ import com.weilylab.xhuschedule.model.Course
 import com.weilylab.xhuschedule.model.Student
 import com.weilylab.xhuschedule.repository.dataSource.CourseDataSource
 import com.weilylab.xhuschedule.repository.local.CourseLocalDataSource
+import com.weilylab.xhuschedule.utils.ConfigurationUtil
 import com.weilylab.xhuschedule.utils.userDo.CourseUtil
 import com.weilylab.xhuschedule.utils.NetworkUtil
 import com.zhuangfei.timetable.model.Schedule
@@ -25,12 +26,11 @@ object CourseRemoteDataSource : CourseDataSource {
 							it.year = year
 							it.term = term
 						} else {
-							it.year = "current"
-							it.term = "current"
+							it.year = ConfigurationUtil.currentYear
+							it.term = ConfigurationUtil.currentTerm
 						}
 					}
-					CourseLocalDataSource.saveCourseList(student.username, year ?: "current", term
-							?: "current", t)
+					CourseLocalDataSource.saveCourseList(student.username, t, year, term)
 				}
 			}, object : RequestListener<List<Course>> {
 				override fun done(t: List<Course>) {
@@ -67,12 +67,11 @@ object CourseRemoteDataSource : CourseDataSource {
 							it.year = year
 							it.term = term
 						} else {
-							it.year = "current"
-							it.term = "current"
+							it.year = ConfigurationUtil.currentYear
+							it.term = ConfigurationUtil.currentTerm
 						}
 					}
-					CourseLocalDataSource.saveCourseList(username, year ?: "current", term
-							?: "current", courseList)
+					CourseLocalDataSource.saveCourseList(username, courseList, year, term)
 				}
 			}, object : RequestListener<List<Course>> {
 				override fun done(t: List<Course>) {

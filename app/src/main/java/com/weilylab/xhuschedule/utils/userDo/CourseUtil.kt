@@ -205,13 +205,7 @@ object CourseUtil {
 				})
 	}
 
-	fun convertCourseToSchedule(courseList: List<Course>): List<Schedule> {
-		val list = ArrayList<Schedule>()
-		courseList.forEach {
-			list.add(it.schedule)
-		}
-		return list
-	}
+	fun convertCourseToSchedule(courseList: List<Course>): List<Schedule> = courseList.map { it.schedule }
 
 	fun filterShowCourse(courseList: List<Schedule>, week: Int): List<Schedule> {
 		if (ConfigurationUtil.isShowNotWeek)
