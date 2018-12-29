@@ -37,15 +37,15 @@ class NotificationService : Service() {
 		Observable.create<Map<String, Any>> {
 			val studentList = StudentLocalDataSource.queryAllStudentListDo()
 			if (ConfigurationUtil.isEnableMultiUserMode) {
-				val courseList = NotificationRepository.queryTomorrowCourse(studentList)
-				it.onNext(mapOf("schedule" to courseList))
-				val testList = NotificationRepository.queryTests(studentList)
-				val testColor = NotificationRepository.generateColorList(testList)
-				it.onNext(mapOf("test" to testList, "testColor" to testColor))
-			} else {
 				val courseList = NotificationRepository.queryTomorrowCourseForManyStudent(studentList)
 				it.onNext(mapOf("schedule" to courseList))
 				val testList = NotificationRepository.queryTestsForManyStudent(studentList)
+				val testColor = NotificationRepository.generateColorList(testList)
+				it.onNext(mapOf("test" to testList, "testColor" to testColor))
+			} else {
+				val courseList = NotificationRepository.queryTomorrowCourse(studentList)
+				it.onNext(mapOf("schedule" to courseList))
+				val testList = NotificationRepository.queryTests(studentList)
 				val testColor = NotificationRepository.generateColorList(testList)
 				it.onNext(mapOf("test" to testList, "testColor" to testColor))
 			}
