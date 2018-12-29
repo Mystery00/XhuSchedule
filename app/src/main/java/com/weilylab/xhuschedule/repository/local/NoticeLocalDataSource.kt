@@ -63,7 +63,6 @@ object NoticeLocalDataSource : NoticeDataSource {
 				}
 				.subscribe(object : RxObserver<Boolean>() {
 					override fun onFinish(data: Boolean?) {
-						Logs.i("onFinish: markAsReadInThread")
 					}
 
 					override fun onError(e: Throwable) {
