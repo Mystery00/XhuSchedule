@@ -13,7 +13,6 @@ import com.weilylab.xhuschedule.config.ColorPoolHelper
 import com.weilylab.xhuschedule.constant.Constants
 import com.weilylab.xhuschedule.model.Test
 import com.zhuangfei.timetable.model.Schedule
-import kotlin.math.roundToInt
 
 object TomorrowNotification {
 	private const val NOTIFICATION_TAG = "TomorrowNotification"
@@ -46,7 +45,7 @@ object TomorrowNotification {
 		notify(context, Constants.NOTIFICATION_ID_TOMORROW_COURSE, builder.build())
 	}
 
-	fun notifyTest(context: Context, testList: List<Test>) {
+	fun notifyTest(context: Context, testList: List<Test>, colorArray: IntArray) {
 		if (testList.isEmpty()) {
 			cancel(context, Constants.NOTIFICATION_ID_TOMORROW_TEST)
 			return
@@ -61,10 +60,10 @@ object TomorrowNotification {
 				.setAutoCancel(true)
 		val style = NotificationCompat.InboxStyle()
 				.setBigContentTitle(title)
-		testList.forEach {
+		testList.forEachIndexed { index, it ->
 			val courseItem = SpannableStringBuilder()
 			courseItem.append(it.name)
-			courseItem.setSpan(ForegroundColorSpan(ColorPoolHelper.colorPool.getColorAuto((Math.random() * ColorPoolHelper.colorPool.size()).roundToInt())), 0, courseItem.length, 0)
+			courseItem.setSpan(ForegroundColorSpan(colorArray[index]), 0, courseItem.length, 0)
 			courseItem.append(" 时间：${it.time} 地点：${it.location}")
 			style.addLine(courseItem)
 		}

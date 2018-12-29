@@ -125,7 +125,7 @@
 			android:theme="@style/AppTheme.NoActionBar" />
 		<activity
 			android:name=".ui.activity.WebViewActivity"
-			android:theme="@style/AppTheme.NoActionBar"/>
+			android:theme="@style/AppTheme.NoActionBar" />
 
 		<service
 			android:name=".service.DownloadSplashIntentService"
@@ -136,9 +136,7 @@
 		<service
 			android:name=".service.DownloadService"
 			android:exported="false" />
-		<service
-			android:name=".service.WidgetUpdateService"
-			android:exported="false" />
+		<service android:name=".service.NotificationService" />
 		<service
 			android:name=".service.widget.TodayCourseWidgetService"
 			android:exported="false"
@@ -147,10 +145,6 @@
 			android:name=".service.widget.TestListWidgetService"
 			android:exported="false"
 			android:permission="android.permission.BIND_REMOTEVIEWS" />
-		<service
-			android:name=".service.NotificationService"
-			android:exported="true"
-			android:permission="android.permission.BIND_JOB_SERVICE" />
 
 		<receiver
 			android:name=".ui.widget.TodayCourseWidget"

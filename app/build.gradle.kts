@@ -80,7 +80,7 @@ dependencies {
 	implementation("androidx.vectordrawable:vectordrawable:1.0.1")
 	implementation("androidx.preference:preference:1.0.0")
 	implementation("androidx.recyclerview:recyclerview:1.0.0")
-	implementation("androidx.constraintlayout:constraintlayout:2.0.0-alpha2")
+	implementation("androidx.constraintlayout:constraintlayout:1.1.3")
 	implementation("androidx.annotation:annotation:1.0.1")
 	implementation("androidx.slice:slice-builders:1.0.0")
 

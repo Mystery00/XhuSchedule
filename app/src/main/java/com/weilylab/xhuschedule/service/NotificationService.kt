@@ -7,18 +7,23 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.constant.Constants
+import com.weilylab.xhuschedule.model.Test
 import com.weilylab.xhuschedule.repository.NotificationRepository
 import com.weilylab.xhuschedule.repository.local.StudentLocalDataSource
 import com.weilylab.xhuschedule.ui.notification.TomorrowNotification
 import com.weilylab.xhuschedule.utils.ConfigurationUtil
-import vip.mystery0.rxpackagedata.Status.*
+import com.zhuangfei.timetable.model.Schedule
+import io.reactivex.Observable
+import io.reactivex.Observer
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
+import io.reactivex.schedulers.Schedulers
+import vip.mystery0.logs.Logs
 
 class NotificationService : Service() {
 	override fun onBind(intent: Intent?): IBinder? = null
 
-	private var isFinishCourse = false
-	private var isFinishTest = false
-
+	@Suppress("UNCHECKED_CAST", "CheckResult")
 	override fun onCreate() {
 		super.onCreate()
 		val notification = NotificationCompat.Builder(this, Constants.NOTIFICATION_CHANNEL_ID_DEFAULT)
@@ -28,82 +33,55 @@ class NotificationService : Service() {
 				.setPriority(NotificationManagerCompat.IMPORTANCE_NONE)
 				.build()
 		startForeground(Constants.NOTIFICATION_ID_TOMORROW_INIT, notification)
-		if (ConfigurationUtil.isEnableMultiUserMode)
-			StudentLocalDataSource.queryAllStudentList { packageData ->
-				when (packageData.status) {
-					Content -> {
-						if (ConfigurationUtil.notificationCourse)
-							NotificationRepository.queryTomorrowCourseForManyStudent(packageData.data!!, null, null) {
-								when (it.status) {
-									Content -> {
-										TomorrowNotification.notifyCourse(this, it.data!!)
-										isFinishCourse = true
-										checkFinish()
-									}
-									Empty, Error -> stopSelf()
-								}
-							}
-						else
-							isFinishCourse = true
-						if (ConfigurationUtil.notificationExam)
-							NotificationRepository.queryTomorrowTestForManyStudent(packageData.data!!) {
-								when (it.status) {
-									Content -> {
-										TomorrowNotification.notifyTest(this, it.data!!)
-										isFinishTest = true
-										checkFinish()
-									}
-									Empty, Error -> stopSelf()
-								}
-							}
-						else
-							isFinishTest = true
-					}
-					Empty, Error -> stopSelf()
-				}
+		Logs.i("onStartJob: 任务执行了")
+		Observable.create<Map<String, Any>> {
+			val studentList = StudentLocalDataSource.queryAllStudentListDo()
+			if (ConfigurationUtil.isEnableMultiUserMode) {
+				val courseList = NotificationRepository.queryTomorrowCourse(studentList)
+				it.onNext(mapOf("schedule" to courseList))
+				val testList = NotificationRepository.queryTests(studentList)
+				val testColor = NotificationRepository.generateColorList(testList)
+				it.onNext(mapOf("test" to testList, "testColor" to testColor))
+			} else {
+				val courseList = NotificationRepository.queryTomorrowCourseForManyStudent(studentList)
+				it.onNext(mapOf("schedule" to courseList))
+				val testList = NotificationRepository.queryTestsForManyStudent(studentList)
+				val testColor = NotificationRepository.generateColorList(testList)
+				it.onNext(mapOf("test" to testList, "testColor" to testColor))
 			}
-		else
-			StudentLocalDataSource.queryMainStudent { packageData ->
-				when (packageData.status) {
-					Content -> {
-						if (ConfigurationUtil.notificationCourse)
-							NotificationRepository.queryTomorrowCourseByUsername(packageData.data!!, null, null) {
-								when (it.status) {
-									Content -> {
-										TomorrowNotification.notifyCourse(this, it.data!!)
-										isFinishCourse = true
-										checkFinish()
-									}
-									Empty, Error -> stopSelf()
-								}
-							}
-						else
-							isFinishCourse = true
-						if (ConfigurationUtil.notificationExam)
-							NotificationRepository.queryTomorrowTestByUsername(packageData.data!!) {
-								when (it.status) {
-									Content -> {
-										TomorrowNotification.notifyTest(this, it.data!!)
-										isFinishTest = true
-										checkFinish()
-									}
-									Empty, Error -> stopSelf()
-								}
-							}
-						else
-							isFinishTest = true
+			it.onComplete()
+		}
+				.subscribeOn(Schedulers.newThread())
+				.unsubscribeOn(Schedulers.newThread())
+				.observeOn(AndroidSchedulers.mainThread())
+				.subscribe(object : Observer<Map<String, Any>> {
+					override fun onComplete() {
+						stopSelf()
 					}
-					Empty, Error -> stopSelf()
-				}
-			}
-	}
 
-	private fun checkFinish() {
-		if (isFinishCourse && isFinishTest)
-			stopSelf()
+					override fun onSubscribe(d: Disposable) {
+					}
+
+					override fun onNext(it: Map<String, Any>) {
+						when {
+							it.containsKey("schedule") -> {
+								TomorrowNotification.notifyCourse(this@NotificationService, it["schedule"] as List<Schedule>)
+							}
+							it.containsKey("test") -> {
+								TomorrowNotification.notifyTest(this@NotificationService, it["test"] as List<Test>, it["testColor"] as IntArray)
+							}
+						}
+					}
+
+					override fun onError(e: Throwable) {
+						Logs.wtf("onError: ", e)
+						stopSelf()
+					}
+				})
 	}
 
 	override fun onDestroy() {
+		Logs.i("onDestroy: 任务结束")
 		stopForeground(true)
 		super.onDestroy()
 	}

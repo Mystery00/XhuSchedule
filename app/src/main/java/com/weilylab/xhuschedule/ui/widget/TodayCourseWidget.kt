@@ -6,14 +6,12 @@ import android.appwidget.AppWidgetProvider
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
-import android.os.Build
 import android.view.View
 import android.widget.RemoteViews
 
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.constant.Constants
 import com.weilylab.xhuschedule.constant.SharedPreferenceConstant
-import com.weilylab.xhuschedule.service.WidgetUpdateService
 import com.weilylab.xhuschedule.service.widget.TodayCourseWidgetService
 import com.weilylab.xhuschedule.utils.CalendarUtil
 import com.weilylab.xhuschedule.utils.WidgetUtil
@@ -40,11 +38,8 @@ class TodayCourseWidget : AppWidgetProvider() {
 	private fun updateAppWidget(context: Context, appWidgetManager: AppWidgetManager, appWidgetId: Int, hasData: Boolean = true) {
 		val views = RemoteViews(context.packageName, R.layout.today_course_widget)
 		views.setTextViewText(R.id.appwidget_text, CalendarUtil.getFormattedText())
-		val refreshIntent = Intent(context, WidgetUpdateService::class.java)
-		val refreshPendingIntent = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
-			PendingIntent.getForegroundService(context, 0, refreshIntent, PendingIntent.FLAG_UPDATE_CURRENT)
-		else
-			PendingIntent.getService(context, 0, refreshIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+		val refreshIntent = Intent(Constants.ACTION_WIDGET_UPDATE_BROADCAST)
+		val refreshPendingIntent = PendingIntent.getBroadcast(context, 0, refreshIntent, PendingIntent.FLAG_UPDATE_CURRENT)
 		views.setOnClickPendingIntent(R.id.appwidget_text, refreshPendingIntent)
 		if (!hasData) {
 			views.setViewVisibility(R.id.listView, View.GONE)

@@ -1,17 +1,18 @@
 package com.weilylab.xhuschedule.utils
 
-import android.app.AlarmManager
-import android.app.PendingIntent
 import android.content.Context
-import android.content.Intent
 import android.graphics.Color
 import android.os.Build
 import androidx.appcompat.app.AlertDialog
 import com.weilylab.xhuschedule.R
-import com.weilylab.xhuschedule.service.NotificationService
 import java.util.*
 import android.app.Activity
+import android.app.AlarmManager
+import android.app.PendingIntent
+import android.content.Intent
 import android.view.View
+import com.weilylab.xhuschedule.service.NotificationService
+import vip.mystery0.logs.Logs
 
 object ConfigUtil {
 	private var lastClick = 0L
@@ -62,6 +63,7 @@ object ConfigUtil {
 		}
 		alarmManager.cancel(pendingIntent)//关闭定时器
 		alarmManager.set(AlarmManager.RTC_WAKEUP, CalendarUtil.getNotificationTime(), pendingIntent)
+		Logs.i("setTrigger: 设置定时任务")
 	}
 
 	fun toHexEncoding(color: Int): String {
