@@ -8,12 +8,15 @@ import android.content.Context
 import android.content.Intent
 import android.view.View
 import android.widget.RemoteViews
+import androidx.appcompat.app.AppCompatDelegate
 
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.constant.Constants
 import com.weilylab.xhuschedule.constant.SharedPreferenceConstant
 import com.weilylab.xhuschedule.service.widget.TestListWidgetService
 import com.weilylab.xhuschedule.utils.CalendarUtil
+import com.weilylab.xhuschedule.utils.Color
+import com.weilylab.xhuschedule.utils.ConfigurationUtil
 import com.weilylab.xhuschedule.utils.WidgetUtil
 
 class TestListWidget : AppWidgetProvider() {
@@ -30,6 +33,8 @@ class TestListWidget : AppWidgetProvider() {
 				WidgetUtil.getWidgetIDs(context, SharedPreferenceConstant.FIELD_IDS_EXAM)
 						.forEach { updateAppWidget(context, appWidgetManager, it, false) }
 			} else {
+				WidgetUtil.getWidgetIDs(context, SharedPreferenceConstant.FIELD_IDS_EXAM)
+						.forEach { updateAppWidget(context, appWidgetManager, it) }
 				appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetManager.getAppWidgetIds(ComponentName(context, TestListWidget::class.java)), R.id.listView)
 			}
 		}
@@ -44,9 +49,11 @@ class TestListWidget : AppWidgetProvider() {
 		if (!hasData) {
 			views.setViewVisibility(R.id.listView, View.GONE)
 			views.setViewVisibility(R.id.nullDataView, View.VISIBLE)
+			views.setInt(R.id.nullDataView, "setBackgroundColor", WidgetUtil.getColor(Color.WhiteBackground))
 		} else {
 			views.setViewVisibility(R.id.listView, View.VISIBLE)
 			views.setViewVisibility(R.id.nullDataView, View.GONE)
+			views.setInt(R.id.listView, "setBackgroundColor", WidgetUtil.getColor(Color.WhiteBackground))
 			val intent = Intent(context, TestListWidgetService::class.java)
 			views.setRemoteAdapter(R.id.listView, intent)
 		}

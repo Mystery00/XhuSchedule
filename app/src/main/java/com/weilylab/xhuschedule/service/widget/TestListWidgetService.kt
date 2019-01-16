@@ -6,13 +6,13 @@ import android.view.View
 import android.widget.RemoteViews
 import android.widget.RemoteViewsService
 import com.weilylab.xhuschedule.R
-import com.weilylab.xhuschedule.config.ColorPoolHelper
 import com.weilylab.xhuschedule.constant.Constants
 import com.weilylab.xhuschedule.model.Test
 import com.weilylab.xhuschedule.repository.WidgetRepository
 import com.weilylab.xhuschedule.utils.CalendarUtil
+import com.weilylab.xhuschedule.utils.Color
 import com.weilylab.xhuschedule.utils.ConfigurationUtil
-import kotlin.math.roundToInt
+import com.weilylab.xhuschedule.utils.WidgetUtil
 
 class TestListWidgetService : RemoteViewsService() {
 	override fun onGetViewFactory(intent: Intent?): RemoteViewsFactory = ListRemoteViewFactory(this)
@@ -55,6 +55,10 @@ class TestListWidgetService : RemoteViewsService() {
 			remotesView.setTextViewText(R.id.exam_days, CalendarUtil.getTestDateText(test))
 			remotesView.setTextColor(R.id.exam_name, colorArray[position])
 			remotesView.setTextColor(R.id.exam_no, colorArray[position])
+			remotesView.setTextColor(R.id.exam_location, WidgetUtil.getColor(Color.GrayText))
+			remotesView.setTextColor(R.id.exam_time, WidgetUtil.getColor(Color.GrayText))
+			remotesView.setTextColor(R.id.exam_student, WidgetUtil.getColor(Color.GrayText))
+			remotesView.setTextColor(R.id.exam_days, WidgetUtil.getColor(Color.GrayText))
 			if (!ConfigurationUtil.isEnableMultiUserMode)
 				remotesView.setViewVisibility(R.id.exam_student, View.GONE)
 			else

@@ -16,18 +16,17 @@
 		android:id="@+id/listView"
 		android:layout_width="match_parent"
 		android:layout_height="match_parent"
-		android:layout_below="@id/appwidget_text"
-		android:background="@android:color/white" />
+		android:layout_below="@id/appwidget_text" />
 
 	<FrameLayout
 		android:id="@+id/nullDataView"
 		android:layout_width="match_parent"
 		android:layout_height="match_parent"
 		android:layout_below="@id/appwidget_text"
-		android:background="@android:color/white"
 		android:visibility="gone">
 
 		<TextView
+			android:id="@+id/nullDataViewText"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:layout_gravity="center"
