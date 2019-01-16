@@ -4,8 +4,11 @@ import android.graphics.Color
 import com.weilylab.xhuschedule.config.ColorPoolHelper
 import com.weilylab.xhuschedule.model.Test
 import com.weilylab.xhuschedule.repository.local.CourseLocalDataSource
+import com.weilylab.xhuschedule.repository.local.InitLocalDataSource
 import com.weilylab.xhuschedule.repository.local.StudentLocalDataSource
 import com.weilylab.xhuschedule.repository.local.TestLocalDataSource
+import com.weilylab.xhuschedule.utils.CalendarUtil
+import com.weilylab.xhuschedule.utils.userDo.CourseUtil
 import com.weilylab.xhuschedule.utils.userDo.TestUtil
 import com.weilylab.xhuschedule.utils.userDo.UserUtil
 import com.zhuangfei.timetable.model.Schedule
@@ -23,7 +26,10 @@ object WidgetRepository {
 	fun queryTodayCourse(): List<Schedule> {
 		val studentList = StudentLocalDataSource.queryAllStudentListDo()
 		val mainStudent = UserUtil.findMainStudent(studentList) ?: return emptyList()
+		val week = CalendarUtil.getWeekFromCalendar(InitLocalDataSource.getStartDateTime())
+		val weekIndex = CalendarUtil.getWeekIndex()
 		return CourseLocalDataSource.getRowCourseList(mainStudent)
+				.filter { CourseUtil.isTodayCourse(it, week, weekIndex) }
 	}
 
 	/**
