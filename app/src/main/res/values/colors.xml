@@ -35,6 +35,8 @@
 	<color name="colorTableBackground">#00000000</color>
 	<!--今日课程页面卡片背景色-->
 	<color name="colorTodayBackground">#FFFFFF</color>
+	<!--考试查询选课课号文本颜色-->
+	<color name="colorSecondGrayText">#66000000</color>
 
 	<!--登录页标签颜色-->
 	<color name="login_color_label">#cccccc</color>

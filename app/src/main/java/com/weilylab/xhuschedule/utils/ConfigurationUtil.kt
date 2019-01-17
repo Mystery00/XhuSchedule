@@ -48,6 +48,16 @@ object ConfigurationUtil {
 				.putBoolean(SharedPreferenceConstant.FIELD_SHOW_GPA, value)
 				.apply()
 		get() = sharedPreferences.getBoolean(SharedPreferenceConstant.FIELD_SHOW_GPA, false)
+	var isShowCredit: Boolean
+		set(value) = sharedPreferences.edit()
+				.putBoolean(SharedPreferenceConstant.FIELD_SHOW_CREDIT, value)
+				.apply()
+		get() = sharedPreferences.getBoolean(SharedPreferenceConstant.FIELD_SHOW_CREDIT, false)
+	var isShowCourseType: Boolean
+		set(value) = sharedPreferences.edit()
+				.putBoolean(SharedPreferenceConstant.FIELD_SHOW_COURSE_TYPE, value)
+				.apply()
+		get() = sharedPreferences.getBoolean(SharedPreferenceConstant.FIELD_SHOW_COURSE_TYPE, false)
 	var isShowFailed: Boolean
 		set(value) = sharedPreferences.edit()
 				.putBoolean(SharedPreferenceConstant.FIELD_SHOW_FAILED, value)

@@ -45,6 +45,8 @@
 	<string name="widget_title_query_today_course">今日课表</string>
 
 	<string name="menu_show_gpa">显示绩点</string>
+	<string name="menu_show_credit">显示学分</string>
+	<string name="menu_show_course_type">显示课程类型</string>
 	<string name="menu_show_failed">显示未通过成绩</string>
 	<string name="menu_show_html">显示原始网页</string>
 
@@ -123,6 +125,7 @@
 	<string name="hint_query_test_time">考试时间：%1$s</string>
 	<string name="hint_query_test_location">考试地点：%1$s</string>
 	<string name="hint_query_test_test_no">座位号：%1$s</string>
+	<string name="hint_query_test_test_class_no">选课课号：%1$s</string>
 
 	<string name="title_dialog_share_with_friends">分享给朋友们</string>
 

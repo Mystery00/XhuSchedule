@@ -5,7 +5,13 @@
 			android:id="@+id/action_show_gpa"
 			android:title="@string/menu_show_gpa" />
 		<item
+			android:id="@+id/action_show_credit"
+			android:title="@string/menu_show_credit" />
+		<item
+			android:id="@+id/action_show_course_type"
+			android:title="@string/menu_show_course_type" />
+		<item
 			android:id="@+id/action_show_failed"
-			android:title="@string/menu_show_failed"/>
+			android:title="@string/menu_show_failed" />
 	</group>
 </menu>

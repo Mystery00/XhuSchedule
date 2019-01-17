@@ -13,5 +13,6 @@ class QueryTestRecyclerViewAdapter(val context: Context) : BaseBindingRecyclerVi
 		binding.textViewTestTime.text = context.getString(R.string.hint_query_test_time, data.time)
 		binding.textViewTestLocation.text = context.getString(R.string.hint_query_test_location, data.location)
 		binding.textViewTestNo.text = context.getString(R.string.hint_query_test_test_no, data.testno)
+		binding.textViewTestClassNo.text=context.getString(R.string.hint_query_test_test_class_no, data.no)
 	}
 }

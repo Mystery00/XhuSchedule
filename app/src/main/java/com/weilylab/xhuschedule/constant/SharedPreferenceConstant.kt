@@ -29,6 +29,8 @@ object SharedPreferenceConstant {
 	const val FIELD_CUSTOM_BACKGROUND_IMAGE = "config_custom_background_image"
 	const val FIELD_NIGHT_MODE = "config_night_mode"
 	const val FIELD_SHOW_GPA = "config_show_gpa"
+	const val FIELD_SHOW_CREDIT = "config_show_credit"
+	const val FIELD_SHOW_COURSE_TYPE = "config_show_course_type"
 	const val FIELD_SHOW_FAILED = "config_show_failed"
 	const val FIELD_NOTIFICATION_COURSE = "config_notification_course"
 	const val FIELD_NOTIFICATION_EXAM = "config_notification_exam"

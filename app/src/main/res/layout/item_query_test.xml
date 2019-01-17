@@ -31,6 +31,7 @@
 			android:id="@+id/textViewTestDate"
 			android:layout_width="0dp"
 			android:layout_height="wrap_content"
+			android:textColor="@color/colorGrayText"
 			app:layout_constraintBottom_toTopOf="@id/textViewTestTime"
 			app:layout_constraintEnd_toEndOf="parent"
 			app:layout_constraintStart_toStartOf="parent"
@@ -40,6 +41,7 @@
 			android:id="@+id/textViewTestTime"
 			android:layout_width="0dp"
 			android:layout_height="wrap_content"
+			android:textColor="@color/colorGrayText"
 			app:layout_constraintBottom_toTopOf="@id/textViewTestLocation"
 			app:layout_constraintEnd_toEndOf="parent"
 			app:layout_constraintStart_toStartOf="parent"
@@ -49,6 +51,7 @@
 			android:id="@+id/textViewTestLocation"
 			android:layout_width="0dp"
 			android:layout_height="wrap_content"
+			android:textColor="@color/colorGrayText"
 			app:layout_constraintBottom_toTopOf="@id/textViewTestNo"
 			app:layout_constraintEnd_toEndOf="parent"
 			app:layout_constraintStart_toStartOf="parent"
@@ -58,10 +61,22 @@
 			android:id="@+id/textViewTestNo"
 			android:layout_width="0dp"
 			android:layout_height="wrap_content"
-			app:layout_constraintBottom_toBottomOf="parent"
+			android:textColor="@color/colorGrayText"
+			app:layout_constraintBottom_toTopOf="@id/textViewTestClassNo"
 			app:layout_constraintEnd_toEndOf="parent"
 			app:layout_constraintStart_toStartOf="parent"
 			app:layout_constraintTop_toBottomOf="@id/textViewTestLocation" />
+
+		<TextView
+			android:id="@+id/textViewTestClassNo"
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:textColor="@color/colorSecondGrayText"
+			android:textSize="12sp"
+			app:layout_constraintBottom_toBottomOf="parent"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintTop_toBottomOf="@id/textViewTestNo" />
 
 	</androidx.constraintlayout.widget.ConstraintLayout>
 

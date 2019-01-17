@@ -9,7 +9,7 @@
 	<!--所有界面需要是白色的颜色 背景-->
 	<color name="colorWhiteBackground">#242424</color>
 	<!--所有界面需要是默认色的颜色 文本-->
-	<color name="colorGrayText">#FFFFFF</color>
+	<color name="colorGrayText">#8AFFFFFF</color>
 	<!--所有界面需要是黑色的颜色 文本-->
 	<color name="colorBlackText">#FFFFFF</color>
 	<!--无数据页面文本颜色-->
@@ -35,6 +35,9 @@
 	<color name="colorTableBackground">#242424</color>
 	<!--今日课程页面卡片背景色-->
 	<color name="colorTodayBackground">#484848</color>
+	<!--考试查询选课课号文本颜色-->
+	<color name="colorSecondGrayText">#66FFFFFF</color>
+
 	<!--通过这个属性获取是否是夜间模式-->
 	<color name="isNight">#000000</color>
 </resources>

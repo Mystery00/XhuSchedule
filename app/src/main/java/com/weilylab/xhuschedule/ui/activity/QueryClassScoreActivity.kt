@@ -196,6 +196,8 @@ class QueryClassScoreActivity : XhuBaseActivity(R.layout.activity_query_class_sc
 	override fun onCreateOptionsMenu(menu: Menu): Boolean {
 		menuInflater.inflate(R.menu.menu_query_score, menu)
 		menu.findItem(R.id.action_show_gpa).isChecked = ConfigurationUtil.isShowGpa
+		menu.findItem(R.id.action_show_credit).isChecked = ConfigurationUtil.isShowCredit
+		menu.findItem(R.id.action_show_course_type).isChecked = ConfigurationUtil.isShowCourseType
 		menu.findItem(R.id.action_show_failed).isChecked = ConfigurationUtil.isShowFailed
 		return true
 	}
@@ -206,6 +208,20 @@ class QueryClassScoreActivity : XhuBaseActivity(R.layout.activity_query_class_sc
 				item.isChecked = !item.isChecked
 				ConfigurationUtil.isShowGpa = item.isChecked
 				queryClassScoreRecyclerViewAdapter.notifyDataSetChanged()
+				true
+			}
+			R.id.action_show_credit -> {
+				item.isChecked = !item.isChecked
+				ConfigurationUtil.isShowCredit = item.isChecked
+				if (queryClassScoreViewModel.scoreList.value != null && queryClassScoreViewModel.scoreList.value!!.data != null)
+					updateScoreList(queryClassScoreViewModel.scoreList.value!!.data!!)
+				true
+			}
+			R.id.action_show_course_type -> {
+				item.isChecked = !item.isChecked
+				ConfigurationUtil.isShowCourseType = item.isChecked
+				if (queryClassScoreViewModel.scoreList.value != null && queryClassScoreViewModel.scoreList.value!!.data != null)
+					updateScoreList(queryClassScoreViewModel.scoreList.value!!.data!!)
 				true
 			}
 			R.id.action_show_failed -> {
