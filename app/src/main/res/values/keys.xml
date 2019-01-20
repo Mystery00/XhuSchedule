@@ -37,6 +37,7 @@
 	<string name="key_night_mode" translatable="false">key_night_mode</string>
 	<string name="key_enable_viewpager_transform" translatable="false">key_enable_viewpager_transform</string>
 	<string name="key_disable_jrsc" translatable="false">key_disable_jrsc</string>
+	<string name="key_tint_navigation_bar" translatable="false">key_tint_navigation_bar</string>
 	<string name="key_reset_user_img" translatable="false">key_reset_user_img</string>
 	<string name="key_reset_background_img" translatable="false">key_reset_background_img</string>
 	<string name="key_query_score_class" translatable="false">key_query_score_class</string>
@@ -70,6 +71,7 @@
 	<string name="title_night_mode">夜间模式</string>
 	<string name="title_enable_viewpager_transform">启用主页面切换动画</string>
 	<string name="title_disable_jrsc">禁用今日诗词</string>
+	<string name="title_tint_navigation_bar">导航栏着色（Android 8.0+）</string>
 	<string name="title_notification_course">课程提醒</string>
 	<string name="title_notification_exam">考试提醒</string>
 	<string name="title_notification_time">提醒时间</string>
@@ -91,6 +93,7 @@
 	<string name="summary_current_year_and_term">当前学期：%1$s学年 第%2$s学期</string>
 	<string name="summary_custom_start_time">当前开学时间：%1$s</string>
 	<string name="summary_enable_multi_user_mode">注意：如果多个用户的课表存在冲突的情况，表格可能会变得很乱，请确定您开启这个模式的意义！</string>
+	<string name="summary_tint_navigation_bar">与状态栏一致</string>
 	<string name="summary_icon" translatable="false">\@爱吃饭的越越</string>
 	<string name="summary_back" translatable="false">\@pan</string>
 	<string name="summary_ui" translatable="false">\@Johnny Zen</string>

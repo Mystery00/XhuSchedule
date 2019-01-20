@@ -49,6 +49,7 @@ class SettingsPreferenceFragment : BasePreferenceFragment(R.xml.preference_setti
 	private val nightModePreference: Preference by lazy { findPreferenceById(R.string.key_night_mode) }
 	private val enableViewPagerTransformPreference: CheckBoxPreference by lazy { findPreferenceById(R.string.key_enable_viewpager_transform) as CheckBoxPreference }
 	private val disableJRSCPreference: CheckBoxPreference by lazy { findPreferenceById(R.string.key_disable_jrsc) as CheckBoxPreference }
+	private val tintNavigationBarPreference: CheckBoxPreference by lazy { findPreferenceById(R.string.key_tint_navigation_bar) as CheckBoxPreference }
 	private val resetUserImgPreference: Preference by lazy { findPreferenceById(R.string.key_reset_user_img) }
 	private val resetBackgroundPreference: Preference by lazy { findPreferenceById(R.string.key_reset_background_img) }
 	private val notificationCoursePreference: CheckBoxPreference by lazy { findPreferenceById(R.string.key_notification_course) as CheckBoxPreference }
@@ -75,6 +76,8 @@ class SettingsPreferenceFragment : BasePreferenceFragment(R.xml.preference_setti
 		super.initPreference()
 		enableViewPagerTransformPreference.isChecked = ConfigurationUtil.enableViewPagerTransform
 		disableJRSCPreference.isChecked = ConfigurationUtil.disableJRSC
+		tintNavigationBarPreference.isChecked = ConfigurationUtil.tintNavigationBar
+		tintNavigationBarPreference.isEnabled = Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
 		autoCheckUpdatePreference.isChecked = ConfigurationUtil.autoCheckUpdate
 		notificationCoursePreference.isChecked = ConfigurationUtil.notificationCourse
 		notificationExamPreference.isChecked = ConfigurationUtil.notificationExam
@@ -130,6 +133,18 @@ class SettingsPreferenceFragment : BasePreferenceFragment(R.xml.preference_setti
 		}
 		disableJRSCPreference.setOnPreferenceChangeListener { _, _ ->
 			ConfigurationUtil.disableJRSC = !disableJRSCPreference.isChecked
+			snackBarMessage(R.string.hint_need_restart, { snackBar ->
+				snackBar.setAction(R.string.action_restart) {
+					val intent = activity!!.packageManager.getLaunchIntentForPackage(activity!!.packageName)
+					intent?.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+					activity!!.startActivity(intent)
+					activity!!.finish()
+				}
+			})
+			true
+		}
+		tintNavigationBarPreference.setOnPreferenceChangeListener { _, _ ->
+			ConfigurationUtil.tintNavigationBar = !tintNavigationBarPreference.isChecked
 			snackBarMessage(R.string.hint_need_restart, { snackBar ->
 				snackBar.setAction(R.string.action_restart) {
 					val intent = activity!!.packageManager.getLaunchIntentForPackage(activity!!.packageName)

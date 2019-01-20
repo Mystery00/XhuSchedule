@@ -143,4 +143,9 @@ object ConfigurationUtil {
 				.putBoolean(SharedPreferenceConstant.FIELD_DISABLE_JRSC, value)
 				.apply()
 		get() = sharedPreferences.getBoolean(SharedPreferenceConstant.FIELD_DISABLE_JRSC, false)
+	var tintNavigationBar: Boolean
+		set(value) = sharedPreferences.edit()
+				.putBoolean(SharedPreferenceConstant.FIELD_TINT_NAVIGATION_BAR, value)
+				.apply()
+		get() = sharedPreferences.getBoolean(SharedPreferenceConstant.FIELD_TINT_NAVIGATION_BAR, false)
 }

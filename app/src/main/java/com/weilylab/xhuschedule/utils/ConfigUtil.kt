@@ -99,7 +99,11 @@ object ConfigUtil {
 		when {
 			Build.VERSION.SDK_INT >= Build.VERSION_CODES.M -> {//6.0
 				activity.window.statusBarColor = Color.WHITE
-				activity.window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+				if (ConfigurationUtil.tintNavigationBar && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+					activity.window.navigationBarColor = Color.WHITE
+					activity.window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR or View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR
+				} else
+					activity.window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
 			}
 		}
 	}
