@@ -67,6 +67,10 @@
 			android:title="@string/title_ui" />
 
 		<Preference
+			android:summary="@string/summary_wx"
+			android:title="@string/title_wx" />
+
+		<Preference
 			android:summary="@string/summary_developer"
 			android:title="@string/title_developer">
 

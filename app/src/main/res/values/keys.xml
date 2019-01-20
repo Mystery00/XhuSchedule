@@ -11,7 +11,7 @@
 	<string name="screen_category_about">关于</string>
 	<string name="screen_category_about_version">版本关于</string>
 	<string name="screen_category_about_application">应用关于</string>
-	<string name="screen_category_developer">开发者信息</string>
+	<string name="screen_category_developer">西瓜课表团队出品</string>
 	<string name="screen_category_notification">通知设置</string>
 
 	<string name="key_show_not_week" translatable="false">key_show_not_week</string>
@@ -48,7 +48,8 @@
 	<string name="title_icon_ui">图标以及界面设计</string>
 	<string name="title_back">数据提供</string>
 	<string name="title_ui">产品设计</string>
-	<string name="title_developer">开发者</string>
+	<string name="title_wx">微信小程序端开发</string>
+	<string name="title_developer">Android端开发</string>
 	<string name="title_show_not">显示非本周课程</string>
 	<string name="title_custom_start_time">更改开学时间</string>
 	<string name="title_current_year_and_term">更改当前学期</string>
@@ -93,6 +94,7 @@
 	<string name="summary_icon" translatable="false">\@爱吃饭的越越</string>
 	<string name="summary_back" translatable="false">\@pan</string>
 	<string name="summary_ui" translatable="false">\@Johnny Zen</string>
+	<string name="summary_wx" translatable="false">\@Quinn</string>
 	<string name="summary_developer" translatable="false">\@Mystery0</string>
 	<string name="summary_source_code" translatable="false">https://github.com/Mystery00/XhuSchedule</string>
 	<string name="summary_open_source_license" translatable="false">GNU General Public License v3.0</string>
@@ -100,12 +102,12 @@
 	<string name="summary_version_code" translatable="false">@string/app_version_code</string>
 	<string name="summary_notification_time">将会在每天的 %1$s 提醒。</string>
 	<string name="summary_auto_check_update">在每一次启动时自动检查更新，注意，跳过某个版本将会无法使用增量更新</string>
-	<string name="summary_weily_product">点击进入『微力实验室』官网</string>
+	<string name="summary_weily_product">点击访问『微力实验室』官网</string>
 	<string name="summary_weixin">点击跳转，也可以在微信小程序页面直接搜索『西瓜课表』即可使用</string>
 	<string name="summary_jrsc">感谢作者@xenv，点击访问『今日诗词』官网</string>
 
 	<string name="link_developer" translatable="false">https://mystery0.vip/</string>
 	<string name="link_open_source_license" translatable="false">https://github.com/Mystery00/XhuSchedule/blob/master/LICENSE.TXT</string>
-	<string name="link_community_link" translatable="false">https://jq.qq.com/?_wv=1027&#038;k=5Nz3XlU</string>
+	<string name="link_community_link" translatable="false">xhuschedule://goto_qq_group?key=JwFjXuBEWPJuevlxn9QhtMRGFSh-geZV</string>
 	<string name="link_jrsc">https://www.jinrishici.com</string>
 </resources>
