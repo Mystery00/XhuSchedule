@@ -38,7 +38,7 @@ class CheckUpdateService : Service() {
 	override fun onCreate() {
 		super.onCreate()
 		val notification = NotificationCompat.Builder(this, Constants.NOTIFICATION_CHANNEL_ID_DEFAULT)
-				.setSmallIcon(R.drawable.ic_stat_init)
+				.setSmallIcon(R.mipmap.ic_stat_init)
 				.setContentText(getString(R.string.hint_foreground_notification))
 				.setAutoCancel(true)
 				.setPriority(NotificationManagerCompat.IMPORTANCE_NONE)

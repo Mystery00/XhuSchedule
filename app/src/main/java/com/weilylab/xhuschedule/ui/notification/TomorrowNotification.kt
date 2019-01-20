@@ -25,7 +25,7 @@ object TomorrowNotification {
 		val title = "您明天有${courseList.size}节课要上哦~"
 		val builder = NotificationCompat.Builder(context, Constants.NOTIFICATION_CHANNEL_ID_TOMORROW)
 				.setDefaults(Notification.DEFAULT_ALL)
-				.setSmallIcon(R.drawable.ic_stat_init)
+				.setSmallIcon(R.mipmap.ic_stat_init)
 				.setContentTitle(title)
 				.setColor(ContextCompat.getColor(context, R.color.colorAccent))
 				.setContentIntent(PendingIntent.getActivity(context, 0, context.packageManager.getLaunchIntentForPackage(context.packageName), PendingIntent.FLAG_UPDATE_CURRENT))
@@ -53,7 +53,7 @@ object TomorrowNotification {
 		val title = "您明天有${testList.size}门考试，记得带上学生证和文具哦~"
 		val builder = NotificationCompat.Builder(context, Constants.NOTIFICATION_CHANNEL_ID_TOMORROW)
 				.setDefaults(Notification.DEFAULT_ALL)
-				.setSmallIcon(R.drawable.ic_stat_init)
+				.setSmallIcon(R.mipmap.ic_stat_init)
 				.setContentTitle(title)
 				.setColor(ContextCompat.getColor(context, R.color.colorAccent))
 				.setContentIntent(PendingIntent.getActivity(context, 0, context.packageManager.getLaunchIntentForPackage(context.packageName), PendingIntent.FLAG_UPDATE_CURRENT))

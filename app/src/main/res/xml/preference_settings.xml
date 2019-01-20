@@ -12,6 +12,7 @@
 			android:title="@string/title_background_img" />
 
 		<Preference
+			android:icon="@drawable/ic_night_mode"
 			android:key="@string/key_night_mode"
 			android:title="@string/title_night_mode" />
 
@@ -48,6 +49,7 @@
 			android:title="@string/title_notification_exam" />
 
 		<Preference
+			android:icon="@drawable/ic_notifications"
 			android:key="@string/key_notification_time"
 			android:title="@string/title_notification_time" />
 
@@ -56,11 +58,13 @@
 	<PreferenceCategory android:title="@string/title_other">
 
 		<CheckBoxPreference
+			android:icon="@drawable/ic_auto_check_update"
 			android:key="@string/key_auto_check_update"
 			android:summary="@string/summary_auto_check_update"
 			android:title="@string/title_auto_check_update" />
 
 		<Preference
+			android:icon="@drawable/ic_weily_studio"
 			android:summary="@string/summary_weily_product"
 			android:title="@string/title_weily_product">
 			<intent
@@ -69,15 +73,19 @@
 		</Preference>
 
 		<Preference
+			android:icon="@drawable/ic_wx_mini_program"
 			android:key="@string/key_weixin"
 			android:summary="@string/summary_weixin"
 			android:title="@string/title_weixin" />
 
 		<Preference
+			android:icon="@drawable/ic_check_update"
 			android:key="@string/key_check_update"
 			android:title="@string/title_check_update" />
 
-		<Preference android:title="@string/title_community_link">
+		<Preference
+			android:icon="@drawable/ic_qq_group"
+			android:title="@string/title_community_link">
 
 			<intent
 				android:action="android.intent.action.VIEW"

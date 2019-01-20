@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 	<Preference
+		android:icon="@drawable/ic_query_class_score"
 		android:key="@string/key_query_score_class"
 		android:title="@string/title_query_score_class">
 		<intent
@@ -9,6 +10,7 @@
 			android:targetPackage="@string/app_package_name" />
 	</Preference>
 	<Preference
+		android:icon="@drawable/ic_query_exp_score"
 		android:key="@string/key_query_score_experiment"
 		android:title="@string/title_query_score_experiment">
 		<intent
@@ -17,6 +19,7 @@
 			android:targetPackage="@string/app_package_name" />
 	</Preference>
 	<Preference
+		android:icon="@drawable/ic_query_cet_score"
 		android:key="@string/key_query_score_cet"
 		android:title="@string/title_query_score_cet">
 		<intent

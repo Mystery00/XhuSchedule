@@ -27,6 +27,7 @@
 			android:title="@string/title_open_source_license_about" />
 
 		<Preference
+			android:icon="@mipmap/ic_jrsc"
 			android:summary="@string/summary_jrsc"
 			android:title="@string/title_jrsc">
 
