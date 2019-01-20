@@ -25,9 +25,9 @@ object RetrofitFactory {
 	private val client by lazy {
 		OkHttpClient.Builder()
 				.retryOnConnectionFailure(true)
-				.connectTimeout(20, TimeUnit.SECONDS)
-				.readTimeout(20, TimeUnit.SECONDS)
-				.writeTimeout(20, TimeUnit.SECONDS)
+				.connectTimeout(25, TimeUnit.SECONDS)
+				.readTimeout(25, TimeUnit.SECONDS)
+				.writeTimeout(25, TimeUnit.SECONDS)
 				.addInterceptor(LoadCookiesInterceptor())
 				.addInterceptor(SaveCookiesInterceptor())
 				.addInterceptor(DebugInterceptor())
