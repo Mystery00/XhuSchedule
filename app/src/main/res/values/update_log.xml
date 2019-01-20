@@ -1,17 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 	<string-array name="update_log">
-		<item>新增：点击诗词查看全诗</item>
-		<item>新增：考试查询页面快速切换用户</item>
+		<item>新增：成绩查询显示学分、课程类型</item>
+		<item>新增：考试查询显示选课课号</item>
 		<item> </item>
-		<item>修复：桌面小部件刷新问题以及数据不准确（如果遇到没有及时更新可以点击顶部的时间进行手动刷新）</item>
-		<item>修复：考试显示小部件在多用户模式下依旧显示主用户的信息</item>
-		<item>修复：在没有课程的情况下不显示今日诗词</item>
-		<item>修复：因为其他原因导致的部分循环请求</item>
-		<item>修复：明日课程、考试提醒内容错误</item>
+		<item>修复：桌面小部件文字颜色错误</item>
+		<item>修复：桌面小部件-今日课程课程显示错误</item>
+		<item>修复：增加连接超时时间阈值</item>
+		<item>修复：在 ipv-6 网络下，部分设备无法使用课表</item>
 		<item> </item>
-		<item>优化：主界面课程卡片弹出和消失动画</item>
-		<item>优化：明日提醒执行逻辑</item>
-		<item>优化：部分细节</item>
+		<item>优化：加入应用反馈群不再通过浏览器跳转</item>
 	</string-array>
 </resources>

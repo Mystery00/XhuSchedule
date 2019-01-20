@@ -8,7 +8,7 @@ plugins {
 autoVersion {
 	major = 2
 	minor = 3
-	patch = 0
+	patch = 1
 	beta = 0
 	alpha = 0
 	isShowBuild = false
