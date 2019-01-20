@@ -17,36 +17,13 @@ object PackageUtil {
 	/**
 	 * 判断手机是否安装某个应用
 	 *
-	 * @param appPackageName 应用包名
-	 * @return true：安装，false：未安装
-	 */
-	fun isApplicationAvailable(appPackageName: String): Boolean {
-		val packageManager = APP.context.packageManager// 获取packageManager
-		val installedPackages = packageManager.getInstalledPackages(0)// 获取所有已安装程序的包信息
-		if (installedPackages != null)
-			for (i in installedPackages.indices) {
-				val pn = installedPackages[i].packageName
-				if (appPackageName == pn)
-					return true
-			}
-		return false
-	}
-
-	/**
-	 * 判断手机是否安装某个应用
-	 *
 	 * @param arrayList 应用包名
 	 * @return true：安装，false：未安装
 	 */
 	fun isApplicationAvailable(arrayList: ArrayList<String>): Boolean {
 		val packageManager = APP.context.packageManager// 获取packageManager
-		val installedPackages = packageManager.getInstalledPackages(0)// 获取所有已安装程序的包信息
-		if (installedPackages != null)
-			for (i in installedPackages.indices) {
-				val pn = installedPackages[i].packageName
-				if (arrayList.contains(pn))
-					return true
-			}
-		return false
+		val installedPackages = packageManager.getInstalledPackages(0)
+				.map { it.packageName }// 获取所有已安装程序的包信息
+		return installedPackages.containsAll(arrayList)
 	}
 }

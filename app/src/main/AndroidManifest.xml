@@ -33,14 +33,11 @@
 			android:theme="@style/SplashTheme">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN" />
-
 				<category android:name="android.intent.category.LAUNCHER" />
 			</intent-filter>
 			<intent-filter>
 				<action android:name="com.weilylab.xhuschedule.NOTIFICATION_VIEW" />
-
 				<category android:name="android.intent.category.DEFAULT" />
-
 				<data
 					android:host="main"
 					android:scheme="xhuschedule" />
@@ -115,6 +112,20 @@
 		<activity
 			android:name=".ui.activity.LinkToWeiXinMiniProgramActivity"
 			android:theme="@android:style/Theme.NoDisplay" />
+		<activity
+			android:name=".ui.activity.GotoQQGroupActivity"
+			android:theme="@android:style/Theme.NoDisplay">
+			<intent-filter>
+				<action android:name="android.intent.action.VIEW" />
+
+				<category android:name="android.intent.category.DEFAULT" />
+				<category android:name="android.intent.category.BROWSABLE" />
+
+				<data
+					android:host="goto_qq_group"
+					android:scheme="xhuschedule" />
+			</intent-filter>
+		</activity>
 		<activity
 			android:name=".ui.activity.ClassCourseColorActivity"
 			android:screenOrientation="portrait"
