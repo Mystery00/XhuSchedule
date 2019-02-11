@@ -50,14 +50,14 @@ android {
 		getByName("debug") {
 			resValue("string", "app_version_name", autoVersion.name)
 			resValue("string", "app_version_code", defaultConfig.versionCode.toString())
-			resValue("string", "app_package_name", defaultConfig.applicationId)
+			resValue("string", "app_package_name", defaultConfig.applicationId!!)
 			isMinifyEnabled = false
 			proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
 		}
 		getByName("release") {
 			resValue("string", "app_version_name", autoVersion.name)
 			resValue("string", "app_version_code", defaultConfig.versionCode.toString())
-			resValue("string", "app_package_name", defaultConfig.applicationId)
+			resValue("string", "app_package_name", defaultConfig.applicationId!!)
 			isMinifyEnabled = true
 			proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
 		}
@@ -89,14 +89,17 @@ dependencies {
 	implementation("com.squareup.retrofit2:retrofit:2.5.0")
 	implementation("com.squareup.retrofit2:adapter-rxjava2:2.5.0")
 	implementation("com.squareup.retrofit2:converter-gson:2.5.0")
-	implementation("com.squareup.okhttp3:logging-interceptor:3.12.0")
+	implementation("com.squareup.okhttp3:logging-interceptor:3.12.1")
 
 	//Mystery0Tools
-	implementation("com.github.Mystery0Tools:Logs:1.3.0")
-	implementation("com.github.Mystery0Tools:Tools:1.6.5")
-	implementation("com.github.Mystery0Tools:CrashHandler:1.0.2")
+	implementation("vip.mystery0.tools:logs:1.3.2")
+	implementation("com.github.Mystery0Tools:Tools:1.6.6")
+	implementation("vip.mystery0.tools:crashhandler:1.0.3")
 	implementation("com.github.Mystery0Tools:BottomTabView:1.0.3")
 	implementation("com.github.Mystery0Tools:RxPackageData:1.0.2")
+
+	//jinrishici
+	implementation("com.jinrishici:android-sdk:1.1")
 
 	//Glide
 	implementation("com.github.bumptech.glide:glide:4.8.0")
