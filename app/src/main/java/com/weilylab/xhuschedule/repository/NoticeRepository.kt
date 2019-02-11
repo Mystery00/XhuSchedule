@@ -4,8 +4,8 @@ import com.weilylab.xhuschedule.constant.Constants
 import com.weilylab.xhuschedule.model.Notice
 import com.weilylab.xhuschedule.repository.local.NoticeLocalDataSource
 import com.weilylab.xhuschedule.repository.remote.NoticeRemoteDataSource
-import com.weilylab.xhuschedule.viewModel.BottomNavigationViewModel
-import com.weilylab.xhuschedule.viewModel.NoticeViewModel
+import com.weilylab.xhuschedule.viewmodel.BottomNavigationViewModel
+import com.weilylab.xhuschedule.viewmodel.NoticeViewModel
 import vip.mystery0.rxpackagedata.PackageData
 
 object NoticeRepository {

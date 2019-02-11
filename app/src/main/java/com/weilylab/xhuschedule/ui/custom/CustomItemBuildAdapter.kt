@@ -9,7 +9,6 @@ import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
 import com.weilylab.xhuschedule.R
-import com.weilylab.xhuschedule.config.APP
 import com.weilylab.xhuschedule.config.ColorPoolHelper
 import com.weilylab.xhuschedule.utils.ConfigurationUtil
 import com.zhuangfei.timetable.TimetableView
@@ -22,11 +21,11 @@ import vip.mystery0.tools.utils.DensityTools
 class CustomItemBuildAdapter(private val context: Context,
 							 private val timetableView: TimetableView) : OnItemBuildAdapter() {
 	var week = 0
-	private val counterSize = DensityTools.dp2px(APP.context, 8F)
+	private val counterSize = DensityTools.dp2px(8F)
 
 	override fun onItemUpdate(layout: FrameLayout, textView: TextView, countTextView: TextView, schedule: Schedule, gd: GradientDrawable) {
 		textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 10f)
-		textView.setLineSpacing(DensityTools.dp2px(context,3), 1f)
+		textView.setLineSpacing(DensityTools.dp2px(3), 1f)
 		val layoutParams = countTextView.layoutParams
 		layoutParams.width = counterSize
 		layoutParams.height = counterSize

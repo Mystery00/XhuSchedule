@@ -2,7 +2,7 @@ package com.weilylab.xhuschedule.repository.local
 
 import androidx.lifecycle.MutableLiveData
 import com.weilylab.xhuschedule.model.Notice
-import com.weilylab.xhuschedule.repository.dataSource.NoticeDataSource
+import com.weilylab.xhuschedule.repository.ds.NoticeDataSource
 import com.weilylab.xhuschedule.repository.local.service.NoticeService
 import com.weilylab.xhuschedule.repository.local.service.impl.NoticeServiceImpl
 import vip.mystery0.logs.Logs

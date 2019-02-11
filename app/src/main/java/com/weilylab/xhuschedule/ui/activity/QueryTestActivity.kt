@@ -21,7 +21,7 @@ import com.weilylab.xhuschedule.ui.adapter.QueryTestRecyclerViewAdapter
 import com.weilylab.xhuschedule.utils.userDo.UserUtil
 import vip.mystery0.rxpackagedata.PackageData
 import vip.mystery0.rxpackagedata.Status.*
-import com.weilylab.xhuschedule.viewModel.QueryTestViewModel
+import com.weilylab.xhuschedule.viewmodel.QueryTestViewModel
 import com.zyao89.view.zloading.ZLoadingDialog
 import com.zyao89.view.zloading.Z_TYPE
 import io.reactivex.Observable

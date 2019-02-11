@@ -1,4 +1,4 @@
-package com.weilylab.xhuschedule.repository.dataSource
+package com.weilylab.xhuschedule.repository.ds
 
 import androidx.lifecycle.MutableLiveData
 import vip.mystery0.rxpackagedata.PackageData

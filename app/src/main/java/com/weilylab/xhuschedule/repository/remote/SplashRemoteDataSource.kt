@@ -5,7 +5,7 @@ import com.weilylab.xhuschedule.api.LeanCloudAPI
 import com.weilylab.xhuschedule.factory.GsonFactory
 import com.weilylab.xhuschedule.factory.RetrofitFactory
 import com.weilylab.xhuschedule.model.response.SplashResponse
-import com.weilylab.xhuschedule.repository.dataSource.SplashDataSource
+import com.weilylab.xhuschedule.repository.ds.SplashDataSource
 import com.weilylab.xhuschedule.repository.local.SplashLocalDataSource
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers

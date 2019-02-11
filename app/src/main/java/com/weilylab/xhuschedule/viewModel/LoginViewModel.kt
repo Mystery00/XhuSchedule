@@ -1,4 +1,4 @@
-package com.weilylab.xhuschedule.viewModel
+package com.weilylab.xhuschedule.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel

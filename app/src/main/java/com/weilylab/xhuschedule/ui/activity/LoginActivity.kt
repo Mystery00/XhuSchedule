@@ -49,7 +49,7 @@ import androidx.lifecycle.ViewModelProviders
 import com.weilylab.xhuschedule.base.XhuBaseActivity
 import com.weilylab.xhuschedule.model.Student
 import com.weilylab.xhuschedule.repository.LoginRepository
-import com.weilylab.xhuschedule.viewModel.LoginViewModel
+import com.weilylab.xhuschedule.viewmodel.LoginViewModel
 import android.view.WindowManager
 import vip.mystery0.logs.Logs
 import vip.mystery0.rxpackagedata.PackageData

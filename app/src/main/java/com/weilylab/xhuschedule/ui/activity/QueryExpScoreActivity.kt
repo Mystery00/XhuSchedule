@@ -18,7 +18,7 @@ import com.weilylab.xhuschedule.ui.adapter.QueryExpScoreRecyclerViewAdapter
 import com.weilylab.xhuschedule.utils.CalendarUtil
 import vip.mystery0.rxpackagedata.PackageData
 import vip.mystery0.rxpackagedata.Status
-import com.weilylab.xhuschedule.viewModel.QueryExpScoreViewModel
+import com.weilylab.xhuschedule.viewmodel.QueryExpScoreViewModel
 import kotlinx.android.synthetic.main.activity_query_exp_score.*
 import vip.mystery0.logs.Logs
 import vip.mystery0.tools.utils.DensityTools
@@ -84,7 +84,7 @@ class QueryExpScoreActivity : XhuBaseActivity(R.layout.activity_query_exp_score)
 		scoreListRecyclerView.addItemDecoration(dividerItemDecoration)
 		scoreListRecyclerView.adapter = queryExpScoreRecyclerViewAdapter
 		val layoutParams = scoreListRecyclerView.layoutParams
-		layoutParams.width = DensityTools.getScreenWidth(this)
+		layoutParams.width = DensityTools.getScreenWidth()
 		scoreListRecyclerView.layoutParams = layoutParams
 	}
 

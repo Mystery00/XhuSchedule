@@ -14,7 +14,7 @@ import com.weilylab.xhuschedule.databinding.LayoutNullDataViewBinding
 import com.weilylab.xhuschedule.model.Course
 import com.weilylab.xhuschedule.repository.local.CourseLocalDataSource
 import com.weilylab.xhuschedule.ui.adapter.ClassCourseColorRecyclerViewAdapter
-import com.weilylab.xhuschedule.viewModel.ClassCourseColorViewModel
+import com.weilylab.xhuschedule.viewmodel.ClassCourseColorViewModel
 import com.zyao89.view.zloading.ZLoadingDialog
 import com.zyao89.view.zloading.Z_TYPE
 import kotlinx.android.synthetic.main.activity_class_course_color.*

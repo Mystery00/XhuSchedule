@@ -80,7 +80,7 @@ class CustomWeekView : LinearLayout, WeekViewEnable<CustomWeekView> {
 			val itemView = layoutWeekViewBinding.weekViewContainer.getChildAt(curWeek - 1)
 			itemView.background = ContextCompat.getDrawable(context, R.drawable.weekview_thisweek)
 		}
-		layoutWeekViewBinding.nestedScrollView.scrollTo(curWeek * DensityTools.dp2px(context, 59F), 0)
+		layoutWeekViewBinding.nestedScrollView.scrollTo(curWeek * DensityTools.dp2px(59F), 0)
 		return this
 	}
 

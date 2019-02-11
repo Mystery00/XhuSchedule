@@ -1,7 +1,7 @@
 package com.weilylab.xhuschedule.repository.local
 
 import androidx.lifecycle.MutableLiveData
-import com.weilylab.xhuschedule.repository.dataSource.InitDataSource
+import com.weilylab.xhuschedule.repository.ds.InitDataSource
 import com.weilylab.xhuschedule.utils.ConfigurationUtil
 import vip.mystery0.rxpackagedata.PackageData
 import java.util.*

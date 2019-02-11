@@ -3,7 +3,6 @@ package com.weilylab.xhuschedule.ui.fragment
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
-import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.bumptech.glide.Glide
@@ -19,7 +18,7 @@ import com.weilylab.xhuschedule.ui.activity.*
 import com.weilylab.xhuschedule.utils.ConfigurationUtil
 import com.weilylab.xhuschedule.utils.LayoutRefreshConfigUtil
 import com.weilylab.xhuschedule.utils.ShareUtil
-import com.weilylab.xhuschedule.viewModel.BottomNavigationViewModel
+import com.weilylab.xhuschedule.viewmodel.BottomNavigationViewModel
 import vip.mystery0.logs.Logs
 import vip.mystery0.rxpackagedata.Status.*
 import vip.mystery0.rxpackagedata.rx.RxObservable

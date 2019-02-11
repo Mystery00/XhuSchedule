@@ -17,7 +17,7 @@ import com.weilylab.xhuschedule.ui.custom.CustomItemBuildAdapter
 import com.weilylab.xhuschedule.utils.CalendarUtil
 import com.weilylab.xhuschedule.utils.ConfigurationUtil
 import com.weilylab.xhuschedule.utils.LayoutRefreshConfigUtil
-import com.weilylab.xhuschedule.viewModel.BottomNavigationViewModel
+import com.weilylab.xhuschedule.viewmodel.BottomNavigationViewModel
 import com.zhuangfei.timetable.listener.ISchedule
 import com.zhuangfei.timetable.listener.OnSlideBuildAdapter
 import com.zhuangfei.timetable.model.Schedule
@@ -112,7 +112,7 @@ class TableFragment : BaseBottomNavigationFragment<FragmentTableBinding>(R.layou
 		binding.timeTableView.viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
 			override fun onGlobalLayout() {
 				binding.timeTableView.viewTreeObserver.removeOnGlobalLayoutListener(this)
-				val timeTableHeight = binding.timeTableView.height - DensityTools.dp2px(activity!!, 35F)
+				val timeTableHeight = binding.timeTableView.height - DensityTools.dp2px(35F)
 				val itemHeight = binding.timeTableView.itemHeight()
 				if (itemHeight * 11 < timeTableHeight)
 					bottomNavigationViewModel.itemHeight.value = timeTableHeight / 11

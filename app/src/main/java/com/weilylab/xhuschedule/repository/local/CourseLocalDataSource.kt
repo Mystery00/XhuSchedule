@@ -3,7 +3,7 @@ package com.weilylab.xhuschedule.repository.local
 import androidx.lifecycle.MutableLiveData
 import com.weilylab.xhuschedule.model.Course
 import com.weilylab.xhuschedule.model.Student
-import com.weilylab.xhuschedule.repository.dataSource.CourseDataSource
+import com.weilylab.xhuschedule.repository.ds.CourseDataSource
 import com.weilylab.xhuschedule.repository.local.service.CourseService
 import com.weilylab.xhuschedule.repository.local.service.impl.CourseServiceImpl
 import com.weilylab.xhuschedule.repository.remote.CourseRemoteDataSource

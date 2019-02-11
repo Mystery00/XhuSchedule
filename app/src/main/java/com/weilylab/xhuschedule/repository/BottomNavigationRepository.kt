@@ -11,7 +11,7 @@ import com.weilylab.xhuschedule.utils.userDo.UserUtil
 import vip.mystery0.rxpackagedata.PackageData
 import vip.mystery0.rxpackagedata.rx.RxObservable
 import vip.mystery0.rxpackagedata.rx.RxObserver
-import com.weilylab.xhuschedule.viewModel.BottomNavigationViewModel
+import com.weilylab.xhuschedule.viewmodel.BottomNavigationViewModel
 import vip.mystery0.rxpackagedata.Status.*
 
 object BottomNavigationRepository {

@@ -19,7 +19,7 @@ import com.weilylab.xhuschedule.ui.adapter.FragmentTodayRecyclerViewAdapter
 import com.weilylab.xhuschedule.utils.CalendarUtil
 import com.weilylab.xhuschedule.utils.LayoutRefreshConfigUtil
 import vip.mystery0.rxpackagedata.Status.*
-import com.weilylab.xhuschedule.viewModel.BottomNavigationViewModel
+import com.weilylab.xhuschedule.viewmodel.BottomNavigationViewModel
 import com.zhuangfei.timetable.model.Schedule
 import vip.mystery0.logs.Logs
 import vip.mystery0.rxpackagedata.PackageData

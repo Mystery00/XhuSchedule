@@ -9,7 +9,7 @@ import com.weilylab.xhuschedule.model.CetScore
 import com.weilylab.xhuschedule.model.ClassScore
 import com.weilylab.xhuschedule.model.ExpScore
 import com.weilylab.xhuschedule.model.Student
-import com.weilylab.xhuschedule.repository.dataSource.ScoreDataSource
+import com.weilylab.xhuschedule.repository.ds.ScoreDataSource
 import com.weilylab.xhuschedule.repository.local.ScoreLocalDataSource
 import com.weilylab.xhuschedule.utils.NetworkUtil
 import com.weilylab.xhuschedule.utils.userDo.ScoreUtil

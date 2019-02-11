@@ -3,9 +3,9 @@ package com.weilylab.xhuschedule.repository
 import com.weilylab.xhuschedule.model.Student
 import com.weilylab.xhuschedule.repository.local.StudentLocalDataSource
 import com.weilylab.xhuschedule.repository.remote.ScoreRemoteDataSource
-import com.weilylab.xhuschedule.viewModel.QueryCetScoreViewModelHelper
-import com.weilylab.xhuschedule.viewModel.QueryClassScoreViewModel
-import com.weilylab.xhuschedule.viewModel.QueryExpScoreViewModel
+import com.weilylab.xhuschedule.viewmodel.QueryCetScoreViewModelHelper
+import com.weilylab.xhuschedule.viewmodel.QueryClassScoreViewModel
+import com.weilylab.xhuschedule.viewmodel.QueryExpScoreViewModel
 import vip.mystery0.rxpackagedata.PackageData
 import vip.mystery0.rxpackagedata.Status.*
 

@@ -6,7 +6,7 @@ import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.base.XhuBaseActivity
 import com.weilylab.xhuschedule.databinding.ActivityQueryCetScoreShowBinding
 import com.weilylab.xhuschedule.model.CetScore
-import com.weilylab.xhuschedule.viewModel.QueryCetScoreViewModelHelper
+import com.weilylab.xhuschedule.viewmodel.QueryCetScoreViewModelHelper
 import kotlinx.android.synthetic.main.activity_query_cet_score_show.*
 import vip.mystery0.logs.Logs
 import vip.mystery0.rxpackagedata.PackageData

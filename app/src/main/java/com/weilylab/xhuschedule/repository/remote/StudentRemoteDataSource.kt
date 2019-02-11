@@ -6,7 +6,7 @@ import com.weilylab.xhuschedule.listener.DoSaveListener
 import com.weilylab.xhuschedule.listener.RequestListener
 import com.weilylab.xhuschedule.model.Student
 import com.weilylab.xhuschedule.model.StudentInfo
-import com.weilylab.xhuschedule.repository.dataSource.StudentDataSource
+import com.weilylab.xhuschedule.repository.ds.StudentDataSource
 import com.weilylab.xhuschedule.repository.local.StudentLocalDataSource
 import com.weilylab.xhuschedule.utils.NetworkUtil
 import com.weilylab.xhuschedule.utils.userDo.UserUtil

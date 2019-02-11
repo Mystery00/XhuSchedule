@@ -4,7 +4,6 @@ import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.LinearLayout
-import com.weilylab.xhuschedule.config.APP
 import vip.mystery0.tools.utils.DensityTools
 import com.weilylab.xhuschedule.databinding.ItemCustomDateviewBinding
 import com.weilylab.xhuschedule.databinding.ItemCustomDateviewFirstBinding
@@ -15,7 +14,7 @@ import com.zhuangfei.timetable.utils.ColorUtils
 class CustomDateAdapter : OnDateBuildAapter() {
 	private lateinit var itemCustomDateviewFirstBinding: ItemCustomDateviewFirstBinding
 	private val bindingArray = arrayOfNulls<ItemCustomDateviewBinding>(7)
-	private val heightPx = DensityTools.dp2px(APP.context, 35f)
+	private val heightPx = DensityTools.dp2px(35f)
 
 	override fun onInit(layout: LinearLayout?, alpha: Float) {
 	}

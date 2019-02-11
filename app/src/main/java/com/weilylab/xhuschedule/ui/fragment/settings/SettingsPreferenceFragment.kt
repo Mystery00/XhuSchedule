@@ -271,7 +271,7 @@ class SettingsPreferenceFragment : BasePreferenceFragment(R.xml.preference_setti
 				cropImage(Matisse.obtainResult(data)[0], REQUEST_CROP_USER, 500, 500)
 			}
 			REQUEST_CHOOSE_BACKGROUND -> if (resultCode == Activity.RESULT_OK) {
-				cropImage(Matisse.obtainResult(data)[0], REQUEST_CROP_BACKGROUND, DensityTools.getScreenWidth(activity!!), DensityTools.getScreenHeight(activity!!))
+				cropImage(Matisse.obtainResult(data)[0], REQUEST_CROP_BACKGROUND, DensityTools.getScreenWidth(), DensityTools.getScreenHeight())
 			}
 			REQUEST_CROP_USER -> if (resultCode == Activity.RESULT_OK) {
 				val file = getFile(requestCode)

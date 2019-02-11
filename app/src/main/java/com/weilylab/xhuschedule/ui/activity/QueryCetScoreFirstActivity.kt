@@ -15,7 +15,7 @@ import com.android.setupwizardlib.view.NavigationBar
 import com.weilylab.xhuschedule.model.Student
 import com.weilylab.xhuschedule.model.StudentInfo
 import com.weilylab.xhuschedule.repository.ScoreRepository
-import com.weilylab.xhuschedule.viewModel.QueryCetScoreViewModelHelper
+import com.weilylab.xhuschedule.viewmodel.QueryCetScoreViewModelHelper
 import com.zyao89.view.zloading.ZLoadingDialog
 import com.zyao89.view.zloading.Z_TYPE
 import vip.mystery0.rxpackagedata.PackageData

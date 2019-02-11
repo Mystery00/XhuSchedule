@@ -1,4 +1,4 @@
-package com.weilylab.xhuschedule.repository.dataSource
+package com.weilylab.xhuschedule.repository.ds
 
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData

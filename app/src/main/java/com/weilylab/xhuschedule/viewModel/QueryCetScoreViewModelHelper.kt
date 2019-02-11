@@ -1,4 +1,4 @@
-package com.weilylab.xhuschedule.viewModel
+package com.weilylab.xhuschedule.viewmodel
 
 import android.graphics.Bitmap
 import androidx.lifecycle.MediatorLiveData

@@ -5,7 +5,7 @@ import com.weilylab.xhuschedule.constant.StringConstant
 import com.weilylab.xhuschedule.listener.DoSaveListener
 import com.weilylab.xhuschedule.listener.RequestListener
 import com.weilylab.xhuschedule.model.Notice
-import com.weilylab.xhuschedule.repository.dataSource.NoticeDataSource
+import com.weilylab.xhuschedule.repository.ds.NoticeDataSource
 import com.weilylab.xhuschedule.repository.local.NoticeLocalDataSource
 import com.weilylab.xhuschedule.utils.NetworkUtil
 import com.weilylab.xhuschedule.utils.userDo.NoticeUtil

@@ -6,7 +6,7 @@ import com.weilylab.xhuschedule.listener.RequestListener
 import com.weilylab.xhuschedule.model.FeedBackToken
 import com.weilylab.xhuschedule.model.Student
 import com.weilylab.xhuschedule.model.StudentInfo
-import com.weilylab.xhuschedule.repository.dataSource.StudentDataSource
+import com.weilylab.xhuschedule.repository.ds.StudentDataSource
 import com.weilylab.xhuschedule.repository.local.service.StudentService
 import com.weilylab.xhuschedule.repository.local.service.impl.StudentServiceImpl
 import com.weilylab.xhuschedule.repository.remote.StudentRemoteDataSource

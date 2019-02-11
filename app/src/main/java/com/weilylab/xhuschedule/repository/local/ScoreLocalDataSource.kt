@@ -4,7 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import com.weilylab.xhuschedule.model.ClassScore
 import com.weilylab.xhuschedule.model.ExpScore
 import com.weilylab.xhuschedule.model.Student
-import com.weilylab.xhuschedule.repository.dataSource.ScoreDataSource
+import com.weilylab.xhuschedule.repository.ds.ScoreDataSource
 import com.weilylab.xhuschedule.repository.local.service.ScoreService
 import com.weilylab.xhuschedule.repository.local.service.impl.ScoreServiceImpl
 import vip.mystery0.rxpackagedata.PackageData

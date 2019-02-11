@@ -4,7 +4,7 @@ import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import com.weilylab.xhuschedule.model.Student
 import com.weilylab.xhuschedule.model.Test
-import com.weilylab.xhuschedule.repository.dataSource.TestDataSource
+import com.weilylab.xhuschedule.repository.ds.TestDataSource
 import com.weilylab.xhuschedule.repository.local.service.TestService
 import com.weilylab.xhuschedule.repository.local.service.impl.TestServiceImpl
 import com.weilylab.xhuschedule.utils.userDo.TestUtil

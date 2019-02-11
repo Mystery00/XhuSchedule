@@ -5,7 +5,7 @@ import androidx.lifecycle.MediatorLiveData
 import com.weilylab.xhuschedule.config.APP
 import com.weilylab.xhuschedule.constant.SharedPreferenceConstant
 import com.weilylab.xhuschedule.model.response.SplashResponse
-import com.weilylab.xhuschedule.repository.dataSource.SplashDataSource
+import com.weilylab.xhuschedule.repository.ds.SplashDataSource
 import vip.mystery0.rxpackagedata.PackageData
 
 object SplashLocalDataSource : SplashDataSource {

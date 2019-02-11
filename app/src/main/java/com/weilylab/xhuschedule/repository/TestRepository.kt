@@ -3,7 +3,7 @@ package com.weilylab.xhuschedule.repository
 import com.weilylab.xhuschedule.model.Student
 import com.weilylab.xhuschedule.repository.local.StudentLocalDataSource
 import com.weilylab.xhuschedule.repository.remote.TestRemoteDataSource
-import com.weilylab.xhuschedule.viewModel.QueryTestViewModel
+import com.weilylab.xhuschedule.viewmodel.QueryTestViewModel
 import vip.mystery0.rxpackagedata.PackageData
 
 object TestRepository {
