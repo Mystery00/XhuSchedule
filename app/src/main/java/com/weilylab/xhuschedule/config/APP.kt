@@ -51,6 +51,7 @@ import com.weilylab.xhuschedule.utils.NotificationUtil
 import com.weilylab.xhuschedule.utils.PackageUtil
 import vip.mystery0.crashhandler.CrashHandler
 import vip.mystery0.logs.Logs
+import vip.mystery0.tools.ToolsClient
 
 /**
  * Created by myste.
@@ -60,12 +61,10 @@ class APP : MultiDexApplication() {
 		super.onCreate()
 		context = applicationContext
 		instance = this
-		CrashHandler.getInstance(this)
-				.config {
-					it.setFileNameSuffix("log")
-							.setDebug(BuildConfig.DEBUG)
-				}
-				.init()
+		CrashHandler.config {
+			it.setFileNameSuffix("log")
+					.setDebug(BuildConfig.DEBUG)
+		}.init(this)
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && !BuildConfig.DEBUG)//大于指定的sdk再启用日志上传
 			try {
 				CrashReport.initCrashReport(CondomContext.wrap(applicationContext, "Bugly"), "7fe1820ab7", BuildConfig.DEBUG)
@@ -95,6 +94,7 @@ class APP : MultiDexApplication() {
 		Logs.setConfig {
 			it.setShowLog(BuildConfig.DEBUG)
 		}
+		ToolsClient.initWithContext(this)
 	}
 
 	companion object {

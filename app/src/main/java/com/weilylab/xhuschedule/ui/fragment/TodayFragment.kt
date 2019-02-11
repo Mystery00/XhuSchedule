@@ -73,16 +73,16 @@ class TodayFragment : BaseBottomNavigationFragment<FragmentTodayBinding>(R.layou
 		binding.nullDataViewStub.setOnInflateListener { _, inflated -> viewStubBinding = DataBindingUtil.bind(inflated)!! }
 		JRSCRepository.load { data ->
 			binding.jrscLayout.visibility = View.VISIBLE
-			binding.jrscTextView.text = data.content.content
-			val text = "——${data.content.origin.author}《${data.content.origin.title}》"
+			binding.jrscTextView.text = data.data.content
+			val text = "——${data.data.origin.author}《${data.data.origin.title}》"
 			binding.jrscAuthorTextView.text = text
 			binding.jrscLayout.setOnClickListener {
 				val stringBuilder = StringBuilder()
-				data.content.origin.content.forEach { s -> stringBuilder.appendln(s) }
+				data.data.origin.content.forEach { s -> stringBuilder.appendln(s) }
 				val dialogShowJrscBinding = DialogShowJrscBinding.inflate(LayoutInflater.from(activity))
-				val title = "《${data.content.origin.title}》"
+				val title = "《${data.data.origin.title}》"
 				dialogShowJrscBinding.title.text = title
-				val author = "[${data.content.origin.dynasty}] ${data.content.origin.author}"
+				val author = "[${data.data.origin.dynasty}] ${data.data.origin.author}"
 				dialogShowJrscBinding.author.text = author
 				dialogShowJrscBinding.content.text = stringBuilder.toString()
 				AlertDialog.Builder(activity!!)

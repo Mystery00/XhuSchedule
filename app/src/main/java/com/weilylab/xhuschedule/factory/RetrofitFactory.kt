@@ -41,16 +41,6 @@ object RetrofitFactory {
 				.build()
 	}
 
-	private val jrscClient by lazy {
-		OkHttpClient.Builder()
-				.connectTimeout(2, TimeUnit.SECONDS)
-				.readTimeout(2, TimeUnit.SECONDS)
-				.writeTimeout(2, TimeUnit.SECONDS)
-				.addInterceptor(JRSCInterceptor())
-				.addInterceptor(DebugInterceptor())
-				.build()
-	}
-
 	val retrofit: Retrofit by lazy {
 		Retrofit.Builder()
 				.baseUrl("https://xhuschedule.mystery0.app")
@@ -87,14 +77,6 @@ object RetrofitFactory {
 		Retrofit.Builder()
 				.baseUrl("https://f939ktgh.api.lncld.net")
 				.client(client)
-				.addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-				.build()
-	}
-
-	val jrscRetrofit: Retrofit by lazy {
-		Retrofit.Builder()
-				.baseUrl("https://v2.jinrishici.com")
-				.client(jrscClient)
 				.addCallAdapterFactory(RxJava2CallAdapterFactory.create())
 				.build()
 	}
