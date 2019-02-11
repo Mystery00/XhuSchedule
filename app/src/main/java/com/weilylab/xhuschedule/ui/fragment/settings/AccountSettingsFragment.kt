@@ -2,6 +2,7 @@ package com.weilylab.xhuschedule.ui.fragment.settings
 
 import android.app.Activity
 import android.content.Intent
+import android.util.Xml
 import androidx.preference.CheckBoxPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceCategory
@@ -161,6 +162,7 @@ class AccountSettingsFragment : BasePreferenceFragment(R.xml.preference_account)
 		loggedStudentCategory.removeAll()
 		studentList.forEach {
 			val preference = Preference(activity)
+			preference.isIconSpaceReserved = true
 			if (it.isMain)
 				preference.title = "${it.username}(${it.studentName})[主]"
 			else
