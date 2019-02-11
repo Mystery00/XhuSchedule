@@ -2,7 +2,6 @@ package com.weilylab.xhuschedule.ui.fragment.settings
 
 import android.app.Activity
 import android.content.Intent
-import android.util.Xml
 import androidx.preference.CheckBoxPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceCategory
