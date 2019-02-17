@@ -143,6 +143,11 @@ object ConfigurationUtil {
 				.putBoolean(SharedPreferenceConstant.FIELD_DISABLE_JRSC, value)
 				.apply()
 		get() = sharedPreferences.getBoolean(SharedPreferenceConstant.FIELD_DISABLE_JRSC, false)
+	var showJRSCTranslation: Boolean
+		set(value) = sharedPreferences.edit()
+				.putBoolean(SharedPreferenceConstant.FIELD_SHOW_JRSC_TRANSLATION, value)
+				.apply()
+		get() = sharedPreferences.getBoolean(SharedPreferenceConstant.FIELD_SHOW_JRSC_TRANSLATION, false)
 	var tintNavigationBar: Boolean
 		set(value) = sharedPreferences.edit()
 				.putBoolean(SharedPreferenceConstant.FIELD_TINT_NAVIGATION_BAR, value)

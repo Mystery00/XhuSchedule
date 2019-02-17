@@ -227,13 +227,13 @@ class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_naviga
 					viewPagerAdapter.getItem(viewPager.currentItem).updateTitle()
 				})
 				.showView()
-		bottomNavigationView.config
-				.setGradientColors(intArrayOf(Color.parseColor("#0297fe"), Color.parseColor("#0fc8ff")))
-		bottomNavigationView.setMenuList(arrayListOf(
-				BottomTabItem(getString(R.string.nav_today), R.drawable.ic_today_selected, R.drawable.ic_today),
-				BottomTabItem(getString(R.string.nav_week), R.drawable.ic_week_selected, R.drawable.ic_week),
-				BottomTabItem(getString(R.string.nav_profile), R.drawable.ic_profile_selected, R.drawable.ic_profile)
-		))
+		bottomNavigationView.config { it.setGradientColors(intArrayOf(Color.parseColor("#0297fe"), Color.parseColor("#0fc8ff"))) }
+				.setMenuList(arrayListOf(
+						BottomTabItem(getString(R.string.nav_today), R.drawable.ic_today_selected, R.drawable.ic_today),
+						BottomTabItem(getString(R.string.nav_week), R.drawable.ic_week_selected, R.drawable.ic_week),
+						BottomTabItem(getString(R.string.nav_profile), R.drawable.ic_profile_selected, R.drawable.ic_profile)
+				))
+				.init()
 	}
 
 	private fun showBackground() {
@@ -271,23 +271,10 @@ class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_naviga
 
 	override fun monitor() {
 		super.monitor()
-		bottomNavigationView.setOnItemSelectedListener {
-			viewPager.setCurrentItem(bottomNavigationView.indexOf(it), false)
-		}
-		viewPager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
-			override fun onPageScrollStateChanged(state: Int) {
-			}
-
-			override fun onPageScrolled(position: Int, positionOffset: Float,
-										positionOffsetPixels: Int) {
-			}
-
-			override fun onPageSelected(position: Int) {
-				bottomNavigationView.setCheckedItem(position)
-				viewPagerAdapter.getItem(position).updateTitle()
-				configWeekView(position)
-			}
-		})
+		bottomNavigationView.linkViewPager(viewPager,{
+			viewPagerAdapter.getItem(it).updateTitle()
+			configWeekView(it)
+		},false)
 		appBarLayout.setOnClickListener { }
 		arrowImageView.setOnClickListener {
 			if (isShowWeekView)

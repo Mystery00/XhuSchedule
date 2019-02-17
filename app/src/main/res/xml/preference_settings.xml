@@ -21,10 +21,6 @@
 			android:title="@string/title_enable_viewpager_transform" />
 
 		<CheckBoxPreference
-			android:key="@string/key_disable_jrsc"
-			android:title="@string/title_disable_jrsc" />
-
-		<CheckBoxPreference
 			android:key="@string/key_tint_navigation_bar"
 			android:summary="@string/summary_tint_navigation_bar"
 			android:title="@string/title_tint_navigation_bar" />
@@ -57,6 +53,18 @@
 			android:icon="@drawable/ic_notifications"
 			android:key="@string/key_notification_time"
 			android:title="@string/title_notification_time" />
+
+	</PreferenceCategory>
+
+	<PreferenceCategory android:title="@string/title_jrsc_settings">
+
+		<CheckBoxPreference
+			android:key="@string/key_disable_jrsc"
+			android:title="@string/title_disable_jrsc" />
+
+		<CheckBoxPreference
+			android:key="@string/key_show_jrsc_translation"
+			android:title="@string/title_show_jrsc_translation"/>
 
 	</PreferenceCategory>
 

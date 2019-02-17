@@ -48,13 +48,14 @@ class SettingsPreferenceFragment : BasePreferenceFragment(R.xml.preference_setti
 	private val backgroundImgPreference: Preference by lazy { findPreferenceById(R.string.key_background_img) }
 	private val nightModePreference: Preference by lazy { findPreferenceById(R.string.key_night_mode) }
 	private val enableViewPagerTransformPreference: CheckBoxPreference by lazy { findPreferenceById(R.string.key_enable_viewpager_transform) as CheckBoxPreference }
-	private val disableJRSCPreference: CheckBoxPreference by lazy { findPreferenceById(R.string.key_disable_jrsc) as CheckBoxPreference }
 	private val tintNavigationBarPreference: CheckBoxPreference by lazy { findPreferenceById(R.string.key_tint_navigation_bar) as CheckBoxPreference }
 	private val resetUserImgPreference: Preference by lazy { findPreferenceById(R.string.key_reset_user_img) }
 	private val resetBackgroundPreference: Preference by lazy { findPreferenceById(R.string.key_reset_background_img) }
 	private val notificationCoursePreference: CheckBoxPreference by lazy { findPreferenceById(R.string.key_notification_course) as CheckBoxPreference }
 	private val notificationExamPreference: CheckBoxPreference by lazy { findPreferenceById(R.string.key_notification_exam) as CheckBoxPreference }
 	private val notificationTimePreference: Preference by lazy { findPreferenceById(R.string.key_notification_time) }
+	private val disableJRSCPreference: CheckBoxPreference by lazy { findPreferenceById(R.string.key_disable_jrsc) as CheckBoxPreference }
+	private val showJRSCTranslationPreference: CheckBoxPreference by lazy { findPreferenceById(R.string.key_show_jrsc_translation) as CheckBoxPreference }
 	private val autoCheckUpdatePreference: CheckBoxPreference by lazy { findPreferenceById(R.string.key_auto_check_update) as CheckBoxPreference }
 	private val weixinPreference: Preference by lazy { findPreferenceById(R.string.key_weixin) }
 	private val checkUpdatePreference: Preference by lazy { findPreferenceById(R.string.key_check_update) }
@@ -131,18 +132,6 @@ class SettingsPreferenceFragment : BasePreferenceFragment(R.xml.preference_setti
 			})
 			true
 		}
-		disableJRSCPreference.setOnPreferenceChangeListener { _, _ ->
-			ConfigurationUtil.disableJRSC = !disableJRSCPreference.isChecked
-			snackBarMessage(R.string.hint_need_restart, { snackBar ->
-				snackBar.setAction(R.string.action_restart) {
-					val intent = activity!!.packageManager.getLaunchIntentForPackage(activity!!.packageName)
-					intent?.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
-					activity!!.startActivity(intent)
-					activity!!.finish()
-				}
-			})
-			true
-		}
 		tintNavigationBarPreference.setOnPreferenceChangeListener { _, _ ->
 			ConfigurationUtil.tintNavigationBar = !tintNavigationBarPreference.isChecked
 			snackBarMessage(R.string.hint_need_restart, { snackBar ->
@@ -209,6 +198,22 @@ class SettingsPreferenceFragment : BasePreferenceFragment(R.xml.preference_setti
 				ConfigUtil.setTrigger(activity!!)
 			}, oldHour, oldMinute, true)
 					.show()
+			true
+		}
+		disableJRSCPreference.setOnPreferenceChangeListener { _, _ ->
+			ConfigurationUtil.disableJRSC = !disableJRSCPreference.isChecked
+			snackBarMessage(R.string.hint_need_restart, { snackBar ->
+				snackBar.setAction(R.string.action_restart) {
+					val intent = activity!!.packageManager.getLaunchIntentForPackage(activity!!.packageName)
+					intent?.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+					activity!!.startActivity(intent)
+					activity!!.finish()
+				}
+			})
+			true
+		}
+		showJRSCTranslationPreference.setOnPreferenceChangeListener { _, _ ->
+			ConfigurationUtil.showJRSCTranslation = !showJRSCTranslationPreference.isChecked
 			true
 		}
 		autoCheckUpdatePreference.setOnPreferenceChangeListener { _, _ ->

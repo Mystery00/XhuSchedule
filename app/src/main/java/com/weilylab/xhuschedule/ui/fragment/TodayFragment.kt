@@ -17,6 +17,7 @@ import com.weilylab.xhuschedule.repository.BottomNavigationRepository
 import com.weilylab.xhuschedule.repository.JRSCRepository
 import com.weilylab.xhuschedule.ui.adapter.FragmentTodayRecyclerViewAdapter
 import com.weilylab.xhuschedule.utils.CalendarUtil
+import com.weilylab.xhuschedule.utils.ConfigurationUtil
 import com.weilylab.xhuschedule.utils.LayoutRefreshConfigUtil
 import vip.mystery0.rxpackagedata.Status.*
 import com.weilylab.xhuschedule.viewmodel.BottomNavigationViewModel
@@ -85,6 +86,14 @@ class TodayFragment : BaseBottomNavigationFragment<FragmentTodayBinding>(R.layou
 				val author = "[${data.data.origin.dynasty}] ${data.data.origin.author}"
 				dialogShowJrscBinding.author.text = author
 				dialogShowJrscBinding.content.text = stringBuilder.toString()
+				val translationStringBuilder = StringBuilder()
+				translationStringBuilder.append("诗词大意：")
+				if (data.data.origin.translate != null)
+					data.data.origin.translate.forEach { s -> translationStringBuilder.append(s) }
+				else
+					translationStringBuilder.append("暂无")
+				dialogShowJrscBinding.translation.text = translationStringBuilder.toString()
+				dialogShowJrscBinding.showTranslation = ConfigurationUtil.showJRSCTranslation
 				AlertDialog.Builder(activity!!)
 						.setView(dialogShowJrscBinding.root)
 						.setPositiveButton(android.R.string.ok, null)

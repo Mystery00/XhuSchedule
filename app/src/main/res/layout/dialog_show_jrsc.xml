@@ -1,6 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout>
 
+	<data>
+
+		<import type="android.view.View" />
+
+		<variable
+			name="showTranslation"
+			type="Boolean" />
+	</data>
+
 	<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
@@ -35,6 +44,17 @@
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
 			android:gravity="center_horizontal" />
+
+		<View
+			android:layout_width="wrap_content"
+			android:layout_height="4dp"
+			android:visibility="@{showTranslation?View.VISIBLE:View.GONE}" />
+
+		<TextView
+			android:id="@+id/translation"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:visibility="@{showTranslation?View.VISIBLE:View.GONE}" />
 
 	</LinearLayout>
 

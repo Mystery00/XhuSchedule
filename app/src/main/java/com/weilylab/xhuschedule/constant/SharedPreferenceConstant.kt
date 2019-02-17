@@ -43,5 +43,6 @@ object SharedPreferenceConstant {
 	const val FIELD_JRSC_TOKEN = "config_jrsc_token"
 	const val FIELD_ENABLE_VIEW_PAGER_TRANSFORM = "config_enable_view_pager_transform"
 	const val FIELD_DISABLE_JRSC = "config_disable_jrsc"
+	const val FIELD_SHOW_JRSC_TRANSLATION = "config_show_jrsc_translation"
 	const val FIELD_TINT_NAVIGATION_BAR = "config_tint_navigation_bar"
 }
