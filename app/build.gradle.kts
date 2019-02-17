@@ -95,7 +95,7 @@ dependencies {
 	implementation("vip.mystery0.tools:logs:1.3.2")
 	implementation("com.github.Mystery0Tools:Tools:1.6.6")
 	implementation("vip.mystery0.tools:crashhandler:1.1.0")
-	implementation("com.github.Mystery0Tools:BottomTabView:1.0.3")
+	implementation("vip.mystery0.tools:bottomtabview:1.0.5")
 	implementation("com.github.Mystery0Tools:RxPackageData:1.0.2")
 
 	//jinrishici
