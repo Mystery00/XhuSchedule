@@ -9,7 +9,7 @@
 	<string name="library_bottomtabview_libraryName">BottomTabView</string>
 	<string name="library_bottomtabview_libraryDescription">使用LinearLayout实现的底部Tab，可以给图标设置渐变效果。</string>
 	<string name="library_bottomtabview_libraryWebsite">https://github.com/Mystery0Tools/BottomTabView</string>
-	<string name="library_bottomtabview_libraryVersion">1.0.3</string>
+	<string name="library_bottomtabview_libraryVersion">1.0.5</string>
 	<!-- OpenSource section -->
 	<string name="library_bottomtabview_isOpenSource">true</string>
 	<string name="library_bottomtabview_repositoryLink">https://github.com/Mystery0Tools/BottomTabView</string>
