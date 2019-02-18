@@ -10,8 +10,9 @@ android:            # 配置信息
   - android-28
   - cmake
   - extras
+  - lldb
   - ndk-bundle
-  - patcher;v4
+  - patcher
 
 before_install:
 - chmod +x gradlew  # 改变gradlew的访问权限
