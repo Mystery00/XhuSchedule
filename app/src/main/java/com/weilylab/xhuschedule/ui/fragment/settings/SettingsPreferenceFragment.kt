@@ -67,6 +67,7 @@ class SettingsPreferenceFragment : BasePreferenceFragment(R.xml.preference_setti
 				.setHintText(getString(R.string.hint_dialog_check_update))
 				.setHintTextSize(16F)
 				.setCanceledOnTouchOutside(false)
+				.setDialogBackgroundColor(ContextCompat.getColor(activity!!, R.color.colorWhiteBackground))
 				.setLoadingColor(ContextCompat.getColor(activity!!, R.color.colorAccent))
 				.setHintTextColor(ContextCompat.getColor(activity!!, R.color.colorAccent))
 				.create()

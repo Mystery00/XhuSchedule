@@ -31,16 +31,17 @@ class ClassSettingsFragment : BasePreferenceFragment(R.xml.preference_class) {
 				.setHintText(getString(R.string.hint_dialog_school_calendar))
 				.setHintTextSize(16F)
 				.setCanceledOnTouchOutside(false)
+				.setDialogBackgroundColor(ContextCompat.getColor(activity!!, R.color.colorWhiteBackground))
 				.setLoadingColor(ContextCompat.getColor(activity!!, R.color.colorAccent))
 				.setHintTextColor(ContextCompat.getColor(activity!!, R.color.colorAccent))
-				.setDialogBackgroundColor(ContextCompat.getColor(activity!!, R.color.zloadingDialogBackgroundColor))
 				.create()
 	}
 	private val downloadButton by lazy {
-		val instance=FloatingActionButton(activity!!)
+		val instance = FloatingActionButton(activity!!)
 		instance.setImageResource(R.drawable.ic_school_calendar_download)
 		instance
 	}
+	private var schoolCalendarUrl: String? = null
 
 	override fun initPreference() {
 		super.initPreference()
@@ -106,19 +107,30 @@ class ClassSettingsFragment : BasePreferenceFragment(R.xml.preference_class) {
 			true
 		}
 		schoolCalendarPreference.setOnPreferenceClickListener {
-			dialog.show()
-			SchoolCalendarRepository.getUrl {
-				if (it != null) {
-					ImagePreview.getInstance()
-							.setContext(activity!!)
-							.setImage(it)
-							.setCustomDownButtonView(downloadButton)
-							.setFolderName("Pictures")
-							.setShowIndicator(false)
-							.start()
-				} else
-					toastMessage(R.string.hint_school_calendar)
-				dialog.dismiss()
+			if (schoolCalendarUrl == null) {
+				dialog.show()
+				SchoolCalendarRepository.getUrl { url ->
+					if (url != null) {
+						schoolCalendarUrl = url
+						ImagePreview.getInstance()
+								.setContext(activity!!)
+								.setImage(schoolCalendarUrl!!)
+								.setCustomDownButtonView(downloadButton)
+								.setFolderName("Pictures")
+								.setShowIndicator(false)
+								.start()
+					} else
+						toastMessage(R.string.hint_school_calendar)
+					dialog.dismiss()
+				}
+			} else {
+				ImagePreview.getInstance()
+						.setContext(activity!!)
+						.setImage(schoolCalendarUrl!!)
+						.setCustomDownButtonView(downloadButton)
+						.setFolderName("Pictures")
+						.setShowIndicator(false)
+						.start()
 			}
 			true
 		}
