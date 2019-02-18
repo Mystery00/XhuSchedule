@@ -130,7 +130,7 @@ dependencies {
 	implementation 'com.github.Mystery0Tools:RxPackageData:1.0.2'
 
 	//jinrishici
-	implementation 'com.jinrishici:android-sdk:1.1'
+	implementation 'com.jinrishici:android-sdk:1.2'
 
 	//Glide
 	implementation 'com.github.bumptech.glide:glide:4.8.0'
