@@ -40,4 +40,6 @@
 
 	<!--通过这个属性获取是否是夜间模式-->
 	<color name="isNight">#000000</color>
+	<!--ZloadingDialog背景颜色-->
+	<color name="zloadingDialogBackgroundColor">#212121</color>
 </resources>

@@ -104,6 +104,10 @@ dependencies {
 	//Glide
 	implementation("com.github.bumptech.glide:glide:4.8.0")
 	annotationProcessor("com.github.bumptech.glide:compiler:4.8.0")
+	annotationProcessor("com.github.bumptech.glide:okhttp3-integration:4.8.0")
+
+	//BigImageView
+	implementation("com.github.Mystery00:BigImageViewPager:4_4.0.1-fork")
 
 	//RxAndroid
 	implementation("io.reactivex.rxjava2:rxandroid:2.1.0")

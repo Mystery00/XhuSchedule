@@ -18,6 +18,7 @@
 	<string name="key_custom_start_time" translatable="false">key_custom_start_time</string>
 	<string name="key_current_year_and_term" translatable="false">key_current_year_and_term</string>
 	<string name="key_custom_course_color" translatable="false">key_custom_course_color</string>
+	<string name="key_action_school_calendar" translatable="false">key_action_school_calendar</string>
 	<string name="key_logged_account" translatable="false">key_logged_account</string>
 	<string name="key_add_account" translatable="false">key_add_account</string>
 	<string name="key_del_account" translatable="false">key_del_account</string>
@@ -56,6 +57,7 @@
 	<string name="title_custom_start_time">更改开学时间</string>
 	<string name="title_current_year_and_term">更改当前学期</string>
 	<string name="title_custom_course_color">自定义课程颜色</string>
+	<string name="title_action_school_calendar">查看校历</string>
 	<string name="title_reset_user_img">重置个人头像</string>
 	<string name="title_reset_background_img">重置背景图片</string>
 	<string name="title_current_account">当前已登录账号</string>

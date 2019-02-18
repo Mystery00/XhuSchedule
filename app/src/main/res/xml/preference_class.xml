@@ -33,4 +33,9 @@
 			android:targetPackage="@string/app_package_name" />
 	</Preference>
 
+	<Preference
+		android:icon="@drawable/ic_school_calendar"
+		android:key="@string/key_action_school_calendar"
+		android:title="@string/title_action_school_calendar" />
+
 </PreferenceScreen>

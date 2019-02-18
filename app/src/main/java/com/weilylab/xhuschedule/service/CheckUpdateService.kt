@@ -9,7 +9,7 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.weilylab.xhuschedule.R
-import com.weilylab.xhuschedule.api.PhpAPI
+import com.weilylab.xhuschedule.api.XhuScheduleCloudAPI
 import com.weilylab.xhuschedule.factory.GsonFactory
 import com.weilylab.xhuschedule.factory.RetrofitFactory
 import com.weilylab.xhuschedule.model.Version
@@ -53,7 +53,7 @@ class CheckUpdateService : Service() {
 		val model = Build.MODEL
 		val rom = Build.DISPLAY
 		RetrofitFactory.retrofit
-				.create(PhpAPI::class.java)
+				.create(XhuScheduleCloudAPI::class.java)
 				.checkVersion(appVersion, systemVersion, manufacturer, model, rom, ConfigUtil.getDeviceID())
 				.subscribeOn(Schedulers.newThread())
 				.unsubscribeOn(Schedulers.newThread())

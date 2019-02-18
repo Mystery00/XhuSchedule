@@ -1,14 +1,21 @@
 package com.weilylab.xhuschedule.ui.fragment.settings
 
+import android.app.Dialog
 import androidx.preference.CheckBoxPreference
 import androidx.preference.Preference
 import androidx.appcompat.app.AlertDialog
+import androidx.core.content.ContextCompat
+import cc.shinichi.library.ImagePreview
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.base.BasePreferenceFragment
+import com.weilylab.xhuschedule.repository.SchoolCalendarRepository
 import com.weilylab.xhuschedule.repository.local.StudentLocalDataSource
 import com.weilylab.xhuschedule.utils.ConfigUtil
 import com.weilylab.xhuschedule.utils.ConfigurationUtil
 import com.weilylab.xhuschedule.utils.LayoutRefreshConfigUtil
+import com.zyao89.view.zloading.ZLoadingDialog
+import com.zyao89.view.zloading.Z_TYPE
 import vip.mystery0.logs.Logs
 import vip.mystery0.rxpackagedata.Status.*
 
@@ -16,6 +23,24 @@ class ClassSettingsFragment : BasePreferenceFragment(R.xml.preference_class) {
 	private val showNotWeekPreference: CheckBoxPreference by lazy { findPreferenceById(R.string.key_show_not_week) as CheckBoxPreference }
 	private val currentYearAndTermPreference: Preference by lazy { findPreferenceById(R.string.key_current_year_and_term) }
 	private val customStartTimePreference: Preference by lazy { findPreferenceById(R.string.key_custom_start_time) }
+	private val schoolCalendarPreference: Preference by lazy { findPreferenceById(R.string.key_action_school_calendar) }
+
+	private val dialog: Dialog by lazy {
+		ZLoadingDialog(activity!!)
+				.setLoadingBuilder(Z_TYPE.SINGLE_CIRCLE)
+				.setHintText(getString(R.string.hint_dialog_school_calendar))
+				.setHintTextSize(16F)
+				.setCanceledOnTouchOutside(false)
+				.setLoadingColor(ContextCompat.getColor(activity!!, R.color.colorAccent))
+				.setHintTextColor(ContextCompat.getColor(activity!!, R.color.colorAccent))
+				.setDialogBackgroundColor(ContextCompat.getColor(activity!!, R.color.zloadingDialogBackgroundColor))
+				.create()
+	}
+	private val downloadButton by lazy {
+		val instance=FloatingActionButton(activity!!)
+		instance.setImageResource(R.drawable.ic_school_calendar_download)
+		instance
+	}
 
 	override fun initPreference() {
 		super.initPreference()
@@ -77,6 +102,23 @@ class ClassSettingsFragment : BasePreferenceFragment(R.xml.preference_class) {
 						toastMessage(packageData.error?.message)
 					}
 				}
+			}
+			true
+		}
+		schoolCalendarPreference.setOnPreferenceClickListener {
+			dialog.show()
+			SchoolCalendarRepository.getUrl {
+				if (it != null) {
+					ImagePreview.getInstance()
+							.setContext(activity!!)
+							.setImage(it)
+							.setCustomDownButtonView(downloadButton)
+							.setFolderName("Pictures")
+							.setShowIndicator(false)
+							.start()
+				} else
+					toastMessage(R.string.hint_school_calendar)
+				dialog.dismiss()
 			}
 			true
 		}
