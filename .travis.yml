@@ -8,15 +8,19 @@ android:            # 配置信息
   - tools
   - build-tools-28.0.3
   - android-28
-  - cmake
   - extras
-  - lldb
-  - ndk-bundle
-  - patcher
 
 before_install:
 - chmod +x gradlew  # 改变gradlew的访问权限
-
+install:
+- echo y | sdkmanager "ndk-bundle"
+- echo y | sdkmanager "cmake;3.6.4111459"
+- echo y | sdkmanager "lldb;3.1"
+#  - sdkmanager --update
+before_script:
+- export ANDROID_NDK_HOME=$ANDROID_HOME/ndk-bundle
+- mkdir -p "$ANDROID_HOME/licenses"
+- cp ./android-licenses/ "$ANDROID_HOME/licenses/"
 #script:              # 执行:下面的命令
 #- ./gradlew assembleRelease
 #
