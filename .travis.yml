@@ -19,8 +19,6 @@ install:
 #  - sdkmanager --update
 before_script:
 - export ANDROID_NDK_HOME=$ANDROID_HOME/ndk-bundle
-- mkdir -p "$ANDROID_HOME/licenses"
-- cp ./android-licenses/ "$ANDROID_HOME/licenses/"
 #script:              # 执行:下面的命令
 #- ./gradlew assembleRelease
 #
