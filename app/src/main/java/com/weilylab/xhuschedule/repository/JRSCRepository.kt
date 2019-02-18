@@ -8,10 +8,10 @@ import com.weilylab.xhuschedule.utils.ConfigurationUtil
 import vip.mystery0.logs.Logs
 
 object JRSCRepository {
+	private val client = JinrishiciClient()
 	fun load(listener: (PoetySentence) -> Unit) {
 		if (ConfigurationUtil.disableJRSC)
 			return
-		val client = JinrishiciClient()
 		client.getOneSentenceBackground(object : JinrishiciCallback {
 			override fun done(poetySentence: PoetySentence?) {
 				if (poetySentence != null)

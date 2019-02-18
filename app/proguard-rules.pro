@@ -90,6 +90,7 @@
 -keep class sun.misc.Unsafe { *; }
 # Application classes that will be serialized/deserialized over Gson  下面替换成自己的实体类
 -keep class com.weilylab.xhuschedule.model.** { *; }
+-keep class com.jinrishici.sdk.android.model.** { *; }
 
 ###---------Retrofit----------------
 # Retrofit does reflection on generic parameters. InnerClasses is required to use Signature and
