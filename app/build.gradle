@@ -41,7 +41,7 @@ autoVersion {
 	major 2
 	minor 3
 	patch 2
-	beta 2
+	beta 3
 	alpha 0
 	isShowBuild false
 }
