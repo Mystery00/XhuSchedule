@@ -9,7 +9,7 @@ autoVersion {
 	major = 2
 	minor = 3
 	patch = 1
-	beta = 0
+	beta = 1
 	alpha = 0
 	isShowBuild = false
 }
