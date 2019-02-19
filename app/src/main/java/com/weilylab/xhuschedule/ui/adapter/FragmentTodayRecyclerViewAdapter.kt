@@ -8,6 +8,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import com.jinrishici.sdk.android.model.PoetySentence
 import com.weilylab.xhuschedule.R
+import com.weilylab.xhuschedule.config.ColorPoolHelper
 import com.weilylab.xhuschedule.databinding.DialogShowJrscBinding
 import com.weilylab.xhuschedule.databinding.ItemFragmentTodayBinding
 import com.weilylab.xhuschedule.databinding.ItemFragmentTodayJrscBinding
@@ -30,10 +31,11 @@ class FragmentTodayRecyclerViewAdapter(private val context: Context) : BaseBindi
 	override fun setItemView(binding: ViewDataBinding, position: Int, data: Any) {
 		when {
 			(binding is ItemFragmentTodayJrscBinding) && (data is PoetySentence) -> {
+				binding.point.setColorFilter(ColorPoolHelper.colorPool.poolInstance.random())
 				binding.jrscTextView.text = data.data.content
 				val text = "——${data.data.origin.author}《${data.data.origin.title}》"
 				binding.jrscAuthorTextView.text = text
-				binding.root.setOnClickListener {
+				binding.cardView.setOnClickListener {
 					val stringBuilder = StringBuilder()
 					data.data.origin.content.forEach { s -> stringBuilder.appendln(s) }
 					val dialogShowJrscBinding = DialogShowJrscBinding.inflate(LayoutInflater.from(context))

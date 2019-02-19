@@ -24,6 +24,7 @@
 		android:supportsRtl="true"
 		android:theme="@style/AppTheme"
 		tools:targetApi="n">
+
 		<uses-library
 			android:name="org.apache.http.legacy"
 			android:required="false" />
@@ -142,6 +143,10 @@
 		<activity
 			android:name=".ui.activity.WebViewActivity"
 			android:theme="@style/AppTheme.NoActionBar" />
+		<activity
+			android:name=".ui.activity.CustomThingActivity"
+			android:label="@string/title_action_custom_thing"
+			android:theme="@style/AppTheme.NoActionBar"/>
 
 		<service
 			android:name=".service.DownloadSplashIntentService"
