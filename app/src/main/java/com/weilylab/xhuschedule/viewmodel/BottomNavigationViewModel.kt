@@ -3,10 +3,7 @@ package com.weilylab.xhuschedule.viewmodel
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.weilylab.xhuschedule.model.FeedBackMessage
-import com.weilylab.xhuschedule.model.Notice
-import com.weilylab.xhuschedule.model.Student
-import com.weilylab.xhuschedule.model.StudentInfo
+import com.weilylab.xhuschedule.model.*
 import com.zhuangfei.timetable.model.Schedule
 import vip.mystery0.rxpackagedata.PackageData
 import java.util.*
@@ -16,6 +13,7 @@ class BottomNavigationViewModel : ViewModel() {
 	val studentInfo by lazy { MediatorLiveData<PackageData<StudentInfo>>() }
 	val courseList by lazy { MediatorLiveData<PackageData<List<Schedule>>>() }
 	val todayCourseList by lazy { MediatorLiveData<PackageData<List<Schedule>>>() }
+	val customThingList by lazy { MutableLiveData<PackageData<List<CustomThing>>>() }
 	val currentWeek by lazy { MediatorLiveData<PackageData<Int>>() }
 
 	val title by lazy { MutableLiveData<String>() }

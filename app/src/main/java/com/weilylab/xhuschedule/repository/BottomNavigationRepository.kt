@@ -56,6 +56,9 @@ object BottomNavigationRepository {
 		}
 	}
 
+	/**
+	 * 获取缓存的所有课程列表
+	 */
 	fun queryCacheCourses(bottomNavigationViewModel: BottomNavigationViewModel) {
 		bottomNavigationViewModel.courseList.value = PackageData.loading()
 		if (bottomNavigationViewModel.studentList.value == null || bottomNavigationViewModel.studentList.value?.data == null || bottomNavigationViewModel.studentList.value!!.data!!.isEmpty())
@@ -78,10 +81,15 @@ object BottomNavigationRepository {
 				}
 			}
 			val mainStudent = UserUtil.findMainStudent(bottomNavigationViewModel.studentList.value!!.data)!!
+			CustomThingRepository.get(bottomNavigationViewModel)
 			CourseLocalDataSource.queryCourseByUsername(bottomNavigationViewModel.courseList, mainStudent, ConfigurationUtil.currentYear, ConfigurationUtil.currentTerm, true, true)
 		}
 	}
 
+	/**
+	 * 获取缓存的所有课程的列表
+	 * 多用户模式
+	 */
 	fun queryCacheCoursesForManyStudent(bottomNavigationViewModel: BottomNavigationViewModel) {
 		bottomNavigationViewModel.courseList.value = PackageData.loading()
 		if (bottomNavigationViewModel.studentList.value == null || bottomNavigationViewModel.studentList.value?.data == null || bottomNavigationViewModel.studentList.value!!.data!!.isEmpty())
@@ -103,6 +111,7 @@ object BottomNavigationRepository {
 					Error -> bottomNavigationViewModel.todayCourseList.value = PackageData.error(packageData.error)
 				}
 			}
+			CustomThingRepository.get(bottomNavigationViewModel)
 			CourseLocalDataSource.queryCourseWithManyStudent(bottomNavigationViewModel.courseList, bottomNavigationViewModel.studentList.value!!.data!!, ConfigurationUtil.currentYear, ConfigurationUtil.currentTerm, true, true)
 		}
 	}

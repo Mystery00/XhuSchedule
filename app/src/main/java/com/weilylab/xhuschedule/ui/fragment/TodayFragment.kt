@@ -1,27 +1,28 @@
 package com.weilylab.xhuschedule.ui.fragment
 
-import android.view.LayoutInflater
 import android.view.View
-import androidx.appcompat.app.AlertDialog
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.jinrishici.sdk.android.model.PoetySentence
 
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.databinding.FragmentTodayBinding
 import com.weilylab.xhuschedule.base.BaseBottomNavigationFragment
-import com.weilylab.xhuschedule.databinding.DialogShowJrscBinding
 import com.weilylab.xhuschedule.databinding.LayoutNullDataViewBinding
+import com.weilylab.xhuschedule.model.CustomThing
 import com.weilylab.xhuschedule.repository.BottomNavigationRepository
 import com.weilylab.xhuschedule.repository.JRSCRepository
 import com.weilylab.xhuschedule.ui.adapter.FragmentTodayRecyclerViewAdapter
 import com.weilylab.xhuschedule.utils.CalendarUtil
-import com.weilylab.xhuschedule.utils.ConfigurationUtil
 import com.weilylab.xhuschedule.utils.LayoutRefreshConfigUtil
 import vip.mystery0.rxpackagedata.Status.*
 import com.weilylab.xhuschedule.viewmodel.BottomNavigationViewModel
 import com.zhuangfei.timetable.model.Schedule
+import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import vip.mystery0.logs.Logs
 import vip.mystery0.rxpackagedata.PackageData
 import vip.mystery0.rxpackagedata.rx.RxObservable
@@ -43,10 +44,10 @@ class TodayFragment : BaseBottomNavigationFragment<FragmentTodayBinding>(R.layou
 		when (it.status) {
 			Content -> {
 				if (it.data != null) {
-					adapter.items.clear()
 					adapter.items.addAll(it.data!!)
-					adapter.notifyDataSetChanged()
-					checkNoDataLayout()
+					adapter.sortItemList {
+						checkNoDataLayout()
+					}
 				}
 			}
 			Empty -> checkNoDataLayout()
@@ -57,54 +58,49 @@ class TodayFragment : BaseBottomNavigationFragment<FragmentTodayBinding>(R.layou
 			}
 		}
 	}
+	private val customThingListObserver = Observer<PackageData<List<CustomThing>>> {
+		when (it.status) {
+			Content -> {
+				if (it.data != null) {
+					adapter.items.addAll(it.data!!)
+					adapter.sortItemList {
+						checkNoDataLayout()
+					}
+				}
+			}
+			Empty -> checkNoDataLayout()
+			Error -> {
+				Logs.wtfm("todayCourseListObserver: ", it.error)
+				checkNoDataLayout()
+			}
+		}
+	}
 
 	override fun initView() {
 		initViewModel()
 		binding.recyclerView.layoutManager = LinearLayoutManager(activity)
 		binding.recyclerView.adapter = adapter
 		isInit = true
+		JRSCRepository.load {
+			adapter.items.add(it)
+			adapter.sortItemList {
+				checkNoDataLayout()
+			}
+		}
 	}
 
 	private fun initViewModel() {
 		bottomNavigationViewModel.todayCourseList.observe(activity!!, todayCourseListObserver)
+		bottomNavigationViewModel.customThingList.observe(activity!!, customThingListObserver)
 	}
 
 	override fun monitor() {
 		super.monitor()
 		binding.nullDataViewStub.setOnInflateListener { _, inflated -> viewStubBinding = DataBindingUtil.bind(inflated)!! }
-		JRSCRepository.load { data ->
-			binding.jrscLayout.visibility = View.VISIBLE
-			binding.jrscTextView.text = data.data.content
-			val text = "——${data.data.origin.author}《${data.data.origin.title}》"
-			binding.jrscAuthorTextView.text = text
-			binding.jrscLayout.setOnClickListener {
-				val stringBuilder = StringBuilder()
-				data.data.origin.content.forEach { s -> stringBuilder.appendln(s) }
-				val dialogShowJrscBinding = DialogShowJrscBinding.inflate(LayoutInflater.from(activity))
-				val title = "《${data.data.origin.title}》"
-				dialogShowJrscBinding.title.text = title
-				val author = "[${data.data.origin.dynasty}] ${data.data.origin.author}"
-				dialogShowJrscBinding.author.text = author
-				dialogShowJrscBinding.content.text = stringBuilder.toString()
-				val translationStringBuilder = StringBuilder()
-				translationStringBuilder.append("诗词大意：")
-				if (data.data.origin.translate != null)
-					data.data.origin.translate.forEach { s -> translationStringBuilder.append(s) }
-				else
-					translationStringBuilder.append("暂无")
-				dialogShowJrscBinding.translation.text = translationStringBuilder.toString()
-				dialogShowJrscBinding.showTranslation = ConfigurationUtil.showJRSCTranslation
-				AlertDialog.Builder(activity!!)
-						.setView(dialogShowJrscBinding.root)
-						.setPositiveButton(android.R.string.ok, null)
-						.show()
-			}
-			checkNoDataLayout()
-		}
 	}
 
 	private fun checkNoDataLayout() {
-		if (binding.jrscLayout.visibility == View.VISIBLE || adapter.items.isNotEmpty())
+		if (adapter.items.isNotEmpty())
 			hideNoDataLayout()
 		else
 			showNoDataLayout()
