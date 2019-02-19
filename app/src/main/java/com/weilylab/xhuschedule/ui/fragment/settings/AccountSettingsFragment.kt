@@ -162,10 +162,9 @@ class AccountSettingsFragment : BasePreferenceFragment(R.xml.preference_account)
 		studentList.forEach {
 			val preference = Preference(activity)
 			preference.isIconSpaceReserved = true
+			preference.title = "${it.username}(${it.studentName})"
 			if (it.isMain)
-				preference.title = "${it.username}(${it.studentName})[主]"
-			else
-				preference.title = "${it.username}(${it.studentName})"
+				preference.setIcon(R.drawable.ic_main_student)
 			loggedStudentCategory.addPreference(preference)
 		}
 	}

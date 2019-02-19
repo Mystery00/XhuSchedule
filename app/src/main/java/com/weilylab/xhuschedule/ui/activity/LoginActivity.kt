@@ -74,12 +74,16 @@ class LoginActivity : XhuBaseActivity(R.layout.activity_login, false) {
 	private val loginObserver = Observer<PackageData<Student>> {
 		when (it.status) {
 			Content -> {
-				hideDialog()
 				if (it.data != null) {
-					LoginRepository.queryStudentInfo(it.data!!)
-					toastMessage(getString(R.string.success_login, getString(R.string.app_name)))
-					setResult(Activity.RESULT_OK, intent)
-					finish()
+					LoginRepository.queryStudentInfo({ _, e ->
+						hideDialog()
+						if (e == null) {
+							toastMessage(getString(R.string.success_login, getString(R.string.app_name)))
+							setResult(Activity.RESULT_OK, intent)
+							finish()
+						} else
+							toastMessage(e.message)
+					}, it.data!!)
 				}
 			}
 			Error -> {

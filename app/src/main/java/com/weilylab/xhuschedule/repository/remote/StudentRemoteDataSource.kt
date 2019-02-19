@@ -16,24 +16,32 @@ object StudentRemoteDataSource : StudentDataSource {
 	override fun queryStudentInfo(studentInfoLiveData: MutableLiveData<PackageData<StudentInfo>>, student: Student) {
 		studentInfoLiveData.value = PackageData.loading()
 		if (NetworkUtil.isConnectInternet()) {
-			UserUtil.getInfo(student, object : DoSaveListener<StudentInfo> {
-				override fun doSave(t: StudentInfo) {
-					t.studentID = student.username
-					StudentLocalDataSource.saveStudentInfo(t)
-				}
-
-			}, object : RequestListener<StudentInfo> {
-				override fun done(t: StudentInfo) {
-					studentInfoLiveData.value = PackageData.content(t)
-				}
-
-				override fun error(rt: String, msg: String?) {
-					studentInfoLiveData.value = PackageData.error(Exception(msg))
-				}
-			})
+			queryStudentInfo({ studentInfo, exception ->
+				if (exception == null)
+					studentInfoLiveData.value = PackageData.content(studentInfo)
+				else
+					studentInfoLiveData.value = PackageData.error(exception)
+			}, student)
 		} else {
 			studentInfoLiveData.value = PackageData.error(Exception(StringConstant.hint_network_error))
 		}
+	}
+
+	fun queryStudentInfo(listener: (StudentInfo?, Exception?) -> Unit, student: Student) {
+		UserUtil.getInfo(student, object : DoSaveListener<StudentInfo> {
+			override fun doSave(t: StudentInfo) {
+				t.studentID = student.username
+				StudentLocalDataSource.saveStudentInfo(t)
+			}
+		}, object : RequestListener<StudentInfo> {
+			override fun done(t: StudentInfo) {
+				listener.invoke(t, null)
+			}
+
+			override fun error(rt: String, msg: String?) {
+				listener.invoke(null, Exception(msg))
+			}
+		})
 	}
 
 	fun login(loginLiveData: MutableLiveData<PackageData<Student>>, student: Student) {

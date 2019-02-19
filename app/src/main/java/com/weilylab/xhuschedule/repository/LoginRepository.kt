@@ -1,12 +1,13 @@
 package com.weilylab.xhuschedule.repository
 
-import androidx.lifecycle.MutableLiveData
 import com.weilylab.xhuschedule.model.Student
+import com.weilylab.xhuschedule.model.StudentInfo
 import com.weilylab.xhuschedule.repository.remote.StudentRemoteDataSource
 import com.weilylab.xhuschedule.viewmodel.LoginViewModel
+import java.lang.Exception
 
 object LoginRepository {
 	fun login(student: Student, loginViewModel: LoginViewModel) = StudentRemoteDataSource.login(loginViewModel.loginLiveData, student)
 
-	fun queryStudentInfo(student: Student) =StudentRemoteDataSource.queryStudentInfo(MutableLiveData(), student)
+	fun queryStudentInfo(listener: (StudentInfo?, Exception?) -> Unit, student: Student) = StudentRemoteDataSource.queryStudentInfo(listener, student)
 }
