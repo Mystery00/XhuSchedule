@@ -106,7 +106,11 @@ class FragmentTodayRecyclerViewAdapter(private val context: Context) : BaseBindi
 				val list = items.clone() as ArrayList<*>
 				list.forEach {
 					when (it) {
-						is PoetySentence -> poetySentenceList.add(it)
+						is PoetySentence -> {
+							//确保今日诗词只会出现一次
+							poetySentenceList.clear()
+							poetySentenceList.add(it)
+						}
 						is Schedule -> courseList.add(it)
 						is CustomThing -> customThingList.add(it)
 					}
