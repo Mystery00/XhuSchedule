@@ -1,6 +1,7 @@
 package com.weilylab.xhuschedule.ui.adapter
 
 import android.content.Context
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
@@ -23,6 +24,8 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import vip.mystery0.logs.Logs
 import vip.mystery0.tools.base.binding.BaseBindingRecyclerViewAdapter
+import java.text.SimpleDateFormat
+import java.util.*
 
 class FragmentTodayRecyclerViewAdapter(private val context: Context) : BaseBindingRecyclerViewAdapter<Any, ViewDataBinding>(0) {
 	private var isRun = false
@@ -71,7 +74,12 @@ class FragmentTodayRecyclerViewAdapter(private val context: Context) : BaseBindi
 				binding.textViewTime.text = time
 			}
 			(binding is ItemFragmentTodayThingBinding) && (data is CustomThing) -> {
-
+				binding.thing = data
+				val color = Color.parseColor(data.color)
+				binding.point.setColorFilter(color)
+				binding.imageView.setColorFilter(color)
+				val text = "${data.startTime} - ${data.endTime}"
+				binding.textViewTime.text = text
 			}
 		}
 	}

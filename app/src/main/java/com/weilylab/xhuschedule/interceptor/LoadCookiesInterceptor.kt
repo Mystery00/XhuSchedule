@@ -44,7 +44,7 @@ class LoadCookiesInterceptor : Interceptor {
 		val host = request.url().host()
 		var username: String? = null
 		when (request.method().toLowerCase()) {
-			"get" -> {
+			"getToday" -> {
 				if (request.url().toString().contains("api.lncld.net/1.1/classes/")) {
 					builder.addHeader("X-LC-Id", "f939kTGhlyHAHVsCpccyWU6t-gzGzoHsz")
 					builder.addHeader("X-LC-Key", "wVpJkuI4DLNxXHBfp19XGz3E")

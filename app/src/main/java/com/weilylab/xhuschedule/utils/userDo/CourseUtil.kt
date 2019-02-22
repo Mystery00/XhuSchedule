@@ -187,9 +187,8 @@ object CourseUtil {
 					val week = CalendarUtil.getWeekFromCalendar(InitLocalDataSource.getStartDateTime())
 					val weekIndex = CalendarUtil.getWeekIndex()
 					val todayCourseList = ArrayList<Schedule>()
-//					todayCourseList.addAll(courseList.filter { isTodayCourse(it, week, weekIndex) }
-//							.sortedBy { it.start })
-					todayCourseList.addAll(courseList)
+					todayCourseList.addAll(courseList.filter { isTodayCourse(it, week, weekIndex) }
+							.sortedBy { it.start })
 					observableEmitter.onFinish(todayCourseList)
 				}
 				.subscribe(object : RxObserver<ArrayList<Schedule>>() {

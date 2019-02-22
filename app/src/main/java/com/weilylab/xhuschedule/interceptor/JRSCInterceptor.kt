@@ -8,7 +8,7 @@ class JRSCInterceptor : Interceptor {
 	override fun intercept(chain: Interceptor.Chain): Response {
 		val request = chain.request()
 		val builder = request.newBuilder()
-		if (request.method().toLowerCase() == "get") {
+		if (request.method().toLowerCase() == "getToday") {
 			if (request.url().toString().contains("v2.jinrishici.com") &&
 					request.url().toString().contains("token") &&
 					ConfigurationUtil.jrscToken != "") {

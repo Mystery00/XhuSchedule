@@ -81,7 +81,7 @@ object BottomNavigationRepository {
 				}
 			}
 			val mainStudent = UserUtil.findMainStudent(bottomNavigationViewModel.studentList.value!!.data)!!
-			CustomThingRepository.get(bottomNavigationViewModel)
+			CustomThingRepository.getToday(bottomNavigationViewModel)
 			CourseLocalDataSource.queryCourseByUsername(bottomNavigationViewModel.courseList, mainStudent, ConfigurationUtil.currentYear, ConfigurationUtil.currentTerm, true, true)
 		}
 	}
@@ -111,7 +111,7 @@ object BottomNavigationRepository {
 					Error -> bottomNavigationViewModel.todayCourseList.value = PackageData.error(packageData.error)
 				}
 			}
-			CustomThingRepository.get(bottomNavigationViewModel)
+			CustomThingRepository.getToday(bottomNavigationViewModel)
 			CourseLocalDataSource.queryCourseWithManyStudent(bottomNavigationViewModel.courseList, bottomNavigationViewModel.studentList.value!!.data!!, ConfigurationUtil.currentYear, ConfigurationUtil.currentTerm, true, true)
 		}
 	}
@@ -130,12 +130,14 @@ object BottomNavigationRepository {
 				bottomNavigationViewModel.courseList.value = PackageData.error(Exception(StringConstant.hint_null_student))
 			return
 		}
+		CustomThingRepository.getToday(bottomNavigationViewModel)
 		CourseRemoteDataSource.queryCourseByUsername(bottomNavigationViewModel.courseList, mainStudent, ConfigurationUtil.currentYear, ConfigurationUtil.currentTerm, false, isShowError)
 	}
 
 	fun queryCoursesOnlineForManyStudent(bottomNavigationViewModel: BottomNavigationViewModel, isShowError: Boolean = true) {
 		if (isShowError)
 			bottomNavigationViewModel.courseList.value = PackageData.loading()
+		CustomThingRepository.getToday(bottomNavigationViewModel)
 		CourseRemoteDataSource.queryCourseWithManyStudent(bottomNavigationViewModel.courseList, bottomNavigationViewModel.studentList.value!!.data!!, ConfigurationUtil.currentYear, ConfigurationUtil.currentTerm, false, isShowError)
 	}
 

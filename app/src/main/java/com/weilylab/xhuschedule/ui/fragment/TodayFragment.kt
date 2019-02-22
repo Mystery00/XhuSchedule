@@ -5,7 +5,6 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.jinrishici.sdk.android.model.PoetySentence
 
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.databinding.FragmentTodayBinding
@@ -20,9 +19,6 @@ import com.weilylab.xhuschedule.utils.LayoutRefreshConfigUtil
 import vip.mystery0.rxpackagedata.Status.*
 import com.weilylab.xhuschedule.viewmodel.BottomNavigationViewModel
 import com.zhuangfei.timetable.model.Schedule
-import io.reactivex.Observable
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
 import vip.mystery0.logs.Logs
 import vip.mystery0.rxpackagedata.PackageData
 import vip.mystery0.rxpackagedata.rx.RxObservable

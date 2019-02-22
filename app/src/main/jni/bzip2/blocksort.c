@@ -1044,7 +1044,7 @@ void BZ2_blockSort ( EState* s )
    if (nblock < 10000) {
       fallbackSort ( s->arr1, s->arr2, ftab, nblock, verb );
    } else {
-      /* Calculate the location for quadrant, remembering to get
+      /* Calculate the location for quadrant, remembering to getToday
          the alignment right.  Assumes that &(block[0]) is at least
          2-byte aligned -- this should be ok since block is really
          the first section of arr2.

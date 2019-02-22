@@ -1,5 +1,6 @@
 package com.weilylab.xhuschedule.utils
 
+import com.weilylab.xhuschedule.model.CustomThing
 import com.weilylab.xhuschedule.model.Test
 import vip.mystery0.logs.Logs
 import java.text.SimpleDateFormat
@@ -69,7 +70,7 @@ object CalendarUtil {
 		val calendar = Calendar.getInstance()
 		val nowYear = calendar.get(Calendar.YEAR)
 		val month = calendar.get(Calendar.MONTH)
-		val startYear = grade?.toInt() ?: nowYear-3
+		val startYear = grade?.toInt() ?: nowYear - 3
 		val endYear = if (month >= Calendar.SEPTEMBER) nowYear + 1 else nowYear
 		return Array(endYear - startYear) { i -> "${startYear + i}-${startYear + 1 + i}" }
 	}
@@ -195,5 +196,40 @@ object CalendarUtil {
 	fun getTodayDateString(): String {
 		val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.CHINA)
 		return simpleDateFormat.format(Calendar.getInstance().time)
+	}
+
+	private val dateFormatter by lazy { SimpleDateFormat("yyyy年MM月dd日", Locale.CHINA) }
+	private val dateTimeFormatter by lazy { SimpleDateFormat("yyyy年MM月dd日 HH:mm", Locale.CHINA) }
+
+	fun isThingToday(thing: CustomThing): Boolean {
+		val startCalendar = if (thing.isAllDay)
+			dateFormatter.parse(thing.startTime)
+		else {
+			val cal = Calendar.getInstance()
+			cal.timeInMillis = 0
+			cal.time = dateTimeFormatter.parse(thing.startTime)
+			cal.set(Calendar.HOUR_OF_DAY, 0)
+			cal.set(Calendar.MINUTE, 0)
+			cal.time
+		}
+		val endCalendar = if (thing.isAllDay) {
+			val cal = Calendar.getInstance()
+			cal.timeInMillis = 0
+			cal.time = dateFormatter.parse(thing.endTime)
+			cal.set(Calendar.HOUR_OF_DAY, 0)
+			cal.set(Calendar.MINUTE, 0)
+			cal.add(Calendar.DAY_OF_YEAR, 1)
+			cal.time
+		} else {
+			val cal = Calendar.getInstance()
+			cal.timeInMillis = 0
+			cal.time = dateTimeFormatter.parse(thing.endTime)
+			cal.set(Calendar.HOUR_OF_DAY, 0)
+			cal.set(Calendar.MINUTE, 0)
+			cal.add(Calendar.DAY_OF_YEAR, 1)
+			cal.time
+		}
+		val now = Calendar.getInstance()
+		return now.time.after(startCalendar) && now.time.before(endCalendar)
 	}
 }

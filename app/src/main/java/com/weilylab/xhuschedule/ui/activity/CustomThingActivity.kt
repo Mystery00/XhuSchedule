@@ -72,7 +72,6 @@ class CustomThingActivity : XhuBaseActivity(R.layout.activity_custom_thing) {
 		supportActionBar?.setDisplayHomeAsUpEnabled(true)
 		recyclerView.layoutManager = LinearLayoutManager(this)
 		recyclerView.adapter = customThingAdapter
-		recyclerView.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
 		swipeRefreshLayout.setColorSchemeResources(
 				android.R.color.holo_blue_light,
 				android.R.color.holo_green_light,
@@ -112,46 +111,13 @@ class CustomThingActivity : XhuBaseActivity(R.layout.activity_custom_thing) {
 	}
 
 	private fun refresh() {
-		val i = CustomThing()
-		i.title = "1"
-		customThingAdapter.items.add(i)
-		customThingAdapter.items.add(i)
-		customThingAdapter.items.add(i)
-		customThingAdapter.items.add(i)
-		customThingAdapter.items.add(i)
-		customThingAdapter.items.add(i)
-		customThingAdapter.items.add(i)
-		customThingAdapter.items.add(i)
-		customThingAdapter.items.add(i)
-		customThingAdapter.items.add(i)
-		customThingAdapter.items.add(i)
-		customThingAdapter.items.add(i)
-		customThingAdapter.items.add(i)
-		customThingAdapter.items.add(i)
-		customThingAdapter.items.add(i)
-		customThingAdapter.items.add(i)
-		customThingAdapter.items.add(i)
-		customThingAdapter.items.add(i)
-		customThingAdapter.items.add(i)
-		customThingAdapter.items.add(i)
-		customThingAdapter.items.add(i)
-		customThingAdapter.items.add(i)
-		customThingAdapter.items.add(i)
-		customThingAdapter.items.add(i)
-		customThingAdapter.items.add(i)
-		customThingAdapter.items.add(i)
-		customThingAdapter.items.add(i)
-		customThingAdapter.items.add(i)
-		customThingAdapter.items.add(i)
-		customThingAdapter.items.add(i)
-		customThingAdapter.notifyDataSetChanged()
-		swipeRefreshLayout.isRefreshing = false
+		CustomThingRepository.getAll(customThingViewModel)
 	}
 
 	private fun initAddLayout() {
 		val binding = LayoutAddCustomThingBinding.inflate(LayoutInflater.from(this))
 		bottomSheetDialog.setContentView(binding.root)
-		bottomSheetDialog.setCancelable(false)
+		bottomSheetDialog.setCancelable(true)
 		bottomSheetDialog.setCanceledOnTouchOutside(false)
 		val start = Calendar.getInstance()
 		val end = Calendar.getInstance()
@@ -269,10 +235,12 @@ class CustomThingActivity : XhuBaseActivity(R.layout.activity_custom_thing) {
 		if (customThing.title == "")
 			customThing.title = "未命名"
 		customThing.isAllDay = binding.switchAllDay.isChecked
-		val start = "${binding.textViewStartDate.text.substring(0, binding.textViewStartDate.text.length - 2)} ${binding.textViewStartTime.text}"
-		val end = "${binding.textViewEndDate.text.substring(0, binding.textViewEndDate.text.length - 2)} ${binding.textViewEndTime.text}"
-		val startTime = saveDateTimeFormatter.parse(start)
-		val endTime = saveDateTimeFormatter.parse(end)
+		val start = if (customThing.isAllDay) binding.textViewStartDate.text.substring(0, binding.textViewStartDate.text.length - 2)
+		else "${binding.textViewStartDate.text.substring(0, binding.textViewStartDate.text.length - 2)} ${binding.textViewStartTime.text}"
+		val end = if (customThing.isAllDay) binding.textViewEndDate.text.substring(0, binding.textViewEndDate.text.length - 2)
+		else "${binding.textViewEndDate.text.substring(0, binding.textViewEndDate.text.length - 2)} ${binding.textViewEndTime.text}"
+		val startTime = if(customThing.isAllDay) dateFormatter.parse(start) else saveDateTimeFormatter.parse(start)
+		val endTime = if(customThing.isAllDay) dateFormatter.parse(end) else saveDateTimeFormatter.parse(end)
 		if (startTime.after(endTime)) {
 			listener.invoke(false)
 			return
