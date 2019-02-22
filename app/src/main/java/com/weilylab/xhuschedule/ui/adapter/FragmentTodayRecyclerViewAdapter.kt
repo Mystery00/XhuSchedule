@@ -24,7 +24,6 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import vip.mystery0.logs.Logs
 import vip.mystery0.tools.base.binding.BaseBindingRecyclerViewAdapter
-import java.text.SimpleDateFormat
 import java.util.*
 
 class FragmentTodayRecyclerViewAdapter(private val context: Context) : BaseBindingRecyclerViewAdapter<Any, ViewDataBinding>(0) {
@@ -128,8 +127,13 @@ class FragmentTodayRecyclerViewAdapter(private val context: Context) : BaseBindi
 			}
 			items.clear()
 			items.addAll(poetySentenceList)
-			items.addAll(courseList)
-			items.addAll(customThingList)
+			if (ConfigurationUtil.showCustomThingFirst) {
+				items.addAll(customThingList)
+				items.addAll(courseList)
+			} else {
+				items.addAll(courseList)
+				items.addAll(customThingList)
+			}
 			observableEmitter.onComplete()
 		}
 				.subscribeOn(Schedulers.newThread())

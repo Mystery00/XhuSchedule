@@ -8,7 +8,6 @@ import android.view.View
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.jrummyapps.android.colorpicker.ColorPickerDialog
@@ -137,8 +136,10 @@ class CustomThingActivity : XhuBaseActivity(R.layout.activity_custom_thing) {
 		}
 		binding.buttonSave.setOnClickListener {
 			formatInput(binding) {
-				if (it)
+				if (it) {
 					bottomSheetDialog.dismiss()
+					LayoutRefreshConfigUtil.isRefreshTodayFragment = true
+				}
 			}
 		}
 		binding.switchAllDay.setOnCheckedChangeListener { _, isChecked ->

@@ -45,4 +45,5 @@ object SharedPreferenceConstant {
 	const val FIELD_DISABLE_JRSC = "config_disable_jrsc"
 	const val FIELD_SHOW_JRSC_TRANSLATION = "config_show_jrsc_translation"
 	const val FIELD_TINT_NAVIGATION_BAR = "config_tint_navigation_bar"
+	const val FIELD_SHOW_CUSTOM_THING_FIRST = "config_show_custom_thing_first"
 }

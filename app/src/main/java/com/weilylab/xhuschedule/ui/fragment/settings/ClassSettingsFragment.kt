@@ -24,6 +24,7 @@ class ClassSettingsFragment : BasePreferenceFragment(R.xml.preference_class) {
 	private val currentYearAndTermPreference: Preference by lazy { findPreferenceById(R.string.key_current_year_and_term) }
 	private val customStartTimePreference: Preference by lazy { findPreferenceById(R.string.key_custom_start_time) }
 	private val schoolCalendarPreference: Preference by lazy { findPreferenceById(R.string.key_action_school_calendar) }
+	private val showCustomThingFirstPreference: CheckBoxPreference by lazy { findPreferenceById(R.string.key_show_custom_thing_first) as CheckBoxPreference }
 
 	private val dialog: Dialog by lazy {
 		ZLoadingDialog(activity!!)
@@ -132,6 +133,11 @@ class ClassSettingsFragment : BasePreferenceFragment(R.xml.preference_class) {
 						.setShowIndicator(false)
 						.start()
 			}
+			true
+		}
+		showCustomThingFirstPreference.setOnPreferenceChangeListener { _, _ ->
+			ConfigurationUtil.showCustomThingFirst = !showCustomThingFirstPreference.isChecked
+			LayoutRefreshConfigUtil.isRefreshTodayFragment = true
 			true
 		}
 	}

@@ -36,11 +36,12 @@ class TodayFragment : BaseBottomNavigationFragment<FragmentTodayBinding>(R.layou
 	private val adapter: FragmentTodayRecyclerViewAdapter by lazy { FragmentTodayRecyclerViewAdapter(activity!!) }
 	private lateinit var viewStubBinding: LayoutNullDataViewBinding
 
-	private val todayCourseListObserver = Observer<PackageData<List<Schedule>>> {
-		when (it.status) {
+	private val todayCourseListObserver = Observer<PackageData<List<Schedule>>> { data ->
+		when (data.status) {
 			Content -> {
-				if (it.data != null) {
-					adapter.items.addAll(it.data!!)
+				if (data.data != null) {
+					adapter.items.removeAll(adapter.items.filter { it is Schedule })
+					adapter.items.addAll(data.data!!)
 					adapter.sortItemList {
 						checkNoDataLayout()
 					}
@@ -48,17 +49,18 @@ class TodayFragment : BaseBottomNavigationFragment<FragmentTodayBinding>(R.layou
 			}
 			Empty -> checkNoDataLayout()
 			Error -> {
-				Logs.wtfm("todayCourseListObserver: ", it.error)
-				toastMessage(it.error?.message)
+				Logs.wtfm("todayCourseListObserver: ", data.error)
+				toastMessage(data.error?.message)
 				checkNoDataLayout()
 			}
 		}
 	}
-	private val customThingListObserver = Observer<PackageData<List<CustomThing>>> {
-		when (it.status) {
+	private val customThingListObserver = Observer<PackageData<List<CustomThing>>> { data ->
+		when (data.status) {
 			Content -> {
-				if (it.data != null) {
-					adapter.items.addAll(it.data!!)
+				if (data.data != null) {
+					adapter.items.removeAll(adapter.items.filter { it is CustomThing })
+					adapter.items.addAll(data.data!!)
 					adapter.sortItemList {
 						checkNoDataLayout()
 					}
@@ -66,7 +68,7 @@ class TodayFragment : BaseBottomNavigationFragment<FragmentTodayBinding>(R.layou
 			}
 			Empty -> checkNoDataLayout()
 			Error -> {
-				Logs.wtfm("todayCourseListObserver: ", it.error)
+				Logs.wtfm("todayCourseListObserver: ", data.error)
 				checkNoDataLayout()
 			}
 		}

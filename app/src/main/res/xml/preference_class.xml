@@ -47,4 +47,8 @@
 			android:targetPackage="@string/app_package_name" />
 	</Preference>
 
+	<CheckBoxPreference
+		android:key="@string/key_show_custom_thing_first"
+		android:title="@string/title_show_custom_thing_first" />
+
 </PreferenceScreen>
