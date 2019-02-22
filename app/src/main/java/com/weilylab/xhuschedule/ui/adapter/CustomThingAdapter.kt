@@ -45,5 +45,7 @@ class CustomThingAdapter(private val context: Context) : BaseBindingRecyclerView
 	override fun setItemView(binding: ItemListCustomThingBinding, position: Int, data: CustomThing) {
 		binding.customThing = data
 		binding.root.backgroundTintList = ColorStateList.valueOf(Color.parseColor(data.color))
+		val text = "${data.startTime} - ${data.endTime}"
+		binding.textViewTime.text = text
 	}
 }

@@ -11,4 +11,6 @@ object CustomThingRepository {
 	fun getAll(customThingViewModel: CustomThingViewModel) = CustomThingLocalDataSource.getAll(customThingViewModel.customThingList)
 
 	fun save(thing: CustomThing, listener: (Boolean, Throwable?) -> Unit) = CustomThingLocalDataSource.save(thing, listener)
+
+	fun delete(thing: CustomThing, listener: (Boolean) -> Unit) = CustomThingLocalDataSource.delete(thing, listener)
 }

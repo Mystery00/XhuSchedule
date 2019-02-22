@@ -1,14 +1,18 @@
 package com.weilylab.xhuschedule.ui.activity
 
 import android.app.DatePickerDialog
+import android.app.Dialog
 import android.app.TimePickerDialog
 import android.content.res.ColorStateList
 import android.view.LayoutInflater
 import android.view.View
+import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.jrummyapps.android.colorpicker.ColorPickerDialog
 import com.jrummyapps.android.colorpicker.ColorPickerDialogListener
@@ -23,6 +27,8 @@ import com.weilylab.xhuschedule.utils.CalendarUtil
 import com.weilylab.xhuschedule.utils.ConfigUtil
 import com.weilylab.xhuschedule.utils.LayoutRefreshConfigUtil
 import com.weilylab.xhuschedule.viewmodel.CustomThingViewModel
+import com.zyao89.view.zloading.ZLoadingDialog
+import com.zyao89.view.zloading.Z_TYPE
 
 import kotlinx.android.synthetic.main.activity_custom_thing.*
 import vip.mystery0.logs.Logs
@@ -41,6 +47,14 @@ class CustomThingActivity : XhuBaseActivity(R.layout.activity_custom_thing) {
 	private val dateFormatter by lazy { SimpleDateFormat("yyyy年MM月dd日", Locale.CHINA) }
 	private val timeFormatter by lazy { SimpleDateFormat("HH:mm", Locale.CHINA) }
 	private val saveDateTimeFormatter by lazy { SimpleDateFormat("yyyy年MM月dd日 HH:mm", Locale.CHINA) }
+	private val dialog: Dialog by lazy {
+		ZLoadingDialog(this)
+				.setLoadingBuilder(Z_TYPE.SINGLE_CIRCLE)
+				.setCanceledOnTouchOutside(false)
+				.setDialogBackgroundColor(ContextCompat.getColor(this, R.color.colorWhiteBackground))
+				.setLoadingColor(ContextCompat.getColor(this, R.color.colorAccent))
+				.create()
+	}
 
 	private val customThingListObserver = Observer<PackageData<List<CustomThing>>> {
 		when (it.status) {
@@ -103,6 +117,22 @@ class CustomThingActivity : XhuBaseActivity(R.layout.activity_custom_thing) {
 		floatingActionButton.setOnClickListener {
 			showAddLayout()
 		}
+		ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
+			override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder): Boolean {
+				return false
+			}
+
+			override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+				val position = viewHolder.adapterPosition
+				dialog.show()
+				CustomThingRepository.delete(customThingAdapter.items[position]) {
+					dialog.dismiss()
+					customThingAdapter.items.removeAt(position)
+					customThingAdapter.notifyItemRemoved(position)
+					LayoutRefreshConfigUtil.isRefreshTodayFragment = true
+				}
+			}
+		}).attachToRecyclerView(recyclerView)
 	}
 
 	private fun initViewModel() {
@@ -240,8 +270,8 @@ class CustomThingActivity : XhuBaseActivity(R.layout.activity_custom_thing) {
 		else "${binding.textViewStartDate.text.substring(0, binding.textViewStartDate.text.length - 2)} ${binding.textViewStartTime.text}"
 		val end = if (customThing.isAllDay) binding.textViewEndDate.text.substring(0, binding.textViewEndDate.text.length - 2)
 		else "${binding.textViewEndDate.text.substring(0, binding.textViewEndDate.text.length - 2)} ${binding.textViewEndTime.text}"
-		val startTime = if(customThing.isAllDay) dateFormatter.parse(start) else saveDateTimeFormatter.parse(start)
-		val endTime = if(customThing.isAllDay) dateFormatter.parse(end) else saveDateTimeFormatter.parse(end)
+		val startTime = if (customThing.isAllDay) dateFormatter.parse(start) else saveDateTimeFormatter.parse(start)
+		val endTime = if (customThing.isAllDay) dateFormatter.parse(end) else saveDateTimeFormatter.parse(end)
 		if (startTime.after(endTime)) {
 			listener.invoke(false)
 			return

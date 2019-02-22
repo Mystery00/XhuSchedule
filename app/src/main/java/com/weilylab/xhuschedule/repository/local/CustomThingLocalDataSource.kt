@@ -35,7 +35,7 @@ object CustomThingLocalDataSource {
 	/**
 	 * 该接口提供给事项管理页面使用
 	 */
-	fun getAll(customThingLiveData: MutableLiveData<PackageData<List<CustomThing>>>){
+	fun getAll(customThingLiveData: MutableLiveData<PackageData<List<CustomThing>>>) {
 		RxObservable<List<CustomThing>>()
 				.doThings { observableEmitter ->
 					observableEmitter.onFinish(customThingService.queryAllThings())
@@ -67,7 +67,24 @@ object CustomThingLocalDataSource {
 					}
 
 					override fun onFinish(data: Boolean?) {
-						listener.invoke(data != null, null)
+						listener.invoke(data != null && data, null)
+					}
+				})
+	}
+
+	fun delete(thing: CustomThing, listener: (Boolean) -> Unit) {
+		RxObservable<Boolean>()
+				.doThings {
+					customThingService.deleteThing(thing)
+					it.onFinish(true)
+				}
+				.subscribe(object : RxObserver<Boolean>() {
+					override fun onError(e: Throwable) {
+						listener.invoke(false)
+					}
+
+					override fun onFinish(data: Boolean?) {
+						listener.invoke(data != null && data)
 					}
 				})
 	}
