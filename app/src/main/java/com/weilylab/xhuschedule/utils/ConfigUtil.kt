@@ -11,6 +11,7 @@ import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Intent
 import android.view.View
+import com.weilylab.xhuschedule.repository.local.InitLocalDataSource
 import com.weilylab.xhuschedule.service.NotificationService
 import vip.mystery0.logs.Logs
 
@@ -85,14 +86,16 @@ object ConfigUtil {
 	fun getCurrentYearAndTerm() {
 		if (ConfigurationUtil.isCustomYearAndTerm)
 			return
-		val calendar = Calendar.getInstance()
-		val year = calendar.get(Calendar.YEAR)
-		val month = calendar.get(Calendar.MONTH)
-		if (month < Calendar.SEPTEMBER)
+		val startTime = InitLocalDataSource.getStartDateTime()
+		val year = startTime.get(Calendar.YEAR)
+		val month = startTime.get(Calendar.MONTH)
+		if (month < Calendar.JUNE) {//开始时间月份小于6月 第二学期
 			ConfigurationUtil.currentYear = "${year - 1}-$year"
-		else
+			ConfigurationUtil.currentTerm = "2"
+		} else {//开始时间月份大于6月 第一学期
 			ConfigurationUtil.currentYear = "$year-${year + 1}"
-		ConfigurationUtil.currentTerm = if (month in Calendar.MARCH until Calendar.SEPTEMBER) "2" else "1"
+			ConfigurationUtil.currentTerm = "1"
+		}
 	}
 
 	fun setStatusBar(activity: Activity) {
