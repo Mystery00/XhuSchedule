@@ -32,4 +32,21 @@ object CustomThingLocalDataSource {
 					}
 				})
 	}
+
+	fun save(thing: CustomThing, listener: (Boolean, Throwable?) -> Unit) {
+		RxObservable<Boolean>()
+				.doThings {
+					customThingService.addThing(thing)
+					it.onFinish(true)
+				}
+				.subscribe(object : RxObserver<Boolean>() {
+					override fun onError(e: Throwable) {
+						listener.invoke(false, e)
+					}
+
+					override fun onFinish(data: Boolean?) {
+						listener.invoke(data != null, null)
+					}
+				})
+	}
 }

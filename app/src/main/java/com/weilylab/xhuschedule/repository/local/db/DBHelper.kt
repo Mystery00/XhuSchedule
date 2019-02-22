@@ -30,7 +30,7 @@ object DBHelper {
 
 	private val MIGRATION_2_3: Migration = object : Migration(2, 3) {
 		override fun migrate(database: SupportSQLiteDatabase) {
-			database.execSQL("CREATE TABLE IF NOT EXISTS `tb_custom_business` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `title` TEXT NOT NULL, `start_time` TEXT NOT NULL, `endTime` TEXT NOT NULL, `is_all_day` INTEGER NOT NULL, `location` TEXT NOT NULL, `color` TEXT NOT NULL)")
+			database.execSQL("CREATE TABLE IF NOT EXISTS `tb_custom_business` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `title` TEXT NOT NULL, `start_time` TEXT NOT NULL, `endTime` TEXT NOT NULL, `is_all_day` INTEGER NOT NULL, `location` TEXT NOT NULL, `color` TEXT NOT NULL, `mark` TEXT NOT NULL)")
 		}
 	}
 }

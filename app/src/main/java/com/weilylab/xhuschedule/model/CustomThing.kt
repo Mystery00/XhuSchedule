@@ -21,4 +21,6 @@ class CustomThing {
 	lateinit var location: String
 	@ColumnInfo(name = "color")
 	lateinit var color: String
+	@ColumnInfo(name = "mark")
+	lateinit var mark: String
 }

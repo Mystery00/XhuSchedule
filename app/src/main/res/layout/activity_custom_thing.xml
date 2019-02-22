@@ -7,31 +7,34 @@
 	android:layout_height="match_parent"
 	tools:context="com.weilylab.xhuschedule.ui.activity.CustomThingActivity">
 
-	<androidx.constraintlayout.widget.ConstraintLayout
+	<com.google.android.material.appbar.AppBarLayout
+		android:id="@+id/appBarLayout"
 		android:layout_width="match_parent"
-		android:layout_height="match_parent">
+		android:layout_height="wrap_content"
+		app:elevation="0dp">
 
 		<androidx.appcompat.widget.Toolbar
 			android:id="@+id/toolbar"
 			style="@style/NoSpaceActionBarTheme"
-			android:layout_width="0dp"
+			android:layout_width="match_parent"
 			android:layout_height="45dp"
 			android:background="?attr/colorPrimary"
-			app:layout_constraintEnd_toEndOf="parent"
-			app:layout_constraintStart_toStartOf="parent"
-			app:layout_constraintTop_toTopOf="parent"
 			app:navigationIcon="@drawable/ic_chevron_left_black"
 			app:popupTheme="@style/AppTheme.PopupOverlay"
 			app:titleTextAppearance="@style/ToolbarTitleText" />
 
 		<View
 			android:id="@+id/line"
-			android:layout_width="0dp"
+			android:layout_width="match_parent"
 			android:layout_height="0.33dp"
-			android:background="@color/colorDivider"
-			app:layout_constraintEnd_toEndOf="parent"
-			app:layout_constraintStart_toStartOf="parent"
-			app:layout_constraintTop_toBottomOf="@id/toolbar" />
+			android:background="@color/colorDivider" />
+
+	</com.google.android.material.appbar.AppBarLayout>
+
+	<androidx.constraintlayout.widget.ConstraintLayout
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
 		<androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 			android:id="@+id/swipeRefreshLayout"
@@ -40,7 +43,7 @@
 			app:layout_constraintBottom_toBottomOf="parent"
 			app:layout_constraintEnd_toEndOf="parent"
 			app:layout_constraintStart_toStartOf="parent"
-			app:layout_constraintTop_toBottomOf="@id/line">
+			app:layout_constraintTop_toTopOf="parent">
 
 			<androidx.constraintlayout.widget.ConstraintLayout
 				android:layout_width="match_parent"
