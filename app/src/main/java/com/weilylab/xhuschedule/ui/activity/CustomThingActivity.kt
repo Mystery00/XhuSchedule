@@ -269,7 +269,6 @@ class CustomThingActivity : XhuBaseActivity(R.layout.activity_custom_thing) {
 							?: getString(R.string.error_db_action), Snackbar.LENGTH_SHORT)
 							.show()
 				listener.invoke(b)
-				refresh()
 			}
 		else
 			CustomThingRepository.save(customThing) { b, t ->
@@ -278,7 +277,6 @@ class CustomThingActivity : XhuBaseActivity(R.layout.activity_custom_thing) {
 							?: getString(R.string.error_db_action), Snackbar.LENGTH_SHORT)
 							.show()
 				listener.invoke(b)
-				refresh()
 			}
 	}
 
@@ -325,6 +323,7 @@ class CustomThingActivity : XhuBaseActivity(R.layout.activity_custom_thing) {
 				if (it) {
 					bottomSheetDialog.dismiss()
 					LayoutRefreshConfigUtil.isRefreshTodayFragment = true
+					refresh()
 				}
 			}
 		}
