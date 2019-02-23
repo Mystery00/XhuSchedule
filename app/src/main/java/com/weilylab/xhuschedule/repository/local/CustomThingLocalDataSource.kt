@@ -72,6 +72,23 @@ object CustomThingLocalDataSource {
 				})
 	}
 
+	fun update(thing: CustomThing, listener: (Boolean, Throwable?) -> Unit) {
+		RxObservable<Boolean>()
+				.doThings {
+					customThingService.updateThing(thing)
+					it.onFinish(true)
+				}
+				.subscribe(object : RxObserver<Boolean>() {
+					override fun onError(e: Throwable) {
+						listener.invoke(false, e)
+					}
+
+					override fun onFinish(data: Boolean?) {
+						listener.invoke(data != null && data, null)
+					}
+				})
+	}
+
 	fun delete(thing: CustomThing, listener: (Boolean) -> Unit) {
 		RxObservable<Boolean>()
 				.doThings {

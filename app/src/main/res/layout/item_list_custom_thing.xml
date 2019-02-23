@@ -21,6 +21,7 @@
 			android:layout_width="0dp"
 			android:layout_height="wrap_content"
 			android:text="@{customThing.title}"
+			android:textColor="#FFFFFF"
 			android:textSize="16sp"
 			app:layout_constraintBottom_toTopOf="@id/textViewTime"
 			app:layout_constraintEnd_toEndOf="parent"
@@ -31,11 +32,30 @@
 			android:id="@+id/textViewTime"
 			android:layout_width="0dp"
 			android:layout_height="wrap_content"
+			android:layout_marginTop="8dp"
+			android:layout_marginBottom="8dp"
+			android:drawableStart="@drawable/ic_all_day"
+			android:drawablePadding="8dp"
+			android:textColor="#FFFFFF"
+			android:textSize="14sp"
+			app:layout_constraintBottom_toTopOf="@id/textViewLocation"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintTop_toBottomOf="@id/textViewTitle" />
+
+		<TextView
+			android:id="@+id/textViewLocation"
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:drawableStart="@drawable/ic_location"
+			android:drawablePadding="8dp"
+			android:text="@{customThing.location}"
+			android:textColor="#FFFFFF"
 			android:textSize="14sp"
 			app:layout_constraintBottom_toBottomOf="parent"
 			app:layout_constraintEnd_toEndOf="parent"
 			app:layout_constraintStart_toStartOf="parent"
-			app:layout_constraintTop_toBottomOf="@id/textViewTitle" />
+			app:layout_constraintTop_toBottomOf="@id/textViewTime" />
 
 	</androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -12,5 +12,7 @@ object CustomThingRepository {
 
 	fun save(thing: CustomThing, listener: (Boolean, Throwable?) -> Unit) = CustomThingLocalDataSource.save(thing, listener)
 
+	fun update(thing: CustomThing, listener: (Boolean, Throwable?) -> Unit) = CustomThingLocalDataSource.update(thing, listener)
+
 	fun delete(thing: CustomThing, listener: (Boolean) -> Unit) = CustomThingLocalDataSource.delete(thing, listener)
 }

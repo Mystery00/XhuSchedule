@@ -1,10 +1,4 @@
-<!--
-  ~ Created by Mystery0 on 17-12-21 上午3:41.
-  ~ Copyright (c) 2017. All Rights reserved.
-  ~
-  ~ Last modified 17-12-21 上午2:35
-  -->
-
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
 	<string name="app_name">西瓜课表</string>
 
@@ -35,6 +29,8 @@
 	<string name="action_next">下一步</string>
 	<string name="action_default">恢复默认</string>
 	<string name="action_restart">重启</string>
+	<string name="action_save">保存</string>
+	<string name="action_cancel_do">撤销</string>
 
 	<string name="shortcut_title_query_test">考试查询</string>
 	<string name="shortcut_title_query_class_score">成绩查询</string>
@@ -54,6 +50,8 @@
 	<string name="prompt_password">密码</string>
 	<string name="prompt_cet_no">准考证号</string>
 	<string name="prompt_cet_name">姓名</string>
+	<string name="prompt_all_day">全天</string>
+	<string name="prompt_unlabel">未命名</string>
 
 	<string name="share_qq">QQ</string>
 	<string name="share_weixin">微信</string>
@@ -65,6 +63,10 @@
 	<string name="hint_input_cet_no">请输入准考证号</string>
 	<string name="hint_input_cet_name">请输入考生姓名</string>
 	<string name="hint_input_cet_vcode">请输入验证码</string>
+	<string name="hint_input_title">请输入标题</string>
+	<string name="hint_input_location">添加地点</string>
+	<string name="hint_input_color">设置颜色</string>
+	<string name="hint_input_mark">添加备注</string>
 
 	<string name="hint_login_password">* 密码为教务系统密码(默认为18位身份证号)</string>
 	<string name="hint_twice_press_exit">再按一次退出西瓜课表</string>
@@ -85,6 +87,7 @@
 	<string name="hint_feedback_empty">信息不能为空！</string>
 	<string name="hint_feedback_hint">请输入…</string>
 	<string name="hint_need_restart">重启以应用设置</string>
+	<string name="hint_delete_done_snackbar">已删除！</string>
 
 	<string name="hint_null_course_data">这里什么都没有(ŎдŎ;)</string>
 
@@ -108,6 +111,8 @@
 	<string name="error_field_required">参数不可为空</string>
 	<string name="error_download">下载失败</string>
 	<string name="error_download_md5_not_matched">MD5校验失败，请重新下载</string>
+	<string name="error_end_before_start">结束时间不能早于开始时间</string>
+	<string name="error_db_action">操作失败！</string>
 
 	<string name="success_login">登陆成功，欢迎使用%1$s！</string>
 
