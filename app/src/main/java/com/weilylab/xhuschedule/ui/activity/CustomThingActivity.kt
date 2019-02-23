@@ -83,6 +83,7 @@ class CustomThingActivity : XhuBaseActivity(R.layout.activity_custom_thing) {
 				android.R.color.holo_green_light,
 				android.R.color.holo_orange_light,
 				android.R.color.holo_red_light)
+		swipeRefreshLayout.setDistanceToTriggerSync(100)
 		initAddLayout()
 	}
 
@@ -151,7 +152,7 @@ class CustomThingActivity : XhuBaseActivity(R.layout.activity_custom_thing) {
 	private fun initAddLayout() {
 		bottomSheetDialog.setContentView(customThingBinding.root)
 		bottomSheetDialog.setCancelable(true)
-		bottomSheetDialog.setCanceledOnTouchOutside(false)
+		bottomSheetDialog.setCanceledOnTouchOutside(true)
 		customThingBinding.imageViewClose.setOnClickListener {
 			bottomSheetDialog.dismiss()
 		}
@@ -252,7 +253,7 @@ class CustomThingActivity : XhuBaseActivity(R.layout.activity_custom_thing) {
 		val startTime = if (customThing.isAllDay) dateFormatter.parse(start) else saveDateTimeFormatter.parse(start)
 		val endTime = if (customThing.isAllDay) dateFormatter.parse(end) else saveDateTimeFormatter.parse(end)
 		if (startTime.after(endTime)) {
-			Snackbar.make(coordinatorLayout, R.string.error_end_before_start, Snackbar.LENGTH_SHORT)
+			Snackbar.make(binding.imageViewClose, R.string.error_end_before_start, Snackbar.LENGTH_SHORT)
 					.show()
 			listener.invoke(false)
 			return
@@ -265,7 +266,7 @@ class CustomThingActivity : XhuBaseActivity(R.layout.activity_custom_thing) {
 		if (isUpdate)
 			CustomThingRepository.update(customThing) { b, t ->
 				if (t != null)
-					Snackbar.make(coordinatorLayout, t.message
+					Snackbar.make(binding.imageViewClose, t.message
 							?: getString(R.string.error_db_action), Snackbar.LENGTH_SHORT)
 							.show()
 				listener.invoke(b)
@@ -273,7 +274,7 @@ class CustomThingActivity : XhuBaseActivity(R.layout.activity_custom_thing) {
 		else
 			CustomThingRepository.save(customThing) { b, t ->
 				if (t != null)
-					Snackbar.make(coordinatorLayout, t.message
+					Snackbar.make(binding.imageViewClose, t.message
 							?: getString(R.string.error_db_action), Snackbar.LENGTH_SHORT)
 							.show()
 				listener.invoke(b)

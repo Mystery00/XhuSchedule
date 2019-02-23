@@ -15,6 +15,10 @@ class CourseServiceImpl : CourseService {
 
 	override fun queryCourseByUsernameAndTerm(username: String, year: String, term: String): List<Course> = courseDao.queryCourseByUsernameAndTerm(username, year, term)
 
+	override fun queryCustomCourseByTerm(year: String, term: String): List<Course> = courseDao.queryCustomCourseByTerm(year, term)
+
+	override fun queryAllCustomCourse(): List<Course> = courseDao.queryAllCustomCourse()
+
 	override fun queryDistinctCourseByUsernameAndTerm(): List<Course> = courseDao.queryDistinctCourseByUsernameAndTerm()
 
 	override fun queryCourseByName(name: String): List<Course> = courseDao.queryCourseByName(name)

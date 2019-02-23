@@ -48,23 +48,27 @@ class Course : ScheduleEnable {
 	@ColumnInfo(name = "student_id")
 	lateinit var studentID: String
 	@ColumnInfo(name = "edit_type")
-	var editType = 0//事项类型，课程默认为0，自定义的事项为1，蹭课为2
+	var editType = 0//事项类型，课程默认为0，自定义的课程为1
 
 	override fun getSchedule(): Schedule {
 		val schedule = Schedule()
 		schedule.name = name
 		schedule.room = location
 		schedule.teacher = teacher
-		val weekArray = week.trim().split('-')
-		val weekList = ArrayList<Int>()
-		for (i in weekArray[0].toInt()..weekArray[1].toInt()) {
-			when (type) {
-				Constants.COURSE_TYPE_ALL -> weekList.add(i)
-				Constants.COURSE_TYPE_SINGLE -> if (i % 2 == 1) weekList.add(i)
-				Constants.COURSE_TYPE_DOUBLE -> if (i % 2 == 0) weekList.add(i)
+		if (editType == 1) {
+			schedule.weekList = week.split(",").map { it.toInt() }
+		} else {
+			val weekArray = week.trim().split('-')
+			val weekList = ArrayList<Int>()
+			for (i in weekArray[0].toInt()..weekArray[1].toInt()) {
+				when (type) {
+					Constants.COURSE_TYPE_ALL -> weekList.add(i)
+					Constants.COURSE_TYPE_SINGLE -> if (i % 2 == 1) weekList.add(i)
+					Constants.COURSE_TYPE_DOUBLE -> if (i % 2 == 0) weekList.add(i)
+				}
 			}
+			schedule.weekList = weekList
 		}
-		schedule.weekList = weekList
 		val timeArray = time.trim().split('-')
 		schedule.start = timeArray[0].toInt()
 		schedule.step = timeArray[1].toInt() - timeArray[0].toInt() + 1

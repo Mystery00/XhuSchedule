@@ -14,8 +14,14 @@ interface CourseDao {
 	@Update
 	fun updateCourse(course: Course)
 
-	@Query("select * from tb_course where student_id = :username and course_year = :year and course_term = :term")
+	@Query("select * from tb_course where student_id = :username and course_year = :year and course_term = :term and edit_type = 0")
 	fun queryCourseByUsernameAndTerm(username: String, year: String, term: String): List<Course>
+
+	@Query("select * from tb_course where course_year = :year and course_term = :term and edit_type = 1")
+	fun queryCustomCourseByTerm(year: String, term: String): List<Course>
+
+	@Query("select * from tb_course where edit_type = 1")
+	fun queryAllCustomCourse(): List<Course>
 
 	@Query("select * from tb_course group by course_name")
 	fun queryDistinctCourseByUsernameAndTerm(): List<Course>

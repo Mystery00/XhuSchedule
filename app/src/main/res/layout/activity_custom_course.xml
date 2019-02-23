@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:id="@+id/coordinatorLayout"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	tools:context="com.weilylab.xhuschedule.ui.activity.CustomCourseActivity">
+
+	<com.google.android.material.appbar.AppBarLayout
+		android:id="@+id/appBarLayout"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		app:elevation="0dp">
+
+		<androidx.appcompat.widget.Toolbar
+			android:id="@+id/toolbar"
+			style="@style/NoSpaceActionBarTheme"
+			android:layout_width="match_parent"
+			android:layout_height="45dp"
+			android:background="?attr/colorPrimary"
+			app:navigationIcon="@drawable/ic_chevron_left_black"
+			app:popupTheme="@style/AppTheme.PopupOverlay"
+			app:titleTextAppearance="@style/ToolbarTitleText" />
+
+		<View
+			android:id="@+id/line"
+			android:layout_width="match_parent"
+			android:layout_height="0.33dp"
+			android:background="@color/colorDivider" />
+
+	</com.google.android.material.appbar.AppBarLayout>
+
+	<androidx.constraintlayout.widget.ConstraintLayout
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+		<androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+			android:id="@+id/swipeRefreshLayout"
+			android:layout_width="0dp"
+			android:layout_height="0dp"
+			app:layout_constraintBottom_toBottomOf="parent"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintTop_toTopOf="parent">
+
+			<androidx.constraintlayout.widget.ConstraintLayout
+				android:layout_width="match_parent"
+				android:layout_height="match_parent"
+				android:background="@color/colorGrayBackground">
+
+				<androidx.recyclerview.widget.RecyclerView
+					android:id="@+id/recyclerView"
+					android:layout_width="0dp"
+					android:layout_height="0dp"
+					app:layout_constraintBottom_toBottomOf="parent"
+					app:layout_constraintEnd_toEndOf="parent"
+					app:layout_constraintStart_toStartOf="parent"
+					app:layout_constraintTop_toTopOf="parent" />
+
+				<ViewStub
+					android:id="@+id/nullDataViewStub"
+					android:layout_width="0dp"
+					android:layout_height="0dp"
+					android:inflatedId="@id/nullDataView"
+					android:layout="@layout/layout_null_data_view"
+					app:layout_constraintBottom_toBottomOf="parent"
+					app:layout_constraintEnd_toEndOf="parent"
+					app:layout_constraintStart_toStartOf="parent"
+					app:layout_constraintTop_toTopOf="parent" />
+
+				<com.google.android.material.floatingactionbutton.FloatingActionButton
+					android:id="@+id/floatingActionButton"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_margin="@dimen/fab_margin"
+					app:layout_behavior="com.weilylab.xhuschedule.ui.custom.FloatingActionButtonScrollBehavior"
+					app:layout_constraintBottom_toBottomOf="parent"
+					app:layout_constraintEnd_toEndOf="parent"
+					app:srcCompat="@drawable/ic_add_button" />
+
+			</androidx.constraintlayout.widget.ConstraintLayout>
+
+		</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+	</androidx.constraintlayout.widget.ConstraintLayout>
+
+	<androidx.core.widget.NestedScrollView
+		android:id="@+id/nestedScrollView"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:fillViewport="true"
+		app:behavior_hideable="true"
+		app:behavior_peekHeight="0dp"
+		app:layout_behavior="@string/bottom_sheet_behavior">
+
+		<include layout="@layout/layout_add_custom_course" />
+
+	</androidx.core.widget.NestedScrollView>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

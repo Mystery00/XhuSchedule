@@ -38,7 +38,13 @@
 		android:key="@string/key_action_school_calendar"
 		android:title="@string/title_action_school_calendar" />
 
-	<Preference android:title="@string/title_action_custom_course" />
+	<Preference android:title="@string/title_action_custom_course">
+		<intent
+			android:action="android.intent.action.VIEW"
+			android:targetClass="com.weilylab.xhuschedule.ui.activity.CustomCourseActivity"
+			android:targetPackage="@string/app_package_name" />
+
+	</Preference>
 
 	<Preference android:title="@string/title_action_custom_thing">
 		<intent

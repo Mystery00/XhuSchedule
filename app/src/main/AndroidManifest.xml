@@ -144,6 +144,10 @@
 			android:name=".ui.activity.WebViewActivity"
 			android:theme="@style/AppTheme.NoActionBar" />
 		<activity
+			android:name=".ui.activity.CustomCourseActivity"
+			android:label="@string/title_action_custom_course"
+			android:theme="@style/AppTheme.NoActionBar"/>
+		<activity
 			android:name=".ui.activity.CustomThingActivity"
 			android:label="@string/title_action_custom_thing"
 			android:theme="@style/AppTheme.NoActionBar"/>

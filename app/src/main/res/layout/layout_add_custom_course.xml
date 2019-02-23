@@ -1,0 +1,328 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:background="@color/colorWhiteBackground"
+	android:orientation="vertical"
+	android:paddingTop="12dp"
+	android:paddingBottom="12dp">
+
+	<androidx.constraintlayout.widget.ConstraintLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content">
+
+		<ImageView
+			android:id="@+id/imageViewClose"
+			android:layout_width="56dp"
+			android:layout_height="56dp"
+			android:contentDescription="@string/app_name"
+			android:padding="16dp"
+			android:src="@drawable/ic_close"
+			android:tint="@color/colorBlackText"
+			app:layout_constraintBottom_toBottomOf="parent"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintTop_toTopOf="parent" />
+
+		<com.google.android.material.button.MaterialButton
+			android:id="@+id/buttonSave"
+			style="@style/Widget.AppCompat.Button.Colored"
+			android:layout_width="64dp"
+			android:layout_height="wrap_content"
+			android:layout_marginEnd="16dp"
+			android:text="@string/action_save"
+			android:textColor="#FFFFFF"
+			app:layout_constraintBottom_toBottomOf="parent"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintTop_toTopOf="parent" />
+
+	</androidx.constraintlayout.widget.ConstraintLayout>
+
+	<View
+		android:layout_width="match_parent"
+		android:layout_height="0.33dp"
+		android:background="@color/colorDivider" />
+
+	<androidx.constraintlayout.widget.ConstraintLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content">
+
+		<ImageView
+			android:id="@+id/imageViewName"
+			android:layout_width="56dp"
+			android:layout_height="56dp"
+			android:contentDescription="@string/app_name"
+			android:padding="16dp"
+			android:src="@drawable/ic_course_name"
+			android:tint="@color/colorBlackText"
+			app:layout_constraintBottom_toBottomOf="@id/editTextName"
+			app:layout_constraintEnd_toStartOf="@id/editTextName"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintTop_toTopOf="@id/editTextName" />
+
+		<EditText
+			android:id="@+id/editTextName"
+			android:layout_width="0dp"
+			android:layout_height="0dp"
+			android:background="@null"
+			android:gravity="center_vertical"
+			android:hint="课程名称（必填）"
+			android:inputType="text"
+			android:textColor="@color/colorBlackText"
+			android:textColorHint="@color/colorGrayText"
+			android:textSize="16sp"
+			app:layout_constraintBottom_toBottomOf="parent"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintStart_toEndOf="@id/imageViewName"
+			app:layout_constraintTop_toTopOf="parent" />
+
+	</androidx.constraintlayout.widget.ConstraintLayout>
+
+	<View
+		android:layout_width="match_parent"
+		android:layout_height="0.33dp"
+		android:background="@color/colorDivider" />
+
+	<androidx.constraintlayout.widget.ConstraintLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content">
+
+		<ImageView
+			android:id="@+id/imageViewTeacher"
+			android:layout_width="56dp"
+			android:layout_height="56dp"
+			android:contentDescription="@string/app_name"
+			android:padding="16dp"
+			android:src="@drawable/ic_course_teacher"
+			android:tint="@color/colorBlackText"
+			app:layout_constraintBottom_toBottomOf="@id/editTextTeacher"
+			app:layout_constraintEnd_toStartOf="@id/editTextTeacher"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintTop_toTopOf="@id/editTextTeacher" />
+
+		<EditText
+			android:id="@+id/editTextTeacher"
+			android:layout_width="0dp"
+			android:layout_height="0dp"
+			android:background="@null"
+			android:gravity="center_vertical"
+			android:hint="任课教师（可选）"
+			android:inputType="text"
+			android:textColor="@color/colorBlackText"
+			android:textColorHint="@color/colorGrayText"
+			android:textSize="16sp"
+			app:layout_constraintBottom_toBottomOf="parent"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintStart_toEndOf="@id/imageViewTeacher"
+			app:layout_constraintTop_toTopOf="parent" />
+
+	</androidx.constraintlayout.widget.ConstraintLayout>
+
+	<View
+		android:layout_width="match_parent"
+		android:layout_height="0.33dp"
+		android:background="@color/colorDivider" />
+
+	<androidx.constraintlayout.widget.ConstraintLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content">
+
+		<ImageView
+			android:id="@+id/imageViewWeek"
+			android:layout_width="56dp"
+			android:layout_height="56dp"
+			android:contentDescription="@string/app_name"
+			android:padding="16dp"
+			android:src="@drawable/ic_week"
+			android:tint="@color/colorBlackText"
+			app:layout_constraintBottom_toBottomOf="@id/textViewWeek"
+			app:layout_constraintEnd_toStartOf="@id/textViewWeek"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintTop_toTopOf="@id/textViewWeek" />
+
+		<TextView
+			android:id="@+id/textViewWeek"
+			android:layout_width="0dp"
+			android:layout_height="0dp"
+			android:background="@null"
+			android:gravity="center_vertical"
+			android:text="上课周数（不能为空）"
+			android:textColor="@color/colorBlackText"
+			android:textColorHint="@color/colorGrayText"
+			android:textSize="16sp"
+			app:layout_constraintBottom_toTopOf="@id/recyclerViewWeek"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintStart_toEndOf="@id/imageViewWeek"
+			app:layout_constraintTop_toTopOf="parent" />
+
+		<androidx.recyclerview.widget.RecyclerView
+			android:id="@+id/recyclerViewWeek"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_marginStart="56dp"
+			android:layout_marginBottom="12dp"
+			app:layout_constraintBottom_toBottomOf="parent"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintTop_toBottomOf="@id/textViewWeek" />
+
+	</androidx.constraintlayout.widget.ConstraintLayout>
+
+	<View
+		android:layout_width="match_parent"
+		android:layout_height="0.33dp"
+		android:background="@color/colorDivider" />
+
+	<androidx.constraintlayout.widget.ConstraintLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content">
+
+		<ImageView
+			android:id="@+id/imageViewLocation"
+			android:layout_width="56dp"
+			android:layout_height="56dp"
+			android:contentDescription="@string/app_name"
+			android:padding="16dp"
+			android:src="@drawable/ic_location"
+			android:tint="@color/colorBlackText"
+			app:layout_constraintBottom_toBottomOf="@id/editTextLocation"
+			app:layout_constraintEnd_toStartOf="@id/editTextLocation"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintTop_toTopOf="@id/editTextLocation" />
+
+		<EditText
+			android:id="@+id/editTextLocation"
+			android:layout_width="0dp"
+			android:layout_height="0dp"
+			android:background="@null"
+			android:gravity="center_vertical"
+			android:hint="上课地点（可选）"
+			android:inputType="text"
+			android:textColor="@color/colorBlackText"
+			android:textColorHint="@color/colorGrayText"
+			android:textSize="16sp"
+			app:layout_constraintBottom_toBottomOf="parent"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintStart_toEndOf="@id/imageViewLocation"
+			app:layout_constraintTop_toTopOf="parent" />
+
+	</androidx.constraintlayout.widget.ConstraintLayout>
+
+	<View
+		android:layout_width="match_parent"
+		android:layout_height="0.33dp"
+		android:background="@color/colorDivider" />
+
+	<androidx.constraintlayout.widget.ConstraintLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content">
+
+		<ImageView
+			android:id="@+id/imageViewTime"
+			android:layout_width="56dp"
+			android:layout_height="56dp"
+			android:contentDescription="@string/app_name"
+			android:padding="16dp"
+			android:src="@drawable/ic_all_day"
+			android:tint="@color/colorBlackText"
+			app:layout_constraintBottom_toBottomOf="@id/textViewTime"
+			app:layout_constraintEnd_toStartOf="@id/textViewTime"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintTop_toTopOf="@id/textViewTime" />
+
+		<TextView
+			android:id="@+id/textViewTime"
+			android:layout_width="0dp"
+			android:layout_height="0dp"
+			android:gravity="center_vertical"
+			android:textColor="@color/colorBlackText"
+			android:textColorHint="@color/colorGrayText"
+			android:textSize="16sp"
+			app:layout_constraintBottom_toBottomOf="parent"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintStart_toEndOf="@id/imageViewTime"
+			app:layout_constraintTop_toTopOf="parent" />
+
+	</androidx.constraintlayout.widget.ConstraintLayout>
+
+	<View
+		android:layout_width="match_parent"
+		android:layout_height="0.33dp"
+		android:background="@color/colorDivider" />
+
+	<androidx.constraintlayout.widget.ConstraintLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content">
+
+		<ImageView
+			android:id="@+id/imageViewColor"
+			android:layout_width="56dp"
+			android:layout_height="56dp"
+			android:contentDescription="@string/app_name"
+			android:padding="16dp"
+			android:src="@drawable/ic_point"
+			android:tint="@color/colorAccent"
+			app:layout_constraintBottom_toBottomOf="@id/textViewColor"
+			app:layout_constraintEnd_toStartOf="@id/textViewColor"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintTop_toTopOf="@id/textViewColor" />
+
+		<TextView
+			android:id="@+id/textViewColor"
+			android:layout_width="0dp"
+			android:layout_height="0dp"
+			android:background="@null"
+			android:gravity="center_vertical"
+			android:text="@string/hint_input_color"
+			android:textColor="@color/colorBlackText"
+			android:textSize="16sp"
+			app:layout_constraintBottom_toBottomOf="parent"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintStart_toEndOf="@id/imageViewColor"
+			app:layout_constraintTop_toTopOf="parent" />
+
+	</androidx.constraintlayout.widget.ConstraintLayout>
+
+	<View
+		android:layout_width="match_parent"
+		android:layout_height="0.33dp"
+		android:background="@color/colorDivider" />
+
+	<TextView
+		android:id="@+id/textViewYear"
+		android:layout_width="match_parent"
+		android:layout_height="48dp"
+		android:layout_marginStart="56dp"
+		android:gravity="center_vertical"
+		android:textColor="@color/colorBlackText"
+		android:textSize="16sp" />
+
+	<View
+		android:layout_width="match_parent"
+		android:layout_height="0.33dp"
+		android:background="@color/colorDivider" />
+
+	<TextView
+		android:id="@+id/textViewTerm"
+		android:layout_width="match_parent"
+		android:layout_height="48dp"
+		android:layout_marginStart="56dp"
+		android:gravity="center_vertical"
+		android:textColor="@color/colorBlackText"
+		android:textSize="16sp" />
+
+	<View
+		android:layout_width="match_parent"
+		android:layout_height="0.33dp"
+		android:background="@color/colorDivider" />
+
+	<TextView
+		android:id="@+id/textViewStudent"
+		android:layout_width="match_parent"
+		android:layout_height="48dp"
+		android:layout_marginStart="56dp"
+		android:gravity="center_vertical"
+		android:textColor="@color/colorBlackText"
+		android:textSize="16sp" />
+
+</LinearLayout>

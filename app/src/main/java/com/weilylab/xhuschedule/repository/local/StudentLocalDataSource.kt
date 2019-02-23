@@ -150,6 +150,8 @@ object StudentLocalDataSource : StudentDataSource {
 		studentService.saveStudentInfo(studentInfo)
 	}
 
+	fun queryMainStudentInfo(studentLiveData: MutableLiveData<PackageData<StudentInfo>>) = queryStudentInfo(studentLiveData, studentService.queryMainStudent()!!)
+
 	fun queryAllStudentList(listener: (PackageData<List<Student>>) -> Unit) {
 		RxObservable<List<Student>>()
 				.doThings {

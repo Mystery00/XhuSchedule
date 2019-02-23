@@ -108,8 +108,13 @@ object CourseLocalDataSource : CourseDataSource {
 	}
 
 	fun getRowCourseList(student: Student, year: String? = null, term: String? = null): List<Schedule> {
-		return CourseUtil.convertCourseToSchedule(courseService.queryCourseByUsernameAndTerm(student.username, year
-				?: ConfigurationUtil.currentYear, term ?: ConfigurationUtil.currentTerm))
+		val courses = courseService.queryCourseByUsernameAndTerm(student.username, year
+				?: ConfigurationUtil.currentYear, term ?: ConfigurationUtil.currentTerm)
+		val custom = courseService.queryAllCustomCourse()
+		val all = ArrayList<Course>()
+		all.addAll(courses)
+		all.addAll(custom)
+		return CourseUtil.convertCourseToSchedule(all)
 	}
 
 
@@ -127,5 +132,80 @@ object CourseLocalDataSource : CourseDataSource {
 			courseService.addCourse(course)
 		}
 		ConfigurationUtil.lastUpdateDate = CalendarUtil.getTodayDateString()
+	}
+
+
+	/**
+	 * 该接口提供给自定义课程页面使用
+	 */
+	fun getAll(customThingLiveData: MutableLiveData<PackageData<List<Course>>>) {
+		RxObservable<List<Course>>()
+				.doThings { observableEmitter ->
+					observableEmitter.onFinish(courseService.queryAllCustomCourse())
+				}
+				.subscribe(object : RxObserver<List<Course>>() {
+					override fun onError(e: Throwable) {
+						customThingLiveData.value = PackageData.error(e)
+					}
+
+					override fun onFinish(data: List<Course>?) {
+						when {
+							data == null -> customThingLiveData.value = PackageData.error(Exception("data is null"))
+							data.isEmpty() -> customThingLiveData.value = PackageData.empty(data)
+							else -> customThingLiveData.value = PackageData.content(data)
+						}
+					}
+				})
+	}
+
+	fun save(course: Course, listener: (Boolean, Throwable?) -> Unit) {
+		RxObservable<Boolean>()
+				.doThings {
+					courseService.addCourse(course)
+					it.onFinish(true)
+				}
+				.subscribe(object : RxObserver<Boolean>() {
+					override fun onError(e: Throwable) {
+						listener.invoke(false, e)
+					}
+
+					override fun onFinish(data: Boolean?) {
+						listener.invoke(data != null && data, null)
+					}
+				})
+	}
+
+	fun update(course: Course, listener: (Boolean, Throwable?) -> Unit) {
+		RxObservable<Boolean>()
+				.doThings {
+					courseService.updateCourse(course)
+					it.onFinish(true)
+				}
+				.subscribe(object : RxObserver<Boolean>() {
+					override fun onError(e: Throwable) {
+						listener.invoke(false, e)
+					}
+
+					override fun onFinish(data: Boolean?) {
+						listener.invoke(data != null && data, null)
+					}
+				})
+	}
+
+	fun delete(course: Course, listener: (Boolean) -> Unit) {
+		RxObservable<Boolean>()
+				.doThings {
+					courseService.deleteCourse(course)
+					it.onFinish(true)
+				}
+				.subscribe(object : RxObserver<Boolean>() {
+					override fun onError(e: Throwable) {
+						listener.invoke(false)
+					}
+
+					override fun onFinish(data: Boolean?) {
+						listener.invoke(data != null && data)
+					}
+				})
 	}
 }
