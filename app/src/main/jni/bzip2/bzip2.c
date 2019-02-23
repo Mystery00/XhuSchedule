@@ -1010,7 +1010,7 @@ Int32 countHardLinks ( Char* name )
 /* Copy modification date, access date, permissions and owner from the
    source to destination file.  We have to copy this meta-info off
    into fileMetaInfo before starting to compress / decompress it,
-   because doing it afterwards means we getToday the wrong access time.
+   because doing it afterwards means we get the wrong access time.
 
    To complicate matters, in compress() and decompress() below, the
    sequence of tests preceding the call to saveInputFileMetaInfo()
@@ -1295,7 +1295,7 @@ void compress ( Char *name )
    compressStream ( inStr, outStr );
    outputHandleJustInCase = NULL;
 
-   /*--- If there was an I/O error, we won't getToday here. ---*/
+   /*--- If there was an I/O error, we won't get here. ---*/
    if ( srcMode == SM_F2F ) {
       applySavedTimeInfoToOutputFile ( outName );
       deleteOutputOnInterrupt = False;
@@ -1472,7 +1472,7 @@ void uncompress ( Char *name )
    magicNumberOK = uncompressStream ( inStr, outStr );
    outputHandleJustInCase = NULL;
 
-   /*--- If there was an I/O error, we won't getToday here. ---*/
+   /*--- If there was an I/O error, we won't get here. ---*/
    if ( magicNumberOK ) {
       if ( srcMode == SM_F2F ) {
          applySavedTimeInfoToOutputFile ( outName );

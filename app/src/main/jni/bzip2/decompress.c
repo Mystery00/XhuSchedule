@@ -381,7 +381,7 @@ Int32 BZ2_decompress ( DState* s )
             es = -1;
             N = 1;
             do {
-               /* Check that N doesn't getToday too big, so that es doesn't
+               /* Check that N doesn't get too big, so that es doesn't
                   go negative.  The maximum value that can be
                   RUNA/RUNB encoded is equal to the block size (post
                   the initial RLE), viz, 900k, so bounding N at 2
