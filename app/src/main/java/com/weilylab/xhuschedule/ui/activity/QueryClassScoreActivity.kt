@@ -1,9 +1,11 @@
 package com.weilylab.xhuschedule.ui.activity
 
+import android.app.Dialog
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AlertDialog
+import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.Observer
@@ -22,10 +24,14 @@ import com.weilylab.xhuschedule.utils.ConfigurationUtil
 import vip.mystery0.rxpackagedata.PackageData
 import vip.mystery0.rxpackagedata.Status.*
 import com.weilylab.xhuschedule.viewmodel.QueryClassScoreViewModel
+import com.zyao89.view.zloading.ZLoadingDialog
+import com.zyao89.view.zloading.Z_TYPE
 import kotlinx.android.synthetic.main.activity_query_class_score.*
 import vip.mystery0.logs.Logs
 import vip.mystery0.tools.utils.DensityTools
 import java.util.*
+
+
 
 class QueryClassScoreActivity : XhuBaseActivity(R.layout.activity_query_class_score) {
 	private val queryClassScoreViewModel: QueryClassScoreViewModel by lazy {
@@ -33,9 +39,21 @@ class QueryClassScoreActivity : XhuBaseActivity(R.layout.activity_query_class_sc
 	}
 	private val queryClassScoreRecyclerViewAdapter: QueryClassScoreRecyclerViewAdapter by lazy { QueryClassScoreRecyclerViewAdapter(this) }
 	private var hasData = false
+	private val dialog: Dialog by lazy {
+		ZLoadingDialog(this)
+				.setLoadingBuilder(Z_TYPE.SINGLE_CIRCLE)
+				.setHintText(getString(R.string.hint_dialog_init))
+				.setHintTextSize(16F)
+				.setCanceledOnTouchOutside(false)
+				.setDialogBackgroundColor(ContextCompat.getColor(this, R.color.colorWhiteBackground))
+				.setLoadingColor(ContextCompat.getColor(this, R.color.colorAccent))
+				.setHintTextColor(ContextCompat.getColor(this, R.color.colorAccent))
+				.create()
+	}
 
 	private val studentInfoListObserver = Observer<PackageData<Map<Student, StudentInfo?>>> { data ->
 		when (data.status) {
+			Loading -> dialog.show()
 			Content -> {
 				val map = data.data!!
 				if (map.keys.isNotEmpty()) {
@@ -44,6 +62,13 @@ class QueryClassScoreActivity : XhuBaseActivity(R.layout.activity_query_class_sc
 					val month = Calendar.getInstance().get(Calendar.MONTH)
 					queryClassScoreViewModel.term.value = if (month in Calendar.MARCH until Calendar.SEPTEMBER) "2" else "1"
 				}
+				dialog.dismiss()
+			}
+			Error -> {
+				dialog.dismiss()
+				Logs.wtf("studentInfoListObserver: ", data.error)
+				toastMessage(R.string.error_init_failed)
+				finish()
 			}
 		}
 	}
