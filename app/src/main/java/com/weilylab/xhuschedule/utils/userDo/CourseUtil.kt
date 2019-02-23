@@ -202,6 +202,28 @@ object CourseUtil {
 				})
 	}
 
+	fun splitWeekString(list: List<Int>): String {
+		val stringBuilder = StringBuilder()
+		list.forEachIndexed f@{ index, i ->
+			when (index) {
+				0 -> stringBuilder.append(i)
+				list.size - 1 -> {
+					if (list[index] - list[index - 1] == 1) stringBuilder.append("-").append(list[index])
+					else stringBuilder.append(",").append(list[index])
+				}
+				else -> {
+					if ((list[index] - list[index - 1] == 1) && (list[index + 1] - list[index] == 1))
+						return@f
+					if ((list[index] - list[index - 1] == 1) && (list[index + 1] - list[index] != 1))
+						stringBuilder.append("-").append(list[index])
+					if (list[index] - list[index - 1] != 1)
+						stringBuilder.append(",").append(list[index])
+				}
+			}
+		}
+		return stringBuilder.toString()
+	}
+
 	fun isTodayCourse(schedule: Schedule, week: Int, weekIndex: Int): Boolean = schedule.day == weekIndex && schedule.weekList.contains(week)
 
 	fun convertCourseToSchedule(courseList: List<Course>): List<Schedule> = courseList.map { it.schedule }

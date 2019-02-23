@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.drawable.GradientDrawable
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.databinding.ItemShowCourseBinding
+import com.weilylab.xhuschedule.utils.userDo.CourseUtil
 import com.zhuangfei.timetable.model.Schedule
 import vip.mystery0.tools.base.binding.BaseBindingRecyclerViewAdapter
 
@@ -16,7 +17,7 @@ class ShowCourseRecyclerViewAdapter(private val context: Context) : BaseBindingR
 		val stringBuilder = StringBuilder()
 		stringBuilder.appendln(data.teacher)
 				.appendln(data.room)
-				.appendln(splitWeek(data.weekList))
+				.append(CourseUtil.splitWeekString(data.weekList).replace(",", "周 ")).appendln("周")
 				.append(courseTimeText)
 		binding.textView.text = stringBuilder.toString()
 		binding.textView.setLineSpacing(binding.textView.textSize * 0.6f, 1f)
@@ -24,26 +25,5 @@ class ShowCourseRecyclerViewAdapter(private val context: Context) : BaseBindingR
 		gradientDrawable.setColor(data.extras["colorInt"] as Int)
 		gradientDrawable.cornerRadius = 48F
 		binding.linearLayout.background = gradientDrawable
-	}
-
-	private fun splitWeek(list: MutableList<Int>): String {
-		val stringBuilder = StringBuilder()
-		var start = list[0]
-		var end = list[0]
-		if (list.size == 1)
-			return "$start-${end}周"
-		for (i in 1 until list.size) {
-			val next = list[i]
-			if (next != end + 1) {
-				stringBuilder.append("$start-${end}周 ")
-				start = next
-				end = next
-			} else {
-				end = next
-			}
-			if (i == list.size - 1)
-				stringBuilder.append("$start-${end}周")
-		}
-		return stringBuilder.toString()
 	}
 }
