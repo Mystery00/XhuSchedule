@@ -13,6 +13,7 @@ class CustomCourseViewModel : ViewModel() {
 	val studentInfoList by lazy { MediatorLiveData<PackageData<Map<Student, StudentInfo?>>>() }
 	val customCourseList by lazy { MutableLiveData<PackageData<List<Course>>>() }
 	val time by lazy { MutableLiveData<Pair<Int, Int>>() }
+	val weekIndex by lazy { MutableLiveData<Int>() }
 	val student by lazy { MutableLiveData<Student>() }
 	val year by lazy { MutableLiveData<String>() }
 	val term by lazy { MutableLiveData<String>() }

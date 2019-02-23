@@ -5,7 +5,6 @@
 	android:layout_height="match_parent"
 	android:background="@color/colorWhiteBackground"
 	android:orientation="vertical"
-	android:paddingTop="12dp"
 	android:paddingBottom="12dp">
 
 	<androidx.constraintlayout.widget.ConstraintLayout
@@ -239,8 +238,22 @@
 			android:textColorHint="@color/colorGrayText"
 			android:textSize="16sp"
 			app:layout_constraintBottom_toBottomOf="parent"
-			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintEnd_toStartOf="@id/textViewWeekIndex"
+			app:layout_constraintHorizontal_chainStyle="packed"
 			app:layout_constraintStart_toEndOf="@id/imageViewTime"
+			app:layout_constraintTop_toTopOf="parent" />
+
+		<TextView
+			android:id="@+id/textViewWeekIndex"
+			android:layout_width="0dp"
+			android:layout_height="0dp"
+			android:gravity="center_vertical"
+			android:textColor="@color/colorBlackText"
+			android:textColorHint="@color/colorGrayText"
+			android:textSize="16sp"
+			app:layout_constraintBottom_toBottomOf="parent"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintStart_toEndOf="@id/textViewTime"
 			app:layout_constraintTop_toTopOf="parent" />
 
 	</androidx.constraintlayout.widget.ConstraintLayout>

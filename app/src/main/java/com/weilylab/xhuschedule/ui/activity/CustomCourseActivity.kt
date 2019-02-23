@@ -68,8 +68,12 @@ class CustomCourseActivity : XhuBaseActivity(R.layout.activity_custom_course) {
 				if (map.keys.isNotEmpty()) {
 					customCourseViewModel.student.value = map.keys.first { it.isMain }
 					customCourseViewModel.year.value = CalendarUtil.getSelectArray(null).last()
-					val month = Calendar.getInstance().get(Calendar.MONTH)
+					val now = Calendar.getInstance()
+					now.firstDayOfWeek = Calendar.MONDAY
+					val month = now.get(Calendar.MONTH)
+					val week = now.get(Calendar.DAY_OF_WEEK)
 					customCourseViewModel.term.value = if (month in Calendar.MARCH until Calendar.SEPTEMBER) "2" else "1"
+					customCourseViewModel.weekIndex.value = week
 				}
 				dialog.dismiss()
 			}
@@ -85,6 +89,10 @@ class CustomCourseActivity : XhuBaseActivity(R.layout.activity_custom_course) {
 	private val timeObserver = Observer<Pair<Int, Int>> {
 		val text = "第 ${it.first}-${it.second} 节"
 		textViewTime.text = text
+	}
+
+	private val weekIndexObserver = Observer<Int> {
+		textViewWeekIndex.text = CalendarUtil.getWeekIndexInString(it)
 	}
 
 	private val studentObserver = Observer<Student> {
@@ -202,19 +210,33 @@ class CustomCourseActivity : XhuBaseActivity(R.layout.activity_custom_course) {
 					}
 					.setPositiveButton(R.string.action_ok) { _, _ ->
 						newTime[0] = selectIndex + 1
-						val timeEndTextArray = Array(11 - newTime[0] - 1) { i -> (i + newTime[0]).toString() }
-						selectIndex = now.second - 1
+						val timeEndTextArray = Array(11 - newTime[0] + 1) { i -> (i + newTime[0]).toString() }
+						selectIndex = 0
 						AlertDialog.Builder(this)
 								.setTitle(R.string.hint_dialog_custom_course_choose_time_end)
 								.setSingleChoiceItems(timeEndTextArray, selectIndex) { _, index ->
 									selectIndex = index
 								}
 								.setPositiveButton(R.string.action_ok) { _, _ ->
-									newTime[1] = selectIndex + 1
+									newTime[1] = selectIndex + newTime[0]
 									customCourseViewModel.time.value = Pair(newTime[0], newTime[1])
 								}
 								.setNegativeButton(R.string.action_cancel, null)
 								.show()
+					}
+					.setNegativeButton(R.string.action_cancel, null)
+					.show()
+		}
+		textViewWeekIndex.setOnClickListener {
+			val termTextArray = Array(7) { i -> CalendarUtil.getWeekIndexInString(i + 1) }
+			var selectIndex = customCourseViewModel.weekIndex.value!! - 1
+			AlertDialog.Builder(this)
+					.setTitle(R.string.hint_dialog_custom_course_choose_week_index)
+					.setSingleChoiceItems(termTextArray, selectIndex) { _, index ->
+						selectIndex = index
+					}
+					.setPositiveButton(R.string.action_ok) { _, _ ->
+						customCourseViewModel.weekIndex.value = selectIndex + 1
 					}
 					.setNegativeButton(R.string.action_cancel, null)
 					.show()
@@ -303,6 +325,7 @@ class CustomCourseActivity : XhuBaseActivity(R.layout.activity_custom_course) {
 	private fun initViewModel() {
 		customCourseViewModel.studentInfoList.observe(this, studentInfoListObserver)
 		customCourseViewModel.time.observe(this, timeObserver)
+		customCourseViewModel.weekIndex.observe(this, weekIndexObserver)
 		customCourseViewModel.student.observe(this, studentObserver)
 		customCourseViewModel.year.observe(this, yearObserver)
 		customCourseViewModel.term.observe(this, termObserver)
@@ -325,6 +348,7 @@ class CustomCourseActivity : XhuBaseActivity(R.layout.activity_custom_course) {
 			editTextLocation.setText(data.location)
 			val timeArray = data.time.split("-").map { it.toInt() }
 			customCourseViewModel.time.value = Pair(timeArray[0], timeArray[1])
+			customCourseViewModel.weekIndex.value = data.day.toInt()
 			imageViewColor.imageTintList = ColorStateList.valueOf(Color.parseColor(data.color))
 			customCourseViewModel.year.value = data.year
 			customCourseViewModel.term.value = data.term
@@ -357,14 +381,14 @@ class CustomCourseActivity : XhuBaseActivity(R.layout.activity_custom_course) {
 	private fun doSave(course: Course, listener: (Boolean) -> Unit) {
 		course.name = editTextName.text.toString()
 		if (course.name == "") {
-			Snackbar.make(imageViewClose, "课程名称不能为空！", Snackbar.LENGTH_LONG)
+			Snackbar.make(imageViewClose, R.string.hint_empty_couse_name, Snackbar.LENGTH_LONG)
 					.show()
 			listener.invoke(false)
 			return
 		}
 		course.teacher = editTextTeacher.text.toString()
 		if (customCourseWeekAdapter.selectedList.isEmpty()) {
-			Snackbar.make(imageViewClose, "周数不能为空！", Snackbar.LENGTH_LONG)
+			Snackbar.make(imageViewClose, R.string.hint_empty_couse_week, Snackbar.LENGTH_LONG)
 					.show()
 			listener.invoke(false)
 			return
@@ -373,7 +397,7 @@ class CustomCourseActivity : XhuBaseActivity(R.layout.activity_custom_course) {
 		course.location = editTextLocation.text.toString()
 		val pair = customCourseViewModel.time.value!!
 		course.time = "${pair.first}-${pair.second}"
-		course.day = "2"
+		course.day = customCourseViewModel.weekIndex.value.toString()
 		course.color = ConfigUtil.toHexEncoding(imageViewColor.imageTintList!!.defaultColor)
 		course.year = customCourseViewModel.year.value!!
 		course.term = customCourseViewModel.term.value!!

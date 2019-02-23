@@ -88,6 +88,8 @@
 	<string name="hint_feedback_hint">请输入…</string>
 	<string name="hint_need_restart">重启以应用设置</string>
 	<string name="hint_delete_done_snackbar">已删除！</string>
+	<string name="hint_empty_couse_name">课程名称不能为空！</string>
+	<string name="hint_empty_couse_week">周数不能为空！</string>
 
 	<string name="hint_null_course_data">这里什么都没有(ŎдŎ;)</string>
 
@@ -107,6 +109,7 @@
 	<string name="hint_dialog_custom_course_choose_term">课程的学期</string>
 	<string name="hint_dialog_custom_course_choose_time_start">请选择开始上课节次</string>
 	<string name="hint_dialog_custom_course_choose_time_end">请选择结束上课节次</string>
+	<string name="hint_dialog_custom_course_choose_week_index">上课星期</string>
 
 	<string name="hint_confirm_reset_user_img">确定要重置个人头像吗？</string>
 	<string name="hint_confirm_reset_background_img">确定要重置背景图片吗？</string>
