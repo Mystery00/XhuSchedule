@@ -92,6 +92,8 @@ class LoginActivity : XhuBaseActivity(R.layout.activity_login, false) {
 				toastMessage(it.error?.message)
 			}
 			Loading -> showDialog()
+			Empty -> {
+			}
 		}
 	}
 

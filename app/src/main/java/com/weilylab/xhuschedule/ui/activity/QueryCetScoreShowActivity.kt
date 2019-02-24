@@ -20,6 +20,8 @@ class QueryCetScoreShowActivity : XhuBaseActivity(R.layout.activity_query_cet_sc
 	private val cetScoreObserver = Observer<PackageData<CetScore>> {
 		when (it.status) {
 			Status.Content -> doShow(it.data!!)
+			else -> {
+			}
 		}
 	}
 

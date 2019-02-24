@@ -15,9 +15,9 @@ class CustomCourseAdapter(private val context: Context) : BaseBindingRecyclerVie
 	override fun setItemView(binding: ItemListCustomCourseBinding, position: Int, data: Course) {
 		binding.course = data
 		binding.root.backgroundTintList = ColorStateList.valueOf(Color.parseColor(data.color))
-		val weekText = "第 ${CourseUtil.splitWeekString(data.week.split(",").map { it.toInt() })} 周"
+		val weekText = context.getString(R.string.prompt_custom_course_week_, CourseUtil.splitWeekString(data.week.split(",").map { it.toInt() }))
 		binding.textViewWeek.text = weekText
-		val timeText = "第 ${data.time} 节"
+		val timeText = context.getString(R.string.prompt_custom_course_time_, data.time)
 		binding.textViewTime.text = timeText
 		binding.root.setOnClickListener { clickListener?.invoke(data) }
 	}

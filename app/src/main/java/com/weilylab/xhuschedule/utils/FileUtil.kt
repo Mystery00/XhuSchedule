@@ -5,11 +5,6 @@ import android.os.Environment
 import android.text.TextUtils
 import com.weilylab.xhuschedule.constant.Constants
 import java.io.File
-import java.io.FileInputStream
-import java.io.IOException
-import java.math.BigInteger
-import java.nio.channels.FileChannel
-import java.security.MessageDigest
 
 object FileUtil {
 	const val UI_IMAGE_BACKGROUND = Constants.FILE_NAME_IMG_BACKGROUND

@@ -60,7 +60,7 @@ object CourseRemoteDataSource : CourseDataSource {
 			CourseUtil.getCoursesForManyStudent(studentList, year, term, object : DoSaveListener<Map<String, List<Course>>> {
 				override fun doSave(t: Map<String, List<Course>>) {
 					val username = t.keys.first()
-					val courseList = t[username]!!
+					val courseList = t.getValue(username)
 					courseList.forEach {
 						it.studentID = username
 						if (year != null && term != null) {

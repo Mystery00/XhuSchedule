@@ -6,6 +6,8 @@
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
 		android:background="@color/colorWhiteBackground"
+		android:focusable="true"
+		android:focusableInTouchMode="true"
 		android:orientation="vertical"
 		android:paddingBottom="12dp">
 

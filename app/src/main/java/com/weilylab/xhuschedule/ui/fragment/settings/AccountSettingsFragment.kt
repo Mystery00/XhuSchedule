@@ -5,7 +5,6 @@ import android.content.Intent
 import androidx.preference.CheckBoxPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceCategory
-import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.base.BasePreferenceFragment
@@ -65,8 +64,7 @@ class AccountSettingsFragment : BasePreferenceFragment(R.xml.preference_account)
 
 							override fun onError(e: Throwable) {
 								Logs.wtf("onError: ", e)
-								Toast.makeText(activity, "删除失败，错误详情：${e.message}", Toast.LENGTH_LONG)
-										.show()
+								toastMessage(getString(R.string.error_delete_account, e.message), true)
 							}
 						})
 					}
@@ -99,8 +97,7 @@ class AccountSettingsFragment : BasePreferenceFragment(R.xml.preference_account)
 
 							override fun onError(e: Throwable) {
 								Logs.wtf("onError: ", e)
-								Toast.makeText(activity, "设置主用户失败，错误详情：${e.message}", Toast.LENGTH_LONG)
-										.show()
+								toastMessage(getString(R.string.error_set_main_account, e.message), true)
 							}
 						})
 					}
@@ -145,6 +142,8 @@ class AccountSettingsFragment : BasePreferenceFragment(R.xml.preference_account)
 					initStudentCategory()
 				}
 				Error -> Logs.wtf("initStudentList: ", it.error)
+				else -> {
+				}
 			}
 		}
 	}

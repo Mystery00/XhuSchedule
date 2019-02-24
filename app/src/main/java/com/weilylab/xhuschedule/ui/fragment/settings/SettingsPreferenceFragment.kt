@@ -263,8 +263,8 @@ class SettingsPreferenceFragment : BasePreferenceFragment(R.xml.preference_setti
 		if (grantResults[0] == PackageManager.PERMISSION_GRANTED)
 			requestImageChoose(requestCode)
 		else
-			Snackbar.make(activity!!.window.decorView, "权限被拒绝，无法使用", Snackbar.LENGTH_LONG)
-					.setAction("重新申请") {
+			Snackbar.make(activity!!.window.decorView, R.string.hint_permission_deny, Snackbar.LENGTH_LONG)
+					.setAction(R.string.action_re_request) {
 						requestImageChoose(requestCode)
 					}
 					.show()
@@ -321,8 +321,7 @@ class SettingsPreferenceFragment : BasePreferenceFragment(R.xml.preference_setti
 	private fun dismissCheckUpdateDialog() {
 		if (dialog.isShowing)
 			dialog.dismiss()
-		Toast.makeText(activity!!, "检查更新完成！", Toast.LENGTH_SHORT)
-				.show()
+		toastMessage(R.string.hint_check_update_done)
 	}
 
 	inner class CheckUpdateLocalBroadcastReceiver : BroadcastReceiver() {

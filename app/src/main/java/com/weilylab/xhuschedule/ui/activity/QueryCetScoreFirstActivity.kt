@@ -45,6 +45,8 @@ class QueryCetScoreFirstActivity : XhuBaseActivity(R.layout.activity_query_cet_s
 					cetNameEditText.setText(student.studentName)
 				}
 			}
+			else -> {
+			}
 		}
 	}
 

@@ -2,6 +2,8 @@
 <resources>
 	<string name="app_name">西瓜课表</string>
 
+	<string name="main_title_mine">我的</string>
+
 	<string name="profile_action_query_test">考试查询</string>
 	<string name="profile_action_query_score">成绩查询</string>
 	<string name="profile_action_account_settings">账号管理</string>
@@ -31,6 +33,7 @@
 	<string name="action_restart">重启</string>
 	<string name="action_save">保存</string>
 	<string name="action_cancel_do">撤销</string>
+	<string name="action_re_request">重新申请</string>
 
 	<string name="shortcut_title_query_test">考试查询</string>
 	<string name="shortcut_title_query_class_score">成绩查询</string>
@@ -52,6 +55,17 @@
 	<string name="prompt_cet_name">姓名</string>
 	<string name="prompt_all_day">全天</string>
 	<string name="prompt_unlabel">未命名</string>
+
+	<string name="prompt_custom_course_name">课程名称（必填）</string>
+	<string name="prompt_custom_course_teacher">任课教师（可选）</string>
+	<string name="prompt_custom_course_week">上课周数（不能为空）</string>
+	<string name="prompt_custom_course_location">上课地点（可选）</string>
+	<string name="prompt_custom_course_time">第 %1$d-%2$d 节</string>
+	<string name="prompt_custom_course_student">%1$s(%2$s)</string>
+	<string name="prompt_custom_course_year">学年：%1$s</string>
+	<string name="prompt_custom_course_term">学期：%1$s</string>
+	<string name="prompt_custom_course_week_">第 %1$s 周</string>
+	<string name="prompt_custom_course_time_">第 %1$s 节</string>
 
 	<string name="share_qq">QQ</string>
 	<string name="share_weixin">微信</string>
@@ -82,6 +96,10 @@
 	<string name="hint_course_sync_done">数据同步成功！</string>
 	<string name="hint_student_logged">该用户已登录！</string>
 	<string name="hint_school_calendar">获取校历数据失败！</string>
+	<string name="hint_week_number">第%1$d周</string>
+	<string name="hint_week_number_s">第%1$s周</string>
+	<string name="hint_week_number_now">本周</string>
+	<string name="hint_remain_day_of_start_term">距离开学还有%1$d天</string>
 
 	<string name="hint_null_student">用户数据获取错误！</string>
 	<string name="hint_feedback_empty">信息不能为空！</string>
@@ -90,6 +108,8 @@
 	<string name="hint_delete_done_snackbar">已删除！</string>
 	<string name="hint_empty_couse_name">课程名称不能为空！</string>
 	<string name="hint_empty_couse_week">周数不能为空！</string>
+	<string name="hint_permission_deny">权限被拒绝，无法使用</string>
+	<string name="hint_check_update_done">检查更新完成！</string>
 
 	<string name="hint_null_course_data">这里什么都没有(ŎдŎ;)</string>
 
@@ -122,6 +142,8 @@
 	<string name="error_end_before_start">结束时间不能早于开始时间</string>
 	<string name="error_db_action">操作失败！</string>
 	<string name="error_init_failed">初始化出错，请重试……\n如果频繁出现此信息，请联系开发者！</string>
+	<string name="error_delete_account">删除失败，错误详情：%1$s</string>
+	<string name="error_set_main_account">设置主用户失败，错误详情：%1$s</string>
 
 	<string name="success_login">登陆成功，欢迎使用%1$s！</string>
 

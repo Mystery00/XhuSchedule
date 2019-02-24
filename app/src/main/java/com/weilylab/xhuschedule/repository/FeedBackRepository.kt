@@ -62,6 +62,8 @@ object FeedBackRepository {
 						}
 					Empty -> bottomNavigationViewModel.newFeedBackMessageList.value = PackageData.empty()
 					Error -> bottomNavigationViewModel.newFeedBackMessageList.value = PackageData.error(packageData.error)
+					Loading -> {
+					}
 				}
 			}
 		}

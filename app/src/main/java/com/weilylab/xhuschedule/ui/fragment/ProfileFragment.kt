@@ -66,6 +66,8 @@ class ProfileFragment : BaseBottomNavigationFragment<FragmentProfileBinding>(R.l
 					Logs.wtf("initViewModel: ", it.error)
 					toastMessage(it.error?.message)
 				}
+				else -> {
+				}
 			}
 		})
 		bottomNavigationViewModel.noticeList.observe(activity!!, Observer { packageData ->
@@ -196,7 +198,7 @@ class ProfileFragment : BaseBottomNavigationFragment<FragmentProfileBinding>(R.l
 				.subscribe(object : RxObserver<Boolean>() {
 					override fun onFinish(data: Boolean?) {
 						if (data != null && data)
-							bottomNavigationViewModel.title.value = "我的"
+							bottomNavigationViewModel.title.value = getString(R.string.main_title_mine)
 					}
 
 					override fun onError(e: Throwable) {

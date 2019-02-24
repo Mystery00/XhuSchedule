@@ -48,6 +48,8 @@ class TableFragment : BaseBottomNavigationFragment<FragmentTableBinding>(R.layou
 						.isShowNotCurWeek(ConfigurationUtil.isShowNotWeek)
 						.updateView()
 			}
+			else -> {
+			}
 		}
 	}
 
@@ -71,6 +73,8 @@ class TableFragment : BaseBottomNavigationFragment<FragmentTableBinding>(R.layou
 			Content -> {
 				val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINA)
 				binding.timeTableView.curWeek(simpleDateFormat.format(it.data!!.time))
+			}
+			else -> {
 			}
 		}
 	}
@@ -151,13 +155,13 @@ class TableFragment : BaseBottomNavigationFragment<FragmentTableBinding>(R.layou
 							if (bottomNavigationViewModel.week.value != null && bottomNavigationViewModel.week.value!!.toInt() <= 0) {
 								val whenTime = CalendarUtil.whenBeginSchool()
 								if (whenTime > 0)
-									bottomNavigationViewModel.title.value = "距离开学还有${whenTime}天"
+									bottomNavigationViewModel.title.value = getString(R.string.hint_remain_day_of_start_term, whenTime)
 								else
-									bottomNavigationViewModel.title.value = "第${bottomNavigationViewModel.week.value
-											?: "0"}周"
+									bottomNavigationViewModel.title.value = getString(R.string.hint_week_number_s, bottomNavigationViewModel.week.value
+											?: "0")
 							} else
-								bottomNavigationViewModel.title.value = "第${bottomNavigationViewModel.week.value
-										?: "0"}周"
+								bottomNavigationViewModel.title.value = getString(R.string.hint_week_number_s, bottomNavigationViewModel.week.value
+										?: "0")
 						}
 					}
 

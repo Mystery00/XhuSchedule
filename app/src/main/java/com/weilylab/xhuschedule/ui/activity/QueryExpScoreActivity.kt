@@ -64,6 +64,8 @@ class QueryExpScoreActivity : XhuBaseActivity(R.layout.activity_query_exp_score)
 				toastMessage(R.string.error_init_failed)
 				finish()
 			}
+			Status.Empty -> {
+			}
 		}
 	}
 

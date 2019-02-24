@@ -74,6 +74,7 @@ class CustomCourseActivity : XhuBaseActivity(R.layout.activity_custom_course) {
 					val week = now.get(Calendar.DAY_OF_WEEK)
 					customCourseViewModel.term.value = if (month in Calendar.MARCH until Calendar.SEPTEMBER) "2" else "1"
 					customCourseViewModel.weekIndex.value = week
+					customCourseViewModel.time.value = Pair(1, 1)
 				}
 				dialog.dismiss()
 			}
@@ -83,11 +84,13 @@ class CustomCourseActivity : XhuBaseActivity(R.layout.activity_custom_course) {
 				toastMessage(R.string.error_init_failed)
 				finish()
 			}
+			Status.Empty -> {
+			}
 		}
 	}
 
 	private val timeObserver = Observer<Pair<Int, Int>> {
-		val text = "第 ${it.first}-${it.second} 节"
+		val text = getString(R.string.prompt_custom_course_time, it.first, it.second)
 		textViewTime.text = text
 	}
 
@@ -96,17 +99,17 @@ class CustomCourseActivity : XhuBaseActivity(R.layout.activity_custom_course) {
 	}
 
 	private val studentObserver = Observer<Student> {
-		val text = "${it.studentName}(${it.username})"
+		val text = getString(R.string.prompt_custom_course_student, it.studentName, it.username)
 		textViewStudent.text = text
 	}
 
 	private val yearObserver = Observer<String> {
-		val text = "学年： $it"
+		val text = getString(R.string.prompt_custom_course_year, it)
 		textViewYear.text = text
 	}
 
 	private val termObserver = Observer<String> {
-		val text = "学期： $it"
+		val text = getString(R.string.prompt_custom_course_term, it)
 		textViewTerm.text = text
 	}
 

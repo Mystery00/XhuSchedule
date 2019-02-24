@@ -35,8 +35,6 @@ object NoticeLocalDataSource : NoticeDataSource {
 				})
 	}
 
-	fun queryAllReadNotices(): List<Notice> = noticeService.queryAllReadNotice()
-
 	fun saveNotice(list: List<Notice>) {
 		list.forEach {
 			val savedNotice = noticeService.queryNoticeById(it.id)

@@ -32,7 +32,6 @@ import vip.mystery0.tools.utils.DensityTools
 import java.util.*
 
 
-
 class QueryClassScoreActivity : XhuBaseActivity(R.layout.activity_query_class_score) {
 	private val queryClassScoreViewModel: QueryClassScoreViewModel by lazy {
 		ViewModelProviders.of(this)[QueryClassScoreViewModel::class.java]
@@ -69,6 +68,8 @@ class QueryClassScoreActivity : XhuBaseActivity(R.layout.activity_query_class_sc
 				Logs.wtf("studentInfoListObserver: ", data.error)
 				toastMessage(R.string.error_init_failed)
 				finish()
+			}
+			else -> {
 			}
 		}
 	}

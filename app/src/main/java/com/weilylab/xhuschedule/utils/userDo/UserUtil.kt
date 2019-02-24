@@ -125,6 +125,8 @@ object UserUtil {
 				}
 				Empty -> listener.invoke(false)
 				Error -> listener.invoke(false)
+				Loading -> {
+				}
 			}
 		}
 	}

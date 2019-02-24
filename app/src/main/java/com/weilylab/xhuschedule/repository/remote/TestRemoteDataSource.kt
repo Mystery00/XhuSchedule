@@ -49,7 +49,7 @@ object TestRemoteDataSource : TestDataSource {
 			TestUtil.getTestsForManyStudent(studentList, object : DoSaveListener<Map<String, List<Test>>> {
 				override fun doSave(t: Map<String, List<Test>>) {
 					val username = t.keys.first()
-					val courseList = t[username]!!
+					val courseList = t.getValue(username)
 					TestLocalDataSource.deleteAllTestsForStudent(username)
 					courseList.forEach {
 						it.studentID = username

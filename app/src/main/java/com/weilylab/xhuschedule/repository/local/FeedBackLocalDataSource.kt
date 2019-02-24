@@ -61,7 +61,7 @@ object FeedBackLocalDataSource {
 		feedBackMessageList.forEach { updateFeedBackMessage(it, list) }
 	}
 
-	fun updateFeedBackMessage(feedBackMessage: FeedBackMessage, savedList: List<FeedBackMessage>) {
+	private fun updateFeedBackMessage(feedBackMessage: FeedBackMessage, savedList: List<FeedBackMessage>) {
 		savedList.forEach {
 			if (it.id == feedBackMessage.id && it.createTime == feedBackMessage.createTime) {
 				it.content = feedBackMessage.content

@@ -53,6 +53,8 @@ class TodayFragment : BaseBottomNavigationFragment<FragmentTodayBinding>(R.layou
 				toastMessage(data.error?.message)
 				checkNoDataLayout()
 			}
+			Loading -> {
+			}
 		}
 	}
 	private val customThingListObserver = Observer<PackageData<List<CustomThing>>> { data ->
@@ -70,6 +72,8 @@ class TodayFragment : BaseBottomNavigationFragment<FragmentTodayBinding>(R.layou
 			Error -> {
 				Logs.wtfm("todayCourseListObserver: ", data.error)
 				checkNoDataLayout()
+			}
+			Loading -> {
 			}
 		}
 	}

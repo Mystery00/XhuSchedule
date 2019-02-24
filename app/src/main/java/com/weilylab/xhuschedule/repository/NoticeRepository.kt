@@ -13,10 +13,6 @@ object NoticeRepository {
 		queryNotice(noticeViewModel, Constants.NOTICE_PLATFORM_ANDROID)
 	}
 
-	fun queryAllNotice(noticeViewModel: NoticeViewModel) {
-		queryNotice(noticeViewModel, Constants.NOTICE_PLATFORM_ALL)
-	}
-
 	private fun queryNotice(noticeViewModel: NoticeViewModel, platform: String?) {
 		noticeViewModel.noticeList.value = PackageData.loading()
 		NoticeRemoteDataSource.queryNotice(noticeViewModel.noticeList, platform)

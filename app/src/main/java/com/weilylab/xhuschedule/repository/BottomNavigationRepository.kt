@@ -82,7 +82,7 @@ object BottomNavigationRepository {
 			}
 			val mainStudent = UserUtil.findMainStudent(bottomNavigationViewModel.studentList.value!!.data)!!
 			CustomThingRepository.getToday(bottomNavigationViewModel)
-			CourseLocalDataSource.queryCourseByUsername(bottomNavigationViewModel.courseList, mainStudent, ConfigurationUtil.currentYear, ConfigurationUtil.currentTerm, true, true)
+			CourseLocalDataSource.queryCourseByUsername(bottomNavigationViewModel.courseList, mainStudent, ConfigurationUtil.currentYear, ConfigurationUtil.currentTerm, isFromCache = true, isShowError = true)
 		}
 	}
 
@@ -112,7 +112,7 @@ object BottomNavigationRepository {
 				}
 			}
 			CustomThingRepository.getToday(bottomNavigationViewModel)
-			CourseLocalDataSource.queryCourseWithManyStudent(bottomNavigationViewModel.courseList, bottomNavigationViewModel.studentList.value!!.data!!, ConfigurationUtil.currentYear, ConfigurationUtil.currentTerm, true, true)
+			CourseLocalDataSource.queryCourseWithManyStudent(bottomNavigationViewModel.courseList, bottomNavigationViewModel.studentList.value!!.data!!, ConfigurationUtil.currentYear, ConfigurationUtil.currentTerm, isFromCache = true, isShowError = true)
 		}
 	}
 

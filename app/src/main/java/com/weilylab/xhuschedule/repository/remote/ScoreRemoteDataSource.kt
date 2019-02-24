@@ -23,14 +23,14 @@ object ScoreRemoteDataSource : ScoreDataSource {
 				override fun doSave(t: Map<Int, List<ClassScore>>) {
 					ScoreLocalDataSource.deleteAllClassScoreForStudent(student.username, year, term)
 					val resultList = ArrayList<ClassScore>()
-					t[ScoreUtil.TYPE_SCORE]!!.forEach {
+					t.getValue(ScoreUtil.TYPE_SCORE).forEach {
 						it.studentID = student.username
 						it.year = year
 						it.term = term
 						it.failed = false
 						resultList.add(it)
 					}
-					t[ScoreUtil.TYPE_FAILED]!!.forEach {
+					t.getValue(ScoreUtil.TYPE_FAILED).forEach {
 						it.studentID = student.username
 						it.year = year
 						it.term = term
@@ -42,14 +42,14 @@ object ScoreRemoteDataSource : ScoreDataSource {
 			}, object : RequestListener<Map<Int, List<ClassScore>>> {
 				override fun done(t: Map<Int, List<ClassScore>>) {
 					val resultList = ArrayList<ClassScore>()
-					t[ScoreUtil.TYPE_SCORE]!!.forEach {
+					t.getValue(ScoreUtil.TYPE_SCORE).forEach {
 						it.studentID = student.username
 						it.year = year
 						it.term = term
 						it.failed = false
 						resultList.add(it)
 					}
-					t[ScoreUtil.TYPE_FAILED]!!.forEach {
+					t.getValue(ScoreUtil.TYPE_FAILED).forEach {
 						it.studentID = student.username
 						it.year = year
 						it.term = term

@@ -103,6 +103,8 @@ class ClassSettingsFragment : BasePreferenceFragment(R.xml.preference_class) {
 						Logs.wtfm("monitor: ", packageData.error)
 						toastMessage(packageData.error?.message)
 					}
+					Loading -> {
+					}
 				}
 			}
 			true

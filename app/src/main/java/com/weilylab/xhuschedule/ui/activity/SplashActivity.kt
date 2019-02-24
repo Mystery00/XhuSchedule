@@ -74,6 +74,8 @@ class SplashActivity : XhuBaseActivity(null, false) {
 			Status.Content -> {
 				todo(it.data!!)
 			}
+			Status.Loading -> {
+			}
 		}
 	}
 

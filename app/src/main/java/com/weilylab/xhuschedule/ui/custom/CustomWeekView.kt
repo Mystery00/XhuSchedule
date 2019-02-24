@@ -58,10 +58,10 @@ class CustomWeekView : LinearLayout, WeekViewEnable<CustomWeekView> {
 		layoutWeekViewBinding.weekViewContainer.removeAllViews()
 		for (i in 1..itemCount) {
 			val itemCourseWeekBinding = ItemCourseWeekBinding.inflate(LayoutInflater.from(context))
-			val weekString = "第${i}周"
+			val weekString = context.getString(R.string.hint_week_number, i)
 			itemCourseWeekBinding.weekTextView.text = weekString
 			if (i == curWeek)
-				itemCourseWeekBinding.weekTextViewBottom.text = "(本周)"
+				itemCourseWeekBinding.weekTextViewBottom.text = context.getString(R.string.hint_week_number_now)
 			itemCourseWeekBinding.perWeekView.setData(dataSource(), i)
 			itemCourseWeekBinding.perWeekViewLayout.setOnClickListener {
 				layoutWeekViewBinding.weekViewContainer.getChildAt(preIndex - 1)
@@ -114,7 +114,7 @@ class CustomWeekView : LinearLayout, WeekViewEnable<CustomWeekView> {
 		for (i in 0 until layoutWeekViewBinding.weekViewContainer.childCount) {
 			val itemCourseWeekBinding = ItemCourseWeekBinding.bind(layoutWeekViewBinding.weekViewContainer.getChildAt(i))
 			if (curWeek - 1 == i)
-				itemCourseWeekBinding.weekTextViewBottom.text = "(本周)"
+				itemCourseWeekBinding.weekTextViewBottom.text = context.getString(R.string.hint_week_number_now)
 			else
 				itemCourseWeekBinding.weekTextViewBottom.text = ""
 			itemCourseWeekBinding.root.setBackgroundColor(ContextCompat.getColor(context, R.color.app_course_chooseweek_bg))
