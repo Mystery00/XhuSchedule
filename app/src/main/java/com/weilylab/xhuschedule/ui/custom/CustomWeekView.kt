@@ -42,7 +42,7 @@ class CustomWeekView : LinearLayout, WeekViewEnable<CustomWeekView> {
 	}
 
 	override fun curWeek(curWeek: Int): CustomWeekView {
-		this.curWeek = if (curWeek < 1) 1 else curWeek
+		this.curWeek = if (curWeek < 0) 0 else curWeek
 		return this
 	}
 
@@ -66,8 +66,9 @@ class CustomWeekView : LinearLayout, WeekViewEnable<CustomWeekView> {
 			itemCourseWeekBinding.perWeekViewLayout.setOnClickListener {
 				layoutWeekViewBinding.weekViewContainer.getChildAt(preIndex - 1)
 						.setBackgroundColor(ContextCompat.getColor(context, R.color.app_course_chooseweek_bg))
-				layoutWeekViewBinding.weekViewContainer.getChildAt(curWeek - 1)
-						.background = ContextCompat.getDrawable(context, R.drawable.weekview_thisweek)
+				if (curWeek > 0)
+					layoutWeekViewBinding.weekViewContainer.getChildAt(curWeek - 1)
+							.background = ContextCompat.getDrawable(context, R.drawable.weekview_thisweek)
 				preIndex = i
 				itemCourseWeekBinding.perWeekViewLayout.background = ContextCompat.getDrawable(context, R.drawable.weekview_white)
 				onWeekItemClickedListener.onWeekClicked(i)
