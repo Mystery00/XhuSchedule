@@ -2,9 +2,11 @@ package com.weilylab.xhuschedule.repository
 
 import android.graphics.Color
 import com.weilylab.xhuschedule.config.ColorPoolHelper
+import com.weilylab.xhuschedule.model.CustomThing
 import com.weilylab.xhuschedule.model.Student
 import com.weilylab.xhuschedule.model.Test
 import com.weilylab.xhuschedule.repository.local.CourseLocalDataSource
+import com.weilylab.xhuschedule.repository.local.CustomThingLocalDataSource
 import com.weilylab.xhuschedule.repository.local.InitLocalDataSource
 import com.weilylab.xhuschedule.repository.local.TestLocalDataSource
 import com.weilylab.xhuschedule.utils.CalendarUtil
@@ -12,6 +14,7 @@ import com.weilylab.xhuschedule.utils.userDo.TestUtil
 import com.weilylab.xhuschedule.utils.userDo.UserUtil
 import com.zhuangfei.timetable.model.Schedule
 import vip.mystery0.tools.utils.StringTools
+import java.util.*
 import kotlin.collections.ArrayList
 
 object NotificationRepository {
@@ -43,6 +46,16 @@ object NotificationRepository {
 			list.addAll(CourseLocalDataSource.getRowCourseList(it))
 		}
 		return list.filter { it.weekList.contains(tomorrowWeek) && it.day == tomorrow }
+	}
+
+	/**
+	 * 查询明日自定义事项信息
+	 * 同步方法
+	 */
+	fun queryTomorrowCustomThing(): List<CustomThing> {
+		val tomorrow = Calendar.getInstance()
+		tomorrow.add(Calendar.DAY_OF_YEAR, 1)
+		return CustomThingLocalDataSource.getRawCustomThingList().filter { CalendarUtil.isThingOnDay(it, tomorrow) }
 	}
 
 	/**

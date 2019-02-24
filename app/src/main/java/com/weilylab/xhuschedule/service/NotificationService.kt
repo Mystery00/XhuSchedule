@@ -7,6 +7,7 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.constant.Constants
+import com.weilylab.xhuschedule.model.CustomThing
 import com.weilylab.xhuschedule.model.Test
 import com.weilylab.xhuschedule.repository.NotificationRepository
 import com.weilylab.xhuschedule.repository.local.StudentLocalDataSource
@@ -36,6 +37,8 @@ class NotificationService : Service() {
 		Logs.i("onStartJob: 任务执行了")
 		Observable.create<Map<String, Any>> {
 			val studentList = StudentLocalDataSource.queryAllStudentListDo()
+			val customThingList = NotificationRepository.queryTomorrowCustomThing()
+			it.onNext(mapOf("customThing" to customThingList))
 			if (ConfigurationUtil.isEnableMultiUserMode) {
 				val courseList = NotificationRepository.queryTomorrowCourseForManyStudent(studentList)
 				it.onNext(mapOf("schedule" to courseList))
@@ -64,6 +67,9 @@ class NotificationService : Service() {
 
 					override fun onNext(it: Map<String, Any>) {
 						when {
+							it.containsKey("customThing") -> {
+								TomorrowNotification.notifyCustomThing(this@NotificationService, it["customThing"] as List<CustomThing>)
+							}
 							it.containsKey("schedule") -> {
 								TomorrowNotification.notifyCourse(this@NotificationService, it["schedule"] as List<Schedule>)
 							}

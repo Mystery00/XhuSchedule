@@ -201,7 +201,7 @@ object CalendarUtil {
 	private val dateFormatter by lazy { SimpleDateFormat("yyyy年MM月dd日", Locale.CHINA) }
 	private val dateTimeFormatter by lazy { SimpleDateFormat("yyyy年MM月dd日 HH:mm", Locale.CHINA) }
 
-	fun isThingToday(thing: CustomThing): Boolean {
+	fun isThingOnDay(thing: CustomThing, now: Calendar = Calendar.getInstance()): Boolean {
 		val startCalendar = if (thing.isAllDay)
 			dateFormatter.parse(thing.startTime)
 		else {
@@ -229,7 +229,6 @@ object CalendarUtil {
 			cal.add(Calendar.DAY_OF_YEAR, 1)
 			cal.time
 		}
-		val now = Calendar.getInstance()
 		return now.time.after(startCalendar) && now.time.before(endCalendar)
 	}
 }

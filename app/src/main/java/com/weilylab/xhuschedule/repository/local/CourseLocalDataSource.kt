@@ -110,13 +110,13 @@ object CourseLocalDataSource : CourseDataSource {
 	fun getRowCourseList(student: Student, year: String? = null, term: String? = null): List<Schedule> {
 		val courses = courseService.queryCourseByUsernameAndTerm(student.username, year
 				?: ConfigurationUtil.currentYear, term ?: ConfigurationUtil.currentTerm)
-		val custom = courseService.queryAllCustomCourse()
+		val custom = courseService.queryCustomCourseByTerm(student.username, year
+				?: ConfigurationUtil.currentYear, term ?: ConfigurationUtil.currentTerm)
 		val all = ArrayList<Course>()
 		all.addAll(courses)
 		all.addAll(custom)
 		return CourseUtil.convertCourseToSchedule(all)
 	}
-
 
 	fun saveCourseList(username: String, courseList: List<Course>, year: String? = null, term: String? = null) {
 		val savedList = courseService.queryCourseByUsernameAndTerm(username, year
@@ -133,7 +133,6 @@ object CourseLocalDataSource : CourseDataSource {
 		}
 		ConfigurationUtil.lastUpdateDate = CalendarUtil.getTodayDateString()
 	}
-
 
 	/**
 	 * 该接口提供给自定义课程页面使用

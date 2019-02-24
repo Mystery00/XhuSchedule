@@ -15,7 +15,7 @@ object CustomThingLocalDataSource {
 		RxObservable<List<CustomThing>>()
 				.doThings { observableEmitter ->
 					val list = customThingService.queryAllThings()
-					observableEmitter.onFinish(list.filter { CalendarUtil.isThingToday(it) })
+					observableEmitter.onFinish(list.filter { CalendarUtil.isThingOnDay(it) })
 				}
 				.subscribe(object : RxObserver<List<CustomThing>>() {
 					override fun onError(e: Throwable) {
@@ -54,6 +54,8 @@ object CustomThingLocalDataSource {
 					}
 				})
 	}
+
+	fun getRawCustomThingList(): List<CustomThing> = customThingService.queryAllThings()
 
 	fun save(thing: CustomThing, listener: (Boolean, Throwable?) -> Unit) {
 		RxObservable<Boolean>()

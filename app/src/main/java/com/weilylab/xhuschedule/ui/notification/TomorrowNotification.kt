@@ -4,6 +4,8 @@ import android.app.Notification
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
+import android.content.Intent
+import android.graphics.Color
 import android.text.SpannableStringBuilder
 import android.text.style.ForegroundColorSpan
 import androidx.core.app.NotificationCompat
@@ -11,11 +13,40 @@ import androidx.core.content.ContextCompat
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.config.ColorPoolHelper
 import com.weilylab.xhuschedule.constant.Constants
+import com.weilylab.xhuschedule.model.CustomThing
 import com.weilylab.xhuschedule.model.Test
+import com.weilylab.xhuschedule.ui.activity.QueryTestActivity
 import com.zhuangfei.timetable.model.Schedule
 
 object TomorrowNotification {
 	private const val NOTIFICATION_TAG = "TomorrowNotification"
+
+	fun notifyCustomThing(context: Context, customThingList: List<CustomThing>) {
+		if (customThingList.isEmpty()) {
+			cancel(context, Constants.NOTIFICATION_ID_TOMORROW_CUSTOM_THING)
+			return
+		}
+		val title = "您明天有${customThingList.size}件事项哦~"
+		val builder = NotificationCompat.Builder(context, Constants.NOTIFICATION_CHANNEL_ID_TOMORROW)
+				.setDefaults(Notification.DEFAULT_ALL)
+				.setSmallIcon(R.mipmap.ic_stat_init)
+				.setContentTitle(title)
+				.setColor(ContextCompat.getColor(context, R.color.colorAccent))
+				.setContentIntent(PendingIntent.getActivity(context, 0, context.packageManager.getLaunchIntentForPackage(context.packageName), PendingIntent.FLAG_UPDATE_CURRENT))
+				.setAutoCancel(true)
+		val style = NotificationCompat.InboxStyle()
+				.setBigContentTitle(title)
+		customThingList.forEach {
+			val item = SpannableStringBuilder()
+			item.append(it.title)
+			item.setSpan(ForegroundColorSpan(Color.parseColor(it.color)), 0, item.length, 0)
+			item.appendln("  ${it.startTime} - ${it.endTime} at ${it.location}")
+			style.addLine(item)
+		}
+		style.addLine("具体详情请点击查看")
+		builder.setStyle(style)
+		notify(context, Constants.NOTIFICATION_ID_TOMORROW_CUSTOM_THING, builder.build())
+	}
 
 	fun notifyCourse(context: Context, courseList: List<Schedule>) {
 		if (courseList.isEmpty()) {
@@ -41,6 +72,7 @@ object TomorrowNotification {
 			courseItem.append("  ${startTimeArray[it.start - 1]}-${endTimeArray[it.start + it.step - 2]} at ${it.room}")
 			style.addLine(courseItem)
 		}
+		style.addLine("具体详情请点击查看")
 		builder.setStyle(style)
 		notify(context, Constants.NOTIFICATION_ID_TOMORROW_COURSE, builder.build())
 	}
@@ -56,7 +88,7 @@ object TomorrowNotification {
 				.setSmallIcon(R.mipmap.ic_stat_init)
 				.setContentTitle(title)
 				.setColor(ContextCompat.getColor(context, R.color.colorAccent))
-				.setContentIntent(PendingIntent.getActivity(context, 0, context.packageManager.getLaunchIntentForPackage(context.packageName), PendingIntent.FLAG_UPDATE_CURRENT))
+				.setContentIntent(PendingIntent.getActivity(context, 0, Intent(context, QueryTestActivity::class.java), PendingIntent.FLAG_UPDATE_CURRENT))
 				.setAutoCancel(true)
 		val style = NotificationCompat.InboxStyle()
 				.setBigContentTitle(title)
@@ -67,6 +99,7 @@ object TomorrowNotification {
 			courseItem.append(" 时间：${it.time} 地点：${it.location}")
 			style.addLine(courseItem)
 		}
+		style.addLine("具体详情请点击查看")
 		builder.setStyle(style)
 		notify(context, Constants.NOTIFICATION_ID_TOMORROW_TEST, builder.build())
 	}

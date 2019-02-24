@@ -1,7 +1,6 @@
 package com.weilylab.xhuschedule.factory
 
 import com.weilylab.xhuschedule.interceptor.DebugInterceptor
-import com.weilylab.xhuschedule.interceptor.JRSCInterceptor
 import com.weilylab.xhuschedule.interceptor.LoadCookiesInterceptor
 import com.weilylab.xhuschedule.interceptor.SaveCookiesInterceptor
 import okhttp3.OkHttpClient

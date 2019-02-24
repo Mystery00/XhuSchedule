@@ -49,6 +49,7 @@ import vip.mystery0.rxpackagedata.PackageData
 import vip.mystery0.rxpackagedata.Status
 import com.weilylab.xhuschedule.viewmodel.SplashViewModel
 import com.weilylab.xhuschedule.service.DownloadSplashIntentService
+import com.weilylab.xhuschedule.service.NotificationService
 import com.weilylab.xhuschedule.utils.ConfigUtil
 import vip.mystery0.logs.Logs
 import vip.mystery0.tools.utils.FileTools
@@ -88,6 +89,7 @@ class SplashActivity : XhuBaseActivity(null, false) {
 	override fun initData() {
 		super.initData()
 		initViewModel()
+		startForegroundService(Intent(this, NotificationService::class.java))
 		SplashRepository.requestSplash(splashViewModel)
 		if (ConfigurationUtil.autoCheckUpdate)
 			ContextCompat.startForegroundService(this, Intent(APP.context, CheckUpdateService::class.java))
