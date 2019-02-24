@@ -241,7 +241,7 @@ class CustomThingActivity : XhuBaseActivity(R.layout.activity_custom_thing) {
 		}
 	}
 
-	private fun formatInput(view: View, binding: LayoutAddCustomThingBinding, customThing: CustomThing, listener: (Boolean) -> Unit) {
+	private fun formatInput(binding: LayoutAddCustomThingBinding, customThing: CustomThing, listener: (Boolean) -> Unit) {
 		customThing.title = binding.editTextTitle.text.toString()
 		if (customThing.title == "")
 			customThing.title = getString(R.string.prompt_unlabel)
@@ -253,8 +253,7 @@ class CustomThingActivity : XhuBaseActivity(R.layout.activity_custom_thing) {
 		val startTime = if (customThing.isAllDay) dateFormatter.parse(start) else saveDateTimeFormatter.parse(start)
 		val endTime = if (customThing.isAllDay) dateFormatter.parse(end) else saveDateTimeFormatter.parse(end)
 		if (startTime.after(endTime)) {
-			Snackbar.make(view, R.string.error_end_before_start, Snackbar.LENGTH_SHORT)
-					.show()
+			toastMessage(R.string.error_end_before_start)
 			listener.invoke(false)
 			return
 		}
@@ -266,17 +265,13 @@ class CustomThingActivity : XhuBaseActivity(R.layout.activity_custom_thing) {
 		if (isUpdate)
 			CustomThingRepository.update(customThing) { b, t ->
 				if (t != null)
-					Snackbar.make(view, t.message
-							?: getString(R.string.error_db_action), Snackbar.LENGTH_SHORT)
-							.show()
+					toastMessage(t.message ?: getString(R.string.error_db_action))
 				listener.invoke(b)
 			}
 		else
 			CustomThingRepository.save(customThing) { b, t ->
 				if (t != null)
-					Snackbar.make(view, t.message
-							?: getString(R.string.error_db_action), Snackbar.LENGTH_SHORT)
-							.show()
+					toastMessage(t.message ?: getString(R.string.error_db_action))
 				listener.invoke(b)
 			}
 	}
@@ -319,8 +314,9 @@ class CustomThingActivity : XhuBaseActivity(R.layout.activity_custom_thing) {
 			customThingBinding.imageViewColor.imageTintList = ColorStateList.valueOf(ContextCompat.getColor(this, R.color.colorAccent))
 			customThingBinding.textViewMark.setText("")
 		}
-		customThingBinding.buttonSave.setOnClickListener { view ->
-			formatInput(view, customThingBinding, data ?: CustomThing()) {
+		customThingBinding.buttonSave.setOnClickListener {
+			formatInput(customThingBinding, data
+					?: CustomThing()) {
 				if (it) {
 					bottomSheetDialog.dismiss()
 					LayoutRefreshConfigUtil.isRefreshTodayFragment = true
