@@ -37,17 +37,17 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatDelegate
-import com.weilylab.xhuschedule.utils.APPActivityManager
 import com.weilylab.xhuschedule.utils.ConfigUtil
 import com.weilylab.xhuschedule.utils.ConfigurationUtil
 import vip.mystery0.tools.base.BaseActivity
+import vip.mystery0.tools.utils.ActivityManagerTools
 
 abstract class XhuBaseActivity(layoutId: Int?, private val isSetStatusBar: Boolean = true) : BaseActivity(layoutId) {
 	private var toast: Toast? = null
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		AppCompatDelegate.setCompatVectorFromResourcesEnabled(true)
-		APPActivityManager.addActivity(this)
+		ActivityManagerTools.addActivity(this)
 		when (ConfigurationUtil.nightMode) {
 			0 -> delegate.setLocalNightMode(AppCompatDelegate.MODE_NIGHT_AUTO)
 			1 -> delegate.setLocalNightMode(AppCompatDelegate.MODE_NIGHT_YES)
@@ -63,7 +63,7 @@ abstract class XhuBaseActivity(layoutId: Int?, private val isSetStatusBar: Boole
 
 	override fun onDestroy() {
 		super.onDestroy()
-		APPActivityManager.finishActivity(this)
+		ActivityManagerTools.finishActivity(this)
 	}
 
 	fun toastMessage(@StringRes stringRes: Int, isShowLong: Boolean = false) = toastMessage(getString(stringRes), isShowLong)

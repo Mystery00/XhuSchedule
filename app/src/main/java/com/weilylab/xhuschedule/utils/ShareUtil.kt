@@ -21,6 +21,7 @@ import com.tencent.tauth.UiError
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.config.APP
 import com.weilylab.xhuschedule.constant.Constants
+import vip.mystery0.tools.utils.ActivityManagerTools
 import vip.mystery0.tools.utils.FileTools
 import kotlin.math.roundToInt
 
@@ -39,7 +40,7 @@ object ShareUtil {
 					params.putString(QQShare.SHARE_TO_QQ_TARGET_URL, Constants.SHARE_TARGET_URL)
 					params.putString(QQShare.SHARE_TO_QQ_IMAGE_URL, Constants.SHARE_IMAGE_URL)
 					params.putString(QQShare.SHARE_TO_QQ_APP_NAME, context.getString(R.string.app_name))
-					APP.tencent!!.shareToQQ(APPActivityManager.currentActivity(), params, object : IUiListener {
+					APP.tencent!!.shareToQQ(ActivityManagerTools.currentActivity(), params, object : IUiListener {
 						override fun onComplete(p0: Any?) {
 						}
 
@@ -63,7 +64,7 @@ object ShareUtil {
 					params.putString(QQShare.SHARE_TO_QQ_IMAGE_URL, Constants.SHARE_IMAGE_URL)
 					params.putString(QQShare.SHARE_TO_QQ_APP_NAME, context.getString(R.string.app_name))
 					params.putInt(QQShare.SHARE_TO_QQ_EXT_INT, QQShare.SHARE_TO_QQ_FLAG_QZONE_AUTO_OPEN)
-					APP.tencent!!.shareToQQ(APPActivityManager.currentActivity(), params, object : IUiListener {
+					APP.tencent!!.shareToQQ(ActivityManagerTools.currentActivity(), params, object : IUiListener {
 						override fun onComplete(p0: Any?) {
 						}
 
@@ -80,7 +81,7 @@ object ShareUtil {
 			}
 			ShareType.WEIBO -> {//分享到微博
 				if (PackageUtil.isWeiBoApplicationAvailable()) {
-					val shareHandler = WbShareHandler(APPActivityManager.currentActivity())
+					val shareHandler = WbShareHandler(ActivityManagerTools.currentActivity())
 					shareHandler.registerApp()
 					val weiboMultiMessage = WeiboMultiMessage()
 					val imageObject = ImageObject()

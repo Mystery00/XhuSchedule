@@ -7,7 +7,7 @@ import androidx.preference.Preference
 import androidx.preference.PreferenceCategory
 import androidx.appcompat.app.AlertDialog
 import com.weilylab.xhuschedule.R
-import com.weilylab.xhuschedule.base.BasePreferenceFragment
+import com.weilylab.xhuschedule.base.XhuBasePreferenceFragment
 import vip.mystery0.rxpackagedata.Status.*
 import com.weilylab.xhuschedule.model.Student
 import com.weilylab.xhuschedule.repository.local.StudentLocalDataSource
@@ -17,7 +17,7 @@ import com.weilylab.xhuschedule.utils.LayoutRefreshConfigUtil
 import vip.mystery0.logs.Logs
 import vip.mystery0.rxpackagedata.rx.RxObserver
 
-class AccountSettingsFragment : BasePreferenceFragment(R.xml.preference_account) {
+class AccountSettingsFragmentXhu : XhuBasePreferenceFragment(R.xml.preference_account) {
 	companion object {
 		const val ADD_ACCOUNT_CODE = 233
 	}

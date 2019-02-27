@@ -12,7 +12,7 @@ import com.weilylab.xhuschedule.model.Student
 import com.weilylab.xhuschedule.model.StudentInfo
 import com.weilylab.xhuschedule.model.response.LoginResponse
 import com.weilylab.xhuschedule.repository.local.StudentLocalDataSource
-import com.weilylab.xhuschedule.utils.NetworkUtil
+import vip.mystery0.tools.utils.NetworkTools
 import vip.mystery0.rxpackagedata.rx.RxObserver
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -22,7 +22,7 @@ object UserUtil {
 	private const val RETRY_TIME = 1
 
 	fun login(student: Student, doSaveListener: DoSaveListener<Student>?, requestListener: RequestListener<Boolean>) {
-		if (NetworkUtil.isConnectInternet())
+		if (NetworkTools.isConnectInternet())
 			RetrofitFactory.retrofit
 					.create(UserAPI::class.java)
 					.autoLogin(student.username, student.password)

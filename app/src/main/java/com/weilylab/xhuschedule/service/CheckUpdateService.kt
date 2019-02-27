@@ -13,12 +13,11 @@ import com.weilylab.xhuschedule.api.XhuScheduleCloudAPI
 import com.weilylab.xhuschedule.factory.GsonFactory
 import com.weilylab.xhuschedule.factory.RetrofitFactory
 import com.weilylab.xhuschedule.model.Version
-import com.weilylab.xhuschedule.utils.APPActivityManager
 import com.weilylab.xhuschedule.constant.Constants
 import com.weilylab.xhuschedule.ui.activity.GuideActivity
 import com.weilylab.xhuschedule.ui.activity.SplashActivity
 import com.weilylab.xhuschedule.ui.activity.SplashImageActivity
-import com.weilylab.xhuschedule.ui.fragment.settings.SettingsPreferenceFragment
+import com.weilylab.xhuschedule.ui.fragment.settings.SettingsPreferenceFragmentXhu
 import com.weilylab.xhuschedule.utils.ConfigUtil
 import com.weilylab.xhuschedule.utils.ConfigurationUtil
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -64,7 +63,7 @@ class CheckUpdateService : Service() {
 						if (data != null && data.versionCode.toInt() > getString(R.string.app_version_code).toInt())
 							showUpdateDialog(data, intent.getBooleanExtra(CHECK_ACTION_BY_MANUAL, false))
 						stopSelf()
-						LocalBroadcastManager.getInstance(this@CheckUpdateService).sendBroadcast(Intent(SettingsPreferenceFragment.ACTION_CHECK_UPDATE_DONE))
+						LocalBroadcastManager.getInstance(this@CheckUpdateService).sendBroadcast(Intent(SettingsPreferenceFragmentXhu.ACTION_CHECK_UPDATE_DONE))
 					}
 
 					override fun onError(e: Throwable) {

@@ -11,14 +11,14 @@ import com.weilylab.xhuschedule.model.ExpScore
 import com.weilylab.xhuschedule.model.Student
 import com.weilylab.xhuschedule.repository.ds.ScoreDataSource
 import com.weilylab.xhuschedule.repository.local.ScoreLocalDataSource
-import com.weilylab.xhuschedule.utils.NetworkUtil
+import vip.mystery0.tools.utils.NetworkTools
 import com.weilylab.xhuschedule.utils.userDo.ScoreUtil
 import vip.mystery0.rxpackagedata.PackageData
 import java.util.ArrayList
 
 object ScoreRemoteDataSource : ScoreDataSource {
 	override fun queryClassScoreByUsername(scoreLiveData: MutableLiveData<PackageData<List<ClassScore>>>, student: Student, year: String, term: String) {
-		if (NetworkUtil.isConnectInternet()) {
+		if (NetworkTools.isConnectInternet()) {
 			ScoreUtil.getClassScore(student, year, term, object : DoSaveListener<Map<Int, List<ClassScore>>> {
 				override fun doSave(t: Map<Int, List<ClassScore>>) {
 					ScoreLocalDataSource.deleteAllClassScoreForStudent(student.username, year, term)
@@ -73,7 +73,7 @@ object ScoreRemoteDataSource : ScoreDataSource {
 	}
 
 	override fun queryExpScoreByUsername(scoreLiveData: MutableLiveData<PackageData<List<ExpScore>>>, student: Student, year: String, term: String) {
-		if (NetworkUtil.isConnectInternet()) {
+		if (NetworkTools.isConnectInternet()) {
 			ScoreUtil.getExpScore(student, year, term, object : DoSaveListener<List<ExpScore>> {
 				override fun doSave(t: List<ExpScore>) {
 					ScoreLocalDataSource.deleteAllExpScoreForStudent(student.username, year, term)
@@ -103,7 +103,7 @@ object ScoreRemoteDataSource : ScoreDataSource {
 	}
 
 	fun getCetVCode(cetVCodeLiveData: MutableLiveData<PackageData<Bitmap>>, student: Student, no: String) {
-		if (NetworkUtil.isConnectInternet()) {
+		if (NetworkTools.isConnectInternet()) {
 			ScoreUtil.getCetVCode(student, no, object : RequestListener<Bitmap> {
 				override fun done(t: Bitmap) {
 					cetVCodeLiveData.value = PackageData.content(t)
@@ -119,7 +119,7 @@ object ScoreRemoteDataSource : ScoreDataSource {
 	}
 
 	fun queryCetScores(cetScoreLiveData: MutableLiveData<PackageData<CetScore>>, student: Student, no: String, name: String, vcode: String) {
-		if (NetworkUtil.isConnectInternet()) {
+		if (NetworkTools.isConnectInternet()) {
 			ScoreUtil.getCetScores(student, no, name, vcode, object : RequestListener<CetScore> {
 				override fun done(t: CetScore) {
 					cetScoreLiveData.value = PackageData.content(t)

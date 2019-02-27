@@ -7,13 +7,13 @@ import com.weilylab.xhuschedule.listener.RequestListener
 import com.weilylab.xhuschedule.model.Notice
 import com.weilylab.xhuschedule.repository.ds.NoticeDataSource
 import com.weilylab.xhuschedule.repository.local.NoticeLocalDataSource
-import com.weilylab.xhuschedule.utils.NetworkUtil
+import vip.mystery0.tools.utils.NetworkTools
 import com.weilylab.xhuschedule.utils.userDo.NoticeUtil
 import vip.mystery0.rxpackagedata.PackageData
 
 object NoticeRemoteDataSource : NoticeDataSource {
 	override fun queryNotice(noticeLiveData: MutableLiveData<PackageData<List<Notice>>>, platform: String?) {
-		if (NetworkUtil.isConnectInternet()) {
+		if (NetworkTools.isConnectInternet()) {
 			NoticeUtil.getNotice(platform, object : DoSaveListener<List<Notice>> {
 				override fun doSave(t: List<Notice>) {
 					NoticeLocalDataSource.saveNotice(t)

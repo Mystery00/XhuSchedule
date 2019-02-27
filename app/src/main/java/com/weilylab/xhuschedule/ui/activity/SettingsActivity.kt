@@ -37,7 +37,7 @@ import android.content.Context
 import android.content.Intent
 import android.view.MenuItem
 import com.weilylab.xhuschedule.R
-import com.weilylab.xhuschedule.base.BasePreferenceFragment
+import com.weilylab.xhuschedule.base.XhuBasePreferenceFragment
 import com.weilylab.xhuschedule.base.XhuBaseActivity
 import com.weilylab.xhuschedule.ui.fragment.settings.*
 import kotlinx.android.synthetic.main.activity_settings.*
@@ -58,11 +58,11 @@ class SettingsActivity : XhuBaseActivity(R.layout.activity_settings) {
 		}
 	}
 
-	private val accountSettingsFragment: AccountSettingsFragment by lazy { AccountSettingsFragment() }
-	private val classSettingsFragment: ClassSettingsFragment by lazy { ClassSettingsFragment() }
-	private val queryScoreFragment: QueryScoreFragment by lazy { QueryScoreFragment() }
-	private val settingsPreferenceFragment: SettingsPreferenceFragment by lazy { SettingsPreferenceFragment() }
-	private val aboutSettingFragment: AboutSettingFragment by lazy { AboutSettingFragment() }
+	private val accountSettingsFragment: AccountSettingsFragmentXhu by lazy { AccountSettingsFragmentXhu() }
+	private val classSettingsFragment: ClassSettingsFragmentXhu by lazy { ClassSettingsFragmentXhu() }
+	private val queryScoreFragment: QueryScoreFragmentXhu by lazy { QueryScoreFragmentXhu() }
+	private val settingsPreferenceFragment: SettingsPreferenceFragmentXhu by lazy { SettingsPreferenceFragmentXhu() }
+	private val aboutSettingFragment: AboutSettingFragmentXhu by lazy { AboutSettingFragmentXhu() }
 
 	override fun initView() {
 		super.initView()
@@ -74,7 +74,7 @@ class SettingsActivity : XhuBaseActivity(R.layout.activity_settings) {
 		supportActionBar?.setDisplayHomeAsUpEnabled(true)
 	}
 
-	private fun getFragment(): BasePreferenceFragment {
+	private fun getFragment(): XhuBasePreferenceFragment {
 		return when (intent.getIntExtra(INTENT_FRAGMENT, 0)) {
 			TYPE_ACCOUNT -> accountSettingsFragment
 			TYPE_CLASS -> classSettingsFragment

@@ -6,10 +6,10 @@ import androidx.preference.Preference
 import com.mikepenz.aboutlibraries.Libs
 import com.mikepenz.aboutlibraries.LibsBuilder
 import com.weilylab.xhuschedule.R
-import com.weilylab.xhuschedule.base.BasePreferenceFragment
+import com.weilylab.xhuschedule.base.XhuBasePreferenceFragment
 import com.weilylab.xhuschedule.utils.ConfigUtil
 
-class AboutSettingFragment : BasePreferenceFragment(R.xml.preference_about) {
+class AboutSettingFragmentXhu : XhuBasePreferenceFragment(R.xml.preference_about) {
 	private val updateLogPreference: Preference by lazy { findPreferenceById(R.string.key_update_log) }
 	private val openSourceLicenseAboutPreference: Preference by lazy { findPreferenceById(R.string.key_open_source_license_about) }
 

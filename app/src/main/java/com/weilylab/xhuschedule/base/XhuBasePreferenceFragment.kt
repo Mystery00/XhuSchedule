@@ -1,7 +1,6 @@
 package com.weilylab.xhuschedule.base
 
 import android.os.Bundle
-import androidx.preference.Preference
 import androidx.annotation.XmlRes
 import android.view.LayoutInflater
 import android.view.View
@@ -9,11 +8,11 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.annotation.StringRes
 import androidx.core.content.ContextCompat
-import androidx.preference.PreferenceFragmentCompat
 import com.google.android.material.snackbar.Snackbar
 import com.weilylab.xhuschedule.R
+import vip.mystery0.tools.base.BasePreferenceFragment
 
-abstract class BasePreferenceFragment(@XmlRes private val preferencesResId: Int) : PreferenceFragmentCompat() {
+abstract class XhuBasePreferenceFragment(@XmlRes private val preferencesResId: Int) : BasePreferenceFragment(preferencesResId) {
 	private var toast: Toast? = null
 	private var snackbar: Snackbar? = null
 
@@ -27,18 +26,6 @@ abstract class BasePreferenceFragment(@XmlRes private val preferencesResId: Int)
 		setDividerHeight(1)
 		return view
 	}
-
-	override fun onActivityCreated(savedInstanceState: Bundle?) {
-		super.onActivityCreated(savedInstanceState)
-		initPreference()
-		monitor()
-	}
-
-	open fun initPreference() {}
-
-	open fun monitor() {}
-
-	fun findPreferenceById(@StringRes id: Int): Preference = findPreference(getString(id))
 
 	fun toastMessage(@StringRes stringRes: Int, isShowLong: Boolean = false) = toastMessage(getString(stringRes), isShowLong)
 

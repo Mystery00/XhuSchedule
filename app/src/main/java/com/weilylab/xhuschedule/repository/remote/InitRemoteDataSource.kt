@@ -7,7 +7,7 @@ import com.weilylab.xhuschedule.factory.RetrofitFactory
 import com.weilylab.xhuschedule.model.response.StartDateTimeResponse
 import com.weilylab.xhuschedule.repository.ds.InitDataSource
 import com.weilylab.xhuschedule.repository.local.InitLocalDataSource
-import com.weilylab.xhuschedule.utils.NetworkUtil
+import vip.mystery0.tools.utils.NetworkTools
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import vip.mystery0.rxpackagedata.PackageData
@@ -16,7 +16,7 @@ import java.util.*
 
 object InitRemoteDataSource : InitDataSource {
 	override fun getStartDateTime(startDateTimeLiveDate: MutableLiveData<PackageData<Calendar>>) {
-		if (NetworkUtil.isConnectInternet())
+		if (NetworkTools.isConnectInternet())
 			RetrofitFactory.leanCloudRetrofit
 					.create(LeanCloudAPI::class.java)
 					.requestStartDateTime()

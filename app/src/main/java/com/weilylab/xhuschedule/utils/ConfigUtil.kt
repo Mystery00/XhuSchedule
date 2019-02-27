@@ -14,6 +14,7 @@ import android.view.View
 import com.weilylab.xhuschedule.repository.local.InitLocalDataSource
 import com.weilylab.xhuschedule.service.NotificationService
 import vip.mystery0.logs.Logs
+import vip.mystery0.tools.utils.ColorTools
 
 object ConfigUtil {
 	private var lastClick = 0L
@@ -67,21 +68,7 @@ object ConfigUtil {
 		Logs.i("setTrigger: 设置定时任务")
 	}
 
-	fun toHexEncoding(color: Int): String {
-		var r = Integer.toHexString(Color.red(color))
-		var g = Integer.toHexString(Color.green(color))
-		var b = Integer.toHexString(Color.blue(color))
-		val sb = StringBuffer()
-		//判断获取到的R,G,B值的长度 如果长度等于1 给R,G,B值的前边添0
-		r = if (r.length == 1) "0$r" else r
-		g = if (g.length == 1) "0$g" else g
-		b = if (b.length == 1) "0$b" else b
-		sb.append("#")
-		sb.append(r)
-		sb.append(g)
-		sb.append(b)
-		return sb.toString()
-	}
+	fun toHexEncoding(color: Int): String = ColorTools.parseColorToString(color)
 
 	fun getCurrentYearAndTerm() {
 		if (ConfigurationUtil.isCustomYearAndTerm)

@@ -10,14 +10,14 @@ import com.weilylab.xhuschedule.repository.ds.CourseDataSource
 import com.weilylab.xhuschedule.repository.local.CourseLocalDataSource
 import com.weilylab.xhuschedule.utils.ConfigurationUtil
 import com.weilylab.xhuschedule.utils.userDo.CourseUtil
-import com.weilylab.xhuschedule.utils.NetworkUtil
 import com.zhuangfei.timetable.model.Schedule
 import vip.mystery0.logs.Logs
 import vip.mystery0.rxpackagedata.PackageData
+import vip.mystery0.tools.utils.NetworkTools
 
 object CourseRemoteDataSource : CourseDataSource {
 	override fun queryCourseByUsername(courseListLiveData: MutableLiveData<PackageData<List<Schedule>>>, student: Student, year: String?, term: String?, isFromCache: Boolean, isShowError: Boolean) {
-		if (NetworkUtil.isConnectInternet()) {
+		if (NetworkTools.isConnectInternet()) {
 			CourseUtil.getCourse(student, year, term, object : DoSaveListener<List<Course>> {
 				override fun doSave(t: List<Course>) {
 					t.forEach {
@@ -56,7 +56,7 @@ object CourseRemoteDataSource : CourseDataSource {
 	}
 
 	override fun queryCourseWithManyStudent(courseListLiveData: MutableLiveData<PackageData<List<Schedule>>>, studentList: List<Student>, year: String?, term: String?, isFromCache: Boolean, isShowError: Boolean) {
-		if (NetworkUtil.isConnectInternet()) {
+		if (NetworkTools.isConnectInternet()) {
 			CourseUtil.getCoursesForManyStudent(studentList, year, term, object : DoSaveListener<Map<String, List<Course>>> {
 				override fun doSave(t: Map<String, List<Course>>) {
 					val username = t.keys.first()

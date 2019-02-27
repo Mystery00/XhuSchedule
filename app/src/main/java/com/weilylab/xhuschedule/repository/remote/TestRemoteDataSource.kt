@@ -9,13 +9,13 @@ import com.weilylab.xhuschedule.model.Student
 import com.weilylab.xhuschedule.model.Test
 import com.weilylab.xhuschedule.repository.ds.TestDataSource
 import com.weilylab.xhuschedule.repository.local.TestLocalDataSource
-import com.weilylab.xhuschedule.utils.NetworkUtil
+import vip.mystery0.tools.utils.NetworkTools
 import com.weilylab.xhuschedule.utils.userDo.TestUtil
 import vip.mystery0.rxpackagedata.PackageData
 
 object TestRemoteDataSource : TestDataSource {
 	override fun queryAllTestsByUsername(testLiveData: MediatorLiveData<PackageData<List<Test>>>, htmlLiveData: MutableLiveData<String>?, student: Student) {
-		if (NetworkUtil.isConnectInternet()) {
+		if (NetworkTools.isConnectInternet()) {
 			TestUtil.getTests(student, object : DoSaveListener<List<Test>> {
 				override fun doSave(t: List<Test>) {
 					TestLocalDataSource.deleteAllTestsForStudent(student.username)
@@ -45,7 +45,7 @@ object TestRemoteDataSource : TestDataSource {
 	}
 
 	override fun queryAllTestsForManyStudent(testLiveData: MediatorLiveData<PackageData<List<Test>>>, studentList: List<Student>) {
-		if (NetworkUtil.isConnectInternet()) {
+		if (NetworkTools.isConnectInternet()) {
 			TestUtil.getTestsForManyStudent(studentList, object : DoSaveListener<Map<String, List<Test>>> {
 				override fun doSave(t: Map<String, List<Test>>) {
 					val username = t.keys.first()

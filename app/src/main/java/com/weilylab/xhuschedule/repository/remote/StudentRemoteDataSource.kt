@@ -8,14 +8,14 @@ import com.weilylab.xhuschedule.model.Student
 import com.weilylab.xhuschedule.model.StudentInfo
 import com.weilylab.xhuschedule.repository.ds.StudentDataSource
 import com.weilylab.xhuschedule.repository.local.StudentLocalDataSource
-import com.weilylab.xhuschedule.utils.NetworkUtil
+import vip.mystery0.tools.utils.NetworkTools
 import com.weilylab.xhuschedule.utils.userDo.UserUtil
 import vip.mystery0.rxpackagedata.PackageData
 
 object StudentRemoteDataSource : StudentDataSource {
 	override fun queryStudentInfo(studentInfoLiveData: MutableLiveData<PackageData<StudentInfo>>, student: Student) {
 		studentInfoLiveData.value = PackageData.loading()
-		if (NetworkUtil.isConnectInternet()) {
+		if (NetworkTools.isConnectInternet()) {
 			queryStudentInfo({ studentInfo, exception ->
 				if (exception == null)
 					studentInfoLiveData.value = PackageData.content(studentInfo)
@@ -48,7 +48,7 @@ object StudentRemoteDataSource : StudentDataSource {
 		loginLiveData.value = PackageData.loading()
 		UserUtil.checkStudentLogged(student) {
 			if (!it) {
-				if (NetworkUtil.isConnectInternet()) {
+				if (NetworkTools.isConnectInternet()) {
 					UserUtil.login(student, object : DoSaveListener<Student> {
 						override fun doSave(t: Student) {
 							StudentLocalDataSource.saveStudent(student)

@@ -8,7 +8,7 @@ import androidx.core.content.ContextCompat
 import cc.shinichi.library.ImagePreview
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.weilylab.xhuschedule.R
-import com.weilylab.xhuschedule.base.BasePreferenceFragment
+import com.weilylab.xhuschedule.base.XhuBasePreferenceFragment
 import com.weilylab.xhuschedule.repository.SchoolCalendarRepository
 import com.weilylab.xhuschedule.repository.local.StudentLocalDataSource
 import com.weilylab.xhuschedule.utils.ConfigUtil
@@ -19,7 +19,7 @@ import com.zyao89.view.zloading.Z_TYPE
 import vip.mystery0.logs.Logs
 import vip.mystery0.rxpackagedata.Status.*
 
-class ClassSettingsFragment : BasePreferenceFragment(R.xml.preference_class) {
+class ClassSettingsFragmentXhu : XhuBasePreferenceFragment(R.xml.preference_class) {
 	private val showNotWeekPreference: CheckBoxPreference by lazy { findPreferenceById(R.string.key_show_not_week) as CheckBoxPreference }
 	private val currentYearAndTermPreference: Preference by lazy { findPreferenceById(R.string.key_current_year_and_term) }
 	private val customStartTimePreference: Preference by lazy { findPreferenceById(R.string.key_custom_start_time) }

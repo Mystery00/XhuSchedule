@@ -20,7 +20,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.google.android.material.snackbar.Snackbar
-import com.weilylab.xhuschedule.base.BasePreferenceFragment
+import com.weilylab.xhuschedule.base.XhuBasePreferenceFragment
 import com.weilylab.xhuschedule.service.CheckUpdateService
 import com.weilylab.xhuschedule.ui.activity.SettingsActivity
 import com.weilylab.xhuschedule.ui.custom.CustomGlideEngine
@@ -35,7 +35,7 @@ import vip.mystery0.tools.utils.DensityTools
 import java.io.File
 import java.util.*
 
-class SettingsPreferenceFragment : BasePreferenceFragment(R.xml.preference_settings) {
+class SettingsPreferenceFragmentXhu : XhuBasePreferenceFragment(R.xml.preference_settings) {
 	companion object {
 		const val ACTION_CHECK_UPDATE_DONE = "action_check_update_done"
 		private const val REQUEST_CHOOSE_USER = 21
