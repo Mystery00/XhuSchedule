@@ -58,11 +58,11 @@ class SettingsActivity : XhuBaseActivity(R.layout.activity_settings) {
 		}
 	}
 
-	private val accountSettingsFragment: AccountSettingsFragmentXhu by lazy { AccountSettingsFragmentXhu() }
-	private val classSettingsFragment: ClassSettingsFragmentXhu by lazy { ClassSettingsFragmentXhu() }
-	private val queryScoreFragment: QueryScoreFragmentXhu by lazy { QueryScoreFragmentXhu() }
-	private val settingsPreferenceFragment: SettingsPreferenceFragmentXhu by lazy { SettingsPreferenceFragmentXhu() }
-	private val aboutSettingFragment: AboutSettingFragmentXhu by lazy { AboutSettingFragmentXhu() }
+	private val accountSettingsFragment: AccountSettingsFragment by lazy { AccountSettingsFragment() }
+	private val classSettingsFragment: ClassSettingsFragment by lazy { ClassSettingsFragment() }
+	private val queryScoreFragment: QueryScoreFragment by lazy { QueryScoreFragment() }
+	private val settingsPreferenceFragment: SettingsPreferenceFragment by lazy { SettingsPreferenceFragment() }
+	private val aboutSettingFragment: AboutSettingFragment by lazy { AboutSettingFragment() }
 
 	override fun initView() {
 		super.initView()

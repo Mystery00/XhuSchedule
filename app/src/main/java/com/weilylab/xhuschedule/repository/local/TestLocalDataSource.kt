@@ -7,11 +7,11 @@ import com.weilylab.xhuschedule.model.Test
 import com.weilylab.xhuschedule.repository.ds.TestDataSource
 import com.weilylab.xhuschedule.repository.local.service.TestService
 import com.weilylab.xhuschedule.repository.local.service.impl.TestServiceImpl
+import com.weilylab.xhuschedule.utils.RxObservable
+import com.weilylab.xhuschedule.utils.RxObserver
 import com.weilylab.xhuschedule.utils.userDo.TestUtil
 import vip.mystery0.logs.Logs
-import vip.mystery0.rxpackagedata.PackageData
-import vip.mystery0.rxpackagedata.rx.RxObservable
-import vip.mystery0.rxpackagedata.rx.RxObserver
+import vip.mystery0.rx.PackageData
 import java.util.ArrayList
 
 object TestLocalDataSource : TestDataSource {

@@ -4,8 +4,8 @@ import com.weilylab.xhuschedule.model.Course
 import com.weilylab.xhuschedule.repository.local.CourseLocalDataSource
 import com.weilylab.xhuschedule.repository.local.StudentLocalDataSource
 import com.weilylab.xhuschedule.viewmodel.CustomCourseViewModel
-import vip.mystery0.rxpackagedata.PackageData
-import vip.mystery0.rxpackagedata.Status.*
+import vip.mystery0.rx.PackageData
+import vip.mystery0.rx.Status.*
 
 object CustomCourseRepository {
 	fun getAll(customCourseViewModel: CustomCourseViewModel) = CourseLocalDataSource.getAll(customCourseViewModel.customCourseList)

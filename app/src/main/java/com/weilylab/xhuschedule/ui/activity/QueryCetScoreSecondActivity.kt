@@ -15,8 +15,8 @@ import com.weilylab.xhuschedule.repository.ScoreRepository
 import com.weilylab.xhuschedule.viewmodel.QueryCetScoreViewModelHelper
 import com.zyao89.view.zloading.ZLoadingDialog
 import com.zyao89.view.zloading.Z_TYPE
-import vip.mystery0.rxpackagedata.PackageData
-import vip.mystery0.rxpackagedata.Status.*
+import vip.mystery0.rx.PackageData
+import vip.mystery0.rx.Status.*
 import kotlinx.android.synthetic.main.activity_query_cet_score_second.*
 import vip.mystery0.logs.Logs
 

@@ -8,25 +8,25 @@ import androidx.preference.PreferenceCategory
 import androidx.appcompat.app.AlertDialog
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.base.XhuBasePreferenceFragment
-import vip.mystery0.rxpackagedata.Status.*
+import vip.mystery0.rx.Status.*
 import com.weilylab.xhuschedule.model.Student
 import com.weilylab.xhuschedule.repository.local.StudentLocalDataSource
 import com.weilylab.xhuschedule.ui.activity.LoginActivity
 import com.weilylab.xhuschedule.utils.ConfigurationUtil
 import com.weilylab.xhuschedule.utils.LayoutRefreshConfigUtil
+import com.weilylab.xhuschedule.utils.RxObserver
 import vip.mystery0.logs.Logs
-import vip.mystery0.rxpackagedata.rx.RxObserver
 
-class AccountSettingsFragmentXhu : XhuBasePreferenceFragment(R.xml.preference_account) {
+class AccountSettingsFragment : XhuBasePreferenceFragment(R.xml.preference_account) {
 	companion object {
 		const val ADD_ACCOUNT_CODE = 233
 	}
 
-	private val loggedStudentCategory: PreferenceCategory by lazy { findPreferenceById(R.string.key_logged_account) as PreferenceCategory }
-	private val addAccountPreference: Preference by lazy { findPreferenceById(R.string.key_add_account) }
-	private val delAccountPreference: Preference by lazy { findPreferenceById(R.string.key_del_account) }
-	private val setMainAccountPreference: Preference by lazy { findPreferenceById(R.string.key_set_main_account) }
-	private val enableMultiUserModePreference: CheckBoxPreference by lazy { findPreferenceById(R.string.key_enable_multi_user_mode) as CheckBoxPreference }
+	private val loggedStudentCategory: PreferenceCategory by lazy { findPreferenceById<PreferenceCategory>(R.string.key_logged_account) }
+	private val addAccountPreference: Preference by lazy { findPreferenceById<Preference>(R.string.key_add_account) }
+	private val delAccountPreference: Preference by lazy { findPreferenceById<Preference>(R.string.key_del_account) }
+	private val setMainAccountPreference: Preference by lazy { findPreferenceById<Preference>(R.string.key_set_main_account) }
+	private val enableMultiUserModePreference: CheckBoxPreference by lazy { findPreferenceById<CheckBoxPreference>(R.string.key_enable_multi_user_mode) }
 	private val studentList = ArrayList<Student>()
 
 	override fun initPreference() {

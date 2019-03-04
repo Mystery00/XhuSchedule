@@ -5,10 +5,10 @@ import com.weilylab.xhuschedule.model.Notice
 import com.weilylab.xhuschedule.repository.ds.NoticeDataSource
 import com.weilylab.xhuschedule.repository.local.service.NoticeService
 import com.weilylab.xhuschedule.repository.local.service.impl.NoticeServiceImpl
+import com.weilylab.xhuschedule.utils.RxObservable
+import com.weilylab.xhuschedule.utils.RxObserver
 import vip.mystery0.logs.Logs
-import vip.mystery0.rxpackagedata.PackageData
-import vip.mystery0.rxpackagedata.rx.RxObservable
-import vip.mystery0.rxpackagedata.rx.RxObserver
+import vip.mystery0.rx.PackageData
 
 object NoticeLocalDataSource : NoticeDataSource {
 	private val noticeService: NoticeService by lazy { NoticeServiceImpl() }

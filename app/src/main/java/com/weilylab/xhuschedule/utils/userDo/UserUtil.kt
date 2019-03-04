@@ -1,7 +1,7 @@
 package com.weilylab.xhuschedule.utils.userDo
 
 import com.weilylab.xhuschedule.api.UserAPI
-import vip.mystery0.rxpackagedata.Status.*
+import vip.mystery0.rx.Status.*
 import com.weilylab.xhuschedule.constant.ResponseCodeConstants
 import com.weilylab.xhuschedule.constant.StringConstant
 import com.weilylab.xhuschedule.factory.GsonFactory
@@ -13,7 +13,7 @@ import com.weilylab.xhuschedule.model.StudentInfo
 import com.weilylab.xhuschedule.model.response.LoginResponse
 import com.weilylab.xhuschedule.repository.local.StudentLocalDataSource
 import vip.mystery0.tools.utils.NetworkTools
-import vip.mystery0.rxpackagedata.rx.RxObserver
+import com.weilylab.xhuschedule.utils.RxObserver
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import vip.mystery0.logs.Logs

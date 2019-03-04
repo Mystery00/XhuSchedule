@@ -9,7 +9,7 @@ import com.weilylab.xhuschedule.listener.DoSaveListener
 import com.weilylab.xhuschedule.listener.RequestListener
 import com.weilylab.xhuschedule.model.Notice
 import com.weilylab.xhuschedule.model.response.NoticeResponse
-import vip.mystery0.rxpackagedata.rx.RxObserver
+import com.weilylab.xhuschedule.utils.RxObserver
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import vip.mystery0.logs.Logs

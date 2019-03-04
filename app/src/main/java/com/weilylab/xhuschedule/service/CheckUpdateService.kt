@@ -17,14 +17,15 @@ import com.weilylab.xhuschedule.constant.Constants
 import com.weilylab.xhuschedule.ui.activity.GuideActivity
 import com.weilylab.xhuschedule.ui.activity.SplashActivity
 import com.weilylab.xhuschedule.ui.activity.SplashImageActivity
-import com.weilylab.xhuschedule.ui.fragment.settings.SettingsPreferenceFragmentXhu
+import com.weilylab.xhuschedule.ui.fragment.settings.SettingsPreferenceFragment
 import com.weilylab.xhuschedule.utils.ConfigUtil
 import com.weilylab.xhuschedule.utils.ConfigurationUtil
+import com.weilylab.xhuschedule.utils.RxObservable
+import com.weilylab.xhuschedule.utils.RxObserver
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import vip.mystery0.logs.Logs
-import vip.mystery0.rxpackagedata.rx.RxObservable
-import vip.mystery0.rxpackagedata.rx.RxObserver
+import vip.mystery0.tools.utils.ActivityManagerTools
 import vip.mystery0.tools.utils.FileTools
 
 class CheckUpdateService : Service() {
@@ -63,7 +64,7 @@ class CheckUpdateService : Service() {
 						if (data != null && data.versionCode.toInt() > getString(R.string.app_version_code).toInt())
 							showUpdateDialog(data, intent.getBooleanExtra(CHECK_ACTION_BY_MANUAL, false))
 						stopSelf()
-						LocalBroadcastManager.getInstance(this@CheckUpdateService).sendBroadcast(Intent(SettingsPreferenceFragmentXhu.ACTION_CHECK_UPDATE_DONE))
+						LocalBroadcastManager.getInstance(this@CheckUpdateService).sendBroadcast(Intent(SettingsPreferenceFragment.ACTION_CHECK_UPDATE_DONE))
 					}
 
 					override fun onError(e: Throwable) {
@@ -82,14 +83,14 @@ class CheckUpdateService : Service() {
 		}
 		RxObservable<Boolean>()
 				.doThings {
-					while (APPActivityManager.currentActivity() is SplashActivity || APPActivityManager.currentActivity() is GuideActivity || APPActivityManager.currentActivity() is SplashImageActivity)
+					while (ActivityManagerTools.currentActivity() is SplashActivity || ActivityManagerTools.currentActivity() is GuideActivity || ActivityManagerTools.currentActivity() is SplashImageActivity)
 						Thread.sleep(1000)
 					it.onFinish(true)
 				}
 				.subscribe(object : RxObserver<Boolean>() {
 					override fun onFinish(data: Boolean?) {
 						if (data != null && data) {
-							val activity = APPActivityManager.currentActivity() ?: return
+							val activity = ActivityManagerTools.currentActivity() ?: return
 							val title = getString(R.string.dialog_update_title, getString(R.string.app_version_name), version.versionName)
 							val text = getString(R.string.dialog_update_text, version.updateLog)
 							val builder = AlertDialog.Builder(activity)
@@ -104,7 +105,7 @@ class CheckUpdateService : Service() {
 								}
 							if (version.must == "1")
 								builder.setOnCancelListener {
-									APPActivityManager.finishAllActivity()
+									ActivityManagerTools.finishAllActivity()
 								}
 							else
 								builder.setNeutralButton(R.string.action_download_cancel) { _, _ ->

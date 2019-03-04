@@ -1,7 +1,7 @@
 package com.weilylab.xhuschedule.repository.ds
 
 import androidx.lifecycle.MutableLiveData
-import vip.mystery0.rxpackagedata.PackageData
+import vip.mystery0.rx.PackageData
 import java.util.*
 
 interface InitDataSource {

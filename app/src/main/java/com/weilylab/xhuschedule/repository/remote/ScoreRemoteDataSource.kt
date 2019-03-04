@@ -13,7 +13,7 @@ import com.weilylab.xhuschedule.repository.ds.ScoreDataSource
 import com.weilylab.xhuschedule.repository.local.ScoreLocalDataSource
 import vip.mystery0.tools.utils.NetworkTools
 import com.weilylab.xhuschedule.utils.userDo.ScoreUtil
-import vip.mystery0.rxpackagedata.PackageData
+import vip.mystery0.rx.PackageData
 import java.util.ArrayList
 
 object ScoreRemoteDataSource : ScoreDataSource {

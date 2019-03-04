@@ -10,14 +10,14 @@ import com.weilylab.xhuschedule.repository.ds.StudentDataSource
 import com.weilylab.xhuschedule.repository.local.service.StudentService
 import com.weilylab.xhuschedule.repository.local.service.impl.StudentServiceImpl
 import com.weilylab.xhuschedule.repository.remote.StudentRemoteDataSource
+import com.weilylab.xhuschedule.utils.RxObservable
+import com.weilylab.xhuschedule.utils.RxObserver
 import com.weilylab.xhuschedule.utils.userDo.UserUtil
 import io.reactivex.Observable
 import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import vip.mystery0.rxpackagedata.PackageData
-import vip.mystery0.rxpackagedata.rx.RxObservable
-import vip.mystery0.rxpackagedata.rx.RxObserver
+import vip.mystery0.rx.PackageData
 import java.util.*
 
 object StudentLocalDataSource : StudentDataSource {

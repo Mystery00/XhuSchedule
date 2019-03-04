@@ -8,8 +8,8 @@ import vip.mystery0.tools.utils.NetworkTools
 import com.weilylab.xhuschedule.utils.userDo.UserUtil
 import com.weilylab.xhuschedule.viewmodel.BottomNavigationViewModel
 import com.weilylab.xhuschedule.viewmodel.FeedBackViewModel
-import vip.mystery0.rxpackagedata.PackageData
-import vip.mystery0.rxpackagedata.Status.*
+import vip.mystery0.rx.PackageData
+import vip.mystery0.rx.Status.*
 
 object FeedBackRepository {
 	fun sendMessage(content: String, feedBackViewModel: FeedBackViewModel) {

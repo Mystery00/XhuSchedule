@@ -4,9 +4,9 @@ import androidx.lifecycle.MutableLiveData
 import com.weilylab.xhuschedule.model.CustomThing
 import com.weilylab.xhuschedule.repository.local.service.impl.CustomThingServiceImpl
 import com.weilylab.xhuschedule.utils.CalendarUtil
-import vip.mystery0.rxpackagedata.PackageData
-import vip.mystery0.rxpackagedata.rx.RxObservable
-import vip.mystery0.rxpackagedata.rx.RxObserver
+import com.weilylab.xhuschedule.utils.RxObservable
+import com.weilylab.xhuschedule.utils.RxObserver
+import vip.mystery0.rx.PackageData
 
 object CustomThingLocalDataSource {
 	private val customThingService by lazy { CustomThingServiceImpl() }

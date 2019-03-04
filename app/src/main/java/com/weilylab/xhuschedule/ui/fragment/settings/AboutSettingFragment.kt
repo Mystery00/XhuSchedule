@@ -9,9 +9,9 @@ import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.base.XhuBasePreferenceFragment
 import com.weilylab.xhuschedule.utils.ConfigUtil
 
-class AboutSettingFragmentXhu : XhuBasePreferenceFragment(R.xml.preference_about) {
-	private val updateLogPreference: Preference by lazy { findPreferenceById(R.string.key_update_log) }
-	private val openSourceLicenseAboutPreference: Preference by lazy { findPreferenceById(R.string.key_open_source_license_about) }
+class AboutSettingFragment : XhuBasePreferenceFragment(R.xml.preference_about) {
+	private val updateLogPreference: Preference by lazy { findPreferenceById<Preference>(R.string.key_update_log) }
+	private val openSourceLicenseAboutPreference: Preference by lazy { findPreferenceById<Preference>(R.string.key_open_source_license_about) }
 
 	override fun monitor() {
 		super.monitor()

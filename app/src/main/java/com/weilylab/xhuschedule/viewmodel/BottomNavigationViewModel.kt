@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.weilylab.xhuschedule.model.*
 import com.zhuangfei.timetable.model.Schedule
-import vip.mystery0.rxpackagedata.PackageData
+import vip.mystery0.rx.PackageData
 import java.util.*
 
 class BottomNavigationViewModel : ViewModel() {

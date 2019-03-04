@@ -16,13 +16,13 @@ import com.weilylab.xhuschedule.repository.JRSCRepository
 import com.weilylab.xhuschedule.ui.adapter.FragmentTodayRecyclerViewAdapter
 import com.weilylab.xhuschedule.utils.CalendarUtil
 import com.weilylab.xhuschedule.utils.LayoutRefreshConfigUtil
-import vip.mystery0.rxpackagedata.Status.*
+import com.weilylab.xhuschedule.utils.RxObservable
+import com.weilylab.xhuschedule.utils.RxObserver
+import vip.mystery0.rx.Status.*
 import com.weilylab.xhuschedule.viewmodel.BottomNavigationViewModel
 import com.zhuangfei.timetable.model.Schedule
 import vip.mystery0.logs.Logs
-import vip.mystery0.rxpackagedata.PackageData
-import vip.mystery0.rxpackagedata.rx.RxObservable
-import vip.mystery0.rxpackagedata.rx.RxObserver
+import vip.mystery0.rx.PackageData
 
 class TodayFragment : BaseBottomNavigationFragment<FragmentTodayBinding>(R.layout.fragment_today) {
 	companion object {

@@ -7,9 +7,9 @@ import com.weilylab.xhuschedule.model.Student
 import com.weilylab.xhuschedule.repository.ds.ScoreDataSource
 import com.weilylab.xhuschedule.repository.local.service.ScoreService
 import com.weilylab.xhuschedule.repository.local.service.impl.ScoreServiceImpl
-import vip.mystery0.rxpackagedata.PackageData
-import vip.mystery0.rxpackagedata.rx.RxObservable
-import vip.mystery0.rxpackagedata.rx.RxObserver
+import com.weilylab.xhuschedule.utils.RxObservable
+import com.weilylab.xhuschedule.utils.RxObserver
+import vip.mystery0.rx.PackageData
 
 object ScoreLocalDataSource : ScoreDataSource {
 	private val scoreService: ScoreService by lazy { ScoreServiceImpl() }

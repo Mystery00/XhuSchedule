@@ -15,14 +15,10 @@ import com.weilylab.xhuschedule.databinding.DialogShareWithFriendsBinding
 import com.weilylab.xhuschedule.databinding.FragmentProfileBinding
 import com.weilylab.xhuschedule.base.BaseBottomNavigationFragment
 import com.weilylab.xhuschedule.ui.activity.*
-import com.weilylab.xhuschedule.utils.ConfigurationUtil
-import com.weilylab.xhuschedule.utils.LayoutRefreshConfigUtil
-import com.weilylab.xhuschedule.utils.ShareUtil
+import com.weilylab.xhuschedule.utils.*
 import com.weilylab.xhuschedule.viewmodel.BottomNavigationViewModel
 import vip.mystery0.logs.Logs
-import vip.mystery0.rxpackagedata.Status.*
-import vip.mystery0.rxpackagedata.rx.RxObservable
-import vip.mystery0.rxpackagedata.rx.RxObserver
+import vip.mystery0.rx.Status.*
 import java.io.File
 
 class ProfileFragment : BaseBottomNavigationFragment<FragmentProfileBinding>(R.layout.fragment_profile) {

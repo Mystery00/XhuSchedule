@@ -35,8 +35,8 @@ import kotlinx.android.synthetic.main.activity_custom_course.*
 import kotlinx.android.synthetic.main.layout_add_custom_course.*
 
 import vip.mystery0.logs.Logs
-import vip.mystery0.rxpackagedata.PackageData
-import vip.mystery0.rxpackagedata.Status
+import vip.mystery0.rx.PackageData
+import vip.mystery0.rx.Status
 import java.util.*
 
 class CustomCourseActivity : XhuBaseActivity(R.layout.activity_custom_course) {

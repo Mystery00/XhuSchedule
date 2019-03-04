@@ -35,7 +35,7 @@ import vip.mystery0.tools.utils.DensityTools
 import java.io.File
 import java.util.*
 
-class SettingsPreferenceFragmentXhu : XhuBasePreferenceFragment(R.xml.preference_settings) {
+class SettingsPreferenceFragment : XhuBasePreferenceFragment(R.xml.preference_settings) {
 	companion object {
 		const val ACTION_CHECK_UPDATE_DONE = "action_check_update_done"
 		private const val REQUEST_CHOOSE_USER = 21
@@ -44,22 +44,22 @@ class SettingsPreferenceFragmentXhu : XhuBasePreferenceFragment(R.xml.preference
 		private const val REQUEST_CROP_BACKGROUND = 32
 	}
 
-	private val userImgPreference: Preference by lazy { findPreferenceById(R.string.key_user_img) }
-	private val backgroundImgPreference: Preference by lazy { findPreferenceById(R.string.key_background_img) }
-	private val nightModePreference: Preference by lazy { findPreferenceById(R.string.key_night_mode) }
-	private val enableViewPagerTransformPreference: CheckBoxPreference by lazy { findPreferenceById(R.string.key_enable_viewpager_transform) as CheckBoxPreference }
-	private val tintNavigationBarPreference: CheckBoxPreference by lazy { findPreferenceById(R.string.key_tint_navigation_bar) as CheckBoxPreference }
-	private val resetUserImgPreference: Preference by lazy { findPreferenceById(R.string.key_reset_user_img) }
-	private val resetBackgroundPreference: Preference by lazy { findPreferenceById(R.string.key_reset_background_img) }
-	private val notificationCoursePreference: CheckBoxPreference by lazy { findPreferenceById(R.string.key_notification_course) as CheckBoxPreference }
-	private val notificationExamPreference: CheckBoxPreference by lazy { findPreferenceById(R.string.key_notification_exam) as CheckBoxPreference }
-	private val notificationTimePreference: Preference by lazy { findPreferenceById(R.string.key_notification_time) }
-	private val disableJRSCPreference: CheckBoxPreference by lazy { findPreferenceById(R.string.key_disable_jrsc) as CheckBoxPreference }
-	private val showJRSCTranslationPreference: CheckBoxPreference by lazy { findPreferenceById(R.string.key_show_jrsc_translation) as CheckBoxPreference }
-	private val autoCheckUpdatePreference: CheckBoxPreference by lazy { findPreferenceById(R.string.key_auto_check_update) as CheckBoxPreference }
-	private val weixinPreference: Preference by lazy { findPreferenceById(R.string.key_weixin) }
-	private val checkUpdatePreference: Preference by lazy { findPreferenceById(R.string.key_check_update) }
-	private val aboutPreference: Preference by lazy { findPreferenceById(R.string.key_about) }
+	private val userImgPreference: Preference by lazy { findPreferenceById<Preference>(R.string.key_user_img) }
+	private val backgroundImgPreference: Preference by lazy { findPreferenceById<Preference>(R.string.key_background_img) }
+	private val nightModePreference: Preference by lazy { findPreferenceById<Preference>(R.string.key_night_mode) }
+	private val enableViewPagerTransformPreference: CheckBoxPreference by lazy { findPreferenceById<CheckBoxPreference>(R.string.key_enable_viewpager_transform) }
+	private val tintNavigationBarPreference: CheckBoxPreference by lazy { findPreferenceById<CheckBoxPreference>(R.string.key_tint_navigation_bar) }
+	private val resetUserImgPreference: Preference by lazy { findPreferenceById<Preference>(R.string.key_reset_user_img) }
+	private val resetBackgroundPreference: Preference by lazy { findPreferenceById<Preference>(R.string.key_reset_background_img) }
+	private val notificationCoursePreference: CheckBoxPreference by lazy { findPreferenceById<CheckBoxPreference>(R.string.key_notification_course) }
+	private val notificationExamPreference: CheckBoxPreference by lazy { findPreferenceById<CheckBoxPreference>(R.string.key_notification_exam) }
+	private val notificationTimePreference: Preference by lazy { findPreferenceById<Preference>(R.string.key_notification_time) }
+	private val disableJRSCPreference: CheckBoxPreference by lazy { findPreferenceById<CheckBoxPreference>(R.string.key_disable_jrsc) }
+	private val showJRSCTranslationPreference: CheckBoxPreference by lazy { findPreferenceById<CheckBoxPreference>(R.string.key_show_jrsc_translation) }
+	private val autoCheckUpdatePreference: CheckBoxPreference by lazy { findPreferenceById<CheckBoxPreference>(R.string.key_auto_check_update) }
+	private val weixinPreference: Preference by lazy { findPreferenceById<Preference>(R.string.key_weixin) }
+	private val checkUpdatePreference: Preference by lazy { findPreferenceById<Preference>(R.string.key_check_update) }
+	private val aboutPreference: Preference by lazy { findPreferenceById<Preference>(R.string.key_about) }
 
 	private val dialog: Dialog by lazy {
 		ZLoadingDialog(activity!!)
@@ -241,33 +241,25 @@ class SettingsPreferenceFragmentXhu : XhuBasePreferenceFragment(R.xml.preference
 	}
 
 	private fun requestImageChoose(requestCode: Int) {
-		if (ContextCompat.checkSelfPermission(activity!!, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
-				requestPermissions(arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), requestCode)
-		} else
-			Matisse.from(this)
-					.choose(MimeType.of(MimeType.JPEG, MimeType.PNG, MimeType.BMP))
-					.showSingleMediaType(true)
-					.countable(false)
-					.maxSelectable(1)
-					.restrictOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
-					.thumbnailScale(0.85f)
-					.imageEngine(CustomGlideEngine())
-					.forResult(requestCode)
-	}
-
-	override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
-		super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-		if (grantResults.isEmpty())
-			return
-		if (grantResults[0] == PackageManager.PERMISSION_GRANTED)
-			requestImageChoose(requestCode)
-		else
-			Snackbar.make(activity!!.window.decorView, R.string.hint_permission_deny, Snackbar.LENGTH_LONG)
-					.setAction(R.string.action_re_request) {
-						requestImageChoose(requestCode)
-					}
-					.show()
+		requestPermissionsOnFragment(arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE)) { code, array ->
+			if (array[0] == PackageManager.PERMISSION_GRANTED) {
+				Matisse.from(this)
+						.choose(MimeType.of(MimeType.JPEG, MimeType.PNG, MimeType.BMP))
+						.showSingleMediaType(true)
+						.countable(false)
+						.maxSelectable(1)
+						.restrictOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
+						.thumbnailScale(0.85f)
+						.imageEngine(CustomGlideEngine())
+						.forResult(requestCode)
+			} else {
+				Snackbar.make(activity!!.window.decorView, R.string.hint_permission_deny, Snackbar.LENGTH_LONG)
+						.setAction(R.string.action_re_request) {
+							reRequestPermission(code)
+						}
+						.show()
+			}
+		}
 	}
 
 	override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

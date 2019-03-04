@@ -8,11 +8,9 @@ import com.weilylab.xhuschedule.repository.remote.CourseRemoteDataSource
 import com.weilylab.xhuschedule.utils.*
 import com.weilylab.xhuschedule.utils.userDo.CourseUtil
 import com.weilylab.xhuschedule.utils.userDo.UserUtil
-import vip.mystery0.rxpackagedata.PackageData
-import vip.mystery0.rxpackagedata.rx.RxObservable
-import vip.mystery0.rxpackagedata.rx.RxObserver
 import com.weilylab.xhuschedule.viewmodel.BottomNavigationViewModel
-import vip.mystery0.rxpackagedata.Status.*
+import vip.mystery0.rx.PackageData
+import vip.mystery0.rx.Status.*
 
 object BottomNavigationRepository {
 	fun queryStudentInfo(bottomNavigationViewModel: BottomNavigationViewModel) {

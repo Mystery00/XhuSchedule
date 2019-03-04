@@ -31,8 +31,8 @@ import com.weilylab.xhuschedule.viewmodel.CustomThingViewModel
 
 import kotlinx.android.synthetic.main.activity_custom_thing.*
 import vip.mystery0.logs.Logs
-import vip.mystery0.rxpackagedata.PackageData
-import vip.mystery0.rxpackagedata.Status
+import vip.mystery0.rx.PackageData
+import vip.mystery0.rx.Status
 import java.text.SimpleDateFormat
 import java.util.*
 

@@ -45,8 +45,8 @@ import com.weilylab.xhuschedule.repository.SplashRepository
 import com.weilylab.xhuschedule.service.CheckUpdateService
 import com.weilylab.xhuschedule.utils.ConfigurationUtil
 import com.weilylab.xhuschedule.utils.FileUtil
-import vip.mystery0.rxpackagedata.PackageData
-import vip.mystery0.rxpackagedata.Status
+import vip.mystery0.rx.PackageData
+import vip.mystery0.rx.Status
 import com.weilylab.xhuschedule.viewmodel.SplashViewModel
 import com.weilylab.xhuschedule.service.DownloadSplashIntentService
 import com.weilylab.xhuschedule.service.NotificationService

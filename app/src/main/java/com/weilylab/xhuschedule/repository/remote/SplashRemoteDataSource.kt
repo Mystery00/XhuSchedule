@@ -7,10 +7,10 @@ import com.weilylab.xhuschedule.factory.RetrofitFactory
 import com.weilylab.xhuschedule.model.response.SplashResponse
 import com.weilylab.xhuschedule.repository.ds.SplashDataSource
 import com.weilylab.xhuschedule.repository.local.SplashLocalDataSource
+import com.weilylab.xhuschedule.utils.RxObserver
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import vip.mystery0.rxpackagedata.PackageData
-import vip.mystery0.rxpackagedata.rx.RxObserver
+import vip.mystery0.rx.PackageData
 import java.util.concurrent.TimeUnit
 
 object SplashRemoteDataSource : SplashDataSource {

@@ -19,8 +19,8 @@ import com.weilylab.xhuschedule.model.Test
 import com.weilylab.xhuschedule.repository.TestRepository
 import com.weilylab.xhuschedule.ui.adapter.QueryTestRecyclerViewAdapter
 import com.weilylab.xhuschedule.utils.userDo.UserUtil
-import vip.mystery0.rxpackagedata.PackageData
-import vip.mystery0.rxpackagedata.Status.*
+import vip.mystery0.rx.PackageData
+import vip.mystery0.rx.Status.*
 import com.weilylab.xhuschedule.viewmodel.QueryTestViewModel
 import com.zyao89.view.zloading.ZLoadingDialog
 import com.zyao89.view.zloading.Z_TYPE

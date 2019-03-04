@@ -52,8 +52,8 @@ import kotlinx.android.synthetic.main.activity_bottom_navigation.*
 import kotlinx.android.synthetic.main.content_bottom_navigation.*
 import vip.mystery0.bottomTabView.BottomTabItem
 import vip.mystery0.logs.Logs
-import vip.mystery0.rxpackagedata.PackageData
-import vip.mystery0.rxpackagedata.Status.*
+import vip.mystery0.rx.PackageData
+import vip.mystery0.rx.Status.*
 import vip.mystery0.tools.utils.DensityTools
 import java.io.File
 import java.text.SimpleDateFormat

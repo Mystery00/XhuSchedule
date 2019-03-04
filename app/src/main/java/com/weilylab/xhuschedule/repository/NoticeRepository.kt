@@ -6,7 +6,7 @@ import com.weilylab.xhuschedule.repository.local.NoticeLocalDataSource
 import com.weilylab.xhuschedule.repository.remote.NoticeRemoteDataSource
 import com.weilylab.xhuschedule.viewmodel.BottomNavigationViewModel
 import com.weilylab.xhuschedule.viewmodel.NoticeViewModel
-import vip.mystery0.rxpackagedata.PackageData
+import vip.mystery0.rx.PackageData
 
 object NoticeRepository {
 	fun queryNoticeForAndroid(noticeViewModel: NoticeViewModel) {

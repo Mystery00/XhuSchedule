@@ -17,14 +17,14 @@ import com.weilylab.xhuschedule.utils.LayoutRefreshConfigUtil
 import com.zyao89.view.zloading.ZLoadingDialog
 import com.zyao89.view.zloading.Z_TYPE
 import vip.mystery0.logs.Logs
-import vip.mystery0.rxpackagedata.Status.*
+import vip.mystery0.rx.Status.*
 
-class ClassSettingsFragmentXhu : XhuBasePreferenceFragment(R.xml.preference_class) {
-	private val showNotWeekPreference: CheckBoxPreference by lazy { findPreferenceById(R.string.key_show_not_week) as CheckBoxPreference }
-	private val currentYearAndTermPreference: Preference by lazy { findPreferenceById(R.string.key_current_year_and_term) }
-	private val customStartTimePreference: Preference by lazy { findPreferenceById(R.string.key_custom_start_time) }
-	private val schoolCalendarPreference: Preference by lazy { findPreferenceById(R.string.key_action_school_calendar) }
-	private val showCustomThingFirstPreference: CheckBoxPreference by lazy { findPreferenceById(R.string.key_show_custom_thing_first) as CheckBoxPreference }
+class ClassSettingsFragment : XhuBasePreferenceFragment(R.xml.preference_class) {
+	private val showNotWeekPreference: CheckBoxPreference by lazy { findPreferenceById<CheckBoxPreference>(R.string.key_show_not_week) }
+	private val currentYearAndTermPreference: Preference by lazy { findPreferenceById<Preference>(R.string.key_current_year_and_term) }
+	private val customStartTimePreference: Preference by lazy { findPreferenceById<Preference>(R.string.key_custom_start_time) }
+	private val schoolCalendarPreference: Preference by lazy { findPreferenceById<Preference>(R.string.key_action_school_calendar) }
+	private val showCustomThingFirstPreference: CheckBoxPreference by lazy { findPreferenceById<CheckBoxPreference>(R.string.key_show_custom_thing_first) }
 
 	private val dialog: Dialog by lazy {
 		ZLoadingDialog(activity!!)

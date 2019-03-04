@@ -52,8 +52,8 @@ import com.weilylab.xhuschedule.repository.LoginRepository
 import com.weilylab.xhuschedule.viewmodel.LoginViewModel
 import android.view.WindowManager
 import vip.mystery0.logs.Logs
-import vip.mystery0.rxpackagedata.PackageData
-import vip.mystery0.rxpackagedata.Status.*
+import vip.mystery0.rx.PackageData
+import vip.mystery0.rx.Status.*
 
 class LoginActivity : XhuBaseActivity(R.layout.activity_login, false) {
 	private val loginViewModel: LoginViewModel by lazy {

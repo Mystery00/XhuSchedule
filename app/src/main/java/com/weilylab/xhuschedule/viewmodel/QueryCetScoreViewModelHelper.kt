@@ -6,7 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import com.weilylab.xhuschedule.model.CetScore
 import com.weilylab.xhuschedule.model.Student
 import com.weilylab.xhuschedule.model.StudentInfo
-import vip.mystery0.rxpackagedata.PackageData
+import vip.mystery0.rx.PackageData
 
 object QueryCetScoreViewModelHelper {
 	var no = MutableLiveData<String>()

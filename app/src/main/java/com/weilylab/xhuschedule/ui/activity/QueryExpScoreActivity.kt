@@ -18,8 +18,8 @@ import com.weilylab.xhuschedule.model.StudentInfo
 import com.weilylab.xhuschedule.repository.ScoreRepository
 import com.weilylab.xhuschedule.ui.adapter.QueryExpScoreRecyclerViewAdapter
 import com.weilylab.xhuschedule.utils.CalendarUtil
-import vip.mystery0.rxpackagedata.PackageData
-import vip.mystery0.rxpackagedata.Status
+import vip.mystery0.rx.PackageData
+import vip.mystery0.rx.Status
 import com.weilylab.xhuschedule.viewmodel.QueryExpScoreViewModel
 import com.zyao89.view.zloading.ZLoadingDialog
 import com.zyao89.view.zloading.Z_TYPE

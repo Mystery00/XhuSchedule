@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.weilylab.xhuschedule.model.Student
 import com.weilylab.xhuschedule.model.Test
-import vip.mystery0.rxpackagedata.PackageData
+import vip.mystery0.rx.PackageData
 
 class QueryTestViewModel : ViewModel() {
 	val studentList by lazy { MediatorLiveData<PackageData<List<Student>>>() }

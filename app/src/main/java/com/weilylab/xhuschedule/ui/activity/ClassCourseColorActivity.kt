@@ -20,8 +20,8 @@ import com.zyao89.view.zloading.Z_TYPE
 import kotlinx.android.synthetic.main.activity_class_course_color.*
 import kotlinx.android.synthetic.main.content_class_course_color.*
 import vip.mystery0.logs.Logs
-import vip.mystery0.rxpackagedata.PackageData
-import vip.mystery0.rxpackagedata.Status.*
+import vip.mystery0.rx.PackageData
+import vip.mystery0.rx.Status.*
 
 class ClassCourseColorActivity : XhuBaseActivity(R.layout.activity_class_course_color) {
 	private val classCourseColorViewModel: ClassCourseColorViewModel by lazy {

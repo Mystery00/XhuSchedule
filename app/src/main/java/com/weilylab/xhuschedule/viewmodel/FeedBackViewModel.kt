@@ -4,7 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.weilylab.xhuschedule.model.FeedBackMessage
 import com.weilylab.xhuschedule.model.Student
-import vip.mystery0.rxpackagedata.PackageData
+import vip.mystery0.rx.PackageData
 
 class FeedBackViewModel : ViewModel() {
 	val mainStudent by lazy { MutableLiveData<PackageData<Student>>() }

@@ -5,10 +5,10 @@ import com.weilylab.xhuschedule.model.FeedBackMessage
 import com.weilylab.xhuschedule.model.Student
 import com.weilylab.xhuschedule.repository.local.service.FeedBackMessageService
 import com.weilylab.xhuschedule.repository.local.service.impl.FeedBackMessageServiceImpl
+import com.weilylab.xhuschedule.utils.RxObservable
+import com.weilylab.xhuschedule.utils.RxObserver
 import vip.mystery0.logs.Logs
-import vip.mystery0.rxpackagedata.PackageData
-import vip.mystery0.rxpackagedata.rx.RxObservable
-import vip.mystery0.rxpackagedata.rx.RxObserver
+import vip.mystery0.rx.PackageData
 
 object FeedBackLocalDataSource {
 	private val feedBackMessageService: FeedBackMessageService by lazy { FeedBackMessageServiceImpl() }

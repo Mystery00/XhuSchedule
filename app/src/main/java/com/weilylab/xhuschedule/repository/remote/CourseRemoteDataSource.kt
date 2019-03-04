@@ -12,7 +12,7 @@ import com.weilylab.xhuschedule.utils.ConfigurationUtil
 import com.weilylab.xhuschedule.utils.userDo.CourseUtil
 import com.zhuangfei.timetable.model.Schedule
 import vip.mystery0.logs.Logs
-import vip.mystery0.rxpackagedata.PackageData
+import vip.mystery0.rx.PackageData
 import vip.mystery0.tools.utils.NetworkTools
 
 object CourseRemoteDataSource : CourseDataSource {

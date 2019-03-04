@@ -27,8 +27,8 @@ import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_feedback.*
 import kotlinx.android.synthetic.main.content_feedback.*
 import vip.mystery0.logs.Logs
-import vip.mystery0.rxpackagedata.PackageData
-import vip.mystery0.rxpackagedata.Status.*
+import vip.mystery0.rx.PackageData
+import vip.mystery0.rx.Status.*
 
 class FeedbackActivity : XhuBaseActivity(R.layout.activity_feedback) {
 	private val feedBackViewModel: FeedBackViewModel by lazy {
@@ -252,7 +252,8 @@ class FeedbackActivity : XhuBaseActivity(R.layout.activity_feedback) {
 
 	private fun addMessage(messageList: List<FeedBackMessage>) {
 		if (feedBackMessageAdapter.items.isEmpty()) {
-			feedBackMessageAdapter.replaceAll(messageList)
+			feedBackMessageAdapter.items.clear()
+			feedBackMessageAdapter.items.addAll(messageList)
 			recyclerView.scrollToPosition(messageList.size - 1)
 			return
 		}
@@ -279,10 +280,11 @@ class FeedbackActivity : XhuBaseActivity(R.layout.activity_feedback) {
 		val lastShowMessage = feedBackMessageAdapter.items[feedBackMessageAdapter.items.size - 1]
 		val sameMessage = messageList[feedBackMessageAdapter.items.size - 1]
 		if (lastShowMessage.id == sameMessage.id && lastShowMessage.createTime == sameMessage.createTime) {
-			feedBackMessageAdapter.addAll(messageList.subList(feedBackMessageAdapter.items.size, messageList.lastIndex + 1))
+			feedBackMessageAdapter.items.addAll(messageList.subList(feedBackMessageAdapter.items.size, messageList.lastIndex + 1))
 			recyclerView.scrollToPosition(feedBackMessageAdapter.items.size - 1)
 		} else {
-			feedBackMessageAdapter.replaceAll(messageList, false)
+			feedBackMessageAdapter.items.clear()
+			feedBackMessageAdapter.items.addAll(messageList)
 			recyclerView.scrollToPosition(messageList.size - 1)
 		}
 	}

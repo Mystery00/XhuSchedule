@@ -11,7 +11,7 @@ import com.weilylab.xhuschedule.repository.ds.TestDataSource
 import com.weilylab.xhuschedule.repository.local.TestLocalDataSource
 import vip.mystery0.tools.utils.NetworkTools
 import com.weilylab.xhuschedule.utils.userDo.TestUtil
-import vip.mystery0.rxpackagedata.PackageData
+import vip.mystery0.rx.PackageData
 
 object TestRemoteDataSource : TestDataSource {
 	override fun queryAllTestsByUsername(testLiveData: MediatorLiveData<PackageData<List<Test>>>, htmlLiveData: MutableLiveData<String>?, student: Student) {

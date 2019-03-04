@@ -128,7 +128,6 @@ dependencies {
 	implementation 'vip.mystery0.tools:tools:1.7.0'
 	implementation 'vip.mystery0.tools:crashhandler:1.1.1'
 	implementation 'vip.mystery0.tools:bottomtabview:1.1.0'
-	implementation 'com.github.Mystery0Tools:RxPackageData:1.0.2'
 
 	//jinrishici
 	implementation 'com.jinrishici:android-sdk:1.2'

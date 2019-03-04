@@ -13,6 +13,8 @@ import com.weilylab.xhuschedule.model.response.CourseResponse
 import com.weilylab.xhuschedule.repository.local.InitLocalDataSource
 import com.weilylab.xhuschedule.utils.CalendarUtil
 import com.weilylab.xhuschedule.utils.ConfigurationUtil
+import com.weilylab.xhuschedule.utils.RxObservable
+import com.weilylab.xhuschedule.utils.RxObserver
 import com.zhuangfei.timetable.model.Schedule
 import io.reactivex.Observable
 import io.reactivex.Observer
@@ -20,8 +22,6 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import vip.mystery0.logs.Logs
-import vip.mystery0.rxpackagedata.rx.RxObservable
-import vip.mystery0.rxpackagedata.rx.RxObserver
 import java.util.*
 import kotlin.collections.ArrayList
 

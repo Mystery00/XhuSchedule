@@ -6,8 +6,8 @@ import com.weilylab.xhuschedule.repository.remote.ScoreRemoteDataSource
 import com.weilylab.xhuschedule.viewmodel.QueryCetScoreViewModelHelper
 import com.weilylab.xhuschedule.viewmodel.QueryClassScoreViewModel
 import com.weilylab.xhuschedule.viewmodel.QueryExpScoreViewModel
-import vip.mystery0.rxpackagedata.PackageData
-import vip.mystery0.rxpackagedata.Status.*
+import vip.mystery0.rx.PackageData
+import vip.mystery0.rx.Status.*
 
 object ScoreRepository {
 	fun queryClassScore(scoreViewModel: QueryClassScoreViewModel) {
