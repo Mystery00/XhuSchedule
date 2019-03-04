@@ -40,8 +40,8 @@ class TodayFragment : BaseBottomNavigationFragment<FragmentTodayBinding>(R.layou
 		when (data.status) {
 			Content -> {
 				if (data.data != null) {
-					adapter.items.removeAll(adapter.items.filter { it is Schedule })
-					adapter.items.addAll(data.data!!)
+					adapter.tempList.removeAll(adapter.items.filter { it is Schedule })
+					adapter.tempList.addAll(data.data!!)
 					adapter.sortItemList {
 						checkNoDataLayout()
 					}
@@ -61,8 +61,8 @@ class TodayFragment : BaseBottomNavigationFragment<FragmentTodayBinding>(R.layou
 		when (data.status) {
 			Content -> {
 				if (data.data != null) {
-					adapter.items.removeAll(adapter.items.filter { it is CustomThing })
-					adapter.items.addAll(data.data!!)
+					adapter.tempList.removeAll(adapter.items.filter { it is CustomThing })
+					adapter.tempList.addAll(data.data!!)
 					adapter.sortItemList {
 						checkNoDataLayout()
 					}
@@ -84,7 +84,7 @@ class TodayFragment : BaseBottomNavigationFragment<FragmentTodayBinding>(R.layou
 		binding.recyclerView.adapter = adapter
 		isInit = true
 		JRSCRepository.load {
-			adapter.items.add(it)
+			adapter.tempList.add(it)
 			adapter.sortItemList {
 				checkNoDataLayout()
 			}

@@ -24,11 +24,12 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import vip.mystery0.logs.Logs
 import vip.mystery0.tools.base.binding.BaseBindingRecyclerViewAdapter
-import java.util.*
+import kotlin.collections.ArrayList
 
 class FragmentTodayRecyclerViewAdapter(private val context: Context) : BaseBindingRecyclerViewAdapter<Any, ViewDataBinding>(0) {
 	private var isRun = false
 	private var needRestart = true
+	val tempList = ArrayList<Any>()
 
 	override fun setItemView(binding: ViewDataBinding, position: Int, data: Any) {
 		when {
@@ -112,8 +113,9 @@ class FragmentTodayRecyclerViewAdapter(private val context: Context) : BaseBindi
 				poetySentenceList.clear()
 				courseList.clear()
 				customThingList.clear()
-				val list = items.clone() as ArrayList<*>
-				list.forEach {
+				val iterator = tempList.iterator()
+				while (iterator.hasNext()) {
+					val it = iterator.next()
 					when (it) {
 						is PoetySentence -> {
 							//确保今日诗词只会出现一次

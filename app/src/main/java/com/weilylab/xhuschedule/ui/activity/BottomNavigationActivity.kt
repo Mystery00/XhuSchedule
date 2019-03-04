@@ -270,10 +270,10 @@ class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_naviga
 
 	override fun monitor() {
 		super.monitor()
-		bottomNavigationView.linkViewPager(viewPager,{
+		bottomNavigationView.linkViewPager(viewPager, {
 			viewPagerAdapter.getItem(it).updateTitle()
 			configWeekView(it)
-		},false)
+		}, false)
 		appBarLayout.setOnClickListener { }
 		arrowImageView.setOnClickListener {
 			if (isShowWeekView)
@@ -453,8 +453,9 @@ class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_naviga
 		dialogShowCourseBinding.point.layoutParams = params
 		dialogShowCourseBinding.recyclerView.scrollToPosition(0)
 		AnimationUtil.setWindowAlpha(this, 1F, 0.5F, 200)
-		if (!isFinishing && !isDestroyed)
+		weekView.post {
 			popupWindow.showAtLocation(weekView, Gravity.CENTER, 0, 0)
+		}
 	}
 
 	private fun generatePoint() {

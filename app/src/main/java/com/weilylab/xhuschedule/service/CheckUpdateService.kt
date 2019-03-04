@@ -46,7 +46,9 @@ class CheckUpdateService : Service() {
 		startForeground(Constants.NOTIFICATION_ID_CHECK_UPDATE, notification)
 	}
 
-	override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
+	override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+		if (intent==null)
+			return super.onStartCommand(intent, flags, startId)
 		val appVersion = "${getString(R.string.app_version_name)}-${getString(R.string.app_version_code)}"
 		val systemVersion = "Android ${Build.VERSION.RELEASE}-${Build.VERSION.SDK_INT}"
 		val manufacturer = Build.MANUFACTURER
