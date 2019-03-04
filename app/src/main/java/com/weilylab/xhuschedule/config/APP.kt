@@ -77,6 +77,7 @@ class APP : MultiDexApplication() {
 			}
 		DBHelper.init(this)
 		NotificationUtil.initChannelID(APP.context)//初始化NotificationChannelID
+		ToolsClient.initWithContext(this)
 		if (PackageUtil.isQQApplicationAvailable())
 			tencent = try {
 				Tencent.createInstance("1106663023", CondomContext.wrap(applicationContext, "Tencent"))
@@ -98,7 +99,6 @@ class APP : MultiDexApplication() {
 		Logs.setConfig {
 			it.setShowLog(BuildConfig.DEBUG)
 		}
-		ToolsClient.initWithContext(this)
 		JinrishiciFactory.init(this)
 	}
 
