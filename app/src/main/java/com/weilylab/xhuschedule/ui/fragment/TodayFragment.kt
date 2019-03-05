@@ -5,10 +5,12 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.jinrishici.sdk.android.factory.JinrishiciFactory
 
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.databinding.FragmentTodayBinding
 import com.weilylab.xhuschedule.base.BaseBottomNavigationFragment
+import com.weilylab.xhuschedule.config.APP
 import com.weilylab.xhuschedule.databinding.LayoutNullDataViewBinding
 import com.weilylab.xhuschedule.model.CustomThing
 import com.weilylab.xhuschedule.repository.BottomNavigationRepository
@@ -83,6 +85,7 @@ class TodayFragment : BaseBottomNavigationFragment<FragmentTodayBinding>(R.layou
 		binding.recyclerView.layoutManager = LinearLayoutManager(activity)
 		binding.recyclerView.adapter = adapter
 		isInit = true
+		JinrishiciFactory.init(APP.context)
 		JRSCRepository.load {
 			adapter.tempList.add(it)
 			adapter.sortItemList {
