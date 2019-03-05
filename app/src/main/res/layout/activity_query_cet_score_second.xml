@@ -9,7 +9,8 @@
 
 	<androidx.constraintlayout.widget.ConstraintLayout
 		android:layout_width="match_parent"
-		android:layout_height="match_parent">
+		android:layout_height="match_parent"
+		android:background="@color/colorGrayBackground">
 
 		<ImageView
 			android:id="@+id/imageView"
@@ -30,7 +31,8 @@
 			android:hint="@string/hint_input_cet_vcode"
 			android:inputType="text"
 			android:padding="16dp"
-			android:textColor="@color/colorGrayText"
+			android:textColor="@color/colorBlackText"
+			android:textColorHint="@color/colorGrayText"
 			app:layout_constraintBottom_toBottomOf="parent"
 			app:layout_constraintEnd_toEndOf="parent"
 			app:layout_constraintStart_toStartOf="parent"
