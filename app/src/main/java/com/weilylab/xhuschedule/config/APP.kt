@@ -78,6 +78,24 @@ class APP : MultiDexApplication() {
 		DBHelper.init(this)
 		NotificationUtil.initChannelID(APP.context)//初始化NotificationChannelID
 		ToolsClient.initWithContext(this)
+		if (PackageUtil.isQQApplicationAvailable())
+			tencent = try {
+				Tencent.createInstance("1106663023", CondomContext.wrap(applicationContext, "Tencent"))
+			} catch (ignore: Exception) {
+				Tencent.createInstance("1106663023", applicationContext)
+			}
+		if (PackageUtil.isWeiXinApplicationAvailable())
+			wxAPI = try {
+				WXAPIFactory.createWXAPI(CondomContext.wrap(applicationContext, "WeiXin"), "wx41799887957cbba8", false)
+			} catch (ignore: Exception) {
+				WXAPIFactory.createWXAPI(applicationContext, "wx41799887957cbba8", false)
+			}
+		if (PackageUtil.isWeiBoApplicationAvailable())
+			try {
+				WbSdk.install(CondomContext.wrap(applicationContext, "WeiBo"), AuthInfo(CondomContext.wrap(applicationContext, "WeiBo"), "2170085314", "https://api.weibo.com/oauth2/default.html", "statuses/share"))
+			} catch (ignore: Exception) {
+				WbSdk.install(CondomContext.wrap(applicationContext, "WeiBo"), AuthInfo(applicationContext, "2170085314", "https://api.weibo.com/oauth2/default.html", "statuses/share"))
+			}
 		Logs.setConfig {
 			it.setShowLog(BuildConfig.DEBUG)
 		}
@@ -89,6 +107,12 @@ class APP : MultiDexApplication() {
 			private set
 
 		lateinit var instance: Application
+			private set
+
+		var tencent: Tencent? = null
+			private set
+
+		var wxAPI: IWXAPI? = null
 			private set
 	}
 }
