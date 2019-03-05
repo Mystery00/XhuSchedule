@@ -114,6 +114,11 @@ object CourseLocalDataSource : CourseDataSource {
 		return CourseUtil.convertCourseToSchedule(all)
 	}
 
+	fun getCustomCourseList(student: Student, year: String? = null, term: String? = null): List<Course> {
+		return courseService.queryCustomCourseByTerm(student.username, year
+				?: ConfigurationUtil.currentYear, term ?: ConfigurationUtil.currentTerm)
+	}
+
 	fun saveCourseList(username: String, courseList: List<Course>, year: String? = null, term: String? = null) {
 		val savedList = courseService.queryCourseByUsernameAndTerm(username, year
 				?: ConfigurationUtil.currentYear, term ?: ConfigurationUtil.currentTerm)

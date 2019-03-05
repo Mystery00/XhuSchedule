@@ -10,6 +10,7 @@ import com.weilylab.xhuschedule.listener.RequestListener
 import com.weilylab.xhuschedule.model.Course
 import com.weilylab.xhuschedule.model.Student
 import com.weilylab.xhuschedule.model.response.CourseResponse
+import com.weilylab.xhuschedule.repository.local.CourseLocalDataSource
 import com.weilylab.xhuschedule.repository.local.InitLocalDataSource
 import com.weilylab.xhuschedule.utils.CalendarUtil
 import com.weilylab.xhuschedule.utils.ConfigurationUtil
@@ -39,6 +40,10 @@ object CourseUtil {
 					if (courseResponse.rt == ResponseCodeConstants.DONE)
 						doSaveListener?.doSave(courseResponse.courses)
 					courseResponse
+				}
+				.doOnNext {
+					if (it.rt == ResponseCodeConstants.DONE)
+						it.courses.addAll(CourseLocalDataSource.getCustomCourseList(student, year, term))
 				}
 				.observeOn(AndroidSchedulers.mainThread())
 				.subscribe(object : RxObserver<CourseResponse>() {
