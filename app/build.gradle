@@ -75,9 +75,6 @@ android {
 			}
 		}
 	}
-	dependencies {
-		implementation 'com.android.support:multidex:1.0.3'
-	}
 	buildTypes {
 		debug {
 			resValue "string", "app_version_name", autoVersion.name
@@ -128,7 +125,7 @@ dependencies {
 	implementation 'vip.mystery0.tools:tools:1.7.0'
 	implementation 'vip.mystery0.tools:crashhandler:1.1.1'
 	implementation 'vip.mystery0.tools:bottomtabview:1.1.0'
-	implementation 'vip.mystery0.tools:circleimageview:1.0.2'
+	implementation 'vip.mystery0.tools:circleimageview:1.0.1'
 
 	//jinrishici
 	implementation 'com.jinrishici:android-sdk:1.2'
@@ -175,7 +172,7 @@ dependencies {
 	implementation 'com.github.iMeiji:SetupWizardLayout:0.1'
 
 	//About Library
-	implementation 'com.mikepenz:aboutlibraries:6.2.3'
+	implementation 'com.mikepenz:aboutlibraries:6.2.1'
 
 	//Color Picker
 	implementation 'com.jrummyapps:colorpicker:2.1.6'
