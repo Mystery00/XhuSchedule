@@ -61,8 +61,8 @@ class DownloadSplashIntentService : IntentService("DownloadSplashIntentService")
 			RetrofitFactory.qiniuRetrofit
 					.create(QiniuAPI::class.java)
 					.download(qiniuPath)
-					.subscribeOn(Schedulers.newThread())
-					.unsubscribeOn(Schedulers.newThread())
+					.subscribeOn(Schedulers.io())
+					.unsubscribeOn(Schedulers.io())
 					.map { responseBody -> responseBody.byteStream() }
 					.observeOn(Schedulers.io())
 					.doOnNext { inputStream -> FileTools.saveFile(inputStream, file) }

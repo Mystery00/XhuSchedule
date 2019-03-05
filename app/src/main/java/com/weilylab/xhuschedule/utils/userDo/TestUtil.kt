@@ -28,8 +28,8 @@ object TestUtil {
 		RetrofitFactory.retrofit
 				.create(TestAPI::class.java)
 				.getTests(student.username)
-				.subscribeOn(Schedulers.newThread())
-				.unsubscribeOn(Schedulers.newThread())
+				.subscribeOn(Schedulers.io())
+				.unsubscribeOn(Schedulers.io())
 				.map {
 					val testResponse = GsonFactory.parse<TestResponse>(it)
 					if (testResponse.rt == ResponseCodeConstants.DONE)
@@ -98,8 +98,8 @@ object TestUtil {
 					needRequestArray.add(RetrofitFactory.retrofit
 							.create(TestAPI::class.java)
 							.getTests(studentList[position].username)
-							.subscribeOn(Schedulers.newThread())
-							.unsubscribeOn(Schedulers.newThread())
+							.subscribeOn(Schedulers.io())
+							.unsubscribeOn(Schedulers.io())
 							.map {
 								val testResponse = GsonFactory.parse<TestResponse>(it)
 								if (testResponse.rt == ResponseCodeConstants.DONE) {

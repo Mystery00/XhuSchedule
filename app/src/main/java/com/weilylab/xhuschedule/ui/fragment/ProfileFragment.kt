@@ -29,14 +29,13 @@ class ProfileFragment : BaseBottomNavigationFragment<FragmentProfileBinding>(R.l
 	private val bottomNavigationViewModel: BottomNavigationViewModel by lazy {
 		ViewModelProviders.of(activity!!)[BottomNavigationViewModel::class.java]
 	}
-	private var isInit = false
 	private val bottomSheetDialog: BottomSheetDialog by lazy { BottomSheetDialog(activity!!) }
 
 	override fun initView() {
 		showUserImage()
 		initViewModel()
 		initShareMenu()
-		isInit = true
+		updateTitle()
 	}
 
 	private fun showUserImage() {
@@ -179,27 +178,8 @@ class ProfileFragment : BaseBottomNavigationFragment<FragmentProfileBinding>(R.l
 	}
 
 	override fun updateTitle() {
-		RxObservable<Boolean>()
-				.doThings {
-					var num = 0
-					while (true) {
-						when {
-							isInit -> it.onFinish(true)
-							num >= 10 -> it.onFinish(false)
-						}
-						Thread.sleep(200)
-						num++
-					}
-				}
-				.subscribe(object : RxObserver<Boolean>() {
-					override fun onFinish(data: Boolean?) {
-						if (data != null && data)
-							bottomNavigationViewModel.title.value = getString(R.string.main_title_mine)
-					}
-
-					override fun onError(e: Throwable) {
-						Logs.wtf("onError: ", e)
-					}
-				})
+		if (activity == null)
+			return
+		bottomNavigationViewModel.title.value = getString(R.string.main_title_mine)
 	}
 }

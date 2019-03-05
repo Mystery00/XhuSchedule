@@ -57,8 +57,8 @@ class CheckUpdateService : Service() {
 		RetrofitFactory.retrofit
 				.create(XhuScheduleCloudAPI::class.java)
 				.checkVersion(appVersion, systemVersion, manufacturer, model, rom, ConfigUtil.getDeviceID())
-				.subscribeOn(Schedulers.newThread())
-				.unsubscribeOn(Schedulers.newThread())
+				.subscribeOn(Schedulers.io())
+				.unsubscribeOn(Schedulers.io())
 				.map { GsonFactory.parse<Version>(it) }
 				.observeOn(AndroidSchedulers.mainThread())
 				.subscribe(object : RxObserver<Version>() {
@@ -84,7 +84,7 @@ class CheckUpdateService : Service() {
 				return
 		}
 		RxObservable<Boolean>()
-				.doThings {
+				.single {
 					while (ActivityManagerTools.currentActivity() is SplashActivity || ActivityManagerTools.currentActivity() is GuideActivity || ActivityManagerTools.currentActivity() is SplashImageActivity)
 						Thread.sleep(1000)
 					it.onFinish(true)

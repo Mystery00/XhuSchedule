@@ -18,7 +18,7 @@ object CourseLocalDataSource : CourseDataSource {
 
 	override fun queryCourseByUsername(courseListLiveData: MutableLiveData<PackageData<List<Schedule>>>, student: Student, year: String?, term: String?, isFromCache: Boolean, isShowError: Boolean) {
 		RxObservable<List<Schedule>>()
-				.doThings {
+				.io {
 					it.onFinish(getRowCourseList(student, year, term))
 				}
 				.subscribe(object : RxObserver<List<Schedule>>() {
@@ -43,7 +43,7 @@ object CourseLocalDataSource : CourseDataSource {
 
 	override fun queryCourseWithManyStudent(courseListLiveData: MutableLiveData<PackageData<List<Schedule>>>, studentList: List<Student>, year: String?, term: String?, isFromCache: Boolean, isShowError: Boolean) {
 		RxObservable<List<Schedule>>()
-				.doThings { emitter ->
+				.io { emitter ->
 					val courses = ArrayList<Schedule>()
 					studentList.forEach { courses.addAll(getRowCourseList(it, year, term)) }
 					emitter.onFinish(courses)
@@ -71,7 +71,7 @@ object CourseLocalDataSource : CourseDataSource {
 	fun queryDistinctCourseByUsernameAndTerm(courseListLiveData: MutableLiveData<PackageData<List<Course>>>) {
 		courseListLiveData.value = PackageData.loading()
 		RxObservable<List<Course>>()
-				.doThings {
+				.io {
 					it.onFinish(courseService.queryDistinctCourseByUsernameAndTerm())
 				}
 				.subscribe(object : RxObserver<List<Course>>() {
@@ -140,7 +140,7 @@ object CourseLocalDataSource : CourseDataSource {
 	 */
 	fun getAll(customThingLiveData: MutableLiveData<PackageData<List<Course>>>) {
 		RxObservable<List<Course>>()
-				.doThings { observableEmitter ->
+				.io { observableEmitter ->
 					observableEmitter.onFinish(courseService.queryAllCustomCourse())
 				}
 				.subscribe(object : RxObserver<List<Course>>() {

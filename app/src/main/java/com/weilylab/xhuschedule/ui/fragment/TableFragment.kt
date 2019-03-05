@@ -33,7 +33,6 @@ class TableFragment : BaseBottomNavigationFragment<FragmentTableBinding>(R.layou
 	private val bottomNavigationViewModel: BottomNavigationViewModel by lazy {
 		ViewModelProviders.of(activity!!)[BottomNavigationViewModel::class.java]
 	}
-	private var isInit = false
 	private var week = 1
 
 	private val courseListObserver = Observer<PackageData<List<Schedule>>> {
@@ -93,7 +92,7 @@ class TableFragment : BaseBottomNavigationFragment<FragmentTableBinding>(R.layou
 						.setTextSize(12f)
 						.setTextColor(Color.WHITE))
 				.showView()
-		isInit = true
+		updateTitle()
 	}
 
 	private fun initViewModel() {
@@ -133,37 +132,19 @@ class TableFragment : BaseBottomNavigationFragment<FragmentTableBinding>(R.layou
 	}
 
 	override fun updateTitle() {
-		RxObservable<Boolean>()
-				.doThings {
-					var num = 0
-					while (true) {
-						when {
-							isInit -> it.onFinish(true)
-							num >= 10 -> it.onFinish(false)
-						}
-						Thread.sleep(200)
-						num++
-					}
-				}
-				.subscribe(object : RxObserver<Boolean>() {
-					override fun onFinish(data: Boolean?) {
-						if (data != null && data) {
-							if (bottomNavigationViewModel.week.value != null && bottomNavigationViewModel.week.value!!.toInt() <= 0) {
-								val whenTime = CalendarUtil.whenBeginSchool()
-								if (whenTime > 0)
-									bottomNavigationViewModel.title.value = getString(R.string.hint_remain_day_of_start_term, whenTime)
-								else
-									bottomNavigationViewModel.title.value = getString(R.string.hint_week_number_s, bottomNavigationViewModel.week.value
-											?: "0")
-							} else
-								bottomNavigationViewModel.title.value = getString(R.string.hint_week_number_s, bottomNavigationViewModel.week.value
-										?: "0")
-						}
-					}
-
-					override fun onError(e: Throwable) {
-						Logs.wtf("onError: ", e)
-					}
-				})
+		if (activity == null)
+			return
+		if (bottomNavigationViewModel.week.value == null)
+			return
+		if (bottomNavigationViewModel.week.value!!.toInt() <= 0) {
+			val whenTime = CalendarUtil.whenBeginSchool()
+			if (whenTime > 0)
+				bottomNavigationViewModel.title.value = getString(R.string.hint_remain_day_of_start_term, whenTime)
+			else
+				bottomNavigationViewModel.title.value = getString(R.string.hint_week_number_s, bottomNavigationViewModel.week.value
+						?: "0")
+		} else
+			bottomNavigationViewModel.title.value = getString(R.string.hint_week_number_s, bottomNavigationViewModel.week.value
+					?: "0")
 	}
 }

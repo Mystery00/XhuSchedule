@@ -20,8 +20,8 @@ object SplashRemoteDataSource : SplashDataSource {
 				.create(LeanCloudAPI::class.java)
 				.requestSplashInfo()
 				.timeout(2, TimeUnit.SECONDS)
-				.subscribeOn(Schedulers.newThread())
-				.unsubscribeOn(Schedulers.newThread())
+				.subscribeOn(Schedulers.io())
+				.unsubscribeOn(Schedulers.io())
 				.map {
 					val splashResponse = GsonFactory.parse<SplashResponse>(it)
 					if (splashResponse.results.isEmpty() || !splashResponse.results[0].isEnable)

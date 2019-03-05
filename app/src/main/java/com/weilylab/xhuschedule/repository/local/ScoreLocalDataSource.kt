@@ -15,7 +15,7 @@ object ScoreLocalDataSource : ScoreDataSource {
 	private val scoreService: ScoreService by lazy { ScoreServiceImpl() }
 	override fun queryClassScoreByUsername(scoreLiveData: MutableLiveData<PackageData<List<ClassScore>>>, student: Student, year: String, term: String) {
 		RxObservable<List<ClassScore>>()
-				.doThings {
+				.io {
 					it.onFinish(scoreService.queryClassScore(student.username, year, term))
 				}.subscribe(object : RxObserver<List<ClassScore>>() {
 					override fun onFinish(data: List<ClassScore>?) {
@@ -33,7 +33,7 @@ object ScoreLocalDataSource : ScoreDataSource {
 
 	override fun queryExpScoreByUsername(scoreLiveData: MutableLiveData<PackageData<List<ExpScore>>>, student: Student, year: String, term: String) {
 		RxObservable<List<ExpScore>>()
-				.doThings {
+				.io {
 					it.onFinish(scoreService.queryExpScore(student.username, year, term))
 				}.subscribe(object : RxObserver<List<ExpScore>>() {
 					override fun onFinish(data: List<ExpScore>?) {

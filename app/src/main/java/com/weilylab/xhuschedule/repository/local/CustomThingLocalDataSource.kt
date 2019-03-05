@@ -13,7 +13,7 @@ object CustomThingLocalDataSource {
 
 	fun getToday(customThingLiveData: MutableLiveData<PackageData<List<CustomThing>>>) {
 		RxObservable<List<CustomThing>>()
-				.doThings { observableEmitter ->
+				.io { observableEmitter ->
 					val list = customThingService.queryAllThings()
 					observableEmitter.onFinish(list.filter { CalendarUtil.isThingOnDay(it) })
 				}
@@ -37,7 +37,7 @@ object CustomThingLocalDataSource {
 	 */
 	fun getAll(customThingLiveData: MutableLiveData<PackageData<List<CustomThing>>>) {
 		RxObservable<List<CustomThing>>()
-				.doThings { observableEmitter ->
+				.io { observableEmitter ->
 					observableEmitter.onFinish(customThingService.queryAllThings())
 				}
 				.subscribe(object : RxObserver<List<CustomThing>>() {

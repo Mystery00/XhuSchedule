@@ -152,7 +152,7 @@ object StudentLocalDataSource : StudentDataSource {
 
 	fun queryAllStudentList(listener: (PackageData<List<Student>>) -> Unit) {
 		RxObservable<List<Student>>()
-				.doThings {
+				.io {
 					it.onFinish(queryAllStudentListDo())
 				}
 				.subscribe(object : RxObserver<List<Student>>() {
@@ -176,7 +176,7 @@ object StudentLocalDataSource : StudentDataSource {
 
 	fun queryAllStudentInfo(listener: (PackageData<List<StudentInfo>>) -> Unit) {
 		RxObservable<List<StudentInfo>>()
-				.doThings {
+				.io {
 					it.onFinish(studentService.queryAllStudentInfo())
 				}
 				.subscribe(object : RxObserver<List<StudentInfo>>() {
@@ -220,8 +220,8 @@ object StudentLocalDataSource : StudentDataSource {
 				it.onNext(token)
 			it.onComplete()
 		}
-				.subscribeOn(Schedulers.newThread())
-				.unsubscribeOn(Schedulers.newThread())
+				.subscribeOn(Schedulers.computation())
+				.unsubscribeOn(Schedulers.computation())
 				.observeOn(AndroidSchedulers.mainThread())
 				.subscribe(object : RxObserver<FeedBackToken>() {
 					override fun onError(e: Throwable) {

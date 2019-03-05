@@ -20,7 +20,7 @@ object TestLocalDataSource : TestDataSource {
 	override fun queryAllTestsByUsername(testLiveData: MediatorLiveData<PackageData<List<Test>>>, htmlLiveData: MutableLiveData<String>?, student: Student) {
 		testLiveData.value = PackageData.loading()
 		RxObservable<List<Test>>()
-				.doThings {
+				.io {
 					it.onFinish(testService.queryTestsForStudent(student.username))
 				}
 				.subscribe(object : RxObserver<List<Test>>() {
@@ -44,7 +44,7 @@ object TestLocalDataSource : TestDataSource {
 
 	override fun queryAllTestsForManyStudent(testLiveData: MediatorLiveData<PackageData<List<Test>>>, studentList: List<Student>) {
 		RxObservable<List<Test>>()
-				.doThings { emitter ->
+				.io { emitter ->
 					val tests = ArrayList<Test>()
 					studentList.forEach {
 						tests.addAll(testService.queryTestsForStudent(it.username))

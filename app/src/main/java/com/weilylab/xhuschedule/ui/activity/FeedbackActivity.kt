@@ -148,8 +148,8 @@ class FeedbackActivity : XhuBaseActivity(R.layout.activity_feedback) {
 			}
 			it.onComplete()
 		}
-				.subscribeOn(Schedulers.newThread())
-				.unsubscribeOn(Schedulers.newThread())
+				.subscribeOn(Schedulers.single())
+				.unsubscribeOn(Schedulers.single())
 				.observeOn(AndroidSchedulers.mainThread())
 				.subscribe(object : io.reactivex.Observer<Boolean> {
 					override fun onComplete() {

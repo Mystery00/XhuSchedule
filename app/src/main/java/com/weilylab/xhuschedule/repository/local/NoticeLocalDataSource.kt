@@ -5,9 +5,9 @@ import com.weilylab.xhuschedule.model.Notice
 import com.weilylab.xhuschedule.repository.ds.NoticeDataSource
 import com.weilylab.xhuschedule.repository.local.service.NoticeService
 import com.weilylab.xhuschedule.repository.local.service.impl.NoticeServiceImpl
+import com.weilylab.xhuschedule.utils.DoNothingObserver
 import com.weilylab.xhuschedule.utils.RxObservable
 import com.weilylab.xhuschedule.utils.RxObserver
-import vip.mystery0.logs.Logs
 import vip.mystery0.rx.PackageData
 
 object NoticeLocalDataSource : NoticeDataSource {
@@ -15,7 +15,7 @@ object NoticeLocalDataSource : NoticeDataSource {
 	override fun queryNotice(noticeLiveData: MutableLiveData<PackageData<List<Notice>>>, platform: String?) {
 		noticeLiveData.value = PackageData.loading()
 		RxObservable<List<Notice>>()
-				.doThings {
+				.io {
 					if (platform == null)
 						it.onFinish(noticeService.queryAllNotice())
 					else
@@ -59,13 +59,6 @@ object NoticeLocalDataSource : NoticeDataSource {
 					markAsRead(list)
 					it.onFinish(true)
 				}
-				.subscribe(object : RxObserver<Boolean>() {
-					override fun onFinish(data: Boolean?) {
-					}
-
-					override fun onError(e: Throwable) {
-						Logs.wtf("onError: ", e)
-					}
-				})
+				.subscribe(DoNothingObserver<Boolean>())
 	}
 }

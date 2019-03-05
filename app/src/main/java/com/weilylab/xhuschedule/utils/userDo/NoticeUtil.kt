@@ -21,8 +21,8 @@ object NoticeUtil {
 		RetrofitFactory.retrofit
 				.create(NoticeAPI::class.java)
 				.getNotices(platform)
-				.subscribeOn(Schedulers.newThread())
-				.unsubscribeOn(Schedulers.newThread())
+				.subscribeOn(Schedulers.io())
+				.unsubscribeOn(Schedulers.io())
 				.map { responseBody ->
 					val noticeResponse = GsonFactory.parse<NoticeResponse>(responseBody)
 					if (noticeResponse.rt == ResponseCodeConstants.DONE)

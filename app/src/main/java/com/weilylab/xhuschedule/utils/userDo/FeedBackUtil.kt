@@ -25,8 +25,8 @@ object FeedBackUtil {
 			RetrofitFactory.feedbackRetrofit
 					.create(FeedbackAPI::class.java)
 					.sendFBMessage(student.username, feedBackToken, content)
-					.subscribeOn(Schedulers.newThread())
-					.unsubscribeOn(Schedulers.newThread())
+					.subscribeOn(Schedulers.io())
+					.unsubscribeOn(Schedulers.io())
 					.map { GsonFactory.parse<SendFeedBackMessageResponse>(it) }
 					.observeOn(AndroidSchedulers.mainThread())
 					.subscribe(object : RxObserver<SendFeedBackMessageResponse>() {
@@ -67,8 +67,8 @@ object FeedBackUtil {
 			RetrofitFactory.feedbackRetrofit
 					.create(FeedbackAPI::class.java)
 					.getFBMessage(student.username, feedBackToken, lastId)
-					.subscribeOn(Schedulers.newThread())
-					.unsubscribeOn(Schedulers.newThread())
+					.subscribeOn(Schedulers.io())
+					.unsubscribeOn(Schedulers.io())
 					.map {
 						val getFeedBackMessageResponse = GsonFactory.parse<GetFeedBackMessageResponse>(it)
 						if (getFeedBackMessageResponse.rt == ResponseCodeConstants.DONE)

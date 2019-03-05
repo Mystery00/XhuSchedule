@@ -15,7 +15,7 @@ object FeedBackLocalDataSource {
 
 	fun queryFeedBackForStudent(feedBackMessageListLiveData: MutableLiveData<PackageData<List<FeedBackMessage>>>, maxId: MutableLiveData<Int>, student: Student) {
 		RxObservable<List<FeedBackMessage>>()
-				.doThings {
+				.io {
 					it.onFinish(feedBackMessageService.queryMessageForStudent(student.username, 0))
 				}
 				.subscribe(object : RxObserver<List<FeedBackMessage>>() {

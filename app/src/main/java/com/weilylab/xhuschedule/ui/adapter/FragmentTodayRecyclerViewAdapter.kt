@@ -16,12 +16,9 @@ import com.weilylab.xhuschedule.databinding.ItemFragmentTodayJrscBinding
 import com.weilylab.xhuschedule.databinding.ItemFragmentTodayThingBinding
 import com.weilylab.xhuschedule.model.CustomThing
 import com.weilylab.xhuschedule.utils.ConfigurationUtil
+import com.weilylab.xhuschedule.utils.RxObservable
+import com.weilylab.xhuschedule.utils.RxObserver
 import com.zhuangfei.timetable.model.Schedule
-import io.reactivex.Observable
-import io.reactivex.Observer
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.Disposable
-import io.reactivex.schedulers.Schedulers
 import vip.mystery0.logs.Logs
 import vip.mystery0.tools.base.binding.BaseBindingRecyclerViewAdapter
 import kotlin.collections.ArrayList
@@ -104,55 +101,51 @@ class FragmentTodayRecyclerViewAdapter(private val context: Context) : BaseBindi
 		needRestart = true
 		if (isRun)
 			return
-		Observable.create<Boolean> { observableEmitter ->
-			val poetySentenceList = ArrayList<PoetySentence>()
-			val courseList = ArrayList<Schedule>()
-			val customThingList = ArrayList<CustomThing>()
-			while (needRestart) {
-				needRestart = false
-				poetySentenceList.clear()
-				courseList.clear()
-				customThingList.clear()
-				val iterator = tempList.iterator()
-				while (iterator.hasNext()) {
-					val it = iterator.next()
-					when (it) {
-						is PoetySentence -> {
-							//确保今日诗词只会出现一次
-							poetySentenceList.clear()
-							poetySentenceList.add(it)
+		RxObservable<Boolean>()
+				.single {observableEmitter ->
+					val poetySentenceList = ArrayList<PoetySentence>()
+					val courseList = ArrayList<Schedule>()
+					val customThingList = ArrayList<CustomThing>()
+					while (needRestart) {
+						needRestart = false
+						poetySentenceList.clear()
+						courseList.clear()
+						customThingList.clear()
+						val iterator = tempList.iterator()
+						while (iterator.hasNext()) {
+							val it = iterator.next()
+							when (it) {
+								is PoetySentence -> {
+									//确保今日诗词只会出现一次
+									poetySentenceList.clear()
+									poetySentenceList.add(it)
+								}
+								is Schedule -> courseList.add(it)
+								is CustomThing -> customThingList.add(it)
+							}
 						}
-						is Schedule -> courseList.add(it)
-						is CustomThing -> customThingList.add(it)
 					}
+					items.clear()
+					items.addAll(poetySentenceList)
+					if (ConfigurationUtil.showCustomThingFirst) {
+						items.addAll(customThingList)
+						items.addAll(courseList)
+					} else {
+						items.addAll(courseList)
+						items.addAll(customThingList)
+					}
+					observableEmitter.onFinish(true)
 				}
-			}
-			items.clear()
-			items.addAll(poetySentenceList)
-			if (ConfigurationUtil.showCustomThingFirst) {
-				items.addAll(customThingList)
-				items.addAll(courseList)
-			} else {
-				items.addAll(courseList)
-				items.addAll(customThingList)
-			}
-			observableEmitter.onComplete()
-		}
-				.subscribeOn(Schedulers.newThread())
-				.unsubscribeOn(Schedulers.newThread())
-				.observeOn(AndroidSchedulers.mainThread())
-				.subscribe(object : Observer<Boolean> {
-					override fun onComplete() {
-						isRun = false
-						notifyDataSetChanged()
-						doneListener.invoke()
-					}
-
-					override fun onSubscribe(d: Disposable) {
+				.subscribe(object :RxObserver<Boolean>(){
+					override fun onStart() {
+						super.onStart()
 						isRun = true
 					}
 
-					override fun onNext(t: Boolean) {
+					override fun onFinish(data: Boolean?) {
+						isRun = false
+						notifyDataSetChanged()
+						doneListener.invoke()
 					}
 
 					override fun onError(e: Throwable) {

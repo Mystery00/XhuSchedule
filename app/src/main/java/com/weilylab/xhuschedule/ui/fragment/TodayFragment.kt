@@ -18,8 +18,6 @@ import com.weilylab.xhuschedule.repository.JRSCRepository
 import com.weilylab.xhuschedule.ui.adapter.FragmentTodayRecyclerViewAdapter
 import com.weilylab.xhuschedule.utils.CalendarUtil
 import com.weilylab.xhuschedule.utils.LayoutRefreshConfigUtil
-import com.weilylab.xhuschedule.utils.RxObservable
-import com.weilylab.xhuschedule.utils.RxObserver
 import vip.mystery0.rx.Status.*
 import com.weilylab.xhuschedule.viewmodel.BottomNavigationViewModel
 import com.zhuangfei.timetable.model.Schedule
@@ -34,7 +32,6 @@ class TodayFragment : BaseBottomNavigationFragment<FragmentTodayBinding>(R.layou
 	private val bottomNavigationViewModel: BottomNavigationViewModel by lazy {
 		ViewModelProviders.of(activity!!)[BottomNavigationViewModel::class.java]
 	}
-	private var isInit = false
 	private val adapter: FragmentTodayRecyclerViewAdapter by lazy { FragmentTodayRecyclerViewAdapter(activity!!) }
 	private lateinit var viewStubBinding: LayoutNullDataViewBinding
 
@@ -84,7 +81,7 @@ class TodayFragment : BaseBottomNavigationFragment<FragmentTodayBinding>(R.layou
 		initViewModel()
 		binding.recyclerView.layoutManager = LinearLayoutManager(activity)
 		binding.recyclerView.adapter = adapter
-		isInit = true
+		updateTitle()
 		JinrishiciFactory.init(APP.context)
 		JRSCRepository.load {
 			adapter.tempList.add(it)
@@ -137,36 +134,19 @@ class TodayFragment : BaseBottomNavigationFragment<FragmentTodayBinding>(R.layou
 	}
 
 	override fun updateTitle() {
-		RxObservable<Boolean>()
-				.doThings {
-					var num = 0
-					while (true) {
-						when {
-							isInit -> it.onFinish(true)
-							num >= 10 -> it.onFinish(false)
-						}
-						Thread.sleep(200)
-						num++
-					}
-				}
-				.subscribe(object : RxObserver<Boolean>() {
-					override fun onFinish(data: Boolean?) {
-						if (data != null && data)
-							if (bottomNavigationViewModel.currentWeek.value?.data != null && bottomNavigationViewModel.currentWeek.value!!.data!! <= 0) {
-								val whenTime = CalendarUtil.whenBeginSchool()
-								if (whenTime > 0)
-									bottomNavigationViewModel.title.value = "距离开学还有${whenTime}天 ${CalendarUtil.getWeekIndexInString()}"
-								else
-									bottomNavigationViewModel.title.value = "第${bottomNavigationViewModel.currentWeek.value?.data
-											?: "0"}周 ${CalendarUtil.getWeekIndexInString()}"
-							} else
-								bottomNavigationViewModel.title.value = "第${bottomNavigationViewModel.currentWeek.value?.data
-										?: "0"}周 ${CalendarUtil.getWeekIndexInString()}"
-					}
-
-					override fun onError(e: Throwable) {
-						Logs.wtf("onError: ", e)
-					}
-				})
+		if (activity == null)
+			return
+		if (bottomNavigationViewModel.currentWeek.value?.data == null)
+			return
+		if (bottomNavigationViewModel.currentWeek.value!!.data!! <= 0) {
+			val whenTime = CalendarUtil.whenBeginSchool()
+			if (whenTime > 0)
+				bottomNavigationViewModel.title.value = "距离开学还有${whenTime}天 ${CalendarUtil.getWeekIndexInString()}"
+			else
+				bottomNavigationViewModel.title.value = "第${bottomNavigationViewModel.currentWeek.value?.data
+						?: "0"}周 ${CalendarUtil.getWeekIndexInString()}"
+		} else
+			bottomNavigationViewModel.title.value = "第${bottomNavigationViewModel.currentWeek.value?.data
+					?: "0"}周 ${CalendarUtil.getWeekIndexInString()}"
 	}
 }

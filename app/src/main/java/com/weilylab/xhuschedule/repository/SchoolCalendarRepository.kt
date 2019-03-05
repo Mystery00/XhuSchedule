@@ -12,8 +12,8 @@ object SchoolCalendarRepository {
 		RetrofitFactory.retrofit
 				.create(XhuScheduleCloudAPI::class.java)
 				.schoolCalendar()
-				.subscribeOn(Schedulers.newThread())
-				.unsubscribeOn(Schedulers.newThread())
+				.subscribeOn(Schedulers.io())
+				.unsubscribeOn(Schedulers.io())
 				.map { it.string() }
 				.observeOn(AndroidSchedulers.mainThread())
 				.subscribe(object : RxObserver<String>() {

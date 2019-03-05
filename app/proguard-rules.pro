@@ -163,3 +163,7 @@
 -keep class com.tencent.mm.sdk.** {
     *;
 }
+###-----------------About Library------------------
+-keepclasseswithmembers class **.R$* {
+     public static final int define_*;
+ }

@@ -33,8 +33,8 @@ object CourseUtil {
 		RetrofitFactory.retrofit
 				.create(CourseAPI::class.java)
 				.getCourses(student.username, year, term)
-				.subscribeOn(Schedulers.newThread())
-				.unsubscribeOn(Schedulers.newThread())
+				.subscribeOn(Schedulers.io())
+				.unsubscribeOn(Schedulers.io())
 				.map {
 					val courseResponse = GsonFactory.parse<CourseResponse>(it)
 					if (courseResponse.rt == ResponseCodeConstants.DONE)
@@ -104,8 +104,8 @@ object CourseUtil {
 					needRequestArray.add(RetrofitFactory.retrofit
 							.create(CourseAPI::class.java)
 							.getCourses(studentList[position].username, year, term)
-							.subscribeOn(Schedulers.newThread())
-							.unsubscribeOn(Schedulers.newThread())
+							.subscribeOn(Schedulers.io())
+							.unsubscribeOn(Schedulers.io())
 							.map {
 								val courseResponse = GsonFactory.parse<CourseResponse>(it)
 								if (courseResponse.rt == ResponseCodeConstants.DONE) {
