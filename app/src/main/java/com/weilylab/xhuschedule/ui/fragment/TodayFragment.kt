@@ -82,8 +82,7 @@ class TodayFragment : BaseBottomNavigationFragment<FragmentTodayBinding>(R.layou
 		binding.recyclerView.layoutManager = LinearLayoutManager(activity)
 		binding.recyclerView.adapter = adapter
 		updateTitle()
-		JinrishiciFactory.init(APP.context)
-		JRSCRepository.load {
+		JRSCRepository.load(APP.context) {
 			adapter.tempList.add(it)
 			adapter.sortItemList {
 				checkNoDataLayout()

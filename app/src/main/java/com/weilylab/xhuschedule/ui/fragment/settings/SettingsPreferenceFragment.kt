@@ -30,7 +30,6 @@ import com.zhihu.matisse.Matisse
 import com.zhihu.matisse.MimeType
 import com.zyao89.view.zloading.ZLoadingDialog
 import com.zyao89.view.zloading.Z_TYPE
-import vip.mystery0.logs.Logs
 import vip.mystery0.tools.utils.DensityTools
 import java.io.File
 import java.util.*
@@ -263,7 +262,6 @@ class SettingsPreferenceFragment : XhuBasePreferenceFragment(R.xml.preference_se
 	}
 
 	override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-		Logs.i("onActivityResult: $requestCode")
 		when (requestCode) {
 			REQUEST_CHOOSE_USER -> if (resultCode == Activity.RESULT_OK) {
 				cropImage(Matisse.obtainResult(data)[0], REQUEST_CROP_USER, 500, 500)
