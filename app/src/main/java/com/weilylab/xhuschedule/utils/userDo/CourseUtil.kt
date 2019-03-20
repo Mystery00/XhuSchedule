@@ -96,7 +96,7 @@ object CourseUtil {
 			doneListener.invoke()
 			return
 		}
-		val needRequestArray = ArrayList<Observable<DataWithUsername<CourseResponse>>>()
+		val needRequestArray = ArrayList<Observable<Pair<String, CourseResponse>>>()
 		resultArray.filter { !it }
 				.forEachIndexed { position, _ ->
 					needRequestArray.add(RetrofitFactory.retrofit
@@ -110,12 +110,17 @@ object CourseUtil {
 									saveMap[studentList[position].username] = courseResponse.courses
 									doSaveListener?.doSave(saveMap)
 								}
-								DataWithUsername(studentList[position].username, courseResponse)
+								Pair(studentList[position].username, courseResponse)
+							}.doOnNext {
+								val response = it.second
+								if (response.rt == ResponseCodeConstants.DONE)
+									response.courses.addAll(CourseLocalDataSource.getCustomCourseListByUsername(it.first, year, term))
 							})
+
 				}
 		Observable.merge(needRequestArray)
 				.observeOn(AndroidSchedulers.mainThread())
-				.subscribe(object : Observer<DataWithUsername<CourseResponse>> {
+				.subscribe(object : Observer<Pair<String, CourseResponse>> {
 					override fun onComplete() {
 						resumeRequest(resultArray, studentList, year, term, doSaveListener, map, doneListener, maxIndex, index)
 					}
@@ -123,9 +128,9 @@ object CourseUtil {
 					override fun onSubscribe(d: Disposable) {
 					}
 
-					override fun onNext(t: DataWithUsername<CourseResponse>) {
-						val username = t.username
-						val data = t.data!!
+					override fun onNext(t: Pair<String, CourseResponse>) {
+						val username = t.first
+						val data = t.second
 						val position = studentList.indexOfFirst { it.username == username }
 						when {
 							data.rt == ResponseCodeConstants.DONE -> {
@@ -247,6 +252,4 @@ object CourseUtil {
 		}
 		return list
 	}
-
-	internal class DataWithUsername<T>(val username: String, val data: T?)
 }
