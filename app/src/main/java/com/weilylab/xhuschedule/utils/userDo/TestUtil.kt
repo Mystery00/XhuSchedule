@@ -28,7 +28,6 @@ object TestUtil {
 				.create(TestAPI::class.java)
 				.getTests(student.username)
 				.subscribeOn(Schedulers.io())
-				.unsubscribeOn(Schedulers.io())
 				.map {
 					val testResponse = GsonFactory.parse<TestResponse>(it)
 					if (testResponse.rt == ResponseCodeConstants.DONE)
@@ -98,7 +97,6 @@ object TestUtil {
 							.create(TestAPI::class.java)
 							.getTests(studentList[position].username)
 							.subscribeOn(Schedulers.io())
-							.unsubscribeOn(Schedulers.io())
 							.map {
 								val testResponse = GsonFactory.parse<TestResponse>(it)
 								if (testResponse.rt == ResponseCodeConstants.DONE) {
@@ -159,7 +157,7 @@ object TestUtil {
 			Thread.sleep(200)
 			it.onComplete()
 		}
-				.subscribeOn(Schedulers.newThread())
+				.subscribeOn(Schedulers.single())
 				.observeOn(AndroidSchedulers.mainThread())
 				.subscribe(object : OnlyCompleteObserver<Boolean>() {
 					override fun onError(e: Throwable) {

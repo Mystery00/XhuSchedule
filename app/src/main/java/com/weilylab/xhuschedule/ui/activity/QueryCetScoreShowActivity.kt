@@ -69,7 +69,7 @@ class QueryCetScoreShowActivity : XhuBaseActivity(R.layout.activity_query_cet_sc
 			}
 			it.onComplete()
 		}
-				.subscribeOn(Schedulers.newThread())
+				.subscribeOn(Schedulers.single())
 				.observeOn(AndroidSchedulers.mainThread())
 				.subscribe(object : OnlyCompleteObserver<Boolean>() {
 					override fun onError(e: Throwable) {

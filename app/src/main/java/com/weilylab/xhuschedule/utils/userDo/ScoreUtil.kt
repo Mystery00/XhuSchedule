@@ -33,7 +33,6 @@ object ScoreUtil {
 				.create(ScoreAPI::class.java)
 				.getScores(student.username, year, term)
 				.subscribeOn(Schedulers.io())
-				.unsubscribeOn(Schedulers.io())
 				.map {
 					val scoreResponse = GsonFactory.parse<ClassScoreResponse>(it)
 					if (scoreResponse.rt == ResponseCodeConstants.DONE) {
@@ -85,7 +84,6 @@ object ScoreUtil {
 				.create(ScoreAPI::class.java)
 				.getExpScores(student.username, year, term)
 				.subscribeOn(Schedulers.io())
-				.unsubscribeOn(Schedulers.io())
 				.map {
 					val scoreResponse = GsonFactory.parse<ExpScoreResponse>(it)
 					if (scoreResponse.rt == ResponseCodeConstants.DONE)
@@ -128,7 +126,6 @@ object ScoreUtil {
 				.create(ScoreAPI::class.java)
 				.getCETVCode(student.username, no, null)
 				.subscribeOn(Schedulers.io())
-				.unsubscribeOn(Schedulers.io())
 				.map { GsonFactory.parse<CetVCodeResponse>(it) }
 				.observeOn(AndroidSchedulers.mainThread())
 				.subscribe(object : OnlyCompleteObserver<CetVCodeResponse>() {
@@ -169,7 +166,6 @@ object ScoreUtil {
 				.create(ScoreAPI::class.java)
 				.getCETScores(student.username, no, name, vcode)
 				.subscribeOn(Schedulers.io())
-				.unsubscribeOn(Schedulers.io())
 				.map { GsonFactory.parse<CetScoresResponse>(it) }
 				.observeOn(AndroidSchedulers.mainThread())
 				.subscribe(object : OnlyCompleteObserver<CetScoresResponse>() {

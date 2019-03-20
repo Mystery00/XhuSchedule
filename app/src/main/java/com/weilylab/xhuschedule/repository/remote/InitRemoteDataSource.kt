@@ -21,7 +21,6 @@ object InitRemoteDataSource : InitDataSource {
 					.create(LeanCloudAPI::class.java)
 					.requestStartDateTime()
 					.subscribeOn(Schedulers.io())
-					.unsubscribeOn(Schedulers.io())
 					.map {
 						val startDateTimeResponse = GsonFactory.parse<StartDateTimeResponse>(it)
 						if (startDateTimeResponse.results.isNotEmpty())

@@ -22,7 +22,6 @@ object NoticeUtil {
 				.create(NoticeAPI::class.java)
 				.getNotices(platform)
 				.subscribeOn(Schedulers.io())
-				.unsubscribeOn(Schedulers.io())
 				.map { responseBody ->
 					val noticeResponse = GsonFactory.parse<NoticeResponse>(responseBody)
 					if (noticeResponse.rt == ResponseCodeConstants.DONE)

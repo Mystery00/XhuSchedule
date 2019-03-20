@@ -27,7 +27,6 @@ object UserUtil {
 					.create(UserAPI::class.java)
 					.autoLogin(student.username, student.password)
 					.subscribeOn(Schedulers.io())
-					.unsubscribeOn(Schedulers.io())
 					.map {
 						val data = GsonFactory.parse<LoginResponse>(it)
 						if (data.rt == ResponseCodeConstants.DONE) {
@@ -61,7 +60,6 @@ object UserUtil {
 				.create(UserAPI::class.java)
 				.getInfo(student.username)
 				.subscribeOn(Schedulers.io())
-				.unsubscribeOn(Schedulers.io())
 				.map {
 					val data = GsonFactory.parse<StudentInfo>(it)
 					if (data.rt == ResponseCodeConstants.DONE)

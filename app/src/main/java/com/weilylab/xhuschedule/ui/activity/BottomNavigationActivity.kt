@@ -380,7 +380,6 @@ class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_naviga
 				it.onComplete()
 			}
 					.subscribeOn(Schedulers.single())
-					.unsubscribeOn(Schedulers.single())
 					.observeOn(AndroidSchedulers.mainThread())
 					.subscribe(object : io.reactivex.Observer<Boolean> {
 						override fun onComplete() {

@@ -67,7 +67,6 @@ object FeedBackUtil {
 					.create(FeedbackAPI::class.java)
 					.getFBMessage(student.username, feedBackToken, lastId)
 					.subscribeOn(Schedulers.io())
-					.unsubscribeOn(Schedulers.io())
 					.map {
 						val getFeedBackMessageResponse = GsonFactory.parse<GetFeedBackMessageResponse>(it)
 						if (getFeedBackMessageResponse.rt == ResponseCodeConstants.DONE)

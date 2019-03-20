@@ -13,7 +13,6 @@ object SchoolCalendarRepository {
 				.create(XhuScheduleCloudAPI::class.java)
 				.schoolCalendar()
 				.subscribeOn(Schedulers.io())
-				.unsubscribeOn(Schedulers.io())
 				.map { it.string() }
 				.observeOn(AndroidSchedulers.mainThread())
 				.subscribe(object : OnlyCompleteObserver<String>() {

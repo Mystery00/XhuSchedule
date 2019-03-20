@@ -58,7 +58,6 @@ class CheckUpdateService : Service() {
 				.create(XhuScheduleCloudAPI::class.java)
 				.checkVersion(appVersion, systemVersion, manufacturer, model, rom, ConfigUtil.getDeviceID())
 				.subscribeOn(Schedulers.io())
-				.unsubscribeOn(Schedulers.io())
 				.map { GsonFactory.parse<Version>(it) }
 				.observeOn(AndroidSchedulers.mainThread())
 				.subscribe(object : OnlyCompleteObserver<Version>() {

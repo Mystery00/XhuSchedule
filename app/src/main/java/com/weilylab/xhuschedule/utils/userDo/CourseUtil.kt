@@ -33,7 +33,6 @@ object CourseUtil {
 				.create(CourseAPI::class.java)
 				.getCourses(student.username, year, term)
 				.subscribeOn(Schedulers.io())
-				.unsubscribeOn(Schedulers.io())
 				.map {
 					val courseResponse = GsonFactory.parse<CourseResponse>(it)
 					if (courseResponse.rt == ResponseCodeConstants.DONE)
@@ -104,7 +103,6 @@ object CourseUtil {
 							.create(CourseAPI::class.java)
 							.getCourses(studentList[position].username, year, term)
 							.subscribeOn(Schedulers.io())
-							.unsubscribeOn(Schedulers.io())
 							.map {
 								val courseResponse = GsonFactory.parse<CourseResponse>(it)
 								if (courseResponse.rt == ResponseCodeConstants.DONE) {
@@ -165,7 +163,7 @@ object CourseUtil {
 			Thread.sleep(200)
 			it.onComplete()
 		}
-				.subscribeOn(Schedulers.newThread())
+				.subscribeOn(Schedulers.single())
 				.observeOn(AndroidSchedulers.mainThread())
 				.subscribe(object : OnlyCompleteObserver<Boolean>() {
 					override fun onError(e: Throwable) {
