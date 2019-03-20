@@ -129,28 +129,39 @@ class DownloadService : IntentService("DownloadService") {
 					val inputStream = responseBody.byteStream()
 					try {
 						FileTools.saveFile(inputStream, file)
-						val downloadFileMD5 = FileTools.getMD5(file)
-						isDownloadMD5Matched = when (type) {
-							Constants.DOWNLOAD_TYPE_APK -> downloadFileMD5 == apkMD5
-							Constants.DOWNLOAD_TYPE_PATCH -> downloadFileMD5 == patchMD5
-							else -> false
-						}
 					} catch (e: IOException) {
 						e.printStackTrace()
 					}
 					inputStream
 				}
-				.doAfterNext {
+				.observeOn(Schedulers.computation())
+				.map {
+					val downloadFileMD5 = FileTools.getMD5(file)
+					isDownloadMD5Matched = when (type) {
+						Constants.DOWNLOAD_TYPE_APK -> downloadFileMD5 == apkMD5
+						Constants.DOWNLOAD_TYPE_PATCH -> downloadFileMD5 == patchMD5
+						else -> false
+					}
+					it
+				}
+				.observeOn(Schedulers.io())
+				.map {
 					if (isDownloadMD5Matched && type == Constants.DOWNLOAD_TYPE_PATCH) {
-						val applicationInfo = applicationContext.applicationInfo
 						val newApkPath = getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS)!!.absolutePath + File.separator + "apk" + File.separator + qiniuPath + ".apk"
 						val newAPK = File(newApkPath)
 						if (!newAPK.parentFile.exists())
 							newAPK.parentFile.mkdirs()
-						BsPatch.patch(applicationInfo.sourceDir,
-								newApkPath,
+						Pair(it, newApkPath)
+					} else
+						Pair(it, null)
+				}
+				.observeOn(Schedulers.newThread())
+				.map {
+					if (it.second != null)
+						BsPatch.patch(applicationContext.applicationInfo.sourceDir,
+								it.second!!,
 								file.absolutePath)
-					}
+					it.first
 				}
 				.observeOn(AndroidSchedulers.mainThread())
 				.subscribe(object : Observer<InputStream> {
