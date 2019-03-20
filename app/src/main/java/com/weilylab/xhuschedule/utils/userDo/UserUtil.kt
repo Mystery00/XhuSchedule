@@ -13,7 +13,7 @@ import com.weilylab.xhuschedule.model.StudentInfo
 import com.weilylab.xhuschedule.model.response.LoginResponse
 import com.weilylab.xhuschedule.repository.local.StudentLocalDataSource
 import vip.mystery0.tools.utils.NetworkTools
-import com.weilylab.xhuschedule.utils.RxObserver
+import vip.mystery0.rx.OnlyCompleteObserver
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import vip.mystery0.logs.Logs
@@ -37,7 +37,7 @@ object UserUtil {
 						data
 					}
 					.observeOn(AndroidSchedulers.mainThread())
-					.subscribe(object : RxObserver<LoginResponse>() {
+					.subscribe(object : OnlyCompleteObserver<LoginResponse>() {
 						override fun onFinish(data: LoginResponse?) {
 							when {
 								data == null -> requestListener.error(ResponseCodeConstants.UNKNOWN_ERROR, StringConstant.hint_data_null)
@@ -69,7 +69,7 @@ object UserUtil {
 					data
 				}
 				.observeOn(AndroidSchedulers.mainThread())
-				.subscribe(object : RxObserver<StudentInfo>() {
+				.subscribe(object : OnlyCompleteObserver<StudentInfo>() {
 					override fun onFinish(data: StudentInfo?) {
 						when {
 							data == null -> requestListener.error(ResponseCodeConstants.UNKNOWN_ERROR, StringConstant.hint_data_null)

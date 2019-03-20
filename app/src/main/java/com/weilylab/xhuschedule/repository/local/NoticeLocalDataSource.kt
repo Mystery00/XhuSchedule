@@ -5,23 +5,31 @@ import com.weilylab.xhuschedule.model.Notice
 import com.weilylab.xhuschedule.repository.ds.NoticeDataSource
 import com.weilylab.xhuschedule.repository.local.service.NoticeService
 import com.weilylab.xhuschedule.repository.local.service.impl.NoticeServiceImpl
-import com.weilylab.xhuschedule.utils.DoNothingObserver
-import com.weilylab.xhuschedule.utils.RxObservable
-import com.weilylab.xhuschedule.utils.RxObserver
+import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
+import io.reactivex.schedulers.Schedulers
+import vip.mystery0.rx.DoNothingObserver
 import vip.mystery0.rx.PackageData
+import vip.mystery0.rx.StartAndCompleteObserver
 
 object NoticeLocalDataSource : NoticeDataSource {
 	private val noticeService: NoticeService by lazy { NoticeServiceImpl() }
 	override fun queryNotice(noticeLiveData: MutableLiveData<PackageData<List<Notice>>>, platform: String?) {
-		noticeLiveData.value = PackageData.loading()
-		RxObservable<List<Notice>>()
-				.io {
-					if (platform == null)
-						it.onFinish(noticeService.queryAllNotice())
-					else
-						it.onFinish(noticeService.queryNoticeForPlatform(platform))
-				}
-				.subscribe(object : RxObserver<List<Notice>>() {
+		Observable.create<List<Notice>> {
+			if (platform == null)
+				it.onNext(noticeService.queryAllNotice())
+			else
+				it.onNext(noticeService.queryNoticeForPlatform(platform))
+			it.onComplete()
+		}
+				.subscribeOn(Schedulers.io())
+				.observeOn(AndroidSchedulers.mainThread())
+				.subscribe(object : StartAndCompleteObserver<List<Notice>>() {
+					override fun onError(e: Throwable) {
+						noticeLiveData.value = PackageData.error(e)
+					}
+
 					override fun onFinish(data: List<Notice>?) {
 						if (data != null && data.isNotEmpty())
 							noticeLiveData.value = PackageData.content(data)
@@ -29,8 +37,8 @@ object NoticeLocalDataSource : NoticeDataSource {
 							noticeLiveData.value = PackageData.empty()
 					}
 
-					override fun onError(e: Throwable) {
-						noticeLiveData.value = PackageData.error(e)
+					override fun onSubscribe(d: Disposable) {
+						noticeLiveData.value = PackageData.loading()
 					}
 				})
 	}
@@ -54,11 +62,11 @@ object NoticeLocalDataSource : NoticeDataSource {
 	}
 
 	fun markAsReadInThread(list: List<Notice>) {
-		RxObservable<Boolean>()
-				.doThingsOnThread {
-					markAsRead(list)
-					it.onFinish(true)
-				}
+		Observable.create<Boolean> {
+			markAsRead(list)
+			it.onComplete()
+		}
+				.subscribeOn(Schedulers.single())
 				.subscribe(DoNothingObserver<Boolean>())
 	}
 }

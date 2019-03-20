@@ -16,10 +16,13 @@ import com.weilylab.xhuschedule.databinding.ItemFragmentTodayJrscBinding
 import com.weilylab.xhuschedule.databinding.ItemFragmentTodayThingBinding
 import com.weilylab.xhuschedule.model.CustomThing
 import com.weilylab.xhuschedule.utils.ConfigurationUtil
-import com.weilylab.xhuschedule.utils.RxObservable
-import com.weilylab.xhuschedule.utils.RxObserver
 import com.zhuangfei.timetable.model.Schedule
+import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
+import io.reactivex.schedulers.Schedulers
 import vip.mystery0.logs.Logs
+import vip.mystery0.rx.StartAndCompleteObserver
 import vip.mystery0.tools.base.binding.BaseBindingRecyclerViewAdapter
 import kotlin.collections.ArrayList
 
@@ -102,45 +105,46 @@ class FragmentTodayRecyclerViewAdapter(private val context: Context) : BaseBindi
 		needRestart = true
 		if (isRun)
 			return
-		RxObservable<Boolean>()
-				.single {observableEmitter ->
-					val poetySentenceList = ArrayList<PoetySentence>()
-					val courseList = ArrayList<Schedule>()
-					val customThingList = ArrayList<CustomThing>()
-					while (needRestart) {
-						needRestart = false
-						poetySentenceList.clear()
-						courseList.clear()
-						customThingList.clear()
-						val iterator = tempList.iterator()
-						while (iterator.hasNext()) {
-							val it = iterator.next()
-							when (it) {
-								is PoetySentence -> {
-									//确保今日诗词只会出现一次
-									poetySentenceList.clear()
-									poetySentenceList.add(it)
-								}
-								is Schedule -> courseList.add(it)
-								is CustomThing -> customThingList.add(it)
-							}
+		Observable.create<Boolean> {
+			val poetySentenceList = ArrayList<PoetySentence>()
+			val courseList = ArrayList<Schedule>()
+			val customThingList = ArrayList<CustomThing>()
+			while (needRestart) {
+				needRestart = false
+				poetySentenceList.clear()
+				courseList.clear()
+				customThingList.clear()
+				val iterator = tempList.iterator()
+				while (iterator.hasNext()) {
+					val element = iterator.next()
+					when (element) {
+						is PoetySentence -> {
+							//确保今日诗词只会出现一次
+							poetySentenceList.clear()
+							poetySentenceList.add(element)
 						}
+						is Schedule -> courseList.add(element)
+						is CustomThing -> customThingList.add(element)
 					}
-					items.clear()
-					items.addAll(poetySentenceList)
-					if (ConfigurationUtil.showCustomThingFirst) {
-						items.addAll(customThingList)
-						items.addAll(courseList)
-					} else {
-						items.addAll(courseList)
-						items.addAll(customThingList)
-					}
-					observableEmitter.onFinish(true)
 				}
-				.subscribe(object :RxObserver<Boolean>(){
-					override fun onStart() {
-						super.onStart()
-						isRun = true
+			}
+			items.clear()
+			items.addAll(poetySentenceList)
+			if (ConfigurationUtil.showCustomThingFirst) {
+				items.addAll(customThingList)
+				items.addAll(courseList)
+			} else {
+				items.addAll(courseList)
+				items.addAll(customThingList)
+			}
+			it.onComplete()
+		}
+				.subscribeOn(Schedulers.computation())
+				.observeOn(AndroidSchedulers.mainThread())
+				.subscribe(object : StartAndCompleteObserver<Boolean>() {
+					override fun onError(e: Throwable) {
+						isRun = false
+						Logs.wtf("onError: ", e)
 					}
 
 					override fun onFinish(data: Boolean?) {
@@ -149,9 +153,8 @@ class FragmentTodayRecyclerViewAdapter(private val context: Context) : BaseBindi
 						doneListener.invoke()
 					}
 
-					override fun onError(e: Throwable) {
-						isRun = false
-						Logs.wtf("onError: ", e)
+					override fun onSubscribe(d: Disposable) {
+						isRun = true
 					}
 				})
 

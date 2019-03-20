@@ -14,8 +14,6 @@ import com.weilylab.xhuschedule.repository.local.CourseLocalDataSource
 import com.weilylab.xhuschedule.repository.local.InitLocalDataSource
 import com.weilylab.xhuschedule.utils.CalendarUtil
 import com.weilylab.xhuschedule.utils.ConfigurationUtil
-import com.weilylab.xhuschedule.utils.RxObservable
-import com.weilylab.xhuschedule.utils.RxObserver
 import com.zhuangfei.timetable.model.Schedule
 import io.reactivex.Observable
 import io.reactivex.Observer
@@ -23,6 +21,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import vip.mystery0.logs.Logs
+import vip.mystery0.rx.OnlyCompleteObserver
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -46,7 +45,7 @@ object CourseUtil {
 						it.courses.addAll(CourseLocalDataSource.getCustomCourseList(student, year, term))
 				}
 				.observeOn(AndroidSchedulers.mainThread())
-				.subscribe(object : RxObserver<CourseResponse>() {
+				.subscribe(object : OnlyCompleteObserver<CourseResponse>() {
 					override fun onFinish(data: CourseResponse?) {
 						when {
 							data == null -> requestListener.error(ResponseCodeConstants.UNKNOWN_ERROR, StringConstant.hint_data_null)
@@ -162,18 +161,19 @@ object CourseUtil {
 	}
 
 	private fun resumeRequest(resultArray: BooleanArray, studentList: List<Student>, year: String?, term: String?, doSaveListener: DoSaveListener<Map<String, List<Course>>>?, map: HashMap<String, List<Course>>, doneListener: () -> Unit, maxIndex: Int, index: Int) {
-		RxObservable<Boolean>()
-				.doThings {
-					Thread.sleep(200)
-					it.onFinish(true)
-				}
-				.subscribe(object : RxObserver<Boolean>() {
-					override fun onFinish(data: Boolean?) {
-						request(resultArray, studentList, year, term, doSaveListener, map, doneListener, maxIndex, index + 1)
-					}
-
+		Observable.create<Boolean> {
+			Thread.sleep(200)
+			it.onComplete()
+		}
+				.subscribeOn(Schedulers.newThread())
+				.observeOn(AndroidSchedulers.mainThread())
+				.subscribe(object : OnlyCompleteObserver<Boolean>() {
 					override fun onError(e: Throwable) {
 						Logs.wtf("onError: ", e)
+					}
+
+					override fun onFinish(data: Boolean?) {
+						request(resultArray, studentList, year, term, doSaveListener, map, doneListener, maxIndex, index + 1)
 					}
 				})
 	}
@@ -187,22 +187,28 @@ object CourseUtil {
 	}
 
 	fun getTodayCourse(courseList: List<Schedule>, listener: (List<Schedule>) -> Unit) {
-		RxObservable<ArrayList<Schedule>>()
-				.doThings { observableEmitter ->
-					val week = CalendarUtil.getWeekFromCalendar(InitLocalDataSource.getStartDateTime())
-					val weekIndex = CalendarUtil.getWeekIndex()
+		Observable.create<Pair<Int, Int>> {
+			val week = CalendarUtil.getWeekFromCalendar(InitLocalDataSource.getStartDateTime())
+			val weekIndex = CalendarUtil.getWeekIndex()
+			it.onNext(Pair(week, weekIndex))
+			it.onComplete()
+		}
+				.subscribeOn(Schedulers.computation())
+				.observeOn(Schedulers.io())
+				.map { pair ->
 					val todayCourseList = ArrayList<Schedule>()
-					todayCourseList.addAll(courseList.filter { isTodayCourse(it, week, weekIndex) }
+					todayCourseList.addAll(courseList.filter { isTodayCourse(it, pair.first, pair.second) }
 							.sortedBy { it.start })
-					observableEmitter.onFinish(todayCourseList)
+					todayCourseList
 				}
-				.subscribe(object : RxObserver<ArrayList<Schedule>>() {
-					override fun onFinish(data: ArrayList<Schedule>?) {
-						listener.invoke(data!!)
-					}
-
+				.observeOn(AndroidSchedulers.mainThread())
+				.subscribe(object : OnlyCompleteObserver<List<Schedule>>() {
 					override fun onError(e: Throwable) {
 						Logs.wtf("onError: ", e)
+					}
+
+					override fun onFinish(data: List<Schedule>?) {
+						listener.invoke(data!!)
 					}
 				})
 	}

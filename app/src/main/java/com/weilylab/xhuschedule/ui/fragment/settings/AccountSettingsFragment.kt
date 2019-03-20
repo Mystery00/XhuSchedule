@@ -14,7 +14,7 @@ import com.weilylab.xhuschedule.repository.local.StudentLocalDataSource
 import com.weilylab.xhuschedule.ui.activity.LoginActivity
 import com.weilylab.xhuschedule.utils.ConfigurationUtil
 import com.weilylab.xhuschedule.utils.LayoutRefreshConfigUtil
-import com.weilylab.xhuschedule.utils.RxObserver
+import vip.mystery0.rx.OnlyCompleteObserver
 import vip.mystery0.logs.Logs
 
 class AccountSettingsFragment : XhuBasePreferenceFragment(R.xml.preference_account) {
@@ -56,7 +56,7 @@ class AccountSettingsFragment : XhuBasePreferenceFragment(R.xml.preference_accou
 						checkedArray.forEachIndexed { index, bool ->
 							if (bool) needDeleteStudentList.add(studentList[index])
 						}
-						StudentLocalDataSource.deleteStudent(needDeleteStudentList, object : RxObserver<Boolean>() {
+						StudentLocalDataSource.deleteStudent(needDeleteStudentList, object : OnlyCompleteObserver<Boolean>() {
 							override fun onFinish(data: Boolean?) {
 								if (data != null && data)
 									initStudentList()
@@ -89,7 +89,7 @@ class AccountSettingsFragment : XhuBasePreferenceFragment(R.xml.preference_accou
 						val newMainStudent = studentList[newMainIndex]
 						oldMainStudent.isMain = false
 						newMainStudent.isMain = true
-						StudentLocalDataSource.updateStudent(arrayListOf(oldMainStudent, newMainStudent), object : RxObserver<Boolean>() {
+						StudentLocalDataSource.updateStudent(arrayListOf(oldMainStudent, newMainStudent), object : OnlyCompleteObserver<Boolean>() {
 							override fun onFinish(data: Boolean?) {
 								if (data != null && data)
 									initStudentList()

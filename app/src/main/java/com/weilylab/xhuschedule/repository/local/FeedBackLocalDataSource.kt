@@ -5,20 +5,24 @@ import com.weilylab.xhuschedule.model.FeedBackMessage
 import com.weilylab.xhuschedule.model.Student
 import com.weilylab.xhuschedule.repository.local.service.FeedBackMessageService
 import com.weilylab.xhuschedule.repository.local.service.impl.FeedBackMessageServiceImpl
-import com.weilylab.xhuschedule.utils.RxObservable
-import com.weilylab.xhuschedule.utils.RxObserver
+import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import vip.mystery0.logs.Logs
+import vip.mystery0.rx.OnlyCompleteObserver
 import vip.mystery0.rx.PackageData
 
 object FeedBackLocalDataSource {
 	private val feedBackMessageService: FeedBackMessageService by lazy { FeedBackMessageServiceImpl() }
 
 	fun queryFeedBackForStudent(feedBackMessageListLiveData: MutableLiveData<PackageData<List<FeedBackMessage>>>, maxId: MutableLiveData<Int>, student: Student) {
-		RxObservable<List<FeedBackMessage>>()
-				.io {
-					it.onFinish(feedBackMessageService.queryMessageForStudent(student.username, 0))
-				}
-				.subscribe(object : RxObserver<List<FeedBackMessage>>() {
+		Observable.create<List<FeedBackMessage>> {
+			it.onNext(feedBackMessageService.queryMessageForStudent(student.username, 0))
+			it.onComplete()
+		}
+				.subscribeOn(Schedulers.io())
+				.observeOn(AndroidSchedulers.mainThread())
+				.subscribe(object : OnlyCompleteObserver<List<FeedBackMessage>>() {
 					override fun onError(e: Throwable) {
 						feedBackMessageListLiveData.value = PackageData.error(e)
 					}
@@ -35,21 +39,20 @@ object FeedBackLocalDataSource {
 	}
 
 	fun queryMaxId(username: String, listener: (Int) -> Unit) {
-		RxObservable<Int?>()
-				.doThings {
-					it.onFinish(feedBackMessageService.queryMaxId(username))
-				}
-				.subscribe(object : RxObserver<Int?>() {
+		Observable.create<Int> {
+			it.onNext(feedBackMessageService.queryMaxId(username) ?: 0)
+			it.onComplete()
+		}
+				.subscribeOn(Schedulers.io())
+				.observeOn(AndroidSchedulers.mainThread())
+				.subscribe(object : OnlyCompleteObserver<Int>() {
 					override fun onError(e: Throwable) {
 						Logs.wtfm("onError: ", e)
 						listener.invoke(0)
 					}
 
 					override fun onFinish(data: Int?) {
-						if (data == null)
-							listener.invoke(0)
-						else
-							listener.invoke(data)
+						listener.invoke(data ?: 0)
 					}
 				})
 	}

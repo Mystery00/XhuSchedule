@@ -21,8 +21,7 @@ object AnimationUtil {
 			}
 			it.onComplete()
 		}
-				.subscribeOn(Schedulers.single())
-				.unsubscribeOn(Schedulers.single())
+				.subscribeOn(Schedulers.computation())
 				.observeOn(AndroidSchedulers.mainThread())
 				.subscribe {
 					val alpha = if (it !in 0F..1F) if (it > 1F) 1F else 0F else it

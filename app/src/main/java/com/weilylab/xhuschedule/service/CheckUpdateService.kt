@@ -20,11 +20,11 @@ import com.weilylab.xhuschedule.ui.activity.SplashImageActivity
 import com.weilylab.xhuschedule.ui.fragment.settings.SettingsPreferenceFragment
 import com.weilylab.xhuschedule.utils.ConfigUtil
 import com.weilylab.xhuschedule.utils.ConfigurationUtil
-import com.weilylab.xhuschedule.utils.RxObservable
-import com.weilylab.xhuschedule.utils.RxObserver
+import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import vip.mystery0.logs.Logs
+import vip.mystery0.rx.OnlyCompleteObserver
 import vip.mystery0.tools.utils.ActivityManagerTools
 import vip.mystery0.tools.utils.FileTools
 
@@ -47,7 +47,7 @@ class CheckUpdateService : Service() {
 	}
 
 	override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-		if (intent==null)
+		if (intent == null)
 			return super.onStartCommand(intent, flags, startId)
 		val appVersion = "${getString(R.string.app_version_name)}-${getString(R.string.app_version_code)}"
 		val systemVersion = "Android ${Build.VERSION.RELEASE}-${Build.VERSION.SDK_INT}"
@@ -61,12 +61,13 @@ class CheckUpdateService : Service() {
 				.unsubscribeOn(Schedulers.io())
 				.map { GsonFactory.parse<Version>(it) }
 				.observeOn(AndroidSchedulers.mainThread())
-				.subscribe(object : RxObserver<Version>() {
+				.subscribe(object : OnlyCompleteObserver<Version>() {
 					override fun onFinish(data: Version?) {
 						if (data != null && data.versionCode.toInt() > getString(R.string.app_version_code).toInt())
 							showUpdateDialog(data, intent.getBooleanExtra(CHECK_ACTION_BY_MANUAL, false))
 						stopSelf()
-						LocalBroadcastManager.getInstance(this@CheckUpdateService).sendBroadcast(Intent(SettingsPreferenceFragment.ACTION_CHECK_UPDATE_DONE))
+						LocalBroadcastManager.getInstance(this@CheckUpdateService)
+								.sendBroadcast(Intent(SettingsPreferenceFragment.ACTION_CHECK_UPDATE_DONE))
 					}
 
 					override fun onError(e: Throwable) {
@@ -83,13 +84,18 @@ class CheckUpdateService : Service() {
 			if (ignoreVersionList.indexOf(version.versionCode) != -1)
 				return
 		}
-		RxObservable<Boolean>()
-				.single {
-					while (ActivityManagerTools.currentActivity() is SplashActivity || ActivityManagerTools.currentActivity() is GuideActivity || ActivityManagerTools.currentActivity() is SplashImageActivity)
-						Thread.sleep(1000)
-					it.onFinish(true)
-				}
-				.subscribe(object : RxObserver<Boolean>() {
+		Observable.create<Boolean> {
+			while (ActivityManagerTools.currentActivity() is SplashActivity || ActivityManagerTools.currentActivity() is GuideActivity || ActivityManagerTools.currentActivity() is SplashImageActivity)
+				Thread.sleep(1000)
+			it.onComplete()
+		}
+				.subscribeOn(Schedulers.single())
+				.observeOn(AndroidSchedulers.mainThread())
+				.subscribe(object :OnlyCompleteObserver<Boolean>(){
+					override fun onError(e: Throwable) {
+						Logs.wtf("onError: ", e)
+					}
+
 					override fun onFinish(data: Boolean?) {
 						if (data != null && data) {
 							val activity = ActivityManagerTools.currentActivity() ?: return
@@ -115,10 +121,6 @@ class CheckUpdateService : Service() {
 								}
 							builder.show()
 						}
-					}
-
-					override fun onError(e: Throwable) {
-						Logs.wtf("onError: ", e)
 					}
 				})
 	}

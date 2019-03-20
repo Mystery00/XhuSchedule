@@ -54,8 +54,8 @@ class NotificationService : Service() {
 			}
 			it.onComplete()
 		}
-				.subscribeOn(Schedulers.computation())
-				.unsubscribeOn(Schedulers.computation())
+				.subscribeOn(Schedulers.io())
+				.unsubscribeOn(Schedulers.io())
 				.observeOn(AndroidSchedulers.mainThread())
 				.subscribe(object : Observer<Map<String, Any>> {
 					override fun onComplete() {

@@ -18,13 +18,15 @@ import com.weilylab.xhuschedule.model.Student
 import com.weilylab.xhuschedule.model.Test
 import com.weilylab.xhuschedule.repository.TestRepository
 import com.weilylab.xhuschedule.ui.adapter.QueryTestRecyclerViewAdapter
-import com.weilylab.xhuschedule.utils.RxObservable
 import com.weilylab.xhuschedule.utils.userDo.UserUtil
 import vip.mystery0.rx.PackageData
 import vip.mystery0.rx.Status.*
 import com.weilylab.xhuschedule.viewmodel.QueryTestViewModel
 import com.zyao89.view.zloading.ZLoadingDialog
 import com.zyao89.view.zloading.Z_TYPE
+import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 
 import kotlinx.android.synthetic.main.activity_query_test.*
 import kotlinx.android.synthetic.main.content_query_test.*
@@ -131,17 +133,20 @@ class QueryTestActivity : XhuBaseActivity(R.layout.activity_query_test) {
 
 	@SuppressLint("CheckResult")
 	private fun generateStudentMenuList(list: List<Student>) {
-		RxObservable<Boolean>()
-				.single {
-					var index = 0
-					while (!::menu.isInitialized) {
-						Thread.sleep(500)
-						if (index >= 3)
-							break
-						index++
-					}
-					it.onFinish(::menu.isInitialized)
-				}.subscribe {
+		Observable.create<Boolean> {
+			var index = 0
+			while (!::menu.isInitialized) {
+				Thread.sleep(500)
+				if (index >= 3)
+					break
+				index++
+			}
+			it.onNext(::menu.isInitialized)
+			it.onComplete()
+		}
+				.subscribeOn(Schedulers.newThread())
+				.observeOn(AndroidSchedulers.mainThread())
+				.subscribe {
 					if (it) {
 						val groupId = 1
 						var nowCheckId = 0

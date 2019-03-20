@@ -39,11 +39,9 @@ import com.weilylab.xhuschedule.api.QiniuAPI
 import com.weilylab.xhuschedule.constant.IntentConstant
 import com.weilylab.xhuschedule.factory.RetrofitFactory
 import com.weilylab.xhuschedule.utils.FileUtil
-import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
-import vip.mystery0.logs.Logs
+import vip.mystery0.rx.DoNothingObserver
 import vip.mystery0.tools.utils.FileTools
 import java.io.InputStream
 
@@ -62,26 +60,9 @@ class DownloadSplashIntentService : IntentService("DownloadSplashIntentService")
 					.create(QiniuAPI::class.java)
 					.download(qiniuPath)
 					.subscribeOn(Schedulers.io())
-					.unsubscribeOn(Schedulers.io())
 					.map { responseBody -> responseBody.byteStream() }
-					.observeOn(Schedulers.io())
 					.doOnNext { inputStream -> FileTools.saveFile(inputStream, file) }
 					.observeOn(AndroidSchedulers.mainThread())
-					.subscribe(object : Observer<InputStream> {
-						override fun onComplete() {
-							Logs.i("onComplete: ")
-						}
-
-						override fun onSubscribe(d: Disposable) {
-							Logs.i("onSubscribe: ")
-						}
-
-						override fun onNext(t: InputStream) {
-						}
-
-						override fun onError(e: Throwable) {
-							Logs.wtf("onError: ", e)
-						}
-					})
+					.subscribe(DoNothingObserver<InputStream>())
 	}
 }

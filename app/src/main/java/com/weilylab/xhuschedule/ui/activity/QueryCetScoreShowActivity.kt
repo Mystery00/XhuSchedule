@@ -6,11 +6,13 @@ import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.base.XhuBaseActivity
 import com.weilylab.xhuschedule.databinding.ActivityQueryCetScoreShowBinding
 import com.weilylab.xhuschedule.model.CetScore
-import com.weilylab.xhuschedule.utils.RxObservable
-import com.weilylab.xhuschedule.utils.RxObserver
 import com.weilylab.xhuschedule.viewmodel.QueryCetScoreViewModelHelper
+import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_query_cet_score_show.*
 import vip.mystery0.logs.Logs
+import vip.mystery0.rx.OnlyCompleteObserver
 import vip.mystery0.rx.PackageData
 import vip.mystery0.rx.Status
 
@@ -61,14 +63,19 @@ class QueryCetScoreShowActivity : XhuBaseActivity(R.layout.activity_query_cet_sc
 	}
 
 	private fun doShow(cetScore: CetScore) {
-		RxObservable<Boolean>()
-				.doThings {
-					while (!::activityQueryCetScoreShowBinding.isInitialized) {
-						Thread.sleep(200)
+		Observable.create<Boolean> {
+			while (!::activityQueryCetScoreShowBinding.isInitialized) {
+				Thread.sleep(200)
+			}
+			it.onComplete()
+		}
+				.subscribeOn(Schedulers.newThread())
+				.observeOn(AndroidSchedulers.mainThread())
+				.subscribe(object : OnlyCompleteObserver<Boolean>() {
+					override fun onError(e: Throwable) {
+						Logs.wtf("onError: ", e)
 					}
-					it.onFinish(true)
-				}
-				.subscribe(object : RxObserver<Boolean>() {
+
 					override fun onFinish(data: Boolean?) {
 						if (::activityQueryCetScoreShowBinding.isInitialized) {
 							activityQueryCetScoreShowBinding.cetScore = cetScore
@@ -77,10 +84,6 @@ class QueryCetScoreShowActivity : XhuBaseActivity(R.layout.activity_query_cet_sc
 							activityQueryCetScoreShowBinding.textViewName.text = nameText
 							activityQueryCetScoreShowBinding.textViewSchool.text = schoolText
 						}
-					}
-
-					override fun onError(e: Throwable) {
-						Logs.wtf("onError: ", e)
 					}
 				})
 	}

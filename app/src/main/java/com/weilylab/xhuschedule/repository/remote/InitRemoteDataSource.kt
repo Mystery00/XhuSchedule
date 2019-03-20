@@ -7,10 +7,10 @@ import com.weilylab.xhuschedule.factory.RetrofitFactory
 import com.weilylab.xhuschedule.model.response.StartDateTimeResponse
 import com.weilylab.xhuschedule.repository.ds.InitDataSource
 import com.weilylab.xhuschedule.repository.local.InitLocalDataSource
-import com.weilylab.xhuschedule.utils.RxObserver
 import vip.mystery0.tools.utils.NetworkTools
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import vip.mystery0.rx.OnlyCompleteObserver
 import vip.mystery0.rx.PackageData
 import java.util.*
 
@@ -29,7 +29,7 @@ object InitRemoteDataSource : InitDataSource {
 						startDateTimeResponse
 					}
 					.observeOn(AndroidSchedulers.mainThread())
-					.subscribe(object : RxObserver<StartDateTimeResponse>() {
+					.subscribe(object : OnlyCompleteObserver<StartDateTimeResponse>() {
 						override fun onFinish(data: StartDateTimeResponse?) {
 							if (data == null) {
 								InitLocalDataSource.getStartDateTime(startDateTimeLiveDate)

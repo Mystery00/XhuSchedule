@@ -124,8 +124,7 @@ class DownloadService : IntentService("DownloadService") {
 	private fun download(context: Context, type: String, qiniuPath: String, file: File, apkMD5: String, patchMD5: String) {
 		retrofit.create(QiniuAPI::class.java)
 				.download(qiniuPath)
-				.subscribeOn(Schedulers.newThread())
-				.unsubscribeOn(Schedulers.newThread())
+				.subscribeOn(Schedulers.io())
 				.map { responseBody ->
 					val inputStream = responseBody.byteStream()
 					try {

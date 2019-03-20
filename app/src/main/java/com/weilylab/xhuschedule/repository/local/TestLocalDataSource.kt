@@ -7,23 +7,32 @@ import com.weilylab.xhuschedule.model.Test
 import com.weilylab.xhuschedule.repository.ds.TestDataSource
 import com.weilylab.xhuschedule.repository.local.service.TestService
 import com.weilylab.xhuschedule.repository.local.service.impl.TestServiceImpl
-import com.weilylab.xhuschedule.utils.RxObservable
-import com.weilylab.xhuschedule.utils.RxObserver
 import com.weilylab.xhuschedule.utils.userDo.TestUtil
+import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
+import io.reactivex.schedulers.Schedulers
 import vip.mystery0.logs.Logs
+import vip.mystery0.rx.OnlyCompleteObserver
 import vip.mystery0.rx.PackageData
+import vip.mystery0.rx.StartAndCompleteObserver
 import java.util.ArrayList
 
 object TestLocalDataSource : TestDataSource {
 	private val testService: TestService by lazy { TestServiceImpl() }
 
 	override fun queryAllTestsByUsername(testLiveData: MediatorLiveData<PackageData<List<Test>>>, htmlLiveData: MutableLiveData<String>?, student: Student) {
-		testLiveData.value = PackageData.loading()
-		RxObservable<List<Test>>()
-				.io {
-					it.onFinish(testService.queryTestsForStudent(student.username))
-				}
-				.subscribe(object : RxObserver<List<Test>>() {
+		Observable.create<List<Test>> {
+			it.onNext(testService.queryTestsForStudent(student.username))
+			it.onComplete()
+		}
+				.subscribeOn(Schedulers.io())
+				.observeOn(AndroidSchedulers.mainThread())
+				.subscribe(object : StartAndCompleteObserver<List<Test>>() {
+					override fun onSubscribe(d: Disposable) {
+						testLiveData.value = PackageData.loading()
+					}
+
 					override fun onFinish(data: List<Test>?) {
 						if (data == null)
 							testLiveData.value = PackageData.empty()
@@ -43,15 +52,17 @@ object TestLocalDataSource : TestDataSource {
 	}
 
 	override fun queryAllTestsForManyStudent(testLiveData: MediatorLiveData<PackageData<List<Test>>>, studentList: List<Student>) {
-		RxObservable<List<Test>>()
-				.io { emitter ->
-					val tests = ArrayList<Test>()
-					studentList.forEach {
-						tests.addAll(testService.queryTestsForStudent(it.username))
-					}
-					emitter.onFinish(tests)
-				}
-				.subscribe(object : RxObserver<List<Test>>() {
+		Observable.create<List<Test>> {
+			val tests = ArrayList<Test>()
+			studentList.forEach { s ->
+				tests.addAll(testService.queryTestsForStudent(s.username))
+			}
+			it.onNext(tests)
+			it.onComplete()
+		}
+				.subscribeOn(Schedulers.io())
+				.observeOn(AndroidSchedulers.mainThread())
+				.subscribe(object : OnlyCompleteObserver<List<Test>>() {
 					override fun onFinish(data: List<Test>?) {
 						if (data == null)
 							testLiveData.value = PackageData.empty()

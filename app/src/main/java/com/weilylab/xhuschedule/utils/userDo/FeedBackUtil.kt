@@ -15,7 +15,7 @@ import vip.mystery0.tools.utils.NetworkTools
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import vip.mystery0.logs.Logs
-import com.weilylab.xhuschedule.utils.RxObserver
+import vip.mystery0.rx.OnlyCompleteObserver
 
 object FeedBackUtil {
 	private const val RETRY_TIME = 1
@@ -26,10 +26,9 @@ object FeedBackUtil {
 					.create(FeedbackAPI::class.java)
 					.sendFBMessage(student.username, feedBackToken, content)
 					.subscribeOn(Schedulers.io())
-					.unsubscribeOn(Schedulers.io())
 					.map { GsonFactory.parse<SendFeedBackMessageResponse>(it) }
 					.observeOn(AndroidSchedulers.mainThread())
-					.subscribe(object : RxObserver<SendFeedBackMessageResponse>() {
+					.subscribe(object : OnlyCompleteObserver<SendFeedBackMessageResponse>() {
 						override fun onFinish(data: SendFeedBackMessageResponse?) {
 							when {
 								data == null -> requestListener.error(ResponseCodeConstants.UNKNOWN_ERROR, StringConstant.hint_data_null)
@@ -76,7 +75,7 @@ object FeedBackUtil {
 						getFeedBackMessageResponse
 					}
 					.observeOn(AndroidSchedulers.mainThread())
-					.subscribe(object : RxObserver<GetFeedBackMessageResponse>() {
+					.subscribe(object : OnlyCompleteObserver<GetFeedBackMessageResponse>() {
 						override fun onError(e: Throwable) {
 							Logs.wtf("onError: ", e)
 							requestListener.error(ResponseCodeConstants.CATCH_ERROR, e.message)

@@ -4,20 +4,25 @@ import androidx.lifecycle.MutableLiveData
 import com.weilylab.xhuschedule.model.CustomThing
 import com.weilylab.xhuschedule.repository.local.service.impl.CustomThingServiceImpl
 import com.weilylab.xhuschedule.utils.CalendarUtil
-import com.weilylab.xhuschedule.utils.RxObservable
-import com.weilylab.xhuschedule.utils.RxObserver
+import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
+import vip.mystery0.rx.OnlyCompleteObserver
 import vip.mystery0.rx.PackageData
 
 object CustomThingLocalDataSource {
 	private val customThingService by lazy { CustomThingServiceImpl() }
 
 	fun getToday(customThingLiveData: MutableLiveData<PackageData<List<CustomThing>>>) {
-		RxObservable<List<CustomThing>>()
-				.io { observableEmitter ->
-					val list = customThingService.queryAllThings()
-					observableEmitter.onFinish(list.filter { CalendarUtil.isThingOnDay(it) })
-				}
-				.subscribe(object : RxObserver<List<CustomThing>>() {
+		Observable.create<List<CustomThing>> {
+			it.onNext(customThingService.queryAllThings())
+			it.onComplete()
+		}
+				.subscribeOn(Schedulers.io())
+				.observeOn(Schedulers.computation())
+				.map { it.filter { c -> CalendarUtil.isThingOnDay(c) } }
+				.observeOn(AndroidSchedulers.mainThread())
+				.subscribe(object : OnlyCompleteObserver<List<CustomThing>>() {
 					override fun onError(e: Throwable) {
 						customThingLiveData.value = PackageData.error(e)
 					}
@@ -36,11 +41,13 @@ object CustomThingLocalDataSource {
 	 * 该接口提供给事项管理页面使用
 	 */
 	fun getAll(customThingLiveData: MutableLiveData<PackageData<List<CustomThing>>>) {
-		RxObservable<List<CustomThing>>()
-				.io { observableEmitter ->
-					observableEmitter.onFinish(customThingService.queryAllThings())
-				}
-				.subscribe(object : RxObserver<List<CustomThing>>() {
+		Observable.create<List<CustomThing>> {
+			it.onNext(customThingService.queryAllThings())
+			it.onComplete()
+		}
+				.subscribeOn(Schedulers.io())
+				.observeOn(AndroidSchedulers.mainThread())
+				.subscribe(object : OnlyCompleteObserver<List<CustomThing>>() {
 					override fun onError(e: Throwable) {
 						customThingLiveData.value = PackageData.error(e)
 					}
@@ -58,12 +65,13 @@ object CustomThingLocalDataSource {
 	fun getRawCustomThingList(): List<CustomThing> = customThingService.queryAllThings()
 
 	fun save(thing: CustomThing, listener: (Boolean, Throwable?) -> Unit) {
-		RxObservable<Boolean>()
-				.doThings {
-					customThingService.addThing(thing)
-					it.onFinish(true)
-				}
-				.subscribe(object : RxObserver<Boolean>() {
+		Observable.create<Boolean> {
+			customThingService.addThing(thing)
+			it.onComplete()
+		}
+				.subscribeOn(Schedulers.io())
+				.observeOn(AndroidSchedulers.mainThread())
+				.subscribe(object : OnlyCompleteObserver<Boolean>() {
 					override fun onError(e: Throwable) {
 						listener.invoke(false, e)
 					}
@@ -75,12 +83,13 @@ object CustomThingLocalDataSource {
 	}
 
 	fun update(thing: CustomThing, listener: (Boolean, Throwable?) -> Unit) {
-		RxObservable<Boolean>()
-				.doThings {
-					customThingService.updateThing(thing)
-					it.onFinish(true)
-				}
-				.subscribe(object : RxObserver<Boolean>() {
+		Observable.create<Boolean> {
+			customThingService.updateThing(thing)
+			it.onComplete()
+		}
+				.subscribeOn(Schedulers.io())
+				.observeOn(AndroidSchedulers.mainThread())
+				.subscribe(object : OnlyCompleteObserver<Boolean>() {
 					override fun onError(e: Throwable) {
 						listener.invoke(false, e)
 					}
@@ -92,12 +101,13 @@ object CustomThingLocalDataSource {
 	}
 
 	fun delete(thing: CustomThing, listener: (Boolean) -> Unit) {
-		RxObservable<Boolean>()
-				.doThings {
-					customThingService.deleteThing(thing)
-					it.onFinish(true)
-				}
-				.subscribe(object : RxObserver<Boolean>() {
+		Observable.create<Boolean> {
+			customThingService.deleteThing(thing)
+			it.onComplete()
+		}
+				.subscribeOn(Schedulers.io())
+				.observeOn(AndroidSchedulers.mainThread())
+				.subscribe(object : OnlyCompleteObserver<Boolean>() {
 					override fun onError(e: Throwable) {
 						listener.invoke(false)
 					}

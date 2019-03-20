@@ -7,7 +7,7 @@ import com.weilylab.xhuschedule.factory.RetrofitFactory
 import com.weilylab.xhuschedule.model.response.SplashResponse
 import com.weilylab.xhuschedule.repository.ds.SplashDataSource
 import com.weilylab.xhuschedule.repository.local.SplashLocalDataSource
-import com.weilylab.xhuschedule.utils.RxObserver
+import vip.mystery0.rx.OnlyCompleteObserver
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import vip.mystery0.rx.PackageData
@@ -31,7 +31,7 @@ object SplashRemoteDataSource : SplashDataSource {
 					splashResponse
 				}
 				.observeOn(AndroidSchedulers.mainThread())
-				.subscribe(object : RxObserver<SplashResponse>() {
+				.subscribe(object : OnlyCompleteObserver<SplashResponse>() {
 					override fun onFinish(data: SplashResponse?) {
 						if (data == null) {
 							SplashLocalDataSource.requestSplash(splashPackageLiveData)

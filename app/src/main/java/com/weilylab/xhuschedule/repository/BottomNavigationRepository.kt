@@ -9,6 +9,10 @@ import com.weilylab.xhuschedule.utils.*
 import com.weilylab.xhuschedule.utils.userDo.CourseUtil
 import com.weilylab.xhuschedule.utils.userDo.UserUtil
 import com.weilylab.xhuschedule.viewmodel.BottomNavigationViewModel
+import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
+import vip.mystery0.rx.OnlyCompleteObserver
 import vip.mystery0.rx.PackageData
 import vip.mystery0.rx.Status.*
 
@@ -147,12 +151,13 @@ object BottomNavigationRepository {
 	fun queryNotice(bottomNavigationViewModel: BottomNavigationViewModel, isFirst: Boolean) {
 		if (!LayoutRefreshConfigUtil.isRefreshNoticeDone)
 			return
-		RxObservable<Boolean>()
-				.doThings {
-					Thread.sleep(500)
-					it.onFinish(true)
-				}
-				.subscribe(object : RxObserver<Boolean>() {
+		Observable.create<Boolean> {
+			Thread.sleep(500)
+			it.onComplete()
+		}
+				.subscribeOn(Schedulers.newThread())
+				.observeOn(AndroidSchedulers.mainThread())
+				.subscribe(object : OnlyCompleteObserver<Boolean>() {
 					override fun onFinish(data: Boolean?) {
 						NoticeRepository.queryNoticeInMainActivity(bottomNavigationViewModel, isFirst)
 					}

@@ -7,17 +7,22 @@ import com.weilylab.xhuschedule.model.Student
 import com.weilylab.xhuschedule.repository.ds.ScoreDataSource
 import com.weilylab.xhuschedule.repository.local.service.ScoreService
 import com.weilylab.xhuschedule.repository.local.service.impl.ScoreServiceImpl
-import com.weilylab.xhuschedule.utils.RxObservable
-import com.weilylab.xhuschedule.utils.RxObserver
+import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
+import vip.mystery0.rx.OnlyCompleteObserver
 import vip.mystery0.rx.PackageData
 
 object ScoreLocalDataSource : ScoreDataSource {
 	private val scoreService: ScoreService by lazy { ScoreServiceImpl() }
 	override fun queryClassScoreByUsername(scoreLiveData: MutableLiveData<PackageData<List<ClassScore>>>, student: Student, year: String, term: String) {
-		RxObservable<List<ClassScore>>()
-				.io {
-					it.onFinish(scoreService.queryClassScore(student.username, year, term))
-				}.subscribe(object : RxObserver<List<ClassScore>>() {
+		Observable.create<List<ClassScore>> {
+			it.onNext(scoreService.queryClassScore(student.username, year, term))
+			it.onComplete()
+		}
+				.subscribeOn(Schedulers.io())
+				.observeOn(AndroidSchedulers.mainThread())
+				.subscribe(object : OnlyCompleteObserver<List<ClassScore>>() {
 					override fun onFinish(data: List<ClassScore>?) {
 						if (data != null && data.isNotEmpty())
 							scoreLiveData.value = PackageData.content(data)
@@ -32,10 +37,13 @@ object ScoreLocalDataSource : ScoreDataSource {
 	}
 
 	override fun queryExpScoreByUsername(scoreLiveData: MutableLiveData<PackageData<List<ExpScore>>>, student: Student, year: String, term: String) {
-		RxObservable<List<ExpScore>>()
-				.io {
-					it.onFinish(scoreService.queryExpScore(student.username, year, term))
-				}.subscribe(object : RxObserver<List<ExpScore>>() {
+		Observable.create<List<ExpScore>> {
+			it.onNext(scoreService.queryExpScore(student.username, year, term))
+			it.onComplete()
+		}
+				.subscribeOn(Schedulers.io())
+				.observeOn(AndroidSchedulers.mainThread())
+				.subscribe(object : OnlyCompleteObserver<List<ExpScore>>() {
 					override fun onFinish(data: List<ExpScore>?) {
 						if (data != null && data.isNotEmpty())
 							scoreLiveData.value = PackageData.content(data)

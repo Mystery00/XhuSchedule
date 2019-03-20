@@ -18,7 +18,7 @@ import com.weilylab.xhuschedule.model.response.CetScoresResponse
 import com.weilylab.xhuschedule.model.response.CetVCodeResponse
 import com.weilylab.xhuschedule.model.response.ClassScoreResponse
 import com.weilylab.xhuschedule.model.response.ExpScoreResponse
-import com.weilylab.xhuschedule.utils.RxObserver
+import vip.mystery0.rx.OnlyCompleteObserver
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import vip.mystery0.logs.Logs
@@ -45,7 +45,7 @@ object ScoreUtil {
 					scoreResponse
 				}
 				.observeOn(AndroidSchedulers.mainThread())
-				.subscribe(object : RxObserver<ClassScoreResponse>() {
+				.subscribe(object : OnlyCompleteObserver<ClassScoreResponse>() {
 					override fun onFinish(data: ClassScoreResponse?) {
 						when {
 							data == null -> requestListener.error(ResponseCodeConstants.UNKNOWN_ERROR, StringConstant.hint_data_null)
@@ -93,7 +93,7 @@ object ScoreUtil {
 					scoreResponse
 				}
 				.observeOn(AndroidSchedulers.mainThread())
-				.subscribe(object : RxObserver<ExpScoreResponse>() {
+				.subscribe(object : OnlyCompleteObserver<ExpScoreResponse>() {
 					override fun onFinish(data: ExpScoreResponse?) {
 						when {
 							data == null -> requestListener.error(ResponseCodeConstants.UNKNOWN_ERROR, StringConstant.hint_data_null)
@@ -131,7 +131,7 @@ object ScoreUtil {
 				.unsubscribeOn(Schedulers.io())
 				.map { GsonFactory.parse<CetVCodeResponse>(it) }
 				.observeOn(AndroidSchedulers.mainThread())
-				.subscribe(object : RxObserver<CetVCodeResponse>() {
+				.subscribe(object : OnlyCompleteObserver<CetVCodeResponse>() {
 					override fun onFinish(data: CetVCodeResponse?) {
 						when {
 							data == null -> requestListener.error(ResponseCodeConstants.UNKNOWN_ERROR, StringConstant.hint_data_null)
@@ -172,7 +172,7 @@ object ScoreUtil {
 				.unsubscribeOn(Schedulers.io())
 				.map { GsonFactory.parse<CetScoresResponse>(it) }
 				.observeOn(AndroidSchedulers.mainThread())
-				.subscribe(object : RxObserver<CetScoresResponse>() {
+				.subscribe(object : OnlyCompleteObserver<CetScoresResponse>() {
 					override fun onFinish(data: CetScoresResponse?) {
 						when {
 							data == null -> requestListener.error(ResponseCodeConstants.UNKNOWN_ERROR, StringConstant.hint_data_null)

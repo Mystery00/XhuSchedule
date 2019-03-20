@@ -10,14 +10,15 @@ import com.weilylab.xhuschedule.repository.ds.StudentDataSource
 import com.weilylab.xhuschedule.repository.local.service.StudentService
 import com.weilylab.xhuschedule.repository.local.service.impl.StudentServiceImpl
 import com.weilylab.xhuschedule.repository.remote.StudentRemoteDataSource
-import com.weilylab.xhuschedule.utils.RxObservable
-import com.weilylab.xhuschedule.utils.RxObserver
 import com.weilylab.xhuschedule.utils.userDo.UserUtil
 import io.reactivex.Observable
 import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
+import vip.mystery0.rx.OnlyCompleteObserver
 import vip.mystery0.rx.PackageData
+import vip.mystery0.rx.StartAndCompleteObserver
 import java.util.*
 
 object StudentLocalDataSource : StudentDataSource {
@@ -31,43 +32,53 @@ object StudentLocalDataSource : StudentDataSource {
 	}
 
 	override fun queryStudentInfo(studentInfoLiveData: MutableLiveData<PackageData<StudentInfo>>, student: Student) {
-		studentInfoLiveData.value = PackageData.loading()
-		RxObservable<StudentInfo>()
-				.doThings {
-					val studentInfo = studentService.queryStudentInfoByUsername(student.username)
-					if (studentInfo == null)
-						it.onError(Exception(StringConstant.hint_data_null))
-					else
-						it.onFinish(studentInfo)
-				}
-				.subscribe(object : RxObserver<StudentInfo>() {
-					override fun onFinish(data: StudentInfo?) {
-						studentInfoLiveData.value = PackageData.content(data)
+		Observable.create<StudentInfo> {
+			val studentInfo = studentService.queryStudentInfoByUsername(student.username)
+			if (studentInfo == null)
+				it.onError(Exception(StringConstant.hint_data_null))
+			else
+				it.onNext(studentInfo)
+			it.onComplete()
+		}
+				.subscribeOn(Schedulers.io())
+				.observeOn(AndroidSchedulers.mainThread())
+				.subscribe(object : StartAndCompleteObserver<StudentInfo>() {
+					override fun onSubscribe(d: Disposable) {
+						studentInfoLiveData.value = PackageData.loading()
 					}
 
 					override fun onError(e: Throwable) {
 						StudentRemoteDataSource.queryStudentInfo(studentInfoLiveData, student)
 					}
+
+					override fun onFinish(data: StudentInfo?) {
+						studentInfoLiveData.value = PackageData.content(data)
+					}
 				})
 	}
 
 	fun queryManyStudentInfo(studentInfoLiveData: MutableLiveData<PackageData<Map<Student, StudentInfo?>>>, studentList: List<Student>) {
-		studentInfoLiveData.value = PackageData.loading()
-		RxObservable<Map<Student, StudentInfo?>>()
-				.doThings { emitter ->
-					val map = HashMap<Student, StudentInfo?>()
-					studentList.forEach {
-						map[it] = studentService.queryStudentInfoByUsername(it.username)
+		Observable.create<Map<Student, StudentInfo?>> {
+			val map = HashMap<Student, StudentInfo?>()
+			studentList.forEach { s ->
+				map[s] = studentService.queryStudentInfoByUsername(s.username)
+			}
+			it.onNext(map)
+			it.onComplete()
+		}
+				.subscribeOn(Schedulers.io())
+				.observeOn(AndroidSchedulers.mainThread())
+				.subscribe(object : StartAndCompleteObserver<Map<Student, StudentInfo?>>() {
+					override fun onError(e: Throwable) {
+						studentInfoLiveData.value = PackageData.error(e)
 					}
-					emitter.onFinish(map)
-				}
-				.subscribe(object : RxObserver<Map<Student, StudentInfo?>>() {
+
 					override fun onFinish(data: Map<Student, StudentInfo?>?) {
 						studentInfoLiveData.value = PackageData.content(data)
 					}
 
-					override fun onError(e: Throwable) {
-						studentInfoLiveData.value = PackageData.error(e)
+					override fun onSubscribe(d: Disposable) {
+						studentInfoLiveData.value = PackageData.loading()
 					}
 				})
 	}
@@ -80,20 +91,24 @@ object StudentLocalDataSource : StudentDataSource {
 	}
 
 	fun queryMainStudent(listener: (PackageData<Student>) -> Unit) {
-		RxObservable<Student?>()
-				.doThings {
-					it.onFinish(studentService.queryMainStudent())
-				}
-				.subscribe(object : RxObserver<Student?>() {
+		Observable.create<Student> {
+			val student = studentService.queryMainStudent()
+			if (student != null)
+				it.onNext(student)
+			it.onComplete()
+		}
+				.subscribeOn(Schedulers.io())
+				.observeOn(AndroidSchedulers.mainThread())
+				.subscribe(object : OnlyCompleteObserver<Student>() {
+					override fun onError(e: Throwable) {
+						listener.invoke(PackageData.error(e))
+					}
+
 					override fun onFinish(data: Student?) {
 						if (data == null)
 							listener.invoke(PackageData.empty(data))
 						else
 							listener.invoke(PackageData.content(data))
-					}
-
-					override fun onError(e: Throwable) {
-						listener.invoke(PackageData.error(e))
 					}
 				})
 	}
@@ -106,30 +121,32 @@ object StudentLocalDataSource : StudentDataSource {
 	}
 
 	fun deleteStudent(studentList: List<Student>, observer: Observer<Boolean>) {
-		RxObservable<Boolean>()
-				.doThings { emitter ->
-					studentList.forEach {
-						studentService.studentLogout(it)
-					}
-					val list = studentService.queryAllStudentList()
-					if (list.isNotEmpty() && !checkMain(list)) {
-						val mainStudent = list[0]
-						mainStudent.isMain = true
-						studentService.updateStudent(mainStudent)
-					}
-					emitter.onFinish(true)
-				}
+		Observable.create<Boolean> {
+			studentList.forEach { s ->
+				studentService.studentLogout(s)
+			}
+			val list = studentService.queryAllStudentList()
+			if (list.isNotEmpty() && !checkMain(list)) {
+				val mainStudent = list[0]
+				mainStudent.isMain = true
+				studentService.updateStudent(mainStudent)
+			}
+			it.onComplete()
+		}
+				.subscribeOn(Schedulers.io())
+				.observeOn(AndroidSchedulers.mainThread())
 				.subscribe(observer)
 	}
 
 	fun updateStudent(studentList: List<Student>, observer: Observer<Boolean>) {
-		RxObservable<Boolean>()
-				.doThings { emitter ->
-					studentList.forEach {
-						studentService.updateStudent(it)
-					}
-					emitter.onFinish(true)
-				}
+		Observable.create<Boolean> {
+			studentList.forEach { s ->
+				studentService.updateStudent(s)
+			}
+			it.onComplete()
+		}
+				.subscribeOn(Schedulers.io())
+				.observeOn(AndroidSchedulers.mainThread())
 				.subscribe(observer)
 	}
 
@@ -151,20 +168,22 @@ object StudentLocalDataSource : StudentDataSource {
 	}
 
 	fun queryAllStudentList(listener: (PackageData<List<Student>>) -> Unit) {
-		RxObservable<List<Student>>()
-				.io {
-					it.onFinish(queryAllStudentListDo())
-				}
-				.subscribe(object : RxObserver<List<Student>>() {
+		Observable.create<List<Student>> {
+			it.onNext(queryAllStudentListDo())
+			it.onComplete()
+		}
+				.subscribeOn(Schedulers.io())
+				.observeOn(AndroidSchedulers.mainThread())
+				.subscribe(object : OnlyCompleteObserver<List<Student>>() {
+					override fun onError(e: Throwable) {
+						listener.invoke(PackageData.error(e))
+					}
+
 					override fun onFinish(data: List<Student>?) {
 						if (data == null || data.isEmpty())
 							listener.invoke(PackageData.empty(data))
 						else
 							listener.invoke(PackageData.content(data))
-					}
-
-					override fun onError(e: Throwable) {
-						listener.invoke(PackageData.error(e))
 					}
 				})
 	}
@@ -175,11 +194,13 @@ object StudentLocalDataSource : StudentDataSource {
 	fun queryAllStudentListDo(): List<Student> = studentService.queryAllStudentList()
 
 	fun queryAllStudentInfo(listener: (PackageData<List<StudentInfo>>) -> Unit) {
-		RxObservable<List<StudentInfo>>()
-				.io {
-					it.onFinish(studentService.queryAllStudentInfo())
-				}
-				.subscribe(object : RxObserver<List<StudentInfo>>() {
+		Observable.create<List<StudentInfo>> {
+			it.onNext(studentService.queryAllStudentInfo())
+			it.onComplete()
+		}
+				.subscribeOn(Schedulers.io())
+				.observeOn(AndroidSchedulers.mainThread())
+				.subscribe(object : OnlyCompleteObserver<List<StudentInfo>>() {
 					override fun onError(e: Throwable) {
 						listener.invoke(PackageData.error(e))
 					}
@@ -220,21 +241,27 @@ object StudentLocalDataSource : StudentDataSource {
 				it.onNext(token)
 			it.onComplete()
 		}
-				.subscribeOn(Schedulers.computation())
-				.unsubscribeOn(Schedulers.computation())
+				.subscribeOn(Schedulers.io())
+				.observeOn(Schedulers.computation())
+				.map {
+					val tokenTimeString = it.fbToken.substring(it.fbToken.indexOf('_') + 1)
+					val tokenTime = Calendar.getInstance()
+					tokenTime.timeInMillis = tokenTimeString.toLong() - 30 * 60 * 1000
+					if (tokenTime.timeInMillis > Calendar.getInstance().timeInMillis)
+						it.fbToken
+					else
+						"null"
+				}
 				.observeOn(AndroidSchedulers.mainThread())
-				.subscribe(object : RxObserver<FeedBackToken>() {
+				.subscribe(object : OnlyCompleteObserver<String>() {
 					override fun onError(e: Throwable) {
 						listener.invoke(PackageData.error(e))
 					}
 
-					override fun onFinish(data: FeedBackToken?) {
+					override fun onFinish(data: String?) {
 						if (data != null) {
-							val tokenTimeString = data.fbToken.substring(data.fbToken.indexOf('_') + 1)
-							val tokenTime = Calendar.getInstance()
-							tokenTime.timeInMillis = tokenTimeString.toLong() - 30 * 60 * 1000
-							if (tokenTime.timeInMillis > Calendar.getInstance().timeInMillis)
-								listener.invoke(PackageData.content(data.fbToken))
+							if (data != "null")
+								listener.invoke(PackageData.content(data))
 							else
 								UserUtil.login(student, null, object : RequestListener<Boolean> {
 									override fun done(t: Boolean) {

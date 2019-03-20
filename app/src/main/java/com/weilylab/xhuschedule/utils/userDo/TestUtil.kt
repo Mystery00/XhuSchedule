@@ -10,14 +10,13 @@ import com.weilylab.xhuschedule.listener.RequestListener
 import com.weilylab.xhuschedule.model.Test
 import com.weilylab.xhuschedule.model.Student
 import com.weilylab.xhuschedule.model.response.TestResponse
-import com.weilylab.xhuschedule.utils.RxObservable
-import com.weilylab.xhuschedule.utils.RxObserver
 import io.reactivex.Observable
 import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import vip.mystery0.logs.Logs
+import vip.mystery0.rx.OnlyCompleteObserver
 import java.util.ArrayList
 import java.util.HashMap
 
@@ -37,7 +36,7 @@ object TestUtil {
 					testResponse
 				}
 				.observeOn(AndroidSchedulers.mainThread())
-				.subscribe(object : RxObserver<TestResponse>() {
+				.subscribe(object : OnlyCompleteObserver<TestResponse>() {
 					override fun onFinish(data: TestResponse?) {
 						when {
 							data == null -> requestListener.error(ResponseCodeConstants.UNKNOWN_ERROR, StringConstant.hint_data_null)
@@ -156,18 +155,19 @@ object TestUtil {
 	}
 
 	private fun resumeRequest(resultArray: BooleanArray, studentList: List<Student>, doSaveListener: DoSaveListener<Map<String, List<Test>>>?, map: HashMap<String, List<Test>>, doneListener: () -> Unit, maxIndex: Int, index: Int) {
-		RxObservable<Boolean>()
-				.doThings {
-					Thread.sleep(200)
-					it.onFinish(true)
-				}
-				.subscribe(object : RxObserver<Boolean>() {
-					override fun onFinish(data: Boolean?) {
-						request(resultArray, studentList, doSaveListener, map, doneListener, maxIndex, index + 1)
-					}
-
+		Observable.create<Boolean> {
+			Thread.sleep(200)
+			it.onComplete()
+		}
+				.subscribeOn(Schedulers.newThread())
+				.observeOn(AndroidSchedulers.mainThread())
+				.subscribe(object : OnlyCompleteObserver<Boolean>() {
 					override fun onError(e: Throwable) {
 						Logs.wtf("onError: ", e)
+					}
+
+					override fun onFinish(data: Boolean?) {
+						request(resultArray, studentList, doSaveListener, map, doneListener, maxIndex, index + 1)
 					}
 				})
 	}

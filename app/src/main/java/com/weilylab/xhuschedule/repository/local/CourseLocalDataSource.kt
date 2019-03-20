@@ -10,53 +10,56 @@ import com.weilylab.xhuschedule.repository.remote.CourseRemoteDataSource
 import com.weilylab.xhuschedule.utils.*
 import com.weilylab.xhuschedule.utils.userDo.CourseUtil
 import com.zhuangfei.timetable.model.Schedule
+import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
+import io.reactivex.schedulers.Schedulers
 import vip.mystery0.logs.Logs
+import vip.mystery0.rx.DoNothingObserver
+import vip.mystery0.rx.OnlyCompleteObserver
 import vip.mystery0.rx.PackageData
+import vip.mystery0.rx.StartAndCompleteObserver
 
 object CourseLocalDataSource : CourseDataSource {
 	private val courseService: CourseService by lazy { CourseServiceImpl() }
 
 	override fun queryCourseByUsername(courseListLiveData: MutableLiveData<PackageData<List<Schedule>>>, student: Student, year: String?, term: String?, isFromCache: Boolean, isShowError: Boolean) {
-		RxObservable<List<Schedule>>()
-				.io {
-					it.onFinish(getRowCourseList(student, year, term))
-				}
-				.subscribe(object : RxObserver<List<Schedule>>() {
-					override fun onFinish(data: List<Schedule>?) {
-						if (data == null || data.isEmpty())
-							CourseRemoteDataSource.queryCourseByUsername(courseListLiveData, student, year, term, isFromCache, isShowError)
-						else {
-							courseListLiveData.value = PackageData.content(data)
-						}
-					}
-
+		Observable.create<List<Schedule>> {
+			it.onNext(getRowCourseList(student, year, term))
+			it.onComplete()
+		}
+				.subscribeOn(Schedulers.io())
+				.observeOn(AndroidSchedulers.mainThread())
+				.subscribe(object : OnlyCompleteObserver<List<Schedule>>() {
 					override fun onError(e: Throwable) {
 						Logs.wtf("onError: ", e)
 						if (isFromCache) {
 							CourseRemoteDataSource.queryCourseByUsername(courseListLiveData, student, year, term, isFromCache, isShowError)
 						} else {
 							courseListLiveData.value = PackageData.error(e)
+						}
+					}
+
+					override fun onFinish(data: List<Schedule>?) {
+						if (data == null || data.isEmpty())
+							CourseRemoteDataSource.queryCourseByUsername(courseListLiveData, student, year, term, isFromCache, isShowError)
+						else {
+							courseListLiveData.value = PackageData.content(data)
 						}
 					}
 				})
 	}
 
 	override fun queryCourseWithManyStudent(courseListLiveData: MutableLiveData<PackageData<List<Schedule>>>, studentList: List<Student>, year: String?, term: String?, isFromCache: Boolean, isShowError: Boolean) {
-		RxObservable<List<Schedule>>()
-				.io { emitter ->
-					val courses = ArrayList<Schedule>()
-					studentList.forEach { courses.addAll(getRowCourseList(it, year, term)) }
-					emitter.onFinish(courses)
-				}
-				.subscribe(object : RxObserver<List<Schedule>>() {
-					override fun onFinish(data: List<Schedule>?) {
-						if (data == null || data.isEmpty())
-							CourseRemoteDataSource.queryCourseWithManyStudent(courseListLiveData, studentList, year, term, isFromCache, isShowError)
-						else {
-							courseListLiveData.value = PackageData.content(data)
-						}
-					}
-
+		Observable.create<List<Schedule>> {
+			val courses = ArrayList<Schedule>()
+			studentList.forEach { s -> courses.addAll(getRowCourseList(s, year, term)) }
+			it.onNext(courses)
+			it.onComplete()
+		}
+				.subscribeOn(Schedulers.io())
+				.observeOn(AndroidSchedulers.mainThread())
+				.subscribe(object : OnlyCompleteObserver<List<Schedule>>() {
 					override fun onError(e: Throwable) {
 						Logs.wtf("onError: ", e)
 						if (isFromCache) {
@@ -65,16 +68,29 @@ object CourseLocalDataSource : CourseDataSource {
 							courseListLiveData.value = PackageData.error(e)
 						}
 					}
+
+					override fun onFinish(data: List<Schedule>?) {
+						if (data == null || data.isEmpty())
+							CourseRemoteDataSource.queryCourseWithManyStudent(courseListLiveData, studentList, year, term, isFromCache, isShowError)
+						else {
+							courseListLiveData.value = PackageData.content(data)
+						}
+					}
 				})
 	}
 
 	fun queryDistinctCourseByUsernameAndTerm(courseListLiveData: MutableLiveData<PackageData<List<Course>>>) {
-		courseListLiveData.value = PackageData.loading()
-		RxObservable<List<Course>>()
-				.io {
-					it.onFinish(courseService.queryDistinctCourseByUsernameAndTerm())
-				}
-				.subscribe(object : RxObserver<List<Course>>() {
+		Observable.create<List<Course>> {
+			it.onNext(courseService.queryDistinctCourseByUsernameAndTerm())
+			it.onComplete()
+		}
+				.subscribeOn(Schedulers.io())
+				.observeOn(AndroidSchedulers.mainThread())
+				.subscribe(object : StartAndCompleteObserver<List<Course>>() {
+					override fun onError(e: Throwable) {
+						courseListLiveData.value = PackageData.error(e)
+					}
+
 					override fun onFinish(data: List<Course>?) {
 						if (data == null || data.isEmpty())
 							courseListLiveData.value = PackageData.empty()
@@ -82,8 +98,8 @@ object CourseLocalDataSource : CourseDataSource {
 							courseListLiveData.value = PackageData.content(data)
 					}
 
-					override fun onError(e: Throwable) {
-						courseListLiveData.value = PackageData.error(e)
+					override fun onSubscribe(d: Disposable) {
+						courseListLiveData.value = PackageData.loading()
 					}
 				})
 	}
@@ -91,15 +107,16 @@ object CourseLocalDataSource : CourseDataSource {
 	fun getDistinctRowCourseList(): List<Course> = courseService.queryDistinctCourseByUsernameAndTerm()
 
 	fun updateCourseColor(course: Course, color: String) {
-		RxObservable<Boolean>()
-				.doThings { observableEmitter ->
-					val list = courseService.queryCourseByName(course.name)
-					list.forEach {
-						it.color = color
-						courseService.updateCourse(it)
-					}
-					observableEmitter.onFinish(true)
-				}
+		Observable.create<Boolean> {
+			val list = courseService.queryCourseByName(course.name)
+			list.forEach { c ->
+				c.color = color
+				courseService.updateCourse(c)
+			}
+			it.onComplete()
+		}
+				.subscribeOn(Schedulers.io())
+				.observeOn(AndroidSchedulers.mainThread())
 				.subscribe(DoNothingObserver<Boolean>())
 	}
 
@@ -139,11 +156,13 @@ object CourseLocalDataSource : CourseDataSource {
 	 * 该接口提供给自定义课程页面使用
 	 */
 	fun getAll(customThingLiveData: MutableLiveData<PackageData<List<Course>>>) {
-		RxObservable<List<Course>>()
-				.io { observableEmitter ->
-					observableEmitter.onFinish(courseService.queryAllCustomCourse())
-				}
-				.subscribe(object : RxObserver<List<Course>>() {
+		Observable.create<List<Course>> {
+			it.onNext(courseService.queryAllCustomCourse())
+			it.onComplete()
+		}
+				.subscribeOn(Schedulers.io())
+				.observeOn(AndroidSchedulers.mainThread())
+				.subscribe(object : OnlyCompleteObserver<List<Course>>() {
 					override fun onError(e: Throwable) {
 						customThingLiveData.value = PackageData.error(e)
 					}
@@ -159,12 +178,13 @@ object CourseLocalDataSource : CourseDataSource {
 	}
 
 	fun save(course: Course, listener: (Boolean, Throwable?) -> Unit) {
-		RxObservable<Boolean>()
-				.doThings {
-					courseService.addCourse(course)
-					it.onFinish(true)
-				}
-				.subscribe(object : RxObserver<Boolean>() {
+		Observable.create<Boolean> {
+			courseService.addCourse(course)
+			it.onComplete()
+		}
+				.subscribeOn(Schedulers.io())
+				.observeOn(AndroidSchedulers.mainThread())
+				.subscribe(object : OnlyCompleteObserver<Boolean>() {
 					override fun onError(e: Throwable) {
 						listener.invoke(false, e)
 					}
@@ -176,12 +196,13 @@ object CourseLocalDataSource : CourseDataSource {
 	}
 
 	fun update(course: Course, listener: (Boolean, Throwable?) -> Unit) {
-		RxObservable<Boolean>()
-				.doThings {
-					courseService.updateCourse(course)
-					it.onFinish(true)
-				}
-				.subscribe(object : RxObserver<Boolean>() {
+		Observable.create<Boolean> {
+			courseService.updateCourse(course)
+			it.onComplete()
+		}
+				.subscribeOn(Schedulers.io())
+				.observeOn(AndroidSchedulers.mainThread())
+				.subscribe(object : OnlyCompleteObserver<Boolean>() {
 					override fun onError(e: Throwable) {
 						listener.invoke(false, e)
 					}
@@ -193,12 +214,13 @@ object CourseLocalDataSource : CourseDataSource {
 	}
 
 	fun delete(course: Course, listener: (Boolean) -> Unit) {
-		RxObservable<Boolean>()
-				.doThings {
-					courseService.deleteCourse(course)
-					it.onFinish(true)
-				}
-				.subscribe(object : RxObserver<Boolean>() {
+		Observable.create<Boolean> {
+			courseService.deleteCourse(course)
+			it.onComplete()
+		}
+				.subscribeOn(Schedulers.io())
+				.observeOn(AndroidSchedulers.mainThread())
+				.subscribe(object : OnlyCompleteObserver<Boolean>() {
 					override fun onError(e: Throwable) {
 						listener.invoke(false)
 					}

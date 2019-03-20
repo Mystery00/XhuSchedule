@@ -9,7 +9,7 @@ import com.weilylab.xhuschedule.listener.DoSaveListener
 import com.weilylab.xhuschedule.listener.RequestListener
 import com.weilylab.xhuschedule.model.Notice
 import com.weilylab.xhuschedule.model.response.NoticeResponse
-import com.weilylab.xhuschedule.utils.RxObserver
+import vip.mystery0.rx.OnlyCompleteObserver
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import vip.mystery0.logs.Logs
@@ -30,7 +30,7 @@ object NoticeUtil {
 					noticeResponse
 				}
 				.observeOn(AndroidSchedulers.mainThread())
-				.subscribe(object : RxObserver<NoticeResponse>() {
+				.subscribe(object : OnlyCompleteObserver<NoticeResponse>() {
 					override fun onFinish(data: NoticeResponse?) {
 						when {
 							data == null -> requestListener.error(ResponseCodeConstants.UNKNOWN_ERROR, StringConstant.hint_data_null)
