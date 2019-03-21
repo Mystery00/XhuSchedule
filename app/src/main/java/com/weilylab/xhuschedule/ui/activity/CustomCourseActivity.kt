@@ -89,10 +89,10 @@ class CustomCourseActivity : XhuBaseActivity(R.layout.activity_custom_course) {
 					customCourseViewModel.weekIndex.value = week
 					customCourseViewModel.time.value = Pair(1, 1)
 				}
-//				dialog.dismiss()
+				dialog.dismiss()
 			}
 			Status.Error -> {
-//				dialog.dismiss()
+				dialog.dismiss()
 				Logs.wtf("studentInfoListObserver: ", data.error)
 				toastMessage(R.string.error_init_failed)
 				finish()
