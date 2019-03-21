@@ -539,4 +539,9 @@ class CustomCourseActivity : XhuBaseActivity(R.layout.activity_custom_course) {
 			else -> super.onOptionsItemSelected(item)
 		}
 	}
+
+	override fun onDestroy() {
+		super.onDestroy()
+		customCourseAdapter.release()
+	}
 }

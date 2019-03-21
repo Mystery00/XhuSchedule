@@ -10,7 +10,7 @@ object GsonFactory {
 
 	fun toJson(any: Any): String = gson.toJson(any)
 
-	fun <T> parse(string: String, clazz: Class<T>): T = gson.fromJson(string, clazz)
+	fun <T> parse(string: String, clazz: Class<T>): T? = gson.fromJson(string, clazz)
 
 	fun <T> parseInputStream(inputStream: InputStream, clazz: Class<T>): T = gson.fromJson(InputStreamReader(inputStream), clazz)
 

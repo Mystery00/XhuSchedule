@@ -119,8 +119,10 @@ object CourseRemoteDataSource : CourseDataSource {
 						}
 
 						override fun onFinish(data: List<Course>?) {
-							if (data == null || data.isEmpty())
+							if (data == null) {
+								statusLiveData.value = PackageData.content(false)
 								return
+							}
 							UserUtil.setUserData(student, key, GsonFactory.toJson(SyncCustomCourse(data)), object : RequestListener<Boolean> {
 								override fun done(t: Boolean) {
 									statusLiveData.value = PackageData.content(false)
@@ -147,7 +149,7 @@ object CourseRemoteDataSource : CourseDataSource {
 			UserUtil.getUserData(student, key, object : DoSaveListener<GetUserDataResponse> {
 				override fun doSave(t: GetUserDataResponse) {
 					val sync = GsonFactory.parse(t.value, SyncCustomCourse::class.java)
-					CourseLocalDataSource.syncLocal(sync.list, student.username)
+					CourseLocalDataSource.syncLocal(sync?.list ?: emptyList(), student.username)
 				}
 			}, object : RequestListener<String> {
 				override fun done(t: String) {

@@ -14,13 +14,12 @@ import com.weilylab.xhuschedule.databinding.ItemListCustomCourseBinding
 import com.weilylab.xhuschedule.databinding.ItemListCustomCourseGroupBinding
 import com.weilylab.xhuschedule.model.Course
 import com.weilylab.xhuschedule.utils.userDo.CourseUtil
-import vip.mystery0.logs.Logs
 import vip.mystery0.tools.base.binding.BaseMultiBindingRecyclerViewAdapter
 
 class CustomCourseAdapter(private val context: Context) : BaseMultiBindingRecyclerViewAdapter() {
 	private var clickListener: ((Course) -> Unit)? = null
 	private val expandList = ArrayList<String>()
-	private val map = HashMap<String, List<Course>>()
+	private val map = HashMap<String, ArrayList<Course>>()
 	private var arrowAnimation: ObjectAnimator? = null
 
 	companion object {
@@ -32,9 +31,16 @@ class CustomCourseAdapter(private val context: Context) : BaseMultiBindingRecycl
 	fun updateMap() {
 		map.clear()
 		val key = items.filter { it is String } as List<String>
+		expandList.clear()
 		expandList.addAll(key)
 		key.forEach { k ->
-			map[k] = (items.filter { (it is Course) && (it.studentID == k) } as List<Course>).sortedBy { it.name }
+			val list = map[k]
+			if (list != null)
+				list.clear()
+			else
+				map[k] = ArrayList()
+			map[k]?.addAll(items.filter { (it is Course) && (it.studentID == k) } as List<Course>)
+			map[k]?.sortBy { it.name }
 		}
 	}
 
@@ -42,8 +48,12 @@ class CustomCourseAdapter(private val context: Context) : BaseMultiBindingRecycl
 		when {
 			(binding is ItemListCustomCourseGroupBinding) && (data is String) -> {
 				binding.textViewUsername.text = data
-				if (expandList.contains(data))
-					binding.imageView
+				arrowAnimation?.cancel()
+				arrowAnimation = if (!expandList.contains(data))
+					ObjectAnimator.ofFloat(binding.imageView, "rotation", 180F, 0F).setDuration(10)
+				else
+					ObjectAnimator.ofFloat(binding.imageView, "rotation", 0F, 180F).setDuration(10)
+				arrowAnimation?.start()
 				binding.root.setOnClickListener {
 					arrowAnimation?.cancel()
 					if (expandList.contains(data)) {//收起
@@ -51,9 +61,7 @@ class CustomCourseAdapter(private val context: Context) : BaseMultiBindingRecycl
 						arrowAnimation?.start()
 						expandList.remove(data)
 						map[data]!!.forEach {
-							val index = items.indexOf(it)
-							notifyItemRemoved(index)
-							items.removeAt(index)
+							notifyItemRemoved(items.indexOf(it))
 						}
 						items.removeAll(map[data]!!)
 					} else {//展开
@@ -94,5 +102,13 @@ class CustomCourseAdapter(private val context: Context) : BaseMultiBindingRecycl
 
 	fun setOnClickListener(listener: (Course) -> Unit) {
 		this.clickListener = listener
+	}
+
+	fun release() {
+		arrowAnimation?.cancel()
+		map.keys.forEach {
+			map[it]!!.clear()
+		}
+		map.clear()
 	}
 }
