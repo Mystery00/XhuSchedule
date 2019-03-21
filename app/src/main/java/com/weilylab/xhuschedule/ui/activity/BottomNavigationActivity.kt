@@ -488,4 +488,10 @@ class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_naviga
 			}
 		}
 	}
+
+	override fun onDestroy() {
+		super.onDestroy()
+		animation?.cancel()
+		arrowAnimation?.cancel()
+	}
 }

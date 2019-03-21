@@ -112,6 +112,7 @@
 	<string name="hint_empty_couse_week">周数不能为空！</string>
 	<string name="hint_permission_deny">权限被拒绝，无法使用</string>
 	<string name="hint_check_update_done">检查更新完成！</string>
+	<string name="hint_sync_done">同步完成！</string>
 
 	<string name="hint_null_course_data">这里什么都没有(ŎдŎ;)</string>
 

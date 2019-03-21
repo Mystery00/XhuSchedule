@@ -89,10 +89,10 @@ class CustomCourseActivity : XhuBaseActivity(R.layout.activity_custom_course) {
 					customCourseViewModel.weekIndex.value = week
 					customCourseViewModel.time.value = Pair(1, 1)
 				}
-				dialog.dismiss()
+//				dialog.dismiss()
 			}
 			Status.Error -> {
-				dialog.dismiss()
+//				dialog.dismiss()
 				Logs.wtf("studentInfoListObserver: ", data.error)
 				toastMessage(R.string.error_init_failed)
 				finish()
@@ -157,8 +157,14 @@ class CustomCourseActivity : XhuBaseActivity(R.layout.activity_custom_course) {
 				hideSyncDialog()
 				//false 表示上传到服务器，true 表示下载到本地
 				//表示是否需要在操作之后刷新列表数据
-				if (it.data!!)
+				if (it.data!!) {
 					refresh()
+					Snackbar.make(coordinatorLayout, R.string.hint_sync_done, Snackbar.LENGTH_SHORT)
+							.show()
+				} else {
+					Snackbar.make(coordinatorLayout, R.string.hint_sync_done, Snackbar.LENGTH_SHORT)
+							.show()
+				}
 			}
 			Status.Error -> {
 				Logs.wtfm("customCourseListObserver: ", it.error)
