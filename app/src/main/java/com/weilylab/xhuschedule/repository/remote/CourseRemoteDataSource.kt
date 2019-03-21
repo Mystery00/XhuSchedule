@@ -2,17 +2,26 @@ package com.weilylab.xhuschedule.repository.remote
 
 import androidx.lifecycle.MutableLiveData
 import com.weilylab.xhuschedule.constant.StringConstant
+import com.weilylab.xhuschedule.factory.GsonFactory
 import com.weilylab.xhuschedule.listener.DoSaveListener
 import com.weilylab.xhuschedule.listener.RequestListener
 import com.weilylab.xhuschedule.model.Course
 import com.weilylab.xhuschedule.model.Student
+import com.weilylab.xhuschedule.model.SyncCustomCourse
+import com.weilylab.xhuschedule.model.response.GetUserDataResponse
 import com.weilylab.xhuschedule.repository.ds.CourseDataSource
 import com.weilylab.xhuschedule.repository.local.CourseLocalDataSource
 import com.weilylab.xhuschedule.utils.ConfigurationUtil
 import com.weilylab.xhuschedule.utils.userDo.CourseUtil
+import com.weilylab.xhuschedule.utils.userDo.UserUtil
 import com.zhuangfei.timetable.model.Schedule
+import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
+import io.reactivex.schedulers.Schedulers
 import vip.mystery0.logs.Logs
 import vip.mystery0.rx.PackageData
+import vip.mystery0.rx.StartAndCompleteObserver
 import vip.mystery0.tools.utils.NetworkTools
 
 object CourseRemoteDataSource : CourseDataSource {
@@ -93,6 +102,64 @@ object CourseRemoteDataSource : CourseDataSource {
 				if (!isFromCache)
 					CourseLocalDataSource.queryCourseWithManyStudent(courseListLiveData, studentList, year, term, isFromCache, isShowError)
 			}
+		}
+	}
+
+	fun syncCustomCourseForServer(statusLiveData: MutableLiveData<PackageData<Boolean>>, student: Student, key: String) {
+		if (NetworkTools.isConnectInternet()) {
+			Observable.create<List<Course>> {
+				it.onNext(CourseLocalDataSource.getCustomCourseListByStudent(student.username))
+				it.onComplete()
+			}
+					.subscribeOn(Schedulers.io())
+					.observeOn(AndroidSchedulers.mainThread())
+					.subscribe(object : StartAndCompleteObserver<List<Course>>() {
+						override fun onError(e: Throwable) {
+							statusLiveData.value = PackageData.error(e)
+						}
+
+						override fun onFinish(data: List<Course>?) {
+							if (data == null || data.isEmpty())
+								return
+							UserUtil.setUserData(student, key, GsonFactory.toJson(SyncCustomCourse(data)), object : RequestListener<Boolean> {
+								override fun done(t: Boolean) {
+									statusLiveData.value = PackageData.content(false)
+								}
+
+								override fun error(rt: String, msg: String?) {
+									statusLiveData.value = PackageData.error(Exception(msg))
+								}
+							})
+						}
+
+						override fun onSubscribe(d: Disposable) {
+							statusLiveData.value = PackageData.loading()
+						}
+					})
+		} else {
+			statusLiveData.value = PackageData.error(Exception(StringConstant.hint_network_error))
+		}
+	}
+
+	fun syncCustomCourseForLocal(statusLiveData: MutableLiveData<PackageData<Boolean>>, student: Student, key: String) {
+		statusLiveData.value = PackageData.loading()
+		if (NetworkTools.isConnectInternet()) {
+			UserUtil.getUserData(student, key, object : DoSaveListener<GetUserDataResponse> {
+				override fun doSave(t: GetUserDataResponse) {
+					val sync = GsonFactory.parse(t.value, SyncCustomCourse::class.java)
+					CourseLocalDataSource.syncLocal(sync.list, student.username)
+				}
+			}, object : RequestListener<String> {
+				override fun done(t: String) {
+					statusLiveData.value = PackageData.content(true)
+				}
+
+				override fun error(rt: String, msg: String?) {
+					statusLiveData.value = PackageData.error(Exception(msg))
+				}
+			})
+		} else {
+			statusLiveData.value = PackageData.error(Exception(StringConstant.hint_network_error))
 		}
 	}
 }

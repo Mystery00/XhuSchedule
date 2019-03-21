@@ -136,6 +136,8 @@ object CourseLocalDataSource : CourseDataSource {
 	fun getCustomCourseListByUsername(username: String, year: String? = null, term: String? = null): List<Course> = courseService.queryCustomCourseByTerm(username, year
 			?: ConfigurationUtil.currentYear, term ?: ConfigurationUtil.currentTerm)
 
+	fun getCustomCourseListByStudent(username: String): List<Course> = courseService.queryCustomCourseByStudent(username)
+
 	fun saveCourseList(username: String, courseList: List<Course>, year: String? = null, term: String? = null) {
 		val savedList = courseService.queryCourseByUsernameAndTerm(username, year
 				?: ConfigurationUtil.currentYear, term ?: ConfigurationUtil.currentTerm)
@@ -155,23 +157,35 @@ object CourseLocalDataSource : CourseDataSource {
 	/**
 	 * 该接口提供给自定义课程页面使用
 	 */
-	fun getAll(customThingLiveData: MutableLiveData<PackageData<List<Course>>>) {
+	fun getAll(customCourseLiveData: MutableLiveData<PackageData<List<Any>>>) {
 		Observable.create<List<Course>> {
 			it.onNext(courseService.queryAllCustomCourse())
 			it.onComplete()
 		}
 				.subscribeOn(Schedulers.io())
+				.observeOn(Schedulers.computation())
+				.map {
+					val list = ArrayList<Course>()
+					list.addAll(it)
+					val map = list.groupBy { c -> c.studentID }
+					val result = ArrayList<Any>()
+					for (key in map.keys) {
+						result.add(key)
+						map.getValue(key).sortedBy { c -> c.name }.forEach { c -> result.add(c) }
+					}
+					result
+				}
 				.observeOn(AndroidSchedulers.mainThread())
-				.subscribe(object : OnlyCompleteObserver<List<Course>>() {
+				.subscribe(object : OnlyCompleteObserver<List<Any>>() {
 					override fun onError(e: Throwable) {
-						customThingLiveData.value = PackageData.error(e)
+						customCourseLiveData.value = PackageData.error(e)
 					}
 
-					override fun onFinish(data: List<Course>?) {
+					override fun onFinish(data: List<Any>?) {
 						when {
-							data == null -> customThingLiveData.value = PackageData.error(Exception("data is null"))
-							data.isEmpty() -> customThingLiveData.value = PackageData.empty(data)
-							else -> customThingLiveData.value = PackageData.content(data)
+							data == null -> customCourseLiveData.value = PackageData.error(Exception("data is null"))
+							data.isEmpty() -> customCourseLiveData.value = PackageData.empty(data)
+							else -> customCourseLiveData.value = PackageData.content(data)
 						}
 					}
 				})
@@ -190,7 +204,7 @@ object CourseLocalDataSource : CourseDataSource {
 					}
 
 					override fun onFinish(data: Boolean?) {
-						listener.invoke(data != null && data, null)
+						listener.invoke(true, null)
 					}
 				})
 	}
@@ -208,7 +222,7 @@ object CourseLocalDataSource : CourseDataSource {
 					}
 
 					override fun onFinish(data: Boolean?) {
-						listener.invoke(data != null && data, null)
+						listener.invoke(true, null)
 					}
 				})
 	}
@@ -226,8 +240,22 @@ object CourseLocalDataSource : CourseDataSource {
 					}
 
 					override fun onFinish(data: Boolean?) {
-						listener.invoke(data != null && data)
+						listener.invoke(true)
 					}
 				})
+	}
+
+	/**
+	 * 保存同步的数据
+	 */
+	fun syncLocal(courseList: List<Course>, username: String) {
+		val savedList = courseService.queryCustomCourseByStudent(username)
+		savedList.forEach { c ->
+			courseService.deleteCourse(c)
+		}
+		courseList.forEach { course ->
+			course.studentID = username
+			courseService.addCourse(course)
+		}
 	}
 }

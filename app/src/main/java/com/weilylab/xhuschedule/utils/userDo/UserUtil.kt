@@ -10,7 +10,9 @@ import com.weilylab.xhuschedule.listener.DoSaveListener
 import com.weilylab.xhuschedule.listener.RequestListener
 import com.weilylab.xhuschedule.model.Student
 import com.weilylab.xhuschedule.model.StudentInfo
+import com.weilylab.xhuschedule.model.response.GetUserDataResponse
 import com.weilylab.xhuschedule.model.response.LoginResponse
+import com.weilylab.xhuschedule.model.response.SetUserDataResponse
 import com.weilylab.xhuschedule.repository.local.StudentLocalDataSource
 import vip.mystery0.tools.utils.NetworkTools
 import vip.mystery0.rx.OnlyCompleteObserver
@@ -127,5 +129,90 @@ object UserUtil {
 				}
 			}
 		}
+	}
+
+	/**
+	 * 设置自定义数据
+	 */
+	fun setUserData(student: Student, key: String, value: String, requestListener: RequestListener<Boolean>, index: Int = 0) {
+		RetrofitFactory.retrofit
+				.create(UserAPI::class.java)
+				.setUserData(student.username, key, value)
+				.subscribeOn(Schedulers.io())
+				.map { GsonFactory.parse<SetUserDataResponse>(it) }
+				.observeOn(AndroidSchedulers.mainThread())
+				.subscribe(object : OnlyCompleteObserver<SetUserDataResponse>() {
+					override fun onError(e: Throwable) {
+						Logs.wtf("onError: ", e)
+						requestListener.error(ResponseCodeConstants.CATCH_ERROR, e.message)
+					}
+
+					override fun onFinish(data: SetUserDataResponse?) {
+						when {
+							data == null -> requestListener.error(ResponseCodeConstants.UNKNOWN_ERROR, StringConstant.hint_data_null)
+							data.rt == ResponseCodeConstants.DONE -> requestListener.done(true)
+							data.rt == ResponseCodeConstants.ERROR_NOT_LOGIN -> {
+								if (index == RETRY_TIME)
+									requestListener.error(ResponseCodeConstants.DO_TOO_MANY, StringConstant.hint_do_too_many)
+								else
+									login(student, null, object : RequestListener<Boolean> {
+										override fun done(t: Boolean) {
+											setUserData(student, key, value, requestListener, index + 1)
+										}
+
+										override fun error(rt: String, msg: String?) {
+											requestListener.error(rt, msg)
+										}
+									})
+							}
+							else -> requestListener.error(data.rt, data.msg)
+						}
+					}
+				})
+	}
+
+	/**
+	 * 设置自定义数据
+	 */
+	fun getUserData(student: Student, key: String, doSaveListener: DoSaveListener<GetUserDataResponse>?, requestListener: RequestListener<String>, index: Int = 0) {
+		RetrofitFactory.retrofit
+				.create(UserAPI::class.java)
+				.getUserData(student.username, key)
+				.subscribeOn(Schedulers.io())
+				.map {
+					val data = GsonFactory.parse<GetUserDataResponse>(it)
+					if (data.rt == ResponseCodeConstants.DONE)
+						doSaveListener?.doSave(data)
+					data
+				}
+				.observeOn(AndroidSchedulers.mainThread())
+				.subscribe(object : OnlyCompleteObserver<GetUserDataResponse>() {
+					override fun onError(e: Throwable) {
+						Logs.wtf("onError: ", e)
+						requestListener.error(ResponseCodeConstants.CATCH_ERROR, e.message)
+					}
+
+					override fun onFinish(data: GetUserDataResponse?) {
+						when {
+							data == null -> requestListener.error(ResponseCodeConstants.UNKNOWN_ERROR, StringConstant.hint_data_null)
+							data.rt == ResponseCodeConstants.DONE -> requestListener.done(data.value)
+							data.rt == ResponseCodeConstants.ERROR_NOT_LOGIN -> {
+								if (index == RETRY_TIME)
+									requestListener.error(ResponseCodeConstants.DO_TOO_MANY, StringConstant.hint_do_too_many)
+								else
+									login(student, null, object : RequestListener<Boolean> {
+										override fun done(t: Boolean) {
+											getUserData(student, key, doSaveListener, requestListener, index + 1)
+										}
+
+										override fun error(rt: String, msg: String?) {
+											requestListener.error(rt, msg)
+										}
+									})
+							}
+							else -> requestListener.error(data.rt, data.msg)
+						}
+					}
+				})
 	}
 }

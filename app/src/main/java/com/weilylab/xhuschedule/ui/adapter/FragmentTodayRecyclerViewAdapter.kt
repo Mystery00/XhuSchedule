@@ -3,6 +3,7 @@ package com.weilylab.xhuschedule.ui.adapter
 import android.content.Context
 import android.graphics.Color
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.databinding.DataBindingUtil
@@ -23,10 +24,10 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import vip.mystery0.logs.Logs
 import vip.mystery0.rx.StartAndCompleteObserver
-import vip.mystery0.tools.base.binding.BaseBindingRecyclerViewAdapter
+import vip.mystery0.tools.base.binding.BaseMultiBindingRecyclerViewAdapter
 import kotlin.collections.ArrayList
 
-class FragmentTodayRecyclerViewAdapter(private val context: Context) : BaseBindingRecyclerViewAdapter<Any, ViewDataBinding>(0) {
+class FragmentTodayRecyclerViewAdapter(private val context: Context) : BaseMultiBindingRecyclerViewAdapter() {
 	private var isRun = false
 	@Volatile
 	private var needRestart = true
@@ -94,7 +95,9 @@ class FragmentTodayRecyclerViewAdapter(private val context: Context) : BaseBindi
 		}
 	}
 
-	override fun getItemViewType(position: Int): Int = when (items[position]) {
+	override fun createBinding(viewType: Int): ViewDataBinding = DataBindingUtil.bind(View(context))!!
+
+	override fun bindViewType(position: Int, data: Any): Int = when (items[position]) {
 		is PoetySentence -> VIEW_TYPE_JRSC
 		is Schedule -> VIEW_TYPE_COURSE
 		is CustomThing -> VIEW_TYPE_THING

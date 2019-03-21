@@ -1,8 +1,10 @@
 package com.weilylab.xhuschedule.repository
 
 import com.weilylab.xhuschedule.model.Course
+import com.weilylab.xhuschedule.model.Student
 import com.weilylab.xhuschedule.repository.local.CourseLocalDataSource
 import com.weilylab.xhuschedule.repository.local.StudentLocalDataSource
+import com.weilylab.xhuschedule.repository.remote.CourseRemoteDataSource
 import com.weilylab.xhuschedule.viewmodel.CustomCourseViewModel
 import vip.mystery0.rx.PackageData
 import vip.mystery0.rx.Status.*
@@ -30,4 +32,8 @@ object CustomCourseRepository {
 		}
 		StudentLocalDataSource.queryAllStudentList(scoreViewModel.studentList)
 	}
+
+	fun syncCustomCourseForLocal(customCourseViewModel: CustomCourseViewModel, student: Student) = CourseRemoteDataSource.syncCustomCourseForLocal(customCourseViewModel.syncCustomCourse, student, "customCourse")
+
+	fun syncCustomCourseForServer(customCourseViewModel: CustomCourseViewModel, student: Student) = CourseRemoteDataSource.syncCustomCourseForServer(customCourseViewModel.syncCustomCourse, student, "customCourse")
 }

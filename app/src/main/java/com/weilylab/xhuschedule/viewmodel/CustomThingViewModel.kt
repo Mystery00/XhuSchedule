@@ -7,4 +7,5 @@ import vip.mystery0.rx.PackageData
 
 class CustomThingViewModel:ViewModel() {
 	val customThingList by lazy { MutableLiveData<PackageData<List<CustomThing>>>() }
+	val syncCustomThing by lazy { MutableLiveData<PackageData<Boolean>>() }
 }

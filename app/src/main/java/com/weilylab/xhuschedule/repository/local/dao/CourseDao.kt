@@ -20,6 +20,9 @@ interface CourseDao {
 	@Query("select * from tb_course where student_id = :username and course_year = :year and course_term = :term and edit_type = 1")
 	fun queryCustomCourseByTerm(username: String, year: String, term: String): List<Course>
 
+	@Query("select * from tb_course where student_id = :username and edit_type = 1")
+	fun queryCustomCourseByStudent(username: String): List<Course>
+
 	@Query("select * from tb_course where edit_type = 1")
 	fun queryAllCustomCourse(): List<Course>
 

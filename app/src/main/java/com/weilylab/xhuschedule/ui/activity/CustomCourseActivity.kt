@@ -3,6 +3,8 @@ package com.weilylab.xhuschedule.ui.activity
 import android.app.Dialog
 import android.content.res.ColorStateList
 import android.graphics.Color
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
@@ -52,6 +54,17 @@ class CustomCourseActivity : XhuBaseActivity(R.layout.activity_custom_course) {
 		ZLoadingDialog(this)
 				.setLoadingBuilder(Z_TYPE.SINGLE_CIRCLE)
 				.setHintText(getString(R.string.hint_dialog_init))
+				.setHintTextSize(16F)
+				.setCanceledOnTouchOutside(false)
+				.setDialogBackgroundColor(ContextCompat.getColor(this, R.color.colorWhiteBackground))
+				.setLoadingColor(ContextCompat.getColor(this, R.color.colorAccent))
+				.setHintTextColor(ContextCompat.getColor(this, R.color.colorAccent))
+				.create()
+	}
+	private val syncDialog: Dialog by lazy {
+		ZLoadingDialog(this)
+				.setLoadingBuilder(Z_TYPE.SINGLE_CIRCLE)
+				.setHintText(getString(R.string.hint_dialog_sync))
 				.setHintTextSize(16F)
 				.setCanceledOnTouchOutside(false)
 				.setDialogBackgroundColor(ContextCompat.getColor(this, R.color.colorWhiteBackground))
@@ -113,25 +126,46 @@ class CustomCourseActivity : XhuBaseActivity(R.layout.activity_custom_course) {
 		textViewTerm.text = text
 	}
 
-	private val customCourseListObserver = Observer<PackageData<List<Course>>> {
+	private val customCourseListObserver = Observer<PackageData<List<Any>>> {
 		when (it.status) {
 			Status.Loading -> showRefresh()
 			Status.Content -> {
 				hideRefresh()
-				hideNoDataLayout()
 				customCourseAdapter.items.clear()
 				customCourseAdapter.items.addAll(it.data!!)
+				customCourseAdapter.updateMap()
 				customCourseAdapter.notifyDataSetChanged()
+				checkData()
 			}
 			Status.Error -> {
 				Logs.wtfm("customCourseListObserver: ", it.error)
 				hideRefresh()
-				hideNoDataLayout()
+				checkData()
 				toastMessage(it.error?.message)
 			}
 			Status.Empty -> {
 				hideRefresh()
 				showNoDataLayout()
+			}
+		}
+	}
+
+	private val statusObserver = Observer<PackageData<Boolean>> {
+		when (it.status) {
+			Status.Loading -> showSyncDialog()
+			Status.Content -> {
+				hideSyncDialog()
+				//false 表示上传到服务器，true 表示下载到本地
+				//表示是否需要在操作之后刷新列表数据
+				if (it.data!!)
+					refresh()
+			}
+			Status.Error -> {
+				Logs.wtfm("customCourseListObserver: ", it.error)
+				hideSyncDialog()
+				toastMessage(it.error?.message)
+			}
+			Status.Empty -> {
 			}
 		}
 	}
@@ -182,23 +216,27 @@ class CustomCourseActivity : XhuBaseActivity(R.layout.activity_custom_course) {
 			override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
 				val position = viewHolder.adapterPosition
 				val item = customCourseAdapter.items.removeAt(position)
-				customCourseAdapter.notifyItemRemoved(position)
-				Snackbar.make(coordinatorLayout, R.string.hint_delete_done_snackbar, Snackbar.LENGTH_LONG)
-						.setAction(R.string.action_cancel_do) {
-							customCourseAdapter.items.add(position, item)
-							customCourseAdapter.notifyItemInserted(position)
-						}
-						.addCallback(object : Snackbar.Callback() {
-							override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
-								if (event != Snackbar.Callback.DISMISS_EVENT_ACTION) {
-									CustomCourseRepository.delete(item) {
-										LayoutRefreshConfigUtil.isRefreshTodayFragment = true
-									}
-									super.onDismissed(transientBottomBar, event)
-								}
+				if (item is Course) {
+					customCourseAdapter.notifyItemRemoved(position)
+					Snackbar.make(coordinatorLayout, R.string.hint_delete_done_snackbar, Snackbar.LENGTH_LONG)
+							.setAction(R.string.action_cancel_do) {
+								customCourseAdapter.items.add(position, item)
+								customCourseAdapter.notifyItemInserted(position)
 							}
-						})
-						.show()
+							.addCallback(object : Snackbar.Callback() {
+								override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
+									if (event != Snackbar.Callback.DISMISS_EVENT_ACTION) {
+										CustomCourseRepository.delete(item) {
+											LayoutRefreshConfigUtil.isRefreshTodayFragment = true
+										}
+										customCourseAdapter.updateMap()
+										checkData()
+										super.onDismissed(transientBottomBar, event)
+									}
+								}
+							})
+							.show()
+				}
 			}
 		}).attachToRecyclerView(recyclerView)
 		textViewTime.setOnClickListener {
@@ -333,6 +371,7 @@ class CustomCourseActivity : XhuBaseActivity(R.layout.activity_custom_course) {
 		customCourseViewModel.year.observe(this, yearObserver)
 		customCourseViewModel.term.observe(this, termObserver)
 		customCourseViewModel.customCourseList.observe(this, customCourseListObserver)
+		customCourseViewModel.syncCustomCourse.observe(this, statusObserver)
 	}
 
 	private fun refresh() {
@@ -367,8 +406,8 @@ class CustomCourseActivity : XhuBaseActivity(R.layout.activity_custom_course) {
 		isUpdate = data != null
 		buttonSave.setOnClickListener {
 			doSave(data ?: Course()) {
+				hideAddLayout()
 				if (it) {
-					hideAddLayout()
 					LayoutRefreshConfigUtil.isRefreshTodayFragment = true
 					refresh()
 				}
@@ -435,6 +474,23 @@ class CustomCourseActivity : XhuBaseActivity(R.layout.activity_custom_course) {
 			swipeRefreshLayout.isRefreshing = false
 	}
 
+	private fun showSyncDialog() {
+		if (!syncDialog.isShowing)
+			syncDialog.show()
+	}
+
+	private fun hideSyncDialog() {
+		if (syncDialog.isShowing)
+			syncDialog.dismiss()
+	}
+
+	private fun checkData() {
+		if (customCourseAdapter.items.isEmpty())
+			showNoDataLayout()
+		else
+			hideNoDataLayout()
+	}
+
 	private fun showNoDataLayout() {
 		try {
 			nullDataViewStub.inflate()
@@ -455,5 +511,32 @@ class CustomCourseActivity : XhuBaseActivity(R.layout.activity_custom_course) {
 			behavior.state = BottomSheetBehavior.STATE_HIDDEN
 		else
 			super.onBackPressed()
+	}
+
+	override fun onCreateOptionsMenu(menu: Menu): Boolean {
+		menuInflater.inflate(R.menu.menu_custom_course_thing, menu)
+		return true
+	}
+
+	override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+		return when (item?.itemId) {
+			R.id.action_upload -> {
+				val main = customCourseViewModel.studentList.value?.data?.find { it.isMain }
+				if (main == null)
+					toastMessage(R.string.error_init_failed)
+				else
+					CustomCourseRepository.syncCustomCourseForServer(customCourseViewModel, main)
+				true
+			}
+			R.id.action_download -> {
+				val main = customCourseViewModel.studentList.value?.data?.find { it.isMain }
+				if (main == null)
+					toastMessage(R.string.error_init_failed)
+				else
+					CustomCourseRepository.syncCustomCourseForLocal(customCourseViewModel, main)
+				true
+			}
+			else -> super.onOptionsItemSelected(item)
+		}
 	}
 }

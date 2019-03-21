@@ -13,6 +13,8 @@ interface CourseService {
 
 	fun queryCustomCourseByTerm(username: String, year: String, term: String): List<Course>
 
+	fun queryCustomCourseByStudent(username: String): List<Course>
+
 	fun queryAllCustomCourse(): List<Course>
 
 	fun queryDistinctCourseByUsernameAndTerm(): List<Course>

@@ -11,7 +11,8 @@ import vip.mystery0.rx.PackageData
 class CustomCourseViewModel : ViewModel() {
 	val studentList by lazy { MutableLiveData<PackageData<List<Student>>>() }
 	val studentInfoList by lazy { MediatorLiveData<PackageData<Map<Student, StudentInfo?>>>() }
-	val customCourseList by lazy { MutableLiveData<PackageData<List<Course>>>() }
+	val customCourseList by lazy { MutableLiveData<PackageData<List<Any>>>() }
+	val syncCustomCourse by lazy { MutableLiveData<PackageData<Boolean>>() }
 	val time by lazy { MutableLiveData<Pair<Int, Int>>() }
 	val weekIndex by lazy { MutableLiveData<Int>() }
 	val student by lazy { MutableLiveData<Student>() }

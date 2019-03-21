@@ -17,13 +17,13 @@ interface UserAPI {
 
 	@FormUrlEncoded
 	@POST("/User/setUserData")
-	fun setUserData(@Field("key") key: String, @Field("value") value: String, @Field("platform") platform: String = "Android"): Observable<ResponseBody>
+	fun setUserData(@Field("username") username: String, @Field("key") key: String, @Field("value") value: String, @Field("platform") platform: String = "Android"): Observable<ResponseBody>
 
 	@FormUrlEncoded
 	@POST("/User/getUserData")
-	fun getUserData(@Field("key") key: String, @Field("platform") platform: String = "Android"): Observable<ResponseBody>
+	fun getUserData(@Field("username") username: String, @Field("key") key: String, @Field("platform") platform: String = "Android"): Observable<ResponseBody>
 
 	@FormUrlEncoded
 	@POST("/User/delUserData")
-	fun delUserData(@Field("key") key: String, @Field("platform") platform: String = "Android"): Observable<ResponseBody>
+	fun delUserData(@Field("username") username: String, @Field("key") key: String, @Field("platform") platform: String = "Android"): Observable<ResponseBody>
 }
