@@ -27,6 +27,7 @@ import com.weilylab.xhuschedule.model.StudentInfo
 import com.weilylab.xhuschedule.repository.CustomCourseRepository
 import com.weilylab.xhuschedule.ui.adapter.CustomCourseAdapter
 import com.weilylab.xhuschedule.ui.adapter.CustomCourseWeekAdapter
+import com.weilylab.xhuschedule.utils.AnimationUtil
 import com.weilylab.xhuschedule.utils.CalendarUtil
 import com.weilylab.xhuschedule.utils.ConfigUtil
 import com.weilylab.xhuschedule.utils.LayoutRefreshConfigUtil
@@ -50,6 +51,8 @@ class CustomCourseActivity : XhuBaseActivity(R.layout.activity_custom_course) {
 	private lateinit var viewStubBinding: LayoutNullDataViewBinding
 	private val behavior by lazy { BottomSheetBehavior.from(nestedScrollView) }
 	private var isUpdate = false
+	private var collapsedHeight = 0
+	private var expandedHeight = 0
 	private val dialog: Dialog by lazy {
 		ZLoadingDialog(this)
 				.setLoadingBuilder(Z_TYPE.SINGLE_CIRCLE)
@@ -79,7 +82,9 @@ class CustomCourseActivity : XhuBaseActivity(R.layout.activity_custom_course) {
 			Status.Content -> {
 				val map = data.data!!
 				if (map.keys.isNotEmpty()) {
-					customCourseViewModel.student.value = map.keys.first { it.isMain }
+					val main = map.keys.first { it.isMain }
+					expandLayout.text = getString(R.string.hint_custom_course_sync, "${main.username}(${main.studentName})")
+					customCourseViewModel.student.value = main
 					customCourseViewModel.year.value = CalendarUtil.getSelectArray(null).last()
 					val now = Calendar.getInstance()
 					now.firstDayOfWeek = Calendar.MONDAY
@@ -191,6 +196,7 @@ class CustomCourseActivity : XhuBaseActivity(R.layout.activity_custom_course) {
 				android.R.color.holo_red_light)
 		swipeRefreshLayout.setDistanceToTriggerSync(100)
 		hideAddLayout()
+		initExpand()
 	}
 
 	override fun initData() {
@@ -369,6 +375,14 @@ class CustomCourseActivity : XhuBaseActivity(R.layout.activity_custom_course) {
 			})
 			colorPickerDialog.show(fragmentManager, "custom-course-color")
 		}
+		expandClose.setOnClickListener {
+			collapse()
+			expandClose.visibility = View.GONE
+		}
+		expandLayout.setOnClickListener {
+			expand()
+			expandClose.visibility = View.VISIBLE
+		}
 	}
 
 	private fun initViewModel() {
@@ -382,9 +396,32 @@ class CustomCourseActivity : XhuBaseActivity(R.layout.activity_custom_course) {
 		customCourseViewModel.syncCustomCourse.observe(this, statusObserver)
 	}
 
+	private fun initExpand() {
+		expandLayout.post {
+			collapsedHeight = expandLayout.measuredHeight
+			expandLayout.maxLines = Int.MAX_VALUE
+			expandLayout.postInvalidate()
+			expandLayout.post {
+				expandedHeight = expandLayout.measuredHeight
+			}
+		}
+	}
+
 	private fun refresh() {
 		showRefresh()
 		CustomCourseRepository.getAll(customCourseViewModel)
+	}
+
+	private fun expand() {
+		if (collapsedHeight == 0 || expandedHeight == 0)
+			return
+		AnimationUtil.expandLayout(expandLayout, collapsedHeight, expandedHeight, true)
+	}
+
+	private fun collapse() {
+		if (collapsedHeight == 0 || expandedHeight == 0)
+			return
+		AnimationUtil.expandLayout(expandLayout, collapsedHeight, expandedHeight, false)
 	}
 
 	private fun showAddLayout(data: Course? = null) {

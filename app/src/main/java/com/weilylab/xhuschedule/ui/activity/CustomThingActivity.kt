@@ -27,6 +27,7 @@ import com.weilylab.xhuschedule.databinding.LayoutNullDataViewBinding
 import com.weilylab.xhuschedule.model.CustomThing
 import com.weilylab.xhuschedule.repository.CustomThingRepository
 import com.weilylab.xhuschedule.ui.adapter.CustomThingAdapter
+import com.weilylab.xhuschedule.utils.AnimationUtil
 import com.weilylab.xhuschedule.utils.CalendarUtil
 import com.weilylab.xhuschedule.utils.ConfigUtil
 import com.weilylab.xhuschedule.utils.LayoutRefreshConfigUtil
@@ -53,6 +54,8 @@ class CustomThingActivity : XhuBaseActivity(R.layout.activity_custom_thing) {
 	private val timeFormatter by lazy { SimpleDateFormat("HH:mm", Locale.CHINA) }
 	private val saveDateTimeFormatter by lazy { SimpleDateFormat("yyyy年MM月dd日 HH:mm", Locale.CHINA) }
 	private var isUpdate = false
+	private var collapsedHeight = 0
+	private var expandedHeight = 0
 	private val syncDialog: Dialog by lazy {
 		ZLoadingDialog(this)
 				.setLoadingBuilder(Z_TYPE.SINGLE_CIRCLE)
@@ -127,6 +130,7 @@ class CustomThingActivity : XhuBaseActivity(R.layout.activity_custom_thing) {
 				android.R.color.holo_red_light)
 		swipeRefreshLayout.setDistanceToTriggerSync(100)
 		initAddLayout()
+		initExpand()
 	}
 
 	override fun initData() {
@@ -182,11 +186,30 @@ class CustomThingActivity : XhuBaseActivity(R.layout.activity_custom_thing) {
 						.show()
 			}
 		}).attachToRecyclerView(recyclerView)
+		expandClose.setOnClickListener {
+			collapse()
+			expandClose.visibility = View.GONE
+		}
+		expandLayout.setOnClickListener {
+			expand()
+			expandClose.visibility = View.VISIBLE
+		}
 	}
 
 	private fun initViewModel() {
 		customThingViewModel.customThingList.observe(this, customThingListObserver)
 		customThingViewModel.syncCustomThing.observe(this, statusObserver)
+	}
+
+	private fun initExpand() {
+		expandLayout.post {
+			collapsedHeight = expandLayout.measuredHeight
+			expandLayout.maxLines = Int.MAX_VALUE
+			expandLayout.postInvalidate()
+			expandLayout.post {
+				expandedHeight = expandLayout.measuredHeight
+			}
+		}
 	}
 
 	private fun refresh() {
@@ -319,6 +342,18 @@ class CustomThingActivity : XhuBaseActivity(R.layout.activity_custom_thing) {
 					toastMessage(t.message ?: getString(R.string.error_db_action))
 				listener.invoke(b)
 			}
+	}
+
+	private fun expand() {
+		if (collapsedHeight == 0 || expandedHeight == 0)
+			return
+		AnimationUtil.expandLayout(expandLayout, collapsedHeight, expandedHeight, true)
+	}
+
+	private fun collapse() {
+		if (collapsedHeight == 0 || expandedHeight == 0)
+			return
+		AnimationUtil.expandLayout(expandLayout, collapsedHeight, expandedHeight, false)
 	}
 
 	private fun showAddLayout(data: CustomThing? = null) {

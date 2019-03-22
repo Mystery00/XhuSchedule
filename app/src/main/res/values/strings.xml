@@ -138,6 +138,8 @@
 
 	<string name="hint_confirm_reset_user_img">确定要重置个人头像吗？</string>
 	<string name="hint_confirm_reset_background_img">确定要重置背景图片吗？</string>
+	<string name="hint_custom_course_sync">当前用户： %1$s \n\n温馨提示：同步功能是针对单个学生的，所以只会同步属于当前用户的数据，其他用户的数据依旧会在此处列出，但是不会更改。\n如果需要更改当前用户，请前往：账号管理-设置主账号 进行更改！</string>
+	<string name="hint_custom_thing_sync">温馨提示：\n自定义事项的数据同步仅针对主用户，所以只会同步到主用户的云端空间。\n在此处会列出所有的自定义事项，不区分用户，如果要同步，请确认需要同步到的用户空间是否正确！\n如果需要更改主用户，请前往：账号管理-设置主账号 进行更改！</string>
 
 	<string name="warning_enable_multi_user_mode">请确保您是双学位的学生或者有同时查看多个账号课表的需求。</string>
 

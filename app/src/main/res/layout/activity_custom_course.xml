@@ -50,6 +50,34 @@
 				android:layout_height="match_parent"
 				android:background="@color/colorGrayBackground">
 
+				<TextView
+					android:id="@+id/expandLayout"
+					android:layout_width="0dp"
+					android:layout_height="wrap_content"
+					android:layout_margin="8dp"
+					android:background="@drawable/drawable_shape_corner"
+					android:backgroundTint="@color/customHintBackgroundColor"
+					android:maxLines="1"
+					android:padding="8dp"
+					android:text="@string/hint_custom_course_sync"
+					android:textColor="#8A000000"
+					android:textSize="12sp"
+					app:layout_constraintBottom_toTopOf="@id/recyclerView"
+					app:layout_constraintEnd_toEndOf="parent"
+					app:layout_constraintStart_toStartOf="parent"
+					app:layout_constraintTop_toTopOf="parent" />
+
+				<ImageView
+					android:id="@+id/expandClose"
+					android:layout_width="24dp"
+					android:layout_height="24dp"
+					android:layout_margin="4dp"
+					android:contentDescription="@string/app_name"
+					android:src="@drawable/ic_action_close"
+					android:tint="#8A000000"
+					app:layout_constraintEnd_toEndOf="@id/expandLayout"
+					app:layout_constraintTop_toTopOf="@id/expandLayout" />
+
 				<androidx.recyclerview.widget.RecyclerView
 					android:id="@+id/recyclerView"
 					android:layout_width="0dp"
@@ -57,7 +85,7 @@
 					app:layout_constraintBottom_toBottomOf="parent"
 					app:layout_constraintEnd_toEndOf="parent"
 					app:layout_constraintStart_toStartOf="parent"
-					app:layout_constraintTop_toTopOf="parent" />
+					app:layout_constraintTop_toBottomOf="@id/expandLayout" />
 
 				<ViewStub
 					android:id="@+id/nullDataViewStub"

@@ -44,6 +44,8 @@
 	<color name="login_color_text">#4ea5ff</color>
 	<!--启动页背景色-->
 	<color name="splashColor">#2e85df</color>
+	<!--自定义课程和事项页面提示文本的背景颜色-->
+	<color name="customHintBackgroundColor">#00E676</color>
 
 	<!--通过这个属性获取是否是夜间模式-->
 	<color name="isNight">#FFFFFF</color>

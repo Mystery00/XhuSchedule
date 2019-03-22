@@ -1,8 +1,12 @@
 package com.weilylab.xhuschedule.utils
 
+import android.animation.IntEvaluator
+import android.animation.ValueAnimator
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
+import android.view.View
+import android.view.ViewGroup
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -28,5 +32,19 @@ object AnimationUtil {
 					layoutParams.alpha = alpha
 					context.window.attributes = layoutParams
 				}
+	}
+
+	fun expandLayout(target: View, collapsedHeight: Int, expandedHeight: Int, isExpand: Boolean) {
+		val start = if (isExpand) collapsedHeight else expandedHeight
+		val end = if (isExpand) expandedHeight else collapsedHeight
+		if (target.layoutParams.height == end)
+			return
+		val valueAnimator = ValueAnimator.ofInt(start, end)
+		val evaluator = IntEvaluator()
+		valueAnimator.addUpdateListener {
+			target.layoutParams.height = evaluator.evaluate(it.animatedFraction, start, end)
+			target.requestLayout()
+		}
+		valueAnimator.setDuration(200).start()
 	}
 }
