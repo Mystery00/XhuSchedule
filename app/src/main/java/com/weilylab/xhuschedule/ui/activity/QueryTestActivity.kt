@@ -200,7 +200,8 @@ class QueryTestActivity : XhuBaseActivity(R.layout.activity_query_test) {
 	override fun onOptionsItemSelected(item: MenuItem?): Boolean {
 		return when (item?.itemId) {
 			R.id.action_show_html -> {
-				WebViewActivity.intentTo(this, queryTestViewModel.html.value)
+				if (!queryTestViewModel.html.value.isNullOrEmpty())
+					WebViewActivity.intentTo(this, queryTestViewModel.html.value)
 				true
 			}
 			else -> {
