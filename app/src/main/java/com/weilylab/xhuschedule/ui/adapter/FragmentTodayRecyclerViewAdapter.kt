@@ -29,7 +29,6 @@ import kotlin.collections.ArrayList
 
 class FragmentTodayRecyclerViewAdapter(private val context: Context) : BaseMultiBindingRecyclerViewAdapter() {
 	private var isRun = false
-	@Volatile
 	private var needRestart = true
 	val tempList = ArrayList<Any>()
 

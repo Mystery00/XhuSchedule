@@ -6,9 +6,11 @@ import com.weilylab.xhuschedule.repository.local.service.impl.CustomThingService
 import com.weilylab.xhuschedule.utils.CalendarUtil
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import vip.mystery0.rx.OnlyCompleteObserver
 import vip.mystery0.rx.PackageData
+import vip.mystery0.rx.StartAndCompleteObserver
 
 object CustomThingLocalDataSource {
 	private val customThingService by lazy { CustomThingServiceImpl() }
@@ -22,7 +24,11 @@ object CustomThingLocalDataSource {
 				.observeOn(Schedulers.computation())
 				.map { it.filter { c -> CalendarUtil.isThingOnDay(c) } }
 				.observeOn(AndroidSchedulers.mainThread())
-				.subscribe(object : OnlyCompleteObserver<List<CustomThing>>() {
+				.subscribe(object : StartAndCompleteObserver<List<CustomThing>>() {
+					override fun onSubscribe(d: Disposable) {
+						customThingLiveData.value = PackageData.loading()
+					}
+
 					override fun onError(e: Throwable) {
 						customThingLiveData.value = PackageData.error(e)
 					}
@@ -77,7 +83,7 @@ object CustomThingLocalDataSource {
 					}
 
 					override fun onFinish(data: Boolean?) {
-						listener.invoke(data != null && data, null)
+						listener.invoke(true, null)
 					}
 				})
 	}
@@ -95,7 +101,7 @@ object CustomThingLocalDataSource {
 					}
 
 					override fun onFinish(data: Boolean?) {
-						listener.invoke(data != null && data, null)
+						listener.invoke(true, null)
 					}
 				})
 	}
@@ -113,8 +119,21 @@ object CustomThingLocalDataSource {
 					}
 
 					override fun onFinish(data: Boolean?) {
-						listener.invoke(data != null && data)
+						listener.invoke(true)
 					}
 				})
+	}
+
+	/**
+	 * 保存同步的数据
+	 */
+	fun syncLocal(courseList: List<CustomThing>) {
+		val savedList = getRawCustomThingList()
+		savedList.forEach { t ->
+			customThingService.deleteThing(t)
+		}
+		courseList.forEach { thing ->
+			customThingService.addThing(thing)
+		}
 	}
 }

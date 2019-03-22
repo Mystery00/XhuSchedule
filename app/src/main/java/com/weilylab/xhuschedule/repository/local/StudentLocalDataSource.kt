@@ -92,7 +92,7 @@ object StudentLocalDataSource : StudentDataSource {
 
 	fun queryMainStudent(listener: (PackageData<Student>) -> Unit) {
 		Observable.create<Student> {
-			val student = studentService.queryMainStudent()
+			val student = queryMainStudent()
 			if (student != null)
 				it.onNext(student)
 			it.onComplete()
@@ -112,6 +112,8 @@ object StudentLocalDataSource : StudentDataSource {
 					}
 				})
 	}
+
+	fun queryMainStudent(): Student? = studentService.queryMainStudent()
 
 	fun saveStudent(student: Student) {
 		val mainStudent = studentService.queryMainStudent()

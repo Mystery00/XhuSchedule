@@ -224,19 +224,21 @@ class CustomCourseActivity : XhuBaseActivity(R.layout.activity_custom_course) {
 				val item = customCourseAdapter.items.removeAt(position)
 				if (item is Course) {
 					customCourseAdapter.notifyItemRemoved(position)
+					checkData()
 					Snackbar.make(coordinatorLayout, R.string.hint_delete_done_snackbar, Snackbar.LENGTH_LONG)
 							.setAction(R.string.action_cancel_do) {
 								customCourseAdapter.items.add(position, item)
 								customCourseAdapter.notifyItemInserted(position)
+								checkData()
 							}
 							.addCallback(object : Snackbar.Callback() {
 								override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
 									if (event != Snackbar.Callback.DISMISS_EVENT_ACTION) {
 										CustomCourseRepository.delete(item) {
 											LayoutRefreshConfigUtil.isRefreshTodayFragment = true
+											LayoutRefreshConfigUtil.isRefreshTableFragment = true
 										}
 										customCourseAdapter.updateMap()
-										checkData()
 										super.onDismissed(transientBottomBar, event)
 									}
 								}
@@ -530,16 +532,22 @@ class CustomCourseActivity : XhuBaseActivity(R.layout.activity_custom_course) {
 				val main = customCourseViewModel.studentList.value?.data?.find { it.isMain }
 				if (main == null)
 					toastMessage(R.string.error_init_failed)
-				else
+				else {
 					CustomCourseRepository.syncCustomCourseForServer(customCourseViewModel, main)
+					LayoutRefreshConfigUtil.isRefreshTodayFragment = true
+					LayoutRefreshConfigUtil.isRefreshTableFragment = true
+				}
 				true
 			}
 			R.id.action_download -> {
 				val main = customCourseViewModel.studentList.value?.data?.find { it.isMain }
 				if (main == null)
 					toastMessage(R.string.error_init_failed)
-				else
+				else {
 					CustomCourseRepository.syncCustomCourseForLocal(customCourseViewModel, main)
+					LayoutRefreshConfigUtil.isRefreshTodayFragment = true
+					LayoutRefreshConfigUtil.isRefreshTableFragment = true
+				}
 				true
 			}
 			else -> super.onOptionsItemSelected(item)

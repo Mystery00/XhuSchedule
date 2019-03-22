@@ -1,10 +1,13 @@
 package com.weilylab.xhuschedule.ui.activity
 
 import android.app.DatePickerDialog
+import android.app.Dialog
 import android.app.TimePickerDialog
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
@@ -28,6 +31,8 @@ import com.weilylab.xhuschedule.utils.CalendarUtil
 import com.weilylab.xhuschedule.utils.ConfigUtil
 import com.weilylab.xhuschedule.utils.LayoutRefreshConfigUtil
 import com.weilylab.xhuschedule.viewmodel.CustomThingViewModel
+import com.zyao89.view.zloading.ZLoadingDialog
+import com.zyao89.view.zloading.Z_TYPE
 
 import kotlinx.android.synthetic.main.activity_custom_thing.*
 import vip.mystery0.logs.Logs
@@ -48,26 +53,63 @@ class CustomThingActivity : XhuBaseActivity(R.layout.activity_custom_thing) {
 	private val timeFormatter by lazy { SimpleDateFormat("HH:mm", Locale.CHINA) }
 	private val saveDateTimeFormatter by lazy { SimpleDateFormat("yyyy年MM月dd日 HH:mm", Locale.CHINA) }
 	private var isUpdate = false
+	private val syncDialog: Dialog by lazy {
+		ZLoadingDialog(this)
+				.setLoadingBuilder(Z_TYPE.SINGLE_CIRCLE)
+				.setHintText(getString(R.string.hint_dialog_sync))
+				.setHintTextSize(16F)
+				.setCanceledOnTouchOutside(false)
+				.setDialogBackgroundColor(ContextCompat.getColor(this, R.color.colorWhiteBackground))
+				.setLoadingColor(ContextCompat.getColor(this, R.color.colorAccent))
+				.setHintTextColor(ContextCompat.getColor(this, R.color.colorAccent))
+				.create()
+	}
 
 	private val customThingListObserver = Observer<PackageData<List<CustomThing>>> {
 		when (it.status) {
 			Status.Loading -> showRefresh()
 			Status.Content -> {
 				hideRefresh()
-				hideNoDataLayout()
 				customThingAdapter.items.clear()
 				customThingAdapter.items.addAll(it.data!!)
 				customThingAdapter.notifyDataSetChanged()
+				checkData()
 			}
 			Status.Error -> {
 				Logs.wtfm("customThingListObserver: ", it.error)
 				hideRefresh()
-				hideNoDataLayout()
+				checkData()
 				toastMessage(it.error?.message)
 			}
 			Status.Empty -> {
 				hideRefresh()
 				showNoDataLayout()
+			}
+		}
+	}
+
+	private val statusObserver = Observer<PackageData<Boolean>> {
+		when (it.status) {
+			Status.Loading -> showSyncDialog()
+			Status.Content -> {
+				hideSyncDialog()
+				//false 表示上传到服务器，true 表示下载到本地
+				//表示是否需要在操作之后刷新列表数据
+				if (it.data!!) {
+					refresh()
+					Snackbar.make(coordinatorLayout, R.string.hint_sync_done, Snackbar.LENGTH_SHORT)
+							.show()
+				} else {
+					Snackbar.make(coordinatorLayout, R.string.hint_sync_done, Snackbar.LENGTH_SHORT)
+							.show()
+				}
+			}
+			Status.Error -> {
+				Logs.wtfm("customCourseListObserver: ", it.error)
+				hideSyncDialog()
+				toastMessage(it.error?.message)
+			}
+			Status.Empty -> {
 			}
 		}
 	}
@@ -120,10 +162,12 @@ class CustomThingActivity : XhuBaseActivity(R.layout.activity_custom_thing) {
 				val position = viewHolder.adapterPosition
 				val item = customThingAdapter.items.removeAt(position)
 				customThingAdapter.notifyItemRemoved(position)
+				checkData()
 				Snackbar.make(coordinatorLayout, R.string.hint_delete_done_snackbar, Snackbar.LENGTH_LONG)
 						.setAction(R.string.action_cancel_do) {
 							customThingAdapter.items.add(position, item)
 							customThingAdapter.notifyItemInserted(position)
+							checkData()
 						}
 						.addCallback(object : Snackbar.Callback() {
 							override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
@@ -142,6 +186,7 @@ class CustomThingActivity : XhuBaseActivity(R.layout.activity_custom_thing) {
 
 	private fun initViewModel() {
 		customThingViewModel.customThingList.observe(this, customThingListObserver)
+		customThingViewModel.syncCustomThing.observe(this, statusObserver)
 	}
 
 	private fun refresh() {
@@ -337,6 +382,23 @@ class CustomThingActivity : XhuBaseActivity(R.layout.activity_custom_thing) {
 			swipeRefreshLayout.isRefreshing = false
 	}
 
+	private fun showSyncDialog() {
+		if (!syncDialog.isShowing)
+			syncDialog.show()
+	}
+
+	private fun hideSyncDialog() {
+		if (syncDialog.isShowing)
+			syncDialog.dismiss()
+	}
+
+	private fun checkData() {
+		if (customThingAdapter.items.isEmpty())
+			showNoDataLayout()
+		else
+			hideNoDataLayout()
+	}
+
 	private fun showNoDataLayout() {
 		try {
 			nullDataViewStub.inflate()
@@ -350,5 +412,24 @@ class CustomThingActivity : XhuBaseActivity(R.layout.activity_custom_thing) {
 		if (::viewStubBinding.isInitialized)
 			viewStubBinding.root.visibility = View.GONE
 		recyclerView.visibility = View.VISIBLE
+	}
+
+	override fun onCreateOptionsMenu(menu: Menu): Boolean {
+		menuInflater.inflate(R.menu.menu_custom_course_thing, menu)
+		return true
+	}
+
+	override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+		return when (item?.itemId) {
+			R.id.action_upload -> {
+				CustomThingRepository.syncCustomThingForServer(customThingViewModel)
+				true
+			}
+			R.id.action_download -> {
+				CustomThingRepository.syncCustomThingForLocal(customThingViewModel)
+				true
+			}
+			else -> super.onOptionsItemSelected(item)
+		}
 	}
 }
