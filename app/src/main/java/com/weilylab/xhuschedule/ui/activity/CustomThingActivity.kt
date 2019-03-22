@@ -347,13 +347,13 @@ class CustomThingActivity : XhuBaseActivity(R.layout.activity_custom_thing) {
 	private fun expand() {
 		if (collapsedHeight == 0 || expandedHeight == 0)
 			return
-		AnimationUtil.expandLayout(expandLayout, collapsedHeight, expandedHeight, true)
+		AnimationUtil.expandLayout(expandLayout, collapsedHeight, expandedHeight)
 	}
 
 	private fun collapse() {
 		if (collapsedHeight == 0 || expandedHeight == 0)
 			return
-		AnimationUtil.expandLayout(expandLayout, collapsedHeight, expandedHeight, false)
+		AnimationUtil.expandLayout(expandLayout, expandedHeight, collapsedHeight)
 	}
 
 	private fun showAddLayout(data: CustomThing? = null) {

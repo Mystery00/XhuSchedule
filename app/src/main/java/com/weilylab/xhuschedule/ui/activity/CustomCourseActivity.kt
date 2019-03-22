@@ -227,8 +227,8 @@ class CustomCourseActivity : XhuBaseActivity(R.layout.activity_custom_course) {
 
 			override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
 				val position = viewHolder.adapterPosition
-				val item = customCourseAdapter.items.removeAt(position)
-				if (item is Course) {
+				if (customCourseAdapter.items[position] is Course) {
+					val item = customCourseAdapter.items.removeAt(position) as Course
 					customCourseAdapter.notifyItemRemoved(position)
 					checkData()
 					Snackbar.make(coordinatorLayout, R.string.hint_delete_done_snackbar, Snackbar.LENGTH_LONG)
@@ -250,6 +250,8 @@ class CustomCourseActivity : XhuBaseActivity(R.layout.activity_custom_course) {
 								}
 							})
 							.show()
+				}else{
+					customCourseAdapter.notifyItemChanged(position)
 				}
 			}
 		}).attachToRecyclerView(recyclerView)
@@ -415,13 +417,13 @@ class CustomCourseActivity : XhuBaseActivity(R.layout.activity_custom_course) {
 	private fun expand() {
 		if (collapsedHeight == 0 || expandedHeight == 0)
 			return
-		AnimationUtil.expandLayout(expandLayout, collapsedHeight, expandedHeight, true)
+		AnimationUtil.expandLayout(expandLayout, collapsedHeight, expandedHeight)
 	}
 
 	private fun collapse() {
 		if (collapsedHeight == 0 || expandedHeight == 0)
 			return
-		AnimationUtil.expandLayout(expandLayout, collapsedHeight, expandedHeight, false)
+		AnimationUtil.expandLayout(expandLayout, expandedHeight, collapsedHeight)
 	}
 
 	private fun showAddLayout(data: Course? = null) {

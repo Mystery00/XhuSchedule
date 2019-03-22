@@ -30,7 +30,11 @@ object CourseLocalDataSource : CourseDataSource {
 		}
 				.subscribeOn(Schedulers.io())
 				.observeOn(AndroidSchedulers.mainThread())
-				.subscribe(object : OnlyCompleteObserver<List<Schedule>>() {
+				.subscribe(object : StartAndCompleteObserver<List<Schedule>>() {
+					override fun onSubscribe(d: Disposable) {
+						courseListLiveData.value = PackageData.loading()
+					}
+
 					override fun onError(e: Throwable) {
 						Logs.wtf("onError: ", e)
 						if (isFromCache) {
@@ -59,7 +63,11 @@ object CourseLocalDataSource : CourseDataSource {
 		}
 				.subscribeOn(Schedulers.io())
 				.observeOn(AndroidSchedulers.mainThread())
-				.subscribe(object : OnlyCompleteObserver<List<Schedule>>() {
+				.subscribe(object : StartAndCompleteObserver<List<Schedule>>() {
+					override fun onSubscribe(d: Disposable) {
+						courseListLiveData.value = PackageData.loading()
+					}
+
 					override fun onError(e: Throwable) {
 						Logs.wtf("onError: ", e)
 						if (isFromCache) {
