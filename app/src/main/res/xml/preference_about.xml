@@ -7,6 +7,7 @@
 			android:title="@string/title_update_log" />
 
 		<Preference
+			android:icon="@drawable/ic_source_code"
 			android:summary="@string/summary_source_code"
 			android:title="@string/title_source_code">
 			<intent
@@ -15,6 +16,7 @@
 		</Preference>
 
 		<Preference
+			android:icon="@drawable/ic_open_source_license"
 			android:summary="@string/summary_open_source_license"
 			android:title="@string/title_open_source_license">
 			<intent
@@ -56,22 +58,27 @@
 	<PreferenceCategory android:title="@string/screen_category_developer">
 
 		<Preference
+			android:icon="@mipmap/img_yue"
 			android:summary="@string/summary_icon"
 			android:title="@string/title_icon_ui" />
 
 		<Preference
+			android:icon="@mipmap/img_pan"
 			android:summary="@string/summary_back"
 			android:title="@string/title_back" />
 
 		<Preference
+			android:icon="@mipmap/img_johnny"
 			android:summary="@string/summary_ui"
 			android:title="@string/title_ui" />
 
 		<Preference
+			android:icon="@mipmap/img_quinn"
 			android:summary="@string/summary_wx"
 			android:title="@string/title_wx" />
 
 		<Preference
+			android:icon="@mipmap/img_mystery0"
 			android:summary="@string/summary_developer"
 			android:title="@string/title_developer">
 

@@ -17,6 +17,7 @@
 			android:title="@string/title_night_mode" />
 
 		<CheckBoxPreference
+			android:icon="@drawable/ic_enable_viewpager_transform"
 			android:key="@string/key_enable_viewpager_transform"
 			android:title="@string/title_enable_viewpager_transform" />
 
@@ -64,7 +65,7 @@
 
 		<CheckBoxPreference
 			android:key="@string/key_show_jrsc_translation"
-			android:title="@string/title_show_jrsc_translation"/>
+			android:title="@string/title_show_jrsc_translation" />
 
 	</PreferenceCategory>
 

@@ -25,6 +25,7 @@
 	</Preference>
 
 	<Preference
+		android:icon="@drawable/ic_custom_course_color"
 		android:key="@string/key_custom_course_color"
 		android:title="@string/title_custom_course_color">
 		<intent
