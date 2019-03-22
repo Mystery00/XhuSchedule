@@ -13,6 +13,7 @@ import androidx.preference.Preference
 import com.weilylab.xhuschedule.R
 import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
+import android.graphics.Color
 import android.net.Uri
 import android.os.Build
 import android.widget.Toast
@@ -241,7 +242,7 @@ class SettingsPreferenceFragment : XhuBasePreferenceFragment(R.xml.preference_se
 
 	private fun requestImageChoose(requestCode: Int) {
 		requestPermissionsOnFragment(arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE)) { code, array ->
-			if (array[0] == PackageManager.PERMISSION_GRANTED) {
+			if (array.isEmpty() || array[0] == PackageManager.PERMISSION_GRANTED) {
 				Matisse.from(this)
 						.choose(MimeType.of(MimeType.JPEG, MimeType.PNG, MimeType.BMP))
 						.showSingleMediaType(true)
@@ -250,6 +251,7 @@ class SettingsPreferenceFragment : XhuBasePreferenceFragment(R.xml.preference_se
 						.restrictOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
 						.thumbnailScale(0.85f)
 						.imageEngine(CustomGlideEngine())
+						.theme(if (ContextCompat.getColor(activity!!, R.color.isNight) == Color.WHITE) R.style.Matisse_Zhihu else R.style.Matisse_Dracula)
 						.forResult(requestCode)
 			} else {
 				Snackbar.make(activity!!.window.decorView, R.string.hint_permission_deny, Snackbar.LENGTH_LONG)
