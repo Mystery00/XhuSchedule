@@ -63,7 +63,7 @@ class CheckUpdateService : Service() {
 				.subscribe(object : OnlyCompleteObserver<Version>() {
 					override fun onFinish(data: Version?) {
 						if (data != null && data.versionCode.toInt() > getString(R.string.app_version_code).toInt())
-							showUpdateDialog(data, intent.getBooleanExtra(CHECK_ACTION_BY_MANUAL, false))
+							showUpdateDialog(data, intent.getBooleanExtra(CHECK_ACTION_BY_MANUAL, false), data.must == "1")
 						stopSelf()
 						LocalBroadcastManager.getInstance(this@CheckUpdateService)
 								.sendBroadcast(Intent(SettingsPreferenceFragment.ACTION_CHECK_UPDATE_DONE))
@@ -77,7 +77,7 @@ class CheckUpdateService : Service() {
 		return super.onStartCommand(intent, flags, startId)
 	}
 
-	private fun showUpdateDialog(version: Version, checkByManual: Boolean) {
+	private fun showUpdateDialog(version: Version, checkByManual: Boolean, isMust: Boolean) {
 		if (!checkByManual) {
 			val ignoreVersionList = ConfigurationUtil.ignoreUpdateVersion.split('!')
 			if (ignoreVersionList.indexOf(version.versionCode) != -1)
@@ -86,7 +86,16 @@ class CheckUpdateService : Service() {
 		Observable.create<Boolean> {
 			while (ActivityManagerTools.currentActivity() is SplashActivity || ActivityManagerTools.currentActivity() is GuideActivity || ActivityManagerTools.currentActivity() is SplashImageActivity)
 				Thread.sleep(1000)
-			it.onNext(ConfigurationUtil.autoCheckUpdate)
+			when {
+				//自动检查更新
+				ConfigurationUtil.autoCheckUpdate -> it.onNext(true)
+				//没有开启自动更新但是是必须的更新
+				!ConfigurationUtil.autoCheckUpdate && isMust -> it.onNext(true)
+				//手动检查更新
+				checkByManual -> it.onNext(true)
+				//其他情况
+				else -> it.onNext(false)
+			}
 			it.onComplete()
 		}
 				.subscribeOn(Schedulers.single())
