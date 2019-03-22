@@ -191,8 +191,11 @@ object CourseUtil {
 
 	fun getTodayCourse(courseList: List<Schedule>, listener: (List<Schedule>) -> Unit) {
 		Observable.create<Pair<Int, Int>> {
-			val week = CalendarUtil.getWeekFromCalendar(InitLocalDataSource.getStartDateTime())
-			val weekIndex = CalendarUtil.getWeekIndex()
+			val shouldShowTomorrow = CalendarUtil.shouldShowTomorrowInfo()
+			val week = if (shouldShowTomorrow) CalendarUtil.getTomorrowWeekFromCalendar(InitLocalDataSource.getStartDateTime())
+			else CalendarUtil.getWeekFromCalendar(InitLocalDataSource.getStartDateTime())
+			val weekIndex = if (shouldShowTomorrow) CalendarUtil.getTomorrowIndex()
+			else CalendarUtil.getWeekIndex()
 			it.onNext(Pair(week, weekIndex))
 			it.onComplete()
 		}

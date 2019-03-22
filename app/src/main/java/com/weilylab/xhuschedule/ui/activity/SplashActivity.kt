@@ -92,8 +92,7 @@ class SplashActivity : XhuBaseActivity(null, false) {
 		super.initData()
 		initViewModel()
 		SplashRepository.requestSplash(splashViewModel)
-		if (ConfigurationUtil.autoCheckUpdate)
-			ContextCompat.startForegroundService(this, Intent(APP.context, CheckUpdateService::class.java))
+		ContextCompat.startForegroundService(this, Intent(APP.context, CheckUpdateService::class.java))
 		ConfigUtil.setTrigger(this)
 		ConfigUtil.getCurrentYearAndTerm()
 	}

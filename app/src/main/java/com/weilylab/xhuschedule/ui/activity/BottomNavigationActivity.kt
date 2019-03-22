@@ -228,7 +228,11 @@ class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_naviga
 				.showView()
 		bottomNavigationView.config { it.setGradientColors(intArrayOf(Color.parseColor("#0297fe"), Color.parseColor("#0fc8ff"))) }
 				.setMenuList(arrayListOf(
-						BottomTabItem(getString(R.string.nav_today), R.drawable.ic_today_selected, R.drawable.ic_today),
+						BottomTabItem(
+								if (CalendarUtil.shouldShowTomorrowInfo()) getString(R.string.nav_tomorrow)
+								else getString(R.string.nav_today),
+								R.drawable.ic_today_selected,
+								R.drawable.ic_today),
 						BottomTabItem(getString(R.string.nav_week), R.drawable.ic_week_selected, R.drawable.ic_week),
 						BottomTabItem(getString(R.string.nav_profile), R.drawable.ic_profile_selected, R.drawable.ic_profile)
 				))
@@ -300,16 +304,24 @@ class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_naviga
 		super.onResume()
 		if (LayoutRefreshConfigUtil.isChangeBackgroundImage) {
 			showBackground()
-			LayoutRefreshConfigUtil.isChangeBackgroundImage = false
 		}
 		if (LayoutRefreshConfigUtil.isRefreshNoticeDot) {
 			BottomNavigationRepository.queryNotice(bottomNavigationViewModel, false)
-			LayoutRefreshConfigUtil.isRefreshNoticeDot = false
 		}
 		if (LayoutRefreshConfigUtil.isRefreshBottomNavigationActivity) {
 			BottomNavigationRepository.queryStudentList(bottomNavigationViewModel)
-			LayoutRefreshConfigUtil.isRefreshBottomNavigationActivity = false
 		}
+		if (LayoutRefreshConfigUtil.isChangeShowTomorrowAfterOnBottomActivity) {
+			//检测是否修改了显示明日课程的时间
+			bottomNavigationView.findItem(0)
+					.name = if (CalendarUtil.shouldShowTomorrowInfo()) getString(R.string.nav_tomorrow)
+			else getString(R.string.nav_today)
+			bottomNavigationView.init()
+		}
+		LayoutRefreshConfigUtil.isChangeBackgroundImage = false
+		LayoutRefreshConfigUtil.isRefreshNoticeDot = false
+		LayoutRefreshConfigUtil.isRefreshBottomNavigationActivity = false
+		LayoutRefreshConfigUtil.isChangeShowTomorrowAfterOnBottomActivity = false
 	}
 
 	override fun onBackPressed() {

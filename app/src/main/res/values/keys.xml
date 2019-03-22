@@ -18,6 +18,7 @@
 	<string name="key_custom_start_time" translatable="false">key_custom_start_time</string>
 	<string name="key_current_year_and_term" translatable="false">key_current_year_and_term</string>
 	<string name="key_custom_course_color" translatable="false">key_custom_course_color</string>
+	<string name="key_show_tomorrow_course_after" translatable="false">key_show_tomorrow_course_after</string>
 	<string name="key_action_school_calendar" translatable="false">key_action_school_calendar</string>
 	<string name="key_show_custom_thing_first" translatable="false">key_show_custom_thing_first</string>
 	<string name="key_logged_account" translatable="false">key_logged_account</string>
@@ -58,6 +59,7 @@
 	<string name="title_custom_start_time">更改开学时间</string>
 	<string name="title_current_year_and_term">更改当前学期</string>
 	<string name="title_custom_course_color">自定义课程颜色</string>
+	<string name="title_show_tomorrow_course_after">自动显示明日课程</string>
 	<string name="title_action_school_calendar">查看校历</string>
 	<string name="title_show_custom_thing_first">优先显示自定义事项</string>
 	<string name="title_action_custom_course">自定义课程</string>
@@ -101,6 +103,8 @@
 
 	<string name="summary_current_year_and_term">当前学期：%1$s学年 第%2$s学期</string>
 	<string name="summary_custom_start_time">当前开学时间：%1$s</string>
+	<string name="summary_show_tomorrow_after_time">在每天的 %1$s 后今日课程页面显示明日的课表。</string>
+	<string name="summary_show_tomorrow_after_time_disable">此功能已禁用，今日课程页面只会显示今日的课表。</string>
 	<string name="summary_enable_multi_user_mode">注意：如果多个用户的课表存在冲突的情况，表格可能会变得很乱，请确定您开启这个模式的意义！</string>
 	<string name="summary_tint_navigation_bar">与状态栏一致</string>
 	<string name="summary_icon" translatable="false">\@爱吃饭的越越</string>

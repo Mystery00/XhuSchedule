@@ -120,8 +120,10 @@ object CalendarUtil {
 		return calendar.timeInMillis
 	}
 
-	fun whenBeginSchool(): Int {
+	fun whenBeginSchool(shouldShowTomorrow: Boolean = false): Int {
 		val calendar = Calendar.getInstance()
+		if (shouldShowTomorrow)
+			calendar.add(Calendar.DAY_OF_MONTH, 1)
 		startDateTime.set(Calendar.HOUR_OF_DAY, 0)
 		startDateTime.set(Calendar.MINUTE, 0)
 		startDateTime.set(Calendar.SECOND, 0)
@@ -202,6 +204,8 @@ object CalendarUtil {
 	private val dateTimeFormatter by lazy { SimpleDateFormat("yyyy年MM月dd日 HH:mm", Locale.CHINA) }
 
 	fun isThingOnDay(thing: CustomThing, now: Calendar = Calendar.getInstance()): Boolean {
+		if (shouldShowTomorrowInfo())
+			now.add(Calendar.DAY_OF_MONTH, 1)
 		val startCalendar = if (thing.isAllDay)
 			dateFormatter.parse(thing.startTime)
 		else {
@@ -230,5 +234,20 @@ object CalendarUtil {
 			cal.time
 		}
 		return now.time.after(startCalendar) && now.time.before(endCalendar)
+	}
+
+	fun shouldShowTomorrowInfo(): Boolean {
+		val time = ConfigurationUtil.showTomorrowCourseAfterTime
+		if (time == "disable")
+			return false
+		val array = time.split(':')
+		val setHour = array[0].toInt()
+		val setMinute = array[1].toInt()
+		val now = Calendar.getInstance()
+		val nowHour = now.get(Calendar.HOUR_OF_DAY)
+		val nowMinute = now.get(Calendar.MINUTE)
+		if (nowHour > setHour)
+			return true
+		return nowMinute >= setMinute
 	}
 }

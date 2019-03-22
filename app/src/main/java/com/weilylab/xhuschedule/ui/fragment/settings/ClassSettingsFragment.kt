@@ -1,6 +1,7 @@
 package com.weilylab.xhuschedule.ui.fragment.settings
 
 import android.app.Dialog
+import android.app.TimePickerDialog
 import androidx.preference.CheckBoxPreference
 import androidx.preference.Preference
 import androidx.appcompat.app.AlertDialog
@@ -18,11 +19,13 @@ import com.zyao89.view.zloading.ZLoadingDialog
 import com.zyao89.view.zloading.Z_TYPE
 import vip.mystery0.logs.Logs
 import vip.mystery0.rx.Status.*
+import java.util.*
 
 class ClassSettingsFragment : XhuBasePreferenceFragment(R.xml.preference_class) {
 	private val showNotWeekPreference: CheckBoxPreference by lazy { findPreferenceById<CheckBoxPreference>(R.string.key_show_not_week) }
 	private val currentYearAndTermPreference: Preference by lazy { findPreferenceById<Preference>(R.string.key_current_year_and_term) }
 	private val customStartTimePreference: Preference by lazy { findPreferenceById<Preference>(R.string.key_custom_start_time) }
+	private val showTomorrowCourseAfterPreference: Preference by lazy { findPreferenceById<Preference>(R.string.key_show_tomorrow_course_after) }
 	private val schoolCalendarPreference: Preference by lazy { findPreferenceById<Preference>(R.string.key_action_school_calendar) }
 	private val showCustomThingFirstPreference: CheckBoxPreference by lazy { findPreferenceById<CheckBoxPreference>(R.string.key_show_custom_thing_first) }
 
@@ -49,6 +52,10 @@ class ClassSettingsFragment : XhuBasePreferenceFragment(R.xml.preference_class) 
 		showNotWeekPreference.isChecked = ConfigurationUtil.isShowNotWeek
 		currentYearAndTermPreference.summary = getString(R.string.summary_current_year_and_term, ConfigurationUtil.currentYear, ConfigurationUtil.currentTerm)
 		updateCustomStartTimeSummary()
+		if (ConfigurationUtil.showTomorrowCourseAfterTime != "disable")
+			showTomorrowCourseAfterPreference.summary = getString(R.string.summary_show_tomorrow_after_time, ConfigurationUtil.showTomorrowCourseAfterTime)
+		else
+			showTomorrowCourseAfterPreference.summary = getString(R.string.summary_show_tomorrow_after_time_disable)
 	}
 
 	override fun monitor() {
@@ -107,6 +114,37 @@ class ClassSettingsFragment : XhuBasePreferenceFragment(R.xml.preference_class) 
 					}
 				}
 			}
+			true
+		}
+		showTomorrowCourseAfterPreference.setOnPreferenceClickListener {
+			val time = ConfigurationUtil.showTomorrowCourseAfterTime
+			val oldHour: Int
+			val oldMinute: Int
+			if (time == "disable") {
+				val calendar = Calendar.getInstance()
+				oldHour = calendar.get(Calendar.HOUR_OF_DAY)
+				oldMinute = calendar.get(Calendar.MINUTE)
+			} else {
+				val array = time.split(':')
+				oldHour = array[0].toInt()
+				oldMinute = array[1].toInt()
+			}
+			val timePickerDialog = TimePickerDialog(activity!!, TimePickerDialog.OnTimeSetListener { _, hourOfDay, minute ->
+				val hourString = if (hourOfDay < 10) "0$hourOfDay" else hourOfDay.toString()
+				val minuteString = if (minute < 10) "0$minute" else minute.toString()
+				val newString = "$hourString:$minuteString"
+				ConfigurationUtil.showTomorrowCourseAfterTime = newString
+				showTomorrowCourseAfterPreference.summary = getString(R.string.summary_show_tomorrow_after_time, ConfigurationUtil.showTomorrowCourseAfterTime)
+				LayoutRefreshConfigUtil.isChangeShowTomorrowAfterOnBottomActivity = true
+				LayoutRefreshConfigUtil.isChangeShowTomorrowAfterOnTodayFragment = true
+			}, oldHour, oldMinute, true)
+			timePickerDialog.setButton(AlertDialog.BUTTON_NEUTRAL, getString(R.string.action_disable)) { _, _ ->
+				ConfigurationUtil.showTomorrowCourseAfterTime = "disable"
+				showTomorrowCourseAfterPreference.summary = getString(R.string.summary_show_tomorrow_after_time_disable)
+				LayoutRefreshConfigUtil.isChangeShowTomorrowAfterOnBottomActivity = true
+				LayoutRefreshConfigUtil.isChangeShowTomorrowAfterOnTodayFragment = true
+			}
+			timePickerDialog.show()
 			true
 		}
 		schoolCalendarPreference.setOnPreferenceClickListener {

@@ -158,4 +158,9 @@ object ConfigurationUtil {
 				.putBoolean(SharedPreferenceConstant.FIELD_SHOW_CUSTOM_THING_FIRST, value)
 				.apply()
 		get() = sharedPreferences.getBoolean(SharedPreferenceConstant.FIELD_SHOW_CUSTOM_THING_FIRST, false)
+	var showTomorrowCourseAfterTime: String
+		set(value) = sharedPreferences.edit()
+				.putString(SharedPreferenceConstant.FIELD_SHOW_TOMORROW_COURSE_AFTER, value)
+				.apply()
+		get() = sharedPreferences.getString(SharedPreferenceConstant.FIELD_SHOW_TOMORROW_COURSE_AFTER, "disable")!!
 }

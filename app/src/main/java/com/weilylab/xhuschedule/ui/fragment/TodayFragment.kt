@@ -124,11 +124,13 @@ class TodayFragment : BaseBottomNavigationFragment<FragmentTodayBinding>(R.layou
 
 	override fun onResume() {
 		super.onResume()
-		if (LayoutRefreshConfigUtil.isRefreshTodayFragment) {
-			if (!LayoutRefreshConfigUtil.isRefreshBottomNavigationActivity && !LayoutRefreshConfigUtil.isRefreshTableFragment)
-				BottomNavigationRepository.queryCacheCourses(bottomNavigationViewModel)
-			LayoutRefreshConfigUtil.isRefreshTodayFragment = false
+		if ((LayoutRefreshConfigUtil.isRefreshTodayFragment && !LayoutRefreshConfigUtil.isRefreshBottomNavigationActivity && !LayoutRefreshConfigUtil.isRefreshTableFragment) || LayoutRefreshConfigUtil.isChangeShowTomorrowAfterOnTodayFragment) {
+			BottomNavigationRepository.queryCacheCourses(bottomNavigationViewModel)
 		}
+		if (LayoutRefreshConfigUtil.isChangeShowTomorrowAfterOnTodayFragment)
+			updateTitle()
+		LayoutRefreshConfigUtil.isRefreshTodayFragment = false
+		LayoutRefreshConfigUtil.isChangeShowTomorrowAfterOnTodayFragment = false
 	}
 
 	override fun updateTitle() {
@@ -136,15 +138,19 @@ class TodayFragment : BaseBottomNavigationFragment<FragmentTodayBinding>(R.layou
 			return
 		if (bottomNavigationViewModel.currentWeek.value?.data == null)
 			return
-		if (bottomNavigationViewModel.currentWeek.value!!.data!! <= 0) {
-			val whenTime = CalendarUtil.whenBeginSchool()
-			if (whenTime > 0)
-				bottomNavigationViewModel.title.value = "距离开学还有${whenTime}天 ${CalendarUtil.getWeekIndexInString()}"
-			else
-				bottomNavigationViewModel.title.value = "第${bottomNavigationViewModel.currentWeek.value?.data
-						?: "0"}周 ${CalendarUtil.getWeekIndexInString()}"
-		} else
-			bottomNavigationViewModel.title.value = "第${bottomNavigationViewModel.currentWeek.value?.data
-					?: "0"}周 ${CalendarUtil.getWeekIndexInString()}"
+		val shouldShowTomorrow = CalendarUtil.shouldShowTomorrowInfo()
+		val whenTime = CalendarUtil.whenBeginSchool(shouldShowTomorrow)
+		val weekIndex = CalendarUtil.getWeekIndexInString(if (shouldShowTomorrow) CalendarUtil.getTomorrowIndex() else CalendarUtil.getWeekIndex())
+		if (bottomNavigationViewModel.currentWeek.value!!.data!! <= 0 && whenTime > 0) {
+			bottomNavigationViewModel.title.value = "距离开学还有${whenTime}天 $weekIndex"
+		} else {
+			var week = bottomNavigationViewModel.currentWeek.value?.data
+			if (week != null && shouldShowTomorrow) {
+				val index = CalendarUtil.getWeekIndex()
+				if (index == 7)//如果今天是周日，那么明天就是周一,周数加一
+					week++
+			}
+			bottomNavigationViewModel.title.value = "第${week ?: "0"}周 $weekIndex"
+		}
 	}
 }

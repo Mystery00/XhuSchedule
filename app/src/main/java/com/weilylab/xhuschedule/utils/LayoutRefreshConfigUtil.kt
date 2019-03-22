@@ -9,6 +9,8 @@ object LayoutRefreshConfigUtil {
 	var isRefreshStartTime = false
 	var isChangeBackgroundImage = false
 	var isChangeUserImage = false
+	var isChangeShowTomorrowAfterOnBottomActivity = false
+	var isChangeShowTomorrowAfterOnTodayFragment = false
 
 	var isRefreshDone = true
 	var isRefreshNoticeDone = true
