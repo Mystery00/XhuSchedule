@@ -208,6 +208,8 @@ class CustomThingActivity : XhuBaseActivity(R.layout.activity_custom_thing) {
 			expandLayout.postInvalidate()
 			expandLayout.post {
 				expandedHeight = expandLayout.measuredHeight
+				expandLayout.layoutParams.height = expandedHeight
+				expandLayout.requestLayout()
 			}
 		}
 	}

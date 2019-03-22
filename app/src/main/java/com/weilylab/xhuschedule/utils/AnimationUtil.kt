@@ -9,6 +9,7 @@ import android.view.View
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import vip.mystery0.logs.Logs
 
 object AnimationUtil {
 	@SuppressLint("CheckResult")

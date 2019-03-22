@@ -250,7 +250,7 @@ class CustomCourseActivity : XhuBaseActivity(R.layout.activity_custom_course) {
 								}
 							})
 							.show()
-				}else{
+				} else {
 					customCourseAdapter.notifyItemChanged(position)
 				}
 			}
@@ -405,6 +405,8 @@ class CustomCourseActivity : XhuBaseActivity(R.layout.activity_custom_course) {
 			expandLayout.postInvalidate()
 			expandLayout.post {
 				expandedHeight = expandLayout.measuredHeight
+				expandLayout.layoutParams.height = expandedHeight
+				expandLayout.requestLayout()
 			}
 		}
 	}
