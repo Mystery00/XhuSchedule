@@ -6,7 +6,6 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.view.View
-import android.view.ViewGroup
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -34,17 +33,19 @@ object AnimationUtil {
 				}
 	}
 
-	fun expandLayout(target: View, collapsedHeight: Int, expandedHeight: Int, isExpand: Boolean) {
-		val start = if (isExpand) collapsedHeight else expandedHeight
-		val end = if (isExpand) expandedHeight else collapsedHeight
+	private var animator: ValueAnimator? = null
+
+	fun expandLayout(target: View, start: Int, end: Int) {
 		if (target.layoutParams.height == end)
 			return
-		val valueAnimator = ValueAnimator.ofInt(start, end)
+		animator?.cancel()
+		animator = ValueAnimator.ofInt(start, end)
 		val evaluator = IntEvaluator()
-		valueAnimator.addUpdateListener {
+		animator?.addUpdateListener {
 			target.layoutParams.height = evaluator.evaluate(it.animatedFraction, start, end)
 			target.requestLayout()
 		}
-		valueAnimator.setDuration(200).start()
+		animator?.duration = 200
+		animator?.start()
 	}
 }
