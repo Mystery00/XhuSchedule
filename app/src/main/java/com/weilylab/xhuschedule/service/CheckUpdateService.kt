@@ -86,11 +86,12 @@ class CheckUpdateService : Service() {
 		Observable.create<Boolean> {
 			while (ActivityManagerTools.currentActivity() is SplashActivity || ActivityManagerTools.currentActivity() is GuideActivity || ActivityManagerTools.currentActivity() is SplashImageActivity)
 				Thread.sleep(1000)
+			it.onNext(ConfigurationUtil.autoCheckUpdate)
 			it.onComplete()
 		}
 				.subscribeOn(Schedulers.single())
 				.observeOn(AndroidSchedulers.mainThread())
-				.subscribe(object :OnlyCompleteObserver<Boolean>(){
+				.subscribe(object : OnlyCompleteObserver<Boolean>() {
 					override fun onError(e: Throwable) {
 						Logs.wtf("onError: ", e)
 					}
