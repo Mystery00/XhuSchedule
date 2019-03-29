@@ -47,4 +47,5 @@ object SharedPreferenceConstant {
 	const val FIELD_TINT_NAVIGATION_BAR = "config_tint_navigation_bar"
 	const val FIELD_SHOW_CUSTOM_THING_FIRST = "config_show_custom_thing_first"
 	const val FIELD_SHOW_TOMORROW_COURSE_AFTER = "config_show_tomorrow_course_after"
+	const val FIELD_USE_IN_APP_IMAGE_SELECTOR = "config_use_in_app_image_selector"
 }

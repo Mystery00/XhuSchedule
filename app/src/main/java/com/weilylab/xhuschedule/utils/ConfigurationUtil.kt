@@ -163,4 +163,9 @@ object ConfigurationUtil {
 				.putString(SharedPreferenceConstant.FIELD_SHOW_TOMORROW_COURSE_AFTER, value)
 				.apply()
 		get() = sharedPreferences.getString(SharedPreferenceConstant.FIELD_SHOW_TOMORROW_COURSE_AFTER, "disable")!!
+	var useInAppImageSelector: Boolean
+		set(value) = sharedPreferences.edit()
+				.putBoolean(SharedPreferenceConstant.FIELD_USE_IN_APP_IMAGE_SELECTOR, value)
+				.apply()
+		get() = sharedPreferences.getBoolean(SharedPreferenceConstant.FIELD_USE_IN_APP_IMAGE_SELECTOR, false)
 }

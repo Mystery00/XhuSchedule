@@ -22,9 +22,15 @@
 			android:title="@string/title_enable_viewpager_transform" />
 
 		<CheckBoxPreference
+			android:key="@string/key_use_in_app_image_selector"
+			android:summary="@string/summary_use_in_app_image_selector"
+			android:title="@string/title_use_in_app_image_selector" />
+
+		<CheckBoxPreference
 			android:key="@string/key_tint_navigation_bar"
 			android:summary="@string/summary_tint_navigation_bar"
 			android:title="@string/title_tint_navigation_bar" />
+
 
 	</PreferenceCategory>
 

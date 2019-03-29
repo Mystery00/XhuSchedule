@@ -42,6 +42,7 @@
 	<string name="key_enable_viewpager_transform" translatable="false">key_enable_viewpager_transform</string>
 	<string name="key_disable_jrsc" translatable="false">key_disable_jrsc</string>
 	<string name="key_tint_navigation_bar" translatable="false">key_tint_navigation_bar</string>
+	<string name="key_use_in_app_image_selector" translatable="false">key_use_in_app_image_selector</string>
 	<string name="key_reset_user_img" translatable="false">key_reset_user_img</string>
 	<string name="key_reset_background_img" translatable="false">key_reset_background_img</string>
 	<string name="key_query_score_class" translatable="false">key_query_score_class</string>
@@ -80,6 +81,7 @@
 	<string name="title_night_mode">夜间模式</string>
 	<string name="title_enable_viewpager_transform">启用主页面切换动画</string>
 	<string name="title_tint_navigation_bar">导航栏着色（Android 8.0+）</string>
+	<string name="title_use_in_app_image_selector">使用应用内图片选择器（Android Q上可能无法使用）</string>
 	<string name="title_notification_course">课程提醒</string>
 	<string name="title_notification_exam">考试提醒</string>
 	<string name="title_notification_time">提醒时间</string>
@@ -107,6 +109,7 @@
 	<string name="summary_show_tomorrow_after_time_disable">此功能已禁用，今日课程页面只会显示今日的课表。</string>
 	<string name="summary_enable_multi_user_mode">注意：如果多个用户的课表存在冲突的情况，表格可能会变得很乱，请确定您开启这个模式的意义！</string>
 	<string name="summary_tint_navigation_bar">与状态栏一致</string>
+	<string name="summary_use_in_app_image_selector">需要授予读写内置存储（READ_EXTERNAL_STORAGE）权限</string>
 	<string name="summary_icon" translatable="false">\@爱吃饭的越越</string>
 	<string name="summary_back" translatable="false">\@pan</string>
 	<string name="summary_ui" translatable="false">\@Johnny Zen</string>

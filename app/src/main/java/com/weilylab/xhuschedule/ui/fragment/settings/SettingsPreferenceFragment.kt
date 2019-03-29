@@ -16,6 +16,7 @@ import android.content.pm.PackageManager
 import android.graphics.Color
 import android.net.Uri
 import android.os.Build
+import android.provider.MediaStore
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
@@ -38,6 +39,8 @@ import java.util.*
 class SettingsPreferenceFragment : XhuBasePreferenceFragment(R.xml.preference_settings) {
 	companion object {
 		const val ACTION_CHECK_UPDATE_DONE = "action_check_update_done"
+		private const val FILE_SELECT_USER = 11
+		private const val FILE_SELECT_BACKGROUND = 12
 		private const val REQUEST_CHOOSE_USER = 21
 		private const val REQUEST_CHOOSE_BACKGROUND = 22
 		private const val REQUEST_CROP_USER = 31
@@ -49,6 +52,7 @@ class SettingsPreferenceFragment : XhuBasePreferenceFragment(R.xml.preference_se
 	private val nightModePreference: Preference by lazy { findPreferenceById<Preference>(R.string.key_night_mode) }
 	private val enableViewPagerTransformPreference: CheckBoxPreference by lazy { findPreferenceById<CheckBoxPreference>(R.string.key_enable_viewpager_transform) }
 	private val tintNavigationBarPreference: CheckBoxPreference by lazy { findPreferenceById<CheckBoxPreference>(R.string.key_tint_navigation_bar) }
+	private val useInAppImageSelectorPreference: CheckBoxPreference by lazy { findPreferenceById<CheckBoxPreference>(R.string.key_use_in_app_image_selector) }
 	private val resetUserImgPreference: Preference by lazy { findPreferenceById<Preference>(R.string.key_reset_user_img) }
 	private val resetBackgroundPreference: Preference by lazy { findPreferenceById<Preference>(R.string.key_reset_background_img) }
 	private val notificationCoursePreference: CheckBoxPreference by lazy { findPreferenceById<CheckBoxPreference>(R.string.key_notification_course) }
@@ -80,6 +84,7 @@ class SettingsPreferenceFragment : XhuBasePreferenceFragment(R.xml.preference_se
 		disableJRSCPreference.isChecked = ConfigurationUtil.disableJRSC
 		tintNavigationBarPreference.isChecked = ConfigurationUtil.tintNavigationBar
 		tintNavigationBarPreference.isEnabled = Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
+		useInAppImageSelectorPreference.isChecked = ConfigurationUtil.useInAppImageSelector
 		autoCheckUpdatePreference.isChecked = ConfigurationUtil.autoCheckUpdate
 		notificationCoursePreference.isChecked = ConfigurationUtil.notificationCourse
 		notificationExamPreference.isChecked = ConfigurationUtil.notificationExam
@@ -143,6 +148,10 @@ class SettingsPreferenceFragment : XhuBasePreferenceFragment(R.xml.preference_se
 					activity!!.finish()
 				}
 			})
+			true
+		}
+		useInAppImageSelectorPreference.setOnPreferenceChangeListener { _, _ ->
+			ConfigurationUtil.useInAppImageSelector = !useInAppImageSelectorPreference.isChecked
 			true
 		}
 		resetUserImgPreference.setOnPreferenceClickListener {
@@ -241,30 +250,42 @@ class SettingsPreferenceFragment : XhuBasePreferenceFragment(R.xml.preference_se
 	}
 
 	private fun requestImageChoose(requestCode: Int) {
-		requestPermissionsOnFragment(arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE)) { code, array ->
-			if (array.isEmpty() || array[0] == PackageManager.PERMISSION_GRANTED) {
-				Matisse.from(this)
-						.choose(MimeType.of(MimeType.JPEG, MimeType.PNG, MimeType.BMP))
-						.showSingleMediaType(true)
-						.countable(false)
-						.maxSelectable(1)
-						.restrictOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
-						.thumbnailScale(0.85f)
-						.imageEngine(CustomGlideEngine())
-						.theme(if (ContextCompat.getColor(activity!!, R.color.isNight) == Color.WHITE) R.style.Matisse_Zhihu else R.style.Matisse_Dracula)
-						.forResult(requestCode)
-			} else {
-				Snackbar.make(activity!!.window.decorView, R.string.hint_permission_deny, Snackbar.LENGTH_LONG)
-						.setAction(R.string.action_re_request) {
-							reRequestPermission(code)
-						}
-						.show()
+		if (ConfigurationUtil.useInAppImageSelector)
+			requestPermissionsOnFragment(arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE)) { code, array ->
+				if (array.isEmpty() || array[0] == PackageManager.PERMISSION_GRANTED) {
+					Matisse.from(this)
+							.choose(MimeType.of(MimeType.JPEG, MimeType.PNG, MimeType.BMP))
+							.showSingleMediaType(true)
+							.countable(false)
+							.maxSelectable(1)
+							.restrictOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
+							.thumbnailScale(0.85f)
+							.imageEngine(CustomGlideEngine())
+							.theme(if (ContextCompat.getColor(activity!!, R.color.isNight) == Color.WHITE) R.style.Matisse_Zhihu else R.style.Matisse_Dracula)
+							.forResult(requestCode)
+				} else {
+					Snackbar.make(activity!!.window.decorView, R.string.hint_permission_deny, Snackbar.LENGTH_LONG)
+							.setAction(R.string.action_re_request) {
+								reRequestPermission(code)
+							}
+							.show()
+				}
 			}
+		else {
+			val intent = Intent(Intent.ACTION_PICK)
+			intent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*")
+			startActivityForResult(intent, requestCode - 10)
 		}
 	}
 
 	override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
 		when (requestCode) {
+			FILE_SELECT_USER -> if (resultCode == Activity.RESULT_OK) {
+				cropImage(data?.data!!, REQUEST_CROP_USER, 500, 500)
+			}
+			FILE_SELECT_BACKGROUND -> if (resultCode == Activity.RESULT_OK) {
+				cropImage(data?.data!!, REQUEST_CROP_BACKGROUND, DensityTools.getScreenWidth(), DensityTools.getScreenHeight())
+			}
 			REQUEST_CHOOSE_USER -> if (resultCode == Activity.RESULT_OK) {
 				cropImage(Matisse.obtainResult(data)[0], REQUEST_CROP_USER, 500, 500)
 			}
