@@ -1,6 +1,6 @@
 package com.weilylab.xhuschedule.model
 
-class CetScore{
+class CetScore {
 	var id = ""
 	var name = ""
 	var school = ""

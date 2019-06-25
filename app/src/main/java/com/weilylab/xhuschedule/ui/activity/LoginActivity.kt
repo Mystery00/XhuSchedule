@@ -33,24 +33,23 @@
 
 package com.weilylab.xhuschedule.ui.activity
 
-import android.text.TextUtils
-import android.view.View
-import com.weilylab.xhuschedule.R
-import com.zyao89.view.zloading.ZLoadingDialog
-import com.zyao89.view.zloading.Z_TYPE
-import kotlinx.android.synthetic.main.activity_login.*
-
 import android.app.Activity
 import android.app.Dialog
 import android.graphics.Color
+import android.text.TextUtils
+import android.view.View
+import android.view.WindowManager
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.base.XhuBaseActivity
 import com.weilylab.xhuschedule.model.Student
 import com.weilylab.xhuschedule.repository.LoginRepository
 import com.weilylab.xhuschedule.viewmodel.LoginViewModel
-import android.view.WindowManager
+import com.zyao89.view.zloading.ZLoadingDialog
+import com.zyao89.view.zloading.Z_TYPE
+import kotlinx.android.synthetic.main.activity_login.*
 import vip.mystery0.logs.Logs
 import vip.mystery0.rx.PackageData
 import vip.mystery0.rx.Status.*

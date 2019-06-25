@@ -16,7 +16,7 @@ import vip.mystery0.logs.Logs
 import vip.mystery0.rx.OnlyCompleteObserver
 import vip.mystery0.rx.PackageData
 import vip.mystery0.rx.StartAndCompleteObserver
-import java.util.ArrayList
+import java.util.*
 
 object TestLocalDataSource : TestDataSource {
 	private val testService: TestService by lazy { TestServiceImpl() }

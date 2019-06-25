@@ -43,14 +43,14 @@ import com.weilylab.xhuschedule.constant.IntentConstant
 import com.weilylab.xhuschedule.model.response.SplashResponse
 import com.weilylab.xhuschedule.repository.SplashRepository
 import com.weilylab.xhuschedule.service.CheckUpdateService
-import com.weilylab.xhuschedule.utils.ConfigurationUtil
-import com.weilylab.xhuschedule.utils.FileUtil
-import vip.mystery0.rx.PackageData
-import vip.mystery0.rx.Status
-import com.weilylab.xhuschedule.viewmodel.SplashViewModel
 import com.weilylab.xhuschedule.service.DownloadSplashIntentService
 import com.weilylab.xhuschedule.utils.ConfigUtil
+import com.weilylab.xhuschedule.utils.ConfigurationUtil
+import com.weilylab.xhuschedule.utils.FileUtil
+import com.weilylab.xhuschedule.viewmodel.SplashViewModel
 import vip.mystery0.logs.Logs
+import vip.mystery0.rx.PackageData
+import vip.mystery0.rx.Status
 import vip.mystery0.tools.utils.FileTools
 
 /**

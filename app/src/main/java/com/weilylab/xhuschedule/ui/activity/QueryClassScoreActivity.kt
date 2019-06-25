@@ -21,13 +21,13 @@ import com.weilylab.xhuschedule.repository.ScoreRepository
 import com.weilylab.xhuschedule.ui.adapter.QueryClassScoreRecyclerViewAdapter
 import com.weilylab.xhuschedule.utils.CalendarUtil
 import com.weilylab.xhuschedule.utils.ConfigurationUtil
-import vip.mystery0.rx.PackageData
-import vip.mystery0.rx.Status.*
 import com.weilylab.xhuschedule.viewmodel.QueryClassScoreViewModel
 import com.zyao89.view.zloading.ZLoadingDialog
 import com.zyao89.view.zloading.Z_TYPE
 import kotlinx.android.synthetic.main.activity_query_class_score.*
 import vip.mystery0.logs.Logs
+import vip.mystery0.rx.PackageData
+import vip.mystery0.rx.Status.*
 import vip.mystery0.tools.utils.DensityTools
 import java.util.*
 

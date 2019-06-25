@@ -7,7 +7,8 @@ import com.weilylab.xhuschedule.repository.ds.CourseDataSource
 import com.weilylab.xhuschedule.repository.local.service.CourseService
 import com.weilylab.xhuschedule.repository.local.service.impl.CourseServiceImpl
 import com.weilylab.xhuschedule.repository.remote.CourseRemoteDataSource
-import com.weilylab.xhuschedule.utils.*
+import com.weilylab.xhuschedule.utils.CalendarUtil
+import com.weilylab.xhuschedule.utils.ConfigurationUtil
 import com.weilylab.xhuschedule.utils.userDo.CourseUtil
 import com.zhuangfei.timetable.model.Schedule
 import io.reactivex.Observable

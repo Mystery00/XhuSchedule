@@ -37,8 +37,8 @@ import android.content.Context
 import android.content.Intent
 import android.view.MenuItem
 import com.weilylab.xhuschedule.R
-import com.weilylab.xhuschedule.base.XhuBasePreferenceFragment
 import com.weilylab.xhuschedule.base.XhuBaseActivity
+import com.weilylab.xhuschedule.base.XhuBasePreferenceFragment
 import com.weilylab.xhuschedule.ui.fragment.settings.*
 import kotlinx.android.synthetic.main.activity_settings.*
 

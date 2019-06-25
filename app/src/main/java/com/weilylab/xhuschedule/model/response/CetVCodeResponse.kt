@@ -1,5 +1,5 @@
 package com.weilylab.xhuschedule.model.response
 
-class CetVCodeResponse:BaseResponse() {
+class CetVCodeResponse : BaseResponse() {
 	lateinit var vcode: String
 }

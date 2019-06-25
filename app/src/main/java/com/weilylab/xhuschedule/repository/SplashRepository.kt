@@ -3,8 +3,8 @@ package com.weilylab.xhuschedule.repository
 import com.weilylab.xhuschedule.model.response.SplashResponse
 import com.weilylab.xhuschedule.repository.local.SplashLocalDataSource
 import com.weilylab.xhuschedule.repository.remote.SplashRemoteDataSource
-import vip.mystery0.tools.utils.NetworkTools
 import com.weilylab.xhuschedule.viewmodel.SplashViewModel
+import vip.mystery0.tools.utils.NetworkTools
 
 object SplashRepository {
 	fun requestSplash(splashViewModel: SplashViewModel) {

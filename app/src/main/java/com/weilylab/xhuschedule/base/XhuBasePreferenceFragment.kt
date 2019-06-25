@@ -1,12 +1,12 @@
 package com.weilylab.xhuschedule.base
 
 import android.os.Bundle
-import androidx.annotation.XmlRes
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.annotation.StringRes
+import androidx.annotation.XmlRes
 import androidx.core.content.ContextCompat
 import com.google.android.material.snackbar.Snackbar
 import com.weilylab.xhuschedule.R

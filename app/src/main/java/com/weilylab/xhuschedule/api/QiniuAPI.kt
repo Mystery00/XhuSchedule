@@ -40,7 +40,7 @@ import retrofit2.http.Path
 import retrofit2.http.Streaming
 
 interface QiniuAPI {
-    @Streaming
-    @GET("/{path}")
-    fun download(@Path("path") path: String): Observable<ResponseBody>
+	@Streaming
+	@GET("/{path}")
+	fun download(@Path("path") path: String): Observable<ResponseBody>
 }

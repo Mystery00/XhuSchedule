@@ -1,20 +1,20 @@
 package com.weilylab.xhuschedule.utils
 
-import android.content.Context
-import android.graphics.Color
-import android.os.Build
-import androidx.appcompat.app.AlertDialog
-import com.weilylab.xhuschedule.R
-import java.util.*
 import android.app.Activity
 import android.app.AlarmManager
 import android.app.PendingIntent
+import android.content.Context
 import android.content.Intent
+import android.graphics.Color
+import android.os.Build
 import android.view.View
+import androidx.appcompat.app.AlertDialog
+import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.repository.local.InitLocalDataSource
 import com.weilylab.xhuschedule.service.NotificationService
 import vip.mystery0.logs.Logs
 import vip.mystery0.tools.utils.ColorTools
+import java.util.*
 
 object ConfigUtil {
 	private var lastClick = 0L

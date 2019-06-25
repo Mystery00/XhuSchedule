@@ -3,7 +3,6 @@ package com.weilylab.xhuschedule.viewmodel
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.weilylab.xhuschedule.model.Course
 import com.weilylab.xhuschedule.model.Student
 import com.weilylab.xhuschedule.model.StudentInfo
 import vip.mystery0.rx.PackageData

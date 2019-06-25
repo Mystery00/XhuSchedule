@@ -35,8 +35,8 @@ package com.weilylab.xhuschedule.ui.adapter
 
 import android.content.Context
 import com.weilylab.xhuschedule.R
-import com.weilylab.xhuschedule.model.Notice
 import com.weilylab.xhuschedule.databinding.ItemNoticeBinding
+import com.weilylab.xhuschedule.model.Notice
 import vip.mystery0.tools.base.binding.BaseBindingRecyclerViewAdapter
 
 class NoticeAdapter(private val context: Context) : BaseBindingRecyclerViewAdapter<Notice, ItemNoticeBinding>(R.layout.item_notice) {

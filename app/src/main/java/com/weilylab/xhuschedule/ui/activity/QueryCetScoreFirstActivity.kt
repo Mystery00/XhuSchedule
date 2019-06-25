@@ -5,22 +5,22 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.text.TextUtils
 import android.view.View
-import com.weilylab.xhuschedule.R
-import com.weilylab.xhuschedule.base.XhuBaseActivity
-import kotlinx.android.synthetic.main.activity_query_cet_score_first.*
 import android.widget.ScrollView
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import com.android.setupwizardlib.view.NavigationBar
+import com.weilylab.xhuschedule.R
+import com.weilylab.xhuschedule.base.XhuBaseActivity
 import com.weilylab.xhuschedule.model.Student
 import com.weilylab.xhuschedule.model.StudentInfo
 import com.weilylab.xhuschedule.repository.ScoreRepository
 import com.weilylab.xhuschedule.viewmodel.QueryCetScoreViewModelHelper
 import com.zyao89.view.zloading.ZLoadingDialog
 import com.zyao89.view.zloading.Z_TYPE
+import kotlinx.android.synthetic.main.activity_query_cet_score_first.*
+import vip.mystery0.logs.Logs
 import vip.mystery0.rx.PackageData
 import vip.mystery0.rx.Status.*
-import vip.mystery0.logs.Logs
 
 class QueryCetScoreFirstActivity : XhuBaseActivity(R.layout.activity_query_cet_score_first) {
 	private val dialog: Dialog by lazy {

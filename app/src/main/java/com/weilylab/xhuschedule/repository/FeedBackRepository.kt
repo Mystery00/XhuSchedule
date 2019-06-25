@@ -4,12 +4,12 @@ import com.weilylab.xhuschedule.constant.StringConstant
 import com.weilylab.xhuschedule.repository.local.FeedBackLocalDataSource
 import com.weilylab.xhuschedule.repository.local.StudentLocalDataSource
 import com.weilylab.xhuschedule.repository.remote.FeedBackRemoteDataSource
-import vip.mystery0.tools.utils.NetworkTools
 import com.weilylab.xhuschedule.utils.userDo.UserUtil
 import com.weilylab.xhuschedule.viewmodel.BottomNavigationViewModel
 import com.weilylab.xhuschedule.viewmodel.FeedBackViewModel
 import vip.mystery0.rx.PackageData
 import vip.mystery0.rx.Status.*
+import vip.mystery0.tools.utils.NetworkTools
 
 object FeedBackRepository {
 	fun sendMessage(content: String, feedBackViewModel: FeedBackViewModel) {

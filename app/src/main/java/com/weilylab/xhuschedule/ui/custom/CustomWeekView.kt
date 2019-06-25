@@ -17,7 +17,7 @@ import com.zhuangfei.timetable.model.ScheduleEnable
 import com.zhuangfei.timetable.model.ScheduleSupport
 import com.zhuangfei.timetable.model.WeekViewEnable
 import vip.mystery0.tools.utils.DensityTools
-import java.util.ArrayList
+import java.util.*
 
 class CustomWeekView : LinearLayout, WeekViewEnable<CustomWeekView> {
 	private var layoutWeekViewBinding: LayoutWeekViewBinding

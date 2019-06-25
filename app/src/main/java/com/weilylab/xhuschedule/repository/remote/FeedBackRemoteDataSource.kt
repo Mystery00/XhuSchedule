@@ -8,7 +8,7 @@ import com.weilylab.xhuschedule.model.Student
 import com.weilylab.xhuschedule.repository.local.FeedBackLocalDataSource
 import com.weilylab.xhuschedule.utils.userDo.FeedBackUtil
 import vip.mystery0.rx.PackageData
-import java.util.ArrayList
+import java.util.*
 
 object FeedBackRemoteDataSource {
 	fun queryFeedBackForStudent(feedBackMessageListLiveData: MutableLiveData<PackageData<List<FeedBackMessage>>>, maxId: MutableLiveData<Int>, student: Student, feedBackToken: String) {

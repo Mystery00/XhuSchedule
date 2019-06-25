@@ -5,7 +5,9 @@ import com.weilylab.xhuschedule.model.Student
 import com.weilylab.xhuschedule.repository.local.CourseLocalDataSource
 import com.weilylab.xhuschedule.repository.local.StudentLocalDataSource
 import com.weilylab.xhuschedule.repository.remote.CourseRemoteDataSource
-import com.weilylab.xhuschedule.utils.*
+import com.weilylab.xhuschedule.utils.CalendarUtil
+import com.weilylab.xhuschedule.utils.ConfigurationUtil
+import com.weilylab.xhuschedule.utils.LayoutRefreshConfigUtil
 import com.weilylab.xhuschedule.utils.userDo.CourseUtil
 import com.weilylab.xhuschedule.utils.userDo.UserUtil
 import com.weilylab.xhuschedule.viewmodel.BottomNavigationViewModel

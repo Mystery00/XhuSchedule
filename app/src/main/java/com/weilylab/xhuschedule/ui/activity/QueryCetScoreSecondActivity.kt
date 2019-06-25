@@ -15,10 +15,10 @@ import com.weilylab.xhuschedule.repository.ScoreRepository
 import com.weilylab.xhuschedule.viewmodel.QueryCetScoreViewModelHelper
 import com.zyao89.view.zloading.ZLoadingDialog
 import com.zyao89.view.zloading.Z_TYPE
-import vip.mystery0.rx.PackageData
-import vip.mystery0.rx.Status.*
 import kotlinx.android.synthetic.main.activity_query_cet_score_second.*
 import vip.mystery0.logs.Logs
+import vip.mystery0.rx.PackageData
+import vip.mystery0.rx.Status.*
 
 class QueryCetScoreSecondActivity : XhuBaseActivity(R.layout.activity_query_cet_score_second) {
 	private val vCodeDialog: Dialog by lazy {

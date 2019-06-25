@@ -8,9 +8,9 @@ import com.weilylab.xhuschedule.model.Student
 import com.weilylab.xhuschedule.model.StudentInfo
 import com.weilylab.xhuschedule.repository.ds.StudentDataSource
 import com.weilylab.xhuschedule.repository.local.StudentLocalDataSource
-import vip.mystery0.tools.utils.NetworkTools
 import com.weilylab.xhuschedule.utils.userDo.UserUtil
 import vip.mystery0.rx.PackageData
+import vip.mystery0.tools.utils.NetworkTools
 
 object StudentRemoteDataSource : StudentDataSource {
 	override fun queryStudentInfo(studentInfoLiveData: MutableLiveData<PackageData<StudentInfo>>, student: Student) {

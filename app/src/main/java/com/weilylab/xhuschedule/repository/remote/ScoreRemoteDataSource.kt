@@ -11,10 +11,10 @@ import com.weilylab.xhuschedule.model.ExpScore
 import com.weilylab.xhuschedule.model.Student
 import com.weilylab.xhuschedule.repository.ds.ScoreDataSource
 import com.weilylab.xhuschedule.repository.local.ScoreLocalDataSource
-import vip.mystery0.tools.utils.NetworkTools
 import com.weilylab.xhuschedule.utils.userDo.ScoreUtil
 import vip.mystery0.rx.PackageData
-import java.util.ArrayList
+import vip.mystery0.tools.utils.NetworkTools
+import java.util.*
 
 object ScoreRemoteDataSource : ScoreDataSource {
 	override fun queryClassScoreByUsername(scoreLiveData: MutableLiveData<PackageData<List<ClassScore>>>, student: Student, year: String, term: String) {

@@ -44,12 +44,12 @@ import java.io.IOException
  * 原文地址：http://blog.csdn.net/a1018875550/article/details/51832700
  */
 class DownloadProgressInterceptor(private val listener: DownloadProgressListener) : Interceptor {
-    @Throws(IOException::class)
-    override fun intercept(chain: Interceptor.Chain): Response {
-        val originalResponse = chain.proceed(chain.request())
+	@Throws(IOException::class)
+	override fun intercept(chain: Interceptor.Chain): Response {
+		val originalResponse = chain.proceed(chain.request())
 
-        return originalResponse.newBuilder()
-                .body(DownloadProgressResponseBody(originalResponse.body!!, listener))
-                .build()
-    }
+		return originalResponse.newBuilder()
+				.body(DownloadProgressResponseBody(originalResponse.body!!, listener))
+				.build()
+	}
 }

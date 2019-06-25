@@ -19,18 +19,17 @@ import com.weilylab.xhuschedule.model.Test
 import com.weilylab.xhuschedule.repository.TestRepository
 import com.weilylab.xhuschedule.ui.adapter.QueryTestRecyclerViewAdapter
 import com.weilylab.xhuschedule.utils.userDo.UserUtil
-import vip.mystery0.rx.PackageData
-import vip.mystery0.rx.Status.*
 import com.weilylab.xhuschedule.viewmodel.QueryTestViewModel
 import com.zyao89.view.zloading.ZLoadingDialog
 import com.zyao89.view.zloading.Z_TYPE
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-
 import kotlinx.android.synthetic.main.activity_query_test.*
 import kotlinx.android.synthetic.main.content_query_test.*
 import vip.mystery0.logs.Logs
+import vip.mystery0.rx.PackageData
+import vip.mystery0.rx.Status.*
 
 class QueryTestActivity : XhuBaseActivity(R.layout.activity_query_test) {
 	private val queryTestViewModel: QueryTestViewModel by lazy {

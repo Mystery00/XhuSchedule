@@ -34,7 +34,7 @@ class TodaySliceProvider : SliceProvider() {
 							.setTitle("URI found.")
 							.setPrimaryAction(activityAction))
 					.build()
-			"/today.class"->ListBuilder(context, sliceUri, ListBuilder.INFINITY)
+			"/today.class" -> ListBuilder(context, sliceUri, ListBuilder.INFINITY)
 					.setHeader(ListBuilder.HeaderBuilder()
 							.setTitle("课表")
 							.setSubtitle("副标题")

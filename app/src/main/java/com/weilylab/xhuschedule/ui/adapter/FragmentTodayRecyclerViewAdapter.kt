@@ -25,7 +25,6 @@ import io.reactivex.schedulers.Schedulers
 import vip.mystery0.logs.Logs
 import vip.mystery0.rx.StartAndCompleteObserver
 import vip.mystery0.tools.base.binding.BaseMultiBindingRecyclerViewAdapter
-import kotlin.collections.ArrayList
 
 class FragmentTodayRecyclerViewAdapter(private val context: Context) : BaseMultiBindingRecyclerViewAdapter() {
 	private var isRun = false
