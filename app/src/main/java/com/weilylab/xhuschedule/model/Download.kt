@@ -61,11 +61,13 @@ class Download : Parcelable {
         this.totalFileSize = parcel.readLong()
     }
 
-    companion object {
-		@JvmField
-        val CREATOR: Parcelable.Creator<Download> = object : Parcelable.Creator<Download> {
-            override fun createFromParcel(source: Parcel): Download = Download(source)
-            override fun newArray(size: Int): Array<Download?> = arrayOfNulls(size)
+    companion object CREATOR : Parcelable.Creator<Download> {
+        override fun createFromParcel(parcel: Parcel): Download {
+            return Download(parcel)
+        }
+
+        override fun newArray(size: Int): Array<Download?> {
+            return arrayOfNulls(size)
         }
     }
 }

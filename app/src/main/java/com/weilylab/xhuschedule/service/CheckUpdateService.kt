@@ -10,10 +10,10 @@ import androidx.core.app.NotificationManagerCompat
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.api.XhuScheduleCloudAPI
-import com.weilylab.xhuschedule.factory.GsonFactory
-import com.weilylab.xhuschedule.factory.RetrofitFactory
-import com.weilylab.xhuschedule.model.Version
 import com.weilylab.xhuschedule.constant.Constants
+import com.weilylab.xhuschedule.factory.RetrofitFactory
+import com.weilylab.xhuschedule.factory.fromJson
+import com.weilylab.xhuschedule.model.Version
 import com.weilylab.xhuschedule.ui.activity.GuideActivity
 import com.weilylab.xhuschedule.ui.activity.SplashActivity
 import com.weilylab.xhuschedule.ui.activity.SplashImageActivity
@@ -58,7 +58,7 @@ class CheckUpdateService : Service() {
 				.create(XhuScheduleCloudAPI::class.java)
 				.checkVersion(appVersion, systemVersion, manufacturer, model, rom, ConfigUtil.getDeviceID())
 				.subscribeOn(Schedulers.io())
-				.map { GsonFactory.parse<Version>(it) }
+				.map { it.fromJson<Version>() }
 				.observeOn(AndroidSchedulers.mainThread())
 				.subscribe(object : OnlyCompleteObserver<Version>() {
 					override fun onFinish(data: Version?) {

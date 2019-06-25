@@ -30,7 +30,7 @@ class CustomCourseAdapter(private val context: Context) : BaseMultiBindingRecycl
 	@Suppress("UNCHECKED_CAST")
 	fun updateMap() {
 		map.clear()
-		val key = items.filter { it is String } as List<String>
+		val key = items.filterIsInstance<String>()
 		expandList.clear()
 		expandList.addAll(key)
 		key.forEach { k ->

@@ -2,16 +2,16 @@ package com.weilylab.xhuschedule.repository.remote
 
 import androidx.lifecycle.MutableLiveData
 import com.weilylab.xhuschedule.api.LeanCloudAPI
-import com.weilylab.xhuschedule.factory.GsonFactory
 import com.weilylab.xhuschedule.factory.RetrofitFactory
+import com.weilylab.xhuschedule.factory.fromJson
 import com.weilylab.xhuschedule.model.response.StartDateTimeResponse
 import com.weilylab.xhuschedule.repository.ds.InitDataSource
 import com.weilylab.xhuschedule.repository.local.InitLocalDataSource
-import vip.mystery0.tools.utils.NetworkTools
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import vip.mystery0.rx.OnlyCompleteObserver
 import vip.mystery0.rx.PackageData
+import vip.mystery0.tools.utils.NetworkTools
 import java.util.*
 
 object InitRemoteDataSource : InitDataSource {
@@ -22,7 +22,7 @@ object InitRemoteDataSource : InitDataSource {
 					.requestStartDateTime()
 					.subscribeOn(Schedulers.io())
 					.map {
-						val startDateTimeResponse = GsonFactory.parse<StartDateTimeResponse>(it)
+						val startDateTimeResponse = it.fromJson<StartDateTimeResponse>()
 						if (startDateTimeResponse.results.isNotEmpty())
 							InitLocalDataSource.setStartDateTime(startDateTimeResponse.results[0].date)
 						startDateTimeResponse

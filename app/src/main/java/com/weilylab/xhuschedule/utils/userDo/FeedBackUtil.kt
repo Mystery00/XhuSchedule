@@ -3,19 +3,19 @@ package com.weilylab.xhuschedule.utils.userDo
 import com.weilylab.xhuschedule.api.FeedbackAPI
 import com.weilylab.xhuschedule.constant.ResponseCodeConstants
 import com.weilylab.xhuschedule.constant.StringConstant
-import com.weilylab.xhuschedule.factory.GsonFactory
 import com.weilylab.xhuschedule.factory.RetrofitFactory
+import com.weilylab.xhuschedule.factory.fromJson
 import com.weilylab.xhuschedule.listener.DoSaveListener
 import com.weilylab.xhuschedule.listener.RequestListener
 import com.weilylab.xhuschedule.model.FeedBackMessage
 import com.weilylab.xhuschedule.model.Student
 import com.weilylab.xhuschedule.model.response.GetFeedBackMessageResponse
 import com.weilylab.xhuschedule.model.response.SendFeedBackMessageResponse
-import vip.mystery0.tools.utils.NetworkTools
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import vip.mystery0.logs.Logs
 import vip.mystery0.rx.OnlyCompleteObserver
+import vip.mystery0.tools.utils.NetworkTools
 
 object FeedBackUtil {
 	private const val RETRY_TIME = 1
@@ -26,7 +26,7 @@ object FeedBackUtil {
 					.create(FeedbackAPI::class.java)
 					.sendFBMessage(student.username, feedBackToken, content)
 					.subscribeOn(Schedulers.io())
-					.map { GsonFactory.parse<SendFeedBackMessageResponse>(it) }
+					.map { it.fromJson<SendFeedBackMessageResponse>() }
 					.observeOn(AndroidSchedulers.mainThread())
 					.subscribe(object : OnlyCompleteObserver<SendFeedBackMessageResponse>() {
 						override fun onFinish(data: SendFeedBackMessageResponse?) {
@@ -68,7 +68,7 @@ object FeedBackUtil {
 					.getFBMessage(student.username, feedBackToken, lastId)
 					.subscribeOn(Schedulers.io())
 					.map {
-						val getFeedBackMessageResponse = GsonFactory.parse<GetFeedBackMessageResponse>(it)
+						val getFeedBackMessageResponse = it.fromJson<GetFeedBackMessageResponse>()
 						if (getFeedBackMessageResponse.rt == ResponseCodeConstants.DONE)
 							doSaveListener.doSave(getFeedBackMessageResponse.fBMessages)
 						getFeedBackMessageResponse

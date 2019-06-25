@@ -118,8 +118,7 @@ class FragmentTodayRecyclerViewAdapter(private val context: Context) : BaseMulti
 				customThingList.clear()
 				val iterator = tempList.iterator()
 				while (iterator.hasNext()) {
-					val element = iterator.next()
-					when (element) {
+					when (val element = iterator.next()) {
 						is PoetySentence -> {
 							//确保今日诗词只会出现一次
 							poetySentenceList.clear()

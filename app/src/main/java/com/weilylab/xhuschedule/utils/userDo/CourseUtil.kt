@@ -5,6 +5,7 @@ import com.weilylab.xhuschedule.constant.ResponseCodeConstants
 import com.weilylab.xhuschedule.constant.StringConstant
 import com.weilylab.xhuschedule.factory.GsonFactory
 import com.weilylab.xhuschedule.factory.RetrofitFactory
+import com.weilylab.xhuschedule.factory.fromJson
 import com.weilylab.xhuschedule.listener.DoSaveListener
 import com.weilylab.xhuschedule.listener.RequestListener
 import com.weilylab.xhuschedule.model.Course
@@ -34,7 +35,7 @@ object CourseUtil {
 				.getCourses(student.username, year, term)
 				.subscribeOn(Schedulers.io())
 				.map {
-					val courseResponse = GsonFactory.parse<CourseResponse>(it)
+					val courseResponse = it.fromJson<CourseResponse>()
 					if (courseResponse.rt == ResponseCodeConstants.DONE)
 						doSaveListener?.doSave(courseResponse.courses)
 					courseResponse
@@ -104,7 +105,7 @@ object CourseUtil {
 							.getCourses(studentList[position].username, year, term)
 							.subscribeOn(Schedulers.io())
 							.map {
-								val courseResponse = GsonFactory.parse<CourseResponse>(it)
+								val courseResponse = it.fromJson<CourseResponse>()
 								if (courseResponse.rt == ResponseCodeConstants.DONE) {
 									val saveMap = HashMap<String, List<Course>>()
 									saveMap[studentList[position].username] = courseResponse.courses

@@ -6,8 +6,8 @@ import android.util.Base64
 import com.weilylab.xhuschedule.api.ScoreAPI
 import com.weilylab.xhuschedule.constant.ResponseCodeConstants
 import com.weilylab.xhuschedule.constant.StringConstant
-import com.weilylab.xhuschedule.factory.GsonFactory
 import com.weilylab.xhuschedule.factory.RetrofitFactory
+import com.weilylab.xhuschedule.factory.fromJson
 import com.weilylab.xhuschedule.listener.DoSaveListener
 import com.weilylab.xhuschedule.listener.RequestListener
 import com.weilylab.xhuschedule.model.CetScore
@@ -18,10 +18,10 @@ import com.weilylab.xhuschedule.model.response.CetScoresResponse
 import com.weilylab.xhuschedule.model.response.CetVCodeResponse
 import com.weilylab.xhuschedule.model.response.ClassScoreResponse
 import com.weilylab.xhuschedule.model.response.ExpScoreResponse
-import vip.mystery0.rx.OnlyCompleteObserver
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import vip.mystery0.logs.Logs
+import vip.mystery0.rx.OnlyCompleteObserver
 
 object ScoreUtil {
 	private const val RETRY_TIME = 1
@@ -34,7 +34,7 @@ object ScoreUtil {
 				.getScores(student.username, year, term)
 				.subscribeOn(Schedulers.io())
 				.map {
-					val scoreResponse = GsonFactory.parse<ClassScoreResponse>(it)
+					val scoreResponse = it.fromJson<ClassScoreResponse>()
 					if (scoreResponse.rt == ResponseCodeConstants.DONE) {
 						val map = HashMap<Int, List<ClassScore>>()
 						map[TYPE_SCORE] = scoreResponse.scores
@@ -85,7 +85,7 @@ object ScoreUtil {
 				.getExpScores(student.username, year, term)
 				.subscribeOn(Schedulers.io())
 				.map {
-					val scoreResponse = GsonFactory.parse<ExpScoreResponse>(it)
+					val scoreResponse = it.fromJson<ExpScoreResponse>()
 					if (scoreResponse.rt == ResponseCodeConstants.DONE)
 						doSaveListener?.doSave(scoreResponse.expScores)
 					scoreResponse
@@ -126,7 +126,7 @@ object ScoreUtil {
 				.create(ScoreAPI::class.java)
 				.getCETVCode(student.username, no, null)
 				.subscribeOn(Schedulers.io())
-				.map { GsonFactory.parse<CetVCodeResponse>(it) }
+				.map { it.fromJson<CetVCodeResponse>() }
 				.observeOn(AndroidSchedulers.mainThread())
 				.subscribe(object : OnlyCompleteObserver<CetVCodeResponse>() {
 					override fun onFinish(data: CetVCodeResponse?) {
@@ -166,7 +166,7 @@ object ScoreUtil {
 				.create(ScoreAPI::class.java)
 				.getCETScores(student.username, no, name, vcode)
 				.subscribeOn(Schedulers.io())
-				.map { GsonFactory.parse<CetScoresResponse>(it) }
+				.map { it.fromJson<CetScoresResponse>() }
 				.observeOn(AndroidSchedulers.mainThread())
 				.subscribe(object : OnlyCompleteObserver<CetScoresResponse>() {
 					override fun onFinish(data: CetScoresResponse?) {

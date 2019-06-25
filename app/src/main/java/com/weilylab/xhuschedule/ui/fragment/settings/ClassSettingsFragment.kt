@@ -2,10 +2,10 @@ package com.weilylab.xhuschedule.ui.fragment.settings
 
 import android.app.Dialog
 import android.app.TimePickerDialog
-import androidx.preference.CheckBoxPreference
-import androidx.preference.Preference
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
+import androidx.preference.CheckBoxPreference
+import androidx.preference.Preference
 import cc.shinichi.library.ImagePreview
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.weilylab.xhuschedule.R
@@ -22,12 +22,12 @@ import vip.mystery0.rx.Status.*
 import java.util.*
 
 class ClassSettingsFragment : XhuBasePreferenceFragment(R.xml.preference_class) {
-	private val showNotWeekPreference: CheckBoxPreference by lazy { findPreferenceById<CheckBoxPreference>(R.string.key_show_not_week) }
-	private val currentYearAndTermPreference: Preference by lazy { findPreferenceById<Preference>(R.string.key_current_year_and_term) }
-	private val customStartTimePreference: Preference by lazy { findPreferenceById<Preference>(R.string.key_custom_start_time) }
-	private val showTomorrowCourseAfterPreference: Preference by lazy { findPreferenceById<Preference>(R.string.key_show_tomorrow_course_after) }
-	private val schoolCalendarPreference: Preference by lazy { findPreferenceById<Preference>(R.string.key_action_school_calendar) }
-	private val showCustomThingFirstPreference: CheckBoxPreference by lazy { findPreferenceById<CheckBoxPreference>(R.string.key_show_custom_thing_first) }
+	private val showNotWeekPreference by lazy { findPreferenceById<CheckBoxPreference>(R.string.key_show_not_week) }
+	private val currentYearAndTermPreference by lazy { findPreferenceById<Preference>(R.string.key_current_year_and_term) }
+	private val customStartTimePreference by lazy { findPreferenceById<Preference>(R.string.key_custom_start_time) }
+	private val showTomorrowCourseAfterPreference by lazy { findPreferenceById<Preference>(R.string.key_show_tomorrow_course_after) }
+	private val schoolCalendarPreference by lazy { findPreferenceById<Preference>(R.string.key_action_school_calendar) }
+	private val showCustomThingFirstPreference by lazy { findPreferenceById<CheckBoxPreference>(R.string.key_show_custom_thing_first) }
 
 	private val dialog: Dialog by lazy {
 		ZLoadingDialog(activity!!)
@@ -60,12 +60,12 @@ class ClassSettingsFragment : XhuBasePreferenceFragment(R.xml.preference_class) 
 
 	override fun monitor() {
 		super.monitor()
-		showNotWeekPreference.setOnPreferenceChangeListener { _, _ ->
+		showNotWeekPreference.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, _ ->
 			ConfigurationUtil.isShowNotWeek = !showNotWeekPreference.isChecked
 			LayoutRefreshConfigUtil.isRefreshTableFragment = true
 			true
 		}
-		currentYearAndTermPreference.setOnPreferenceClickListener {
+		currentYearAndTermPreference.onPreferenceClickListener = Preference.OnPreferenceClickListener {
 			StudentLocalDataSource.queryAllStudentInfo { packageData ->
 				when (packageData.status) {
 					Content -> {
@@ -116,7 +116,7 @@ class ClassSettingsFragment : XhuBasePreferenceFragment(R.xml.preference_class) 
 			}
 			true
 		}
-		showTomorrowCourseAfterPreference.setOnPreferenceClickListener {
+		showTomorrowCourseAfterPreference.onPreferenceClickListener = Preference.OnPreferenceClickListener {
 			val time = ConfigurationUtil.showTomorrowCourseAfterTime
 			val oldHour: Int
 			val oldMinute: Int
@@ -147,7 +147,7 @@ class ClassSettingsFragment : XhuBasePreferenceFragment(R.xml.preference_class) 
 			timePickerDialog.show()
 			true
 		}
-		schoolCalendarPreference.setOnPreferenceClickListener {
+		schoolCalendarPreference.onPreferenceClickListener = Preference.OnPreferenceClickListener {
 			if (schoolCalendarUrl == null) {
 				dialog.show()
 				SchoolCalendarRepository.getUrl { url ->
@@ -175,7 +175,7 @@ class ClassSettingsFragment : XhuBasePreferenceFragment(R.xml.preference_class) 
 			}
 			true
 		}
-		showCustomThingFirstPreference.setOnPreferenceChangeListener { _, _ ->
+		showCustomThingFirstPreference.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, _ ->
 			ConfigurationUtil.showCustomThingFirst = !showCustomThingFirstPreference.isChecked
 			LayoutRefreshConfigUtil.isRefreshTodayFragment = true
 			true

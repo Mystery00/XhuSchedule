@@ -12,7 +12,6 @@ import com.weilylab.xhuschedule.viewmodel.BottomNavigationViewModel
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import vip.mystery0.logs.Logs
 import vip.mystery0.rx.OnlyCompleteObserver
 import vip.mystery0.rx.PackageData
 import vip.mystery0.rx.Status.*

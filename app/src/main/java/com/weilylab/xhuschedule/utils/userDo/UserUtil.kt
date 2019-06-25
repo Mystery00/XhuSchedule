@@ -1,11 +1,10 @@
 package com.weilylab.xhuschedule.utils.userDo
 
 import com.weilylab.xhuschedule.api.UserAPI
-import vip.mystery0.rx.Status.*
 import com.weilylab.xhuschedule.constant.ResponseCodeConstants
 import com.weilylab.xhuschedule.constant.StringConstant
-import com.weilylab.xhuschedule.factory.GsonFactory
 import com.weilylab.xhuschedule.factory.RetrofitFactory
+import com.weilylab.xhuschedule.factory.fromJson
 import com.weilylab.xhuschedule.listener.DoSaveListener
 import com.weilylab.xhuschedule.listener.RequestListener
 import com.weilylab.xhuschedule.model.Student
@@ -14,11 +13,12 @@ import com.weilylab.xhuschedule.model.response.GetUserDataResponse
 import com.weilylab.xhuschedule.model.response.LoginResponse
 import com.weilylab.xhuschedule.model.response.SetUserDataResponse
 import com.weilylab.xhuschedule.repository.local.StudentLocalDataSource
-import vip.mystery0.tools.utils.NetworkTools
-import vip.mystery0.rx.OnlyCompleteObserver
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import vip.mystery0.logs.Logs
+import vip.mystery0.rx.OnlyCompleteObserver
+import vip.mystery0.rx.Status.*
+import vip.mystery0.tools.utils.NetworkTools
 
 object UserUtil {
 	private const val RETRY_TIME = 1
@@ -30,7 +30,7 @@ object UserUtil {
 					.autoLogin(student.username, student.password)
 					.subscribeOn(Schedulers.io())
 					.map {
-						val data = GsonFactory.parse<LoginResponse>(it)
+						val data = it.fromJson<LoginResponse>()
 						if (data.rt == ResponseCodeConstants.DONE) {
 							StudentLocalDataSource.registerFeedBackToken(student, data.fbToken)
 							doSaveListener?.doSave(student)
@@ -63,7 +63,7 @@ object UserUtil {
 				.getInfo(student.username)
 				.subscribeOn(Schedulers.io())
 				.map {
-					val data = GsonFactory.parse<StudentInfo>(it)
+					val data = it.fromJson<StudentInfo>()
 					if (data.rt == ResponseCodeConstants.DONE)
 						doSaveListener?.doSave(data)
 					data
@@ -139,7 +139,7 @@ object UserUtil {
 				.create(UserAPI::class.java)
 				.setUserData(student.username, key, value)
 				.subscribeOn(Schedulers.io())
-				.map { GsonFactory.parse<SetUserDataResponse>(it) }
+				.map { it.fromJson<SetUserDataResponse>() }
 				.observeOn(AndroidSchedulers.mainThread())
 				.subscribe(object : OnlyCompleteObserver<SetUserDataResponse>() {
 					override fun onError(e: Throwable) {
@@ -180,7 +180,7 @@ object UserUtil {
 				.getUserData(student.username, key)
 				.subscribeOn(Schedulers.io())
 				.map {
-					val data = GsonFactory.parse<GetUserDataResponse>(it)
+					val data = it.fromJson<GetUserDataResponse>()
 					if (data.rt == ResponseCodeConstants.DONE)
 						doSaveListener?.doSave(data)
 					data

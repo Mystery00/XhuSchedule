@@ -2,10 +2,11 @@ package com.weilylab.xhuschedule.repository.remote
 
 import androidx.lifecycle.MutableLiveData
 import com.weilylab.xhuschedule.constant.StringConstant
-import com.weilylab.xhuschedule.factory.GsonFactory
 import com.weilylab.xhuschedule.listener.DoSaveListener
 import com.weilylab.xhuschedule.listener.RequestListener
-import com.weilylab.xhuschedule.model.*
+import com.weilylab.xhuschedule.model.CustomThing
+import com.weilylab.xhuschedule.model.Student
+import com.weilylab.xhuschedule.model.SyncCustomThing
 import com.weilylab.xhuschedule.model.response.GetUserDataResponse
 import com.weilylab.xhuschedule.repository.local.CustomThingLocalDataSource
 import com.weilylab.xhuschedule.repository.local.StudentLocalDataSource
@@ -16,6 +17,8 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import vip.mystery0.rx.PackageData
 import vip.mystery0.rx.StartAndCompleteObserver
+import vip.mystery0.tools.factory.fromJson
+import vip.mystery0.tools.factory.toJson
 import vip.mystery0.tools.utils.NetworkTools
 
 object CustomThingRemoteDataSource {
@@ -44,8 +47,8 @@ object CustomThingRemoteDataSource {
 							} else {
 								UserUtil.getUserData(data, key, object : DoSaveListener<GetUserDataResponse> {
 									override fun doSave(t: GetUserDataResponse) {
-										val sync = GsonFactory.parse(t.value, SyncCustomThing::class.java)
-										CustomThingLocalDataSource.syncLocal(sync?.list?: emptyList())
+										val sync = t.value.fromJson<SyncCustomThing>()
+										CustomThingLocalDataSource.syncLocal(sync.list)
 									}
 								}, object : RequestListener<String> {
 									override fun done(t: String) {
@@ -86,7 +89,7 @@ object CustomThingRemoteDataSource {
 								statusLiveData.value = PackageData.content(false)
 								return
 							}
-							UserUtil.setUserData(data.first!!, key, GsonFactory.toJson(SyncCustomThing(data.second)), object : RequestListener<Boolean> {
+							UserUtil.setUserData(data.first!!, key, SyncCustomThing(data.second).toJson(), object : RequestListener<Boolean> {
 								override fun done(t: Boolean) {
 									statusLiveData.value = PackageData.content(false)
 								}

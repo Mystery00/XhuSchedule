@@ -2,7 +2,6 @@ package com.weilylab.xhuschedule.repository.remote
 
 import androidx.lifecycle.MutableLiveData
 import com.weilylab.xhuschedule.constant.StringConstant
-import com.weilylab.xhuschedule.factory.GsonFactory
 import com.weilylab.xhuschedule.listener.DoSaveListener
 import com.weilylab.xhuschedule.listener.RequestListener
 import com.weilylab.xhuschedule.model.Course
@@ -22,6 +21,8 @@ import io.reactivex.schedulers.Schedulers
 import vip.mystery0.logs.Logs
 import vip.mystery0.rx.PackageData
 import vip.mystery0.rx.StartAndCompleteObserver
+import vip.mystery0.tools.factory.fromJson
+import vip.mystery0.tools.factory.toJson
 import vip.mystery0.tools.utils.NetworkTools
 
 object CourseRemoteDataSource : CourseDataSource {
@@ -123,7 +124,7 @@ object CourseRemoteDataSource : CourseDataSource {
 								statusLiveData.value = PackageData.content(false)
 								return
 							}
-							UserUtil.setUserData(student, key, GsonFactory.toJson(SyncCustomCourse(data)), object : RequestListener<Boolean> {
+							UserUtil.setUserData(student, key, SyncCustomCourse(data).toJson(), object : RequestListener<Boolean> {
 								override fun done(t: Boolean) {
 									statusLiveData.value = PackageData.content(false)
 								}
@@ -148,8 +149,8 @@ object CourseRemoteDataSource : CourseDataSource {
 		if (NetworkTools.instance.isConnectInternet()) {
 			UserUtil.getUserData(student, key, object : DoSaveListener<GetUserDataResponse> {
 				override fun doSave(t: GetUserDataResponse) {
-					val sync = GsonFactory.parse(t.value, SyncCustomCourse::class.java)
-					CourseLocalDataSource.syncLocal(sync?.list ?: emptyList(), student.username)
+					val sync = t.value.fromJson<SyncCustomCourse>()
+					CourseLocalDataSource.syncLocal(sync.list, student.username)
 				}
 			}, object : RequestListener<String> {
 				override fun done(t: String) {

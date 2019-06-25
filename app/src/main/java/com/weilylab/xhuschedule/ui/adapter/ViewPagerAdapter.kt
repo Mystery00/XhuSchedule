@@ -35,13 +35,13 @@ package com.weilylab.xhuschedule.ui.adapter
 
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
-import java.util.ArrayList
 import com.weilylab.xhuschedule.base.BaseBottomNavigationFragment
+import java.util.*
 
 /**
  * Created by myste.
  */
-class ViewPagerAdapter(fragmentManager: FragmentManager) : FragmentPagerAdapter(fragmentManager) {
+class ViewPagerAdapter(fragmentManager: FragmentManager) : FragmentPagerAdapter(fragmentManager, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
 
 	private val fragmentList = ArrayList<BaseBottomNavigationFragment<*>>()
 

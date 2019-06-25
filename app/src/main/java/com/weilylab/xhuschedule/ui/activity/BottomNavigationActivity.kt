@@ -58,6 +58,7 @@ import vip.mystery0.tools.utils.DensityTools
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.math.roundToInt
 
 class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_navigation) {
 	companion object {
@@ -441,7 +442,7 @@ class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_naviga
 				val horizontalOffset = recyclerView.computeHorizontalScrollOffset().toFloat() / DensityTools.instance.getScreenWidth().toFloat()
 				val params = dialogShowCourseBinding.point.layoutParams as ConstraintLayout.LayoutParams
 				super.onScrolled(recyclerView, dx, dy)
-				params.leftMargin = Math.round(distance * horizontalOffset)
+				params.leftMargin = (distance * horizontalOffset).roundToInt()
 				dialogShowCourseBinding.point.layoutParams = params
 			}
 		})
@@ -490,6 +491,7 @@ class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_naviga
 	}
 
 	override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+		super.onActivityResult(requestCode, resultCode, data)
 		when (requestCode) {
 			ADD_ACCOUNT_CODE -> {
 				if (resultCode == Activity.RESULT_OK) {

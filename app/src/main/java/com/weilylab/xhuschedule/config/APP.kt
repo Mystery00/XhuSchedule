@@ -38,7 +38,6 @@ import android.app.Application
 import android.content.Context
 import android.os.Build
 import androidx.multidex.MultiDexApplication
-import com.jinrishici.sdk.android.factory.JinrishiciFactory
 import com.oasisfeng.condom.CondomContext
 import com.sina.weibo.sdk.WbSdk
 import com.sina.weibo.sdk.auth.AuthInfo
@@ -76,7 +75,7 @@ class APP : MultiDexApplication() {
 				CrashReport.initCrashReport(applicationContext, "7fe1820ab7", BuildConfig.DEBUG)
 			}
 		DBHelper.init(this)
-		NotificationUtil.initChannelID(APP.context)//初始化NotificationChannelID
+		NotificationUtil.initChannelID(this)//初始化NotificationChannelID
 		ToolsClient.initWithContext(this)
 		if (PackageUtil.isQQApplicationAvailable())
 			tencent = try {

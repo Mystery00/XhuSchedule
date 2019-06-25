@@ -31,7 +31,7 @@ object FeedBackLocalDataSource {
 						if (data == null || data.isEmpty())
 							feedBackMessageListLiveData.value = PackageData.empty()
 						else {
-							maxId.value = data.sortedBy { it.id }.last().id
+							maxId.value = data.maxBy { it.id }!!.id
 							feedBackMessageListLiveData.value = PackageData.content(data)
 						}
 					}

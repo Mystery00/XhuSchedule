@@ -239,7 +239,7 @@ class CustomCourseActivity : XhuBaseActivity(R.layout.activity_custom_course) {
 							}
 							.addCallback(object : Snackbar.Callback() {
 								override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
-									if (event != Snackbar.Callback.DISMISS_EVENT_ACTION) {
+									if (event != DISMISS_EVENT_ACTION) {
 										CustomCourseRepository.delete(item) {
 											LayoutRefreshConfigUtil.isRefreshTodayFragment = true
 											LayoutRefreshConfigUtil.isRefreshTableFragment = true
@@ -568,7 +568,7 @@ class CustomCourseActivity : XhuBaseActivity(R.layout.activity_custom_course) {
 	}
 
 	override fun onOptionsItemSelected(item: MenuItem): Boolean {
-		return when (item?.itemId) {
+		return when (item.itemId) {
 			R.id.action_upload -> {
 				val main = customCourseViewModel.studentList.value?.data?.find { it.isMain }
 				if (main == null)

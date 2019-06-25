@@ -8,15 +8,12 @@ import android.content.Context
 import android.content.Intent
 import android.view.View
 import android.widget.RemoteViews
-import androidx.appcompat.app.AppCompatDelegate
-
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.constant.Constants
 import com.weilylab.xhuschedule.constant.SharedPreferenceConstant
 import com.weilylab.xhuschedule.service.widget.TodayCourseWidgetService
 import com.weilylab.xhuschedule.utils.CalendarUtil
 import com.weilylab.xhuschedule.utils.Color
-import com.weilylab.xhuschedule.utils.ConfigurationUtil
 import com.weilylab.xhuschedule.utils.WidgetUtil
 
 class TodayCourseWidget : AppWidgetProvider() {

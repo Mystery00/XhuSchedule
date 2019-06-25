@@ -3,12 +3,12 @@ package com.weilylab.xhuschedule.utils.userDo
 import com.weilylab.xhuschedule.api.TestAPI
 import com.weilylab.xhuschedule.constant.ResponseCodeConstants
 import com.weilylab.xhuschedule.constant.StringConstant
-import com.weilylab.xhuschedule.factory.GsonFactory
 import com.weilylab.xhuschedule.factory.RetrofitFactory
+import com.weilylab.xhuschedule.factory.fromJson
 import com.weilylab.xhuschedule.listener.DoSaveListener
 import com.weilylab.xhuschedule.listener.RequestListener
-import com.weilylab.xhuschedule.model.Test
 import com.weilylab.xhuschedule.model.Student
+import com.weilylab.xhuschedule.model.Test
 import com.weilylab.xhuschedule.model.response.TestResponse
 import io.reactivex.Observable
 import io.reactivex.Observer
@@ -17,8 +17,7 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import vip.mystery0.logs.Logs
 import vip.mystery0.rx.OnlyCompleteObserver
-import java.util.ArrayList
-import java.util.HashMap
+import java.util.*
 
 object TestUtil {
 	private const val RETRY_TIME = 1
@@ -29,7 +28,7 @@ object TestUtil {
 				.getTests(student.username)
 				.subscribeOn(Schedulers.io())
 				.map {
-					val testResponse = GsonFactory.parse<TestResponse>(it)
+					val testResponse = it.fromJson<TestResponse>()
 					if (testResponse.rt == ResponseCodeConstants.DONE)
 						doSaveListener?.doSave(testResponse.tests)
 					testResponse
@@ -98,7 +97,7 @@ object TestUtil {
 							.getTests(studentList[position].username)
 							.subscribeOn(Schedulers.io())
 							.map {
-								val testResponse = GsonFactory.parse<TestResponse>(it)
+								val testResponse = it.fromJson<TestResponse>()
 								if (testResponse.rt == ResponseCodeConstants.DONE) {
 									val saveMap = HashMap<String, List<Test>>()
 									saveMap[studentList[position].username] = testResponse.tests

@@ -197,8 +197,8 @@ class QueryTestActivity : XhuBaseActivity(R.layout.activity_query_test) {
 		return true
 	}
 
-	override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-		return when (item?.itemId) {
+	override fun onOptionsItemSelected(item: MenuItem): Boolean {
+		return when (item.itemId) {
 			R.id.action_show_html -> {
 				if (!queryTestViewModel.html.value.isNullOrEmpty())
 					WebViewActivity.intentTo(this, queryTestViewModel.html.value)
@@ -207,7 +207,7 @@ class QueryTestActivity : XhuBaseActivity(R.layout.activity_query_test) {
 			else -> {
 				queryTestViewModel.studentList.value?.data?.forEachIndexed { index, student ->
 					val itemId = 100 + index
-					if (item?.itemId == itemId) {
+					if (item.itemId == itemId) {
 						queryTestForStudent(student)
 						return true
 					}

@@ -38,8 +38,7 @@ object CalendarUtil {
 	}
 
 	fun getTomorrowIndex(): Int {
-		val nowIndex = getWeekIndex()
-		return when (nowIndex) {
+		return when (val nowIndex = getWeekIndex()) {
 			7 -> 1
 			else -> nowIndex + 1
 		}

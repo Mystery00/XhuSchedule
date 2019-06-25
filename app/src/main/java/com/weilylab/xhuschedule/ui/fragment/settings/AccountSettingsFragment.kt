@@ -2,31 +2,32 @@ package com.weilylab.xhuschedule.ui.fragment.settings
 
 import android.app.Activity
 import android.content.Intent
+import androidx.appcompat.app.AlertDialog
 import androidx.preference.CheckBoxPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceCategory
-import androidx.appcompat.app.AlertDialog
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.base.XhuBasePreferenceFragment
-import vip.mystery0.rx.Status.*
 import com.weilylab.xhuschedule.model.Student
 import com.weilylab.xhuschedule.repository.local.StudentLocalDataSource
 import com.weilylab.xhuschedule.ui.activity.LoginActivity
 import com.weilylab.xhuschedule.utils.ConfigurationUtil
 import com.weilylab.xhuschedule.utils.LayoutRefreshConfigUtil
-import vip.mystery0.rx.OnlyCompleteObserver
 import vip.mystery0.logs.Logs
+import vip.mystery0.rx.OnlyCompleteObserver
+import vip.mystery0.rx.Status.Content
+import vip.mystery0.rx.Status.Error
 
 class AccountSettingsFragment : XhuBasePreferenceFragment(R.xml.preference_account) {
 	companion object {
 		const val ADD_ACCOUNT_CODE = 233
 	}
 
-	private val loggedStudentCategory: PreferenceCategory by lazy { findPreferenceById<PreferenceCategory>(R.string.key_logged_account) }
-	private val addAccountPreference: Preference by lazy { findPreferenceById<Preference>(R.string.key_add_account) }
-	private val delAccountPreference: Preference by lazy { findPreferenceById<Preference>(R.string.key_del_account) }
-	private val setMainAccountPreference: Preference by lazy { findPreferenceById<Preference>(R.string.key_set_main_account) }
-	private val enableMultiUserModePreference: CheckBoxPreference by lazy { findPreferenceById<CheckBoxPreference>(R.string.key_enable_multi_user_mode) }
+	private val loggedStudentCategory by lazy { findPreferenceById<PreferenceCategory>(R.string.key_logged_account) }
+	private val addAccountPreference by lazy { findPreferenceById<Preference>(R.string.key_add_account) }
+	private val delAccountPreference by lazy { findPreferenceById<Preference>(R.string.key_del_account) }
+	private val setMainAccountPreference by lazy { findPreferenceById<Preference>(R.string.key_set_main_account) }
+	private val enableMultiUserModePreference by lazy { findPreferenceById<CheckBoxPreference>(R.string.key_enable_multi_user_mode) }
 	private val studentList = ArrayList<Student>()
 
 	override fun initPreference() {
@@ -38,11 +39,11 @@ class AccountSettingsFragment : XhuBasePreferenceFragment(R.xml.preference_accou
 
 	override fun monitor() {
 		super.monitor()
-		addAccountPreference.setOnPreferenceClickListener {
+		addAccountPreference.onPreferenceClickListener = Preference.OnPreferenceClickListener {
 			startActivityForResult(Intent(activity, LoginActivity::class.java), ADD_ACCOUNT_CODE)
 			true
 		}
-		delAccountPreference.setOnPreferenceClickListener {
+		delAccountPreference.onPreferenceClickListener = Preference.OnPreferenceClickListener {
 			LayoutRefreshConfigUtil.isRefreshBottomNavigationActivity = true
 			val valueArray = Array(studentList.size) { i -> "${studentList[i].username}(${studentList[i].studentName})" }
 			val checkedArray = BooleanArray(studentList.size) { false }
@@ -72,7 +73,7 @@ class AccountSettingsFragment : XhuBasePreferenceFragment(R.xml.preference_accou
 					.show()
 			true
 		}
-		setMainAccountPreference.setOnPreferenceClickListener {
+		setMainAccountPreference.onPreferenceClickListener = Preference.OnPreferenceClickListener {
 			LayoutRefreshConfigUtil.isRefreshBottomNavigationActivity = true
 			val valueArray = Array(studentList.size) { i -> studentList[i].username }
 			val oldMainIndex = studentList.indexOfFirst { s -> s.isMain }
@@ -104,7 +105,7 @@ class AccountSettingsFragment : XhuBasePreferenceFragment(R.xml.preference_accou
 					.show()
 			true
 		}
-		enableMultiUserModePreference.setOnPreferenceChangeListener { _, _ ->
+		enableMultiUserModePreference.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, _ ->
 			LayoutRefreshConfigUtil.isRefreshBottomNavigationActivity = true
 			val isEnableMultiUserMode = !enableMultiUserModePreference.isChecked
 			if (isEnableMultiUserMode)

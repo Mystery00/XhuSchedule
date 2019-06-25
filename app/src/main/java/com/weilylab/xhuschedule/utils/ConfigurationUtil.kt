@@ -4,7 +4,6 @@ import android.content.Context
 import com.weilylab.xhuschedule.config.APP
 import com.weilylab.xhuschedule.constant.SharedPreferenceConstant
 
-
 object ConfigurationUtil {
 	private val sharedPreferences by lazy { APP.context.getSharedPreferences(SharedPreferenceConstant.FILE_NAME_CONFIG, Context.MODE_PRIVATE) }
 

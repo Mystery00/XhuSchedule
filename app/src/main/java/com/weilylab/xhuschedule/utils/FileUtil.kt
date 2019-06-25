@@ -15,7 +15,7 @@ object FileUtil {
 	fun getSplashImageFile(context: Context, objectId: String): File? {
 		if (TextUtils.isEmpty(objectId))
 			return null
-		return File(context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)!!.absolutePath + File.separator + "splash" + File.separator + objectId)
+		return File("${context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)!!.absolutePath}${File.separator}splash${File.separator}$objectId")
 	}
 
 	/**
@@ -24,6 +24,6 @@ object FileUtil {
 	fun getImageFile(context: Context, fileName: String): File? {
 		if (TextUtils.isEmpty(fileName))
 			return null
-		return File(context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)!!.absolutePath + File.separator + "image" + File.separator + fileName)
+		return File("${context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)!!.absolutePath}${File.separator}image${File.separator}$fileName")
 	}
 }

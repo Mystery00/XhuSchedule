@@ -2,8 +2,8 @@ package com.weilylab.xhuschedule.repository.remote
 
 import androidx.lifecycle.MediatorLiveData
 import com.weilylab.xhuschedule.api.LeanCloudAPI
-import com.weilylab.xhuschedule.factory.GsonFactory
 import com.weilylab.xhuschedule.factory.RetrofitFactory
+import com.weilylab.xhuschedule.factory.fromJson
 import com.weilylab.xhuschedule.model.response.SplashResponse
 import com.weilylab.xhuschedule.repository.ds.SplashDataSource
 import com.weilylab.xhuschedule.repository.local.SplashLocalDataSource
@@ -22,7 +22,7 @@ object SplashRemoteDataSource : SplashDataSource {
 				.timeout(2, TimeUnit.SECONDS)
 				.subscribeOn(Schedulers.io())
 				.map {
-					val splashResponse = GsonFactory.parse<SplashResponse>(it)
+					val splashResponse = it.fromJson<SplashResponse>()
 					if (splashResponse.results.isEmpty() || !splashResponse.results[0].isEnable)
 						SplashLocalDataSource.removeSplash()
 					else

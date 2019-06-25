@@ -38,7 +38,7 @@ class TodayFragment : BaseBottomNavigationFragment<FragmentTodayBinding>(R.layou
 		when (data.status) {
 			Content -> {
 				if (data.data != null) {
-					adapter.tempList.removeAll(adapter.items.filter { it is Schedule })
+					adapter.tempList.removeAll(adapter.items.filterIsInstance<Schedule>())
 					adapter.tempList.addAll(data.data!!)
 					adapter.sortItemList {
 						checkNoDataLayout()
@@ -46,7 +46,7 @@ class TodayFragment : BaseBottomNavigationFragment<FragmentTodayBinding>(R.layou
 				}
 			}
 			Empty -> {
-				adapter.tempList.removeAll(adapter.items.filter { it is Schedule })
+				adapter.tempList.removeAll(adapter.items.filterIsInstance<Schedule>())
 				adapter.sortItemList {
 					checkNoDataLayout()
 				}
@@ -64,7 +64,7 @@ class TodayFragment : BaseBottomNavigationFragment<FragmentTodayBinding>(R.layou
 		when (data.status) {
 			Content -> {
 				if (data.data != null) {
-					adapter.tempList.removeAll(adapter.items.filter { it is CustomThing })
+					adapter.tempList.removeAll(adapter.items.filterIsInstance<CustomThing>())
 					adapter.tempList.addAll(data.data!!)
 					adapter.sortItemList {
 						checkNoDataLayout()
@@ -72,7 +72,7 @@ class TodayFragment : BaseBottomNavigationFragment<FragmentTodayBinding>(R.layou
 				}
 			}
 			Empty -> {
-				adapter.tempList.removeAll(adapter.items.filter { it is CustomThing })
+				adapter.tempList.removeAll(adapter.items.filterIsInstance<CustomThing>())
 				adapter.sortItemList {
 					checkNoDataLayout()
 				}

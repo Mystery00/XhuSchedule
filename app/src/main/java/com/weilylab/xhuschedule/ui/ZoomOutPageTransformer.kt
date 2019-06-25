@@ -3,6 +3,8 @@ package com.weilylab.xhuschedule.ui
 import android.view.View
 
 import androidx.viewpager.widget.ViewPager
+import kotlin.math.abs
+import kotlin.math.max
 
 class ZoomOutPageTransformer : ViewPager.PageTransformer {
 	override fun transformPage(view: View, position: Float) {
@@ -14,7 +16,7 @@ class ZoomOutPageTransformer : ViewPager.PageTransformer {
 				view.alpha = 0f
 			position <= 1 -> { // [-1,1]
 				// Modify the default slide transition to shrink the page as well
-				val scaleFactor = Math.max(MIN_SCALE, 1 - Math.abs(position))
+				val scaleFactor = max(MIN_SCALE, 1 - abs(position))
 				val verticalMargin = pageHeight * (1 - scaleFactor) / 2
 				val horizontalMargin = pageWidth * (1 - scaleFactor) / 2
 				if (position < 0)

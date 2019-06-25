@@ -35,21 +35,20 @@ package com.weilylab.xhuschedule.ui.activity
 
 import android.content.Intent
 import android.graphics.Color
+import android.view.View
+import android.widget.LinearLayout
 import androidx.constraintlayout.widget.ConstraintLayout
-
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
 import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat
 import androidx.viewpager.widget.ViewPager
-import android.view.*
-import android.widget.LinearLayout
-
 import com.weilylab.xhuschedule.R
-import com.weilylab.xhuschedule.ui.fragment.PlaceholderFragment
 import com.weilylab.xhuschedule.base.XhuBaseActivity
+import com.weilylab.xhuschedule.ui.fragment.PlaceholderFragment
 import com.weilylab.xhuschedule.utils.ConfigurationUtil
 import kotlinx.android.synthetic.main.activity_guide.*
+import kotlin.math.roundToInt
 
 class GuideActivity : XhuBaseActivity(R.layout.activity_guide) {
 	private val imageArray = arrayOf(R.mipmap.welcome1, R.mipmap.welcome2, R.mipmap.welcome3, R.mipmap.welcome4)
@@ -116,7 +115,7 @@ class GuideActivity : XhuBaseActivity(R.layout.activity_guide) {
 				val leftMargin = distance * (index + positionOffset)
 				val params = point.layoutParams as ConstraintLayout.LayoutParams
 
-				params.leftMargin = Math.round(leftMargin)
+				params.leftMargin = leftMargin.roundToInt()
 				point.layoutParams = params
 			}
 
@@ -135,7 +134,7 @@ class GuideActivity : XhuBaseActivity(R.layout.activity_guide) {
 		imageViewBackground.setImageResource(resId)
 	}
 
-	inner class SectionsPagerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
+	inner class SectionsPagerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
 
 		override fun getItem(position: Int): Fragment {
 			return PlaceholderFragment.newInstance(imageArray[position])

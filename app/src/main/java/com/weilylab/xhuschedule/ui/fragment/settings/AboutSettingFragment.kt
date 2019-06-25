@@ -10,16 +10,16 @@ import com.weilylab.xhuschedule.base.XhuBasePreferenceFragment
 import com.weilylab.xhuschedule.utils.ConfigUtil
 
 class AboutSettingFragment : XhuBasePreferenceFragment(R.xml.preference_about) {
-	private val updateLogPreference: Preference by lazy { findPreferenceById<Preference>(R.string.key_update_log) }
-	private val openSourceLicenseAboutPreference: Preference by lazy { findPreferenceById<Preference>(R.string.key_open_source_license_about) }
+	private val updateLogPreference by lazy { findPreferenceById<Preference>(R.string.key_update_log) }
+	private val openSourceLicenseAboutPreference by lazy { findPreferenceById<Preference>(R.string.key_open_source_license_about) }
 
 	override fun monitor() {
 		super.monitor()
-		updateLogPreference.setOnPreferenceClickListener {
+		updateLogPreference.onPreferenceClickListener = Preference.OnPreferenceClickListener {
 			ConfigUtil.showUpdateLog(activity!!)
 			true
 		}
-		openSourceLicenseAboutPreference.setOnPreferenceClickListener {
+		openSourceLicenseAboutPreference.onPreferenceClickListener = Preference.OnPreferenceClickListener {
 			val isNight = ContextCompat.getColor(activity!!, R.color.isNight) == Color.parseColor("#000000")
 			LibsBuilder()
 					.withActivityStyle(if (isNight) Libs.ActivityStyle.DARK else Libs.ActivityStyle.LIGHT)
