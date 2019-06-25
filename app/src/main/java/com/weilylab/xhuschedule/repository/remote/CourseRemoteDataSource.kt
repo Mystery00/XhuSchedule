@@ -149,8 +149,8 @@ object CourseRemoteDataSource : CourseDataSource {
 		if (NetworkTools.instance.isConnectInternet()) {
 			UserUtil.getUserData(student, key, object : DoSaveListener<GetUserDataResponse> {
 				override fun doSave(t: GetUserDataResponse) {
-					val sync = t.value.fromJson<SyncCustomCourse>()
-					CourseLocalDataSource.syncLocal(sync.list, student.username)
+					val sync = t.value.fromJson<SyncCustomCourse?>()
+					CourseLocalDataSource.syncLocal(sync?.list?: emptyList(), student.username)
 				}
 			}, object : RequestListener<String> {
 				override fun done(t: String) {

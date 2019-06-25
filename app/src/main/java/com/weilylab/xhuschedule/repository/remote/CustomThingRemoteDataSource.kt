@@ -47,8 +47,8 @@ object CustomThingRemoteDataSource {
 							} else {
 								UserUtil.getUserData(data, key, object : DoSaveListener<GetUserDataResponse> {
 									override fun doSave(t: GetUserDataResponse) {
-										val sync = t.value.fromJson<SyncCustomThing>()
-										CustomThingLocalDataSource.syncLocal(sync.list)
+										val sync = t.value.fromJson<SyncCustomThing?>()
+										CustomThingLocalDataSource.syncLocal(sync?.list?: emptyList())
 									}
 								}, object : RequestListener<String> {
 									override fun done(t: String) {
