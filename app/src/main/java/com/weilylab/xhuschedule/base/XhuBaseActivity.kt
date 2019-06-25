@@ -39,6 +39,7 @@ import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatDelegate
 import com.weilylab.xhuschedule.utils.ConfigUtil
 import com.weilylab.xhuschedule.utils.ConfigurationUtil
+import vip.mystery0.logs.Logs
 import vip.mystery0.tools.base.BaseActivity
 import vip.mystery0.tools.utils.ActivityManagerTools
 
@@ -46,24 +47,23 @@ abstract class XhuBaseActivity(layoutId: Int?, private val isSetStatusBar: Boole
 	private var toast: Toast? = null
 
 	override fun onCreate(savedInstanceState: Bundle?) {
-		AppCompatDelegate.setCompatVectorFromResourcesEnabled(true)
 		ActivityManagerTools.instance.addActivity(this)
+		super.onCreate(savedInstanceState)
 		when (ConfigurationUtil.nightMode) {
-			0 -> delegate.localNightMode = AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY
-			1 -> delegate.localNightMode = AppCompatDelegate.MODE_NIGHT_YES
+			0 -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY)
+			1 -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
 			2 -> {
-				delegate.localNightMode = AppCompatDelegate.MODE_NIGHT_NO
+				AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
 				if (isSetStatusBar)
 					ConfigUtil.setStatusBar(this)
 			}
-			3 -> delegate.localNightMode = AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
+			3 -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
 		}
-		super.onCreate(savedInstanceState)
 	}
 
 	override fun onDestroy() {
 		super.onDestroy()
-		ActivityManagerTools.instance.finishActivity(this)
+		ActivityManagerTools.instance.removeActivity(this)
 	}
 
 	fun toastMessage(@StringRes stringRes: Int, isShowLong: Boolean = false) = toastMessage(getString(stringRes), isShowLong)
