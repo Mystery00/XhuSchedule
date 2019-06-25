@@ -47,6 +47,9 @@ autoVersion {
 }
 
 android {
+	packagingOptions {
+		exclude 'META-INF/library-core_release.kotlin_module'
+	}
 	compileSdkVersion 29
 	dataBinding {
 		enabled = true
@@ -154,19 +157,19 @@ dependencies {
 	kapt 'androidx.room:room-compiler:2.1.0'
 
 	//Condom
-	implementation 'com.oasisfeng.condom:library:2.2.0'
+	implementation 'com.oasisfeng.condom:library:2.3.1'
 
 	//MultiDex
 	implementation 'androidx.multidex:multidex:2.0.1'
 
 	//TimetableView
-	implementation 'com.zhuangfei:TimetableView:2.0.6'
+	implementation 'com.github.zfman:TimetableView:v2.0.7'
 
 	//Matisse
 	implementation 'com.zhihu.android:matisse:0.5.2-beta4'
 
 	//UCrop
-	implementation 'com.github.yalantis:ucrop:2.2.2'
+	implementation 'com.github.yalantis:ucrop:2.2.3'
 
 	//SetupWizardLayout
 	implementation 'com.github.iMeiji:SetupWizardLayout:0.1'
