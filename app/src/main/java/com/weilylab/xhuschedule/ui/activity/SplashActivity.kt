@@ -34,6 +34,8 @@
 package com.weilylab.xhuschedule.ui.activity
 
 import android.content.Intent
+import android.os.Bundle
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -76,6 +78,16 @@ class SplashActivity : XhuBaseActivity(null, false) {
 			Status.Loading -> {
 			}
 		}
+	}
+
+	override fun onCreate(savedInstanceState: Bundle?) {
+		when (ConfigurationUtil.nightMode) {
+			0 -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY)
+			1 -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+			2 -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+			3 -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
+		}
+		super.onCreate(savedInstanceState)
 	}
 
 	override fun initView() {

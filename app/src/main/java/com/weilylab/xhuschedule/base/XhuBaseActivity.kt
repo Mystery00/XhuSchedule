@@ -36,10 +36,8 @@ package com.weilylab.xhuschedule.base
 import android.os.Bundle
 import android.widget.Toast
 import androidx.annotation.StringRes
-import androidx.appcompat.app.AppCompatDelegate
 import com.weilylab.xhuschedule.utils.ConfigUtil
 import com.weilylab.xhuschedule.utils.ConfigurationUtil
-import vip.mystery0.logs.Logs
 import vip.mystery0.tools.base.BaseActivity
 import vip.mystery0.tools.utils.ActivityManagerTools
 
@@ -49,16 +47,8 @@ abstract class XhuBaseActivity(layoutId: Int?, private val isSetStatusBar: Boole
 	override fun onCreate(savedInstanceState: Bundle?) {
 		ActivityManagerTools.instance.addActivity(this)
 		super.onCreate(savedInstanceState)
-		when (ConfigurationUtil.nightMode) {
-			0 -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY)
-			1 -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-			2 -> {
-				AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-				if (isSetStatusBar)
-					ConfigUtil.setStatusBar(this)
-			}
-			3 -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
-		}
+		if (ConfigurationUtil.nightMode == 2 && isSetStatusBar)
+			ConfigUtil.setStatusBar(this)
 	}
 
 	override fun onDestroy() {
