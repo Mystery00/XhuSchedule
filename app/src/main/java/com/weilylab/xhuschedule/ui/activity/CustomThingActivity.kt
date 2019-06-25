@@ -75,7 +75,6 @@ class CustomThingActivity : XhuBaseActivity(R.layout.activity_custom_thing) {
 				hideRefresh()
 				customThingAdapter.items.clear()
 				customThingAdapter.items.addAll(it.data!!)
-				customThingAdapter.notifyDataSetChanged()
 				checkData()
 			}
 			Status.Error -> {
@@ -165,12 +164,10 @@ class CustomThingActivity : XhuBaseActivity(R.layout.activity_custom_thing) {
 			override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
 				val position = viewHolder.adapterPosition
 				val item = customThingAdapter.items.removeAt(position)
-				customThingAdapter.notifyItemRemoved(position)
 				checkData()
 				Snackbar.make(coordinatorLayout, R.string.hint_delete_done_snackbar, Snackbar.LENGTH_LONG)
 						.setAction(R.string.action_cancel_do) {
 							customThingAdapter.items.add(position, item)
-							customThingAdapter.notifyItemInserted(position)
 							checkData()
 						}
 						.addCallback(object : Snackbar.Callback() {

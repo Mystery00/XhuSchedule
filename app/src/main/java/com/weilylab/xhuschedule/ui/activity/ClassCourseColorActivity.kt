@@ -48,7 +48,6 @@ class ClassCourseColorActivity : XhuBaseActivity(R.layout.activity_class_course_
 				hideNoDataLayout()
 				classCourseColorRecyclerViewAdapter.items.clear()
 				classCourseColorRecyclerViewAdapter.items.addAll(it.data!!)
-				classCourseColorRecyclerViewAdapter.notifyDataSetChanged()
 			}
 			Empty -> {
 				hideDialog()

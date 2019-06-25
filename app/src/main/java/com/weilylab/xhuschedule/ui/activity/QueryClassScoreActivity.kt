@@ -274,7 +274,6 @@ class QueryClassScoreActivity : XhuBaseActivity(R.layout.activity_query_class_sc
 			queryClassScoreRecyclerViewAdapter.items.addAll(list.filter { !it.failed })
 		else
 			queryClassScoreRecyclerViewAdapter.items.addAll(list)
-		queryClassScoreRecyclerViewAdapter.notifyDataSetChanged()
 	}
 
 	private fun showLoading() {

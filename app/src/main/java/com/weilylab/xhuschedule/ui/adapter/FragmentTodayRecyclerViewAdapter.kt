@@ -19,11 +19,11 @@ import com.weilylab.xhuschedule.model.CustomThing
 import com.weilylab.xhuschedule.utils.ConfigurationUtil
 import com.zhuangfei.timetable.model.Schedule
 import io.reactivex.Observable
+import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import vip.mystery0.logs.Logs
-import vip.mystery0.rx.StartAndCompleteObserver
 import vip.mystery0.tools.base.binding.BaseMultiBindingRecyclerViewAdapter
 
 class FragmentTodayRecyclerViewAdapter(private val context: Context) : BaseMultiBindingRecyclerViewAdapter() {
@@ -106,10 +106,10 @@ class FragmentTodayRecyclerViewAdapter(private val context: Context) : BaseMulti
 		needRestart = true
 		if (isRun)
 			return
+		val poetySentenceList = ArrayList<PoetySentence>()
+		val courseList = ArrayList<Schedule>()
+		val customThingList = ArrayList<CustomThing>()
 		Observable.create<Boolean> {
-			val poetySentenceList = ArrayList<PoetySentence>()
-			val courseList = ArrayList<Schedule>()
-			val customThingList = ArrayList<CustomThing>()
 			while (needRestart) {
 				needRestart = false
 				poetySentenceList.clear()
@@ -128,33 +128,38 @@ class FragmentTodayRecyclerViewAdapter(private val context: Context) : BaseMulti
 					}
 				}
 			}
-			items.clear()
-			items.addAll(poetySentenceList)
-			if (ConfigurationUtil.showCustomThingFirst) {
-				items.addAll(customThingList)
-				items.addAll(courseList)
-			} else {
-				items.addAll(courseList)
-				items.addAll(customThingList)
-			}
+			it.onNext(true)
 			it.onComplete()
 		}
 				.subscribeOn(Schedulers.computation())
 				.observeOn(AndroidSchedulers.mainThread())
-				.subscribe(object : StartAndCompleteObserver<Boolean>() {
-					override fun onError(e: Throwable) {
+				.subscribe(object : Observer<Boolean> {
+					override fun onComplete() {
 						isRun = false
-						Logs.wtf("onError: ", e)
-					}
-
-					override fun onFinish(data: Boolean?) {
-						isRun = false
-						notifyDataSetChanged()
 						doneListener.invoke()
 					}
 
 					override fun onSubscribe(d: Disposable) {
 						isRun = true
+					}
+
+					override fun onNext(t: Boolean) {
+						if (t) {
+							items.clear()
+							items.addAll(poetySentenceList)
+							if (ConfigurationUtil.showCustomThingFirst) {
+								items.addAll(customThingList)
+								items.addAll(courseList)
+							} else {
+								items.addAll(courseList)
+								items.addAll(customThingList)
+							}
+						}
+					}
+
+					override fun onError(e: Throwable) {
+						isRun = false
+						Logs.wtf("onError: ", e)
 					}
 				})
 

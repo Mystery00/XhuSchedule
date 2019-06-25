@@ -213,7 +213,6 @@ class QueryExpScoreActivity : XhuBaseActivity(R.layout.activity_query_exp_score)
 	private fun updateScoreList(list: List<ExpScore>) {
 		queryExpScoreRecyclerViewAdapter.items.clear()
 		queryExpScoreRecyclerViewAdapter.items.addAll(list)
-		queryExpScoreRecyclerViewAdapter.notifyDataSetChanged()
 	}
 
 	private fun showLoading() {

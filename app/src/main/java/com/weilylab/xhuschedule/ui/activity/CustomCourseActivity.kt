@@ -139,7 +139,6 @@ class CustomCourseActivity : XhuBaseActivity(R.layout.activity_custom_course) {
 				customCourseAdapter.items.clear()
 				customCourseAdapter.items.addAll(it.data!!)
 				customCourseAdapter.updateMap()
-				customCourseAdapter.notifyDataSetChanged()
 				checkData()
 			}
 			Status.Error -> {
@@ -229,12 +228,10 @@ class CustomCourseActivity : XhuBaseActivity(R.layout.activity_custom_course) {
 				val position = viewHolder.adapterPosition
 				if (customCourseAdapter.items[position] is Course) {
 					val item = customCourseAdapter.items.removeAt(position) as Course
-					customCourseAdapter.notifyItemRemoved(position)
 					checkData()
 					Snackbar.make(coordinatorLayout, R.string.hint_delete_done_snackbar, Snackbar.LENGTH_LONG)
 							.setAction(R.string.action_cancel_do) {
 								customCourseAdapter.items.add(position, item)
-								customCourseAdapter.notifyItemInserted(position)
 								checkData()
 							}
 							.addCallback(object : Snackbar.Callback() {
@@ -435,7 +432,6 @@ class CustomCourseActivity : XhuBaseActivity(R.layout.activity_custom_course) {
 			val weekList = data.week.split(",")
 			customCourseWeekAdapter.selectedList.clear()
 			customCourseWeekAdapter.selectedList.addAll(weekList)
-			customCourseWeekAdapter.notifyDataSetChanged()
 			editTextLocation.setText(data.location)
 			val timeArray = data.time.split("-").map { it.toInt() }
 			customCourseViewModel.time.value = Pair(timeArray[0], timeArray[1])
@@ -448,7 +444,6 @@ class CustomCourseActivity : XhuBaseActivity(R.layout.activity_custom_course) {
 			editTextName.setText("")
 			editTextTeacher.setText("")
 			customCourseWeekAdapter.selectedList.clear()
-			customCourseWeekAdapter.notifyDataSetChanged()
 			editTextLocation.setText("")
 			imageViewColor.imageTintList = ColorStateList.valueOf(ContextCompat.getColor(this, R.color.colorAccent))
 		}

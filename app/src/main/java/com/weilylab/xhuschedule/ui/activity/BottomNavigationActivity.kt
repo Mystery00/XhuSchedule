@@ -203,7 +203,6 @@ class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_naviga
 		showAdapter.items.clear()
 		val week = bottomNavigationViewModel.week.value ?: 0
 		showAdapter.items.addAll(CourseUtil.filterShowCourse(it, week))
-		showAdapter.notifyDataSetChanged()
 		showPopupWindow()
 	}
 

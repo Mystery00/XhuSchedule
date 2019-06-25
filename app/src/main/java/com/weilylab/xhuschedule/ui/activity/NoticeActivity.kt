@@ -67,7 +67,6 @@ class NoticeActivity : XhuBaseActivity(R.layout.activity_notice) {
 				hideNoDataLayout()
 				noticeAdapter.items.clear()
 				noticeAdapter.items.addAll(it.data!!)
-				noticeAdapter.notifyDataSetChanged()
 			}
 			Error -> {
 				Logs.wtfm("noticeObserver: ", it.error)

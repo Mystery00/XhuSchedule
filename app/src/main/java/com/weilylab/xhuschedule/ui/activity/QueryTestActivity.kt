@@ -74,7 +74,6 @@ class QueryTestActivity : XhuBaseActivity(R.layout.activity_query_test) {
 				hideNoDataLayout()
 				queryTestRecyclerViewAdapter.items.clear()
 				queryTestRecyclerViewAdapter.items.addAll(it.data!!)
-				queryTestRecyclerViewAdapter.notifyDataSetChanged()
 			}
 			Error -> {
 				Logs.wtfm("queryTestListObserver: ", it.error)

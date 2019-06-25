@@ -133,7 +133,6 @@ class TodayFragment : BaseBottomNavigationFragment<FragmentTodayBinding>(R.layou
 
 	override fun onResume() {
 		super.onResume()
-		Logs.i("onResume: ${LayoutRefreshConfigUtil.isChangeShowTomorrowAfterOnTodayFragment}")
 		if ((LayoutRefreshConfigUtil.isRefreshTodayFragment && !LayoutRefreshConfigUtil.isRefreshBottomNavigationActivity && !LayoutRefreshConfigUtil.isRefreshTableFragment) || LayoutRefreshConfigUtil.isChangeShowTomorrowAfterOnTodayFragment) {
 			BottomNavigationRepository.queryCacheCourses(bottomNavigationViewModel)
 		}
