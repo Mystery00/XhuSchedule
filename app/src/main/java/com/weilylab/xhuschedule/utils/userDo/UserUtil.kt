@@ -24,7 +24,7 @@ object UserUtil {
 	private const val RETRY_TIME = 1
 
 	fun login(student: Student, doSaveListener: DoSaveListener<Student>?, requestListener: RequestListener<Boolean>) {
-		if (NetworkTools.isConnectInternet())
+		if (NetworkTools.instance.isConnectInternet())
 			RetrofitFactory.retrofit
 					.create(UserAPI::class.java)
 					.autoLogin(student.username, student.password)

@@ -8,7 +8,7 @@ import com.weilylab.xhuschedule.viewmodel.SplashViewModel
 
 object SplashRepository {
 	fun requestSplash(splashViewModel: SplashViewModel) {
-		if (NetworkTools.isConnectInternet())
+		if (NetworkTools.instance.isConnectInternet())
 			SplashRemoteDataSource.requestSplash(splashViewModel.splash)
 		else
 			SplashLocalDataSource.requestSplash(splashViewModel.splash)

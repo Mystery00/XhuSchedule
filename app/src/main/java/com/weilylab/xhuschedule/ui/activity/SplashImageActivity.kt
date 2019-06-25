@@ -77,7 +77,7 @@ class SplashImageActivity : XhuBaseActivity(R.layout.activity_splash_image, fals
 				.asBitmap()
 				.load(splashFile)
 				.apply(RequestOptions()
-						.override(DensityTools.getScreenWidth(), DensityTools.getScreenHeight())
+						.override(DensityTools.instance.getScreenWidth(), DensityTools.instance.getScreenHeight())
 						.diskCacheStrategy(DiskCacheStrategy.NONE))
 				.into(imageView)
 		skipView.setTotalTime(splash.splashTime)

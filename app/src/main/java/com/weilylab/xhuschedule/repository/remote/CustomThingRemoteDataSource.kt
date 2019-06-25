@@ -20,7 +20,7 @@ import vip.mystery0.tools.utils.NetworkTools
 
 object CustomThingRemoteDataSource {
 	fun syncCustomThingForLocal(statusLiveData: MutableLiveData<PackageData<Boolean>>, key: String) {
-		if (NetworkTools.isConnectInternet()) {
+		if (NetworkTools.instance.isConnectInternet()) {
 			Observable.create<Student> {
 				val main = StudentLocalDataSource.queryMainStudent()
 				if (main != null)
@@ -65,7 +65,7 @@ object CustomThingRemoteDataSource {
 	}
 
 	fun syncCustomThingForServer(statusLiveData: MutableLiveData<PackageData<Boolean>>, key: String) {
-		if (NetworkTools.isConnectInternet()) {
+		if (NetworkTools.instance.isConnectInternet()) {
 			Observable.create<List<CustomThing>> {
 				it.onNext(CustomThingLocalDataSource.getRawCustomThingList())
 				it.onComplete()

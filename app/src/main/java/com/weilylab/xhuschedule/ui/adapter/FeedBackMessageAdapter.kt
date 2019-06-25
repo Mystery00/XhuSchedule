@@ -35,15 +35,15 @@ class FeedBackMessageAdapter : BaseBindingRecyclerViewAdapter<FeedBackMessage, I
 		if (index > 0) {
 			val lastMessage = items[index - 1]
 			val lastMessageTimeString = lastMessage.createTime
-			val lastMessageTime = simpleDateFormat.parse(lastMessageTimeString).time
+			val lastMessageTime = simpleDateFormat.parse(lastMessageTimeString)!!.time
 			val thisMessageTimeString = data.createTime
-			val thisMessageTime = simpleDateFormat.parse(thisMessageTimeString).time
+			val thisMessageTime = simpleDateFormat.parse(thisMessageTimeString)!!.time
 			if (thisMessageTime - lastMessageTime > 10 * 60 * 1000)
 				showDateAndTime(binding.dateTextView, thisMessageTime)
 			else
 				binding.dateTextView.alpha = 0F
 		} else
-			showDateAndTime(binding.dateTextView, simpleDateFormat.parse(data.createTime).time)
+			showDateAndTime(binding.dateTextView, simpleDateFormat.parse(data.createTime)!!.time)
 	}
 
 	private fun showDateAndTime(textView: TextView, time: Long) {

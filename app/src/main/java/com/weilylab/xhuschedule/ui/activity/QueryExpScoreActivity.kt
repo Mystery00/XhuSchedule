@@ -108,7 +108,7 @@ class QueryExpScoreActivity : XhuBaseActivity(R.layout.activity_query_exp_score)
 		scoreListRecyclerView.addItemDecoration(dividerItemDecoration)
 		scoreListRecyclerView.adapter = queryExpScoreRecyclerViewAdapter
 		val layoutParams = scoreListRecyclerView.layoutParams
-		layoutParams.width = DensityTools.getScreenWidth()
+		layoutParams.width = DensityTools.instance.getScreenWidth()
 		scoreListRecyclerView.layoutParams = layoutParams
 	}
 

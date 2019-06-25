@@ -47,23 +47,23 @@ abstract class XhuBaseActivity(layoutId: Int?, private val isSetStatusBar: Boole
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		AppCompatDelegate.setCompatVectorFromResourcesEnabled(true)
-		ActivityManagerTools.addActivity(this)
+		ActivityManagerTools.instance.addActivity(this)
 		when (ConfigurationUtil.nightMode) {
-			0 -> delegate.setLocalNightMode(AppCompatDelegate.MODE_NIGHT_AUTO)
-			1 -> delegate.setLocalNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+			0 -> delegate.localNightMode = AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY
+			1 -> delegate.localNightMode = AppCompatDelegate.MODE_NIGHT_YES
 			2 -> {
-				delegate.setLocalNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+				delegate.localNightMode = AppCompatDelegate.MODE_NIGHT_NO
 				if (isSetStatusBar)
 					ConfigUtil.setStatusBar(this)
 			}
-			3 -> delegate.setLocalNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
+			3 -> delegate.localNightMode = AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
 		}
 		super.onCreate(savedInstanceState)
 	}
 
 	override fun onDestroy() {
 		super.onDestroy()
-		ActivityManagerTools.finishActivity(this)
+		ActivityManagerTools.instance.finishActivity(this)
 	}
 
 	fun toastMessage(@StringRes stringRes: Int, isShowLong: Boolean = false) = toastMessage(getString(stringRes), isShowLong)

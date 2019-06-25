@@ -14,7 +14,7 @@ import com.zhuangfei.timetable.utils.ColorUtils
 class CustomDateAdapter : OnDateBuildAapter() {
 	private lateinit var itemCustomDateviewFirstBinding: ItemCustomDateviewFirstBinding
 	private val bindingArray = arrayOfNulls<ItemCustomDateviewBinding>(7)
-	private val heightPx = DensityTools.dp2px(35f)
+	private val heightPx = DensityTools.instance.dp2px(35f)
 
 	override fun onInit(layout: LinearLayout?, alpha: Float) {
 	}

@@ -41,23 +41,23 @@ class LoadCookiesInterceptor : Interceptor {
 	override fun intercept(chain: Interceptor.Chain): Response {
 		val request = chain.request()
 		val builder = request.newBuilder()
-		val host = request.url().host()
+		val host = request.url.host
 		var username: String? = null
-		when (request.method().toLowerCase()) {
+		when (request.method.toLowerCase()) {
 			"get" -> {
-				if (request.url().toString().contains("api.lncld.net/1.1/classes/")) {
+				if (request.url.toString().contains("api.lncld.net/1.1/classes/")) {
 					builder.addHeader("X-LC-Id", "f939kTGhlyHAHVsCpccyWU6t-gzGzoHsz")
 					builder.addHeader("X-LC-Key", "wVpJkuI4DLNxXHBfp19XGz3E")
 					builder.addHeader("Content-Type", "application/json")
 					return chain.proceed(builder.build())
 				}
-				val list = request.url().queryParameterValues("username")
+				val list = request.url.queryParameterValues("username")
 				username = if (list.isNotEmpty()) list[0] else null
 			}
 			"post" -> {
-				if (request.body() is FormBody) {
-					val formBody = request.body() as FormBody
-					username = (0 until formBody.size())
+				if (request.body is FormBody) {
+					val formBody = request.body as FormBody
+					username = (0 until formBody.size)
 							.firstOrNull { formBody.encodedName(it) == "username" }
 							?.let { formBody.encodedValue(it) }
 				}

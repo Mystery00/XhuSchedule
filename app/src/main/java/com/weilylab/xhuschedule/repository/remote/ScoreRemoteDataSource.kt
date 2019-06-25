@@ -18,7 +18,7 @@ import java.util.ArrayList
 
 object ScoreRemoteDataSource : ScoreDataSource {
 	override fun queryClassScoreByUsername(scoreLiveData: MutableLiveData<PackageData<List<ClassScore>>>, student: Student, year: String, term: String) {
-		if (NetworkTools.isConnectInternet()) {
+		if (NetworkTools.instance.isConnectInternet()) {
 			ScoreUtil.getClassScore(student, year, term, object : DoSaveListener<Map<Int, List<ClassScore>>> {
 				override fun doSave(t: Map<Int, List<ClassScore>>) {
 					ScoreLocalDataSource.deleteAllClassScoreForStudent(student.username, year, term)
@@ -73,7 +73,7 @@ object ScoreRemoteDataSource : ScoreDataSource {
 	}
 
 	override fun queryExpScoreByUsername(scoreLiveData: MutableLiveData<PackageData<List<ExpScore>>>, student: Student, year: String, term: String) {
-		if (NetworkTools.isConnectInternet()) {
+		if (NetworkTools.instance.isConnectInternet()) {
 			ScoreUtil.getExpScore(student, year, term, object : DoSaveListener<List<ExpScore>> {
 				override fun doSave(t: List<ExpScore>) {
 					ScoreLocalDataSource.deleteAllExpScoreForStudent(student.username, year, term)
@@ -103,7 +103,7 @@ object ScoreRemoteDataSource : ScoreDataSource {
 	}
 
 	fun getCetVCode(cetVCodeLiveData: MutableLiveData<PackageData<Bitmap>>, student: Student, no: String) {
-		if (NetworkTools.isConnectInternet()) {
+		if (NetworkTools.instance.isConnectInternet()) {
 			ScoreUtil.getCetVCode(student, no, object : RequestListener<Bitmap> {
 				override fun done(t: Bitmap) {
 					cetVCodeLiveData.value = PackageData.content(t)
@@ -119,7 +119,7 @@ object ScoreRemoteDataSource : ScoreDataSource {
 	}
 
 	fun queryCetScores(cetScoreLiveData: MutableLiveData<PackageData<CetScore>>, student: Student, no: String, name: String, vcode: String) {
-		if (NetworkTools.isConnectInternet()) {
+		if (NetworkTools.instance.isConnectInternet()) {
 			ScoreUtil.getCetScores(student, no, name, vcode, object : RequestListener<CetScore> {
 				override fun done(t: CetScore) {
 					cetScoreLiveData.value = PackageData.content(t)

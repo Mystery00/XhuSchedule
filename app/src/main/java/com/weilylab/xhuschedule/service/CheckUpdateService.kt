@@ -84,7 +84,7 @@ class CheckUpdateService : Service() {
 				return
 		}
 		Observable.create<Boolean> {
-			while (ActivityManagerTools.currentActivity() is SplashActivity || ActivityManagerTools.currentActivity() is GuideActivity || ActivityManagerTools.currentActivity() is SplashImageActivity)
+			while (ActivityManagerTools.instance.currentActivity() is SplashActivity || ActivityManagerTools.instance.currentActivity() is GuideActivity || ActivityManagerTools.instance.currentActivity() is SplashImageActivity)
 				Thread.sleep(1000)
 			when {
 				//自动检查更新
@@ -107,22 +107,22 @@ class CheckUpdateService : Service() {
 
 					override fun onFinish(data: Boolean?) {
 						if (data != null && data) {
-							val activity = ActivityManagerTools.currentActivity() ?: return
+							val activity = ActivityManagerTools.instance.currentActivity() ?: return
 							val title = getString(R.string.dialog_update_title, getString(R.string.app_version_name), version.versionName)
 							val text = getString(R.string.dialog_update_text, version.updateLog)
 							val builder = AlertDialog.Builder(activity)
 									.setTitle(title)
 									.setMessage(text)
-									.setPositiveButton("${getString(R.string.action_download_apk)}(${FileTools.formatFileSize(version.apkSize.toLong())})") { _, _ ->
+									.setPositiveButton("${getString(R.string.action_download_apk)}(${FileTools.instance.formatFileSize(version.apkSize.toLong())})") { _, _ ->
 										DownloadService.intentTo(activity, Constants.DOWNLOAD_TYPE_APK, version.apkQiniuPath, version.apkMD5, version.patchMD5)
 									}
 							if (version.lastVersionCode == getString(R.string.app_version_code))
-								builder.setNegativeButton("${getString(R.string.action_download_patch)}(${FileTools.formatFileSize(version.patchSize.toLong())})") { _, _ ->
+								builder.setNegativeButton("${getString(R.string.action_download_patch)}(${FileTools.instance.formatFileSize(version.patchSize.toLong())})") { _, _ ->
 									DownloadService.intentTo(activity, Constants.DOWNLOAD_TYPE_PATCH, version.patchQiniuPath, version.apkMD5, version.patchMD5)
 								}
 							if (version.must == "1")
 								builder.setOnCancelListener {
-									ActivityManagerTools.finishAllActivity()
+									ActivityManagerTools.instance.finishAllActivity()
 								}
 							else
 								builder.setNeutralButton(R.string.action_download_cancel) { _, _ ->

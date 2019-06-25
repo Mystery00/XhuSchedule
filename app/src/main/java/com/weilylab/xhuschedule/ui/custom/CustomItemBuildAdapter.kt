@@ -21,11 +21,11 @@ import vip.mystery0.tools.utils.DensityTools
 class CustomItemBuildAdapter(private val context: Context,
 							 private val timetableView: TimetableView) : OnItemBuildAdapter() {
 	var week = 0
-	private val counterSize = DensityTools.dp2px(8F)
+	private val counterSize = DensityTools.instance.dp2px(8F)
 
 	override fun onItemUpdate(layout: FrameLayout, textView: TextView, countTextView: TextView, schedule: Schedule, gd: GradientDrawable) {
 		textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 10f)
-		textView.setLineSpacing(DensityTools.dp2px(3), 1f)
+		textView.setLineSpacing(DensityTools.instance.dp2px(3), 1f)
 		val layoutParams = countTextView.layoutParams
 		layoutParams.width = counterSize
 		layoutParams.height = counterSize

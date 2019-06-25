@@ -111,7 +111,7 @@ class TableFragment : BaseBottomNavigationFragment<FragmentTableBinding>(R.layou
 		binding.timeTableView.viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
 			override fun onGlobalLayout() {
 				binding.timeTableView.viewTreeObserver.removeOnGlobalLayoutListener(this)
-				val timeTableHeight = binding.timeTableView.height - DensityTools.dp2px(35F)
+				val timeTableHeight = binding.timeTableView.height - DensityTools.instance.dp2px(35F)
 				val itemHeight = binding.timeTableView.itemHeight()
 				if (itemHeight * 11 < timeTableHeight)
 					bottomNavigationViewModel.itemHeight.value = timeTableHeight / 11

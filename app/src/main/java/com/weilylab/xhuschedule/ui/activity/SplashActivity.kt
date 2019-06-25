@@ -49,7 +49,6 @@ import vip.mystery0.rx.PackageData
 import vip.mystery0.rx.Status
 import com.weilylab.xhuschedule.viewmodel.SplashViewModel
 import com.weilylab.xhuschedule.service.DownloadSplashIntentService
-import com.weilylab.xhuschedule.service.NotificationService
 import com.weilylab.xhuschedule.utils.ConfigUtil
 import vip.mystery0.logs.Logs
 import vip.mystery0.tools.utils.FileTools
@@ -105,7 +104,7 @@ class SplashActivity : XhuBaseActivity(null, false) {
 		if (splash.isEnable) {
 			val splashFile = FileUtil.getSplashImageFile(this, splash.objectId)
 			if (splashFile != null && splashFile.exists()) {
-				val md5 = FileTools.getMD5(splashFile)
+				val md5 = FileTools.instance.getMD5(splashFile)
 				if (splash.imageMD5 == md5)
 					gotoSplashImage()
 				else {

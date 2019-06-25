@@ -68,7 +68,7 @@ object ConfigUtil {
 		Logs.i("setTrigger: 设置定时任务")
 	}
 
-	fun toHexEncoding(color: Int): String = ColorTools.parseColorToString(color)
+	fun toHexEncoding(color: Int): String = ColorTools.instance.parseColorToString(color)
 
 	fun getCurrentYearAndTerm() {
 		if (ConfigurationUtil.isCustomYearAndTerm)

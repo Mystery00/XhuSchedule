@@ -15,7 +15,7 @@ import vip.mystery0.rx.PackageData
 
 object TestRemoteDataSource : TestDataSource {
 	override fun queryAllTestsByUsername(testLiveData: MediatorLiveData<PackageData<List<Test>>>, htmlLiveData: MutableLiveData<String>?, student: Student) {
-		if (NetworkTools.isConnectInternet()) {
+		if (NetworkTools.instance.isConnectInternet()) {
 			TestUtil.getTests(student, object : DoSaveListener<List<Test>> {
 				override fun doSave(t: List<Test>) {
 					TestLocalDataSource.deleteAllTestsForStudent(student.username)
@@ -45,7 +45,7 @@ object TestRemoteDataSource : TestDataSource {
 	}
 
 	override fun queryAllTestsForManyStudent(testLiveData: MediatorLiveData<PackageData<List<Test>>>, studentList: List<Student>) {
-		if (NetworkTools.isConnectInternet()) {
+		if (NetworkTools.instance.isConnectInternet()) {
 			TestUtil.getTestsForManyStudent(studentList, object : DoSaveListener<Map<String, List<Test>>> {
 				override fun doSave(t: Map<String, List<Test>>) {
 					val username = t.keys.first()

@@ -77,11 +77,11 @@ class Course : ScheduleEnable {
 			try {
 				schedule.extras["colorInt"] = Color.parseColor(color)
 			} catch (e: Exception) {
-				val md5Int = StringTools.md5(schedule.name).substring(0, 1).toInt(16)
+				val md5Int = StringTools.instance.md5(schedule.name).substring(0, 1).toInt(16)
 				schedule.extras["colorInt"] = ColorPoolHelper.colorPool.getColorAuto(md5Int)
 			}
 		else {
-			val md5Int = StringTools.md5(schedule.name).substring(0, 1).toInt(16)
+			val md5Int = StringTools.instance.md5(schedule.name).substring(0, 1).toInt(16)
 			schedule.extras["colorInt"] = ColorPoolHelper.colorPool.getColorAuto(md5Int)
 		}
 		return schedule

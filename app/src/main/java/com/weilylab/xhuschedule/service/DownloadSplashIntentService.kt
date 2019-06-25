@@ -53,15 +53,15 @@ class DownloadSplashIntentService : IntentService("DownloadSplashIntentService")
 		val objectId = intent.getStringExtra(IntentConstant.INTENT_TAG_NAME_SPLASH_FILE_NAME)
 				?: return
 		val file = FileUtil.getSplashImageFile(this, objectId) ?: return
-		if (!file.parentFile.exists())
-			file.parentFile.mkdirs()
+		if (!file.parentFile!!.exists())
+			file.parentFile!!.mkdirs()
 		if (!file.exists())
 			RetrofitFactory.qiniuRetrofit
 					.create(QiniuAPI::class.java)
 					.download(qiniuPath)
 					.subscribeOn(Schedulers.io())
 					.map { responseBody -> responseBody.byteStream() }
-					.doOnNext { inputStream -> FileTools.saveFile(inputStream, file) }
+					.doOnNext { inputStream -> FileTools.instance.copyInputStreamToFile(inputStream, file) }
 					.observeOn(AndroidSchedulers.mainThread())
 					.subscribe(DoNothingObserver<InputStream>())
 	}

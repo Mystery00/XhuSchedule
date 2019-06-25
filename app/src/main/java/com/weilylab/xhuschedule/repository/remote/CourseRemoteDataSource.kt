@@ -26,7 +26,7 @@ import vip.mystery0.tools.utils.NetworkTools
 
 object CourseRemoteDataSource : CourseDataSource {
 	override fun queryCourseByUsername(courseListLiveData: MutableLiveData<PackageData<List<Schedule>>>, student: Student, year: String?, term: String?, isFromCache: Boolean, isShowError: Boolean) {
-		if (NetworkTools.isConnectInternet()) {
+		if (NetworkTools.instance.isConnectInternet()) {
 			CourseUtil.getCourse(student, year, term, object : DoSaveListener<List<Course>> {
 				override fun doSave(t: List<Course>) {
 					t.forEach {
@@ -65,7 +65,7 @@ object CourseRemoteDataSource : CourseDataSource {
 	}
 
 	override fun queryCourseWithManyStudent(courseListLiveData: MutableLiveData<PackageData<List<Schedule>>>, studentList: List<Student>, year: String?, term: String?, isFromCache: Boolean, isShowError: Boolean) {
-		if (NetworkTools.isConnectInternet()) {
+		if (NetworkTools.instance.isConnectInternet()) {
 			CourseUtil.getCoursesForManyStudent(studentList, year, term, object : DoSaveListener<Map<String, List<Course>>> {
 				override fun doSave(t: Map<String, List<Course>>) {
 					val username = t.keys.first()
@@ -106,7 +106,7 @@ object CourseRemoteDataSource : CourseDataSource {
 	}
 
 	fun syncCustomCourseForServer(statusLiveData: MutableLiveData<PackageData<Boolean>>, student: Student, key: String) {
-		if (NetworkTools.isConnectInternet()) {
+		if (NetworkTools.instance.isConnectInternet()) {
 			Observable.create<List<Course>> {
 				it.onNext(CourseLocalDataSource.getCustomCourseListByStudent(student.username))
 				it.onComplete()
@@ -145,7 +145,7 @@ object CourseRemoteDataSource : CourseDataSource {
 
 	fun syncCustomCourseForLocal(statusLiveData: MutableLiveData<PackageData<Boolean>>, student: Student, key: String) {
 		statusLiveData.value = PackageData.loading()
-		if (NetworkTools.isConnectInternet()) {
+		if (NetworkTools.instance.isConnectInternet()) {
 			UserUtil.getUserData(student, key, object : DoSaveListener<GetUserDataResponse> {
 				override fun doSave(t: GetUserDataResponse) {
 					val sync = GsonFactory.parse(t.value, SyncCustomCourse::class.java)

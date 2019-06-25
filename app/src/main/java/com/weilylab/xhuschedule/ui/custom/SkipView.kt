@@ -63,10 +63,10 @@ class SkipView : View {
 	}
 	private lateinit var listener: () -> Unit
 
-	override fun setOnClickListener(l: OnClickListener) {
+	override fun setOnClickListener(l: OnClickListener?) {
 		super.setOnClickListener {
 			isFinish = true
-			l.onClick(it)
+			l?.onClick(it)
 		}
 	}
 

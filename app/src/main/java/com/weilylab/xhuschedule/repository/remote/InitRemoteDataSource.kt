@@ -16,7 +16,7 @@ import java.util.*
 
 object InitRemoteDataSource : InitDataSource {
 	override fun getStartDateTime(startDateTimeLiveDate: MutableLiveData<PackageData<Calendar>>) {
-		if (NetworkTools.isConnectInternet())
+		if (NetworkTools.instance.isConnectInternet())
 			RetrofitFactory.leanCloudRetrofit
 					.create(LeanCloudAPI::class.java)
 					.requestStartDateTime()

@@ -41,10 +41,10 @@ class SaveCookiesInterceptor : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
         val request = chain.request()
         val response = chain.proceed(request)
-        if (request.body() is FormBody) {
-            val formBody = request.body() as FormBody
-            val host = request.url().host()
-            val username: String? = (0 until formBody.size())
+        if (request.body is FormBody) {
+            val formBody = request.body as FormBody
+            val host = request.url.host
+            val username: String? = (0 until formBody.size)
                     .firstOrNull { formBody.encodedName(it) == "username" }
                     ?.let { formBody.encodedValue(it) }
             if (username != null && response.headers("set-cookie").isNotEmpty()) {

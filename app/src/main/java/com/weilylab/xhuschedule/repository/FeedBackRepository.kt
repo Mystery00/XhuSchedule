@@ -40,7 +40,7 @@ object FeedBackRepository {
 	}
 
 	fun queryFeedBackMessageInMainActivity(bottomNavigationViewModel: BottomNavigationViewModel) {
-		if (!NetworkTools.isConnectInternet()) {
+		if (!NetworkTools.instance.isConnectInternet()) {
 			bottomNavigationViewModel.newFeedBackMessageList.value = PackageData.empty()
 			return
 		}

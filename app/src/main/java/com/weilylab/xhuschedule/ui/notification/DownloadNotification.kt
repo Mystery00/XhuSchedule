@@ -63,7 +63,7 @@ object DownloadNotification {
 
 	fun updateProgress(context: Context, download: Download) {
 		notificationBuilder.setProgress(100, download.progress, false)
-				.setContentText(context.getString(R.string.download_notification_title_download, FileTools.formatFileSize(download.currentFileSize), FileTools.formatFileSize(download.totalFileSize)))
+				.setContentText(context.getString(R.string.download_notification_title_download, FileTools.instance.formatFileSize(download.currentFileSize), FileTools.instance.formatFileSize(download.totalFileSize)))
 				.setSubText(context.getString(R.string.download_notification_text, download.progress))
 		notify(context, notificationBuilder.build())
 	}

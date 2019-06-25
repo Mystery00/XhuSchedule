@@ -15,7 +15,7 @@ import vip.mystery0.rx.PackageData
 object StudentRemoteDataSource : StudentDataSource {
 	override fun queryStudentInfo(studentInfoLiveData: MutableLiveData<PackageData<StudentInfo>>, student: Student) {
 		studentInfoLiveData.value = PackageData.loading()
-		if (NetworkTools.isConnectInternet()) {
+		if (NetworkTools.instance.isConnectInternet()) {
 			queryStudentInfo({ studentInfo, exception ->
 				if (exception == null)
 					studentInfoLiveData.value = PackageData.content(studentInfo)
@@ -48,7 +48,7 @@ object StudentRemoteDataSource : StudentDataSource {
 		loginLiveData.value = PackageData.loading()
 		UserUtil.checkStudentLogged(student) {
 			if (!it) {
-				if (NetworkTools.isConnectInternet()) {
+				if (NetworkTools.instance.isConnectInternet()) {
 					UserUtil.login(student, object : DoSaveListener<Student> {
 						override fun doSave(t: Student) {
 							StudentLocalDataSource.saveStudent(student)

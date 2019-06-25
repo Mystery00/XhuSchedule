@@ -175,7 +175,7 @@ class CustomThingActivity : XhuBaseActivity(R.layout.activity_custom_thing) {
 						}
 						.addCallback(object : Snackbar.Callback() {
 							override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
-								if (event != Snackbar.Callback.DISMISS_EVENT_ACTION) {
+								if (event != DISMISS_EVENT_ACTION) {
 									CustomThingRepository.delete(item) {
 										LayoutRefreshConfigUtil.isRefreshTodayFragment = true
 									}
@@ -239,7 +239,7 @@ class CustomThingActivity : XhuBaseActivity(R.layout.activity_custom_thing) {
 			val originText = customThingBinding.textViewStartDate.text.toString()
 			val s = originText.substring(0, originText.length - 2)
 			val now = Calendar.getInstance()
-			now.time = dateFormatter.parse(s)
+			now.time = dateFormatter.parse(s)!!
 			DatePickerDialog(this, { _, year, month, dayOfMonth ->
 				val calendar = Calendar.getInstance()
 				calendar.timeInMillis = 0
@@ -253,7 +253,7 @@ class CustomThingActivity : XhuBaseActivity(R.layout.activity_custom_thing) {
 		customThingBinding.textViewStartTime.setOnClickListener {
 			val originText = customThingBinding.textViewStartTime.text.toString()
 			val now = Calendar.getInstance()
-			now.time = timeFormatter.parse(originText)
+			now.time = timeFormatter.parse(originText)!!
 			TimePickerDialog(this, { _, hourOfDay, minute ->
 				val calendar = Calendar.getInstance()
 				calendar.timeInMillis = 0
@@ -267,7 +267,7 @@ class CustomThingActivity : XhuBaseActivity(R.layout.activity_custom_thing) {
 			val originText = customThingBinding.textViewEndDate.text.toString()
 			val s = originText.substring(0, originText.length - 2)
 			val now = Calendar.getInstance()
-			now.time = dateFormatter.parse(s)
+			now.time = dateFormatter.parse(s)!!
 			DatePickerDialog(this, { _, year, month, dayOfMonth ->
 				val calendar = Calendar.getInstance()
 				calendar.timeInMillis = 0
@@ -281,7 +281,7 @@ class CustomThingActivity : XhuBaseActivity(R.layout.activity_custom_thing) {
 		customThingBinding.textViewEndTime.setOnClickListener {
 			val originText = customThingBinding.textViewEndTime.text.toString()
 			val now = Calendar.getInstance()
-			now.time = timeFormatter.parse(originText)
+			now.time = timeFormatter.parse(originText)!!
 			TimePickerDialog(this, { _, hourOfDay, minute ->
 				val calendar = Calendar.getInstance()
 				calendar.timeInMillis = 0
@@ -320,8 +320,8 @@ class CustomThingActivity : XhuBaseActivity(R.layout.activity_custom_thing) {
 		else "${binding.textViewStartDate.text.substring(0, binding.textViewStartDate.text.length - 2)} ${binding.textViewStartTime.text}"
 		val end = if (customThing.isAllDay) binding.textViewEndDate.text.substring(0, binding.textViewEndDate.text.length - 2)
 		else "${binding.textViewEndDate.text.substring(0, binding.textViewEndDate.text.length - 2)} ${binding.textViewEndTime.text}"
-		val startTime = if (customThing.isAllDay) dateFormatter.parse(start) else saveDateTimeFormatter.parse(start)
-		val endTime = if (customThing.isAllDay) dateFormatter.parse(end) else saveDateTimeFormatter.parse(end)
+		val startTime = if (customThing.isAllDay) dateFormatter.parse(start)!! else saveDateTimeFormatter.parse(start)!!
+		val endTime = if (customThing.isAllDay) dateFormatter.parse(end)!! else saveDateTimeFormatter.parse(end)!!
 		if (startTime.after(endTime)) {
 			toastMessage(R.string.error_end_before_start)
 			listener.invoke(false)
@@ -365,8 +365,8 @@ class CustomThingActivity : XhuBaseActivity(R.layout.activity_custom_thing) {
 			customThingBinding.switchAllDay.isChecked = data.isAllDay
 			val start = Calendar.getInstance()
 			val end = Calendar.getInstance()
-			start.time = if (data.isAllDay) dateFormatter.parse(data.startTime) else saveDateTimeFormatter.parse(data.startTime)
-			end.time = if (data.isAllDay) dateFormatter.parse(data.endTime) else saveDateTimeFormatter.parse(data.endTime)
+			start.time = if (data.isAllDay) dateFormatter.parse(data.startTime)!! else saveDateTimeFormatter.parse(data.startTime)!!
+			end.time = if (data.isAllDay) dateFormatter.parse(data.endTime)!! else saveDateTimeFormatter.parse(data.endTime)!!
 			val startDate = "${dateFormatter.format(start.time)}${CalendarUtil.getWeekIndexInString(start.get(Calendar.DAY_OF_WEEK))}"
 			val endDate = "${dateFormatter.format(end.time)}${CalendarUtil.getWeekIndexInString(end.get(Calendar.DAY_OF_WEEK))}"
 			customThingBinding.textViewStartDate.text = startDate
@@ -456,8 +456,8 @@ class CustomThingActivity : XhuBaseActivity(R.layout.activity_custom_thing) {
 		return true
 	}
 
-	override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-		return when (item?.itemId) {
+	override fun onOptionsItemSelected(item: MenuItem): Boolean {
+		return when (item.itemId) {
 			R.id.action_upload -> {
 				CustomThingRepository.syncCustomThingForServer(customThingViewModel)
 				true

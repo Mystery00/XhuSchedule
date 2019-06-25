@@ -10,7 +10,7 @@ object PackageUtil {
 	private const val wbPackage = "com.sina.weibo"
 	private const val weicoPackage = "com.weico.international"
 
-	fun isQQApplicationAvailable(): Boolean = PackageTools.isApplicationAvailable(arrayListOf(qqPackage, timPackage))
-	fun isWeiXinApplicationAvailable(): Boolean = PackageTools.isApplicationAvailable(arrayListOf(wxPackage))
-	fun isWeiBoApplicationAvailable(): Boolean = PackageTools.isApplicationAvailable(arrayListOf(wbPackage, weicoPackage))
+	fun isQQApplicationAvailable(): Boolean = PackageTools.instance.isApplicationAvailable(arrayListOf(qqPackage, timPackage))
+	fun isWeiXinApplicationAvailable(): Boolean = PackageTools.instance.isApplicationAvailable(arrayListOf(wxPackage))
+	fun isWeiBoApplicationAvailable(): Boolean = PackageTools.instance.isApplicationAvailable(arrayListOf(wbPackage, weicoPackage))
 }

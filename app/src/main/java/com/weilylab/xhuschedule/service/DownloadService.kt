@@ -88,8 +88,8 @@ class DownloadService : IntentService("DownloadService") {
 		val apkMD5 = intent?.getStringExtra(IntentConstant.INTENT_TAG_NAME_APK_MD5)
 		val patchMD5 = intent?.getStringExtra(IntentConstant.INTENT_TAG_NAME_PATCH_MD5)
 		val file = File(getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS)!!.absolutePath + File.separator + qiniuPath)
-		if (!file.parentFile.exists())
-			file.parentFile.mkdirs()
+		if (!file.parentFile!!.exists())
+			file.parentFile!!.mkdirs()
 		if (TextUtils.isEmpty(type) || TextUtils.isEmpty(qiniuPath)) {
 			Logs.i("onHandleIntent: 格式错误")
 			return
@@ -128,7 +128,7 @@ class DownloadService : IntentService("DownloadService") {
 				.map { responseBody ->
 					val inputStream = responseBody.byteStream()
 					try {
-						FileTools.saveFile(inputStream, file)
+						FileTools.instance.copyInputStreamToFile(inputStream, file)
 					} catch (e: IOException) {
 						e.printStackTrace()
 					}
@@ -136,7 +136,7 @@ class DownloadService : IntentService("DownloadService") {
 				}
 				.observeOn(Schedulers.computation())
 				.map {
-					val downloadFileMD5 = FileTools.getMD5(file)
+					val downloadFileMD5 = FileTools.instance.getMD5(file)
 					isDownloadMD5Matched = when (type) {
 						Constants.DOWNLOAD_TYPE_APK -> downloadFileMD5 == apkMD5
 						Constants.DOWNLOAD_TYPE_PATCH -> downloadFileMD5 == patchMD5
@@ -149,8 +149,8 @@ class DownloadService : IntentService("DownloadService") {
 					if (isDownloadMD5Matched && type == Constants.DOWNLOAD_TYPE_PATCH) {
 						val newApkPath = getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS)!!.absolutePath + File.separator + "apk" + File.separator + qiniuPath + ".apk"
 						val newAPK = File(newApkPath)
-						if (!newAPK.parentFile.exists())
-							newAPK.parentFile.mkdirs()
+						if (!newAPK.parentFile!!.exists())
+							newAPK.parentFile!!.mkdirs()
 						Pair(it, newApkPath)
 					} else
 						Pair(it, null)

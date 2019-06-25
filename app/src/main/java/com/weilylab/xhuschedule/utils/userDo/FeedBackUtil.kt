@@ -21,7 +21,7 @@ object FeedBackUtil {
 	private const val RETRY_TIME = 1
 
 	fun sendFeedBackMessage(student: Student, feedBackToken: String, content: String, requestListener: RequestListener<Boolean>, index: Int = 0) {
-		if (NetworkTools.isConnectInternet()) {
+		if (NetworkTools.instance.isConnectInternet()) {
 			RetrofitFactory.feedbackRetrofit
 					.create(FeedbackAPI::class.java)
 					.sendFBMessage(student.username, feedBackToken, content)
@@ -62,7 +62,7 @@ object FeedBackUtil {
 	}
 
 	fun getFeedBackMessage(student: Student, feedBackToken: String, lastId: Int, doSaveListener: DoSaveListener<List<FeedBackMessage>>, requestListener: RequestListener<List<FeedBackMessage>>, index: Int = 0) {
-		if (NetworkTools.isConnectInternet()) {
+		if (NetworkTools.instance.isConnectInternet()) {
 			RetrofitFactory.feedbackRetrofit
 					.create(FeedbackAPI::class.java)
 					.getFBMessage(student.username, feedBackToken, lastId)

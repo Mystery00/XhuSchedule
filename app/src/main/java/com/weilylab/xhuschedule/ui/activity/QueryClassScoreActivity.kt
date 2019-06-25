@@ -113,7 +113,7 @@ class QueryClassScoreActivity : XhuBaseActivity(R.layout.activity_query_class_sc
 		scoreListRecyclerView.addItemDecoration(dividerItemDecoration)
 		scoreListRecyclerView.adapter = queryClassScoreRecyclerViewAdapter
 		val layoutParams = scoreListRecyclerView.layoutParams
-		layoutParams.width = DensityTools.getScreenWidth()
+		layoutParams.width = DensityTools.instance.getScreenWidth()
 		scoreListRecyclerView.layoutParams = layoutParams
 	}
 
@@ -228,8 +228,8 @@ class QueryClassScoreActivity : XhuBaseActivity(R.layout.activity_query_class_sc
 		return true
 	}
 
-	override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-		return when (item?.itemId) {
+	override fun onOptionsItemSelected(item: MenuItem): Boolean {
+		return when (item.itemId) {
 			R.id.action_show_gpa -> {
 				item.isChecked = !item.isChecked
 				ConfigurationUtil.isShowGpa = item.isChecked

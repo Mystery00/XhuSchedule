@@ -13,7 +13,7 @@ import vip.mystery0.rx.PackageData
 
 object NoticeRemoteDataSource : NoticeDataSource {
 	override fun queryNotice(noticeLiveData: MutableLiveData<PackageData<List<Notice>>>, platform: String?) {
-		if (NetworkTools.isConnectInternet()) {
+		if (NetworkTools.instance.isConnectInternet()) {
 			NoticeUtil.getNotice(platform, object : DoSaveListener<List<Notice>> {
 				override fun doSave(t: List<Notice>) {
 					NoticeLocalDataSource.saveNotice(t)

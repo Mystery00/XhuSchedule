@@ -211,7 +211,7 @@ object CalendarUtil {
 		else {
 			val cal = Calendar.getInstance()
 			cal.timeInMillis = 0
-			cal.time = dateTimeFormatter.parse(thing.startTime)
+			cal.time = dateTimeFormatter.parse(thing.startTime)!!
 			cal.set(Calendar.HOUR_OF_DAY, 0)
 			cal.set(Calendar.MINUTE, 0)
 			cal.time
@@ -219,7 +219,7 @@ object CalendarUtil {
 		val endCalendar = if (thing.isAllDay) {
 			val cal = Calendar.getInstance()
 			cal.timeInMillis = 0
-			cal.time = dateFormatter.parse(thing.endTime)
+			cal.time = dateFormatter.parse(thing.endTime)!!
 			cal.set(Calendar.HOUR_OF_DAY, 0)
 			cal.set(Calendar.MINUTE, 0)
 			cal.add(Calendar.DAY_OF_YEAR, 1)
@@ -227,7 +227,7 @@ object CalendarUtil {
 		} else {
 			val cal = Calendar.getInstance()
 			cal.timeInMillis = 0
-			cal.time = dateTimeFormatter.parse(thing.endTime)
+			cal.time = dateTimeFormatter.parse(thing.endTime)!!
 			cal.set(Calendar.HOUR_OF_DAY, 0)
 			cal.set(Calendar.MINUTE, 0)
 			cal.add(Calendar.DAY_OF_YEAR, 1)

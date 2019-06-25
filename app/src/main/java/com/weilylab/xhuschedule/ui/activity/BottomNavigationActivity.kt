@@ -353,7 +353,7 @@ class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_naviga
 	private fun showWeekView() {
 		animation?.cancel()
 		arrowAnimation?.cancel()
-		animation = ObjectAnimator.ofFloat(weekView, "translationY", 0F, DensityTools.dp2px(71F).toFloat())
+		animation = ObjectAnimator.ofFloat(weekView, "translationY", 0F, DensityTools.instance.dp2px(71F).toFloat())
 		arrowAnimation = ObjectAnimator.ofFloat(arrowImageView, "rotation", 0F, 180F)
 		animation!!.start()
 		arrowAnimation!!.start()
@@ -363,7 +363,7 @@ class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_naviga
 	private fun hideWeekView() {
 		animation?.cancel()
 		arrowAnimation?.cancel()
-		animation = ObjectAnimator.ofFloat(weekView, "translationY", DensityTools.dp2px(71F).toFloat(), 0F)
+		animation = ObjectAnimator.ofFloat(weekView, "translationY", DensityTools.instance.dp2px(71F).toFloat(), 0F)
 		arrowAnimation = ObjectAnimator.ofFloat(arrowImageView, "rotation", 180F, 0F)
 		animation!!.start()
 		arrowAnimation!!.start()
@@ -438,7 +438,7 @@ class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_naviga
 		dialogShowCourseBinding.recyclerView.adapter = showAdapter
 		dialogShowCourseBinding.recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
 			override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-				val horizontalOffset = recyclerView.computeHorizontalScrollOffset().toFloat() / DensityTools.getScreenWidth().toFloat()
+				val horizontalOffset = recyclerView.computeHorizontalScrollOffset().toFloat() / DensityTools.instance.getScreenWidth().toFloat()
 				val params = dialogShowCourseBinding.point.layoutParams as ConstraintLayout.LayoutParams
 				super.onScrolled(recyclerView, dx, dy)
 				params.leftMargin = Math.round(distance * horizontalOffset)
@@ -446,7 +446,7 @@ class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_naviga
 			}
 		})
 		PagerSnapHelper().attachToRecyclerView(dialogShowCourseBinding.recyclerView)
-		val viewSize = DensityTools.getScreenWidth() - DensityTools.dp2px(96F)
+		val viewSize = DensityTools.instance.getScreenWidth() - DensityTools.instance.dp2px(96F)
 		popupWindow = PopupWindow(dialogShowCourseBinding.root, ViewGroup.LayoutParams.MATCH_PARENT, viewSize)
 		popupWindow.isOutsideTouchable = true
 		popupWindow.isFocusable = true

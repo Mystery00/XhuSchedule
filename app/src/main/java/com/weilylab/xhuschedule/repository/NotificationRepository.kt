@@ -93,7 +93,7 @@ object NotificationRepository {
 			val color = try {
 				Color.parseColor(course!!.color)
 			} catch (e: Exception) {
-				val md5Int = StringTools.md5(test.name).substring(0, 1).toInt(16)
+				val md5Int = StringTools.instance.md5(test.name).substring(0, 1).toInt(16)
 				ColorPoolHelper.colorPool.getColorAuto(md5Int)
 			}
 			colorList.add(color)
