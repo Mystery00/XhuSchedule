@@ -8,7 +8,7 @@
 <resources>
 
 	<!-- Base application theme. -->
-	<style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+	<style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar.Bridge">
 		<!-- Customize your theme here. -->
 		<item name="colorPrimary">@color/colorPrimary</item>
 		<item name="colorPrimaryDark">@color/colorPrimaryDark</item>
@@ -21,13 +21,13 @@
 		<item name="windowNoTitle">true</item>
 	</style>
 
-	<style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+	<style name="AppTheme.PopupOverlay" parent="ThemeOverlay.MaterialComponents.Light" />
 
 	<style name="ToolbarTitleText" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
 		<item name="android:textSize">17sp</item>
 	</style>
 
-	<style name="NoSpaceActionBarTheme" parent="Base.Widget.AppCompat.Toolbar">
+	<style name="NoSpaceActionBarTheme" parent="Widget.MaterialComponents.Toolbar">
 		<item name="contentInsetStart">0dp</item>
 		<item name="contentInsetStartWithNavigation">0dp</item>
 	</style>
@@ -36,7 +36,7 @@
 		<item name="android:textColor">@color/textColorNullDataView</item>
 	</style>
 
-	<style name="SplashTheme" parent="Theme.AppCompat.Light.NoActionBar">
+	<style name="SplashTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
 		<item name="android:windowBackground">@drawable/drawable_splash</item>
 		<item name="android:windowTranslucentStatus">true</item>
 		<item name="android:windowTranslucentNavigation">true</item>
@@ -48,5 +48,5 @@
 		<item name="android:windowExitAnimation">@anim/animation_show_course_out</item>
 	</style>
 
-	<style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+	<style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.MaterialComponents.Dark.ActionBar" />
 </resources>
