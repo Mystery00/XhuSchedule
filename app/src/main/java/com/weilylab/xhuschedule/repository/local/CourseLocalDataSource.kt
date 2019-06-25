@@ -263,6 +263,7 @@ object CourseLocalDataSource : CourseDataSource {
 			courseService.deleteCourse(c)
 		}
 		courseList.forEach { course ->
+			course.id = 0
 			course.studentID = username
 			courseService.addCourse(course)
 		}
