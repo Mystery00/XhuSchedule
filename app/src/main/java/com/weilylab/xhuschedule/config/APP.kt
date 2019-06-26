@@ -41,7 +41,6 @@ import androidx.multidex.MultiDexApplication
 import com.oasisfeng.condom.CondomContext
 import com.sina.weibo.sdk.WbSdk
 import com.sina.weibo.sdk.auth.AuthInfo
-import com.tencent.bugly.crashreport.CrashReport
 import com.tencent.mm.opensdk.openapi.IWXAPI
 import com.tencent.mm.opensdk.openapi.WXAPIFactory
 import com.tencent.tauth.Tencent
@@ -68,12 +67,6 @@ class APP : MultiDexApplication() {
 					.setAutoClean(true)
 					.setDebug(BuildConfig.DEBUG)
 		}.initWithContext(this)
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && !BuildConfig.DEBUG)//大于指定的sdk再启用日志上传
-			try {
-				CrashReport.initCrashReport(CondomContext.wrap(applicationContext, "Bugly"), "7fe1820ab7", BuildConfig.DEBUG)
-			} catch (ignore: Exception) {
-				CrashReport.initCrashReport(applicationContext, "7fe1820ab7", BuildConfig.DEBUG)
-			}
 		DBHelper.init(this)
 		NotificationUtil.initChannelID(this)//初始化NotificationChannelID
 		ToolsClient.initWithContext(this)
