@@ -39,8 +39,8 @@ apply plugin: 'kotlin-kapt'
 
 autoVersion {
 	major 2
-	minor 4
-	patch 1
+	minor 5
+	patch 0
 	beta 0
 	alpha 0
 	isShowBuild false

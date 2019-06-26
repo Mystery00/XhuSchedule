@@ -11,9 +11,11 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.api.XhuScheduleCloudAPI
 import com.weilylab.xhuschedule.constant.Constants
+import com.weilylab.xhuschedule.constant.ResponseCodeConstants
 import com.weilylab.xhuschedule.factory.RetrofitFactory
 import com.weilylab.xhuschedule.factory.fromJson
 import com.weilylab.xhuschedule.model.Version
+import com.weilylab.xhuschedule.model.response.VersionResponse
 import com.weilylab.xhuschedule.ui.activity.GuideActivity
 import com.weilylab.xhuschedule.ui.activity.SplashActivity
 import com.weilylab.xhuschedule.ui.activity.SplashImageActivity
@@ -58,12 +60,13 @@ class CheckUpdateService : Service() {
 				.create(XhuScheduleCloudAPI::class.java)
 				.checkVersion(appVersion, systemVersion, manufacturer, model, rom, ConfigUtil.getDeviceID())
 				.subscribeOn(Schedulers.io())
-				.map { it.fromJson<Version>() }
+				.map { it.fromJson<VersionResponse>() }
 				.observeOn(AndroidSchedulers.mainThread())
-				.subscribe(object : OnlyCompleteObserver<Version>() {
-					override fun onFinish(data: Version?) {
-						if (data != null && data.versionCode.toInt() > getString(R.string.app_version_code).toInt())
-							showUpdateDialog(data, intent.getBooleanExtra(CHECK_ACTION_BY_MANUAL, false), data.must == "1")
+				.subscribe(object : OnlyCompleteObserver<VersionResponse>() {
+					override fun onFinish(data: VersionResponse?) {
+						if (data != null && data.code == ResponseCodeConstants.DONE.toInt())
+							if (data.data.versionCode.toInt() > getString(R.string.app_version_code).toInt())
+								showUpdateDialog(data.data, intent.getBooleanExtra(CHECK_ACTION_BY_MANUAL, false), data.data.must == "1")
 						stopSelf()
 						LocalBroadcastManager.getInstance(this@CheckUpdateService)
 								.sendBroadcast(Intent(SettingsPreferenceFragment.ACTION_CHECK_UPDATE_DONE))
