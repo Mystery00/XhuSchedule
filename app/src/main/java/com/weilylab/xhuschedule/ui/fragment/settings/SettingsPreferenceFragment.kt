@@ -33,6 +33,7 @@ import com.zhihu.matisse.MimeType
 import com.zyao89.view.zloading.ZLoadingDialog
 import com.zyao89.view.zloading.Z_TYPE
 import vip.mystery0.tools.utils.DensityTools
+import vip.mystery0.tools.utils.PackageTools
 import java.io.File
 import java.util.*
 
@@ -89,6 +90,13 @@ class SettingsPreferenceFragment : XhuBasePreferenceFragment(R.xml.preference_se
 		notificationCoursePreference.isChecked = ConfigurationUtil.notificationCourse
 		notificationExamPreference.isChecked = ConfigurationUtil.notificationExam
 		notificationTimePreference.summary = getString(R.string.summary_notification_time, ConfigurationUtil.notificationTime)
+
+		if (PackageTools.instance.isAfter(PackageTools.VERSION_Q, exclude = false)) {
+			useInAppImageSelectorPreference.isChecked = false
+			ConfigurationUtil.useInAppImageSelector = false
+			useInAppImageSelectorPreference.isEnabled = false
+			useInAppImageSelectorPreference.summary = getString(R.string.summary_use_in_app_image_selector_q)
+		}
 	}
 
 	override fun monitor() {
