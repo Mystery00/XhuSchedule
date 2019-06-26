@@ -17,6 +17,6 @@ interface XhuScheduleCloudAPI {
 					 @Field("rom") rom: String,
 					 @Field("device_id") deviceID: String): Observable<ResponseBody>
 
-	@GET("/9783/schoolCalendar")
+	@GET("/9783/schoolCalendar/url")
 	fun schoolCalendar(): Observable<ResponseBody>
 }

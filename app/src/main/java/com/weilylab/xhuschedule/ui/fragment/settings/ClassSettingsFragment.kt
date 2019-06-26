@@ -19,7 +19,6 @@ import com.zyao89.view.zloading.ZLoadingDialog
 import com.zyao89.view.zloading.Z_TYPE
 import vip.mystery0.logs.Logs
 import vip.mystery0.rx.Status.*
-import java.io.File
 import java.util.*
 
 class ClassSettingsFragment : XhuBasePreferenceFragment(R.xml.preference_class) {
