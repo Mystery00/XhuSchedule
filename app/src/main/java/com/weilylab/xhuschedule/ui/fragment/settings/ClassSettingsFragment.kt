@@ -19,6 +19,7 @@ import com.zyao89.view.zloading.ZLoadingDialog
 import com.zyao89.view.zloading.Z_TYPE
 import vip.mystery0.logs.Logs
 import vip.mystery0.rx.Status.*
+import java.io.File
 import java.util.*
 
 class ClassSettingsFragment : XhuBasePreferenceFragment(R.xml.preference_class) {
@@ -148,30 +149,27 @@ class ClassSettingsFragment : XhuBasePreferenceFragment(R.xml.preference_class) 
 			true
 		}
 		schoolCalendarPreference.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+			fun jumpToImageView(url: String) {
+				ImagePreview.getInstance()
+						.setContext(activity!!)
+						.setImage(url)
+						.setCustomDownButtonView(downloadButton)
+						.setShowIndicator(false)
+						.setPickDirectoryWhenDownloadImage(true)
+						.start()
+			}
 			if (schoolCalendarUrl == null) {
 				dialog.show()
 				SchoolCalendarRepository.getUrl { url ->
 					if (url != null) {
 						schoolCalendarUrl = url
-						ImagePreview.getInstance()
-								.setContext(activity!!)
-								.setImage(schoolCalendarUrl!!)
-								.setCustomDownButtonView(downloadButton)
-								.setFolderName("Pictures")
-								.setShowIndicator(false)
-								.start()
+						jumpToImageView(schoolCalendarUrl!!)
 					} else
 						toastMessage(R.string.hint_school_calendar)
 					dialog.dismiss()
 				}
 			} else {
-				ImagePreview.getInstance()
-						.setContext(activity!!)
-						.setImage(schoolCalendarUrl!!)
-						.setCustomDownButtonView(downloadButton)
-						.setFolderName("Pictures")
-						.setShowIndicator(false)
-						.start()
+				jumpToImageView(schoolCalendarUrl!!)
 			}
 			true
 		}
