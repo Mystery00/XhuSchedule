@@ -1,17 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 	<string-array name="update_log">
-		<item>新增：云端同步（暂时仅支持同步自定义课程和自定义事项）</item>
-		<item>新增：指定时间之后在“今日课程界面”显示次日的课程数据</item>
-		<item> </item>
-		<item>修复：今日诗词导致的栈溢出</item>
-		<item>修复：四六级查询界面在夜间模式中颜色显示错误</item>
-		<item>修复：手动更新课程时不显示自定义课程</item>
-		<item>修复：因为动画可能导致的内存溢出</item>
-		<item>修复：Android Q上存储设备权限问题导致图片选择器异常</item>
-		<item> </item>
-		<item>优化：多线程下的线程切换逻辑</item>
-		<item>优化：自定义课程界面按学号对课程进行分类</item>
-		<item>优化：添加部分图标</item>
+		<item>兼容适配Android Q的存储沙盒</item>
+		<item>修复部分可能导致崩溃的错误</item>
 	</string-array>
 </resources>
