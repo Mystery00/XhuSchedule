@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/XhuSchedule.iml" filepath="$PROJECT_DIR$/XhuSchedule.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/XhuSchedule.iml" filepath="$PROJECT_DIR$/.idea/XhuSchedule.iml" />
+      <module fileurl="file://$PROJECT_DIR$/XhuSchedule.iml" filepath="$PROJECT_DIR$/XhuSchedule.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>

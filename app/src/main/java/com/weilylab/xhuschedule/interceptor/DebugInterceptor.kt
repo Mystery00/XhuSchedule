@@ -7,8 +7,9 @@ import okhttp3.logging.HttpLoggingInterceptor
 
 class DebugInterceptor : Interceptor {
 	private val httpLoggingInterceptor by lazy {
-		HttpLoggingInterceptor()
-				.setLevel(HttpLoggingInterceptor.Level.BODY)
+		val interceptor = HttpLoggingInterceptor()
+		interceptor.level = HttpLoggingInterceptor.Level.BODY
+		interceptor
 	}
 
 	override fun intercept(chain: Interceptor.Chain): Response = if (BuildConfig.DEBUG)
