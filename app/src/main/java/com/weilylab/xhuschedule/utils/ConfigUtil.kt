@@ -7,6 +7,7 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.os.Build
+import android.provider.Settings
 import android.view.View
 import androidx.appcompat.app.AlertDialog
 import com.weilylab.xhuschedule.R
@@ -31,7 +32,7 @@ object ConfigUtil {
 	fun getDeviceID(): String {
 		val deviceID = ConfigurationUtil.deviceID
 		return if (deviceID == "") {
-			UUID.randomUUID().toString()
+			Settings.Secure.ANDROID_ID
 		} else
 			deviceID
 	}
