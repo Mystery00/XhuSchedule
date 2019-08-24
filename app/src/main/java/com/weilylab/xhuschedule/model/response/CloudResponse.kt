@@ -1,7 +1,6 @@
 package com.weilylab.xhuschedule.model.response
 
-open class CloudResponse<T> {
+abstract class CloudResponse{
 	val code: Int = -1
-	var data: T? = null
 	lateinit var message: String
 }

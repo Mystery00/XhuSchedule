@@ -6,10 +6,10 @@ import com.weilylab.xhuschedule.interceptor.SaveCookiesInterceptor
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
+import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
 object RetrofitFactory {
-
 	private val client by lazy {
 		OkHttpClient.Builder()
 				.retryOnConnectionFailure(true)
@@ -34,6 +34,7 @@ object RetrofitFactory {
 				.baseUrl("https://xhuschedule.mystery0.app")
 				.client(client)
 				.addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+				.addConverterFactory(GsonConverterFactory.create())
 				.build()
 	}
 
@@ -42,6 +43,7 @@ object RetrofitFactory {
 				.baseUrl("https://xhuschedule.mystery0.app")
 				.client(client)
 				.addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+				.addConverterFactory(GsonConverterFactory.create())
 				.build()
 	}
 

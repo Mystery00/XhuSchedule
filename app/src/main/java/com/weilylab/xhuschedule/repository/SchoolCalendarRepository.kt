@@ -27,7 +27,7 @@ object SchoolCalendarRepository {
 						if (data == null || data.code != 0)
 							listener.invoke(null)
 						else
-							listener.invoke(data.data.url)
+							listener.invoke(data.data)
 					}
 				})
 	}

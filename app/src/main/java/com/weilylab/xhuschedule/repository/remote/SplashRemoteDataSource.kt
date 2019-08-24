@@ -3,33 +3,45 @@ package com.weilylab.xhuschedule.repository.remote
 import androidx.lifecycle.MediatorLiveData
 import com.weilylab.xhuschedule.api.XhuScheduleCloudAPI
 import com.weilylab.xhuschedule.factory.RetrofitFactory
+import com.weilylab.xhuschedule.factory.fromJson
 import com.weilylab.xhuschedule.model.Splash
+import com.weilylab.xhuschedule.model.response.SplashResponse
 import com.weilylab.xhuschedule.repository.ds.SplashDataSource
 import com.weilylab.xhuschedule.repository.local.SplashLocalDataSource
-import vip.mystery0.rx.PackageData
-import vip.mystery0.rx.error
-import vip.mystery0.rx.loading
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
+import vip.mystery0.rx.*
+import java.util.concurrent.TimeUnit
 
 object SplashRemoteDataSource : SplashDataSource {
 	override fun requestSplash(splashPackageLiveData: MediatorLiveData<PackageData<Splash>>) {
 		splashPackageLiveData.loading()
-		val response = RetrofitFactory.retrofit.create(XhuScheduleCloudAPI::class.java)
+		RetrofitFactory.retrofit
+				.create(XhuScheduleCloudAPI::class.java)
 				.requestSplashInfo()
-				.execute()
-		if (response.isSuccessful) {
-			val cloudResponse = response.body()!!
-			if (cloudResponse.code == 0) {
-				val splash = cloudResponse.data
-				if (splash == null || !splash.enable) {
-					SplashLocalDataSource.removeSplash()
-				} else {
-					SplashLocalDataSource.saveSplash(splash)
+				.timeout(2, TimeUnit.SECONDS)
+				.subscribeOn(Schedulers.io())
+				.map {
+					val splashResponse = it.fromJson<SplashResponse>()
+					if (splashResponse.data == null || !splashResponse.data!!.enable)
+						SplashLocalDataSource.removeSplash()
+					else
+						SplashLocalDataSource.saveSplash(splashResponse.data!!)
+					splashResponse
 				}
-			} else {
-				splashPackageLiveData.error(Exception(cloudResponse.message))
-			}
-		} else {
-			splashPackageLiveData.error(Exception(response.errorBody()?.string()))
-		}
+				.observeOn(AndroidSchedulers.mainThread())
+				.subscribe(object : OnlyCompleteObserver<SplashResponse>() {
+					override fun onFinish(data: SplashResponse?) {
+						if (data?.data == null) {
+							SplashLocalDataSource.requestSplash(splashPackageLiveData)
+						} else {
+							splashPackageLiveData.content(data.data)
+						}
+					}
+
+					override fun onError(e: Throwable) {
+						splashPackageLiveData.error(e)
+					}
+				})
 	}
 }
