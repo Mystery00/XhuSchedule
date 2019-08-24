@@ -2,8 +2,7 @@ package com.weilylab.xhuschedule.ui.fragment
 
 import android.view.View
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.base.BaseBottomNavigationFragment
@@ -19,8 +18,8 @@ import com.weilylab.xhuschedule.utils.LayoutRefreshConfigUtil
 import com.weilylab.xhuschedule.viewmodel.BottomNavigationViewModel
 import com.zhuangfei.timetable.model.Schedule
 import vip.mystery0.logs.Logs
-import vip.mystery0.rx.PackageData
-import vip.mystery0.rx.Status.*
+import vip.mystery0.rx.PackageDataObserver
+import vip.mystery0.tools.toastLong
 
 class TodayFragment : BaseBottomNavigationFragment<FragmentTodayBinding>(R.layout.fragment_today) {
 	companion object {
@@ -28,60 +27,56 @@ class TodayFragment : BaseBottomNavigationFragment<FragmentTodayBinding>(R.layou
 	}
 
 	private val bottomNavigationViewModel: BottomNavigationViewModel by lazy {
-		ViewModelProviders.of(activity!!)[BottomNavigationViewModel::class.java]
+		ViewModelProvider(activity!!)[BottomNavigationViewModel::class.java]
 	}
 	private val adapter: FragmentTodayRecyclerViewAdapter by lazy { FragmentTodayRecyclerViewAdapter(activity!!) }
 	private lateinit var viewStubBinding: LayoutNullDataViewBinding
 
-	private val todayCourseListObserver = Observer<PackageData<List<Schedule>>> { data ->
-		when (data.status) {
-			Content -> {
-				if (data.data != null) {
-					adapter.tempList.removeAll(adapter.items.filterIsInstance<Schedule>())
-					adapter.tempList.addAll(data.data!!)
-					adapter.sortItemList {
-						checkNoDataLayout()
-					}
-				}
-			}
-			Empty -> {
+	private val todayCourseListObserver = object : PackageDataObserver<List<Schedule>> {
+		override fun content(data: List<Schedule>?) {
+			if (data != null) {
 				adapter.tempList.removeAll(adapter.items.filterIsInstance<Schedule>())
+				adapter.tempList.addAll(data)
 				adapter.sortItemList {
 					checkNoDataLayout()
 				}
-			}
-			Error -> {
-				Logs.wtfm("todayCourseListObserver: ", data.error)
-				toastMessage(data.error?.message)
-				checkNoDataLayout()
-			}
-			Loading -> {
 			}
 		}
-	}
-	private val customThingListObserver = Observer<PackageData<List<CustomThing>>> { data ->
-		when (data.status) {
-			Content -> {
-				if (data.data != null) {
-					adapter.tempList.removeAll(adapter.items.filterIsInstance<CustomThing>())
-					adapter.tempList.addAll(data.data!!)
-					adapter.sortItemList {
-						checkNoDataLayout()
-					}
-				}
+
+		override fun empty(data: List<Schedule>?) {
+			adapter.tempList.removeAll(adapter.items.filterIsInstance<Schedule>())
+			adapter.sortItemList {
+				checkNoDataLayout()
 			}
-			Empty -> {
+		}
+
+		override fun error(data: List<Schedule>?, e: Throwable?) {
+			Logs.wtfm("todayCourseListObserver: ", e)
+			e.toastLong()
+			checkNoDataLayout()
+		}
+	}
+	private val customThingListObserver = object : PackageDataObserver<List<CustomThing>> {
+		override fun content(data: List<CustomThing>?) {
+			if (data != null) {
 				adapter.tempList.removeAll(adapter.items.filterIsInstance<CustomThing>())
+				adapter.tempList.addAll(data)
 				adapter.sortItemList {
 					checkNoDataLayout()
 				}
 			}
-			Error -> {
-				Logs.wtfm("todayCourseListObserver: ", data.error)
+		}
+
+		override fun empty(data: List<CustomThing>?) {
+			adapter.tempList.removeAll(adapter.items.filterIsInstance<CustomThing>())
+			adapter.sortItemList {
 				checkNoDataLayout()
 			}
-			Loading -> {
-			}
+		}
+
+		override fun error(data: List<CustomThing>?, e: Throwable?) {
+			Logs.wtfm("todayCourseListObserver: ", e)
+			checkNoDataLayout()
 		}
 	}
 

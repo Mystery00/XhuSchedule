@@ -4,7 +4,7 @@ import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
@@ -14,6 +14,7 @@ import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.base.BaseBottomNavigationFragment
 import com.weilylab.xhuschedule.databinding.DialogShareWithFriendsBinding
 import com.weilylab.xhuschedule.databinding.FragmentProfileBinding
+import com.weilylab.xhuschedule.model.StudentInfo
 import com.weilylab.xhuschedule.ui.activity.FeedbackActivity
 import com.weilylab.xhuschedule.ui.activity.NoticeActivity
 import com.weilylab.xhuschedule.ui.activity.QueryTestActivity
@@ -23,7 +24,9 @@ import com.weilylab.xhuschedule.utils.LayoutRefreshConfigUtil
 import com.weilylab.xhuschedule.utils.ShareUtil
 import com.weilylab.xhuschedule.viewmodel.BottomNavigationViewModel
 import vip.mystery0.logs.Logs
+import vip.mystery0.rx.PackageDataObserver
 import vip.mystery0.rx.Status.*
+import vip.mystery0.tools.toastLong
 import java.io.File
 
 class ProfileFragment : BaseBottomNavigationFragment<FragmentProfileBinding>(R.layout.fragment_profile) {
@@ -32,7 +35,7 @@ class ProfileFragment : BaseBottomNavigationFragment<FragmentProfileBinding>(R.l
 	}
 
 	private val bottomNavigationViewModel: BottomNavigationViewModel by lazy {
-		ViewModelProviders.of(activity!!)[BottomNavigationViewModel::class.java]
+		ViewModelProvider(activity!!)[BottomNavigationViewModel::class.java]
 	}
 	private val bottomSheetDialog: BottomSheetDialog by lazy { BottomSheetDialog(activity!!) }
 
@@ -59,15 +62,14 @@ class ProfileFragment : BaseBottomNavigationFragment<FragmentProfileBinding>(R.l
 	}
 
 	private fun initViewModel() {
-		bottomNavigationViewModel.studentInfo.observe(activity!!, Observer {
-			when (it.status) {
-				Content -> binding.studentInfo = it.data
-				Error -> {
-					Logs.wtf("initViewModel: ", it.error)
-					toastMessage(it.error?.message)
-				}
-				else -> {
-				}
+		bottomNavigationViewModel.studentInfo.observe(activity!!, object : PackageDataObserver<StudentInfo> {
+			override fun content(data: StudentInfo?) {
+				binding.studentInfo = data
+			}
+
+			override fun error(data: StudentInfo?, e: Throwable?) {
+				Logs.wtf("error: ", e)
+				e.toastLong()
 			}
 		})
 		bottomNavigationViewModel.noticeList.observe(activity!!, Observer { packageData ->

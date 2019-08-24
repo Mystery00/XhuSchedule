@@ -3,7 +3,7 @@ package com.weilylab.xhuschedule.ui.fragment
 import android.graphics.Color
 import android.view.ViewTreeObserver
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.base.BaseBottomNavigationFragment
 import com.weilylab.xhuschedule.config.ColorPoolHelper
@@ -20,10 +20,9 @@ import com.zhuangfei.timetable.listener.ISchedule
 import com.zhuangfei.timetable.listener.OnSlideBuildAdapter
 import com.zhuangfei.timetable.model.Schedule
 import vip.mystery0.logs.Logs
-import vip.mystery0.rx.PackageData
-import vip.mystery0.rx.Status.Content
+import vip.mystery0.rx.PackageDataObserver
 import vip.mystery0.tools.utils.DensityTools
-import java.text.SimpleDateFormat
+import vip.mystery0.tools.utils.toDateTimeString
 import java.util.*
 
 class TableFragment : BaseBottomNavigationFragment<FragmentTableBinding>(R.layout.fragment_table) {
@@ -32,20 +31,16 @@ class TableFragment : BaseBottomNavigationFragment<FragmentTableBinding>(R.layou
 	}
 
 	private val bottomNavigationViewModel: BottomNavigationViewModel by lazy {
-		ViewModelProviders.of(activity!!)[BottomNavigationViewModel::class.java]
+		ViewModelProvider(activity!!)[BottomNavigationViewModel::class.java]
 	}
 	private var week = 1
 
-	private val courseListObserver = Observer<PackageData<List<Schedule>>> {
-		when (it.status) {
-			Content -> {
-				binding.timeTableView
-						.data(it.data)!!
-						.isShowNotCurWeek(ConfigurationUtil.isShowNotWeek)
-						.updateView()
-			}
-			else -> {
-			}
+	private val courseListObserver = object : PackageDataObserver<List<Schedule>> {
+		override fun content(data: List<Schedule>?) {
+			binding.timeTableView
+					.data(data)!!
+					.isShowNotCurWeek(ConfigurationUtil.isShowNotWeek)
+					.updateView()
 		}
 	}
 
@@ -64,14 +59,9 @@ class TableFragment : BaseBottomNavigationFragment<FragmentTableBinding>(R.layou
 		}
 	}
 
-	private val startDateTimeObserver = Observer<PackageData<Calendar>> {
-		when (it.status) {
-			Content -> {
-				val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINA)
-				binding.timeTableView.curWeek(simpleDateFormat.format(it.data!!.time))
-			}
-			else -> {
-			}
+	private val startDateTimeObserver = object : PackageDataObserver<Calendar> {
+		override fun content(data: Calendar?) {
+			binding.timeTableView.curWeek(data!!.toDateTimeString())
 		}
 	}
 
