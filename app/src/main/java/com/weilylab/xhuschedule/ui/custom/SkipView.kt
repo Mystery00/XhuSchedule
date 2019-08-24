@@ -73,7 +73,7 @@ class SkipView : View {
 		super.onMeasure(widthMeasureSpec, heightMeasureSpec)
 		val width = measuredWidth
 		val height = measuredHeight
-		circleRadius = if (width <= 0 || height <= 0) 100 else Math.min(width, height) / 2
+		circleRadius = if (width <= 0 || height <= 0) 100 else width.coerceAtMost(height) / 2
 		setMeasuredDimension(circleRadius * 2, circleRadius * 2)
 	}
 
