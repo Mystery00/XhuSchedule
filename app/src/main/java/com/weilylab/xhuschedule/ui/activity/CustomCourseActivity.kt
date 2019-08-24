@@ -10,7 +10,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -36,15 +36,14 @@ import com.zyao89.view.zloading.ZLoadingDialog
 import com.zyao89.view.zloading.Z_TYPE
 import kotlinx.android.synthetic.main.activity_custom_course.*
 import kotlinx.android.synthetic.main.layout_add_custom_course.*
-
 import vip.mystery0.logs.Logs
-import vip.mystery0.rx.PackageData
-import vip.mystery0.rx.Status
+import vip.mystery0.rx.PackageDataObserver
+import vip.mystery0.tools.toastLong
 import java.util.*
 
 class CustomCourseActivity : XhuBaseActivity(R.layout.activity_custom_course) {
 	private val customCourseViewModel: CustomCourseViewModel by lazy {
-		ViewModelProviders.of(this).get(CustomCourseViewModel::class.java)
+		ViewModelProvider(this).get(CustomCourseViewModel::class.java)
 	}
 	private val customCourseAdapter: CustomCourseAdapter by lazy { CustomCourseAdapter(this) }
 	private val customCourseWeekAdapter: CustomCourseWeekAdapter by lazy { CustomCourseWeekAdapter(this) }
@@ -76,34 +75,34 @@ class CustomCourseActivity : XhuBaseActivity(R.layout.activity_custom_course) {
 				.create()
 	}
 
-	private val studentInfoListObserver = Observer<PackageData<Map<Student, StudentInfo?>>> { data ->
-		when (data.status) {
-			Status.Loading -> dialog.show()
-			Status.Content -> {
-				val map = data.data!!
-				if (map.keys.isNotEmpty()) {
-					val main = map.keys.first { it.isMain }
-					expandLayout.text = getString(R.string.hint_custom_course_sync, "${main.username}(${main.studentName})")
-					customCourseViewModel.student.value = main
-					customCourseViewModel.year.value = CalendarUtil.getSelectArray(null).last()
-					val now = Calendar.getInstance()
-					now.firstDayOfWeek = Calendar.MONDAY
-					val month = now.get(Calendar.MONTH)
-					val week = now.get(Calendar.DAY_OF_WEEK)
-					customCourseViewModel.term.value = if (month in Calendar.MARCH until Calendar.SEPTEMBER) "2" else "1"
-					customCourseViewModel.weekIndex.value = week
-					customCourseViewModel.time.value = Pair(1, 1)
-				}
-				dialog.dismiss()
+	private val studentInfoListObserver = object : PackageDataObserver<Map<Student, StudentInfo?>> {
+		override fun loading() {
+			dialog.show()
+		}
+
+		override fun content(data: Map<Student, StudentInfo?>?) {
+			val map = data!!
+			if (map.keys.isNotEmpty()) {
+				val main = map.keys.first { it.isMain }
+				expandLayout.text = getString(R.string.hint_custom_course_sync, "${main.username}(${main.studentName})")
+				customCourseViewModel.student.value = main
+				customCourseViewModel.year.value = CalendarUtil.getSelectArray(null).last()
+				val now = Calendar.getInstance()
+				now.firstDayOfWeek = Calendar.MONDAY
+				val month = now.get(Calendar.MONTH)
+				val week = now.get(Calendar.DAY_OF_WEEK)
+				customCourseViewModel.term.value = if (month in Calendar.MARCH until Calendar.SEPTEMBER) "2" else "1"
+				customCourseViewModel.weekIndex.value = week
+				customCourseViewModel.time.value = Pair(1, 1)
 			}
-			Status.Error -> {
-				dialog.dismiss()
-				Logs.wtf("studentInfoListObserver: ", data.error)
-				toastMessage(R.string.error_init_failed)
-				finish()
-			}
-			Status.Empty -> {
-			}
+			dialog.dismiss()
+		}
+
+		override fun error(data: Map<Student, StudentInfo?>?, e: Throwable?) {
+			dialog.dismiss()
+			Logs.wtf("studentInfoListObserver: ", e)
+			toastMessage(R.string.error_init_failed)
+			finish()
 		}
 	}
 
@@ -131,52 +130,55 @@ class CustomCourseActivity : XhuBaseActivity(R.layout.activity_custom_course) {
 		textViewTerm.text = text
 	}
 
-	private val customCourseListObserver = Observer<PackageData<List<Any>>> {
-		when (it.status) {
-			Status.Loading -> showRefresh()
-			Status.Content -> {
-				hideRefresh()
-				customCourseAdapter.items.clear()
-				customCourseAdapter.items.addAll(it.data!!)
-				customCourseAdapter.updateMap()
-				checkData()
-			}
-			Status.Error -> {
-				Logs.wtfm("customCourseListObserver: ", it.error)
-				hideRefresh()
-				checkData()
-				toastMessage(it.error?.message)
-			}
-			Status.Empty -> {
-				hideRefresh()
-				showNoDataLayout()
-			}
+	private val customCourseListObserver = object : PackageDataObserver<List<Any>> {
+		override fun loading() {
+			showRefresh()
+		}
+
+		override fun content(data: List<Any>?) {
+			hideRefresh()
+			customCourseAdapter.items.clear()
+			customCourseAdapter.items.addAll(data!!)
+			customCourseAdapter.updateMap()
+			checkData()
+		}
+
+		override fun error(data: List<Any>?, e: Throwable?) {
+			Logs.wtfm("customCourseListObserver: ", e)
+			hideRefresh()
+			checkData()
+			e.toastLong(this@CustomCourseActivity)
+		}
+
+		override fun empty(data: List<Any>?) {
+			hideRefresh()
+			showNoDataLayout()
 		}
 	}
 
-	private val statusObserver = Observer<PackageData<Boolean>> {
-		when (it.status) {
-			Status.Loading -> showSyncDialog()
-			Status.Content -> {
-				hideSyncDialog()
-				//false 表示上传到服务器，true 表示下载到本地
-				//表示是否需要在操作之后刷新列表数据
-				if (it.data!!) {
-					refresh()
-					Snackbar.make(coordinatorLayout, R.string.hint_sync_done, Snackbar.LENGTH_SHORT)
-							.show()
-				} else {
-					Snackbar.make(coordinatorLayout, R.string.hint_sync_done, Snackbar.LENGTH_SHORT)
-							.show()
-				}
+	private val statusObserver = object : PackageDataObserver<Boolean> {
+		override fun loading() {
+			showSyncDialog()
+		}
+
+		override fun content(data: Boolean?) {
+			hideSyncDialog()
+			//false 表示上传到服务器，true 表示下载到本地
+			//表示是否需要在操作之后刷新列表数据
+			if (data!!) {
+				refresh()
+				Snackbar.make(coordinatorLayout, R.string.hint_sync_done, Snackbar.LENGTH_SHORT)
+						.show()
+			} else {
+				Snackbar.make(coordinatorLayout, R.string.hint_sync_done, Snackbar.LENGTH_SHORT)
+						.show()
 			}
-			Status.Error -> {
-				Logs.wtfm("customCourseListObserver: ", it.error)
-				hideSyncDialog()
-				toastMessage(it.error?.message)
-			}
-			Status.Empty -> {
-			}
+		}
+
+		override fun error(data: Boolean?, e: Throwable?) {
+			Logs.wtfm("customCourseListObserver: ", e)
+			hideSyncDialog()
+			e.toastLong(this@CustomCourseActivity)
 		}
 	}
 

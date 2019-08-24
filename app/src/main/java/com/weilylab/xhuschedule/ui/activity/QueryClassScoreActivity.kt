@@ -9,7 +9,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.weilylab.xhuschedule.R
@@ -26,15 +26,15 @@ import com.zyao89.view.zloading.ZLoadingDialog
 import com.zyao89.view.zloading.Z_TYPE
 import kotlinx.android.synthetic.main.activity_query_class_score.*
 import vip.mystery0.logs.Logs
-import vip.mystery0.rx.PackageData
-import vip.mystery0.rx.Status.*
+import vip.mystery0.rx.PackageDataObserver
+import vip.mystery0.tools.toastLong
 import vip.mystery0.tools.utils.DensityTools
 import java.util.*
 
 
 class QueryClassScoreActivity : XhuBaseActivity(R.layout.activity_query_class_score) {
 	private val queryClassScoreViewModel: QueryClassScoreViewModel by lazy {
-		ViewModelProviders.of(this)[QueryClassScoreViewModel::class.java]
+		ViewModelProvider(this)[QueryClassScoreViewModel::class.java]
 	}
 	private val queryClassScoreRecyclerViewAdapter: QueryClassScoreRecyclerViewAdapter by lazy { QueryClassScoreRecyclerViewAdapter(this) }
 	private var hasData = false
@@ -50,27 +50,27 @@ class QueryClassScoreActivity : XhuBaseActivity(R.layout.activity_query_class_sc
 				.create()
 	}
 
-	private val studentInfoListObserver = Observer<PackageData<Map<Student, StudentInfo?>>> { data ->
-		when (data.status) {
-			Loading -> dialog.show()
-			Content -> {
-				val map = data.data!!
-				if (map.keys.isNotEmpty()) {
-					queryClassScoreViewModel.student.value = map.keys.first { it.isMain }
-					queryClassScoreViewModel.year.value = CalendarUtil.getSelectArray(null).last()
-					val month = Calendar.getInstance().get(Calendar.MONTH)
-					queryClassScoreViewModel.term.value = if (month in Calendar.MARCH until Calendar.SEPTEMBER) "2" else "1"
-				}
-				dialog.dismiss()
+	private val studentInfoListObserver = object : PackageDataObserver<Map<Student, StudentInfo?>> {
+		override fun loading() {
+			dialog.show()
+		}
+
+		override fun content(data: Map<Student, StudentInfo?>?) {
+			val map = data!!
+			if (map.keys.isNotEmpty()) {
+				queryClassScoreViewModel.student.value = map.keys.first { it.isMain }
+				queryClassScoreViewModel.year.value = CalendarUtil.getSelectArray(null).last()
+				val month = Calendar.getInstance().get(Calendar.MONTH)
+				queryClassScoreViewModel.term.value = if (month in Calendar.MARCH until Calendar.SEPTEMBER) "2" else "1"
 			}
-			Error -> {
-				dialog.dismiss()
-				Logs.wtf("studentInfoListObserver: ", data.error)
-				toastMessage(R.string.error_init_failed)
-				finish()
-			}
-			else -> {
-			}
+			dialog.dismiss()
+		}
+
+		override fun error(data: Map<Student, StudentInfo?>?, e: Throwable?) {
+			dialog.dismiss()
+			Logs.wtf("studentInfoListObserver: ", e)
+			toastMessage(R.string.error_init_failed)
+			finish()
 		}
 	}
 
@@ -87,20 +87,25 @@ class QueryClassScoreActivity : XhuBaseActivity(R.layout.activity_query_class_sc
 		textViewTerm.text = it
 	}
 
-	private val scoreListObserver = Observer<PackageData<List<ClassScore>>> {
-		when (it.status) {
-			Loading -> showLoading()
-			Empty -> showEmpty()
-			Content -> {
-				hasData = true
-				updateScoreList(it.data!!)
-				showContent()
-			}
-			Error -> {
-				Logs.wtfm("scoreListObserver: ", it.error)
-				dismissLoading()
-				toastMessage(it.error?.message)
-			}
+	private val scoreListObserver = object : PackageDataObserver<List<ClassScore>> {
+		override fun loading() {
+			showLoading()
+		}
+
+		override fun empty(data: List<ClassScore>?) {
+			showEmpty()
+		}
+
+		override fun content(data: List<ClassScore>?) {
+			hasData = true
+			updateScoreList(data!!)
+			showContent()
+		}
+
+		override fun error(data: List<ClassScore>?, e: Throwable?) {
+			Logs.wtfm("scoreListObserver: ", e)
+			dismissLoading()
+			e.toastLong(this@QueryClassScoreActivity)
 		}
 	}
 

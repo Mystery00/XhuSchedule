@@ -73,7 +73,7 @@ class GuideActivity : XhuBaseActivity(R.layout.activity_guide) {
 		grayPointDrawable.setTint(Color.LTGRAY)
 
 		container.adapter = sectionsPagerAdapter
-		for (i in 0 until imageArray.size) {
+		for (i in imageArray.indices) {
 			val view = View(applicationContext)
 			view.background = grayPointDrawable
 			val params = LinearLayout.LayoutParams(20, 20)

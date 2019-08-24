@@ -15,7 +15,7 @@ import android.widget.PopupWindow
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
@@ -52,8 +52,8 @@ import kotlinx.android.synthetic.main.activity_bottom_navigation.*
 import kotlinx.android.synthetic.main.content_bottom_navigation.*
 import vip.mystery0.bottomTabView.BottomTabItem
 import vip.mystery0.logs.Logs
-import vip.mystery0.rx.PackageData
-import vip.mystery0.rx.Status.*
+import vip.mystery0.rx.PackageDataObserver
+import vip.mystery0.tools.toastLong
 import vip.mystery0.tools.utils.DensityTools
 import java.io.File
 import java.text.SimpleDateFormat
@@ -69,7 +69,7 @@ class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_naviga
 	}
 
 	private val bottomNavigationViewModel: BottomNavigationViewModel by lazy {
-		ViewModelProviders.of(this)[BottomNavigationViewModel::class.java]
+		ViewModelProvider(this)[BottomNavigationViewModel::class.java]
 	}
 	private val viewPagerAdapter: ViewPagerAdapter by lazy { ViewPagerAdapter(supportFragmentManager) }
 	private val dialog: Dialog by lazy {
@@ -91,103 +91,110 @@ class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_naviga
 	private lateinit var loadingAnimation: ObjectAnimator
 	private var action = ACTION_NONE
 
-	private val studentListObserver = Observer<PackageData<List<Student>>> {
-		when (it.status) {
-			Loading -> {
-				if (action == ACTION_INIT)
-					showDialog()
+	private val studentListObserver = object : PackageDataObserver<List<Student>> {
+		override fun loading() {
+			if (action == ACTION_INIT)
+				showDialog()
+		}
+
+		override fun content(data: List<Student>?) {
+			try {
+				if (getString(R.string.app_version_code).toInt() > ConfigurationUtil.updatedVersion)
+					ConfigUtil.showUpdateLog(this@BottomNavigationActivity)
+			} catch (e: Exception) {
 			}
-			Content -> {
-				try {
-					if (getString(R.string.app_version_code).toInt() > ConfigurationUtil.updatedVersion)
-						ConfigUtil.showUpdateLog(this)
-				} catch (e: Exception) {
-				}
-				if (ConfigurationUtil.isEnableMultiUserMode) {
-					val mainStudent = UserUtil.findMainStudent(it.data)
-					if (mainStudent != null)
-						BottomNavigationRepository.queryStudentInfo(bottomNavigationViewModel, mainStudent)
-					else
-						BottomNavigationRepository.queryStudentList(bottomNavigationViewModel)
-					BottomNavigationRepository.queryCacheCoursesForManyStudent(bottomNavigationViewModel)
-				} else {
-					BottomNavigationRepository.queryStudentInfo(bottomNavigationViewModel)
-					BottomNavigationRepository.queryCacheCourses(bottomNavigationViewModel)
-				}
-				BottomNavigationRepository.queryCurrentWeek(bottomNavigationViewModel)
-				BottomNavigationRepository.queryFeedBack(bottomNavigationViewModel)
+			if (ConfigurationUtil.isEnableMultiUserMode) {
+				val mainStudent = UserUtil.findMainStudent(data)
+				if (mainStudent != null)
+					BottomNavigationRepository.queryStudentInfo(bottomNavigationViewModel, mainStudent)
+				else
+					BottomNavigationRepository.queryStudentList(bottomNavigationViewModel)
+				BottomNavigationRepository.queryCacheCoursesForManyStudent(bottomNavigationViewModel)
+			} else {
+				BottomNavigationRepository.queryStudentInfo(bottomNavigationViewModel)
+				BottomNavigationRepository.queryCacheCourses(bottomNavigationViewModel)
 			}
-			Empty -> {
-				startActivityForResult(Intent(this, LoginActivity::class.java), ADD_ACCOUNT_CODE)
-				hideDialog()
-			}
-			Error -> {
-				Logs.wtfm("studentListObserver: ", it.error)
-				toastMessage(it.error?.message, true)
-				hideDialog()
-			}
+			BottomNavigationRepository.queryCurrentWeek(bottomNavigationViewModel)
+			BottomNavigationRepository.queryFeedBack(bottomNavigationViewModel)
+		}
+
+		override fun empty(data: List<Student>?) {
+			startActivityForResult(Intent(this@BottomNavigationActivity, LoginActivity::class.java), ADD_ACCOUNT_CODE)
+			hideDialog()
+		}
+
+		override fun error(data: List<Student>?, e: Throwable?) {
+			Logs.wtfm("studentListObserver: ", e)
+			e.toastLong(this@BottomNavigationActivity)
+			hideDialog()
 		}
 	}
 
-	private val courseListObserver = Observer<PackageData<List<Schedule>>> { packageData ->
-		when (packageData.status) {
-			Content -> {
-				if (action == ACTION_REFRESH) {
-					toastMessage(R.string.hint_course_sync_done)
-					action = ACTION_NONE
-				}
-				cancelLoading()
-				hideDialog()
-				val nowString = CalendarUtil.getTodayDateString()
-				if (nowString != ConfigurationUtil.lastUpdateDate) {
-					if (ConfigurationUtil.isEnableMultiUserMode)
-						BottomNavigationRepository.queryCoursesOnlineForManyStudent(bottomNavigationViewModel, false)
-					else
-						BottomNavigationRepository.queryCoursesOnline(bottomNavigationViewModel, false)
-				}
-			}
-			Loading -> showLoading()
-			Error -> {
-				Logs.wtfm("courseListObserver: ", packageData.error)
+	private val courseListObserver = object : PackageDataObserver<List<Schedule>> {
+		override fun content(data: List<Schedule>?) {
+			if (action == ACTION_REFRESH) {
+				toastMessage(R.string.hint_course_sync_done)
 				action = ACTION_NONE
-				toastMessage(packageData.error?.message)
-				cancelLoading()
-				hideDialog()
 			}
-			Empty -> {
-				if (action == ACTION_REFRESH) {
-					toastMessage(R.string.hint_course_sync_done)
-					action = ACTION_NONE
-				}
-				cancelLoading()
-				hideDialog()
+			cancelLoading()
+			hideDialog()
+			val nowString = CalendarUtil.getTodayDateString()
+			if (nowString != ConfigurationUtil.lastUpdateDate) {
+				if (ConfigurationUtil.isEnableMultiUserMode)
+					BottomNavigationRepository.queryCoursesOnlineForManyStudent(bottomNavigationViewModel, false)
+				else
+					BottomNavigationRepository.queryCoursesOnline(bottomNavigationViewModel, false)
 			}
+		}
+
+		override fun loading() {
+			showLoading()
+		}
+
+		override fun error(data: List<Schedule>?, e: Throwable?) {
+			Logs.wtfm("courseListObserver: ", e)
+			action = ACTION_NONE
+			e.toastLong(this@BottomNavigationActivity)
+			cancelLoading()
+			hideDialog()
+		}
+
+		override fun empty(data: List<Schedule>?) {
+			if (action == ACTION_REFRESH) {
+				toastMessage(R.string.hint_course_sync_done)
+				action = ACTION_NONE
+			}
+			cancelLoading()
+			hideDialog()
 		}
 	}
 
-	private val currentWeekObserver = Observer<PackageData<Int>> {
-		when (it.status) {
-			Content -> {
-				val week = when {
-					it.data!! < 1 -> 1
-					it.data!! > 20 -> 20
-					else -> it.data!!
-				}
-				weekView.curWeek(week).showView()
-				bottomNavigationViewModel.week.value = week
-				viewPagerAdapter.getItem(viewPager.currentItem).updateTitle()
+	private val currentWeekObserver = object : PackageDataObserver<Int> {
+		override fun content(data: Int?) {
+			val week = when {
+				data!! < 1 -> 1
+				data > 20 -> 20
+				else -> data
 			}
-			Error -> {
-				Logs.wtfm("currentWeekObserver: ", it.error)
-				toastMessage(it.error?.message)
-				cancelLoading()
-				hideDialog()
-			}
-			Loading -> showLoading()
-			Empty -> {
-				cancelLoading()
-				hideDialog()
-			}
+			weekView.curWeek(week).showView()
+			bottomNavigationViewModel.week.value = week
+			viewPagerAdapter.getItem(viewPager.currentItem).updateTitle()
+		}
+
+		override fun error(data: Int?, e: Throwable?) {
+			Logs.wtfm("currentWeekObserver: ", e)
+			e.toastLong(this@BottomNavigationActivity)
+			cancelLoading()
+			hideDialog()
+		}
+
+		override fun loading() {
+			showLoading()
+		}
+
+		override fun empty(data: Int?) {
+			cancelLoading()
+			hideDialog()
 		}
 	}
 

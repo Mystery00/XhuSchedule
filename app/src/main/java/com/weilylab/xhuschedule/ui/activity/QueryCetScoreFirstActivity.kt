@@ -7,7 +7,6 @@ import android.text.TextUtils
 import android.view.View
 import android.widget.ScrollView
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.Observer
 import com.android.setupwizardlib.view.NavigationBar
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.base.XhuBaseActivity
@@ -19,8 +18,8 @@ import com.zyao89.view.zloading.ZLoadingDialog
 import com.zyao89.view.zloading.Z_TYPE
 import kotlinx.android.synthetic.main.activity_query_cet_score_first.*
 import vip.mystery0.logs.Logs
-import vip.mystery0.rx.PackageData
-import vip.mystery0.rx.Status.*
+import vip.mystery0.rx.PackageDataObserver
+import vip.mystery0.tools.toastLong
 
 class QueryCetScoreFirstActivity : XhuBaseActivity(R.layout.activity_query_cet_score_first) {
 	private val dialog: Dialog by lazy {
@@ -35,37 +34,36 @@ class QueryCetScoreFirstActivity : XhuBaseActivity(R.layout.activity_query_cet_s
 				.create()
 	}
 
-	private val studentInfoListObserver = Observer<PackageData<Map<Student, StudentInfo?>>> { data ->
-		when (data.status) {
-			Content -> {
-				val map = data.data!!
-				if (map.keys.isNotEmpty()) {
-					val student = map.keys.first { it.isMain }
-					QueryCetScoreViewModelHelper.student.value = student
-					cetNameEditText.setText(student.studentName)
-				}
-			}
-			else -> {
+	private val studentInfoListObserver = object : PackageDataObserver<Map<Student, StudentInfo?>> {
+		override fun content(data: Map<Student, StudentInfo?>?) {
+			val map = data!!
+			if (map.keys.isNotEmpty()) {
+				val student = map.keys.first { it.isMain }
+				QueryCetScoreViewModelHelper.student.value = student
+				cetNameEditText.setText(student.studentName)
 			}
 		}
 	}
 
-	private val cetVCodeObserver = Observer<PackageData<Bitmap>> {
-		when (it.status) {
-			Content -> {
-				hideDialog()
-				startActivity(Intent(this, QueryCetScoreSecondActivity::class.java))
-			}
-			Loading -> showDialog()
-			Empty -> {
-				hideDialog()
-				toastMessage(R.string.hint_data_null, true)
-			}
-			Error -> {
-				Logs.wtfm("cetVCodeObserver: ", it.error)
-				hideDialog()
-				toastMessage(it.error?.message, true)
-			}
+	private val cetVCodeObserver = object : PackageDataObserver<Bitmap> {
+		override fun content(data: Bitmap?) {
+			hideDialog()
+			startActivity(Intent(this@QueryCetScoreFirstActivity, QueryCetScoreSecondActivity::class.java))
+		}
+
+		override fun loading() {
+			showDialog()
+		}
+
+		override fun empty(data: Bitmap?) {
+			hideDialog()
+			toastMessage(R.string.hint_data_null, true)
+		}
+
+		override fun error(data: Bitmap?, e: Throwable?) {
+			Logs.wtfm("cetVCodeObserver: ", e)
+			hideDialog()
+			e.toastLong(this@QueryCetScoreFirstActivity)
 		}
 	}
 

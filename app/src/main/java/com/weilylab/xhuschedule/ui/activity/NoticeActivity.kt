@@ -35,8 +35,7 @@ package com.weilylab.xhuschedule.ui.activity
 
 import android.view.View
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.weilylab.xhuschedule.R
@@ -49,35 +48,38 @@ import com.weilylab.xhuschedule.utils.LayoutRefreshConfigUtil
 import com.weilylab.xhuschedule.viewmodel.NoticeViewModel
 import kotlinx.android.synthetic.main.activity_notice.*
 import vip.mystery0.logs.Logs
-import vip.mystery0.rx.PackageData
-import vip.mystery0.rx.Status.*
+import vip.mystery0.rx.PackageDataObserver
+import vip.mystery0.tools.toastLong
 
 class NoticeActivity : XhuBaseActivity(R.layout.activity_notice) {
 	private val noticeViewModel: NoticeViewModel by lazy {
-		ViewModelProviders.of(this).get(NoticeViewModel::class.java)
+		ViewModelProvider(this).get(NoticeViewModel::class.java)
 	}
 	private val noticeAdapter: NoticeAdapter by lazy { NoticeAdapter(this) }
 	private lateinit var viewStubBinding: LayoutNullDataViewBinding
 
-	private val noticeObserver = Observer<PackageData<List<Notice>>> {
-		when (it.status) {
-			Loading -> showRefresh()
-			Content -> {
-				hideRefresh()
-				hideNoDataLayout()
-				noticeAdapter.items.clear()
-				noticeAdapter.items.addAll(it.data!!)
-			}
-			Error -> {
-				Logs.wtfm("noticeObserver: ", it.error)
-				hideRefresh()
-				hideNoDataLayout()
-				toastMessage(it.error?.message)
-			}
-			Empty -> {
-				hideRefresh()
-				showNoDataLayout()
-			}
+	private val noticeObserver = object : PackageDataObserver<List<Notice>> {
+		override fun loading() {
+			showRefresh()
+		}
+
+		override fun content(data: List<Notice>?) {
+			hideRefresh()
+			hideNoDataLayout()
+			noticeAdapter.items.clear()
+			noticeAdapter.items.addAll(data!!)
+		}
+
+		override fun error(data: List<Notice>?, e: Throwable?) {
+			Logs.wtfm("noticeObserver: ", e)
+			hideRefresh()
+			hideNoDataLayout()
+			e.toastLong(this@NoticeActivity)
+		}
+
+		override fun empty(data: List<Notice>?) {
+			hideRefresh()
+			showNoDataLayout()
 		}
 	}
 

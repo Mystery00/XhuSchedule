@@ -4,8 +4,7 @@ import android.app.Dialog
 import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.weilylab.xhuschedule.R
@@ -20,12 +19,12 @@ import com.zyao89.view.zloading.Z_TYPE
 import kotlinx.android.synthetic.main.activity_class_course_color.*
 import kotlinx.android.synthetic.main.content_class_course_color.*
 import vip.mystery0.logs.Logs
-import vip.mystery0.rx.PackageData
-import vip.mystery0.rx.Status.*
+import vip.mystery0.rx.PackageDataObserver
+import vip.mystery0.tools.toastLong
 
 class ClassCourseColorActivity : XhuBaseActivity(R.layout.activity_class_course_color) {
 	private val classCourseColorViewModel: ClassCourseColorViewModel by lazy {
-		ViewModelProviders.of(this)[ClassCourseColorViewModel::class.java]
+		ViewModelProvider(this)[ClassCourseColorViewModel::class.java]
 	}
 	private lateinit var viewStubBinding: LayoutNullDataViewBinding
 	private val classCourseColorRecyclerViewAdapter: ClassCourseColorRecyclerViewAdapter by lazy { ClassCourseColorRecyclerViewAdapter(this) }
@@ -40,25 +39,28 @@ class ClassCourseColorActivity : XhuBaseActivity(R.layout.activity_class_course_
 				.create()
 	}
 
-	private val classCourseColorObserver = Observer<PackageData<List<Course>>> {
-		when (it.status) {
-			Loading -> showDialog()
-			Content -> {
-				hideDialog()
-				hideNoDataLayout()
-				classCourseColorRecyclerViewAdapter.items.clear()
-				classCourseColorRecyclerViewAdapter.items.addAll(it.data!!)
-			}
-			Empty -> {
-				hideDialog()
-				showNoDataLayout()
-			}
-			Error -> {
-				Logs.wtfm("classCourseColorObserver: ", it.error)
-				hideDialog()
-				hideNoDataLayout()
-				toastMessage(it.error?.message)
-			}
+	private val classCourseColorObserver = object : PackageDataObserver<List<Course>> {
+		override fun loading() {
+			showDialog()
+		}
+
+		override fun content(data: List<Course>?) {
+			hideDialog()
+			hideNoDataLayout()
+			classCourseColorRecyclerViewAdapter.items.clear()
+			classCourseColorRecyclerViewAdapter.items.addAll(data!!)
+		}
+
+		override fun empty(data: List<Course>?) {
+			hideDialog()
+			showNoDataLayout()
+		}
+
+		override fun error(data: List<Course>?, e: Throwable?) {
+			Logs.wtfm("classCourseColorObserver: ", e)
+			hideDialog()
+			hideNoDataLayout()
+			e.toastLong(this@ClassCourseColorActivity)
 		}
 	}
 

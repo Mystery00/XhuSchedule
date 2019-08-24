@@ -40,8 +40,7 @@ import android.text.TextUtils
 import android.view.View
 import android.view.WindowManager
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.base.XhuBaseActivity
 import com.weilylab.xhuschedule.model.Student
@@ -51,12 +50,12 @@ import com.zyao89.view.zloading.ZLoadingDialog
 import com.zyao89.view.zloading.Z_TYPE
 import kotlinx.android.synthetic.main.activity_login.*
 import vip.mystery0.logs.Logs
-import vip.mystery0.rx.PackageData
-import vip.mystery0.rx.Status.*
+import vip.mystery0.rx.PackageDataObserver
+import vip.mystery0.tools.toastLong
 
 class LoginActivity : XhuBaseActivity(R.layout.activity_login, false) {
 	private val loginViewModel: LoginViewModel by lazy {
-		ViewModelProviders.of(this)[LoginViewModel::class.java]
+		ViewModelProvider(this)[LoginViewModel::class.java]
 	}
 	private val dialog: Dialog by lazy {
 		ZLoadingDialog(this)
@@ -70,29 +69,29 @@ class LoginActivity : XhuBaseActivity(R.layout.activity_login, false) {
 				.create()
 	}
 
-	private val loginObserver = Observer<PackageData<Student>> {
-		when (it.status) {
-			Content -> {
-				if (it.data != null) {
-					LoginRepository.queryStudentInfo({ _, e ->
-						hideDialog()
-						if (e == null) {
-							toastMessage(getString(R.string.success_login, getString(R.string.app_name)))
-							setResult(Activity.RESULT_OK, intent)
-							finish()
-						} else
-							toastMessage(e.message)
-					}, it.data!!)
-				}
+	private val loginObserver = object : PackageDataObserver<Student> {
+		override fun content(data: Student?) {
+			if (data != null) {
+				LoginRepository.queryStudentInfo({ _, e ->
+					hideDialog()
+					if (e == null) {
+						toastMessage(getString(R.string.success_login, getString(R.string.app_name)))
+						setResult(Activity.RESULT_OK, intent)
+						finish()
+					} else
+						toastMessage(e.message)
+				}, data)
 			}
-			Error -> {
-				Logs.wtfm("loginObserver: ", it.error)
-				hideDialog()
-				toastMessage(it.error?.message)
-			}
-			Loading -> showDialog()
-			Empty -> {
-			}
+		}
+
+		override fun error(data: Student?, e: Throwable?) {
+			Logs.wtfm("loginObserver: ", e)
+			hideDialog()
+			e.toastLong(this@LoginActivity)
+		}
+
+		override fun loading() {
+			showDialog()
 		}
 	}
 

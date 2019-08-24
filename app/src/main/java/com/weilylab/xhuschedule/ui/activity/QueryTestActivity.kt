@@ -8,7 +8,7 @@ import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.weilylab.xhuschedule.R
@@ -29,11 +29,12 @@ import kotlinx.android.synthetic.main.activity_query_test.*
 import kotlinx.android.synthetic.main.content_query_test.*
 import vip.mystery0.logs.Logs
 import vip.mystery0.rx.PackageData
-import vip.mystery0.rx.Status.*
+import vip.mystery0.rx.PackageDataObserver
+import vip.mystery0.tools.toastLong
 
 class QueryTestActivity : XhuBaseActivity(R.layout.activity_query_test) {
 	private val queryTestViewModel: QueryTestViewModel by lazy {
-		ViewModelProviders.of(this)[QueryTestViewModel::class.java]
+		ViewModelProvider(this)[QueryTestViewModel::class.java]
 	}
 	private lateinit var menu: Menu
 	private lateinit var viewStubBinding: LayoutNullDataViewBinding
@@ -50,41 +51,51 @@ class QueryTestActivity : XhuBaseActivity(R.layout.activity_query_test) {
 	}
 	private val queryTestRecyclerViewAdapter: QueryTestRecyclerViewAdapter by lazy { QueryTestRecyclerViewAdapter(this) }
 
-	private val queryStudentListObserver = Observer<PackageData<List<Student>>> { packageData ->
-		when (packageData.status) {
-			Content -> {
-				generateStudentMenuList(packageData.data!!)
-				val mainStudent = UserUtil.findMainStudent(packageData.data)
-				if (mainStudent == null)
-					queryTestViewModel.testList.value = PackageData.empty()
-				else
-					queryTestForStudent(mainStudent)
-			}
-			Error -> queryTestViewModel.testList.value = PackageData.error(packageData.error)
-			Empty -> queryTestViewModel.testList.value = PackageData.empty()
-			Loading -> queryTestViewModel.testList.value = PackageData.loading()
+	private val queryStudentListObserver = object : PackageDataObserver<List<Student>> {
+		override fun content(data: List<Student>?) {
+			generateStudentMenuList(data!!)
+			val mainStudent = UserUtil.findMainStudent(data)
+			if (mainStudent == null)
+				queryTestViewModel.testList.value = PackageData.empty()
+			else
+				queryTestForStudent(mainStudent)
+		}
+
+		override fun error(data: List<Student>?, e: Throwable?) {
+			queryTestViewModel.testList.value = PackageData.error(e)
+		}
+
+		override fun empty(data: List<Student>?) {
+			queryTestViewModel.testList.value = PackageData.empty()
+		}
+
+		override fun loading() {
+			queryTestViewModel.testList.value = PackageData.loading()
 		}
 	}
 
-	private val queryTestListObserver = Observer<PackageData<List<Test>>> {
-		when (it.status) {
-			Loading -> showDialog()
-			Content -> {
-				hideDialog()
-				hideNoDataLayout()
-				queryTestRecyclerViewAdapter.items.clear()
-				queryTestRecyclerViewAdapter.items.addAll(it.data!!)
-			}
-			Error -> {
-				Logs.wtfm("queryTestListObserver: ", it.error)
-				hideDialog()
-				hideNoDataLayout()
-				toastMessage(it.error?.message)
-			}
-			Empty -> {
-				hideDialog()
-				showNoDataLayout()
-			}
+	private val queryTestListObserver = object : PackageDataObserver<List<Test>> {
+		override fun loading() {
+			showDialog()
+		}
+
+		override fun content(data: List<Test>?) {
+			hideDialog()
+			hideNoDataLayout()
+			queryTestRecyclerViewAdapter.items.clear()
+			queryTestRecyclerViewAdapter.items.addAll(data!!)
+		}
+
+		override fun error(data: List<Test>?, e: Throwable?) {
+			Logs.wtfm("queryTestListObserver: ", e)
+			hideDialog()
+			hideNoDataLayout()
+			e.toastLong(this@QueryTestActivity)
+		}
+
+		override fun empty(data: List<Test>?) {
+			hideDialog()
+			showNoDataLayout()
 		}
 	}
 

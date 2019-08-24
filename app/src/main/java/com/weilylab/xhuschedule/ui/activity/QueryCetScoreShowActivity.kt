@@ -1,7 +1,6 @@
 package com.weilylab.xhuschedule.ui.activity
 
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.Observer
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.base.XhuBaseActivity
 import com.weilylab.xhuschedule.databinding.ActivityQueryCetScoreShowBinding
@@ -13,17 +12,14 @@ import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_query_cet_score_show.*
 import vip.mystery0.logs.Logs
 import vip.mystery0.rx.OnlyCompleteObserver
-import vip.mystery0.rx.PackageData
-import vip.mystery0.rx.Status
+import vip.mystery0.rx.PackageDataObserver
 
 class QueryCetScoreShowActivity : XhuBaseActivity(R.layout.activity_query_cet_score_show) {
 	private lateinit var activityQueryCetScoreShowBinding: ActivityQueryCetScoreShowBinding
 
-	private val cetScoreObserver = Observer<PackageData<CetScore>> {
-		when (it.status) {
-			Status.Content -> doShow(it.data!!)
-			else -> {
-			}
+	private val cetScoreObserver = object : PackageDataObserver<CetScore> {
+		override fun content(data: CetScore?) {
+			doShow(data!!)
 		}
 	}
 

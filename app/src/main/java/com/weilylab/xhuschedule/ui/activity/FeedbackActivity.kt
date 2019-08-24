@@ -4,8 +4,7 @@ import android.app.Dialog
 import android.text.Editable
 import android.text.TextWatcher
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.base.XhuBaseActivity
@@ -23,16 +22,15 @@ import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
-
 import kotlinx.android.synthetic.main.activity_feedback.*
 import kotlinx.android.synthetic.main.content_feedback.*
 import vip.mystery0.logs.Logs
-import vip.mystery0.rx.PackageData
-import vip.mystery0.rx.Status.*
+import vip.mystery0.rx.PackageDataObserver
+import vip.mystery0.tools.toastLong
 
 class FeedbackActivity : XhuBaseActivity(R.layout.activity_feedback) {
 	private val feedBackViewModel: FeedBackViewModel by lazy {
-		ViewModelProviders.of(this)[FeedBackViewModel::class.java]
+		ViewModelProvider(this)[FeedBackViewModel::class.java]
 	}
 	private val dialog: Dialog by lazy {
 		ZLoadingDialog(this)
@@ -51,62 +49,73 @@ class FeedbackActivity : XhuBaseActivity(R.layout.activity_feedback) {
 	private var isRefreshDone = true
 	private var isRefreshFinish = true
 
-	private val mainStudentObserver = Observer<PackageData<Student>> {
-		when (it.status) {
-			Content -> FeedBackRepository.queryFeedBackToken(feedBackViewModel)
-			Loading -> showInitDialog()
-			Empty -> {
-				hideInitDialog()
-				toastMessage(R.string.hint_null_student)
-				finish()
-			}
-			Error -> {
-				Logs.wtfm("mainStudentObserver: ", it.error)
-				hideInitDialog()
-				toastMessage(it.error?.message)
-			}
+	private val mainStudentObserver = object : PackageDataObserver<Student> {
+		override fun content(data: Student?) {
+			FeedBackRepository.queryFeedBackToken(feedBackViewModel)
+		}
+
+		override fun loading() {
+			showInitDialog()
+		}
+
+		override fun empty(data: Student?) {
+			hideInitDialog()
+			toastMessage(R.string.hint_null_student)
+			finish()
+		}
+
+		override fun error(data: Student?, e: Throwable?) {
+			Logs.wtfm("mainStudentObserver: ", e)
+			hideInitDialog()
+			e.toastLong(this@FeedbackActivity)
 		}
 	}
 
-	private val feedBackTokenObserver = Observer<PackageData<String>> {
-		when (it.status) {
-			Content -> {
-				hideInitDialog()
-				initAutoRefreshMessage()
-				FeedBackRepository.getMessageFromLocal(feedBackViewModel)
-			}
-			Loading -> showInitDialog()
-			Empty -> {
-				hideInitDialog()
-				toastMessage(R.string.hint_null_student)
-				disableInput()
-			}
-			Error -> {
-				Logs.wtfm("feedBackTokenObserver: ", it.error)
-				hideInitDialog()
-				toastMessage(it.error?.message)
-				disableInput()
-			}
+	private val feedBackTokenObserver = object : PackageDataObserver<String> {
+		override fun content(data: String?) {
+			hideInitDialog()
+			initAutoRefreshMessage()
+			FeedBackRepository.getMessageFromLocal(feedBackViewModel)
+		}
+
+		override fun loading() {
+			showInitDialog()
+		}
+
+		override fun empty(data: String?) {
+			hideInitDialog()
+			toastMessage(R.string.hint_null_student)
+			disableInput()
+		}
+
+		override fun error(data: String?, e: Throwable?) {
+			Logs.wtfm("feedBackTokenObserver: ", e)
+			hideInitDialog()
+			e.toastLong(this@FeedbackActivity)
+			disableInput()
 		}
 	}
 
-	private val feedBackMessageObserver = Observer<PackageData<List<FeedBackMessage>>> {
-		when (it.status) {
-			Content -> {
-				hideRefresh()
-				addMessage(it.data!!)
-				isRefreshByManual = false
-			}
-			Loading -> if (isRefreshByManual)
+	private val feedBackMessageObserver = object : PackageDataObserver<List<FeedBackMessage>> {
+		override fun content(data: List<FeedBackMessage>?) {
+			hideRefresh()
+			addMessage(data!!)
+			isRefreshByManual = false
+		}
+
+		override fun loading() {
+			if (isRefreshByManual)
 				showRefresh()
-			Empty -> {
-				hideRefresh()
-			}
-			Error -> {
-				Logs.wtfm("feedBackMessageObserver: ", it.error)
-				hideRefresh()
-				toastMessage(it.error?.message)
-			}
+		}
+
+		override fun empty(data: List<FeedBackMessage>?) {
+			hideRefresh()
+		}
+
+		override fun error(data: List<FeedBackMessage>?, e: Throwable?) {
+			Logs.wtfm("feedBackMessageObserver: ", e)
+			hideRefresh()
+			e.toastLong(this@FeedbackActivity)
 		}
 	}
 

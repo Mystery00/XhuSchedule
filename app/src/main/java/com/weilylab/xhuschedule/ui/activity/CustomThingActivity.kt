@@ -12,7 +12,7 @@ import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -34,17 +34,18 @@ import com.weilylab.xhuschedule.utils.LayoutRefreshConfigUtil
 import com.weilylab.xhuschedule.viewmodel.CustomThingViewModel
 import com.zyao89.view.zloading.ZLoadingDialog
 import com.zyao89.view.zloading.Z_TYPE
-
 import kotlinx.android.synthetic.main.activity_custom_thing.*
 import vip.mystery0.logs.Logs
 import vip.mystery0.rx.PackageData
+import vip.mystery0.rx.PackageDataObserver
 import vip.mystery0.rx.Status
+import vip.mystery0.tools.toastLong
 import java.text.SimpleDateFormat
 import java.util.*
 
 class CustomThingActivity : XhuBaseActivity(R.layout.activity_custom_thing) {
 	private val customThingViewModel: CustomThingViewModel by lazy {
-		ViewModelProviders.of(this).get(CustomThingViewModel::class.java)
+		ViewModelProvider(this).get(CustomThingViewModel::class.java)
 	}
 	private val customThingAdapter: CustomThingAdapter by lazy { CustomThingAdapter(this) }
 	private lateinit var viewStubBinding: LayoutNullDataViewBinding
@@ -68,25 +69,28 @@ class CustomThingActivity : XhuBaseActivity(R.layout.activity_custom_thing) {
 				.create()
 	}
 
-	private val customThingListObserver = Observer<PackageData<List<CustomThing>>> {
-		when (it.status) {
-			Status.Loading -> showRefresh()
-			Status.Content -> {
-				hideRefresh()
-				customThingAdapter.items.clear()
-				customThingAdapter.items.addAll(it.data!!)
-				checkData()
-			}
-			Status.Error -> {
-				Logs.wtfm("customThingListObserver: ", it.error)
-				hideRefresh()
-				checkData()
-				toastMessage(it.error?.message)
-			}
-			Status.Empty -> {
-				hideRefresh()
-				showNoDataLayout()
-			}
+	private val customThingListObserver = object : PackageDataObserver<List<CustomThing>> {
+		override fun loading() {
+			showRefresh()
+		}
+
+		override fun content(data: List<CustomThing>?) {
+			hideRefresh()
+			customThingAdapter.items.clear()
+			customThingAdapter.items.addAll(data!!)
+			checkData()
+		}
+
+		override fun error(data: List<CustomThing>?, e: Throwable?) {
+			Logs.wtfm("customThingListObserver: ", e)
+			hideRefresh()
+			checkData()
+			e.toastLong(this@CustomThingActivity)
+		}
+
+		override fun empty(data: List<CustomThing>?) {
+			hideRefresh()
+			showNoDataLayout()
 		}
 	}
 
