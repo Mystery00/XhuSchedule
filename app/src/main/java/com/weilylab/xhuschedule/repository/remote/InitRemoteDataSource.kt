@@ -1,7 +1,7 @@
 package com.weilylab.xhuschedule.repository.remote
 
 import androidx.lifecycle.MutableLiveData
-import com.weilylab.xhuschedule.api.LeanCloudAPI
+import com.weilylab.xhuschedule.api.XhuScheduleCloudAPI
 import com.weilylab.xhuschedule.factory.RetrofitFactory
 import com.weilylab.xhuschedule.factory.fromJson
 import com.weilylab.xhuschedule.model.response.StartDateTimeResponse
@@ -17,14 +17,14 @@ import java.util.*
 object InitRemoteDataSource : InitDataSource {
 	override fun getStartDateTime(startDateTimeLiveDate: MutableLiveData<PackageData<Calendar>>) {
 		if (NetworkTools.instance.isConnectInternet())
-			RetrofitFactory.leanCloudRetrofit
-					.create(LeanCloudAPI::class.java)
+			RetrofitFactory.retrofit
+					.create(XhuScheduleCloudAPI::class.java)
 					.requestStartDateTime()
 					.subscribeOn(Schedulers.io())
 					.map {
 						val startDateTimeResponse = it.fromJson<StartDateTimeResponse>()
-						if (startDateTimeResponse.results.isNotEmpty())
-							InitLocalDataSource.setStartDateTime(startDateTimeResponse.results[0].date)
+						if (startDateTimeResponse.code == 0)
+							InitLocalDataSource.setStartDateTime(startDateTimeResponse.data)
 						startDateTimeResponse
 					}
 					.observeOn(AndroidSchedulers.mainThread())
@@ -34,7 +34,7 @@ object InitRemoteDataSource : InitDataSource {
 								InitLocalDataSource.getStartDateTime(startDateTimeLiveDate)
 							} else {
 								val calendar = Calendar.getInstance()
-								val dateArray = data.results[0].date.split('-')
+								val dateArray = data.data.split('-')
 								calendar.set(dateArray[0].toInt(), dateArray[1].toInt() - 1, dateArray[2].toInt(), 0, 0, 0)
 								startDateTimeLiveDate.value = PackageData.content(calendar)
 							}

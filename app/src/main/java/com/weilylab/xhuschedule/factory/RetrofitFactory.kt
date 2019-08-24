@@ -6,7 +6,6 @@ import com.weilylab.xhuschedule.interceptor.SaveCookiesInterceptor
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
-import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
 object RetrofitFactory {
@@ -34,7 +33,6 @@ object RetrofitFactory {
 				.baseUrl("https://xhuschedule.mystery0.app")
 				.client(client)
 				.addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-				.addConverterFactory(GsonConverterFactory.create())
 				.build()
 	}
 
@@ -43,7 +41,6 @@ object RetrofitFactory {
 				.baseUrl("https://xhuschedule.mystery0.app")
 				.client(client)
 				.addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-				.addConverterFactory(GsonConverterFactory.create())
 				.build()
 	}
 
@@ -51,14 +48,6 @@ object RetrofitFactory {
 		Retrofit.Builder()
 				.baseUrl("https://download.xhuschedule.mostpan.com")
 				.client(qiniuClient)
-				.addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-				.build()
-	}
-
-	val leanCloudRetrofit: Retrofit by lazy {
-		Retrofit.Builder()
-				.baseUrl("https://f939ktgh.api.lncld.net")
-				.client(client)
 				.addCallAdapterFactory(RxJava2CallAdapterFactory.create())
 				.build()
 	}

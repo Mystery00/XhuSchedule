@@ -2,10 +2,7 @@ package com.weilylab.xhuschedule.api
 
 import io.reactivex.Observable
 import okhttp3.ResponseBody
-import retrofit2.http.Field
-import retrofit2.http.FormUrlEncoded
-import retrofit2.http.GET
-import retrofit2.http.POST
+import retrofit2.http.*
 
 interface XhuScheduleCloudAPI {
 	@FormUrlEncoded
@@ -22,4 +19,7 @@ interface XhuScheduleCloudAPI {
 
 	@GET("/9783/api/rest/v1/xhuschedulecloud/splash")
 	fun requestSplashInfo(): Observable<ResponseBody>
+
+	@GET("/9783/api/rest/v1/xhuschedulecloud/starttime")
+	fun requestStartDateTime(): Observable<ResponseBody>
 }
