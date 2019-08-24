@@ -41,15 +41,16 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.base.XhuBaseActivity
-import com.weilylab.xhuschedule.model.response.SplashResponse
+import com.weilylab.xhuschedule.model.Splash
 import com.weilylab.xhuschedule.repository.SplashRepository
 import com.weilylab.xhuschedule.utils.FileUtil
 import kotlinx.android.synthetic.main.activity_splash_image.*
 import vip.mystery0.tools.utils.DensityTools
+import vip.mystery0.tools.utils.sha1
 import java.io.File
 
 class SplashImageActivity : XhuBaseActivity(R.layout.activity_splash_image, false) {
-	private val splash: SplashResponse.Splash by lazy { SplashRepository.getSplash() }
+	private val splash: Splash by lazy { SplashRepository.getSplash() }
 	private var splashFile: File? = null
 
 	override fun inflateView(layoutId: Int) {
@@ -64,11 +65,11 @@ class SplashImageActivity : XhuBaseActivity(R.layout.activity_splash_image, fals
 
 	override fun initView() {
 		super.initView()
-		if (!splash.isEnable) {
+		if (!splash.enable) {
 			gotoMain()
 			return
 		}
-		splashFile = FileUtil.getSplashImageFile(this, splash.objectId)
+		splashFile = FileUtil.getSplashImageFile(this, splash.splashUrl.sha1())
 		if (splashFile == null || !splashFile!!.exists()) {
 			gotoMain()
 			return

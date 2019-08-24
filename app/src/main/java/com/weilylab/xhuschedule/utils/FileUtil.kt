@@ -12,10 +12,10 @@ object FileUtil {
 	/**
 	 * 获取存储的启动页图片的File对象
 	 */
-	fun getSplashImageFile(context: Context, objectId: String): File? {
-		if (TextUtils.isEmpty(objectId))
+	fun getSplashImageFile(context: Context, fileName: String): File? {
+		if (TextUtils.isEmpty(fileName))
 			return null
-		return File("${context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)!!.absolutePath}${File.separator}splash${File.separator}$objectId")
+		return File("${context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)!!.absolutePath}${File.separator}splash${File.separator}$fileName")
 	}
 
 	/**

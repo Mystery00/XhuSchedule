@@ -9,17 +9,6 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import java.util.concurrent.TimeUnit
 
 object RetrofitFactory {
-	private val splashClient by lazy {
-		OkHttpClient.Builder()
-				.retryOnConnectionFailure(true)
-				.connectTimeout(1, TimeUnit.SECONDS)
-				.readTimeout(1, TimeUnit.SECONDS)
-				.writeTimeout(1, TimeUnit.SECONDS)
-				.addInterceptor(LoadCookiesInterceptor())
-				.addInterceptor(SaveCookiesInterceptor())
-				.addInterceptor(DebugInterceptor())
-				.build()
-	}
 
 	private val client by lazy {
 		OkHttpClient.Builder()
@@ -50,16 +39,8 @@ object RetrofitFactory {
 
 	val feedbackRetrofit: Retrofit by lazy {
 		Retrofit.Builder()
-				.baseUrl("https://xhuschedule.mostpan.com")
+				.baseUrl("https://xhuschedule.mystery0.app")
 				.client(client)
-				.addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-				.build()
-	}
-
-	val splashLeanCloudRetrofit: Retrofit by lazy {
-		Retrofit.Builder()
-				.baseUrl("https://f939ktgh.api.lncld.net")
-				.client(splashClient)
 				.addCallAdapterFactory(RxJava2CallAdapterFactory.create())
 				.build()
 	}

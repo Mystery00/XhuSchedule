@@ -4,12 +4,12 @@ import android.content.Context
 import androidx.lifecycle.MediatorLiveData
 import com.weilylab.xhuschedule.config.APP
 import com.weilylab.xhuschedule.constant.SharedPreferenceConstant
-import com.weilylab.xhuschedule.model.response.SplashResponse
+import com.weilylab.xhuschedule.model.Splash
 import com.weilylab.xhuschedule.repository.ds.SplashDataSource
 import vip.mystery0.rx.PackageData
 
 object SplashLocalDataSource : SplashDataSource {
-	override fun requestSplash(splashPackageLiveData: MediatorLiveData<PackageData<SplashResponse.Splash>>) {
+	override fun requestSplash(splashPackageLiveData: MediatorLiveData<PackageData<Splash>>) {
 		splashPackageLiveData.value = PackageData.loading()
 		val splash = getSplash()
 		splashPackageLiveData.value = PackageData.content(splash)
@@ -17,9 +17,9 @@ object SplashLocalDataSource : SplashDataSource {
 
 	private val sharedPreferences = APP.context.getSharedPreferences(SharedPreferenceConstant.FILE_NAME_SPLASH, Context.MODE_PRIVATE)
 
-	fun saveSplash(splash: SplashResponse.Splash) {
+	fun saveSplash(splash: Splash) {
 		sharedPreferences.edit()
-				.putString(SharedPreferenceConstant.FIELD_SPLASH_ID, splash.objectId)
+				.putInt(SharedPreferenceConstant.FIELD_SPLASH_ID, splash.id)
 				.putString(SharedPreferenceConstant.FIELD_SPLASH_URL, splash.splashUrl)
 				.putString(SharedPreferenceConstant.FIELD_SPLASH_LOCATION_URL, splash.locationUrl)
 				.putLong(SharedPreferenceConstant.FIELD_SPLASH_TIME, splash.splashTime)
@@ -37,16 +37,16 @@ object SplashLocalDataSource : SplashDataSource {
 				.apply()
 	}
 
-	fun getSplash(): SplashResponse.Splash {
-		val splash = SplashResponse.Splash()
+	fun getSplash(): Splash {
+		val splash = Splash()
 		val isEnable = sharedPreferences.contains(SharedPreferenceConstant.FIELD_SPLASH_ID) &&
 				sharedPreferences.contains(SharedPreferenceConstant.FIELD_SPLASH_URL) &&
 				sharedPreferences.contains(SharedPreferenceConstant.FIELD_SPLASH_LOCATION_URL) &&
 				sharedPreferences.contains(SharedPreferenceConstant.FIELD_SPLASH_TIME) &&
 				sharedPreferences.contains(SharedPreferenceConstant.FIELD_SPLASH_IMAGE_MD5)
-		splash.isEnable = isEnable
+		splash.enable = isEnable
 		if (isEnable) {
-			splash.objectId = sharedPreferences.getString(SharedPreferenceConstant.FIELD_SPLASH_ID, "")!!
+			splash.id = sharedPreferences.getInt(SharedPreferenceConstant.FIELD_SPLASH_ID, 0)
 			splash.splashUrl = sharedPreferences.getString(SharedPreferenceConstant.FIELD_SPLASH_URL, "")!!
 			splash.locationUrl = sharedPreferences.getString(SharedPreferenceConstant.FIELD_SPLASH_LOCATION_URL, "")!!
 			splash.splashTime = sharedPreferences.getLong(SharedPreferenceConstant.FIELD_SPLASH_TIME, 0L)

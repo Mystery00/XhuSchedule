@@ -36,7 +36,6 @@ package com.weilylab.xhuschedule.config
 import android.annotation.SuppressLint
 import android.app.Application
 import android.content.Context
-import android.os.Build
 import androidx.multidex.MultiDexApplication
 import com.oasisfeng.condom.CondomContext
 import com.sina.weibo.sdk.WbSdk
@@ -50,6 +49,7 @@ import com.weilylab.xhuschedule.utils.NotificationUtil
 import com.weilylab.xhuschedule.utils.PackageUtil
 import vip.mystery0.crashhandler.CrashHandler
 import vip.mystery0.logs.Logs
+import vip.mystery0.rx.DataManager
 import vip.mystery0.tools.ToolsClient
 
 /**
@@ -67,6 +67,7 @@ class APP : MultiDexApplication() {
 					.setAutoClean(true)
 					.setDebug(BuildConfig.DEBUG)
 		}.initWithContext(this)
+		DataManager.init(10)
 		DBHelper.init(this)
 		NotificationUtil.initChannelID(this)//初始化NotificationChannelID
 		ToolsClient.initWithContext(this)
