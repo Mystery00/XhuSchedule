@@ -1,6 +1,7 @@
 package com.weilylab.xhuschedule.repository.remote
 
 import android.graphics.Bitmap
+import android.util.SparseArray
 import androidx.lifecycle.MutableLiveData
 import com.weilylab.xhuschedule.constant.StringConstant
 import com.weilylab.xhuschedule.listener.DoSaveListener
@@ -19,18 +20,18 @@ import java.util.*
 object ScoreRemoteDataSource : ScoreDataSource {
 	override fun queryClassScoreByUsername(scoreLiveData: MutableLiveData<PackageData<List<ClassScore>>>, student: Student, year: String, term: String) {
 		if (NetworkTools.instance.isConnectInternet()) {
-			ScoreUtil.getClassScore(student, year, term, object : DoSaveListener<Map<Int, List<ClassScore>>> {
-				override fun doSave(t: Map<Int, List<ClassScore>>) {
+			ScoreUtil.getClassScore(student, year, term, object : DoSaveListener<SparseArray<List<ClassScore>>> {
+				override fun doSave(t: SparseArray<List<ClassScore>>) {
 					ScoreLocalDataSource.deleteAllClassScoreForStudent(student.username, year, term)
 					val resultList = ArrayList<ClassScore>()
-					t.getValue(ScoreUtil.TYPE_SCORE).forEach {
+					t.get(ScoreUtil.TYPE_SCORE).forEach {
 						it.studentID = student.username
 						it.year = year
 						it.term = term
 						it.failed = false
 						resultList.add(it)
 					}
-					t.getValue(ScoreUtil.TYPE_FAILED).forEach {
+					t.get(ScoreUtil.TYPE_FAILED).forEach {
 						it.studentID = student.username
 						it.year = year
 						it.term = term
@@ -39,17 +40,17 @@ object ScoreRemoteDataSource : ScoreDataSource {
 					}
 					ScoreLocalDataSource.saveClassScoreList(resultList)
 				}
-			}, object : RequestListener<Map<Int, List<ClassScore>>> {
-				override fun done(t: Map<Int, List<ClassScore>>) {
+			}, object : RequestListener<SparseArray<List<ClassScore>>> {
+				override fun done(t: SparseArray<List<ClassScore>>) {
 					val resultList = ArrayList<ClassScore>()
-					t.getValue(ScoreUtil.TYPE_SCORE).forEach {
+					t.get(ScoreUtil.TYPE_SCORE).forEach {
 						it.studentID = student.username
 						it.year = year
 						it.term = term
 						it.failed = false
 						resultList.add(it)
 					}
-					t.getValue(ScoreUtil.TYPE_FAILED).forEach {
+					t.get(ScoreUtil.TYPE_FAILED).forEach {
 						it.studentID = student.username
 						it.year = year
 						it.term = term

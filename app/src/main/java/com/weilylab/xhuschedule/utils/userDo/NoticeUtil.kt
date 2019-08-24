@@ -15,7 +15,7 @@ import vip.mystery0.logs.Logs
 import vip.mystery0.rx.OnlyCompleteObserver
 
 object NoticeUtil {
-	private const val RETRY_TIME = 1
+	private const val RETRY_TIME = UserUtil.RETRY_TIME
 
 	fun getNotice(platform: String?, doSaveListener: DoSaveListener<List<Notice>>, requestListener: RequestListener<List<Notice>>, index: Int = 0) {
 		RetrofitFactory.retrofit
@@ -35,7 +35,7 @@ object NoticeUtil {
 							data == null -> requestListener.error(ResponseCodeConstants.UNKNOWN_ERROR, StringConstant.hint_data_null)
 							data.rt == ResponseCodeConstants.DONE -> requestListener.done(data.notices)
 							else -> {
-								if (index == RETRY_TIME)
+								if (index >= RETRY_TIME)
 									requestListener.error(ResponseCodeConstants.DO_TOO_MANY, StringConstant.hint_do_too_many)
 								else
 									requestListener.error(data.rt, data.msg)

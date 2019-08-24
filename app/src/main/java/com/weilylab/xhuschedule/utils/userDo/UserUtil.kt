@@ -21,7 +21,7 @@ import vip.mystery0.rx.Status.*
 import vip.mystery0.tools.utils.NetworkTools
 
 object UserUtil {
-	private const val RETRY_TIME = 1
+	const val RETRY_TIME = 1
 
 	fun login(student: Student, doSaveListener: DoSaveListener<Student>?, requestListener: RequestListener<Boolean>) {
 		if (NetworkTools.instance.isConnectInternet())
@@ -75,7 +75,7 @@ object UserUtil {
 							data == null -> requestListener.error(ResponseCodeConstants.UNKNOWN_ERROR, StringConstant.hint_data_null)
 							data.rt == ResponseCodeConstants.DONE -> requestListener.done(data)
 							data.rt == ResponseCodeConstants.ERROR_NOT_LOGIN -> {
-								if (index == RETRY_TIME)
+								if (index >= RETRY_TIME)
 									requestListener.error(ResponseCodeConstants.DO_TOO_MANY, StringConstant.hint_do_too_many)
 								else
 									login(student, null, object : RequestListener<Boolean> {
@@ -152,7 +152,7 @@ object UserUtil {
 							data == null -> requestListener.error(ResponseCodeConstants.UNKNOWN_ERROR, StringConstant.hint_data_null)
 							data.rt == ResponseCodeConstants.DONE -> requestListener.done(true)
 							data.rt == ResponseCodeConstants.ERROR_NOT_LOGIN -> {
-								if (index == RETRY_TIME)
+								if (index >= RETRY_TIME)
 									requestListener.error(ResponseCodeConstants.DO_TOO_MANY, StringConstant.hint_do_too_many)
 								else
 									login(student, null, object : RequestListener<Boolean> {
@@ -197,7 +197,7 @@ object UserUtil {
 							data == null -> requestListener.error(ResponseCodeConstants.UNKNOWN_ERROR, StringConstant.hint_data_null)
 							data.rt == ResponseCodeConstants.DONE -> requestListener.done(data.value)
 							data.rt == ResponseCodeConstants.ERROR_NOT_LOGIN -> {
-								if (index == RETRY_TIME)
+								if (index >= RETRY_TIME)
 									requestListener.error(ResponseCodeConstants.DO_TOO_MANY, StringConstant.hint_do_too_many)
 								else
 									login(student, null, object : RequestListener<Boolean> {

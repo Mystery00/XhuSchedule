@@ -26,7 +26,7 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 object CourseUtil {
-	private const val RETRY_TIME = 1
+	private const val RETRY_TIME = UserUtil.RETRY_TIME
 
 	fun getCourse(student: Student, year: String?, term: String?, doSaveListener: DoSaveListener<List<Course>>?, requestListener: RequestListener<List<Course>>, index: Int = 0) {
 		RetrofitFactory.retrofit
@@ -50,7 +50,7 @@ object CourseUtil {
 							data == null -> requestListener.error(ResponseCodeConstants.UNKNOWN_ERROR, StringConstant.hint_data_null)
 							data.rt == ResponseCodeConstants.DONE -> requestListener.done(data.courses)
 							data.rt == ResponseCodeConstants.ERROR_NOT_LOGIN -> {
-								if (index == RETRY_TIME)
+								if (index >= RETRY_TIME)
 									requestListener.error(ResponseCodeConstants.DO_TOO_MANY, StringConstant.hint_do_too_many)
 								else
 									UserUtil.login(student, null, object : RequestListener<Boolean> {
@@ -138,7 +138,7 @@ object CourseUtil {
 								resultArray[position] = true
 							}
 							data.rt == ResponseCodeConstants.ERROR_NOT_LOGIN -> {
-								if (index == RETRY_TIME)
+								if (index >= RETRY_TIME)
 									resultArray[position] = false
 								else
 									UserUtil.login(studentList[position], null, object : RequestListener<Boolean> {

@@ -3,6 +3,7 @@ package com.weilylab.xhuschedule.utils.userDo
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.util.Base64
+import android.util.SparseArray
 import com.weilylab.xhuschedule.api.ScoreAPI
 import com.weilylab.xhuschedule.constant.ResponseCodeConstants
 import com.weilylab.xhuschedule.constant.StringConstant
@@ -24,11 +25,11 @@ import vip.mystery0.logs.Logs
 import vip.mystery0.rx.OnlyCompleteObserver
 
 object ScoreUtil {
-	private const val RETRY_TIME = 1
+	private const val RETRY_TIME = UserUtil.RETRY_TIME
 	const val TYPE_SCORE = 22
 	const val TYPE_FAILED = 33
 
-	fun getClassScore(student: Student, year: String, term: String, doSaveListener: DoSaveListener<Map<Int, List<ClassScore>>>?, requestListener: RequestListener<Map<Int, List<ClassScore>>>, index: Int = 0) {
+	fun getClassScore(student: Student, year: String, term: String, doSaveListener: DoSaveListener<SparseArray<List<ClassScore>>>?, requestListener: RequestListener<SparseArray<List<ClassScore>>>, index: Int = 0) {
 		RetrofitFactory.retrofit
 				.create(ScoreAPI::class.java)
 				.getScores(student.username, year, term)
@@ -36,9 +37,9 @@ object ScoreUtil {
 				.map {
 					val scoreResponse = it.fromJson<ClassScoreResponse>()
 					if (scoreResponse.rt == ResponseCodeConstants.DONE) {
-						val map = HashMap<Int, List<ClassScore>>()
-						map[TYPE_SCORE] = scoreResponse.scores
-						map[TYPE_FAILED] = scoreResponse.failScores
+						val map = SparseArray<List<ClassScore>>()
+						map.put(TYPE_SCORE, scoreResponse.scores)
+						map.put(TYPE_FAILED, scoreResponse.failScores)
 						doSaveListener?.doSave(map)
 					}
 					scoreResponse
@@ -49,13 +50,13 @@ object ScoreUtil {
 						when {
 							data == null -> requestListener.error(ResponseCodeConstants.UNKNOWN_ERROR, StringConstant.hint_data_null)
 							data.rt == ResponseCodeConstants.DONE -> {
-								val map = HashMap<Int, List<ClassScore>>()
-								map[TYPE_SCORE] = data.scores
-								map[TYPE_FAILED] = data.failScores
+								val map = SparseArray<List<ClassScore>>()
+								map.put(TYPE_SCORE, data.scores)
+								map.put(TYPE_FAILED, data.failScores)
 								requestListener.done(map)
 							}
 							data.rt == ResponseCodeConstants.ERROR_NOT_LOGIN -> {
-								if (index == RETRY_TIME)
+								if (index >= RETRY_TIME)
 									requestListener.error(ResponseCodeConstants.DO_TOO_MANY, StringConstant.hint_do_too_many)
 								else
 									UserUtil.login(student, null, object : RequestListener<Boolean> {
@@ -97,7 +98,7 @@ object ScoreUtil {
 							data == null -> requestListener.error(ResponseCodeConstants.UNKNOWN_ERROR, StringConstant.hint_data_null)
 							data.rt == ResponseCodeConstants.DONE -> requestListener.done(data.expScores)
 							data.rt == ResponseCodeConstants.ERROR_NOT_LOGIN -> {
-								if (index == RETRY_TIME)
+								if (index >= RETRY_TIME)
 									requestListener.error(ResponseCodeConstants.DO_TOO_MANY, StringConstant.hint_do_too_many)
 								else
 									UserUtil.login(student, null, object : RequestListener<Boolean> {
@@ -137,7 +138,7 @@ object ScoreUtil {
 								requestListener.done(BitmapFactory.decodeByteArray(bytes, 0, bytes.size))
 							}
 							data.rt == ResponseCodeConstants.ERROR_NOT_LOGIN -> {
-								if (index == RETRY_TIME)
+								if (index >= RETRY_TIME)
 									requestListener.error(ResponseCodeConstants.DO_TOO_MANY, StringConstant.hint_do_too_many)
 								else
 									UserUtil.login(student, null, object : RequestListener<Boolean> {
@@ -176,7 +177,7 @@ object ScoreUtil {
 								requestListener.done(data.cetScore)
 							}
 							data.rt == ResponseCodeConstants.ERROR_NOT_LOGIN -> {
-								if (index == RETRY_TIME)
+								if (index >= RETRY_TIME)
 									requestListener.error(ResponseCodeConstants.DO_TOO_MANY, StringConstant.hint_do_too_many)
 								else
 									UserUtil.login(student, null, object : RequestListener<Boolean> {

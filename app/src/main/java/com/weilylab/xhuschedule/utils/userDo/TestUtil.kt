@@ -20,7 +20,7 @@ import vip.mystery0.rx.OnlyCompleteObserver
 import java.util.*
 
 object TestUtil {
-	private const val RETRY_TIME = 1
+	private const val RETRY_TIME = UserUtil.RETRY_TIME
 
 	fun getTests(student: Student, doSaveListener: DoSaveListener<List<Test>>?, requestListener: RequestListener<List<Test>>, htmlListener: (String) -> Unit, index: Int = 0) {
 		RetrofitFactory.retrofit
@@ -43,7 +43,7 @@ object TestUtil {
 								htmlListener.invoke(data.html)
 							}
 							data.rt == ResponseCodeConstants.ERROR_NOT_LOGIN -> {
-								if (index == RETRY_TIME)
+								if (index >= RETRY_TIME)
 									requestListener.error(ResponseCodeConstants.DO_TOO_MANY, StringConstant.hint_do_too_many)
 								else
 									UserUtil.login(student, null, object : RequestListener<Boolean> {
@@ -126,7 +126,7 @@ object TestUtil {
 								resultArray[position] = true
 							}
 							data.rt == ResponseCodeConstants.ERROR_NOT_LOGIN -> {
-								if (index == RETRY_TIME)
+								if (index >= RETRY_TIME)
 									resultArray[position] = false
 								else
 									UserUtil.login(studentList[position], null, object : RequestListener<Boolean> {

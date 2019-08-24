@@ -18,7 +18,7 @@ import vip.mystery0.rx.OnlyCompleteObserver
 import vip.mystery0.tools.utils.NetworkTools
 
 object FeedBackUtil {
-	private const val RETRY_TIME = 1
+	private const val RETRY_TIME = UserUtil.RETRY_TIME
 
 	fun sendFeedBackMessage(student: Student, feedBackToken: String, content: String, requestListener: RequestListener<Boolean>, index: Int = 0) {
 		if (NetworkTools.instance.isConnectInternet()) {
@@ -34,7 +34,7 @@ object FeedBackUtil {
 								data == null -> requestListener.error(ResponseCodeConstants.UNKNOWN_ERROR, StringConstant.hint_data_null)
 								data.rt == ResponseCodeConstants.DONE -> requestListener.done(true)
 								data.rt == ResponseCodeConstants.SERVER_TOKEN_INVALID_ERROR -> {
-									if (index == RETRY_TIME)
+									if (index >= RETRY_TIME)
 										requestListener.error(ResponseCodeConstants.DO_TOO_MANY, StringConstant.hint_do_too_many)
 									else
 										UserUtil.login(student, null, object : RequestListener<Boolean> {
@@ -85,7 +85,7 @@ object FeedBackUtil {
 								data == null -> requestListener.error(ResponseCodeConstants.UNKNOWN_ERROR, StringConstant.hint_data_null)
 								data.rt == ResponseCodeConstants.DONE -> requestListener.done(data.fBMessages)
 								data.rt == ResponseCodeConstants.SERVER_TOKEN_INVALID_ERROR -> {
-									if (index == RETRY_TIME)
+									if (index >= RETRY_TIME)
 										requestListener.error(ResponseCodeConstants.DO_TOO_MANY, StringConstant.hint_do_too_many)
 									else
 										UserUtil.login(student, null, object : RequestListener<Boolean> {
