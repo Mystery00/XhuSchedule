@@ -35,12 +35,12 @@ object TestRemoteDataSource : TestDataSource {
 
 				override fun error(rt: String, msg: String?) {
 					testLiveData.value = PackageData.error(Exception(msg))
-					TestLocalDataSource.queryAllTestsByUsername(testLiveData, htmlLiveData, student)
+//					TestLocalDataSource.queryAllTestsByUsername(testLiveData, htmlLiveData, student)
 				}
 			}, htmlListener = { htmlLiveData?.value = it })
 		} else {
 			testLiveData.value = PackageData.error(Exception(StringConstant.hint_network_error))
-			TestLocalDataSource.queryAllTestsByUsername(testLiveData, htmlLiveData, student)
+//			TestLocalDataSource.queryAllTestsByUsername(testLiveData, htmlLiveData, student)
 		}
 	}
 
@@ -67,12 +67,12 @@ object TestRemoteDataSource : TestDataSource {
 
 				override fun error(rt: String, msg: String?) {
 					testLiveData.value = PackageData.error(Exception(msg))
-					TestLocalDataSource.queryAllTestsForManyStudent(testLiveData, studentList)
+//					TestLocalDataSource.queryAllTestsForManyStudent(testLiveData, studentList)
 				}
 			})
 		} else {
 			testLiveData.value = PackageData.error(Exception(StringConstant.hint_network_error))
-			TestLocalDataSource.queryAllTestsForManyStudent(testLiveData, studentList)
+//			TestLocalDataSource.queryAllTestsForManyStudent(testLiveData, studentList)
 		}
 	}
 }
