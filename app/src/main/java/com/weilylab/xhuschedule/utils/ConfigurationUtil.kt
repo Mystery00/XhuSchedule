@@ -41,7 +41,7 @@ object ConfigurationUtil {
 		set(value) = sharedPreferences.edit()
 				.putInt(SharedPreferenceConstant.FIELD_NIGHT_MODE, value)
 				.apply()
-		get() = sharedPreferences.getInt(SharedPreferenceConstant.FIELD_NIGHT_MODE, 2)
+		get() = sharedPreferences.getInt(SharedPreferenceConstant.FIELD_NIGHT_MODE, 3)
 	var isShowGpa: Boolean
 		set(value) = sharedPreferences.edit()
 				.putBoolean(SharedPreferenceConstant.FIELD_SHOW_GPA, value)
