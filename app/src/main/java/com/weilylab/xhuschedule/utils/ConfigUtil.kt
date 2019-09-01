@@ -10,6 +10,7 @@ import android.os.Build
 import android.provider.Settings
 import android.view.View
 import androidx.appcompat.app.AlertDialog
+import com.weilylab.xhuschedule.BuildConfig
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.config.APP
 import com.weilylab.xhuschedule.repository.local.InitLocalDataSource
@@ -31,6 +32,8 @@ object ConfigUtil {
 	}
 
 	fun getDeviceID(): String {
+		if (BuildConfig.DEBUG)
+			return "debug"
 		val deviceID = ConfigurationUtil.deviceID
 		return if (deviceID == "") {
 			val id = Settings.Secure.getString(APP.context.contentResolver, Settings.Secure.ANDROID_ID)

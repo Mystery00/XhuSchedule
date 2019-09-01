@@ -36,6 +36,7 @@ package com.weilylab.xhuschedule.interceptor
 import okhttp3.FormBody
 import okhttp3.Interceptor
 import okhttp3.Response
+import java.util.*
 
 class LoadCookiesInterceptor : Interceptor {
 	override fun intercept(chain: Interceptor.Chain): Response {
@@ -43,14 +44,8 @@ class LoadCookiesInterceptor : Interceptor {
 		val builder = request.newBuilder()
 		val host = request.url.host
 		var username: String? = null
-		when (request.method.toLowerCase()) {
+		when (request.method.toLowerCase(Locale.CHINA)) {
 			"get" -> {
-				if (request.url.toString().contains("api.lncld.net/1.1/classes/")) {
-					builder.addHeader("X-LC-Id", "f939kTGhlyHAHVsCpccyWU6t-gzGzoHsz")
-					builder.addHeader("X-LC-Key", "wVpJkuI4DLNxXHBfp19XGz3E")
-					builder.addHeader("Content-Type", "application/json")
-					return chain.proceed(builder.build())
-				}
 				val list = request.url.queryParameterValues("username")
 				username = if (list.isNotEmpty()) list[0] else null
 			}

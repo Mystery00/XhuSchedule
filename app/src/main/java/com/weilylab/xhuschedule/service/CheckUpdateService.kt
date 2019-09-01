@@ -8,6 +8,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import com.weilylab.xhuschedule.BuildConfig
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.api.XhuScheduleCloudAPI
 import com.weilylab.xhuschedule.constant.Constants
@@ -51,7 +52,7 @@ class CheckUpdateService : Service() {
 	override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
 		if (intent == null)
 			return super.onStartCommand(intent, flags, startId)
-		val appVersion = "${getString(R.string.app_version_name)}-${getString(R.string.app_version_code)}"
+		val appVersion = if (BuildConfig.DEBUG) "debug" else "${getString(R.string.app_version_name)}-${getString(R.string.app_version_code)}"
 		val systemVersion = "Android ${Build.VERSION.RELEASE}-${Build.VERSION.SDK_INT}"
 		val manufacturer = Build.MANUFACTURER
 		val model = Build.MODEL
