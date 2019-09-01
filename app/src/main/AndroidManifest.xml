@@ -118,9 +118,6 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".ui.activity.LinkToWeiXinMiniProgramActivity"
-            android:theme="@android:style/Theme.NoDisplay" />
-        <activity
             android:name=".ui.activity.GotoQQGroupActivity"
             android:theme="@android:style/Theme.NoDisplay">
             <intent-filter>

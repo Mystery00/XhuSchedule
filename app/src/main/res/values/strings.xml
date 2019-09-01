@@ -39,6 +39,7 @@
 
     <string name="shortcut_title_query_test">考试查询</string>
     <string name="shortcut_title_query_class_score">成绩查询</string>
+    <string name="shortcut_title_query_classroom">空闲教室查询</string>
     <string name="shortcut_title_query_cet_score">四六级查询</string>
     <string name="shortcut_title_link_to_mini_program">微信小程序</string>
 
