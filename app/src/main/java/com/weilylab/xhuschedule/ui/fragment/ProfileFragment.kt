@@ -15,10 +15,7 @@ import com.weilylab.xhuschedule.base.BaseBottomNavigationFragment
 import com.weilylab.xhuschedule.databinding.DialogShareWithFriendsBinding
 import com.weilylab.xhuschedule.databinding.FragmentProfileBinding
 import com.weilylab.xhuschedule.model.StudentInfo
-import com.weilylab.xhuschedule.ui.activity.FeedbackActivity
-import com.weilylab.xhuschedule.ui.activity.NoticeActivity
-import com.weilylab.xhuschedule.ui.activity.QueryTestActivity
-import com.weilylab.xhuschedule.ui.activity.SettingsActivity
+import com.weilylab.xhuschedule.ui.activity.*
 import com.weilylab.xhuschedule.utils.ConfigurationUtil
 import com.weilylab.xhuschedule.utils.LayoutRefreshConfigUtil
 import com.weilylab.xhuschedule.utils.ShareUtil
@@ -113,6 +110,9 @@ class ProfileFragment : BaseBottomNavigationFragment<FragmentProfileBinding>(R.l
 		}
 		binding.queryScoreLayout.setOnClickListener {
 			SettingsActivity.intentTo(activity, SettingsActivity.TYPE_QUERY_SCORE)
+		}
+		binding.queryClassroomLayout.setOnClickListener {
+			startActivity(Intent(activity, QueryClassroomActivity::class.java))
 		}
 		binding.accountSettingsLayout.setOnClickListener {
 			SettingsActivity.intentTo(activity, SettingsActivity.TYPE_ACCOUNT)

@@ -6,128 +6,129 @@
   -->
 
 <resources>
-	<string name="screen_category_ui">界面设置</string>
-	<string name="screen_category_reset_ui">界面重置</string>
-	<string name="screen_category_about">关于</string>
-	<string name="screen_category_about_version">版本关于</string>
-	<string name="screen_category_about_application">应用关于</string>
-	<string name="screen_category_developer">西瓜课表团队出品</string>
-	<string name="screen_category_notification">通知设置</string>
+    <string name="screen_category_ui">界面设置</string>
+    <string name="screen_category_reset_ui">界面重置</string>
+    <string name="screen_category_about">关于</string>
+    <string name="screen_category_about_version">版本关于</string>
+    <string name="screen_category_about_application">应用关于</string>
+    <string name="screen_category_developer">西瓜课表团队出品</string>
+    <string name="screen_category_notification">通知设置</string>
 
-	<string name="key_show_not_week" translatable="false">key_show_not_week</string>
-	<string name="key_custom_start_time" translatable="false">key_custom_start_time</string>
-	<string name="key_current_year_and_term" translatable="false">key_current_year_and_term</string>
-	<string name="key_custom_course_color" translatable="false">key_custom_course_color</string>
-	<string name="key_show_tomorrow_course_after" translatable="false">key_show_tomorrow_course_after</string>
-	<string name="key_action_school_calendar" translatable="false">key_action_school_calendar</string>
-	<string name="key_show_custom_thing_first" translatable="false">key_show_custom_thing_first</string>
-	<string name="key_logged_account" translatable="false">key_logged_account</string>
-	<string name="key_add_account" translatable="false">key_add_account</string>
-	<string name="key_del_account" translatable="false">key_del_account</string>
-	<string name="key_set_main_account" translatable="false">key_set_main_account</string>
-	<string name="key_enable_multi_user_mode" translatable="false">key_enable_multi_user_mode</string>
-	<string name="key_notification_exam" translatable="false">key_notification_exam</string>
-	<string name="key_notification_course" translatable="false">key_notification_course</string>
-	<string name="key_notification_time" translatable="false">key_notification_time</string>
-	<string name="key_show_jrsc_translation" translatable="false">key_show_jrsc_translation</string>
-	<string name="key_auto_check_update" translatable="false">key_auto_check_update</string>
-	<string name="key_update_log" translatable="false">key_update_log</string>
-	<string name="key_weixin" translatable="false">key_weixin</string>
-	<string name="key_check_update" translatable="false">key_check_update</string>
-	<string name="key_version_name" translatable="false">key_version_name</string>
-	<string name="key_version_code" translatable="false">key_version_code</string>
-	<string name="key_user_img" translatable="false">key_user_img</string>
-	<string name="key_background_img" translatable="false">key_background_img</string>
-	<string name="key_night_mode" translatable="false">key_night_mode</string>
-	<string name="key_enable_viewpager_transform" translatable="false">key_enable_viewpager_transform</string>
-	<string name="key_disable_jrsc" translatable="false">key_disable_jrsc</string>
-	<string name="key_tint_navigation_bar" translatable="false">key_tint_navigation_bar</string>
-	<string name="key_use_in_app_image_selector" translatable="false">key_use_in_app_image_selector</string>
-	<string name="key_reset_user_img" translatable="false">key_reset_user_img</string>
-	<string name="key_reset_background_img" translatable="false">key_reset_background_img</string>
-	<string name="key_query_score_class" translatable="false">key_query_score_class</string>
-	<string name="key_query_score_experiment" translatable="false">key_query_score_experiment</string>
-	<string name="key_query_score_cet" translatable="false">key_query_score_cet</string>
-	<string name="key_open_source_license_about" translatable="false">key_open_source_license_about</string>
-	<string name="key_about" translatable="false">key_about</string>
+    <string name="key_show_not_week" translatable="false">key_show_not_week</string>
+    <string name="key_custom_start_time" translatable="false">key_custom_start_time</string>
+    <string name="key_current_year_and_term" translatable="false">key_current_year_and_term</string>
+    <string name="key_custom_course_color" translatable="false">key_custom_course_color</string>
+    <string name="key_show_tomorrow_course_after" translatable="false">key_show_tomorrow_course_after</string>
+    <string name="key_action_school_calendar" translatable="false">key_action_school_calendar</string>
+    <string name="key_show_custom_thing_first" translatable="false">key_show_custom_thing_first</string>
+    <string name="key_logged_account" translatable="false">key_logged_account</string>
+    <string name="key_add_account" translatable="false">key_add_account</string>
+    <string name="key_del_account" translatable="false">key_del_account</string>
+    <string name="key_set_main_account" translatable="false">key_set_main_account</string>
+    <string name="key_enable_multi_user_mode" translatable="false">key_enable_multi_user_mode</string>
+    <string name="key_notification_exam" translatable="false">key_notification_exam</string>
+    <string name="key_notification_course" translatable="false">key_notification_course</string>
+    <string name="key_notification_time" translatable="false">key_notification_time</string>
+    <string name="key_show_jrsc_translation" translatable="false">key_show_jrsc_translation</string>
+    <string name="key_auto_check_update" translatable="false">key_auto_check_update</string>
+    <string name="key_update_log" translatable="false">key_update_log</string>
+    <string name="key_weixin" translatable="false">key_weixin</string>
+    <string name="key_check_update" translatable="false">key_check_update</string>
+    <string name="key_version_name" translatable="false">key_version_name</string>
+    <string name="key_version_code" translatable="false">key_version_code</string>
+    <string name="key_user_img" translatable="false">key_user_img</string>
+    <string name="key_background_img" translatable="false">key_background_img</string>
+    <string name="key_night_mode" translatable="false">key_night_mode</string>
+    <string name="key_enable_viewpager_transform" translatable="false">key_enable_viewpager_transform</string>
+    <string name="key_disable_jrsc" translatable="false">key_disable_jrsc</string>
+    <string name="key_tint_navigation_bar" translatable="false">key_tint_navigation_bar</string>
+    <string name="key_use_in_app_image_selector" translatable="false">key_use_in_app_image_selector</string>
+    <string name="key_reset_user_img" translatable="false">key_reset_user_img</string>
+    <string name="key_reset_background_img" translatable="false">key_reset_background_img</string>
+    <string name="key_query_score_class" translatable="false">key_query_score_class</string>
+    <string name="key_query_score_experiment" translatable="false">key_query_score_experiment</string>
+    <string name="key_query_score_cet" translatable="false">key_query_score_cet</string>
+    <string name="key_open_source_license_about" translatable="false">key_open_source_license_about</string>
+    <string name="key_about" translatable="false">key_about</string>
 
-	<string name="title_icon_ui">图标以及界面设计</string>
-	<string name="title_back">数据提供</string>
-	<string name="title_ui">产品设计</string>
-	<string name="title_wx">微信小程序端开发</string>
-	<string name="title_developer">Android端开发</string>
-	<string name="title_show_not">显示非本周课程</string>
-	<string name="title_custom_start_time">更改开学时间</string>
-	<string name="title_current_year_and_term">更改当前学期</string>
-	<string name="title_custom_course_color">自定义课程颜色</string>
-	<string name="title_show_tomorrow_course_after">自动显示明日课程</string>
-	<string name="title_action_school_calendar">查看校历</string>
-	<string name="title_show_custom_thing_first">优先显示自定义事项</string>
-	<string name="title_action_custom_course">自定义课程</string>
-	<string name="title_action_custom_thing">自定义事项</string>
-	<string name="title_reset_user_img">重置个人头像</string>
-	<string name="title_reset_background_img">重置背景图片</string>
-	<string name="title_current_account">当前已登录账号</string>
-	<string name="title_account_manager">账号管理</string>
-	<string name="title_add_account">添加账号</string>
-	<string name="title_del_account">删除账号</string>
-	<string name="title_set_main_account">设置主账号</string>
-	<string name="title_enable_multi_user_mode">启用多用户模式</string>
-	<string name="title_query_score_class">课程成绩</string>
-	<string name="title_query_score_experiment">实验成绩</string>
-	<string name="title_query_score_cet">四六级成绩</string>
-	<string name="title_user_img">自定义个人头像</string>
-	<string name="title_background_img">自定义背景图片</string>
-	<string name="title_night_mode">夜间模式</string>
-	<string name="title_enable_viewpager_transform">启用主页面切换动画</string>
-	<string name="title_tint_navigation_bar">导航栏着色（Android 8.0+）</string>
-	<string name="title_use_in_app_image_selector">使用应用内图片选择器</string>
-	<string name="title_notification_course">课程提醒</string>
-	<string name="title_notification_exam">考试提醒</string>
-	<string name="title_notification_time">提醒时间</string>
-	<string name="title_jrsc_settings">诗词设置</string>
-	<string name="title_disable_jrsc">禁用今日诗词</string>
-	<string name="title_show_jrsc_translation">显示诗词大意</string>
-	<string name="title_other">其他设置</string>
-	<string name="title_auto_check_update">自动检查更新</string>
-	<string name="title_weily_product">微力实验室出品</string>
-	<string name="title_community_link">点击加入『西瓜课表用户交流反馈』</string>
-	<string name="title_about">关于</string>
-	<string name="title_source_code">开源地址</string>
-	<string name="title_open_source_license">开源协议</string>
-	<string name="title_weixin">微信小程序</string>
-	<string name="title_version_code">版本号</string>
-	<string name="title_update_log">更新日志</string>
-	<string name="title_check_update">检查更新</string>
-	<string name="title_version_name">版本名称</string>
-	<string name="title_open_source_license_about">开源许可</string>
-	<string name="title_jrsc">今日诗词</string>
+    <string name="title_icon_ui">图标以及界面设计</string>
+    <string name="title_back">数据提供</string>
+    <string name="title_ui">产品设计</string>
+    <string name="title_wx">微信小程序端开发</string>
+    <string name="title_developer">Android端开发</string>
+    <string name="title_show_not">显示非本周课程</string>
+    <string name="title_custom_start_time">更改开学时间</string>
+    <string name="title_current_year_and_term">更改当前学期</string>
+    <string name="title_custom_course_color">自定义课程颜色</string>
+    <string name="title_show_tomorrow_course_after">自动显示明日课程</string>
+    <string name="title_action_school_calendar">查看校历</string>
+    <string name="title_show_custom_thing_first">优先显示自定义事项</string>
+    <string name="title_action_custom_course">自定义课程</string>
+    <string name="title_action_custom_thing">自定义事项</string>
+    <string name="title_reset_user_img">重置个人头像</string>
+    <string name="title_reset_background_img">重置背景图片</string>
+    <string name="title_current_account">当前已登录账号</string>
+    <string name="title_account_manager">账号管理</string>
+    <string name="title_add_account">添加账号</string>
+    <string name="title_del_account">删除账号</string>
+    <string name="title_set_main_account">设置主账号</string>
+    <string name="title_enable_multi_user_mode">启用多用户模式</string>
+    <string name="title_query_score_class">课程成绩</string>
+    <string name="title_query_score_classroom">空闲教室查询</string>
+    <string name="title_query_score_experiment">实验成绩</string>
+    <string name="title_query_score_cet">四六级成绩</string>
+    <string name="title_user_img">自定义个人头像</string>
+    <string name="title_background_img">自定义背景图片</string>
+    <string name="title_night_mode">夜间模式</string>
+    <string name="title_enable_viewpager_transform">启用主页面切换动画</string>
+    <string name="title_tint_navigation_bar">导航栏着色（Android 8.0+）</string>
+    <string name="title_use_in_app_image_selector">使用应用内图片选择器</string>
+    <string name="title_notification_course">课程提醒</string>
+    <string name="title_notification_exam">考试提醒</string>
+    <string name="title_notification_time">提醒时间</string>
+    <string name="title_jrsc_settings">诗词设置</string>
+    <string name="title_disable_jrsc">禁用今日诗词</string>
+    <string name="title_show_jrsc_translation">显示诗词大意</string>
+    <string name="title_other">其他设置</string>
+    <string name="title_auto_check_update">自动检查更新</string>
+    <string name="title_weily_product">微力实验室出品</string>
+    <string name="title_community_link">点击加入『西瓜课表用户交流反馈』</string>
+    <string name="title_about">关于</string>
+    <string name="title_source_code">开源地址</string>
+    <string name="title_open_source_license">开源协议</string>
+    <string name="title_weixin">微信小程序</string>
+    <string name="title_version_code">版本号</string>
+    <string name="title_update_log">更新日志</string>
+    <string name="title_check_update">检查更新</string>
+    <string name="title_version_name">版本名称</string>
+    <string name="title_open_source_license_about">开源许可</string>
+    <string name="title_jrsc">今日诗词</string>
 
-	<string name="summary_current_year_and_term">当前学期：%1$s学年 第%2$s学期</string>
-	<string name="summary_custom_start_time">当前开学时间：%1$s</string>
-	<string name="summary_show_tomorrow_after_time">在每天的 %1$s 后今日课程页面显示明日的课表。</string>
-	<string name="summary_show_tomorrow_after_time_disable">此功能已禁用，今日课程页面只会显示今日的课表。</string>
-	<string name="summary_enable_multi_user_mode">注意：如果多个用户的课表存在冲突的情况，表格可能会变得很乱，请确定您开启这个模式的意义！</string>
-	<string name="summary_tint_navigation_bar">与状态栏一致</string>
-	<string name="summary_use_in_app_image_selector">需要授予读写内置存储（READ_EXTERNAL_STORAGE）权限</string>
-	<string name="summary_use_in_app_image_selector_q">Android Q上无法使用</string>
-	<string name="summary_icon" translatable="false">\@爱吃饭的越越</string>
-	<string name="summary_back" translatable="false">\@pan</string>
-	<string name="summary_ui" translatable="false">\@Johnny Zen</string>
-	<string name="summary_wx" translatable="false">\@Quinn</string>
-	<string name="summary_developer" translatable="false">\@Mystery0</string>
-	<string name="summary_source_code" translatable="false">https://github.com/Mystery00/XhuSchedule</string>
-	<string name="summary_open_source_license" translatable="false">GNU General Public License v3.0</string>
-	<string name="summary_version_name" translatable="false">@string/app_version_name</string>
-	<string name="summary_version_code" translatable="false">@string/app_version_code</string>
-	<string name="summary_notification_time">将会在每天的 %1$s 提醒。</string>
-	<string name="summary_auto_check_update">在每一次启动时自动检查更新，注意，跳过某个版本将会无法使用增量更新</string>
-	<string name="summary_weily_product">点击访问『微力实验室』官网</string>
-	<string name="summary_weixin">点击跳转，也可以在微信小程序页面直接搜索『西瓜课表』即可使用</string>
-	<string name="summary_jrsc">感谢作者@xenv，点击访问『今日诗词』官网</string>
+    <string name="summary_current_year_and_term">当前学期：%1$s学年 第%2$s学期</string>
+    <string name="summary_custom_start_time">当前开学时间：%1$s</string>
+    <string name="summary_show_tomorrow_after_time">在每天的 %1$s 后今日课程页面显示明日的课表。</string>
+    <string name="summary_show_tomorrow_after_time_disable">此功能已禁用，今日课程页面只会显示今日的课表。</string>
+    <string name="summary_enable_multi_user_mode">注意：如果多个用户的课表存在冲突的情况，表格可能会变得很乱，请确定您开启这个模式的意义！</string>
+    <string name="summary_tint_navigation_bar">与状态栏一致</string>
+    <string name="summary_use_in_app_image_selector">需要授予读写内置存储（READ_EXTERNAL_STORAGE）权限</string>
+    <string name="summary_use_in_app_image_selector_q">Android Q上无法使用</string>
+    <string name="summary_icon" translatable="false">\@爱吃饭的越越</string>
+    <string name="summary_back" translatable="false">\@pan</string>
+    <string name="summary_ui" translatable="false">\@Johnny Zen</string>
+    <string name="summary_wx" translatable="false">\@Quinn</string>
+    <string name="summary_developer" translatable="false">\@Mystery0</string>
+    <string name="summary_source_code" translatable="false">https://github.com/Mystery00/XhuSchedule</string>
+    <string name="summary_open_source_license" translatable="false">GNU General Public License v3.0</string>
+    <string name="summary_version_name" translatable="false">@string/app_version_name</string>
+    <string name="summary_version_code" translatable="false">@string/app_version_code</string>
+    <string name="summary_notification_time">将会在每天的 %1$s 提醒。</string>
+    <string name="summary_auto_check_update">在每一次启动时自动检查更新，注意，跳过某个版本将会无法使用增量更新</string>
+    <string name="summary_weily_product">点击访问『微力实验室』官网</string>
+    <string name="summary_weixin">点击跳转，也可以在微信小程序页面直接搜索『西瓜课表』即可使用</string>
+    <string name="summary_jrsc">感谢作者@xenv，点击访问『今日诗词』官网</string>
 
-	<string name="link_developer" translatable="false">https://mystery0.vip/</string>
-	<string name="link_open_source_license" translatable="false">https://github.com/Mystery00/XhuSchedule/blob/master/LICENSE.TXT</string>
-	<string name="link_community_link" translatable="false">xhuschedule://goto_qq_group?key=JwFjXuBEWPJuevlxn9QhtMRGFSh-geZV</string>
-	<string name="link_jrsc">https://www.jinrishici.com</string>
+    <string name="link_developer" translatable="false">https://mystery0.vip/</string>
+    <string name="link_open_source_license" translatable="false">https://github.com/Mystery00/XhuSchedule/blob/master/LICENSE.TXT</string>
+    <string name="link_community_link" translatable="false">xhuschedule://goto_qq_group?key=JwFjXuBEWPJuevlxn9QhtMRGFSh-geZV</string>
+    <string name="link_jrsc">https://www.jinrishici.com</string>
 </resources>

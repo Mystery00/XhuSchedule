@@ -31,7 +31,6 @@ import vip.mystery0.tools.toastLong
 import vip.mystery0.tools.utils.DensityTools
 import java.util.*
 
-
 class QueryClassScoreActivity : XhuBaseActivity(R.layout.activity_query_class_score) {
 	private val queryClassScoreViewModel: QueryClassScoreViewModel by lazy {
 		ViewModelProvider(this)[QueryClassScoreViewModel::class.java]

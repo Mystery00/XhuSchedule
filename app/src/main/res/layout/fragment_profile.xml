@@ -204,6 +204,64 @@
 
 			<View
 				android:layout_width="match_parent"
+				android:layout_height="0.33dp"
+				android:background="@color/colorItemBackgroundProfile" />
+
+			<androidx.constraintlayout.widget.ConstraintLayout
+				android:id="@+id/queryClassroomLayout"
+				android:layout_width="match_parent"
+				android:layout_height="44.67dp">
+
+				<FrameLayout
+					android:id="@+id/imageLayoutQueryClassroom"
+					android:layout_width="48dp"
+					android:layout_height="0dp"
+					app:layout_constraintBottom_toBottomOf="parent"
+					app:layout_constraintStart_toStartOf="parent"
+					app:layout_constraintTop_toTopOf="parent">
+
+					<ImageView
+						android:id="@+id/imageViewQueryClassroom"
+						android:layout_width="18dp"
+						android:layout_height="18dp"
+						android:layout_gravity="center"
+						android:contentDescription="@string/app_name"
+						android:src="@drawable/ic_query_classroom"
+						android:tint="@color/colorBlackText"
+						app:layout_constraintBottom_toBottomOf="parent"
+						app:layout_constraintStart_toStartOf="parent"
+						app:layout_constraintTop_toTopOf="parent" />
+
+				</FrameLayout>
+
+				<TextView
+					android:id="@+id/textViewQueryClassroom"
+					android:layout_width="0dp"
+					android:layout_height="wrap_content"
+					android:text="@string/profile_action_query_classroom"
+					android:textColor="@color/colorBlackText"
+					android:textSize="15sp"
+					app:layout_constraintBottom_toBottomOf="parent"
+					app:layout_constraintEnd_toStartOf="@id/imageViewMoreQueryClassroom"
+					app:layout_constraintStart_toEndOf="@id/imageLayoutQueryClassroom"
+					app:layout_constraintTop_toTopOf="parent" />
+
+				<ImageView
+					android:id="@+id/imageViewMoreQueryClassroom"
+					android:layout_width="10dp"
+					android:layout_height="12dp"
+					android:layout_marginEnd="14dp"
+					android:contentDescription="@string/app_name"
+					android:tint="@color/colorMoreProfile"
+					app:layout_constraintBottom_toBottomOf="parent"
+					app:layout_constraintEnd_toEndOf="parent"
+					app:layout_constraintTop_toTopOf="parent"
+					app:srcCompat="@drawable/ic_more" />
+
+			</androidx.constraintlayout.widget.ConstraintLayout>
+
+			<View
+				android:layout_width="match_parent"
 				android:layout_height="6dp"
 				android:background="@color/colorDividerProfile" />
 

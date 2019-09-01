@@ -1,234 +1,239 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-	xmlns:tools="http://schemas.android.com/tools"
-	package="com.weilylab.xhuschedule">
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.weilylab.xhuschedule">
 
-	<uses-permission android:name="android.permission.INTERNET" />
-	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-	<uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-	<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-	<uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
-	<uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
-	<uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.VIBRATE" />
 
-	<application
-		android:name=".config.APP"
-		android:icon="@mipmap/ic_launcher"
-		android:label="@string/app_name"
-		android:networkSecurityConfig="@xml/network_security_config"
-		android:roundIcon="@mipmap/ic_launcher_round"
-		android:supportsRtl="true"
-		android:theme="@style/AppTheme"
-		tools:targetApi="n">
+    <application
+        android:name=".config.APP"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:networkSecurityConfig="@xml/network_security_config"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme"
+        tools:targetApi="n">
 
-		<uses-library
-			android:name="org.apache.http.legacy"
-			android:required="false" />
+        <uses-library
+            android:name="org.apache.http.legacy"
+            android:required="false" />
 
-		<activity
-			android:name=".ui.activity.SplashActivity"
-			android:label="@string/app_name"
-			android:screenOrientation="portrait"
-			android:theme="@style/SplashTheme">
-			<intent-filter>
-				<action android:name="android.intent.action.MAIN" />
+        <activity
+            android:name=".ui.activity.SplashActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            android:theme="@style/SplashTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
-				<category android:name="android.intent.category.LAUNCHER" />
-			</intent-filter>
-			<intent-filter>
-				<action android:name="com.weilylab.xhuschedule.NOTIFICATION_VIEW" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="com.weilylab.xhuschedule.NOTIFICATION_VIEW" />
 
-				<category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.DEFAULT" />
 
-				<data
-					android:host="main"
-					android:scheme="xhuschedule" />
-			</intent-filter>
+                <data
+                    android:host="main"
+                    android:scheme="xhuschedule" />
+            </intent-filter>
 
-			<meta-data
-				android:name="android.app.shortcuts"
-				android:resource="@xml/shortcuts" />
-		</activity>
-		<activity
-			android:name=".ui.activity.GuideActivity"
-			android:screenOrientation="portrait"
-			android:theme="@style/AppTheme.NoActionBar" />
-		<activity
-			android:name=".ui.activity.SplashImageActivity"
-			android:screenOrientation="portrait" />
-		<activity
-			android:name=".ui.activity.LoginActivity"
-			android:screenOrientation="portrait"
-			android:theme="@style/AppTheme.NoActionBar"
-			android:windowSoftInputMode="adjustPan" />
-		<activity
-			android:name="com.yalantis.ucrop.UCropActivity"
-			android:screenOrientation="portrait"
-			android:theme="@style/AppTheme.NoActionBar" />
-		<activity
-			android:name=".ui.activity.SettingsActivity"
-			android:label="@string/title_activity_settings"
-			android:screenOrientation="portrait"
-			android:theme="@style/AppTheme.NoActionBar" />
-		<activity
-			android:name=".ui.activity.NoticeActivity"
-			android:label="@string/title_activity_notice"
-			android:screenOrientation="portrait"
-			android:theme="@style/AppTheme.NoActionBar" />
-		<activity
-			android:name=".ui.activity.BottomNavigationActivity"
-			android:screenOrientation="portrait"
-			android:theme="@style/AppTheme.NoActionBar" />
-		<activity
-			android:name=".ui.activity.QueryTestActivity"
-			android:label="@string/title_activity_query_test"
-			android:screenOrientation="portrait"
-			android:theme="@style/AppTheme.NoActionBar" />
-		<activity
-			android:name=".ui.activity.QueryClassScoreActivity"
-			android:label="@string/title_query_score_class"
-			android:screenOrientation="portrait"
-			android:theme="@style/AppTheme.NoActionBar" />
-		<activity
-			android:name=".ui.activity.QueryExpScoreActivity"
-			android:label="@string/title_query_score_experiment"
-			android:screenOrientation="portrait"
-			android:theme="@style/AppTheme.NoActionBar" />
-		<activity
-			android:name=".ui.activity.FeedbackActivity"
-			android:label="@string/title_activity_feedback"
-			android:screenOrientation="portrait"
-			android:theme="@style/AppTheme.NoActionBar" />
-		<activity
-			android:name=".ui.activity.QueryCetScoreFirstActivity"
-			android:screenOrientation="portrait"
-			android:theme="@style/SuwThemeMaterial.Light" />
-		<activity
-			android:name=".ui.activity.QueryCetScoreSecondActivity"
-			android:screenOrientation="portrait"
-			android:theme="@style/SuwThemeMaterial.Light" />
-		<activity
-			android:name=".ui.activity.QueryCetScoreShowActivity"
-			android:screenOrientation="portrait"
-			android:theme="@style/AppTheme.NoActionBar" />
-		<activity
-			android:name=".ui.activity.LinkToWeiXinMiniProgramActivity"
-			android:theme="@android:style/Theme.NoDisplay" />
-		<activity
-			android:name=".ui.activity.GotoQQGroupActivity"
-			android:theme="@android:style/Theme.NoDisplay">
-			<intent-filter>
-				<action android:name="android.intent.action.VIEW" />
+            <meta-data
+                android:name="android.app.shortcuts"
+                android:resource="@xml/shortcuts" />
+        </activity>
+        <activity
+            android:name=".ui.activity.GuideActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".ui.activity.SplashImageActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.LoginActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name="com.yalantis.ucrop.UCropActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".ui.activity.SettingsActivity"
+            android:label="@string/title_activity_settings"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".ui.activity.NoticeActivity"
+            android:label="@string/title_activity_notice"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".ui.activity.BottomNavigationActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".ui.activity.QueryTestActivity"
+            android:label="@string/title_activity_query_test"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".ui.activity.QueryClassScoreActivity"
+            android:label="@string/title_query_score_class"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".ui.activity.QueryClassroomActivity"
+            android:label="@string/title_query_score_classroom"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".ui.activity.QueryExpScoreActivity"
+            android:label="@string/title_query_score_experiment"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".ui.activity.FeedbackActivity"
+            android:label="@string/title_activity_feedback"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".ui.activity.QueryCetScoreFirstActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/SuwThemeMaterial.Light" />
+        <activity
+            android:name=".ui.activity.QueryCetScoreSecondActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/SuwThemeMaterial.Light" />
+        <activity
+            android:name=".ui.activity.QueryCetScoreShowActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".ui.activity.LinkToWeiXinMiniProgramActivity"
+            android:theme="@android:style/Theme.NoDisplay" />
+        <activity
+            android:name=".ui.activity.GotoQQGroupActivity"
+            android:theme="@android:style/Theme.NoDisplay">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
 
-				<category android:name="android.intent.category.DEFAULT" />
-				<category android:name="android.intent.category.BROWSABLE" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
 
-				<data
-					android:host="goto_qq_group"
-					android:scheme="xhuschedule" />
-			</intent-filter>
-		</activity>
-		<activity
-			android:name=".ui.activity.ClassCourseColorActivity"
-			android:screenOrientation="portrait"
-			android:theme="@style/AppTheme.NoActionBar" />
-		<activity
-			android:name=".ui.activity.CustomStartTimeActivity"
-			android:screenOrientation="portrait"
-			android:theme="@style/AppTheme.NoActionBar" />
-		<activity
-			android:name=".ui.activity.WebViewActivity"
-			android:theme="@style/AppTheme.NoActionBar" />
-		<activity
-			android:name=".ui.activity.CustomCourseActivity"
-			android:label="@string/title_action_custom_course"
-			android:theme="@style/AppTheme.NoActionBar"/>
-		<activity
-			android:name=".ui.activity.CustomThingActivity"
-			android:label="@string/title_action_custom_thing"
-			android:theme="@style/AppTheme.NoActionBar"/>
+                <data
+                    android:host="goto_qq_group"
+                    android:scheme="xhuschedule" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".ui.activity.ClassCourseColorActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".ui.activity.CustomStartTimeActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".ui.activity.WebViewActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".ui.activity.CustomCourseActivity"
+            android:label="@string/title_action_custom_course"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".ui.activity.CustomThingActivity"
+            android:label="@string/title_action_custom_thing"
+            android:theme="@style/AppTheme.NoActionBar" />
 
-		<service
-			android:name=".service.DownloadSplashIntentService"
-			android:exported="false" />
-		<service
-			android:name=".service.CheckUpdateService"
-			android:exported="false" />
-		<service
-			android:name=".service.DownloadService"
-			android:exported="false" />
-		<service android:name=".service.NotificationService" />
-		<service
-			android:name=".service.widget.TodayCourseWidgetService"
-			android:exported="false"
-			android:permission="android.permission.BIND_REMOTEVIEWS" />
-		<service
-			android:name=".service.widget.TestListWidgetService"
-			android:exported="false"
-			android:permission="android.permission.BIND_REMOTEVIEWS" />
+        <service
+            android:name=".service.DownloadSplashIntentService"
+            android:exported="false" />
+        <service
+            android:name=".service.CheckUpdateService"
+            android:exported="false" />
+        <service
+            android:name=".service.DownloadService"
+            android:exported="false" />
+        <service android:name=".service.NotificationService" />
+        <service
+            android:name=".service.widget.TodayCourseWidgetService"
+            android:exported="false"
+            android:permission="android.permission.BIND_REMOTEVIEWS" />
+        <service
+            android:name=".service.widget.TestListWidgetService"
+            android:exported="false"
+            android:permission="android.permission.BIND_REMOTEVIEWS" />
 
-		<receiver
-			android:name=".ui.widget.TodayCourseWidget"
-			android:label="@string/widget_title_query_today_course">
-			<intent-filter>
-				<action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-			</intent-filter>
+        <receiver
+            android:name=".ui.widget.TodayCourseWidget"
+            android:label="@string/widget_title_query_today_course">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
 
-			<meta-data
-				android:name="android.appwidget.provider"
-				android:resource="@xml/today_course_widget_info" />
-		</receiver>
-		<receiver
-			android:name=".ui.widget.TestListWidget"
-			android:label="@string/widget_title_query_test">
-			<intent-filter>
-				<action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-			</intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/today_course_widget_info" />
+        </receiver>
+        <receiver
+            android:name=".ui.widget.TestListWidget"
+            android:label="@string/widget_title_query_test">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
 
-			<meta-data
-				android:name="android.appwidget.provider"
-				android:resource="@xml/test_list_widget_info" />
-		</receiver>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/test_list_widget_info" />
+        </receiver>
 
-		<provider
-			android:name="androidx.core.content.FileProvider"
-			android:authorities="${applicationId}"
-			android:exported="false"
-			android:grantUriPermissions="true">
-			<meta-data
-				android:name="android.support.FILE_PROVIDER_PATHS"
-				android:resource="@xml/file_paths" />
-		</provider>
-		<provider
-			android:name=".provider.TodaySliceProvider"
-			android:authorities="com.weilylab.xhuschedule.provider"
-			android:exported="true">
-			<intent-filter>
-				<action android:name="android.intent.action.VIEW" />
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+        <provider
+            android:name=".provider.TodaySliceProvider"
+            android:authorities="com.weilylab.xhuschedule.provider"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
 
-				<category android:name="android.app.slice.category.SLICE" />
-			</intent-filter>
-		</provider> <!-- 腾讯开放平台 -->
-		<activity
-			android:name="com.tencent.tauth.AuthActivity"
-			android:launchMode="singleTask"
-			android:noHistory="true"
-			android:process="${applicationId}.sb">
-			<intent-filter>
-				<action android:name="android.intent.action.VIEW" />
+                <category android:name="android.app.slice.category.SLICE" />
+            </intent-filter>
+        </provider> <!-- 腾讯开放平台 -->
+        <activity
+            android:name="com.tencent.tauth.AuthActivity"
+            android:launchMode="singleTask"
+            android:noHistory="true"
+            android:process="${applicationId}.sb">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
 
-				<category android:name="android.intent.category.DEFAULT" />
-				<category android:name="android.intent.category.BROWSABLE" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
 
-				<data android:scheme="1106663023" />
-			</intent-filter>
-		</activity>
-		<activity
-			android:name="com.tencent.connect.common.AssistActivity"
-			android:configChanges="orientation|keyboardHidden|screenSize"
-			android:process="${applicationId}.sb"
-			android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-	</application>
+                <data android:scheme="1106663023" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.tencent.connect.common.AssistActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:process="${applicationId}.sb"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+    </application>
 
 </manifest>
