@@ -8,9 +8,9 @@
 #指定外部模糊字典
 -obfuscationdictionary dictionary.txt
 #指定class模糊字典
-#-classobfuscationdictionary filename
+-classobfuscationdictionary dictionary.txt
 #指定package模糊字典
-#-packageobfuscationdictionary filename
+-packageobfuscationdictionary dictionary.txt
 
 # 保护注解
 -keepattributes *Annotation*
