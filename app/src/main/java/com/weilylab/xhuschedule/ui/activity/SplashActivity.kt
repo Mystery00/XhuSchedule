@@ -51,7 +51,7 @@ import com.weilylab.xhuschedule.utils.FileUtil
 import com.weilylab.xhuschedule.viewmodel.SplashViewModel
 import vip.mystery0.logs.Logs
 import vip.mystery0.rx.PackageDataObserver
-import vip.mystery0.tools.utils.FileTools
+import vip.mystery0.tools.utils.md5
 import vip.mystery0.tools.utils.sha1
 
 /**

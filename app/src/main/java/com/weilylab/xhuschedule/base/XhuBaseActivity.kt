@@ -45,15 +45,9 @@ abstract class XhuBaseActivity(layoutId: Int?, private val isSetStatusBar: Boole
 	private var toast: Toast? = null
 
 	override fun onCreate(savedInstanceState: Bundle?) {
-		ActivityManagerTools.instance.addActivity(this)
 		super.onCreate(savedInstanceState)
 		if (ConfigurationUtil.nightMode == 2 && isSetStatusBar)
 			ConfigUtil.setStatusBar(this)
-	}
-
-	override fun onDestroy() {
-		super.onDestroy()
-		ActivityManagerTools.instance.removeActivity(this)
 	}
 
 	fun toastMessage(@StringRes stringRes: Int, isShowLong: Boolean = false) = toastMessage(getString(stringRes), isShowLong)

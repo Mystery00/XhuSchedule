@@ -1,5 +1,6 @@
 package com.weilylab.xhuschedule.api
 
+import com.weilylab.xhuschedule.model.response.LoginResponse
 import io.reactivex.Observable
 import okhttp3.ResponseBody
 import retrofit2.http.Field
@@ -9,7 +10,7 @@ import retrofit2.http.POST
 interface UserAPI {
 	@FormUrlEncoded
 	@POST("/User/autoLogin")
-	fun autoLogin(@Field("username") username: String, @Field("password") password: String): Observable<ResponseBody>
+	suspend fun autoLogin(@Field("username") username: String, @Field("password") password: String): LoginResponse
 
 	@FormUrlEncoded
 	@POST("/User/getInfo")

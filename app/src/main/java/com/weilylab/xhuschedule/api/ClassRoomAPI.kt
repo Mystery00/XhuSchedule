@@ -9,9 +9,9 @@ import retrofit2.http.POST
 interface ClassRoomAPI {
 	@FormUrlEncoded
 	@POST("/Classroom/getClassrooms")
-	fun getClassrooms(@Field("username") username: String,
+	suspend fun getClassrooms(@Field("username") username: String,
 					  @Field("location") location: String,
 					  @Field("week") week: String,
 					  @Field("day") day: String,
-					  @Field("time") time: String): Call<ClassroomResponse>
+					  @Field("time") time: String): ClassroomResponse
 }

@@ -49,7 +49,6 @@ import com.weilylab.xhuschedule.utils.NotificationUtil
 import com.weilylab.xhuschedule.utils.PackageUtil
 import vip.mystery0.crashhandler.CrashHandler
 import vip.mystery0.logs.Logs
-import vip.mystery0.rx.DataManager
 import vip.mystery0.tools.ToolsClient
 
 /**
@@ -66,8 +65,7 @@ class APP : MultiDexApplication() {
 					.setDirName("crash")
 					.setAutoClean(true)
 					.setDebug(BuildConfig.DEBUG)
-		}.initWithContext(this)
-		DataManager.init(10)
+		}.init()
 		DBHelper.init(this)
 		NotificationUtil.initChannelID(this)//初始化NotificationChannelID
 		ToolsClient.initWithContext(this)
