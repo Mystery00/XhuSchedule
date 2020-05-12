@@ -1,0 +1,68 @@
+package com.weilylab.xhuschedule.module
+
+import com.weilylab.xhuschedule.api.XhuScheduleCloudAPI
+import com.weilylab.xhuschedule.constant.Constants
+import com.weilylab.xhuschedule.constant.ResponseCodeConstants
+import com.weilylab.xhuschedule.interceptor.DebugInterceptor
+import com.weilylab.xhuschedule.interceptor.LoadCookiesInterceptor
+import com.weilylab.xhuschedule.interceptor.SaveCookiesInterceptor
+import com.weilylab.xhuschedule.model.Student
+import com.weilylab.xhuschedule.model.response.BaseResponse
+import okhttp3.OkHttpClient
+import org.koin.core.qualifier.named
+import org.koin.dsl.module
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
+import java.util.concurrent.TimeUnit
+
+val networkModule = module {
+	single(named("client")) {
+		OkHttpClient.Builder()
+				.retryOnConnectionFailure(true)
+				.connectTimeout(25, TimeUnit.SECONDS)
+				.readTimeout(25, TimeUnit.SECONDS)
+				.writeTimeout(25, TimeUnit.SECONDS)
+				.addInterceptor(LoadCookiesInterceptor())
+				.addInterceptor(SaveCookiesInterceptor())
+				.addInterceptor(DebugInterceptor())
+				.build()
+	}
+	single(named("fileClient")) {
+		OkHttpClient.Builder()
+				.retryOnConnectionFailure(true)
+				.connectTimeout(15, TimeUnit.SECONDS)
+				.build()
+	}
+
+	single(named("retrofit")) {
+		Retrofit.Builder()
+				.baseUrl(Constants.SERVER_URL)
+				.client(get(named("client")))
+				.addConverterFactory(GsonConverterFactory.create())
+				.build()
+	}
+	single(named("fileRetrofit")) {
+		Retrofit.Builder()
+				.baseUrl("https://download.xhuschedule.mostpan.com")
+				.client(get(named("fileClient")))
+				.build()
+	}
+	single {
+		get<Retrofit>(named("retrofit")).create(XhuScheduleCloudAPI::class.java)
+	}
+}
+
+suspend fun <T : BaseResponse> T.verifyData(needLogin: suspend () -> T): T = when (rt) {
+	ResponseCodeConstants.DONE -> this
+	ResponseCodeConstants.ERROR_NOT_LOGIN -> needLogin()
+	else -> throw Exception(msg)
+}
+
+suspend fun <T : BaseResponse> T.redoAfterLogin(student: Student, repeat: suspend () -> T): T = verifyData {
+	student.reLogin {
+		val response = repeat()
+		if (!response.isSuccessful)
+			throw Exception(response.msg)
+		response
+	}
+}

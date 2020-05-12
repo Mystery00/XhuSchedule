@@ -36,22 +36,22 @@ package com.weilylab.xhuschedule.ui.activity
 import android.content.Intent
 import android.net.Uri
 import android.view.View
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.bumptech.glide.request.RequestOptions
+import coil.api.load
+import coil.request.CachePolicy
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.base.XhuBaseActivity
 import com.weilylab.xhuschedule.model.Splash
-import com.weilylab.xhuschedule.repository.SplashRepository
-import com.weilylab.xhuschedule.utils.FileUtil
+import com.weilylab.xhuschedule.viewmodel.SplashViewModel
 import kotlinx.android.synthetic.main.activity_splash_image.*
-import vip.mystery0.tools.utils.DensityTools
-import vip.mystery0.tools.utils.sha1
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import vip.mystery0.logs.Logs
+import vip.mystery0.rx.DataObserver
+import vip.mystery0.tools.utils.screenHeight
+import vip.mystery0.tools.utils.screenWidth
 import java.io.File
 
 class SplashImageActivity : XhuBaseActivity(R.layout.activity_splash_image, false) {
-	private val splash: Splash by lazy { SplashRepository.getSplash() }
-	private var splashFile: File? = null
+	private val splashViewModel: SplashViewModel by viewModel()
 
 	override fun inflateView(layoutId: Int) {
 		window.decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_LAYOUT_STABLE
@@ -63,39 +63,47 @@ class SplashImageActivity : XhuBaseActivity(R.layout.activity_splash_image, fals
 		super.inflateView(layoutId)
 	}
 
+	override fun initData() {
+		super.initData()
+		splashViewModel.splashFile.observe(this, object : DataObserver<Pair<Splash, File>> {
+			override fun empty() {
+				super.empty()
+				gotoMain()
+			}
+
+			override fun error( e: Throwable?) {
+				super.error(e)
+				Logs.wtf("error: ", e)
+				empty()
+			}
+
+			override fun contentNoEmpty(data: Pair<Splash, File>) {
+				super.content(data)
+				imageView.load(data.second) {
+					size(screenWidth, screenHeight)
+					diskCachePolicy(CachePolicy.DISABLED)
+				}
+				imageView.setOnClickListener {
+					if (data.first.locationUrl != "")
+						startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(data.first.locationUrl)))
+				}
+				skipView.setTotalTime(data.first.splashTime)
+						.start()
+			}
+		})
+	}
+
 	override fun initView() {
 		super.initView()
-		if (!splash.enable) {
-			gotoMain()
-			return
-		}
-		splashFile = FileUtil.getSplashImageFile(this, splash.splashUrl.sha1())
-		if (splashFile == null || !splashFile!!.exists()) {
-			gotoMain()
-			return
-		}
-		Glide.with(this)
-				.asBitmap()
-				.load(splashFile)
-				.apply(RequestOptions()
-						.override(DensityTools.instance.getScreenWidth(), DensityTools.instance.getScreenHeight())
-						.diskCacheStrategy(DiskCacheStrategy.NONE))
-				.into(imageView)
-		skipView.setTotalTime(splash.splashTime)
-				.setUpdateTime(50)
+		skipView.setUpdateTime(50)
 				.setText(R.string.action_bypass)
 				.setFinishAction {
 					gotoMain()
 				}
-				.start()
 	}
 
 	override fun monitor() {
 		super.monitor()
-		imageView.setOnClickListener {
-			if (splash.locationUrl != "")
-				startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(splash.locationUrl)))
-		}
 		skipView.setOnClickListener {
 			gotoMain()
 		}

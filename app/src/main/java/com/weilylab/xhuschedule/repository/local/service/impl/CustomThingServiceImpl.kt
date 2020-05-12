@@ -1,11 +1,10 @@
 package com.weilylab.xhuschedule.repository.local.service.impl
 
 import com.weilylab.xhuschedule.model.CustomThing
-import com.weilylab.xhuschedule.repository.local.db.DBHelper
+import com.weilylab.xhuschedule.repository.local.dao.CustomThingDao
 import com.weilylab.xhuschedule.repository.local.service.CustomThingService
 
-class CustomThingServiceImpl : CustomThingService {
-	private val customThingDao by lazy { DBHelper.db.getCustomThingDao() }
+class CustomThingServiceImpl(private val customThingDao: CustomThingDao) : CustomThingService {
 
 	override fun addThing(thing: CustomThing): Long = customThingDao.addThing(thing)
 

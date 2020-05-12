@@ -44,12 +44,17 @@ import com.tencent.mm.opensdk.openapi.IWXAPI
 import com.tencent.mm.opensdk.openapi.WXAPIFactory
 import com.tencent.tauth.Tencent
 import com.weilylab.xhuschedule.BuildConfig
-import com.weilylab.xhuschedule.repository.local.db.DBHelper
+import com.weilylab.xhuschedule.module.*
 import com.weilylab.xhuschedule.utils.NotificationUtil
 import com.weilylab.xhuschedule.utils.PackageUtil
+import org.koin.android.ext.koin.androidContext
+import org.koin.core.context.startKoin
+import org.koin.core.logger.Level
 import vip.mystery0.crashhandler.CrashHandler
 import vip.mystery0.logs.Logs
+import vip.mystery0.logs.logsLogger
 import vip.mystery0.tools.ToolsClient
+import java.io.File
 
 /**
  * Created by myste.
@@ -59,14 +64,17 @@ class APP : MultiDexApplication() {
 		super.onCreate()
 		context = applicationContext
 		instance = this
+		startKoin {
+			logsLogger(Level.ERROR)
+			androidContext(this@APP)
+			modules(listOf(appModule, databaseModule, networkModule, repositoryModule, viewModelModule))
+		}
 		CrashHandler.config {
-			it.setFileNameSuffix("log")
-					.setDir(externalCacheDir!!)
-					.setDirName("crash")
+			setFileNameSuffix("log")
+					.setDir(File(externalCacheDir, "crash"))
 					.setAutoClean(true)
 					.setDebug(BuildConfig.DEBUG)
 		}.init()
-		DBHelper.init(this)
 		NotificationUtil.initChannelID(this)//初始化NotificationChannelID
 		ToolsClient.initWithContext(this)
 		if (PackageUtil.isQQApplicationAvailable())

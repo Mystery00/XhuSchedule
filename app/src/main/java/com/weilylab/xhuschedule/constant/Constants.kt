@@ -34,6 +34,8 @@
 package com.weilylab.xhuschedule.constant
 
 object Constants {
+	const val SERVER_URL = "https://mirror.xhuschedule.mystery0.vip"
+
 	const val NOTICE_PLATFORM_ANDROID = "Android"
 	const val NOTICE_PLATFORM_ALL = "All"
 

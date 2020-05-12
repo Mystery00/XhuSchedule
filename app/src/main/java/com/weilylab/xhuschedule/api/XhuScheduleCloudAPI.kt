@@ -1,5 +1,6 @@
 package com.weilylab.xhuschedule.api
 
+import com.weilylab.xhuschedule.model.response.SplashResponse
 import io.reactivex.Observable
 import okhttp3.ResponseBody
 import retrofit2.http.*
@@ -18,7 +19,7 @@ interface XhuScheduleCloudAPI {
 	fun schoolCalendar(): Observable<ResponseBody>
 
 	@GET("/9783/api/rest/v1/xhuschedulecloud/splash")
-	fun requestSplashInfo(): Observable<ResponseBody>
+	suspend fun requestSplashInfo(): SplashResponse
 
 	@GET("/9783/api/rest/v1/xhuschedulecloud/starttime")
 	fun requestStartDateTime(): Observable<ResponseBody>

@@ -2,12 +2,10 @@ package com.weilylab.xhuschedule.repository.local.service.impl
 
 import com.weilylab.xhuschedule.model.ClassScore
 import com.weilylab.xhuschedule.model.ExpScore
-import com.weilylab.xhuschedule.repository.local.db.DBHelper
+import com.weilylab.xhuschedule.repository.local.dao.ScoreDao
 import com.weilylab.xhuschedule.repository.local.service.ScoreService
 
-class ScoreServiceImpl : ScoreService {
-	private val scoreDao by lazy { DBHelper.db.getScoreDao() }
-
+class ScoreServiceImpl(private val scoreDao: ScoreDao) : ScoreService {
 	override fun saveClassScore(classScore: ClassScore): Long = scoreDao.saveClassScore(classScore)
 
 	override fun deleteClassScore(classScore: ClassScore): Int = scoreDao.deleteClassScore(classScore)

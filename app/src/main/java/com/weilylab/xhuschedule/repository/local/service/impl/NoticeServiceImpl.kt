@@ -1,12 +1,10 @@
 package com.weilylab.xhuschedule.repository.local.service.impl
 
 import com.weilylab.xhuschedule.model.Notice
-import com.weilylab.xhuschedule.repository.local.db.DBHelper
+import com.weilylab.xhuschedule.repository.local.dao.NoticeDao
 import com.weilylab.xhuschedule.repository.local.service.NoticeService
 
-class NoticeServiceImpl : NoticeService {
-	private val noticeDao by lazy { DBHelper.db.getNoticeDao() }
-
+class NoticeServiceImpl(private val noticeDao: NoticeDao) : NoticeService {
 	override fun add(notice: Notice): Long = noticeDao.add(notice)
 
 	override fun remove(notice: Notice): Int = noticeDao.remove(notice)

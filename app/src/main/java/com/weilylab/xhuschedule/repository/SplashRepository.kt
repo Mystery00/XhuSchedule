@@ -3,19 +3,18 @@ package com.weilylab.xhuschedule.repository
 import com.weilylab.xhuschedule.model.Splash
 import com.weilylab.xhuschedule.repository.local.SplashLocalDataSource
 import com.weilylab.xhuschedule.repository.remote.SplashRemoteDataSource
-import com.weilylab.xhuschedule.viewmodel.SplashViewModel
-import vip.mystery0.rx.DataManager
-import vip.mystery0.tools.utils.NetworkTools
+import org.koin.core.KoinComponent
+import org.koin.core.inject
+import vip.mystery0.tools.utils.isConnectInternet
 
-object SplashRepository {
-	fun requestSplash(splashViewModel: SplashViewModel) {
-		DataManager.instance().doRequest(splashViewModel.splash) {
-			if (NetworkTools.instance.isConnectInternet())
-				SplashRemoteDataSource.requestSplash(splashViewModel.splash)
-			else
-				SplashLocalDataSource.requestSplash(splashViewModel.splash)
-		}
-	}
+class SplashRepository : KoinComponent {
+	private val splashLocalDataSource: SplashLocalDataSource by inject()
+	private val splashRemoteDataSource: SplashRemoteDataSource by inject()
 
-	fun getSplash(): Splash = SplashLocalDataSource.getSplash()
+	suspend fun requestSplash(): Splash = if (isConnectInternet())
+		splashRemoteDataSource.requestSplash()
+	else
+		splashLocalDataSource.requestSplash()
+
+	suspend fun getSplash(): Splash = splashLocalDataSource.getSplash()
 }

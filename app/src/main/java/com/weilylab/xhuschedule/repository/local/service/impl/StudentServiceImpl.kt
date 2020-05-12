@@ -3,13 +3,12 @@ package com.weilylab.xhuschedule.repository.local.service.impl
 import com.weilylab.xhuschedule.model.FeedBackToken
 import com.weilylab.xhuschedule.model.Student
 import com.weilylab.xhuschedule.model.StudentInfo
-import com.weilylab.xhuschedule.repository.local.db.DBHelper
+import com.weilylab.xhuschedule.repository.local.dao.FBTokenDao
+import com.weilylab.xhuschedule.repository.local.dao.StudentDao
 import com.weilylab.xhuschedule.repository.local.service.StudentService
 
-class StudentServiceImpl : StudentService {
-	private val studentDao by lazy { DBHelper.db.getStudentDao() }
-	private val fbTokenDao by lazy { DBHelper.db.getFBTokenDao() }
-
+class StudentServiceImpl(private val studentDao: StudentDao,
+						 private val fbTokenDao: FBTokenDao) : StudentService {
 	override fun studentLogin(student: Student): Long = studentDao.studentLogin(student)
 
 	override fun studentLogout(student: Student): Int = studentDao.studentLogout(student)

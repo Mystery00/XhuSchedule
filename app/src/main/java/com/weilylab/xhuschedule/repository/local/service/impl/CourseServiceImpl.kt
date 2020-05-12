@@ -1,12 +1,10 @@
 package com.weilylab.xhuschedule.repository.local.service.impl
 
 import com.weilylab.xhuschedule.model.Course
-import com.weilylab.xhuschedule.repository.local.db.DBHelper
+import com.weilylab.xhuschedule.repository.local.dao.CourseDao
 import com.weilylab.xhuschedule.repository.local.service.CourseService
 
-class CourseServiceImpl : CourseService {
-	private val courseDao by lazy { DBHelper.db.getCourseDao() }
-
+class CourseServiceImpl(private val courseDao: CourseDao) : CourseService {
 	override fun addCourse(course: Course): Long = courseDao.addCourse(course)
 
 	override fun deleteCourse(course: Course): Int = courseDao.deleteCourse(course)
