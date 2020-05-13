@@ -5,6 +5,8 @@ import androidx.lifecycle.ViewModel
 import com.weilylab.xhuschedule.model.Splash
 import com.weilylab.xhuschedule.repository.SplashRepository
 import com.weilylab.xhuschedule.utils.getSplashImageFile
+import org.koin.core.KoinComponent
+import org.koin.core.inject
 import vip.mystery0.rx.PackageData
 import vip.mystery0.rx.content
 import vip.mystery0.rx.empty
@@ -13,7 +15,8 @@ import vip.mystery0.tools.utils.md5
 import vip.mystery0.tools.utils.sha1
 import java.io.File
 
-class SplashViewModel(private val splashRepository: SplashRepository) : ViewModel() {
+class SplashViewModel : ViewModel(), KoinComponent {
+	private val splashRepository: SplashRepository by inject()
 	val splashData by lazy { MediatorLiveData<PackageData<Pair<Splash, Boolean>>>() }
 	val splashFile by lazy { MediatorLiveData<PackageData<Pair<Splash, File>>>() }
 

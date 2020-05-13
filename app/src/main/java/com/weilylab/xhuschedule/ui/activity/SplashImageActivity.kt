@@ -63,6 +63,15 @@ class SplashImageActivity : XhuBaseActivity(R.layout.activity_splash_image, fals
 		super.inflateView(layoutId)
 	}
 
+	override fun initView() {
+		super.initView()
+		skipView.setUpdateTime(50)
+				.setText(R.string.action_bypass)
+				.setFinishAction {
+					gotoMain()
+				}
+	}
+
 	override fun initData() {
 		super.initData()
 		splashViewModel.splashFile.observe(this, object : DataObserver<Pair<Splash, File>> {
@@ -91,15 +100,7 @@ class SplashImageActivity : XhuBaseActivity(R.layout.activity_splash_image, fals
 						.start()
 			}
 		})
-	}
-
-	override fun initView() {
-		super.initView()
-		skipView.setUpdateTime(50)
-				.setText(R.string.action_bypass)
-				.setFinishAction {
-					gotoMain()
-				}
+		splashViewModel.getSplash()
 	}
 
 	override fun monitor() {
