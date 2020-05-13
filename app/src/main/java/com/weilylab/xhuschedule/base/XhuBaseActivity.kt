@@ -33,16 +33,19 @@
 
 package com.weilylab.xhuschedule.base
 
+import android.app.Dialog
 import android.os.Bundle
-import android.widget.Toast
+import androidx.annotation.ColorInt
 import androidx.annotation.StringRes
+import androidx.core.content.ContextCompat
+import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.utils.ConfigUtil
 import com.weilylab.xhuschedule.utils.ConfigurationUtil
+import com.zyao89.view.zloading.ZLoadingDialog
+import com.zyao89.view.zloading.Z_TYPE
 import vip.mystery0.tools.base.BaseActivity
-import vip.mystery0.tools.utils.ActivityManagerTools
 
 abstract class XhuBaseActivity(layoutId: Int?, private val isSetStatusBar: Boolean = true) : BaseActivity(layoutId) {
-	private var toast: Toast? = null
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
@@ -50,11 +53,31 @@ abstract class XhuBaseActivity(layoutId: Int?, private val isSetStatusBar: Boole
 			ConfigUtil.setStatusBar(this)
 	}
 
-	fun toastMessage(@StringRes stringRes: Int, isShowLong: Boolean = false) = toastMessage(getString(stringRes), isShowLong)
+	fun toast(throwable: Throwable?) = toast(throwable?.message)
+	fun toastLong(throwable: Throwable?) = toastLong(throwable?.message)
 
-	fun toastMessage(message: String?, isShowLong: Boolean = false) {
-		toast?.cancel()
-		toast = Toast.makeText(this, message, if (isShowLong) Toast.LENGTH_LONG else Toast.LENGTH_SHORT)
-		toast?.show()
-	}
+	fun buildDialog(@StringRes stringRes: Int,
+					type: Z_TYPE = Z_TYPE.SINGLE_CIRCLE,
+					textSize: Float = 16F,
+					cancelOnTouchOutside: Boolean = false,
+					@ColorInt dialogBackgroundColor: Int = ContextCompat.getColor(this, R.color.colorWhiteBackground),
+					@ColorInt loadingColor: Int = ContextCompat.getColor(this, R.color.colorAccent),
+					@ColorInt textColor: Int = ContextCompat.getColor(this, R.color.colorAccent)): Dialog = buildDialog(getString(stringRes), type, textSize, cancelOnTouchOutside, dialogBackgroundColor, loadingColor, textColor)
+
+	fun buildDialog(text: String,
+					type: Z_TYPE = Z_TYPE.SINGLE_CIRCLE,
+					textSize: Float = 16F,
+					cancelOnTouchOutside: Boolean = false,
+					@ColorInt dialogBackgroundColor: Int = ContextCompat.getColor(this, R.color.colorWhiteBackground),
+					@ColorInt loadingColor: Int = ContextCompat.getColor(this, R.color.colorAccent),
+					@ColorInt textColor: Int = ContextCompat.getColor(this, R.color.colorAccent)): Dialog =
+			ZLoadingDialog(this)
+					.setLoadingBuilder(type)
+					.setHintText(text)
+					.setHintTextSize(textSize)
+					.setCanceledOnTouchOutside(cancelOnTouchOutside)
+					.setDialogBackgroundColor(dialogBackgroundColor)
+					.setLoadingColor(loadingColor)
+					.setHintTextColor(textColor)
+					.create()
 }
