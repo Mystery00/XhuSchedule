@@ -1,17 +1,28 @@
 package com.weilylab.xhuschedule.base
 
-import android.widget.Toast
+import androidx.annotation.StringRes
 import androidx.databinding.ViewDataBinding
+import com.google.android.material.snackbar.BaseTransientBottomBar
+import com.google.android.material.snackbar.Snackbar
+import com.weilylab.xhuschedule.R
 import vip.mystery0.tools.base.binding.BaseBindingFragment
 
 abstract class BaseBottomNavigationFragment<B : ViewDataBinding>(layoutId: Int) : BaseBindingFragment<B>(layoutId) {
-	private var toast: Toast? = null
-
+	private var snackbar: Snackbar? = null
 	abstract fun updateTitle()
 
-	fun toastMessage(message: String?, isShowLong: Boolean = false) {
-		toast?.cancel()
-		toast = Toast.makeText(activity!!, message, if (isShowLong) Toast.LENGTH_LONG else Toast.LENGTH_SHORT)
-		toast?.show()
+	fun toast(throwable: Throwable?) = toast(throwable?.message)
+	fun toastLong(throwable: Throwable?) = toastLong(throwable?.message)
+
+	fun snackbar(@StringRes stringRes: Int) = snackBarMessage(stringRes, {}, Snackbar.LENGTH_SHORT)
+	fun snackbar(message: String) = snackBarMessage(message, {}, Snackbar.LENGTH_SHORT)
+	fun snackbarLong(@StringRes stringRes: Int) = snackBarMessage(stringRes, {}, Snackbar.LENGTH_LONG)
+	fun snackbarLong(message: String) = snackBarMessage(message, {}, Snackbar.LENGTH_LONG)
+	fun snackBarMessage(@StringRes stringId: Int, doOther: Snackbar.() -> Unit, @BaseTransientBottomBar.Duration duration: Int) = snackBarMessage(getString(stringId), doOther, duration)
+	fun snackBarMessage(message: String, doOther: Snackbar.() -> Unit, @BaseTransientBottomBar.Duration duration: Int) {
+		snackbar?.dismiss()
+		snackbar = Snackbar.make(findViewById(R.id.coordinatorLayout), message, duration)
+		doOther.invoke(snackbar!!)
+		snackbar!!.show()
 	}
 }

@@ -8,12 +8,12 @@ import android.widget.Toast
 import androidx.annotation.StringRes
 import androidx.annotation.XmlRes
 import androidx.core.content.ContextCompat
+import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
 import com.weilylab.xhuschedule.R
 import vip.mystery0.tools.base.BasePreferenceFragment
 
 abstract class XhuBasePreferenceFragment(@XmlRes private val preferencesResId: Int) : BasePreferenceFragment(preferencesResId) {
-	private var toast: Toast? = null
 	private var snackbar: Snackbar? = null
 
 	override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
@@ -22,28 +22,22 @@ abstract class XhuBasePreferenceFragment(@XmlRes private val preferencesResId: I
 
 	override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 		val view = super.onCreateView(inflater, container, savedInstanceState) ?: return null
-		listView.setBackgroundColor(ContextCompat.getColor(activity!!, R.color.colorWhiteBackground))
+		listView.setBackgroundColor(ContextCompat.getColor(requireActivity(), R.color.colorWhiteBackground))
 		setDividerHeight(1)
 		return view
 	}
 
-	fun toastMessage(@StringRes stringRes: Int, isShowLong: Boolean = false) = toastMessage(getString(stringRes), isShowLong)
+	fun toast(throwable: Throwable?) = toast(throwable?.message)
+	fun toastLong(throwable: Throwable?) = toastLong(throwable?.message)
 
-	fun toastMessage(message: String?, isShowLong: Boolean = false) {
-		toast?.cancel()
-		toast = Toast.makeText(activity!!, message, if (isShowLong) Toast.LENGTH_LONG else Toast.LENGTH_SHORT)
-		toast?.show()
-	}
-
-	fun snackBarMessage(@StringRes stringRes: Int, isShowLong: Boolean = false) = snackBarMessage(getString(stringRes), isShowLong)
-
-	fun snackBarMessage(message: String, isShowLong: Boolean = false) = snackBarMessage(message, {}, isShowLong)
-
-	fun snackBarMessage(@StringRes stringId: Int, doOther: (Snackbar) -> Unit, showLong: Boolean = false) = snackBarMessage(getString(stringId), doOther, showLong = showLong)
-
-	fun snackBarMessage(message: String, doOther: (Snackbar) -> Unit, showLong: Boolean = false) {
+	fun snackbar(@StringRes stringRes: Int) = snackBarMessage(stringRes, {}, Snackbar.LENGTH_SHORT)
+	fun snackbar(message: String) = snackBarMessage(message, {}, Snackbar.LENGTH_SHORT)
+	fun snackbarLong(@StringRes stringRes: Int) = snackBarMessage(stringRes, {}, Snackbar.LENGTH_LONG)
+	fun snackbarLong(message: String) = snackBarMessage(message, {}, Snackbar.LENGTH_LONG)
+	fun snackBarMessage(@StringRes stringId: Int, doOther: Snackbar.() -> Unit, @BaseTransientBottomBar.Duration duration: Int) = snackBarMessage(getString(stringId), doOther, duration)
+	fun snackBarMessage(message: String, doOther: Snackbar.() -> Unit, @BaseTransientBottomBar.Duration duration: Int) {
 		snackbar?.dismiss()
-		snackbar = Snackbar.make(activity!!.findViewById(R.id.coordinatorLayout), message, if (showLong) Snackbar.LENGTH_LONG else Snackbar.LENGTH_SHORT)
+		snackbar = Snackbar.make(requireActivity().findViewById(R.id.coordinatorLayout), message, duration)
 		doOther.invoke(snackbar!!)
 		snackbar!!.show()
 	}
