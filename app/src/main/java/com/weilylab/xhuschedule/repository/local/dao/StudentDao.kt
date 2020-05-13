@@ -7,32 +7,32 @@ import com.weilylab.xhuschedule.model.StudentInfo
 @Dao
 interface StudentDao {
 	@Insert
-	fun studentLogin(student: Student): Long
+	suspend fun studentLogin(student: Student): Long
 
 	@Delete
-	fun studentLogout(student: Student): Int
+	suspend fun studentLogout(student: Student): Int
 
 	@Query("select * from tb_student")
-	fun queryAllStudentList(): List<Student>
+	suspend fun queryAllStudentList(): List<Student>
 
 	@Query("select count(username) from tb_student")
-	fun queryStudentSize(): Int
+	suspend fun queryStudentSize(): Int
 
 	@Query("select * from tb_student where username = :username limit 1")
-	fun queryStudentByUsername(username: String): Student?
+	suspend fun queryStudentByUsername(username: String): Student?
 
 	@Query("select * from tb_student where is_main = 1 limit 1")
-	fun queryMainStudent(): Student?
+	suspend fun queryMainStudent(): Student?
 
 	@Update
-	fun updateStudent(student: Student)
+	suspend fun updateStudent(student: Student)
 
 	@Insert
-	fun saveStudentInfo(studentInfo: StudentInfo): Long
+	suspend fun saveStudentInfo(studentInfo: StudentInfo): Long
 
 	@Query("select * from tb_student_info where student_id = :username limit 1")
-	fun queryStudentInfoByUsername(username: String): StudentInfo?
+	suspend fun queryStudentInfoByUsername(username: String): StudentInfo?
 
 	@Query("select tb_student_info.* from tb_student join tb_student_info on tb_student.username=tb_student_info.student_id")
-	fun queryAllStudentInfo(): List<StudentInfo>
+	suspend fun queryAllStudentInfo(): List<StudentInfo>
 }

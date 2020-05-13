@@ -39,55 +39,31 @@ import android.graphics.Color
 import android.text.TextUtils
 import android.view.View
 import android.view.WindowManager
-import androidx.core.content.ContextCompat
-import androidx.lifecycle.ViewModelProvider
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.base.XhuBaseActivity
 import com.weilylab.xhuschedule.model.Student
-import com.weilylab.xhuschedule.repository.LoginRepository
 import com.weilylab.xhuschedule.viewmodel.LoginViewModel
-import com.zyao89.view.zloading.ZLoadingDialog
-import com.zyao89.view.zloading.Z_TYPE
 import kotlinx.android.synthetic.main.activity_login.*
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import vip.mystery0.logs.Logs
-import vip.mystery0.rx.PackageDataObserver
-import vip.mystery0.tools.toastLong
+import vip.mystery0.rx.DataObserver
 
 class LoginActivity : XhuBaseActivity(R.layout.activity_login, false) {
-	private val loginViewModel: LoginViewModel by lazy {
-		ViewModelProvider(this)[LoginViewModel::class.java]
-	}
-	private val dialog: Dialog by lazy {
-		ZLoadingDialog(this)
-				.setLoadingBuilder(Z_TYPE.SINGLE_CIRCLE)
-				.setHintText(getString(R.string.hint_dialog_login))
-				.setHintTextSize(16F)
-				.setCanceledOnTouchOutside(false)
-				.setDialogBackgroundColor(ContextCompat.getColor(this, R.color.colorWhiteBackground))
-				.setLoadingColor(ContextCompat.getColor(this, R.color.colorAccent))
-				.setHintTextColor(ContextCompat.getColor(this, R.color.colorAccent))
-				.create()
-	}
+	private val loginViewModel: LoginViewModel by viewModel()
+	private val dialog: Dialog by lazy { buildDialog(R.string.hint_dialog_login) }
 
-	private val loginObserver = object : PackageDataObserver<Student> {
-		override fun content(data: Student?) {
-			if (data != null) {
-				LoginRepository.queryStudentInfo({ _, e ->
-					hideDialog()
-					if (e == null) {
-						toastMessage(getString(R.string.success_login, getString(R.string.app_name)))
-						setResult(Activity.RESULT_OK, intent)
-						finish()
-					} else
-						toastMessage(e.message)
-				}, data)
-			}
+	private val loginObserver = object : DataObserver<Student> {
+		override fun contentNoEmpty(data: Student) {
+			hideDialog()
+			toast(getString(R.string.success_login, getString(R.string.app_name)))
+			setResult(Activity.RESULT_OK, intent)
+			finish()
 		}
 
 		override fun error(data: Student?, e: Throwable?) {
 			Logs.wtfm("loginObserver: ", e)
 			hideDialog()
-			e.toastLong(this@LoginActivity)
+			toastLong(e)
 		}
 
 		override fun loading() {
@@ -154,7 +130,7 @@ class LoginActivity : XhuBaseActivity(R.layout.activity_login, false) {
 		val student = Student()
 		student.username = usernameStr
 		student.password = passwordStr
-		LoginRepository.login(student, loginViewModel)
+		loginViewModel.login(student)
 	}
 
 	private fun showDialog() {

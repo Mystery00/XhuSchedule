@@ -7,18 +7,6 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "tb_student_info")
 class StudentInfo {
-	/**
-	 * profession : 软件工程
-	 * msg : 成功
-	 * no : 312015xxxxxxx
-	 * rt : 0
-	 * classname : 软件设计15-1
-	 * grade : 2015
-	 * sex : 男
-	 * name : 邓易林
-	 * institute : 计算机与软件工程学院
-	 * direction : 软件设计技术
-	 */
 	@PrimaryKey(autoGenerate = true)
 	var id = 0
 

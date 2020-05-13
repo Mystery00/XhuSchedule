@@ -4,7 +4,6 @@ import com.weilylab.xhuschedule.api.UserAPI
 import com.weilylab.xhuschedule.constant.ResponseCodeConstants
 import com.weilylab.xhuschedule.constant.StringConstant
 import com.weilylab.xhuschedule.factory.RetrofitFactory
-import com.weilylab.xhuschedule.factory.fromJson
 import com.weilylab.xhuschedule.listener.DoSaveListener
 import com.weilylab.xhuschedule.listener.RequestListener
 import com.weilylab.xhuschedule.model.Student
@@ -15,12 +14,13 @@ import com.weilylab.xhuschedule.model.response.SetUserDataResponse
 import com.weilylab.xhuschedule.repository.local.StudentLocalDataSource
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import org.koin.core.KoinComponent
 import vip.mystery0.logs.Logs
 import vip.mystery0.rx.OnlyCompleteObserver
 import vip.mystery0.rx.Status.*
 import vip.mystery0.tools.utils.NetworkTools
 
-object UserUtil {
+object UserUtil : KoinComponent {
 	const val RETRY_TIME = 1
 
 	fun login(student: Student, doSaveListener: DoSaveListener<Student>?, requestListener: RequestListener<Boolean>) {

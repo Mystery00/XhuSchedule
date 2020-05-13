@@ -1,5 +1,6 @@
 package com.weilylab.xhuschedule.module
 
+import com.weilylab.xhuschedule.api.UserAPI
 import com.weilylab.xhuschedule.api.XhuScheduleCloudAPI
 import com.weilylab.xhuschedule.constant.Constants
 import com.weilylab.xhuschedule.constant.ResponseCodeConstants
@@ -8,7 +9,9 @@ import com.weilylab.xhuschedule.interceptor.LoadCookiesInterceptor
 import com.weilylab.xhuschedule.interceptor.SaveCookiesInterceptor
 import com.weilylab.xhuschedule.model.Student
 import com.weilylab.xhuschedule.model.response.BaseResponse
+import com.weilylab.xhuschedule.repository.LoginRepository
 import okhttp3.OkHttpClient
+import org.koin.core.inject
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import retrofit2.Retrofit
@@ -50,6 +53,9 @@ val networkModule = module {
 	single {
 		get<Retrofit>(named("retrofit")).create(XhuScheduleCloudAPI::class.java)
 	}
+	single {
+		get<Retrofit>(named("retrofit")).create(UserAPI::class.java)
+	}
 }
 
 suspend fun <T : BaseResponse> T.verifyData(needLogin: suspend () -> T): T = when (rt) {
@@ -58,8 +64,11 @@ suspend fun <T : BaseResponse> T.verifyData(needLogin: suspend () -> T): T = whe
 	else -> throw Exception(msg)
 }
 
-suspend fun <T : BaseResponse> T.redoAfterLogin(student: Student, repeat: suspend () -> T): T = verifyData {
-	student.reLogin {
+suspend fun <T : BaseResponse> T.redoAfterLogin(student: Student, repeat: suspend () -> T): T {
+	val loginRepository: LoginRepository by inject()
+
+	return verifyData {
+		loginRepository.doLoginOnly(student)
 		val response = repeat()
 		if (!response.isSuccessful)
 			throw Exception(response.msg)

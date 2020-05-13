@@ -1,5 +1,6 @@
 package com.weilylab.xhuschedule.api
 
+import com.weilylab.xhuschedule.model.StudentInfo
 import com.weilylab.xhuschedule.model.response.LoginResponse
 import io.reactivex.Observable
 import okhttp3.ResponseBody
@@ -14,7 +15,7 @@ interface UserAPI {
 
 	@FormUrlEncoded
 	@POST("/User/getInfo")
-	fun getInfo(@Field("username") username: String): Observable<ResponseBody>
+	suspend fun getInfo(@Field("username") username: String): StudentInfo
 
 	@FormUrlEncoded
 	@POST("/User/setUserData")
