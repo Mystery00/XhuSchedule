@@ -1,8 +1,6 @@
 package com.weilylab.xhuschedule.utils
 
-import android.content.Context
 import android.os.Environment
-import android.text.TextUtils
 import com.weilylab.xhuschedule.constant.Constants
 import vip.mystery0.tools.context
 import java.io.File

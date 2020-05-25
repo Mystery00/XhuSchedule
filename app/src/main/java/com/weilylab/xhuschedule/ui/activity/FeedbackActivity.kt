@@ -14,7 +14,6 @@ import com.weilylab.xhuschedule.model.Student
 import com.weilylab.xhuschedule.repository.FeedBackRepository
 import com.weilylab.xhuschedule.repository.local.StudentLocalDataSource
 import com.weilylab.xhuschedule.ui.adapter.FeedBackMessageAdapter
-import com.weilylab.xhuschedule.utils.LayoutRefreshConfigUtil
 import com.weilylab.xhuschedule.viewmodel.FeedBackViewModel
 import com.zyao89.view.zloading.ZLoadingDialog
 import com.zyao89.view.zloading.Z_TYPE

@@ -9,7 +9,6 @@ import com.weilylab.xhuschedule.databinding.ItemClassCourseColorBinding
 import com.weilylab.xhuschedule.model.Course
 import com.weilylab.xhuschedule.repository.local.CourseLocalDataSource
 import com.weilylab.xhuschedule.utils.ConfigUtil
-import com.weilylab.xhuschedule.utils.LayoutRefreshConfigUtil
 import vip.mystery0.tools.base.binding.BaseBindingRecyclerViewAdapter
 
 class ClassCourseColorRecyclerViewAdapter(private val context: Context) : BaseBindingRecyclerViewAdapter<Course, ItemClassCourseColorBinding>(R.layout.item_class_course_color) {

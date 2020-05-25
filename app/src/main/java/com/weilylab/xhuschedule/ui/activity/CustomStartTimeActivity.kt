@@ -5,7 +5,6 @@ import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.base.XhuBaseActivity
 import com.weilylab.xhuschedule.repository.local.InitLocalDataSource
 import com.weilylab.xhuschedule.utils.CalendarUtil
-import com.weilylab.xhuschedule.utils.LayoutRefreshConfigUtil
 import kotlinx.android.synthetic.main.activity_custom_start_time.*
 import java.util.*
 

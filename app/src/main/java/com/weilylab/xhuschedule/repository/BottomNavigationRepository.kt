@@ -1,12 +1,8 @@
 package com.weilylab.xhuschedule.repository
 
-import com.weilylab.xhuschedule.api.NoticeAPI
 import com.weilylab.xhuschedule.api.XhuScheduleCloudAPI
 import com.weilylab.xhuschedule.model.Course
 import com.weilylab.xhuschedule.model.Student
-import com.weilylab.xhuschedule.repository.local.dao.FeedBackMessageDao
-import com.weilylab.xhuschedule.repository.local.dao.NoticeDao
-import com.weilylab.xhuschedule.repository.local.dao.StudentDao
 import com.weilylab.xhuschedule.utils.ConfigurationUtil
 import com.weilylab.xhuschedule.utils.userDo.CourseUtil
 import com.zhuangfei.timetable.model.Schedule
@@ -19,13 +15,9 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 class BottomNavigationRepository : KoinComponent {
-	private val studentDao: StudentDao by inject()
-
 	private val courseRepository: CourseRepository by inject()
 
 	private val xhuScheduleCloudAPI: XhuScheduleCloudAPI by inject()
-
-	suspend fun queryAllStudent(): List<Student> = studentDao.queryAllStudentList()
 
 	/**
 	 * 获取缓存的所有课程的列表

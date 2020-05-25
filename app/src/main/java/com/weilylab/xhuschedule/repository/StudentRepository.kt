@@ -12,7 +12,7 @@ import org.koin.core.inject
 import vip.mystery0.tools.ResourceException
 import vip.mystery0.tools.utils.isConnectInternet
 
-class LoginRepository : KoinComponent {
+class StudentRepository : KoinComponent {
 	private val studentDao: StudentDao by inject()
 
 	private val feedBackRepository: FeedBackRepository by inject()
@@ -71,5 +71,23 @@ class LoginRepository : KoinComponent {
 			}
 			else -> throw Exception(info.msg)
 		}
+	}
+
+	suspend fun deleteStudentList(studentList: List<Student>) {
+		studentList.forEach { s ->
+			studentDao.studentLogout(s)
+		}
+		val list = studentDao.queryAllStudentList()
+		if (list.isNotEmpty() && list.none { it.isMain }) {
+			val mainStudent = list[0]
+			mainStudent.isMain = true
+			studentDao.updateStudent(mainStudent)
+		}
+	}
+
+	suspend fun queryAllStudentList(): List<Student> = studentDao.queryAllStudentList()
+
+	suspend fun updateStudentList(updateList: List<Student>) {
+		updateList.forEach { studentDao.updateStudent(it) }
 	}
 }

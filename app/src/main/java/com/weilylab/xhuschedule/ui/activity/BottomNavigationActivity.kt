@@ -1,6 +1,7 @@
 package com.weilylab.xhuschedule.ui.activity
 
 import android.animation.ObjectAnimator
+import android.animation.ValueAnimator
 import android.app.Activity
 import android.app.Dialog
 import android.content.Intent
@@ -33,16 +34,14 @@ import com.weilylab.xhuschedule.ui.fragment.ProfileFragment
 import com.weilylab.xhuschedule.ui.fragment.TableFragment
 import com.weilylab.xhuschedule.ui.fragment.TodayFragment
 import com.weilylab.xhuschedule.ui.fragment.settings.AccountSettingsFragment.Companion.ADD_ACCOUNT_CODE
-import com.weilylab.xhuschedule.utils.*
+import com.weilylab.xhuschedule.utils.AnimationUtil
+import com.weilylab.xhuschedule.utils.CalendarUtil
+import com.weilylab.xhuschedule.utils.ConfigUtil
+import com.weilylab.xhuschedule.utils.ConfigurationUtil
 import com.weilylab.xhuschedule.utils.userDo.CourseUtil
 import com.weilylab.xhuschedule.viewmodel.BottomNavigationViewModel
 import com.zhuangfei.timetable.listener.IWeekView
 import com.zhuangfei.timetable.model.Schedule
-import com.zhuangfei.timetable.model.ScheduleSupport
-import io.reactivex.Observable
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.Disposable
-import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_bottom_navigation.*
 import kotlinx.android.synthetic.main.content_bottom_navigation.*
 import org.greenrobot.eventbus.Subscribe
@@ -56,8 +55,6 @@ import vip.mystery0.tools.toastLong
 import vip.mystery0.tools.utils.dpTopx
 import vip.mystery0.tools.utils.screenWidth
 import java.io.File
-import java.text.SimpleDateFormat
-import java.util.*
 import kotlin.math.roundToInt
 
 class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_navigation) {
@@ -68,11 +65,15 @@ class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_naviga
 
 	private var animation: ObjectAnimator? = null
 	private var arrowAnimation: ObjectAnimator? = null
+	private val loadingAnimation: ObjectAnimator by lazy {
+		val animation = ObjectAnimator.ofFloat(imageSync, "rotation", 0F, 360F)
+				.setDuration(1000)
+		animation.repeatCount = ValueAnimator.INFINITE
+		animation
+	}
 
-	private val courseList = ArrayList<Schedule>()
 	private var isShowWeekView = false
 	private val showAdapter: ShowCourseRecyclerViewAdapter by lazy { ShowCourseRecyclerViewAdapter(this) }
-	private lateinit var loadingAnimation: ObjectAnimator
 
 	private val studentListObserver = object : DataObserver<List<Student>> {
 		override fun loading() {
@@ -96,9 +97,11 @@ class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_naviga
 
 	private val courseListObserver = object : DataObserver<List<Schedule>> {
 		override fun contentNoEmpty(data: List<Schedule>) {
+			weekView.data(data).showView()
 			toast(R.string.hint_course_sync_done)
 			cancelLoading()
 			hideDialog()
+			bottomNavigationViewModel.queryCurrentWeek()
 		}
 
 		override fun loading() {
@@ -176,7 +179,7 @@ class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_naviga
 		viewPager.adapter = viewPagerAdapter
 		if (ConfigurationUtil.enableViewPagerTransform)
 			viewPager.setPageTransformer(true, ZoomOutPageTransformer())
-		weekView.data(courseList)
+		weekView.data(emptyList())
 				.curWeek(1)
 				.callback(IWeekView.OnWeekItemClickedListener {
 					bottomNavigationViewModel.week.value = it
@@ -215,7 +218,6 @@ class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_naviga
 		viewPagerAdapter.getItem(0).updateTitle()
 		configWeekView(0)
 		bottomNavigationViewModel.init()
-		bottomNavigationViewModel.queryCurrentWeek()
 		bottomNavigationViewModel.queryNewNotice()
 		bottomNavigationViewModel.queryNewFeedbackMessage()
 	}
@@ -250,13 +252,6 @@ class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_naviga
 		}
 		imageSync.setOnClickListener {
 			bottomNavigationViewModel.queryOnline()
-		}
-	}
-
-	@Subscribe(threadMode = ThreadMode.MAIN)
-	fun updateUIFromConfig(uiConfigEvent: UIConfigEvent) {
-		if (uiConfigEvent.refreshUI.contains(UI.TODAY_COURSE)) {
-			bottomNavigationViewModel.init()
 		}
 	}
 
@@ -317,50 +312,11 @@ class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_naviga
 	}
 
 	private fun showLoading() {
-		if (!LayoutRefreshConfigUtil.isRefreshDone)
-			return
-		if (!::loadingAnimation.isInitialized) {
-			Observable.create<Boolean> {
-				while (!LayoutRefreshConfigUtil.isRefreshDone) {
-					it.onNext(true)
-					Thread.sleep(1000)
-				}
-				it.onComplete()
-			}
-					.subscribeOn(Schedulers.single())
-					.observeOn(AndroidSchedulers.mainThread())
-					.subscribe(object : io.reactivex.Observer<Boolean> {
-						override fun onComplete() {
-							if (bottomNavigationViewModel.courseList.value != null && bottomNavigationViewModel.courseList.value!!.data != null) {
-								courseList.clear()
-								courseList.addAll(bottomNavigationViewModel.courseList.value!!.data!!)
-								if (bottomNavigationViewModel.startDateTime.value != null && bottomNavigationViewModel.startDateTime.value != null) {
-									val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINA)
-									bottomNavigationViewModel.week.value = ScheduleSupport.timeTransfrom(simpleDateFormat.format(bottomNavigationViewModel.startDateTime.value!!.time))
-								}
-								weekView.data(courseList).showView()
-							}
-						}
-
-						override fun onSubscribe(d: Disposable) {
-							LayoutRefreshConfigUtil.isRefreshDone = false
-						}
-
-						override fun onNext(t: Boolean) {
-							ObjectAnimator.ofFloat(imageSync, "rotation", 0F, 360F)
-									.setDuration(1000)
-									.start()
-						}
-
-						override fun onError(e: Throwable) {
-							Logs.wtf("onError: ", e)
-						}
-					})
-		}
+		loadingAnimation.start()
 	}
 
 	private fun cancelLoading() {
-		LayoutRefreshConfigUtil.isRefreshDone = true
+		loadingAnimation.cancel()
 	}
 
 	private lateinit var popupWindow: PopupWindow
@@ -441,5 +397,15 @@ class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_naviga
 		super.onDestroy()
 		animation?.cancel()
 		arrowAnimation?.cancel()
+	}
+
+	@Subscribe(threadMode = ThreadMode.MAIN)
+	fun updateUIFromConfig(uiConfigEvent: UIConfigEvent) {
+		if (uiConfigEvent.refreshUI.contains(UI.MAIN_INIT)) {
+			bottomNavigationViewModel.init()
+		}
+		if (uiConfigEvent.refreshUI.contains(UI.BACKGROUND_IMG)) {
+			showBackground()
+		}
 	}
 }

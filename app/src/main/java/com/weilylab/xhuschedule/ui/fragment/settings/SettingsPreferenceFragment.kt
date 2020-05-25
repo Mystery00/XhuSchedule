@@ -23,17 +23,25 @@ import androidx.preference.Preference
 import com.google.android.material.snackbar.Snackbar
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.base.XhuBasePreferenceFragment
+import com.weilylab.xhuschedule.model.event.UI
+import com.weilylab.xhuschedule.model.event.UIConfigEvent
 import com.weilylab.xhuschedule.service.CheckUpdateService
 import com.weilylab.xhuschedule.ui.activity.SettingsActivity
 import com.weilylab.xhuschedule.ui.custom.CustomGlideEngine
 import com.weilylab.xhuschedule.utils.*
+import com.weilylab.xhuschedule.viewmodel.SettingsViewModel
 import com.yalantis.ucrop.UCrop
 import com.zhihu.matisse.Matisse
 import com.zhihu.matisse.MimeType
 import com.zyao89.view.zloading.ZLoadingDialog
 import com.zyao89.view.zloading.Z_TYPE
-import vip.mystery0.tools.utils.DensityTools
-import vip.mystery0.tools.utils.PackageTools
+import org.greenrobot.eventbus.EventBus
+import org.koin.android.ext.android.inject
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import vip.mystery0.tools.utils.AndroidVersionCode
+import vip.mystery0.tools.utils.screenHeight
+import vip.mystery0.tools.utils.screenWidth
+import vip.mystery0.tools.utils.sdkIsAfter
 import java.io.File
 import java.util.*
 
@@ -47,6 +55,8 @@ class SettingsPreferenceFragment : XhuBasePreferenceFragment(R.xml.preference_se
 		private const val REQUEST_CROP_USER = 31
 		private const val REQUEST_CROP_BACKGROUND = 32
 	}
+
+	private val eventBus: EventBus by inject()
 
 	private val userImgPreference by lazy { findPreferenceById<Preference>(R.string.key_user_img) }
 	private val backgroundImgPreference by lazy { findPreferenceById<Preference>(R.string.key_background_img) }
@@ -67,17 +77,17 @@ class SettingsPreferenceFragment : XhuBasePreferenceFragment(R.xml.preference_se
 	private val aboutPreference by lazy { findPreferenceById<Preference>(R.string.key_about) }
 
 	private val dialog: Dialog by lazy {
-		ZLoadingDialog(activity!!)
+		ZLoadingDialog(requireActivity())
 				.setLoadingBuilder(Z_TYPE.SINGLE_CIRCLE)
 				.setHintText(getString(R.string.hint_dialog_check_update))
 				.setHintTextSize(16F)
 				.setCanceledOnTouchOutside(false)
-				.setDialogBackgroundColor(ContextCompat.getColor(activity!!, R.color.colorWhiteBackground))
-				.setLoadingColor(ContextCompat.getColor(activity!!, R.color.colorAccent))
-				.setHintTextColor(ContextCompat.getColor(activity!!, R.color.colorAccent))
+				.setDialogBackgroundColor(ContextCompat.getColor(requireActivity(), R.color.colorWhiteBackground))
+				.setLoadingColor(ContextCompat.getColor(requireActivity(), R.color.colorAccent))
+				.setHintTextColor(ContextCompat.getColor(requireActivity(), R.color.colorAccent))
 				.create()
 	}
-	private val localBroadcastManager: LocalBroadcastManager by lazy { LocalBroadcastManager.getInstance(activity!!) }
+	private val localBroadcastManager: LocalBroadcastManager by lazy { LocalBroadcastManager.getInstance(requireActivity()) }
 
 	override fun initPreference() {
 		super.initPreference()
@@ -91,7 +101,7 @@ class SettingsPreferenceFragment : XhuBasePreferenceFragment(R.xml.preference_se
 		notificationExamPreference.isChecked = ConfigurationUtil.notificationExam
 		notificationTimePreference.summary = getString(R.string.summary_notification_time, ConfigurationUtil.notificationTime)
 
-		if (PackageTools.instance.isAfter(PackageTools.VERSION_Q, exclude = false)) {
+		if (sdkIsAfter(AndroidVersionCode.VERSION_Q, false)) {
 			useInAppImageSelectorPreference.isChecked = false
 			ConfigurationUtil.useInAppImageSelector = false
 			useInAppImageSelectorPreference.isEnabled = false
@@ -112,7 +122,7 @@ class SettingsPreferenceFragment : XhuBasePreferenceFragment(R.xml.preference_se
 		nightModePreference.onPreferenceClickListener = Preference.OnPreferenceClickListener {
 			val itemArray = resources.getStringArray(R.array.night_mode)
 			var selectedIndex = ConfigurationUtil.nightMode
-			AlertDialog.Builder(activity!!)
+			AlertDialog.Builder(requireActivity())
 					.setTitle(R.string.title_night_mode)
 					.setSingleChoiceItems(itemArray, selectedIndex) { _, index ->
 						selectedIndex = index
@@ -120,14 +130,14 @@ class SettingsPreferenceFragment : XhuBasePreferenceFragment(R.xml.preference_se
 					.setPositiveButton(R.string.action_ok) { _, _ ->
 						if (ConfigurationUtil.nightMode != selectedIndex) {
 							ConfigurationUtil.nightMode = selectedIndex
-							snackBarMessage(R.string.hint_need_restart, { snackBar ->
-								snackBar.setAction(R.string.action_restart) {
-									val intent = activity!!.packageManager.getLaunchIntentForPackage(activity!!.packageName)
+							snackBarMessage(R.string.hint_need_restart, {
+								setAction(R.string.action_restart) {
+									val intent = requireActivity().packageManager.getLaunchIntentForPackage(requireActivity().packageName)
 									intent?.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
-									activity!!.startActivity(intent)
-									activity!!.finish()
+									requireActivity().startActivity(intent)
+									requireActivity().finish()
 								}
-							})
+							}, Snackbar.LENGTH_SHORT)
 						}
 					}
 					.setNegativeButton(R.string.action_cancel, null)
@@ -136,26 +146,26 @@ class SettingsPreferenceFragment : XhuBasePreferenceFragment(R.xml.preference_se
 		}
 		enableViewPagerTransformPreference.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, _ ->
 			ConfigurationUtil.enableViewPagerTransform = !enableViewPagerTransformPreference.isChecked
-			snackBarMessage(R.string.hint_need_restart, { snackBar ->
-				snackBar.setAction(R.string.action_restart) {
-					val intent = activity!!.packageManager.getLaunchIntentForPackage(activity!!.packageName)
+			snackBarMessage(R.string.hint_need_restart, {
+				setAction(R.string.action_restart) {
+					val intent = requireActivity().packageManager.getLaunchIntentForPackage(requireActivity().packageName)
 					intent?.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
-					activity!!.startActivity(intent)
-					activity!!.finish()
+					requireActivity().startActivity(intent)
+					requireActivity().finish()
 				}
-			})
+			}, Snackbar.LENGTH_SHORT)
 			true
 		}
 		tintNavigationBarPreference.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, _ ->
 			ConfigurationUtil.tintNavigationBar = !tintNavigationBarPreference.isChecked
-			snackBarMessage(R.string.hint_need_restart, { snackBar ->
-				snackBar.setAction(R.string.action_restart) {
-					val intent = activity!!.packageManager.getLaunchIntentForPackage(activity!!.packageName)
+			snackBarMessage(R.string.hint_need_restart, {
+				setAction(R.string.action_restart) {
+					val intent = requireActivity().packageManager.getLaunchIntentForPackage(requireActivity().packageName)
 					intent?.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
-					activity!!.startActivity(intent)
-					activity!!.finish()
+					requireActivity().startActivity(intent)
+					requireActivity().finish()
 				}
-			})
+			}, Snackbar.LENGTH_SHORT)
 			true
 		}
 		useInAppImageSelectorPreference.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, _ ->
@@ -163,24 +173,24 @@ class SettingsPreferenceFragment : XhuBasePreferenceFragment(R.xml.preference_se
 			true
 		}
 		resetUserImgPreference.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-			AlertDialog.Builder(activity!!)
+			AlertDialog.Builder(requireActivity())
 					.setTitle(R.string.hint_confirm_reset_user_img)
 					.setMessage("")
 					.setPositiveButton(R.string.action_ok) { _, _ ->
 						ConfigurationUtil.customUserImage = ""
-						LayoutRefreshConfigUtil.isChangeUserImage = true
+						eventBus.post(UIConfigEvent(arrayListOf(UI.USER_IMG)))
 					}
 					.setNegativeButton(R.string.action_cancel, null)
 					.show()
 			true
 		}
 		resetBackgroundPreference.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-			AlertDialog.Builder(activity!!)
+			AlertDialog.Builder(requireActivity())
 					.setTitle(R.string.hint_confirm_reset_background_img)
 					.setMessage("")
 					.setPositiveButton(R.string.action_ok) { _, _ ->
 						ConfigurationUtil.customBackgroundImage = ""
-						LayoutRefreshConfigUtil.isChangeBackgroundImage = true
+						eventBus.post(UIConfigEvent(arrayListOf(UI.BACKGROUND_IMG)))
 					}
 					.setNegativeButton(R.string.action_cancel, null)
 					.show()
@@ -207,27 +217,27 @@ class SettingsPreferenceFragment : XhuBasePreferenceFragment(R.xml.preference_se
 				oldHour = array[0].toInt()
 				oldMinute = array[1].toInt()
 			}
-			TimePickerDialog(activity!!, TimePickerDialog.OnTimeSetListener { _, hourOfDay, minute ->
+			TimePickerDialog(requireActivity(), TimePickerDialog.OnTimeSetListener { _, hourOfDay, minute ->
 				val hourString = if (hourOfDay < 10) "0$hourOfDay" else hourOfDay.toString()
 				val minuteString = if (minute < 10) "0$minute" else minute.toString()
 				val newString = "$hourString:$minuteString"
 				ConfigurationUtil.notificationTime = newString
 				notificationTimePreference.summary = getString(R.string.summary_notification_time, ConfigurationUtil.notificationTime)
-				ConfigUtil.setTrigger(activity!!)
+				ConfigUtil.setTrigger(requireActivity())
 			}, oldHour, oldMinute, true)
 					.show()
 			true
 		}
 		disableJRSCPreference.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, _ ->
 			ConfigurationUtil.disableJRSC = !disableJRSCPreference.isChecked
-			snackBarMessage(R.string.hint_need_restart, { snackBar ->
-				snackBar.setAction(R.string.action_restart) {
-					val intent = activity!!.packageManager.getLaunchIntentForPackage(activity!!.packageName)
+			snackBarMessage(R.string.hint_need_restart, {
+				setAction(R.string.action_restart) {
+					val intent = requireActivity().packageManager.getLaunchIntentForPackage(requireActivity().packageName)
 					intent?.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
-					activity!!.startActivity(intent)
-					activity!!.finish()
+					requireActivity().startActivity(intent)
+					requireActivity().finish()
 				}
-			})
+			}, Snackbar.LENGTH_SHORT)
 			true
 		}
 		showJRSCTranslationPreference.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, _ ->
@@ -239,16 +249,16 @@ class SettingsPreferenceFragment : XhuBasePreferenceFragment(R.xml.preference_se
 			true
 		}
 		weixinPreference.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-			ShareUtil.linkWeiXinMiniProgram(activity!!)
+			ShareUtil.linkWeiXinMiniProgram(requireActivity())
 			true
 		}
 		checkUpdatePreference.onPreferenceClickListener = Preference.OnPreferenceClickListener {
 			showCheckUpdateDialog()
 			val intentFilter = IntentFilter(ACTION_CHECK_UPDATE_DONE)
 			localBroadcastManager.registerReceiver(CheckUpdateLocalBroadcastReceiver(), intentFilter)
-			val intent = Intent(activity!!, CheckUpdateService::class.java)
+			val intent = Intent(requireActivity(), CheckUpdateService::class.java)
 			intent.putExtra(CheckUpdateService.CHECK_ACTION_BY_MANUAL, true)
-			activity!!.startService(intent)
+			requireActivity().startService(intent)
 			true
 		}
 		aboutPreference.onPreferenceClickListener = Preference.OnPreferenceClickListener {
@@ -269,10 +279,10 @@ class SettingsPreferenceFragment : XhuBasePreferenceFragment(R.xml.preference_se
 							.restrictOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
 							.thumbnailScale(0.85f)
 							.imageEngine(CustomGlideEngine())
-							.theme(if (ContextCompat.getColor(activity!!, R.color.isNight) == Color.WHITE) R.style.Matisse_Zhihu else R.style.Matisse_Dracula)
+							.theme(if (ContextCompat.getColor(requireActivity(), R.color.isNight) == Color.WHITE) R.style.Matisse_Zhihu else R.style.Matisse_Dracula)
 							.forResult(requestCode)
 				} else {
-					Snackbar.make(activity!!.window.decorView, R.string.hint_permission_deny, Snackbar.LENGTH_LONG)
+					Snackbar.make(requireActivity().window.decorView, R.string.hint_permission_deny, Snackbar.LENGTH_LONG)
 							.setAction(R.string.action_re_request) {
 								reRequestPermission(code)
 							}
@@ -292,32 +302,32 @@ class SettingsPreferenceFragment : XhuBasePreferenceFragment(R.xml.preference_se
 				cropImage(data?.data!!, REQUEST_CROP_USER, 500, 500)
 			}
 			FILE_SELECT_BACKGROUND -> if (resultCode == Activity.RESULT_OK) {
-				cropImage(data?.data!!, REQUEST_CROP_BACKGROUND, DensityTools.instance.getScreenWidth(), DensityTools.instance.getScreenHeight())
+				cropImage(data?.data!!, REQUEST_CROP_BACKGROUND, screenWidth, screenHeight)
 			}
 			REQUEST_CHOOSE_USER -> if (resultCode == Activity.RESULT_OK) {
 				cropImage(Matisse.obtainResult(data)[0], REQUEST_CROP_USER, 500, 500)
 			}
 			REQUEST_CHOOSE_BACKGROUND -> if (resultCode == Activity.RESULT_OK) {
-				cropImage(Matisse.obtainResult(data)[0], REQUEST_CROP_BACKGROUND, DensityTools.instance.getScreenWidth(), DensityTools.instance.getScreenHeight())
+				cropImage(Matisse.obtainResult(data)[0], REQUEST_CROP_BACKGROUND, screenWidth, screenHeight)
 			}
 			REQUEST_CROP_USER -> if (resultCode == Activity.RESULT_OK) {
 				val file = getFile(requestCode)
 				ConfigurationUtil.customUserImage = file.absolutePath
-				LayoutRefreshConfigUtil.isChangeUserImage = true
-				Toast.makeText(activity!!, R.string.hint_custom_img, Toast.LENGTH_SHORT)
+				eventBus.post(UIConfigEvent(arrayListOf(UI.USER_IMG)))
+				Toast.makeText(requireActivity(), R.string.hint_custom_img, Toast.LENGTH_SHORT)
 						.show()
 			}
 			REQUEST_CROP_BACKGROUND -> if (resultCode == Activity.RESULT_OK) {
 				val file = getFile(requestCode)
 				ConfigurationUtil.customBackgroundImage = file.absolutePath
-				LayoutRefreshConfigUtil.isChangeBackgroundImage = true
-				Toast.makeText(activity!!, R.string.hint_custom_img, Toast.LENGTH_SHORT)
+				eventBus.post(UIConfigEvent(arrayListOf(UI.BACKGROUND_IMG)))
+				Toast.makeText(requireActivity(), R.string.hint_custom_img, Toast.LENGTH_SHORT)
 						.show()
 			}
 		}
 	}
 
-	private fun getFile(cropCode: Int): File = FileUtil.getImageFile(activity!!, when (cropCode) {
+	private fun getFile(cropCode: Int): File = getImageFile(when (cropCode) {
 		REQUEST_CROP_USER -> FileUtil.UI_IMAGE_USER_IMG
 		REQUEST_CROP_BACKGROUND -> FileUtil.UI_IMAGE_BACKGROUND
 		else -> throw NullPointerException("null")
@@ -331,7 +341,7 @@ class SettingsPreferenceFragment : XhuBasePreferenceFragment(R.xml.preference_se
 		UCrop.of(uri, destinationUri)
 				.withAspectRatio(width.toFloat(), height.toFloat())
 				.withMaxResultSize(width * 10, height * 10)
-				.start(activity!!, this, cropCode)
+				.start(requireActivity(), this, cropCode)
 	}
 
 	private fun showCheckUpdateDialog() {
@@ -342,7 +352,7 @@ class SettingsPreferenceFragment : XhuBasePreferenceFragment(R.xml.preference_se
 	private fun dismissCheckUpdateDialog() {
 		if (dialog.isShowing)
 			dialog.dismiss()
-		toastMessage(R.string.hint_check_update_done)
+		toast(R.string.hint_check_update_done)
 	}
 
 	inner class CheckUpdateLocalBroadcastReceiver : BroadcastReceiver() {

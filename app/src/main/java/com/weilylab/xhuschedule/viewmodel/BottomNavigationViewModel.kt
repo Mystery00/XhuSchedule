@@ -23,7 +23,7 @@ import java.util.*
 
 class BottomNavigationViewModel : ViewModel(), KoinComponent {
 	private val bottomNavigationRepository: BottomNavigationRepository by inject()
-	private val loginRepository: LoginRepository by inject()
+	private val studentRepository: StudentRepository by inject()
 	private val customThingRepository: CustomThingRepository by inject()
 	private val noticeRepository: NoticeRepository by inject()
 	private val feedBackRepository: FeedBackRepository by inject()
@@ -70,7 +70,7 @@ class BottomNavigationViewModel : ViewModel(), KoinComponent {
 	fun init() {
 		launch(studentList) {
 			studentList.loading()
-			val list = bottomNavigationRepository.queryAllStudent()
+			val list = studentRepository.queryAllStudentList()
 			if (list.isEmpty()) {
 				studentList.empty()
 				return@launch
@@ -79,7 +79,7 @@ class BottomNavigationViewModel : ViewModel(), KoinComponent {
 			//查询主用户信息
 			val mainStudent = UserUtil.findMainStudent(list)
 					?: throw ResourceException(R.string.hint_null_student)
-			val info = loginRepository.queryStudentInfo(mainStudent)
+			val info = studentRepository.queryStudentInfo(mainStudent)
 			studentInfo.postValue(info)
 
 			val enableMultiUserMode = withContext(Dispatchers.IO) { ConfigurationUtil.isEnableMultiUserMode }
@@ -114,7 +114,7 @@ class BottomNavigationViewModel : ViewModel(), KoinComponent {
 
 	private suspend fun queryOnline(throwError: Boolean) {
 		courseList.loading()
-		val list = bottomNavigationRepository.queryAllStudent()
+		val list = studentRepository.queryAllStudentList()
 		val enableMultiUserMode = withContext(Dispatchers.IO) { ConfigurationUtil.isEnableMultiUserMode }
 		if (enableMultiUserMode) {
 			val courses = bottomNavigationRepository.queryCoursesForManyStudent(list, fromCache = false, throwError = throwError)
@@ -142,6 +142,7 @@ class BottomNavigationViewModel : ViewModel(), KoinComponent {
 				return@launch
 			}
 			val startTime = bottomNavigationRepository.getOnlineStartDateTime()
+			startDateTime.postValue(startTime)
 			CalendarUtil.startDateTime = startTime
 			val weekIndex = CalendarUtil.getWeekFromCalendar(startTime)
 			week.postValue(weekIndex)
@@ -157,7 +158,7 @@ class BottomNavigationViewModel : ViewModel(), KoinComponent {
 
 	fun queryNewFeedbackMessage() {
 		launch(newFeedback) {
-			val list = bottomNavigationRepository.queryAllStudent()
+			val list = studentRepository.queryAllStudentList()
 			//查询主用户信息
 			val mainStudent = UserUtil.findMainStudent(list)
 					?: throw ResourceException(R.string.hint_null_student)

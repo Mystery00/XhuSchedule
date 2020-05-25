@@ -40,7 +40,9 @@ import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.base.XhuBaseActivity
 import com.weilylab.xhuschedule.base.XhuBasePreferenceFragment
 import com.weilylab.xhuschedule.ui.fragment.settings.*
+import com.weilylab.xhuschedule.viewmodel.SettingsViewModel
 import kotlinx.android.synthetic.main.activity_settings.*
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SettingsActivity : XhuBaseActivity(R.layout.activity_settings) {
 	companion object {
@@ -57,6 +59,8 @@ class SettingsActivity : XhuBaseActivity(R.layout.activity_settings) {
 			context?.startActivity(intent)
 		}
 	}
+
+	private val settingsViewModel: SettingsViewModel by viewModel()
 
 	private val accountSettingsFragment: AccountSettingsFragment by lazy { AccountSettingsFragment() }
 	private val classSettingsFragment: ClassSettingsFragment by lazy { ClassSettingsFragment() }

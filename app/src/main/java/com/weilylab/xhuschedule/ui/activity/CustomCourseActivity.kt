@@ -30,7 +30,6 @@ import com.weilylab.xhuschedule.ui.adapter.CustomCourseWeekAdapter
 import com.weilylab.xhuschedule.utils.AnimationUtil
 import com.weilylab.xhuschedule.utils.CalendarUtil
 import com.weilylab.xhuschedule.utils.ConfigUtil
-import com.weilylab.xhuschedule.utils.LayoutRefreshConfigUtil
 import com.weilylab.xhuschedule.viewmodel.CustomCourseViewModel
 import com.zyao89.view.zloading.ZLoadingDialog
 import com.zyao89.view.zloading.Z_TYPE

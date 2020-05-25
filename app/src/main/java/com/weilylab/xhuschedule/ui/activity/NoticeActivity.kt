@@ -44,7 +44,6 @@ import com.weilylab.xhuschedule.databinding.LayoutNullDataViewBinding
 import com.weilylab.xhuschedule.model.Notice
 import com.weilylab.xhuschedule.repository.NoticeRepository
 import com.weilylab.xhuschedule.ui.adapter.NoticeAdapter
-import com.weilylab.xhuschedule.utils.LayoutRefreshConfigUtil
 import com.weilylab.xhuschedule.viewmodel.NoticeViewModel
 import kotlinx.android.synthetic.main.activity_notice.*
 import vip.mystery0.logs.Logs

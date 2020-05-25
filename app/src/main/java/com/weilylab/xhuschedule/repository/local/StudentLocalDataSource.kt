@@ -123,15 +123,7 @@ class StudentLocalDataSource(
 
 	fun deleteStudent(studentList: List<Student>, observer: Observer<Boolean>) {
 		Observable.create<Boolean> {
-			studentList.forEach { s ->
-				studentService.studentLogout(s)
-			}
-			val list = studentService.queryAllStudentList()
-			if (list.isNotEmpty() && !checkMain(list)) {
-				val mainStudent = list[0]
-				mainStudent.isMain = true
-				studentService.updateStudent(mainStudent)
-			}
+
 			it.onComplete()
 		}
 				.subscribeOn(Schedulers.io())
@@ -149,14 +141,6 @@ class StudentLocalDataSource(
 				.subscribeOn(Schedulers.io())
 				.observeOn(AndroidSchedulers.mainThread())
 				.subscribe(observer)
-	}
-
-	private fun checkMain(list: List<Student>): Boolean {
-		list.forEach {
-			if (it.isMain)
-				return true
-		}
-		return false
 	}
 
 	fun saveStudentInfo(studentInfo: StudentInfo) {

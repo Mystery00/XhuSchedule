@@ -11,10 +11,14 @@ import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.base.BaseBottomNavigationFragment
 import com.weilylab.xhuschedule.databinding.DialogShareWithFriendsBinding
 import com.weilylab.xhuschedule.databinding.FragmentProfileBinding
+import com.weilylab.xhuschedule.model.event.UI
+import com.weilylab.xhuschedule.model.event.UIConfigEvent
 import com.weilylab.xhuschedule.ui.activity.*
 import com.weilylab.xhuschedule.utils.ConfigurationUtil
 import com.weilylab.xhuschedule.utils.ShareUtil
 import com.weilylab.xhuschedule.viewmodel.BottomNavigationViewModel
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import vip.mystery0.logs.Logs
 import vip.mystery0.rx.DataObserver
@@ -159,5 +163,12 @@ class ProfileFragment : BaseBottomNavigationFragment<FragmentProfileBinding>(R.l
 
 	override fun updateTitle() {
 		bottomNavigationViewModel.title.postValue(Pair(javaClass, getString(R.string.main_title_mine)))
+	}
+
+	@Subscribe(threadMode = ThreadMode.MAIN)
+	fun updateUIFromConfig(uiConfigEvent: UIConfigEvent) {
+		if (uiConfigEvent.refreshUI.contains(UI.BACKGROUND_IMG)) {
+			showUserImage()
+		}
 	}
 }

@@ -8,7 +8,7 @@ import com.weilylab.xhuschedule.interceptor.LoadCookiesInterceptor
 import com.weilylab.xhuschedule.interceptor.SaveCookiesInterceptor
 import com.weilylab.xhuschedule.model.Student
 import com.weilylab.xhuschedule.model.response.BaseResponse
-import com.weilylab.xhuschedule.repository.LoginRepository
+import com.weilylab.xhuschedule.repository.StudentRepository
 import okhttp3.OkHttpClient
 import org.koin.core.inject
 import org.koin.core.qualifier.named
@@ -73,8 +73,8 @@ suspend fun <T : BaseResponse> T.verifyData(needLogin: suspend () -> T): T = whe
 }
 
 suspend fun <T : BaseResponse> T.redoAfterLogin(student: Student, repeat: suspend () -> T): T = verifyData {
-	val loginRepository: LoginRepository by inject()
-	loginRepository.doLoginOnly(student)
+	val studentRepository: StudentRepository by inject()
+	studentRepository.doLoginOnly(student)
 	val response = repeat()
 	if (!response.isSuccessful)
 		throw Exception(response.msg)
