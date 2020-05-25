@@ -56,7 +56,6 @@ class TableFragment : BaseBottomNavigationFragment<FragmentTableBinding>(R.layou
 						.setTextSize(12f)
 						.setTextColor(Color.WHITE))
 				.showView()
-		updateTitle()
 	}
 
 	private fun initViewModel() {
@@ -92,24 +91,15 @@ class TableFragment : BaseBottomNavigationFragment<FragmentTableBinding>(R.layou
 		}
 	}
 
-//	override fun onResume() {
-//		super.onResume()
-//		if (LayoutRefreshConfigUtil.isRefreshTableFragment && !LayoutRefreshConfigUtil.isRefreshBottomNavigationActivity) {
-//			BottomNavigationRepository.queryCacheCourses(bottomNavigationViewModel)
-//		}
-//		LayoutRefreshConfigUtil.isRefreshTableFragment = false
-//	}
-
 	override fun updateTitle() {
-		if (activity == null)
-			return
-		if (bottomNavigationViewModel.week.value == null)
-			return
-		val whenTime = CalendarUtil.whenBeginSchool()
-		if (bottomNavigationViewModel.week.value!!.toInt() <= 0 && whenTime > 0)
-			bottomNavigationViewModel.title.value = getString(R.string.hint_remain_day_of_start_term, whenTime)
-		else
-			bottomNavigationViewModel.title.value = getString(R.string.hint_week_number_s, bottomNavigationViewModel.week.value
-					?: "0")
+		bottomNavigationViewModel.week.value?.let {
+			val whenTime = CalendarUtil.whenBeginSchool()
+			if (it <= 0 && whenTime > 0) {
+				bottomNavigationViewModel.title.postValue(Pair(javaClass, getString(R.string.hint_remain_day_of_start_term, whenTime)))
+			} else {
+				bottomNavigationViewModel.title.postValue(Pair(javaClass, getString(R.string.hint_week_number_s, bottomNavigationViewModel.week.value
+						?: "0")))
+			}
+		}
 	}
 }

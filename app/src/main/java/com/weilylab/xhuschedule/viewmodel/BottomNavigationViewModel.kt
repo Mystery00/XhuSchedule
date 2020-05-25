@@ -1,11 +1,12 @@
 package com.weilylab.xhuschedule.viewmodel
 
-import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.jinrishici.sdk.android.model.PoetySentence
 import com.weilylab.xhuschedule.R
-import com.weilylab.xhuschedule.model.*
+import com.weilylab.xhuschedule.model.CustomThing
+import com.weilylab.xhuschedule.model.Student
+import com.weilylab.xhuschedule.model.StudentInfo
 import com.weilylab.xhuschedule.repository.*
 import com.weilylab.xhuschedule.utils.CalendarUtil
 import com.weilylab.xhuschedule.utils.ConfigurationUtil
@@ -62,6 +63,9 @@ class BottomNavigationViewModel : ViewModel(), KoinComponent {
 
 	//是否有新的消息
 	val newFeedback by lazy { MutableLiveData<PackageData<Boolean>>() }
+
+	//顶部标题
+	val title by lazy { MutableLiveData<Pair<Class<*>, String>>() }
 
 	fun init() {
 		launch(studentList) {
@@ -160,6 +164,4 @@ class BottomNavigationViewModel : ViewModel(), KoinComponent {
 			newFeedback.content(feedBackRepository.queryNewFeedback(mainStudent))
 		}
 	}
-
-	val title by lazy { MutableLiveData<String>() }
 }

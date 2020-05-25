@@ -13,7 +13,6 @@ import com.weilylab.xhuschedule.databinding.DialogShareWithFriendsBinding
 import com.weilylab.xhuschedule.databinding.FragmentProfileBinding
 import com.weilylab.xhuschedule.ui.activity.*
 import com.weilylab.xhuschedule.utils.ConfigurationUtil
-import com.weilylab.xhuschedule.utils.LayoutRefreshConfigUtil
 import com.weilylab.xhuschedule.utils.ShareUtil
 import com.weilylab.xhuschedule.viewmodel.BottomNavigationViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -120,18 +119,6 @@ class ProfileFragment : BaseBottomNavigationFragment<FragmentProfileBinding>(R.l
 		}
 	}
 
-	override fun onResume() {
-		super.onResume()
-		if (LayoutRefreshConfigUtil.isChangeUserImage) {
-			showUserImage()
-			LayoutRefreshConfigUtil.isChangeUserImage = false
-		}
-		if (LayoutRefreshConfigUtil.isRefreshFeedBackDot) {
-			binding.feedBackRedDotView.visibility = View.GONE
-			LayoutRefreshConfigUtil.isRefreshFeedBackDot = false
-		}
-	}
-
 	private fun initShareMenu() {
 		val binding = DialogShareWithFriendsBinding.inflate(LayoutInflater.from(activity))
 		bottomSheetDialog.setContentView(binding.root)
@@ -171,8 +158,6 @@ class ProfileFragment : BaseBottomNavigationFragment<FragmentProfileBinding>(R.l
 	}
 
 	override fun updateTitle() {
-		if (activity == null)
-			return
-		bottomNavigationViewModel.title.value = getString(R.string.main_title_mine)
+		bottomNavigationViewModel.title.postValue(Pair(javaClass, getString(R.string.main_title_mine)))
 	}
 }

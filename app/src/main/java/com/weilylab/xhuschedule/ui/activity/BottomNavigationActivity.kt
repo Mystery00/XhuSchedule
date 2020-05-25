@@ -24,7 +24,8 @@ import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.base.XhuBaseActivity
 import com.weilylab.xhuschedule.databinding.DialogShowCourseBinding
 import com.weilylab.xhuschedule.model.Student
-import com.weilylab.xhuschedule.repository.BottomNavigationRepository
+import com.weilylab.xhuschedule.model.event.UI
+import com.weilylab.xhuschedule.model.event.UIConfigEvent
 import com.weilylab.xhuschedule.ui.ZoomOutPageTransformer
 import com.weilylab.xhuschedule.ui.adapter.ShowCourseRecyclerViewAdapter
 import com.weilylab.xhuschedule.ui.adapter.ViewPagerAdapter
@@ -44,6 +45,8 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_bottom_navigation.*
 import kotlinx.android.synthetic.main.content_bottom_navigation.*
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import vip.mystery0.bottomTabView.BottomTabItem
 import vip.mystery0.logs.Logs
@@ -93,11 +96,7 @@ class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_naviga
 
 	private val courseListObserver = object : DataObserver<List<Schedule>> {
 		override fun contentNoEmpty(data: List<Schedule>) {
-			//TODO 正确信息提示
-//			if (action == ACTION_REFRESH) {
-//				toastMessage(R.string.hint_course_sync_done)
-//				action = ACTION_NONE
-//			}
+			toast(R.string.hint_course_sync_done)
 			cancelLoading()
 			hideDialog()
 		}
@@ -153,8 +152,9 @@ class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_naviga
 		viewPagerAdapter.getItem(viewPager.currentItem).updateTitle()
 	}
 
-	private val titleObserver = Observer<String> {
-		titleTextView.text = it
+	private val titleObserver = Observer<Pair<Class<*>, String>> {
+		if (it.first == viewPagerAdapter.getItem(0).javaClass)
+			titleTextView.text = it.second
 	}
 
 	private val showCourseObserver = Observer<List<Schedule>> {
@@ -253,29 +253,12 @@ class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_naviga
 		}
 	}
 
-//	override fun onResume() {
-//		super.onResume()
-//		if (LayoutRefreshConfigUtil.isChangeBackgroundImage) {
-//			showBackground()
-//		}
-//		if (LayoutRefreshConfigUtil.isRefreshNoticeDot) {
-//			BottomNavigationRepository.queryNotice(bottomNavigationViewModel, false)
-//		}
-//		if (LayoutRefreshConfigUtil.isRefreshBottomNavigationActivity) {
-//			BottomNavigationRepository.queryStudentList(bottomNavigationViewModel)
-//		}
-//		if (LayoutRefreshConfigUtil.isChangeShowTomorrowAfterOnBottomActivity) {
-//			//检测是否修改了显示明日课程的时间
-//			bottomNavigationView.findItem(0)
-//					.name = if (CalendarUtil.shouldShowTomorrowInfo()) getString(R.string.nav_tomorrow)
-//			else getString(R.string.nav_today)
-//			bottomNavigationView.init()
-//		}
-//		LayoutRefreshConfigUtil.isChangeBackgroundImage = false
-//		LayoutRefreshConfigUtil.isRefreshNoticeDot = false
-//		LayoutRefreshConfigUtil.isRefreshBottomNavigationActivity = false
-//		LayoutRefreshConfigUtil.isChangeShowTomorrowAfterOnBottomActivity = false
-//	}
+	@Subscribe(threadMode = ThreadMode.MAIN)
+	fun updateUIFromConfig(uiConfigEvent: UIConfigEvent) {
+		if (uiConfigEvent.refreshUI.contains(UI.TODAY_COURSE)) {
+			bottomNavigationViewModel.init()
+		}
+	}
 
 	override fun onBackPressed() {
 		if (ConfigUtil.isTwiceClick())

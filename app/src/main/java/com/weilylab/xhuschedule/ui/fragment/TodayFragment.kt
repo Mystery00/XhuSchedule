@@ -11,8 +11,6 @@ import com.weilylab.xhuschedule.base.BaseBottomNavigationFragment
 import com.weilylab.xhuschedule.databinding.FragmentTodayBinding
 import com.weilylab.xhuschedule.databinding.LayoutNullDataViewBinding
 import com.weilylab.xhuschedule.model.CustomThing
-import com.weilylab.xhuschedule.model.event.UI
-import com.weilylab.xhuschedule.model.event.UIConfigEvent
 import com.weilylab.xhuschedule.repository.JRSCRepository
 import com.weilylab.xhuschedule.ui.adapter.FragmentTodayRecyclerViewAdapter
 import com.weilylab.xhuschedule.utils.CalendarUtil
@@ -23,8 +21,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import org.greenrobot.eventbus.Subscribe
-import org.greenrobot.eventbus.ThreadMode
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class TodayFragment : BaseBottomNavigationFragment<FragmentTodayBinding>(R.layout.fragment_today) {
@@ -107,43 +103,22 @@ class TodayFragment : BaseBottomNavigationFragment<FragmentTodayBinding>(R.layou
 		binding.recyclerView.visibility = View.VISIBLE
 	}
 
-//	override fun onResume() {
-//		super.onResume()
-//		if ((LayoutRefreshConfigUtil.isRefreshTodayFragment && !LayoutRefreshConfigUtil.isRefreshBottomNavigationActivity && !LayoutRefreshConfigUtil.isRefreshTableFragment) || LayoutRefreshConfigUtil.isChangeShowTomorrowAfterOnTodayFragment) {
-//			BottomNavigationRepository.queryCacheCourses(bottomNavigationViewModel)
-//		}
-//		if (LayoutRefreshConfigUtil.isChangeShowTomorrowAfterOnTodayFragment)
-//			updateTitle()
-//		LayoutRefreshConfigUtil.isRefreshTodayFragment = false
-//		LayoutRefreshConfigUtil.isChangeShowTomorrowAfterOnTodayFragment = false
-//	}
-
-	@Subscribe(threadMode = ThreadMode.MAIN)
-	fun updateUIFromConfig(uiConfigEvent: UIConfigEvent) {
-		if (uiConfigEvent.refreshUI.contains(UI.TODAY_COURSE)) {
-			//TODO 改到activity中调用
-			bottomNavigationViewModel.init()
-		}
-	}
-
 	override fun updateTitle() {
-		if (activity == null)
-			return
-		if (bottomNavigationViewModel.currentWeek.value?.data == null)
-			return
-		val shouldShowTomorrow = CalendarUtil.shouldShowTomorrowInfo()
-		val whenTime = CalendarUtil.whenBeginSchool(shouldShowTomorrow)
-		val weekIndex = CalendarUtil.getWeekIndexInString(if (shouldShowTomorrow) CalendarUtil.getTomorrowIndex() else CalendarUtil.getWeekIndex())
-		if (bottomNavigationViewModel.currentWeek.value!!.data!! <= 0 && whenTime > 0) {
-			bottomNavigationViewModel.title.value = "距离开学还有${whenTime}天 $weekIndex"
-		} else {
-			var week = bottomNavigationViewModel.currentWeek.value?.data
-			if (week != null && shouldShowTomorrow) {
-				val index = CalendarUtil.getWeekIndex()
-				if (index == 7)//如果今天是周日，那么明天就是周一,周数加一
-					week++
+		bottomNavigationViewModel.currentWeek.value?.data?.let {
+			val shouldShowTomorrow = CalendarUtil.shouldShowTomorrowInfo()
+			val whenTime = CalendarUtil.whenBeginSchool(shouldShowTomorrow)
+			val weekIndex = CalendarUtil.getWeekIndexInString(if (shouldShowTomorrow) CalendarUtil.getTomorrowIndex() else CalendarUtil.getWeekIndex())
+			if (bottomNavigationViewModel.currentWeek.value!!.data!! <= 0 && whenTime > 0) {
+				bottomNavigationViewModel.title.postValue(Pair(javaClass, "距离开学还有${whenTime}天 $weekIndex"))
+			} else {
+				var week = bottomNavigationViewModel.currentWeek.value?.data
+				if (week != null && shouldShowTomorrow) {
+					val index = CalendarUtil.getWeekIndex()
+					if (index == 7)//如果今天是周日，那么明天就是周一,周数加一
+						week++
+				}
+				bottomNavigationViewModel.title.postValue(Pair(javaClass, "第${week ?: "0"}周 $weekIndex"))
 			}
-			bottomNavigationViewModel.title.value = "第${week ?: "0"}周 $weekIndex"
 		}
 	}
 
