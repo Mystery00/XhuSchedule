@@ -99,9 +99,7 @@ object UserUtil : KoinComponent {
 				})
 	}
 
-	fun findMainStudent(list: List<Student>?): Student? {
-		if (list == null)
-			return null
+	fun findMainStudent(list: List<Student>): Student? {
 		val main = list.firstOrNull { it.isMain }
 		if (main != null)
 			return main

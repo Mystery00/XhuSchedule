@@ -4,7 +4,6 @@ import com.weilylab.xhuschedule.api.CourseAPI
 import com.weilylab.xhuschedule.constant.ResponseCodeConstants
 import com.weilylab.xhuschedule.constant.StringConstant
 import com.weilylab.xhuschedule.factory.RetrofitFactory
-import com.weilylab.xhuschedule.factory.fromJson
 import com.weilylab.xhuschedule.listener.DoSaveListener
 import com.weilylab.xhuschedule.listener.RequestListener
 import com.weilylab.xhuschedule.model.Course
@@ -20,6 +19,8 @@ import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import vip.mystery0.logs.Logs
 import vip.mystery0.rx.OnlyCompleteObserver
 import java.util.*
@@ -189,34 +190,17 @@ object CourseUtil {
 		return true
 	}
 
-	fun getTodayCourse(courseList: List<Schedule>, listener: (List<Schedule>) -> Unit) {
-		Observable.create<Pair<Int, Int>> {
+	suspend fun getTodayCourse(courseList: List<Schedule>): List<Schedule> {
+		val pair = withContext(Dispatchers.Default) {
 			val shouldShowTomorrow = CalendarUtil.shouldShowTomorrowInfo()
 			val week = if (shouldShowTomorrow) CalendarUtil.getTomorrowWeekFromCalendar(InitLocalDataSource.getStartDateTime())
 			else CalendarUtil.getWeekFromCalendar(InitLocalDataSource.getStartDateTime())
 			val weekIndex = if (shouldShowTomorrow) CalendarUtil.getTomorrowIndex()
 			else CalendarUtil.getWeekIndex()
-			it.onNext(Pair(week, weekIndex))
-			it.onComplete()
+			Pair(week, weekIndex)
 		}
-				.subscribeOn(Schedulers.computation())
-				.observeOn(Schedulers.io())
-				.map { pair ->
-					val todayCourseList = ArrayList<Schedule>()
-					todayCourseList.addAll(courseList.filter { isTodayCourse(it, pair.first, pair.second) }
-							.sortedBy { it.start })
-					todayCourseList
-				}
-				.observeOn(AndroidSchedulers.mainThread())
-				.subscribe(object : OnlyCompleteObserver<List<Schedule>>() {
-					override fun onError(e: Throwable) {
-						Logs.wtf("onError: ", e)
-					}
-
-					override fun onFinish(data: List<Schedule>?) {
-						listener.invoke(data!!)
-					}
-				})
+		return courseList.filter { isTodayCourse(it, pair.first, pair.second) }
+				.sortedBy { it.start }
 	}
 
 	fun splitWeekString(list: List<Int>): String {

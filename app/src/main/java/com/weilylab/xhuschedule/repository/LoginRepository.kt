@@ -52,7 +52,9 @@ class LoginRepository : KoinComponent {
 		}
 	}
 
-	suspend fun queryStudentInfo(student: Student, repeatTime: Int = 0): StudentInfo {
+	suspend fun queryStudentInfo(student: Student): StudentInfo = queryStudentInfo(student, 0)
+
+	private suspend fun queryStudentInfo(student: Student, repeatTime: Int = 0): StudentInfo {
 		if (repeatTime > Constants.API_RETRY_TIME) {
 			throw ResourceException(R.string.hint_do_too_many)
 		}

@@ -2,12 +2,17 @@ package com.weilylab.xhuschedule.repository
 
 import com.weilylab.xhuschedule.model.CustomThing
 import com.weilylab.xhuschedule.repository.local.CustomThingLocalDataSource
+import com.weilylab.xhuschedule.repository.local.dao.CustomThingDao
 import com.weilylab.xhuschedule.repository.remote.CustomThingRemoteDataSource
-import com.weilylab.xhuschedule.viewmodel.BottomNavigationViewModel
+import com.weilylab.xhuschedule.utils.CalendarUtil
 import com.weilylab.xhuschedule.viewmodel.CustomThingViewModel
+import org.koin.core.KoinComponent
+import org.koin.core.inject
 
-object CustomThingRepository {
-	fun getToday(bottomNavigationViewModel: BottomNavigationViewModel) = CustomThingLocalDataSource.getToday(bottomNavigationViewModel.customThingList)
+class CustomThingRepository : KoinComponent {
+	private val customThingDao: CustomThingDao by inject()
+
+	suspend fun getToday() = customThingDao.queryAllThings().filter { c -> CalendarUtil.isThingOnDay(c) }
 
 	fun getAll(customThingViewModel: CustomThingViewModel) = CustomThingLocalDataSource.getAll(customThingViewModel.customThingList)
 

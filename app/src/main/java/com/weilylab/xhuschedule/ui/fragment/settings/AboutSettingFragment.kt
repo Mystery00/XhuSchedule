@@ -16,11 +16,11 @@ class AboutSettingFragment : XhuBasePreferenceFragment(R.xml.preference_about) {
 	override fun monitor() {
 		super.monitor()
 		updateLogPreference.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-			ConfigUtil.showUpdateLog(activity!!)
+			ConfigUtil.showUpdateLog(requireActivity())
 			true
 		}
 		openSourceLicenseAboutPreference.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-			val isNight = ContextCompat.getColor(activity!!, R.color.isNight) == Color.parseColor("#000000")
+			val isNight = ContextCompat.getColor(requireActivity(), R.color.isNight) == Color.parseColor("#000000")
 			LibsBuilder()
 					.withActivityStyle(if (isNight) Libs.ActivityStyle.DARK else Libs.ActivityStyle.LIGHT)
 					.withLicenseShown(true)

@@ -34,8 +34,10 @@
 package com.weilylab.xhuschedule.config
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.app.Application
 import android.content.Context
+import android.os.Bundle
 import androidx.multidex.MultiDexApplication
 import com.oasisfeng.condom.CondomContext
 import com.sina.weibo.sdk.WbSdk
@@ -47,6 +49,7 @@ import com.weilylab.xhuschedule.BuildConfig
 import com.weilylab.xhuschedule.module.*
 import com.weilylab.xhuschedule.utils.NotificationUtil
 import com.weilylab.xhuschedule.utils.PackageUtil
+import org.greenrobot.eventbus.EventBus
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 import org.koin.core.logger.Level
@@ -54,6 +57,7 @@ import vip.mystery0.crashhandler.CrashHandler
 import vip.mystery0.logs.Logs
 import vip.mystery0.logs.logsLogger
 import vip.mystery0.tools.ToolsClient
+import vip.mystery0.tools.utils.ActivityManagerTools
 import java.io.File
 
 /**
@@ -77,6 +81,26 @@ class APP : MultiDexApplication() {
 		}.init()
 		NotificationUtil.initChannelID(this)//初始化NotificationChannelID
 		ToolsClient.initWithContext(this)
+		registerActivityLifecycleCallbacks(object : Application.ActivityLifecycleCallbacks {
+			override fun onActivityPaused(activity: Activity?) = Unit
+			override fun onActivityResumed(activity: Activity?) = Unit
+			override fun onActivityStarted(activity: Activity?) {
+				EventBus.getDefault().register(this)
+			}
+
+			override fun onActivityDestroyed(activity: Activity?) {
+				ActivityManagerTools.removeActivity(activity)
+			}
+
+			override fun onActivitySaveInstanceState(activity: Activity?, outState: Bundle?) = Unit
+			override fun onActivityStopped(activity: Activity?) {
+				EventBus.getDefault().unregister(this)
+			}
+
+			override fun onActivityCreated(activity: Activity?, savedInstanceState: Bundle?) {
+				ActivityManagerTools.addActivity(activity)
+			}
+		})
 		if (PackageUtil.isQQApplicationAvailable())
 			tencent = try {
 				Tencent.createInstance("1106663023", CondomContext.wrap(applicationContext, "Tencent"))

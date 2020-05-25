@@ -13,17 +13,13 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.PopupWindow
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.bumptech.glide.request.RequestOptions
-import com.bumptech.glide.signature.MediaStoreSignature
+import coil.api.load
+import coil.request.CachePolicy
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.base.XhuBaseActivity
 import com.weilylab.xhuschedule.databinding.DialogShowCourseBinding
@@ -35,139 +31,94 @@ import com.weilylab.xhuschedule.ui.adapter.ViewPagerAdapter
 import com.weilylab.xhuschedule.ui.fragment.ProfileFragment
 import com.weilylab.xhuschedule.ui.fragment.TableFragment
 import com.weilylab.xhuschedule.ui.fragment.TodayFragment
+import com.weilylab.xhuschedule.ui.fragment.settings.AccountSettingsFragment.Companion.ADD_ACCOUNT_CODE
 import com.weilylab.xhuschedule.utils.*
 import com.weilylab.xhuschedule.utils.userDo.CourseUtil
-import com.weilylab.xhuschedule.utils.userDo.UserUtil
 import com.weilylab.xhuschedule.viewmodel.BottomNavigationViewModel
 import com.zhuangfei.timetable.listener.IWeekView
 import com.zhuangfei.timetable.model.Schedule
 import com.zhuangfei.timetable.model.ScheduleSupport
-import com.zyao89.view.zloading.ZLoadingDialog
-import com.zyao89.view.zloading.Z_TYPE
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_bottom_navigation.*
 import kotlinx.android.synthetic.main.content_bottom_navigation.*
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import vip.mystery0.bottomTabView.BottomTabItem
 import vip.mystery0.logs.Logs
+import vip.mystery0.rx.DataObserver
 import vip.mystery0.rx.PackageDataObserver
 import vip.mystery0.tools.toastLong
-import vip.mystery0.tools.utils.DensityTools
+import vip.mystery0.tools.utils.dpTopx
+import vip.mystery0.tools.utils.screenWidth
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.math.roundToInt
 
 class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_navigation) {
-	companion object {
-		private const val ADD_ACCOUNT_CODE = 21
-		private const val ACTION_NONE = 30
-		private const val ACTION_INIT = 31
-		private const val ACTION_REFRESH = 32
-	}
+	private val bottomNavigationViewModel: BottomNavigationViewModel by viewModel()
 
-	private val bottomNavigationViewModel: BottomNavigationViewModel by lazy {
-		ViewModelProvider(this)[BottomNavigationViewModel::class.java]
-	}
 	private val viewPagerAdapter: ViewPagerAdapter by lazy { ViewPagerAdapter(supportFragmentManager) }
-	private val dialog: Dialog by lazy {
-		ZLoadingDialog(this)
-				.setLoadingBuilder(Z_TYPE.SINGLE_CIRCLE)
-				.setHintText(getString(R.string.hint_dialog_init))
-				.setHintTextSize(16F)
-				.setCanceledOnTouchOutside(false)
-				.setDialogBackgroundColor(ContextCompat.getColor(this, R.color.colorWhiteBackground))
-				.setLoadingColor(ContextCompat.getColor(this, R.color.colorAccent))
-				.setHintTextColor(ContextCompat.getColor(this, R.color.colorAccent))
-				.create()
-	}
-	private val courseList = ArrayList<Schedule>()
+	private val dialog: Dialog by lazy { buildDialog(getString(R.string.hint_dialog_init)) }
+
 	private var animation: ObjectAnimator? = null
 	private var arrowAnimation: ObjectAnimator? = null
+
+	private val courseList = ArrayList<Schedule>()
 	private var isShowWeekView = false
 	private val showAdapter: ShowCourseRecyclerViewAdapter by lazy { ShowCourseRecyclerViewAdapter(this) }
 	private lateinit var loadingAnimation: ObjectAnimator
-	private var action = ACTION_NONE
 
-	private val studentListObserver = object : PackageDataObserver<List<Student>> {
+	private val studentListObserver = object : DataObserver<List<Student>> {
 		override fun loading() {
-			if (action == ACTION_INIT)
-				showDialog()
+			super.loading()
+			showDialog()
 		}
 
-		override fun content(data: List<Student>?) {
-			try {
-				if (getString(R.string.app_version_code).toInt() > ConfigurationUtil.updatedVersion)
-					ConfigUtil.showUpdateLog(this@BottomNavigationActivity)
-			} catch (e: Exception) {
-			}
-			if (ConfigurationUtil.isEnableMultiUserMode) {
-				val mainStudent = UserUtil.findMainStudent(data)
-				if (mainStudent != null)
-					BottomNavigationRepository.queryStudentInfo(bottomNavigationViewModel, mainStudent)
-				else
-					BottomNavigationRepository.queryStudentList(bottomNavigationViewModel)
-				BottomNavigationRepository.queryCacheCoursesForManyStudent(bottomNavigationViewModel)
-			} else {
-				BottomNavigationRepository.queryStudentInfo(bottomNavigationViewModel)
-				BottomNavigationRepository.queryCacheCourses(bottomNavigationViewModel)
-			}
-			BottomNavigationRepository.queryCurrentWeek(bottomNavigationViewModel)
-			BottomNavigationRepository.queryFeedBack(bottomNavigationViewModel)
-		}
-
-		override fun empty(data: List<Student>?) {
+		override fun empty() {
+			super.empty()
 			startActivityForResult(Intent(this@BottomNavigationActivity, LoginActivity::class.java), ADD_ACCOUNT_CODE)
 			hideDialog()
 		}
 
-		override fun error(data: List<Student>?, e: Throwable?) {
+		override fun error(e: Throwable?) {
+			super.error(e)
 			Logs.wtfm("studentListObserver: ", e)
-			e.toastLong(this@BottomNavigationActivity)
+			toastLong(e)
 			hideDialog()
 		}
 	}
 
-	private val courseListObserver = object : PackageDataObserver<List<Schedule>> {
-		override fun content(data: List<Schedule>?) {
-			if (action == ACTION_REFRESH) {
-				toastMessage(R.string.hint_course_sync_done)
-				action = ACTION_NONE
-			}
+	private val courseListObserver = object : DataObserver<List<Schedule>> {
+		override fun contentNoEmpty(data: List<Schedule>) {
+			//TODO 正确信息提示
+//			if (action == ACTION_REFRESH) {
+//				toastMessage(R.string.hint_course_sync_done)
+//				action = ACTION_NONE
+//			}
 			cancelLoading()
 			hideDialog()
-			val nowString = CalendarUtil.getTodayDateString()
-			if (nowString != ConfigurationUtil.lastUpdateDate) {
-				if (ConfigurationUtil.isEnableMultiUserMode)
-					BottomNavigationRepository.queryCoursesOnlineForManyStudent(bottomNavigationViewModel, false)
-				else
-					BottomNavigationRepository.queryCoursesOnline(bottomNavigationViewModel, false)
-			}
 		}
 
 		override fun loading() {
 			showLoading()
 		}
 
-		override fun error(data: List<Schedule>?, e: Throwable?) {
+		override fun error(e: Throwable?) {
 			Logs.wtfm("courseListObserver: ", e)
-			action = ACTION_NONE
-			e.toastLong(this@BottomNavigationActivity)
+			toastLong(e)
 			cancelLoading()
 			hideDialog()
 		}
 
-		override fun empty(data: List<Schedule>?) {
-			if (action == ACTION_REFRESH) {
-				toastMessage(R.string.hint_course_sync_done)
-				action = ACTION_NONE
-			}
+		override fun empty() {
 			cancelLoading()
 			hideDialog()
 		}
 	}
+
 
 	private val currentWeekObserver = object : PackageDataObserver<Int> {
 		override fun content(data: Int?) {
@@ -248,16 +199,13 @@ class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_naviga
 
 	private fun showBackground() {
 		val path = ConfigurationUtil.customBackgroundImage
-		if (path == "" || !File(path).exists()) {
-			backgroundImageView.setImageResource(R.mipmap.bg1)
+		val file = File(path)
+		if (path == "" || !file.exists()) {
+			backgroundImageView.load(R.mipmap.bg1)
 		} else {
-			val options = RequestOptions()
-					.signature(MediaStoreSignature("image/*", File(path).lastModified(), 0))
-					.diskCacheStrategy(DiskCacheStrategy.NONE)
-			Glide.with(this)
-					.load(path)
-					.apply(options)
-					.into(backgroundImageView)
+			backgroundImageView.load(file) {
+				diskCachePolicy(CachePolicy.DISABLED)
+			}
 		}
 	}
 
@@ -266,8 +214,10 @@ class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_naviga
 		initViewModel()
 		viewPagerAdapter.getItem(0).updateTitle()
 		configWeekView(0)
-		BottomNavigationRepository.queryStudentList(bottomNavigationViewModel)
-		BottomNavigationRepository.queryNotice(bottomNavigationViewModel, true)
+		bottomNavigationViewModel.init()
+		bottomNavigationViewModel.queryCurrentWeek()
+		bottomNavigationViewModel.queryNewNotice()
+		bottomNavigationViewModel.queryNewFeedbackMessage()
 	}
 
 	private fun initViewModel() {
@@ -299,43 +249,39 @@ class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_naviga
 				showWeekView()
 		}
 		imageSync.setOnClickListener {
-			action = ACTION_REFRESH
-			if (ConfigurationUtil.isEnableMultiUserMode)
-				BottomNavigationRepository.queryCoursesOnlineForManyStudent(bottomNavigationViewModel)
-			else
-				BottomNavigationRepository.queryCoursesOnline(bottomNavigationViewModel)
+			bottomNavigationViewModel.queryOnline()
 		}
 	}
 
-	override fun onResume() {
-		super.onResume()
-		if (LayoutRefreshConfigUtil.isChangeBackgroundImage) {
-			showBackground()
-		}
-		if (LayoutRefreshConfigUtil.isRefreshNoticeDot) {
-			BottomNavigationRepository.queryNotice(bottomNavigationViewModel, false)
-		}
-		if (LayoutRefreshConfigUtil.isRefreshBottomNavigationActivity) {
-			BottomNavigationRepository.queryStudentList(bottomNavigationViewModel)
-		}
-		if (LayoutRefreshConfigUtil.isChangeShowTomorrowAfterOnBottomActivity) {
-			//检测是否修改了显示明日课程的时间
-			bottomNavigationView.findItem(0)
-					.name = if (CalendarUtil.shouldShowTomorrowInfo()) getString(R.string.nav_tomorrow)
-			else getString(R.string.nav_today)
-			bottomNavigationView.init()
-		}
-		LayoutRefreshConfigUtil.isChangeBackgroundImage = false
-		LayoutRefreshConfigUtil.isRefreshNoticeDot = false
-		LayoutRefreshConfigUtil.isRefreshBottomNavigationActivity = false
-		LayoutRefreshConfigUtil.isChangeShowTomorrowAfterOnBottomActivity = false
-	}
+//	override fun onResume() {
+//		super.onResume()
+//		if (LayoutRefreshConfigUtil.isChangeBackgroundImage) {
+//			showBackground()
+//		}
+//		if (LayoutRefreshConfigUtil.isRefreshNoticeDot) {
+//			BottomNavigationRepository.queryNotice(bottomNavigationViewModel, false)
+//		}
+//		if (LayoutRefreshConfigUtil.isRefreshBottomNavigationActivity) {
+//			BottomNavigationRepository.queryStudentList(bottomNavigationViewModel)
+//		}
+//		if (LayoutRefreshConfigUtil.isChangeShowTomorrowAfterOnBottomActivity) {
+//			//检测是否修改了显示明日课程的时间
+//			bottomNavigationView.findItem(0)
+//					.name = if (CalendarUtil.shouldShowTomorrowInfo()) getString(R.string.nav_tomorrow)
+//			else getString(R.string.nav_today)
+//			bottomNavigationView.init()
+//		}
+//		LayoutRefreshConfigUtil.isChangeBackgroundImage = false
+//		LayoutRefreshConfigUtil.isRefreshNoticeDot = false
+//		LayoutRefreshConfigUtil.isRefreshBottomNavigationActivity = false
+//		LayoutRefreshConfigUtil.isChangeShowTomorrowAfterOnBottomActivity = false
+//	}
 
 	override fun onBackPressed() {
 		if (ConfigUtil.isTwiceClick())
 			super.onBackPressed()
 		else
-			toastMessage(R.string.hint_twice_press_exit)
+			toastLong(R.string.hint_twice_press_exit)
 	}
 
 	private fun configWeekView(position: Int) {
@@ -360,20 +306,20 @@ class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_naviga
 	private fun showWeekView() {
 		animation?.cancel()
 		arrowAnimation?.cancel()
-		animation = ObjectAnimator.ofFloat(weekView, "translationY", 0F, DensityTools.instance.dp2px(71F).toFloat())
+		animation = ObjectAnimator.ofFloat(weekView, "translationY", 0F, dpTopx(71F).toFloat())
 		arrowAnimation = ObjectAnimator.ofFloat(arrowImageView, "rotation", 0F, 180F)
-		animation!!.start()
-		arrowAnimation!!.start()
+		animation?.start()
+		arrowAnimation?.start()
 		isShowWeekView = true
 	}
 
 	private fun hideWeekView() {
 		animation?.cancel()
 		arrowAnimation?.cancel()
-		animation = ObjectAnimator.ofFloat(weekView, "translationY", DensityTools.instance.dp2px(71F).toFloat(), 0F)
+		animation = ObjectAnimator.ofFloat(weekView, "translationY", dpTopx(71F).toFloat(), 0F)
 		arrowAnimation = ObjectAnimator.ofFloat(arrowImageView, "rotation", 180F, 0F)
-		animation!!.start()
-		arrowAnimation!!.start()
+		animation?.start()
+		arrowAnimation?.start()
 		isShowWeekView = false
 	}
 
@@ -405,9 +351,9 @@ class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_naviga
 							if (bottomNavigationViewModel.courseList.value != null && bottomNavigationViewModel.courseList.value!!.data != null) {
 								courseList.clear()
 								courseList.addAll(bottomNavigationViewModel.courseList.value!!.data!!)
-								if (bottomNavigationViewModel.startDateTime.value != null && bottomNavigationViewModel.startDateTime.value!!.data != null) {
+								if (bottomNavigationViewModel.startDateTime.value != null && bottomNavigationViewModel.startDateTime.value != null) {
 									val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINA)
-									bottomNavigationViewModel.week.value = ScheduleSupport.timeTransfrom(simpleDateFormat.format(bottomNavigationViewModel.startDateTime.value!!.data!!.time))
+									bottomNavigationViewModel.week.value = ScheduleSupport.timeTransfrom(simpleDateFormat.format(bottomNavigationViewModel.startDateTime.value!!.time))
 								}
 								weekView.data(courseList).showView()
 							}
@@ -440,12 +386,11 @@ class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_naviga
 
 	private fun initPopupWindow() {
 		dialogShowCourseBinding = DialogShowCourseBinding.inflate(LayoutInflater.from(this))
-		val linearLayoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-		dialogShowCourseBinding.recyclerView.layoutManager = linearLayoutManager
+		dialogShowCourseBinding.recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
 		dialogShowCourseBinding.recyclerView.adapter = showAdapter
 		dialogShowCourseBinding.recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
 			override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-				val horizontalOffset = recyclerView.computeHorizontalScrollOffset().toFloat() / DensityTools.instance.getScreenWidth().toFloat()
+				val horizontalOffset = recyclerView.computeHorizontalScrollOffset().toFloat() / screenWidth
 				val params = dialogShowCourseBinding.point.layoutParams as ConstraintLayout.LayoutParams
 				super.onScrolled(recyclerView, dx, dy)
 				params.leftMargin = (distance * horizontalOffset).roundToInt()
@@ -453,7 +398,7 @@ class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_naviga
 			}
 		})
 		PagerSnapHelper().attachToRecyclerView(dialogShowCourseBinding.recyclerView)
-		val viewSize = DensityTools.instance.getScreenWidth() - DensityTools.instance.dp2px(96F)
+		val viewSize = screenWidth - dpTopx(96F)
 		popupWindow = PopupWindow(dialogShowCourseBinding.root, ViewGroup.LayoutParams.MATCH_PARENT, viewSize)
 		popupWindow.isOutsideTouchable = true
 		popupWindow.isFocusable = true
@@ -501,7 +446,7 @@ class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_naviga
 		when (requestCode) {
 			ADD_ACCOUNT_CODE -> {
 				if (resultCode == Activity.RESULT_OK) {
-					BottomNavigationRepository.queryStudentList(bottomNavigationViewModel)
+					bottomNavigationViewModel.init()
 				} else {
 					finish()
 				}

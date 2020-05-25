@@ -11,7 +11,7 @@ import vip.mystery0.logs.Logs
 
 object JRSCRepository {
 	private val client = JinrishiciClient.getInstance()
-	fun load(context: Context, listener: (PoetySentence) -> Unit) {
+	fun load(context: Context, listener: PoetySentence.() -> Unit) {
 		if (!JinrishiciFactory.isInit())
 			client.init(context)
 		if (ConfigurationUtil.disableJRSC)

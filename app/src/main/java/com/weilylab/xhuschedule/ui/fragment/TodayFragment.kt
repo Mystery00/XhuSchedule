@@ -2,81 +2,60 @@ package com.weilylab.xhuschedule.ui.fragment
 
 import android.view.View
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.Observer
+import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.jinrishici.sdk.android.model.PoetySentence
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.base.BaseBottomNavigationFragment
-import com.weilylab.xhuschedule.config.APP
 import com.weilylab.xhuschedule.databinding.FragmentTodayBinding
 import com.weilylab.xhuschedule.databinding.LayoutNullDataViewBinding
 import com.weilylab.xhuschedule.model.CustomThing
-import com.weilylab.xhuschedule.repository.BottomNavigationRepository
+import com.weilylab.xhuschedule.model.event.UI
+import com.weilylab.xhuschedule.model.event.UIConfigEvent
 import com.weilylab.xhuschedule.repository.JRSCRepository
 import com.weilylab.xhuschedule.ui.adapter.FragmentTodayRecyclerViewAdapter
 import com.weilylab.xhuschedule.utils.CalendarUtil
-import com.weilylab.xhuschedule.utils.LayoutRefreshConfigUtil
+import com.weilylab.xhuschedule.utils.ConfigurationUtil
 import com.weilylab.xhuschedule.viewmodel.BottomNavigationViewModel
 import com.zhuangfei.timetable.model.Schedule
-import vip.mystery0.logs.Logs
-import vip.mystery0.rx.PackageDataObserver
-import vip.mystery0.tools.toastLong
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class TodayFragment : BaseBottomNavigationFragment<FragmentTodayBinding>(R.layout.fragment_today) {
 	companion object {
 		fun newInstance() = TodayFragment()
 	}
 
-	private val bottomNavigationViewModel: BottomNavigationViewModel by lazy {
-		ViewModelProvider(activity!!)[BottomNavigationViewModel::class.java]
-	}
-	private val adapter: FragmentTodayRecyclerViewAdapter by lazy { FragmentTodayRecyclerViewAdapter(activity!!) }
+	private val bottomNavigationViewModel: BottomNavigationViewModel by viewModel()
+	private val adapter: FragmentTodayRecyclerViewAdapter by lazy { FragmentTodayRecyclerViewAdapter(requireActivity()) }
 	private lateinit var viewStubBinding: LayoutNullDataViewBinding
+	private var sortJob: Job? = null
 
-	private val todayCourseListObserver = object : PackageDataObserver<List<Schedule>> {
-		override fun content(data: List<Schedule>?) {
-			if (data != null) {
-				adapter.tempList.removeAll(adapter.items.filterIsInstance<Schedule>())
-				adapter.tempList.addAll(data)
-				adapter.sortItemList {
-					checkNoDataLayout()
-				}
-			}
-		}
-
-		override fun empty(data: List<Schedule>?) {
-			adapter.tempList.removeAll(adapter.items.filterIsInstance<Schedule>())
-			adapter.sortItemList {
+	private val todayCourseListObserver = Observer<List<Schedule>> { data ->
+		data?.let { list ->
+			sortJob?.cancel()
+			adapter.tempList.removeAll { it is Schedule }
+			adapter.tempList.addAll(list)
+			sortItemList {
 				checkNoDataLayout()
 			}
-		}
-
-		override fun error(data: List<Schedule>?, e: Throwable?) {
-			Logs.wtfm("todayCourseListObserver: ", e)
-			e.toastLong()
-			checkNoDataLayout()
 		}
 	}
-	private val customThingListObserver = object : PackageDataObserver<List<CustomThing>> {
-		override fun content(data: List<CustomThing>?) {
-			if (data != null) {
-				adapter.tempList.removeAll(adapter.items.filterIsInstance<CustomThing>())
-				adapter.tempList.addAll(data)
-				adapter.sortItemList {
-					checkNoDataLayout()
-				}
-			}
-		}
 
-		override fun empty(data: List<CustomThing>?) {
-			adapter.tempList.removeAll(adapter.items.filterIsInstance<CustomThing>())
-			adapter.sortItemList {
+	private val customThingListObserver = Observer<List<CustomThing>> { data ->
+		data?.let { list ->
+			sortJob?.cancel()
+			adapter.tempList.removeAll { it is CustomThing }
+			adapter.tempList.addAll(list)
+			sortItemList {
 				checkNoDataLayout()
 			}
-		}
-
-		override fun error(data: List<CustomThing>?, e: Throwable?) {
-			Logs.wtfm("todayCourseListObserver: ", e)
-			checkNoDataLayout()
 		}
 	}
 
@@ -84,18 +63,20 @@ class TodayFragment : BaseBottomNavigationFragment<FragmentTodayBinding>(R.layou
 		initViewModel()
 		binding.recyclerView.layoutManager = LinearLayoutManager(activity)
 		binding.recyclerView.adapter = adapter
-		updateTitle()
-		JRSCRepository.load(APP.context) {
-			adapter.tempList.add(it)
-			adapter.sortItemList {
-				checkNoDataLayout()
-			}
-		}
+		JRSCRepository.load(requireContext()) { bottomNavigationViewModel.poetySentence.postValue(this) }
 	}
 
 	private fun initViewModel() {
-		bottomNavigationViewModel.todayCourseList.observe(activity!!, todayCourseListObserver)
-		bottomNavigationViewModel.customThingList.observe(activity!!, customThingListObserver)
+		bottomNavigationViewModel.poetySentence.observe(requireActivity(), Observer { sentence ->
+			sortJob?.cancel()
+			adapter.tempList.removeAll { it is PoetySentence }
+			adapter.tempList.add(sentence)
+			sortItemList {
+				checkNoDataLayout()
+			}
+		})
+		bottomNavigationViewModel.todayCourseList.observe(requireActivity(), todayCourseListObserver)
+		bottomNavigationViewModel.customThingList.observe(requireActivity(), customThingListObserver)
 	}
 
 	override fun monitor() {
@@ -126,15 +107,23 @@ class TodayFragment : BaseBottomNavigationFragment<FragmentTodayBinding>(R.layou
 		binding.recyclerView.visibility = View.VISIBLE
 	}
 
-	override fun onResume() {
-		super.onResume()
-		if ((LayoutRefreshConfigUtil.isRefreshTodayFragment && !LayoutRefreshConfigUtil.isRefreshBottomNavigationActivity && !LayoutRefreshConfigUtil.isRefreshTableFragment) || LayoutRefreshConfigUtil.isChangeShowTomorrowAfterOnTodayFragment) {
-			BottomNavigationRepository.queryCacheCourses(bottomNavigationViewModel)
+//	override fun onResume() {
+//		super.onResume()
+//		if ((LayoutRefreshConfigUtil.isRefreshTodayFragment && !LayoutRefreshConfigUtil.isRefreshBottomNavigationActivity && !LayoutRefreshConfigUtil.isRefreshTableFragment) || LayoutRefreshConfigUtil.isChangeShowTomorrowAfterOnTodayFragment) {
+//			BottomNavigationRepository.queryCacheCourses(bottomNavigationViewModel)
+//		}
+//		if (LayoutRefreshConfigUtil.isChangeShowTomorrowAfterOnTodayFragment)
+//			updateTitle()
+//		LayoutRefreshConfigUtil.isRefreshTodayFragment = false
+//		LayoutRefreshConfigUtil.isChangeShowTomorrowAfterOnTodayFragment = false
+//	}
+
+	@Subscribe(threadMode = ThreadMode.MAIN)
+	fun updateUIFromConfig(uiConfigEvent: UIConfigEvent) {
+		if (uiConfigEvent.refreshUI.contains(UI.TODAY_COURSE)) {
+			//TODO 改到activity中调用
+			bottomNavigationViewModel.init()
 		}
-		if (LayoutRefreshConfigUtil.isChangeShowTomorrowAfterOnTodayFragment)
-			updateTitle()
-		LayoutRefreshConfigUtil.isRefreshTodayFragment = false
-		LayoutRefreshConfigUtil.isChangeShowTomorrowAfterOnTodayFragment = false
 	}
 
 	override fun updateTitle() {
@@ -155,6 +144,38 @@ class TodayFragment : BaseBottomNavigationFragment<FragmentTodayBinding>(R.layou
 					week++
 			}
 			bottomNavigationViewModel.title.value = "第${week ?: "0"}周 $weekIndex"
+		}
+	}
+
+	private fun sortItemList(doneListener: () -> Unit) {
+		sortJob?.cancel()
+		sortJob = bottomNavigationViewModel.viewModelScope.launch {
+			withContext(Dispatchers.Default) {
+				val poetySentenceList = ArrayList<PoetySentence>()
+				val courseList = ArrayList<Schedule>()
+				val customThingList = ArrayList<CustomThing>()
+				adapter.tempList.forEach {
+					when (it) {
+						is PoetySentence -> poetySentenceList.add(it)
+						is CustomThing -> customThingList.add(it)
+						is Schedule -> courseList.add(it)
+					}
+				}
+				val list = ArrayList<Any>(poetySentenceList.size + courseList.size + customThingList.size)
+				list.addAll(poetySentenceList)
+				if (ConfigurationUtil.showCustomThingFirst) {
+					list.addAll(customThingList)
+					list.addAll(courseList)
+				} else {
+					list.addAll(courseList)
+					list.addAll(customThingList)
+				}
+				adapter.items.clear()
+				adapter.items.addAll(list)
+				list.clear()
+				sortJob = null
+				doneListener()
+			}
 		}
 	}
 }

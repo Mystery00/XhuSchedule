@@ -1,7 +1,6 @@
 package com.weilylab.xhuschedule.module
 
-import com.weilylab.xhuschedule.api.UserAPI
-import com.weilylab.xhuschedule.api.XhuScheduleCloudAPI
+import com.weilylab.xhuschedule.api.*
 import com.weilylab.xhuschedule.constant.Constants
 import com.weilylab.xhuschedule.constant.ResponseCodeConstants
 import com.weilylab.xhuschedule.interceptor.DebugInterceptor
@@ -56,6 +55,15 @@ val networkModule = module {
 	single {
 		get<Retrofit>(named("retrofit")).create(UserAPI::class.java)
 	}
+	single {
+		get<Retrofit>(named("retrofit")).create(CourseAPI::class.java)
+	}
+	single {
+		get<Retrofit>(named("retrofit")).create(NoticeAPI::class.java)
+	}
+	single {
+		get<Retrofit>(named("retrofit")).create(FeedbackAPI::class.java)
+	}
 }
 
 suspend fun <T : BaseResponse> T.verifyData(needLogin: suspend () -> T): T = when (rt) {
@@ -64,14 +72,11 @@ suspend fun <T : BaseResponse> T.verifyData(needLogin: suspend () -> T): T = whe
 	else -> throw Exception(msg)
 }
 
-suspend fun <T : BaseResponse> T.redoAfterLogin(student: Student, repeat: suspend () -> T): T {
+suspend fun <T : BaseResponse> T.redoAfterLogin(student: Student, repeat: suspend () -> T): T = verifyData {
 	val loginRepository: LoginRepository by inject()
-
-	return verifyData {
-		loginRepository.doLoginOnly(student)
-		val response = repeat()
-		if (!response.isSuccessful)
-			throw Exception(response.msg)
-		response
-	}
+	loginRepository.doLoginOnly(student)
+	val response = repeat()
+	if (!response.isSuccessful)
+		throw Exception(response.msg)
+	response
 }

@@ -4,37 +4,32 @@ import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.bumptech.glide.request.RequestOptions
-import com.bumptech.glide.signature.MediaStoreSignature
+import coil.api.load
+import coil.request.CachePolicy
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.base.BaseBottomNavigationFragment
 import com.weilylab.xhuschedule.databinding.DialogShareWithFriendsBinding
 import com.weilylab.xhuschedule.databinding.FragmentProfileBinding
-import com.weilylab.xhuschedule.model.StudentInfo
 import com.weilylab.xhuschedule.ui.activity.*
 import com.weilylab.xhuschedule.utils.ConfigurationUtil
 import com.weilylab.xhuschedule.utils.LayoutRefreshConfigUtil
 import com.weilylab.xhuschedule.utils.ShareUtil
 import com.weilylab.xhuschedule.viewmodel.BottomNavigationViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import vip.mystery0.logs.Logs
-import vip.mystery0.rx.PackageDataObserver
-import vip.mystery0.rx.Status.*
-import vip.mystery0.tools.toastLong
+import vip.mystery0.rx.DataObserver
 import java.io.File
 
 class ProfileFragment : BaseBottomNavigationFragment<FragmentProfileBinding>(R.layout.fragment_profile) {
 	companion object {
+		private const val TAG = "ProfileFragment"
+
 		fun newInstance() = ProfileFragment()
 	}
 
-	private val bottomNavigationViewModel: BottomNavigationViewModel by lazy {
-		ViewModelProvider(activity!!)[BottomNavigationViewModel::class.java]
-	}
-	private val bottomSheetDialog: BottomSheetDialog by lazy { BottomSheetDialog(activity!!) }
+	private val bottomNavigationViewModel: BottomNavigationViewModel by viewModel()
+	private val bottomSheetDialog: BottomSheetDialog by lazy { BottomSheetDialog(requireActivity()) }
 
 	override fun initView() {
 		showUserImage()
@@ -46,59 +41,50 @@ class ProfileFragment : BaseBottomNavigationFragment<FragmentProfileBinding>(R.l
 	private fun showUserImage() {
 		val path = ConfigurationUtil.customUserImage
 		if (path == "" || !File(path).exists()) {
-			binding.studentProfileImage.setImageResource(R.mipmap.share_launcher)
+			binding.studentProfileImage.load(R.mipmap.share_launcher)
 		} else {
-			val options = RequestOptions()
-					.signature(MediaStoreSignature("image/*", File(path).lastModified(), 0))
-					.diskCacheStrategy(DiskCacheStrategy.NONE)
-			Glide.with(this)
-					.load(path)
-					.apply(options)
-					.into(binding.studentProfileImage)
+			binding.studentProfileImage.load(path) {
+				diskCachePolicy(CachePolicy.DISABLED)
+			}
 		}
 	}
 
 	private fun initViewModel() {
-		bottomNavigationViewModel.studentInfo.observe(activity!!, object : PackageDataObserver<StudentInfo> {
-			override fun content(data: StudentInfo?) {
-				binding.studentInfo = data
+		bottomNavigationViewModel.studentInfo.observe(requireActivity(), Observer {
+			binding.studentInfo = it
+		})
+		bottomNavigationViewModel.newNotice.observe(this, object : DataObserver<Boolean> {
+			override fun contentNoEmpty(data: Boolean) {
+				super.contentNoEmpty(data)
+				binding.redDotView.visibility = if (data) View.VISIBLE else View.GONE
 			}
 
-			override fun error(data: StudentInfo?, e: Throwable?) {
-				Logs.wtf("error: ", e)
-				e.toastLong()
+			override fun error(e: Throwable?) {
+				super.error(e)
+				Logs.w(TAG, "newNotice error: ", e)
+				binding.redDotView.visibility = View.GONE
+			}
+
+			override fun empty() {
+				super.empty()
+				binding.redDotView.visibility = View.GONE
 			}
 		})
-		bottomNavigationViewModel.noticeList.observe(activity!!, Observer { packageData ->
-			when (packageData.status) {
-				Content -> {
-					LayoutRefreshConfigUtil.isRefreshNoticeDone = true
-					if (packageData.data == null || packageData.data!!.isEmpty())
-						binding.redDotView.visibility = View.GONE
-					else {
-						packageData.data!!.forEach {
-							if (!it.isRead) {
-								binding.redDotView.visibility = View.VISIBLE
-								return@Observer
-							}
-						}
-						binding.redDotView.visibility = View.GONE
-					}
-				}
-				Loading, Empty, Error ->
-					binding.redDotView.visibility = View.GONE
+		bottomNavigationViewModel.newFeedback.observe(this, object : DataObserver<Boolean> {
+			override fun contentNoEmpty(data: Boolean) {
+				super.contentNoEmpty(data)
+				binding.feedBackRedDotView.visibility = if (data) View.VISIBLE else View.GONE
 			}
-		})
-		bottomNavigationViewModel.newFeedBackMessageList.observe(activity!!, Observer { packageData ->
-			when (packageData.status) {
-				Content -> {
-					if (packageData.data != null && packageData.data!!.isNotEmpty())
-						binding.feedBackRedDotView.visibility = View.VISIBLE
-					else
-						binding.feedBackRedDotView.visibility = View.GONE
-				}
-				Loading, Empty, Error ->
-					binding.feedBackRedDotView.visibility = View.GONE
+
+			override fun error(e: Throwable?) {
+				super.error(e)
+				Logs.w(TAG, "newFeedback error: ", e)
+				binding.feedBackRedDotView.visibility = View.GONE
+			}
+
+			override fun empty() {
+				super.empty()
+				binding.feedBackRedDotView.visibility = View.GONE
 			}
 		})
 	}
@@ -155,27 +141,27 @@ class ProfileFragment : BaseBottomNavigationFragment<FragmentProfileBinding>(R.l
 			bottomSheetDialog.dismiss()
 		}
 		binding.qqShareLayout.setOnClickListener {
-			ShareUtil.shareApplication(activity!!, ShareUtil.ShareType.QQ)
+			ShareUtil.shareApplication(requireActivity(), ShareUtil.ShareType.QQ)
 			bottomSheetDialog.dismiss()
 		}
 		binding.qzoneShareLayout.setOnClickListener {
-			ShareUtil.shareApplication(activity!!, ShareUtil.ShareType.QZONE)
+			ShareUtil.shareApplication(requireActivity(), ShareUtil.ShareType.QZONE)
 			bottomSheetDialog.dismiss()
 		}
 		binding.weiboShareLayout.setOnClickListener {
-			ShareUtil.shareApplication(activity!!, ShareUtil.ShareType.WEIBO)
+			ShareUtil.shareApplication(requireActivity(), ShareUtil.ShareType.WEIBO)
 			bottomSheetDialog.dismiss()
 		}
 		binding.wxShareLayout.setOnClickListener {
-			ShareUtil.shareApplication(activity!!, ShareUtil.ShareType.WEIXIN)
+			ShareUtil.shareApplication(requireActivity(), ShareUtil.ShareType.WEIXIN)
 			bottomSheetDialog.dismiss()
 		}
 		binding.friendShareLayout.setOnClickListener {
-			ShareUtil.shareApplication(activity!!, ShareUtil.ShareType.FRIEND)
+			ShareUtil.shareApplication(requireActivity(), ShareUtil.ShareType.FRIEND)
 			bottomSheetDialog.dismiss()
 		}
 		binding.systemShareLayout.setOnClickListener {
-			ShareUtil.shareApplication(activity!!, ShareUtil.ShareType.SYSTEM)
+			ShareUtil.shareApplication(requireActivity(), ShareUtil.ShareType.SYSTEM)
 			bottomSheetDialog.dismiss()
 		}
 	}

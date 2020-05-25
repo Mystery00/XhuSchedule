@@ -27,8 +27,6 @@ import vip.mystery0.logs.Logs
 import vip.mystery0.tools.base.binding.BaseMultiBindingRecyclerViewAdapter
 
 class FragmentTodayRecyclerViewAdapter(private val context: Context) : BaseMultiBindingRecyclerViewAdapter() {
-	private var isRun = false
-	private var needRestart = true
 	val tempList = ArrayList<Any>()
 
 	override fun setItemView(binding: ViewDataBinding, position: Int, data: Any) {
@@ -100,69 +98,6 @@ class FragmentTodayRecyclerViewAdapter(private val context: Context) : BaseMulti
 		is Schedule -> VIEW_TYPE_COURSE
 		is CustomThing -> VIEW_TYPE_THING
 		else -> throw Exception("what't fuck for this")
-	}
-
-	fun sortItemList(doneListener: () -> Unit) {
-		needRestart = true
-		if (isRun)
-			return
-		val poetySentenceList = ArrayList<PoetySentence>()
-		val courseList = ArrayList<Schedule>()
-		val customThingList = ArrayList<CustomThing>()
-		Observable.create<Boolean> {
-			while (needRestart) {
-				needRestart = false
-				poetySentenceList.clear()
-				courseList.clear()
-				customThingList.clear()
-				val iterator = tempList.iterator()
-				while (iterator.hasNext()) {
-					when (val element = iterator.next()) {
-						is PoetySentence -> {
-							//确保今日诗词只会出现一次
-							poetySentenceList.clear()
-							poetySentenceList.add(element)
-						}
-						is Schedule -> courseList.add(element)
-						is CustomThing -> customThingList.add(element)
-					}
-				}
-			}
-			it.onNext(true)
-			it.onComplete()
-		}
-				.subscribeOn(Schedulers.computation())
-				.observeOn(AndroidSchedulers.mainThread())
-				.subscribe(object : Observer<Boolean> {
-					override fun onComplete() {
-						isRun = false
-						doneListener.invoke()
-					}
-
-					override fun onSubscribe(d: Disposable) {
-						isRun = true
-					}
-
-					override fun onNext(t: Boolean) {
-						if (t) {
-							items.clear()
-							items.addAll(poetySentenceList)
-							if (ConfigurationUtil.showCustomThingFirst) {
-								items.addAll(customThingList)
-								items.addAll(courseList)
-							} else {
-								items.addAll(courseList)
-								items.addAll(customThingList)
-							}
-						}
-					}
-
-					override fun onError(e: Throwable) {
-						isRun = false
-						Logs.wtf("onError: ", e)
-					}
-				})
-
 	}
 
 	companion object {

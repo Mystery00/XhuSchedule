@@ -9,14 +9,14 @@ import android.graphics.Color
 import android.os.Build
 import android.provider.Settings
 import android.view.View
-import androidx.appcompat.app.AlertDialog
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.weilylab.xhuschedule.BuildConfig
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.config.APP
 import com.weilylab.xhuschedule.repository.local.InitLocalDataSource
 import com.weilylab.xhuschedule.service.NotificationService
 import vip.mystery0.logs.Logs
-import vip.mystery0.tools.utils.ColorTools
+import vip.mystery0.tools.utils.toColorString
 import java.util.*
 
 object ConfigUtil {
@@ -45,17 +45,12 @@ object ConfigUtil {
 
 	fun showUpdateLog(context: Context) {
 		val logArray = context.resources.getStringArray(R.array.update_log)
-		val stringBuilder = StringBuilder()
-		logArray.forEach {
-			stringBuilder.append(it).append('\n')
-		}
-		AlertDialog.Builder(context)
+		MaterialAlertDialogBuilder(context)
 				.setTitle("${context.getString(R.string.app_name)} V${context.getString(R.string.app_version_name)} 更新日志")
-				.setMessage(stringBuilder.toString())
+				.setMessage(logArray.joinToString("\n"))
 				.setPositiveButton(R.string.action_ok, null)
 				.setOnDismissListener {
-					ConfigurationUtil.updatedVersion = context.getString(R.string.app_version_code)
-							.toInt()
+					ConfigurationUtil.updatedVersion = context.getString(R.string.app_version_code).toInt()
 				}
 				.show()
 	}
@@ -75,7 +70,7 @@ object ConfigUtil {
 		Logs.i("setTrigger: 设置定时任务")
 	}
 
-	fun toHexEncoding(color: Int): String = ColorTools.instance.parseColorToString(color)
+	fun toHexEncoding(color: Int): String = color.toColorString()
 
 	fun getCurrentYearAndTerm() {
 		if (ConfigurationUtil.isCustomYearAndTerm)

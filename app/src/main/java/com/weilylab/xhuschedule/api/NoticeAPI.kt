@@ -1,11 +1,10 @@
 package com.weilylab.xhuschedule.api
 
-import io.reactivex.Observable
-import okhttp3.ResponseBody
+import com.weilylab.xhuschedule.model.response.NoticeResponse
 import retrofit2.http.GET
 import retrofit2.http.Query
 
 interface NoticeAPI {
 	@GET("/Common/getNotices")
-	fun getNotices(@Query("platform") platform: String?): Observable<ResponseBody>
+	suspend fun getNotices(@Query("platform") platform: String?): NoticeResponse
 }

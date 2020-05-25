@@ -7,8 +7,6 @@ import com.weilylab.xhuschedule.model.FeedBackToken
 import com.weilylab.xhuschedule.model.Student
 import com.weilylab.xhuschedule.model.StudentInfo
 import com.weilylab.xhuschedule.repository.ds.StudentDataSource
-import com.weilylab.xhuschedule.repository.local.service.StudentService
-import com.weilylab.xhuschedule.repository.local.service.impl.StudentServiceImpl
 import com.weilylab.xhuschedule.repository.remote.StudentRemoteDataSource
 import com.weilylab.xhuschedule.utils.userDo.UserUtil
 import io.reactivex.Observable
@@ -21,8 +19,9 @@ import vip.mystery0.rx.PackageData
 import vip.mystery0.rx.StartAndCompleteObserver
 import java.util.*
 
-object StudentLocalDataSource : StudentDataSource {
-	private val studentService: StudentService by lazy { StudentServiceImpl() }
+class StudentLocalDataSource(
+		private val studentService: StudentService
+) : StudentDataSource {
 
 	fun queryAllStudentList(studentListLiveData: MutableLiveData<PackageData<List<Student>>>) {
 		studentListLiveData.value = PackageData.loading()

@@ -43,12 +43,4 @@ val databaseModule = module {
 	single { get<DB>().getFBTokenDao() }
 	single { get<DB>().getFeedBackMessageDao() }
 	single { get<DB>().getCustomThingDao() }
-
-	single<StudentService> { StudentServiceImpl(get(), get()) }
-	single<CourseService> { CourseServiceImpl(get()) }
-	single<TestService> { TestServiceImpl(get()) }
-	single<NoticeService> { NoticeServiceImpl(get()) }
-	single<ScoreService> { ScoreServiceImpl(get()) }
-	single<FeedBackMessageService> { FeedBackMessageServiceImpl(get()) }
-	single<CustomThingService> { CustomThingServiceImpl(get()) }
 }

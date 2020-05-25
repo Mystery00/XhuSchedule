@@ -14,7 +14,6 @@ import com.weilylab.xhuschedule.ui.activity.LoginActivity
 import com.weilylab.xhuschedule.utils.ConfigurationUtil
 import com.weilylab.xhuschedule.utils.LayoutRefreshConfigUtil
 import vip.mystery0.logs.Logs
-import vip.mystery0.rx.OnlyCompleteObserver
 import vip.mystery0.rx.Status.Content
 import vip.mystery0.rx.Status.Error
 
@@ -47,7 +46,7 @@ class AccountSettingsFragment : XhuBasePreferenceFragment(R.xml.preference_accou
 			LayoutRefreshConfigUtil.isRefreshBottomNavigationActivity = true
 			val valueArray = Array(studentList.size) { i -> "${studentList[i].username}(${studentList[i].studentName})" }
 			val checkedArray = BooleanArray(studentList.size) { false }
-			AlertDialog.Builder(activity!!)
+			AlertDialog.Builder(requireActivity())
 					.setTitle(R.string.title_del_account)
 					.setMultiChoiceItems(valueArray, checkedArray) { _, which, isChecked ->
 						checkedArray[which] = isChecked
@@ -57,6 +56,7 @@ class AccountSettingsFragment : XhuBasePreferenceFragment(R.xml.preference_accou
 						checkedArray.forEachIndexed { index, bool ->
 							if (bool) needDeleteStudentList.add(studentList[index])
 						}
+
 						StudentLocalDataSource.deleteStudent(needDeleteStudentList, object : OnlyCompleteObserver<Boolean>() {
 							override fun onFinish(data: Boolean?) {
 								if (data != null && data)
