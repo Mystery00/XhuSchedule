@@ -45,13 +45,11 @@ class CustomCourseRepository : KoinComponent {
 			if (response.isSuccessful) {
 				val courseList = response.value.fromJson<SyncCustomCourse>().list
 				val savedList = courseDao.queryCustomCourseByStudent(student.username)
-				savedList.forEach { c ->
-					courseDao.deleteCourse(c)
-				}
+				savedList.forEach { course -> delete(course) }
 				courseList.forEach { course ->
 					course.id = 0
 					course.studentID = student.username
-					courseDao.addCourse(course)
+					save(course)
 				}
 				return courseList
 			} else {

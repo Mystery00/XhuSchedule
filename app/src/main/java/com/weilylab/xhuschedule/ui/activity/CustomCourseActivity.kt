@@ -51,7 +51,6 @@ class CustomCourseActivity : XhuBaseActivity(R.layout.activity_custom_course), K
 	private var collapsedHeight = 0
 	private var expandedHeight = 0
 	private val dialog: Dialog by lazy { buildDialog(R.string.hint_dialog_init) }
-	private val syncDialog: Dialog by lazy { buildDialog(R.string.hint_dialog_sync) }
 
 	private val studentInfoListObserver = object : DataObserver<Map<Student, StudentInfo?>> {
 		override fun loading() {
@@ -117,28 +116,6 @@ class CustomCourseActivity : XhuBaseActivity(R.layout.activity_custom_course), K
 		override fun empty() {
 			hideRefresh()
 			showNoDataLayout()
-		}
-	}
-
-	private val statusObserver = object : DataObserver<Boolean> {
-		override fun loading() {
-			showSyncDialog()
-		}
-
-		override fun contentNoEmpty(data: Boolean) {
-			hideSyncDialog()
-			//false 表示上传到服务器，true 表示下载到本地
-			//表示是否需要在操作之后刷新列表数据
-			if (data) {
-				refresh()
-			}
-			snackbar(R.string.hint_sync_done)
-		}
-
-		override fun error(e: Throwable?) {
-			Logs.wtfm("customCourseListObserver: ", e)
-			hideSyncDialog()
-			toastLong(e)
 		}
 	}
 
@@ -350,7 +327,6 @@ class CustomCourseActivity : XhuBaseActivity(R.layout.activity_custom_course), K
 		customCourseViewModel.year.observe(this, yearObserver)
 		customCourseViewModel.term.observe(this, termObserver)
 		customCourseViewModel.customCourseList.observe(this, customCourseListObserver)
-		customCourseViewModel.syncCustomCourse.observe(this, statusObserver)
 	}
 
 	private fun initExpand() {
@@ -445,13 +421,9 @@ class CustomCourseActivity : XhuBaseActivity(R.layout.activity_custom_course), K
 		course.type = "0"
 		course.editType = 1
 		if (isUpdate)
-			customCourseViewModel.updateCustomCourse(course) {
-				listener()
-			}
+			customCourseViewModel.updateCustomCourse(course, listener)
 		else
-			customCourseViewModel.saveCustomCourse(course) {
-				listener()
-			}
+			customCourseViewModel.saveCustomCourse(course, listener)
 	}
 
 	private fun showRefresh() {
@@ -462,16 +434,6 @@ class CustomCourseActivity : XhuBaseActivity(R.layout.activity_custom_course), K
 	private fun hideRefresh() {
 		if (swipeRefreshLayout.isRefreshing)
 			swipeRefreshLayout.isRefreshing = false
-	}
-
-	private fun showSyncDialog() {
-		if (!syncDialog.isShowing)
-			syncDialog.show()
-	}
-
-	private fun hideSyncDialog() {
-		if (syncDialog.isShowing)
-			syncDialog.dismiss()
 	}
 
 	private fun checkData() {

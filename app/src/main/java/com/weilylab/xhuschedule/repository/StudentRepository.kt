@@ -87,6 +87,8 @@ class StudentRepository : KoinComponent {
 
 	suspend fun queryAllStudentList(): List<Student> = studentDao.queryAllStudentList()
 
+	suspend fun queryMainStudent(): Student? = studentDao.queryMainStudent()
+
 	suspend fun updateStudentList(updateList: List<Student>) {
 		updateList.forEach { studentDao.updateStudent(it) }
 	}

@@ -26,7 +26,6 @@ class CustomCourseViewModel : ViewModel(), KoinComponent {
 	val studentList by lazy { MutableLiveData<List<Student>>() }
 	val studentInfoList by lazy { MutableLiveData<PackageData<Map<Student, StudentInfo?>>>() }
 	val customCourseList by lazy { MutableLiveData<PackageData<List<Any>>>() }
-	val syncCustomCourse by lazy { MutableLiveData<PackageData<Boolean>>() }
 	val time by lazy { MutableLiveData<Pair<Int, Int>>() }
 	val weekIndex by lazy { MutableLiveData<Int>() }
 	val mainStudent by lazy { MutableLiveData<Student>() }
@@ -34,7 +33,7 @@ class CustomCourseViewModel : ViewModel(), KoinComponent {
 	val term by lazy { MutableLiveData<String>() }
 
 	fun init() {
-		studentInfoList.loading()
+		customCourseList.loading()
 		launch(customCourseList) {
 			if (studentList.value == null) {
 				studentList.postValue(studentRepository.queryAllStudentList())

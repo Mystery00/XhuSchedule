@@ -1,7 +1,6 @@
 package com.weilylab.xhuschedule.ui.activity
 
 import android.app.DatePickerDialog
-import android.app.Dialog
 import android.app.TimePickerDialog
 import android.content.res.ColorStateList
 import android.graphics.Color
@@ -11,8 +10,6 @@ import android.view.MenuItem
 import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -25,27 +22,25 @@ import com.weilylab.xhuschedule.base.XhuBaseActivity
 import com.weilylab.xhuschedule.databinding.LayoutAddCustomThingBinding
 import com.weilylab.xhuschedule.databinding.LayoutNullDataViewBinding
 import com.weilylab.xhuschedule.model.CustomThing
-import com.weilylab.xhuschedule.repository.CustomThingRepository
+import com.weilylab.xhuschedule.model.event.UI
+import com.weilylab.xhuschedule.model.event.UIConfigEvent
 import com.weilylab.xhuschedule.ui.adapter.CustomThingAdapter
 import com.weilylab.xhuschedule.utils.AnimationUtil
 import com.weilylab.xhuschedule.utils.CalendarUtil
 import com.weilylab.xhuschedule.utils.ConfigUtil
 import com.weilylab.xhuschedule.viewmodel.CustomThingViewModel
-import com.zyao89.view.zloading.ZLoadingDialog
-import com.zyao89.view.zloading.Z_TYPE
 import kotlinx.android.synthetic.main.activity_custom_thing.*
+import org.greenrobot.eventbus.EventBus
+import org.koin.android.ext.android.inject
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import vip.mystery0.logs.Logs
-import vip.mystery0.rx.PackageData
-import vip.mystery0.rx.PackageDataObserver
-import vip.mystery0.rx.Status
-import vip.mystery0.tools.toastLong
+import vip.mystery0.rx.DataObserver
 import java.text.SimpleDateFormat
 import java.util.*
 
 class CustomThingActivity : XhuBaseActivity(R.layout.activity_custom_thing) {
-	private val customThingViewModel: CustomThingViewModel by lazy {
-		ViewModelProvider(this).get(CustomThingViewModel::class.java)
-	}
+	private val customThingViewModel: CustomThingViewModel by viewModel()
+	private val eventBus: EventBus by inject()
 	private val customThingAdapter: CustomThingAdapter by lazy { CustomThingAdapter(this) }
 	private lateinit var viewStubBinding: LayoutNullDataViewBinding
 	private val customThingBinding by lazy { LayoutAddCustomThingBinding.inflate(LayoutInflater.from(this)) }
@@ -56,66 +51,29 @@ class CustomThingActivity : XhuBaseActivity(R.layout.activity_custom_thing) {
 	private var isUpdate = false
 	private var collapsedHeight = 0
 	private var expandedHeight = 0
-	private val syncDialog: Dialog by lazy {
-		ZLoadingDialog(this)
-				.setLoadingBuilder(Z_TYPE.SINGLE_CIRCLE)
-				.setHintText(getString(R.string.hint_dialog_sync))
-				.setHintTextSize(16F)
-				.setCanceledOnTouchOutside(false)
-				.setDialogBackgroundColor(ContextCompat.getColor(this, R.color.colorWhiteBackground))
-				.setLoadingColor(ContextCompat.getColor(this, R.color.colorAccent))
-				.setHintTextColor(ContextCompat.getColor(this, R.color.colorAccent))
-				.create()
-	}
 
-	private val customThingListObserver = object : PackageDataObserver<List<CustomThing>> {
+	private val customThingListObserver = object : DataObserver<List<CustomThing>> {
 		override fun loading() {
 			showRefresh()
 		}
 
-		override fun content(data: List<CustomThing>?) {
+		override fun contentNoEmpty(data: List<CustomThing>) {
 			hideRefresh()
 			customThingAdapter.items.clear()
-			customThingAdapter.items.addAll(data!!)
+			customThingAdapter.items.addAll(data)
 			checkData()
 		}
 
-		override fun error(data: List<CustomThing>?, e: Throwable?) {
+		override fun error(e: Throwable?) {
 			Logs.wtfm("customThingListObserver: ", e)
 			hideRefresh()
 			checkData()
-			e.toastLong(this@CustomThingActivity)
+			toastLong(e)
 		}
 
-		override fun empty(data: List<CustomThing>?) {
+		override fun empty() {
 			hideRefresh()
 			showNoDataLayout()
-		}
-	}
-
-	private val statusObserver = Observer<PackageData<Boolean>> {
-		when (it.status) {
-			Status.Loading -> showSyncDialog()
-			Status.Content -> {
-				hideSyncDialog()
-				//false 表示上传到服务器，true 表示下载到本地
-				//表示是否需要在操作之后刷新列表数据
-				if (it.data!!) {
-					refresh()
-					Snackbar.make(coordinatorLayout, R.string.hint_sync_done, Snackbar.LENGTH_SHORT)
-							.show()
-				} else {
-					Snackbar.make(coordinatorLayout, R.string.hint_sync_done, Snackbar.LENGTH_SHORT)
-							.show()
-				}
-			}
-			Status.Error -> {
-				Logs.wtfm("customCourseListObserver: ", it.error)
-				hideSyncDialog()
-				toastMessage(it.error?.message)
-			}
-			Status.Empty -> {
-			}
 		}
 	}
 
@@ -148,7 +106,6 @@ class CustomThingActivity : XhuBaseActivity(R.layout.activity_custom_thing) {
 	override fun monitor() {
 		super.monitor()
 		toolbar.setNavigationOnClickListener {
-			LayoutRefreshConfigUtil.isRefreshNoticeDot = true
 			finish()
 		}
 		swipeRefreshLayout.setOnRefreshListener {
@@ -176,8 +133,8 @@ class CustomThingActivity : XhuBaseActivity(R.layout.activity_custom_thing) {
 						.addCallback(object : Snackbar.Callback() {
 							override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
 								if (event != DISMISS_EVENT_ACTION) {
-									CustomThingRepository.delete(item) {
-										LayoutRefreshConfigUtil.isRefreshTodayFragment = true
+									customThingViewModel.deleteCustomThing(item) {
+										eventBus.post(UIConfigEvent(arrayListOf(UI.MAIN_INIT)))
 									}
 									super.onDismissed(transientBottomBar, event)
 								}
@@ -198,7 +155,6 @@ class CustomThingActivity : XhuBaseActivity(R.layout.activity_custom_thing) {
 
 	private fun initViewModel() {
 		customThingViewModel.customThingList.observe(this, customThingListObserver)
-		customThingViewModel.syncCustomThing.observe(this, statusObserver)
 	}
 
 	private fun initExpand() {
@@ -216,7 +172,7 @@ class CustomThingActivity : XhuBaseActivity(R.layout.activity_custom_thing) {
 
 	private fun refresh() {
 		showRefresh()
-		CustomThingRepository.getAll(customThingViewModel)
+		customThingViewModel.getAllCustomThing()
 	}
 
 	private fun initAddLayout() {
@@ -311,7 +267,7 @@ class CustomThingActivity : XhuBaseActivity(R.layout.activity_custom_thing) {
 		}
 	}
 
-	private fun formatInput(binding: LayoutAddCustomThingBinding, customThing: CustomThing, listener: (Boolean) -> Unit) {
+	private fun formatInput(binding: LayoutAddCustomThingBinding, customThing: CustomThing, listener: () -> Unit) {
 		customThing.title = binding.editTextTitle.text.toString()
 		if (customThing.title == "")
 			customThing.title = getString(R.string.prompt_unlabel)
@@ -323,8 +279,7 @@ class CustomThingActivity : XhuBaseActivity(R.layout.activity_custom_thing) {
 		val startTime = if (customThing.isAllDay) dateFormatter.parse(start)!! else saveDateTimeFormatter.parse(start)!!
 		val endTime = if (customThing.isAllDay) dateFormatter.parse(end)!! else saveDateTimeFormatter.parse(end)!!
 		if (startTime.after(endTime)) {
-			toastMessage(R.string.error_end_before_start)
-			listener.invoke(false)
+			toast(R.string.error_end_before_start)
 			return
 		}
 		customThing.startTime = start
@@ -333,17 +288,9 @@ class CustomThingActivity : XhuBaseActivity(R.layout.activity_custom_thing) {
 		customThing.color = ConfigUtil.toHexEncoding(binding.imageViewColor.imageTintList!!.defaultColor)
 		customThing.mark = binding.textViewMark.text.toString()
 		if (isUpdate)
-			CustomThingRepository.update(customThing) { b, t ->
-				if (t != null)
-					toastMessage(t.message ?: getString(R.string.error_db_action))
-				listener.invoke(b)
-			}
+			customThingViewModel.updateCustomThing(customThing, listener)
 		else
-			CustomThingRepository.save(customThing) { b, t ->
-				if (t != null)
-					toastMessage(t.message ?: getString(R.string.error_db_action))
-				listener.invoke(b)
-			}
+			customThingViewModel.saveCustomThing(customThing, listener)
 	}
 
 	private fun expand() {
@@ -399,11 +346,9 @@ class CustomThingActivity : XhuBaseActivity(R.layout.activity_custom_thing) {
 		customThingBinding.buttonSave.setOnClickListener {
 			formatInput(customThingBinding, data
 					?: CustomThing()) {
-				if (it) {
-					bottomSheetDialog.dismiss()
-					LayoutRefreshConfigUtil.isRefreshTodayFragment = true
-					refresh()
-				}
+				bottomSheetDialog.dismiss()
+				eventBus.post(UIConfigEvent(arrayListOf(UI.MAIN_INIT)))
+				refresh()
 			}
 		}
 		bottomSheetDialog.show()
@@ -417,16 +362,6 @@ class CustomThingActivity : XhuBaseActivity(R.layout.activity_custom_thing) {
 	private fun hideRefresh() {
 		if (swipeRefreshLayout.isRefreshing)
 			swipeRefreshLayout.isRefreshing = false
-	}
-
-	private fun showSyncDialog() {
-		if (!syncDialog.isShowing)
-			syncDialog.show()
-	}
-
-	private fun hideSyncDialog() {
-		if (syncDialog.isShowing)
-			syncDialog.dismiss()
 	}
 
 	private fun checkData() {
@@ -459,11 +394,11 @@ class CustomThingActivity : XhuBaseActivity(R.layout.activity_custom_thing) {
 	override fun onOptionsItemSelected(item: MenuItem): Boolean {
 		return when (item.itemId) {
 			R.id.action_upload -> {
-				CustomThingRepository.syncCustomThingForServer(customThingViewModel)
+				customThingViewModel.syncForRemote()
 				true
 			}
 			R.id.action_download -> {
-				CustomThingRepository.syncCustomThingForLocal(customThingViewModel)
+				customThingViewModel.syncForLocal()
 				true
 			}
 			else -> super.onOptionsItemSelected(item)

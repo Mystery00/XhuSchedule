@@ -3,15 +3,26 @@ package com.weilylab.xhuschedule.ui.activity
 import com.applikeysolutions.cosmocalendar.model.Day
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.base.XhuBaseActivity
-import com.weilylab.xhuschedule.repository.local.InitLocalDataSource
+import com.weilylab.xhuschedule.model.event.UI
+import com.weilylab.xhuschedule.model.event.UIConfigEvent
+import com.weilylab.xhuschedule.repository.InitRepository
 import com.weilylab.xhuschedule.utils.CalendarUtil
 import kotlinx.android.synthetic.main.activity_custom_start_time.*
+import kotlinx.coroutines.launch
+import org.greenrobot.eventbus.EventBus
+import org.koin.android.ext.android.inject
 import java.util.*
 
 class CustomStartTimeActivity : XhuBaseActivity(R.layout.activity_custom_start_time) {
+	private val eventBus: EventBus by inject()
+
+	private val initRepository: InitRepository by inject()
+
 	override fun initData() {
 		super.initData()
-		calendarView.selectionManager.toggleDay(Day(InitLocalDataSource.getStartDateTime()))
+		launch {
+			calendarView.selectionManager.toggleDay(Day(initRepository.getStartTime()))
+		}
 	}
 
 	override fun monitor() {
@@ -29,8 +40,7 @@ class CustomStartTimeActivity : XhuBaseActivity(R.layout.activity_custom_start_t
 
 	private fun finishAndSetStartTime(startDateTime: Calendar?) {
 		CalendarUtil.setCustomStartTime(getMondayForCalendar(startDateTime))
-		LayoutRefreshConfigUtil.isRefreshStartTime = true
-		LayoutRefreshConfigUtil.isRefreshBottomNavigationActivity = true
+		eventBus.post(UIConfigEvent(arrayListOf(UI.MAIN_INIT)))
 		finish()
 	}
 
