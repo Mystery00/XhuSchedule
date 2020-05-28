@@ -1,39 +1,82 @@
 package com.weilylab.xhuschedule.repository
 
+import com.weilylab.xhuschedule.R
+import com.weilylab.xhuschedule.api.UserAPI
 import com.weilylab.xhuschedule.model.Course
 import com.weilylab.xhuschedule.model.Student
-import com.weilylab.xhuschedule.repository.local.CourseLocalDataSource
-import com.weilylab.xhuschedule.repository.local.StudentLocalDataSource
-import com.weilylab.xhuschedule.repository.remote.CourseRemoteDataSource
-import com.weilylab.xhuschedule.viewmodel.CustomCourseViewModel
-import vip.mystery0.rx.PackageData
-import vip.mystery0.rx.Status.*
+import com.weilylab.xhuschedule.model.SyncCustomCourse
+import com.weilylab.xhuschedule.module.redoAfterLogin
+import com.weilylab.xhuschedule.repository.local.dao.CourseDao
+import org.koin.core.KoinComponent
+import org.koin.core.inject
+import vip.mystery0.tools.ResourceException
+import vip.mystery0.tools.factory.fromJson
+import vip.mystery0.tools.factory.toJson
+import vip.mystery0.tools.utils.isConnectInternet
 
-object CustomCourseRepository {
-	fun getAll(customCourseViewModel: CustomCourseViewModel) = CourseLocalDataSource.getAll(customCourseViewModel.customCourseList)
+class CustomCourseRepository : KoinComponent {
+	private val courseDao: CourseDao by inject()
 
-	fun save(course: Course, listener: (Boolean, Throwable?) -> Unit) = CourseLocalDataSource.save(course, listener)
+	private val userAPI: UserAPI by inject()
 
-	fun update(course: Course, listener: (Boolean, Throwable?) -> Unit) = CourseLocalDataSource.update(course, listener)
-
-	fun delete(course: Course, listener: (Boolean) -> Unit) = CourseLocalDataSource.delete(course, listener)
-
-	fun queryAllStudentInfo(scoreViewModel: CustomCourseViewModel) {
-		scoreViewModel.studentInfoList.value = PackageData.loading()
-		scoreViewModel.studentInfoList.removeSource(scoreViewModel.studentList)
-		scoreViewModel.studentInfoList.addSource(scoreViewModel.studentList) {
-			when (it.status) {
-				Content -> if (it.data!!.isNotEmpty())
-					StudentLocalDataSource.queryManyStudentInfo(scoreViewModel.studentInfoList, it.data!!)
-				Error -> scoreViewModel.studentInfoList.value = PackageData.error(it.error)
-				Empty -> scoreViewModel.studentInfoList.value = PackageData.empty()
-				Loading -> scoreViewModel.studentInfoList.value = PackageData.loading()
-			}
+	suspend fun getAll(): List<Any> {
+		val list = courseDao.queryAllCustomCourse()
+		val map = list.groupBy { c -> c.studentID }
+		val result = ArrayList<Any>()
+		for (key in map.keys) {
+			result.add(key)
+			map.getValue(key).sortedBy { c -> c.name }.forEach { c -> result.add(c) }
 		}
-		StudentLocalDataSource.queryAllStudentList(scoreViewModel.studentList)
+		return result
 	}
 
-	fun syncCustomCourseForLocal(customCourseViewModel: CustomCourseViewModel, student: Student) = CourseRemoteDataSource.syncCustomCourseForLocal(customCourseViewModel.syncCustomCourse, student, "customCourse")
+	suspend fun save(course: Course) = courseDao.addCourse(course)
 
-	fun syncCustomCourseForServer(customCourseViewModel: CustomCourseViewModel, student: Student) = CourseRemoteDataSource.syncCustomCourseForServer(customCourseViewModel.syncCustomCourse, student, "customCourse")
+	suspend fun update(course: Course) = courseDao.updateCourse(course)
+
+	suspend fun delete(course: Course) = courseDao.deleteCourse(course)
+
+	suspend fun syncCustomCourseForLocal(student: Student): List<Course> {
+		if (isConnectInternet()) {
+			val key = "customCourse"
+			val response = userAPI.getUserData(student.username, key).redoAfterLogin(student) {
+				userAPI.getUserData(student.username, key)
+			}
+			if (response.isSuccessful) {
+				val courseList = response.value.fromJson<SyncCustomCourse>().list
+				val savedList = courseDao.queryCustomCourseByStudent(student.username)
+				savedList.forEach { c ->
+					courseDao.deleteCourse(c)
+				}
+				courseList.forEach { course ->
+					course.id = 0
+					course.studentID = student.username
+					courseDao.addCourse(course)
+				}
+				return courseList
+			} else {
+				throw Exception(response.msg)
+			}
+		} else {
+			throw ResourceException(R.string.hint_network_error)
+		}
+	}
+
+	suspend fun syncCustomCourseForServer(student: Student): List<Course> {
+		if (isConnectInternet()) {
+			val key = "customCourse"
+			val localList = courseDao.queryCustomCourseByStudent(student.username)
+			val value = SyncCustomCourse(localList).toJson()
+			val response = userAPI.setUserData(student.username, key, value).redoAfterLogin(student) {
+				userAPI.setUserData(student.username, key, value)
+			}
+			if (response.isSuccessful) {
+				return localList
+			} else {
+				throw Exception(response.msg)
+			}
+		} else {
+			throw ResourceException(R.string.hint_network_error)
+		}
+	}
 }

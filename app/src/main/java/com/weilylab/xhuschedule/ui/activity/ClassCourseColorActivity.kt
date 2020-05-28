@@ -4,59 +4,46 @@ import android.app.Dialog
 import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.base.XhuBaseActivity
 import com.weilylab.xhuschedule.databinding.LayoutNullDataViewBinding
 import com.weilylab.xhuschedule.model.Course
-import com.weilylab.xhuschedule.repository.local.CourseLocalDataSource
 import com.weilylab.xhuschedule.ui.adapter.ClassCourseColorRecyclerViewAdapter
 import com.weilylab.xhuschedule.viewmodel.ClassCourseColorViewModel
-import com.zyao89.view.zloading.ZLoadingDialog
-import com.zyao89.view.zloading.Z_TYPE
 import kotlinx.android.synthetic.main.activity_class_course_color.*
 import kotlinx.android.synthetic.main.content_class_course_color.*
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import vip.mystery0.logs.Logs
-import vip.mystery0.rx.PackageDataObserver
+import vip.mystery0.rx.DataObserver
 import vip.mystery0.tools.toastLong
 
 class ClassCourseColorActivity : XhuBaseActivity(R.layout.activity_class_course_color) {
-	private val classCourseColorViewModel: ClassCourseColorViewModel by lazy {
-		ViewModelProvider(this)[ClassCourseColorViewModel::class.java]
-	}
+	private val classCourseColorViewModel: ClassCourseColorViewModel by viewModel()
+
 	private lateinit var viewStubBinding: LayoutNullDataViewBinding
 	private val classCourseColorRecyclerViewAdapter: ClassCourseColorRecyclerViewAdapter by lazy { ClassCourseColorRecyclerViewAdapter(this) }
-	private val dialog: Dialog by lazy {
-		ZLoadingDialog(this)
-				.setLoadingBuilder(Z_TYPE.SINGLE_CIRCLE)
-				.setHintText(" ")
-				.setCanceledOnTouchOutside(false)
-				.setDialogBackgroundColor(ContextCompat.getColor(this, R.color.colorWhiteBackground))
-				.setLoadingColor(ContextCompat.getColor(this, R.color.colorAccent))
-				.setHintTextColor(ContextCompat.getColor(this, R.color.colorAccent))
-				.create()
-	}
+	private val dialog: Dialog by lazy { buildDialog(" ") }
 
-	private val classCourseColorObserver = object : PackageDataObserver<List<Course>> {
+	private val classCourseColorObserver = object : DataObserver<List<Course>> {
 		override fun loading() {
 			showDialog()
 		}
 
-		override fun content(data: List<Course>?) {
+		override fun contentNoEmpty(data: List<Course>) {
 			hideDialog()
 			hideNoDataLayout()
 			classCourseColorRecyclerViewAdapter.items.clear()
-			classCourseColorRecyclerViewAdapter.items.addAll(data!!)
+			classCourseColorRecyclerViewAdapter.items.addAll(data)
 		}
 
-		override fun empty(data: List<Course>?) {
+		override fun empty() {
 			hideDialog()
 			showNoDataLayout()
 		}
 
-		override fun error(data: List<Course>?, e: Throwable?) {
+		override fun error(e: Throwable?) {
 			Logs.wtfm("classCourseColorObserver: ", e)
 			hideDialog()
 			hideNoDataLayout()
@@ -78,7 +65,7 @@ class ClassCourseColorActivity : XhuBaseActivity(R.layout.activity_class_course_
 	override fun initData() {
 		super.initData()
 		initViewModel()
-		CourseLocalDataSource.queryDistinctCourseByUsernameAndTerm(classCourseColorViewModel.classCourseList)
+		classCourseColorViewModel.queryDistinctCourseByUsernameAndTerm()
 	}
 
 	private fun initViewModel() {

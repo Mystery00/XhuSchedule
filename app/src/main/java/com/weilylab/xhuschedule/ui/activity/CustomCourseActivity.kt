@@ -10,7 +10,6 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -24,26 +23,26 @@ import com.weilylab.xhuschedule.databinding.LayoutNullDataViewBinding
 import com.weilylab.xhuschedule.model.Course
 import com.weilylab.xhuschedule.model.Student
 import com.weilylab.xhuschedule.model.StudentInfo
-import com.weilylab.xhuschedule.repository.CustomCourseRepository
+import com.weilylab.xhuschedule.model.event.UI
+import com.weilylab.xhuschedule.model.event.UIConfigEvent
 import com.weilylab.xhuschedule.ui.adapter.CustomCourseAdapter
 import com.weilylab.xhuschedule.ui.adapter.CustomCourseWeekAdapter
 import com.weilylab.xhuschedule.utils.AnimationUtil
 import com.weilylab.xhuschedule.utils.CalendarUtil
 import com.weilylab.xhuschedule.utils.ConfigUtil
 import com.weilylab.xhuschedule.viewmodel.CustomCourseViewModel
-import com.zyao89.view.zloading.ZLoadingDialog
-import com.zyao89.view.zloading.Z_TYPE
 import kotlinx.android.synthetic.main.activity_custom_course.*
 import kotlinx.android.synthetic.main.layout_add_custom_course.*
+import org.greenrobot.eventbus.EventBus
+import org.koin.android.ext.android.inject
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.KoinComponent
 import vip.mystery0.logs.Logs
-import vip.mystery0.rx.PackageDataObserver
-import vip.mystery0.tools.toastLong
-import java.util.*
+import vip.mystery0.rx.DataObserver
 
-class CustomCourseActivity : XhuBaseActivity(R.layout.activity_custom_course) {
-	private val customCourseViewModel: CustomCourseViewModel by lazy {
-		ViewModelProvider(this).get(CustomCourseViewModel::class.java)
-	}
+class CustomCourseActivity : XhuBaseActivity(R.layout.activity_custom_course), KoinComponent {
+	private val customCourseViewModel: CustomCourseViewModel by viewModel()
+	private val eventBus: EventBus by inject()
 	private val customCourseAdapter: CustomCourseAdapter by lazy { CustomCourseAdapter(this) }
 	private val customCourseWeekAdapter: CustomCourseWeekAdapter by lazy { CustomCourseWeekAdapter(this) }
 	private lateinit var viewStubBinding: LayoutNullDataViewBinding
@@ -51,56 +50,22 @@ class CustomCourseActivity : XhuBaseActivity(R.layout.activity_custom_course) {
 	private var isUpdate = false
 	private var collapsedHeight = 0
 	private var expandedHeight = 0
-	private val dialog: Dialog by lazy {
-		ZLoadingDialog(this)
-				.setLoadingBuilder(Z_TYPE.SINGLE_CIRCLE)
-				.setHintText(getString(R.string.hint_dialog_init))
-				.setHintTextSize(16F)
-				.setCanceledOnTouchOutside(false)
-				.setDialogBackgroundColor(ContextCompat.getColor(this, R.color.colorWhiteBackground))
-				.setLoadingColor(ContextCompat.getColor(this, R.color.colorAccent))
-				.setHintTextColor(ContextCompat.getColor(this, R.color.colorAccent))
-				.create()
-	}
-	private val syncDialog: Dialog by lazy {
-		ZLoadingDialog(this)
-				.setLoadingBuilder(Z_TYPE.SINGLE_CIRCLE)
-				.setHintText(getString(R.string.hint_dialog_sync))
-				.setHintTextSize(16F)
-				.setCanceledOnTouchOutside(false)
-				.setDialogBackgroundColor(ContextCompat.getColor(this, R.color.colorWhiteBackground))
-				.setLoadingColor(ContextCompat.getColor(this, R.color.colorAccent))
-				.setHintTextColor(ContextCompat.getColor(this, R.color.colorAccent))
-				.create()
-	}
+	private val dialog: Dialog by lazy { buildDialog(R.string.hint_dialog_init) }
+	private val syncDialog: Dialog by lazy { buildDialog(R.string.hint_dialog_sync) }
 
-	private val studentInfoListObserver = object : PackageDataObserver<Map<Student, StudentInfo?>> {
+	private val studentInfoListObserver = object : DataObserver<Map<Student, StudentInfo?>> {
 		override fun loading() {
 			dialog.show()
 		}
 
-		override fun content(data: Map<Student, StudentInfo?>?) {
-			val map = data!!
-			if (map.keys.isNotEmpty()) {
-				val main = map.keys.first { it.isMain }
-				expandLayout.text = getString(R.string.hint_custom_course_sync, "${main.username}(${main.studentName})")
-				customCourseViewModel.student.value = main
-				customCourseViewModel.year.value = CalendarUtil.getSelectArray(null).last()
-				val now = Calendar.getInstance()
-				now.firstDayOfWeek = Calendar.MONDAY
-				val month = now.get(Calendar.MONTH)
-				val week = now.get(Calendar.DAY_OF_WEEK)
-				customCourseViewModel.term.value = if (month in Calendar.MARCH until Calendar.SEPTEMBER) "2" else "1"
-				customCourseViewModel.weekIndex.value = week
-				customCourseViewModel.time.value = Pair(1, 1)
-			}
+		override fun contentNoEmpty(data: Map<Student, StudentInfo?>) {
 			dialog.dismiss()
 		}
 
-		override fun error(data: Map<Student, StudentInfo?>?, e: Throwable?) {
+		override fun error(e: Throwable?) {
 			dialog.dismiss()
 			Logs.wtf("studentInfoListObserver: ", e)
-			toastMessage(R.string.error_init_failed)
+			toastLong(R.string.error_init_failed)
 			finish()
 		}
 	}
@@ -129,55 +94,51 @@ class CustomCourseActivity : XhuBaseActivity(R.layout.activity_custom_course) {
 		textViewTerm.text = text
 	}
 
-	private val customCourseListObserver = object : PackageDataObserver<List<Any>> {
+	private val customCourseListObserver = object : DataObserver<List<Any>> {
 		override fun loading() {
 			showRefresh()
 		}
 
-		override fun content(data: List<Any>?) {
+		override fun contentNoEmpty(data: List<Any>) {
 			hideRefresh()
 			customCourseAdapter.items.clear()
-			customCourseAdapter.items.addAll(data!!)
+			customCourseAdapter.items.addAll(data)
 			customCourseAdapter.updateMap()
 			checkData()
 		}
 
-		override fun error(data: List<Any>?, e: Throwable?) {
+		override fun error(e: Throwable?) {
 			Logs.wtfm("customCourseListObserver: ", e)
 			hideRefresh()
 			checkData()
-			e.toastLong(this@CustomCourseActivity)
+			toastLong(e)
 		}
 
-		override fun empty(data: List<Any>?) {
+		override fun empty() {
 			hideRefresh()
 			showNoDataLayout()
 		}
 	}
 
-	private val statusObserver = object : PackageDataObserver<Boolean> {
+	private val statusObserver = object : DataObserver<Boolean> {
 		override fun loading() {
 			showSyncDialog()
 		}
 
-		override fun content(data: Boolean?) {
+		override fun contentNoEmpty(data: Boolean) {
 			hideSyncDialog()
 			//false 表示上传到服务器，true 表示下载到本地
 			//表示是否需要在操作之后刷新列表数据
-			if (data!!) {
+			if (data) {
 				refresh()
-				Snackbar.make(coordinatorLayout, R.string.hint_sync_done, Snackbar.LENGTH_SHORT)
-						.show()
-			} else {
-				Snackbar.make(coordinatorLayout, R.string.hint_sync_done, Snackbar.LENGTH_SHORT)
-						.show()
 			}
+			snackbar(R.string.hint_sync_done)
 		}
 
-		override fun error(data: Boolean?, e: Throwable?) {
+		override fun error(e: Throwable?) {
 			Logs.wtfm("customCourseListObserver: ", e)
 			hideSyncDialog()
-			e.toastLong(this@CustomCourseActivity)
+			toastLong(e)
 		}
 	}
 
@@ -206,16 +167,13 @@ class CustomCourseActivity : XhuBaseActivity(R.layout.activity_custom_course) {
 
 	override fun requestData() {
 		super.requestData()
-		CustomCourseRepository.queryAllStudentInfo(customCourseViewModel)
+		customCourseViewModel.init()
 		refresh()
 	}
 
 	override fun monitor() {
 		super.monitor()
-		toolbar.setNavigationOnClickListener {
-			LayoutRefreshConfigUtil.isRefreshNoticeDot = true
-			finish()
-		}
+		toolbar.setNavigationOnClickListener { finish() }
 		swipeRefreshLayout.setOnRefreshListener { refresh() }
 		nullDataViewStub.setOnInflateListener { _, inflated -> viewStubBinding = DataBindingUtil.bind(inflated)!! }
 		floatingActionButton.setOnClickListener { showAddLayout() }
@@ -238,11 +196,10 @@ class CustomCourseActivity : XhuBaseActivity(R.layout.activity_custom_course) {
 							.addCallback(object : Snackbar.Callback() {
 								override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
 									if (event != DISMISS_EVENT_ACTION) {
-										CustomCourseRepository.delete(item) {
-											LayoutRefreshConfigUtil.isRefreshTodayFragment = true
-											LayoutRefreshConfigUtil.isRefreshTableFragment = true
+										customCourseViewModel.deleteCustomCourse(item) {
+											eventBus.post(UIConfigEvent(arrayListOf(UI.MAIN_INIT)))
+											customCourseAdapter.updateMap()
 										}
-										customCourseAdapter.updateMap()
 										super.onDismissed(transientBottomBar, event)
 									}
 								}
@@ -297,14 +254,14 @@ class CustomCourseActivity : XhuBaseActivity(R.layout.activity_custom_course) {
 					.show()
 		}
 		textViewStudent.setOnClickListener {
-			if (customCourseViewModel.studentList.value == null || customCourseViewModel.studentList.value!!.data == null || customCourseViewModel.studentList.value!!.data!!.isEmpty()) {
-				toastMessage(R.string.hint_action_not_login, true)
+			if (customCourseViewModel.studentList.value == null || customCourseViewModel.studentList.value!!.isEmpty()) {
+				toastLong(R.string.hint_action_not_login)
 				return@setOnClickListener
 			}
 			val map = customCourseViewModel.studentInfoList.value!!.data!!
 			val studentList = map.keys.toList()
 			val studentTextArray = Array(studentList.size) { i -> "${studentList[i].studentName}(${studentList[i].username})" }
-			var nowIndex = studentList.indexOf(customCourseViewModel.student.value)
+			var nowIndex = studentList.indexOf(customCourseViewModel.mainStudent.value)
 			if (nowIndex == -1) nowIndex = 0
 			var selectIndex = nowIndex
 			AlertDialog.Builder(this)
@@ -313,18 +270,18 @@ class CustomCourseActivity : XhuBaseActivity(R.layout.activity_custom_course) {
 						selectIndex = index
 					}
 					.setPositiveButton(R.string.action_ok) { _, _ ->
-						customCourseViewModel.student.value = studentList[selectIndex]
+						customCourseViewModel.mainStudent.value = studentList[selectIndex]
 					}
 					.setNegativeButton(R.string.action_cancel, null)
 					.show()
 		}
 		textViewYear.setOnClickListener {
-			if (customCourseViewModel.studentList.value == null || customCourseViewModel.studentList.value!!.data == null || customCourseViewModel.studentList.value!!.data!!.isEmpty()) {
-				toastMessage(R.string.hint_action_not_login, true)
+			if (customCourseViewModel.studentList.value == null || customCourseViewModel.studentList.value!!.isEmpty()) {
+				toastLong(R.string.hint_action_not_login)
 				return@setOnClickListener
 			}
 			val map = customCourseViewModel.studentInfoList.value!!.data!!
-			val studentInfo = map[customCourseViewModel.student.value]
+			val studentInfo = map[customCourseViewModel.mainStudent.value]
 			val yearTextArray = CalendarUtil.getSelectArray(studentInfo?.grade)
 			var nowIndex = yearTextArray.indexOf(customCourseViewModel.year.value)
 			if (nowIndex == -1) nowIndex = 0
@@ -389,7 +346,7 @@ class CustomCourseActivity : XhuBaseActivity(R.layout.activity_custom_course) {
 		customCourseViewModel.studentInfoList.observe(this, studentInfoListObserver)
 		customCourseViewModel.time.observe(this, timeObserver)
 		customCourseViewModel.weekIndex.observe(this, weekIndexObserver)
-		customCourseViewModel.student.observe(this, studentObserver)
+		customCourseViewModel.mainStudent.observe(this, studentObserver)
 		customCourseViewModel.year.observe(this, yearObserver)
 		customCourseViewModel.term.observe(this, termObserver)
 		customCourseViewModel.customCourseList.observe(this, customCourseListObserver)
@@ -411,7 +368,7 @@ class CustomCourseActivity : XhuBaseActivity(R.layout.activity_custom_course) {
 
 	private fun refresh() {
 		showRefresh()
-		CustomCourseRepository.getAll(customCourseViewModel)
+		customCourseViewModel.getAllCustomCourse()
 	}
 
 	private fun expand() {
@@ -435,12 +392,12 @@ class CustomCourseActivity : XhuBaseActivity(R.layout.activity_custom_course) {
 			customCourseWeekAdapter.selectedList.addAll(weekList)
 			editTextLocation.setText(data.location)
 			val timeArray = data.time.split("-").map { it.toInt() }
-			customCourseViewModel.time.value = Pair(timeArray[0], timeArray[1])
-			customCourseViewModel.weekIndex.value = data.day.toInt()
+			customCourseViewModel.time.postValue(Pair(timeArray[0], timeArray[1]))
+			customCourseViewModel.weekIndex.postValue(data.day.toInt())
 			imageViewColor.imageTintList = ColorStateList.valueOf(Color.parseColor(data.color))
-			customCourseViewModel.year.value = data.year
-			customCourseViewModel.term.value = data.term
-			customCourseViewModel.student.value = customCourseViewModel.studentList.value!!.data!!.find { it.username == data.studentID }
+			customCourseViewModel.year.postValue(data.year)
+			customCourseViewModel.term.postValue(data.term)
+			customCourseViewModel.mainStudent.postValue(customCourseViewModel.studentList.value!!.find { it.username == data.studentID })
 		} else {
 			editTextName.setText("")
 			editTextTeacher.setText("")
@@ -452,10 +409,8 @@ class CustomCourseActivity : XhuBaseActivity(R.layout.activity_custom_course) {
 		buttonSave.setOnClickListener {
 			doSave(data ?: Course()) {
 				hideAddLayout()
-				if (it) {
-					LayoutRefreshConfigUtil.isRefreshTodayFragment = true
-					refresh()
-				}
+				eventBus.post(UIConfigEvent(arrayListOf(UI.MAIN_INIT)))
+				refresh()
 			}
 		}
 		behavior.state = BottomSheetBehavior.STATE_EXPANDED
@@ -465,19 +420,17 @@ class CustomCourseActivity : XhuBaseActivity(R.layout.activity_custom_course) {
 		behavior.state = BottomSheetBehavior.STATE_HIDDEN
 	}
 
-	private fun doSave(course: Course, listener: (Boolean) -> Unit) {
+	private fun doSave(course: Course, listener: () -> Unit) {
 		course.name = editTextName.text.toString()
 		if (course.name == "") {
 			Snackbar.make(imageViewClose, R.string.hint_empty_couse_name, Snackbar.LENGTH_LONG)
 					.show()
-			listener.invoke(false)
 			return
 		}
 		course.teacher = editTextTeacher.text.toString()
 		if (customCourseWeekAdapter.selectedList.isEmpty()) {
 			Snackbar.make(imageViewClose, R.string.hint_empty_couse_week, Snackbar.LENGTH_LONG)
 					.show()
-			listener.invoke(false)
 			return
 		}
 		course.week = customCourseWeekAdapter.selectedList.joinToString(",")
@@ -488,24 +441,16 @@ class CustomCourseActivity : XhuBaseActivity(R.layout.activity_custom_course) {
 		course.color = ConfigUtil.toHexEncoding(imageViewColor.imageTintList!!.defaultColor)
 		course.year = customCourseViewModel.year.value!!
 		course.term = customCourseViewModel.term.value!!
-		course.studentID = customCourseViewModel.student.value!!.username
+		course.studentID = customCourseViewModel.mainStudent.value!!.username
 		course.type = "0"
 		course.editType = 1
 		if (isUpdate)
-			CustomCourseRepository.update(course) { b, t ->
-				if (t != null)
-					Snackbar.make(imageViewClose, t.message
-							?: getString(R.string.error_db_action), Snackbar.LENGTH_SHORT)
-							.show()
-				listener.invoke(b)
+			customCourseViewModel.updateCustomCourse(course) {
+				listener()
 			}
 		else
-			CustomCourseRepository.save(course) { b, t ->
-				if (t != null)
-					Snackbar.make(imageViewClose, t.message
-							?: getString(R.string.error_db_action), Snackbar.LENGTH_SHORT)
-							.show()
-				listener.invoke(b)
+			customCourseViewModel.saveCustomCourse(course) {
+				listener()
 			}
 	}
 
@@ -566,24 +511,22 @@ class CustomCourseActivity : XhuBaseActivity(R.layout.activity_custom_course) {
 	override fun onOptionsItemSelected(item: MenuItem): Boolean {
 		return when (item.itemId) {
 			R.id.action_upload -> {
-				val main = customCourseViewModel.studentList.value?.data?.find { it.isMain }
+				val main = customCourseViewModel.mainStudent.value
 				if (main == null)
-					toastMessage(R.string.error_init_failed)
+					toast(R.string.error_init_failed)
 				else {
-					CustomCourseRepository.syncCustomCourseForServer(customCourseViewModel, main)
-					LayoutRefreshConfigUtil.isRefreshTodayFragment = true
-					LayoutRefreshConfigUtil.isRefreshTableFragment = true
+					customCourseViewModel.syncForRemote(main)
+					eventBus.post(UIConfigEvent(arrayListOf(UI.MAIN_INIT)))
 				}
 				true
 			}
 			R.id.action_download -> {
-				val main = customCourseViewModel.studentList.value?.data?.find { it.isMain }
+				val main = customCourseViewModel.mainStudent.value
 				if (main == null)
-					toastMessage(R.string.error_init_failed)
+					toast(R.string.error_init_failed)
 				else {
-					CustomCourseRepository.syncCustomCourseForLocal(customCourseViewModel, main)
-					LayoutRefreshConfigUtil.isRefreshTodayFragment = true
-					LayoutRefreshConfigUtil.isRefreshTableFragment = true
+					customCourseViewModel.syncForLocal(main)
+					eventBus.post(UIConfigEvent(arrayListOf(UI.MAIN_INIT)))
 				}
 				true
 			}

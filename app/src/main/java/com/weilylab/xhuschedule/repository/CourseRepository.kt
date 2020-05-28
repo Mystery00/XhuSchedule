@@ -32,4 +32,6 @@ class CourseRepository : KoinComponent {
 	}
 
 	suspend fun queryCustomCourseByTerm(student: Student, year: String, term: String): List<Course> = courseDao.queryCustomCourseByTerm(student.username, year, term)
+
+	suspend fun queryDistinctCourseByUsernameAndTerm(): List<Course> = courseDao.queryDistinctCourseByUsernameAndTerm()
 }

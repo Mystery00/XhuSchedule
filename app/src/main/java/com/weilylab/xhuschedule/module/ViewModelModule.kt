@@ -1,9 +1,6 @@
 package com.weilylab.xhuschedule.module
 
-import com.weilylab.xhuschedule.viewmodel.BottomNavigationViewModel
-import com.weilylab.xhuschedule.viewmodel.LoginViewModel
-import com.weilylab.xhuschedule.viewmodel.SettingsViewModel
-import com.weilylab.xhuschedule.viewmodel.SplashViewModel
+import com.weilylab.xhuschedule.viewmodel.*
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
@@ -19,5 +16,11 @@ val viewModelModule = module {
 	}
 	viewModel {
 		SettingsViewModel()
+	}
+	viewModel {
+		ClassCourseColorViewModel()
+	}
+	viewModel {
+		CustomCourseViewModel()
 	}
 }

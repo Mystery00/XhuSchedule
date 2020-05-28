@@ -88,31 +88,6 @@ object CourseLocalDataSource : CourseDataSource {
 				})
 	}
 
-	fun queryDistinctCourseByUsernameAndTerm(courseListLiveData: MutableLiveData<PackageData<List<Course>>>) {
-		Observable.create<List<Course>> {
-			it.onNext(courseService.queryDistinctCourseByUsernameAndTerm())
-			it.onComplete()
-		}
-				.subscribeOn(Schedulers.io())
-				.observeOn(AndroidSchedulers.mainThread())
-				.subscribe(object : StartAndCompleteObserver<List<Course>>() {
-					override fun onError(e: Throwable) {
-						courseListLiveData.value = PackageData.error(e)
-					}
-
-					override fun onFinish(data: List<Course>?) {
-						if (data == null || data.isEmpty())
-							courseListLiveData.value = PackageData.empty()
-						else
-							courseListLiveData.value = PackageData.content(data)
-					}
-
-					override fun onSubscribe(d: Disposable) {
-						courseListLiveData.value = PackageData.loading()
-					}
-				})
-	}
-
 	fun getDistinctRowCourseList(): List<Course> = courseService.queryDistinctCourseByUsernameAndTerm()
 
 	fun updateCourseColor(course: Course, color: String) {
@@ -161,43 +136,6 @@ object CourseLocalDataSource : CourseDataSource {
 			courseService.addCourse(course)
 		}
 		ConfigurationUtil.lastUpdateDate = CalendarUtil.getTodayDateString()
-	}
-
-	/**
-	 * 该接口提供给自定义课程页面使用
-	 */
-	fun getAll(customCourseLiveData: MutableLiveData<PackageData<List<Any>>>) {
-		Observable.create<List<Course>> {
-			it.onNext(courseService.queryAllCustomCourse())
-			it.onComplete()
-		}
-				.subscribeOn(Schedulers.io())
-				.observeOn(Schedulers.computation())
-				.map {
-					val list = ArrayList<Course>()
-					list.addAll(it)
-					val map = list.groupBy { c -> c.studentID }
-					val result = ArrayList<Any>()
-					for (key in map.keys) {
-						result.add(key)
-						map.getValue(key).sortedBy { c -> c.name }.forEach { c -> result.add(c) }
-					}
-					result
-				}
-				.observeOn(AndroidSchedulers.mainThread())
-				.subscribe(object : OnlyCompleteObserver<List<Any>>() {
-					override fun onError(e: Throwable) {
-						customCourseLiveData.value = PackageData.error(e)
-					}
-
-					override fun onFinish(data: List<Any>?) {
-						when {
-							data == null -> customCourseLiveData.value = PackageData.error(Exception("data is null"))
-							data.isEmpty() -> customCourseLiveData.value = PackageData.empty(data)
-							else -> customCourseLiveData.value = PackageData.content(data)
-						}
-					}
-				})
 	}
 
 	fun save(course: Course, listener: (Boolean, Throwable?) -> Unit) {
