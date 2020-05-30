@@ -29,7 +29,10 @@ class FeedBackViewModel : ViewModel(), KoinComponent {
 	fun init() {
 		launch(feedBackMessageList) {
 			val student = studentRepository.queryMainStudent()
-					?: throw ResourceException(R.string.hint_action_not_login)
+			if (student == null) {
+				mainStudent.postValue(null)
+				return@launch
+			}
 			mainStudent.postValue(student)
 			queryMessageFromLocalInCoroutine(student)
 		}

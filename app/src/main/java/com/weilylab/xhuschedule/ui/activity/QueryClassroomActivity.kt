@@ -78,9 +78,7 @@ class QueryClassroomActivity : XhuBaseActivity(R.layout.activity_query_class_roo
 			if (it == null) {
 				toastLong(R.string.hint_action_not_login)
 				finish()
-				return@Observer
 			}
-
 		})
 		queryClassroomViewModel.location.observe(this, Observer { textViewLocation.text = it })
 		queryClassroomViewModel.week.observe(this, Observer {

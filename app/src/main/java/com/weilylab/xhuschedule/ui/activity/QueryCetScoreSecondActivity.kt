@@ -10,7 +10,6 @@ import com.android.setupwizardlib.view.NavigationBar
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.base.XhuBaseActivity
 import com.weilylab.xhuschedule.model.CetScore
-import com.weilylab.xhuschedule.repository.ScoreRepository
 import com.weilylab.xhuschedule.viewmodel.QueryCetScoreViewModelHelper
 import kotlinx.android.synthetic.main.activity_query_cet_score_second.*
 import vip.mystery0.logs.Logs
@@ -92,7 +91,7 @@ class QueryCetScoreSecondActivity : XhuBaseActivity(R.layout.activity_query_cet_
 	override fun monitor() {
 		super.monitor()
 		imageView.setOnClickListener {
-			ScoreRepository.getCetVCode()
+			QueryCetScoreViewModelHelper.getCetVCode(this)
 		}
 		setupLayout.navigationBar.setNavigationBarListener(object : NavigationBar.NavigationBarListener {
 			override fun onNavigateBack() {
@@ -127,7 +126,7 @@ class QueryCetScoreSecondActivity : XhuBaseActivity(R.layout.activity_query_cet_
 			cetVCodeEditText.requestFocus()
 			return
 		}
-		ScoreRepository.getCetScore(cetVCodeStr)
+		QueryCetScoreViewModelHelper.getCetScore(this, cetVCodeStr)
 	}
 
 	private fun showVCodeDialog() {

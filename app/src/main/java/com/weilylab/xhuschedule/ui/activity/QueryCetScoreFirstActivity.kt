@@ -7,12 +7,11 @@ import android.text.TextUtils
 import android.view.View
 import android.widget.ScrollView
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.Observer
 import com.android.setupwizardlib.view.NavigationBar
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.base.XhuBaseActivity
 import com.weilylab.xhuschedule.model.Student
-import com.weilylab.xhuschedule.model.StudentInfo
-import com.weilylab.xhuschedule.repository.ScoreRepository
 import com.weilylab.xhuschedule.viewmodel.QueryCetScoreViewModelHelper
 import kotlinx.android.synthetic.main.activity_query_cet_score_first.*
 import vip.mystery0.logs.Logs
@@ -21,14 +20,12 @@ import vip.mystery0.rx.DataObserver
 class QueryCetScoreFirstActivity : XhuBaseActivity(R.layout.activity_query_cet_score_first) {
 	private val dialog: Dialog by lazy { buildDialog(R.string.hint_dialog_get_cet_vcode) }
 
-	private val studentInfoListObserver = object : DataObserver<Map<Student, StudentInfo?>> {
-		override fun contentNoEmpty(data: Map<Student, StudentInfo?>) {
-			if (data.keys.isNotEmpty()) {
-				val student = data.keys.first { it.isMain }
-				QueryCetScoreViewModelHelper.student.value = student
-				cetNameEditText.setText(student.studentName)
-			}
+	private val studentObserver = Observer<Student> {
+		if (it == null) {
+			toastLong(R.string.hint_action_not_login)
+			finish()
 		}
+		cetNameEditText.setText(it.studentName)
 	}
 
 	private val cetVCodeObserver = object : DataObserver<Bitmap> {
@@ -64,16 +61,16 @@ class QueryCetScoreFirstActivity : XhuBaseActivity(R.layout.activity_query_cet_s
 	override fun initData() {
 		super.initData()
 		initViewModel()
-		ScoreRepository.queryAllStudentInfo()
+		QueryCetScoreViewModelHelper.init(this)
 	}
 
 	private fun initViewModel() {
-		QueryCetScoreViewModelHelper.studentInfoList.observe(this, studentInfoListObserver)
+		QueryCetScoreViewModelHelper.student.observe(this, studentObserver)
 		QueryCetScoreViewModelHelper.cetVCodeLiveData.observe(this, cetVCodeObserver)
 	}
 
 	private fun removeObserver() {
-		QueryCetScoreViewModelHelper.studentInfoList.removeObserver(studentInfoListObserver)
+		QueryCetScoreViewModelHelper.student.removeObserver(studentObserver)
 		QueryCetScoreViewModelHelper.cetVCodeLiveData.removeObserver(cetVCodeObserver)
 	}
 
@@ -103,7 +100,8 @@ class QueryCetScoreFirstActivity : XhuBaseActivity(R.layout.activity_query_cet_s
 	}
 
 	private fun requestVCode() {
-		if (QueryCetScoreViewModelHelper.studentList.value == null || QueryCetScoreViewModelHelper.studentList.value!!.data == null || QueryCetScoreViewModelHelper.studentList.value!!.data!!.isEmpty()) {
+		val student = QueryCetScoreViewModelHelper.student.value
+		if (student == null) {
 			toastLong(R.string.hint_action_not_login)
 			return
 		}
@@ -133,9 +131,9 @@ class QueryCetScoreFirstActivity : XhuBaseActivity(R.layout.activity_query_cet_s
 			focusView?.requestFocus()
 			return
 		}
-		QueryCetScoreViewModelHelper.no.value = cetNoStr
-		QueryCetScoreViewModelHelper.name.value = cetNameStr
-		ScoreRepository.getCetVCode()
+		QueryCetScoreViewModelHelper.no.postValue(cetNoStr)
+		QueryCetScoreViewModelHelper.name.postValue(cetNameStr)
+		QueryCetScoreViewModelHelper.getCetVCode(this)
 	}
 
 	private fun showDialog() {

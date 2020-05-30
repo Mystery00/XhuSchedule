@@ -12,7 +12,6 @@ import com.weilylab.xhuschedule.model.ExpScore
 import com.weilylab.xhuschedule.model.Student
 import com.weilylab.xhuschedule.repository.ds.ScoreDataSource
 import com.weilylab.xhuschedule.repository.local.ScoreLocalDataSource
-import com.weilylab.xhuschedule.utils.userDo.ScoreUtil
 import vip.mystery0.rx.PackageData
 import vip.mystery0.tools.utils.NetworkTools
 import java.util.*

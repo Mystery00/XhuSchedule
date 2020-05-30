@@ -1,22 +1,24 @@
 package com.weilylab.xhuschedule.api
 
-import io.reactivex.Observable
-import okhttp3.ResponseBody
+import com.weilylab.xhuschedule.model.response.CetScoresResponse
+import com.weilylab.xhuschedule.model.response.CetVCodeResponse
+import com.weilylab.xhuschedule.model.response.ClassScoreResponse
+import com.weilylab.xhuschedule.model.response.ExpScoreResponse
 import retrofit2.http.*
 
 interface ScoreAPI {
 	@FormUrlEncoded
 	@POST("/Score/getScores")
-	fun getScores(@Field("username") username: String, @Field("year") year: String?, @Field("term") term: String?): Observable<ResponseBody>
+	suspend fun getScores(@Field("username") username: String, @Field("year") year: String?, @Field("term") term: String?): ClassScoreResponse
 
 	@FormUrlEncoded
 	@POST("/Score/getExpScores")
-	fun getExpScores(@Field("username") username: String, @Field("year") year: String?, @Field("term") term: String?): Observable<ResponseBody>
+	suspend fun getExpScores(@Field("username") username: String, @Field("year") year: String?, @Field("term") term: String?): ExpScoreResponse
 
 	@GET("/Score/getCETVCode")
-	fun getCETVCode(@Query("username") username: String, @Query("id") id: String, @Query("type") type: String?): Observable<ResponseBody>
+	suspend fun getCETVCode(@Query("username") username: String, @Query("id") id: String, @Query("type") type: String?): CetVCodeResponse
 
 	@FormUrlEncoded
 	@POST("/Score/getCETScores")
-	fun getCETScores(@Field("username") username: String, @Field("id") id: String, @Field("name") name: String, @Field("vcode") vcode: String): Observable<ResponseBody>
+	suspend fun getCETScores(@Field("username") username: String, @Field("id") id: String, @Field("name") name: String, @Field("vcode") vcode: String): CetScoresResponse
 }

@@ -5,86 +5,30 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AlertDialog
-import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.base.XhuBaseActivity
 import com.weilylab.xhuschedule.model.ClassScore
-import com.weilylab.xhuschedule.model.Student
-import com.weilylab.xhuschedule.model.StudentInfo
-import com.weilylab.xhuschedule.repository.ScoreRepository
 import com.weilylab.xhuschedule.ui.adapter.QueryClassScoreRecyclerViewAdapter
 import com.weilylab.xhuschedule.utils.CalendarUtil
 import com.weilylab.xhuschedule.utils.ConfigurationUtil
 import com.weilylab.xhuschedule.viewmodel.QueryClassScoreViewModel
-import com.zyao89.view.zloading.ZLoadingDialog
-import com.zyao89.view.zloading.Z_TYPE
 import kotlinx.android.synthetic.main.activity_query_class_score.*
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import vip.mystery0.logs.Logs
 import vip.mystery0.rx.PackageDataObserver
 import vip.mystery0.tools.toastLong
-import vip.mystery0.tools.utils.DensityTools
-import java.util.*
+import vip.mystery0.tools.utils.screenWidth
 
 class QueryClassScoreActivity : XhuBaseActivity(R.layout.activity_query_class_score) {
-	private val queryClassScoreViewModel: QueryClassScoreViewModel by lazy {
-		ViewModelProvider(this)[QueryClassScoreViewModel::class.java]
-	}
+	private val queryClassScoreViewModel: QueryClassScoreViewModel by viewModel()
 	private val queryClassScoreRecyclerViewAdapter: QueryClassScoreRecyclerViewAdapter by lazy { QueryClassScoreRecyclerViewAdapter(this) }
 	private var hasData = false
-	private val dialog: Dialog by lazy {
-		ZLoadingDialog(this)
-				.setLoadingBuilder(Z_TYPE.SINGLE_CIRCLE)
-				.setHintText(getString(R.string.hint_dialog_init))
-				.setHintTextSize(16F)
-				.setCanceledOnTouchOutside(false)
-				.setDialogBackgroundColor(ContextCompat.getColor(this, R.color.colorWhiteBackground))
-				.setLoadingColor(ContextCompat.getColor(this, R.color.colorAccent))
-				.setHintTextColor(ContextCompat.getColor(this, R.color.colorAccent))
-				.create()
-	}
-
-	private val studentInfoListObserver = object : PackageDataObserver<Map<Student, StudentInfo?>> {
-		override fun loading() {
-			dialog.show()
-		}
-
-		override fun content(data: Map<Student, StudentInfo?>?) {
-			val map = data!!
-			if (map.keys.isNotEmpty()) {
-				queryClassScoreViewModel.student.value = map.keys.first { it.isMain }
-				queryClassScoreViewModel.year.value = CalendarUtil.getSelectArray(null).last()
-				val month = Calendar.getInstance().get(Calendar.MONTH)
-				queryClassScoreViewModel.term.value = if (month in Calendar.MARCH until Calendar.SEPTEMBER) "2" else "1"
-			}
-			dialog.dismiss()
-		}
-
-		override fun error(data: Map<Student, StudentInfo?>?, e: Throwable?) {
-			dialog.dismiss()
-			Logs.wtf("studentInfoListObserver: ", e)
-			toastMessage(R.string.error_init_failed)
-			finish()
-		}
-	}
-
-	private val studentObserver = Observer<Student> {
-		val text = "${it.studentName}(${it.username})"
-		textViewStudent.text = text
-	}
-
-	private val yearObserver = Observer<String> {
-		textViewYear.text = it
-	}
-
-	private val termObserver = Observer<String> {
-		textViewTerm.text = it
-	}
+	private val dialog: Dialog by lazy { buildDialog(R.string.hint_dialog_init) }
 
 	private val scoreListObserver = object : PackageDataObserver<List<ClassScore>> {
 		override fun loading() {
@@ -117,21 +61,33 @@ class QueryClassScoreActivity : XhuBaseActivity(R.layout.activity_query_class_sc
 		scoreListRecyclerView.addItemDecoration(dividerItemDecoration)
 		scoreListRecyclerView.adapter = queryClassScoreRecyclerViewAdapter
 		val layoutParams = scoreListRecyclerView.layoutParams
-		layoutParams.width = DensityTools.instance.getScreenWidth()
+		layoutParams.width = screenWidth
 		scoreListRecyclerView.layoutParams = layoutParams
 	}
 
 	override fun initData() {
 		super.initData()
 		initViewModel()
-		ScoreRepository.queryAllStudentInfo(queryClassScoreViewModel)
+		dialog.show()
+		queryClassScoreViewModel.init()
 	}
 
 	private fun initViewModel() {
-		queryClassScoreViewModel.studentInfoList.observe(this, studentInfoListObserver)
-		queryClassScoreViewModel.student.observe(this, studentObserver)
-		queryClassScoreViewModel.year.observe(this, yearObserver)
-		queryClassScoreViewModel.term.observe(this, termObserver)
+		queryClassScoreViewModel.student.observe(this, Observer {
+			dialog.dismiss()
+			if (it == null) {
+				toastLong(R.string.hint_action_not_login)
+				finish()
+			}
+			val text = "${it.studentName}(${it.username})"
+			textViewStudent.text = text
+		})
+		queryClassScoreViewModel.year.observe(this, Observer {
+			textViewYear.text = it
+		})
+		queryClassScoreViewModel.term.observe(this, Observer {
+			textViewTerm.text = it
+		})
 		queryClassScoreViewModel.scoreList.observe(this, scoreListObserver)
 	}
 
@@ -156,12 +112,11 @@ class QueryClassScoreActivity : XhuBaseActivity(R.layout.activity_query_class_sc
 			}
 		})
 		textViewStudent.setOnClickListener {
-			if (queryClassScoreViewModel.studentList.value == null || queryClassScoreViewModel.studentList.value!!.data == null || queryClassScoreViewModel.studentList.value!!.data!!.isEmpty()) {
-				toastMessage(R.string.hint_action_not_login, true)
+			val studentList = queryClassScoreViewModel.studentList.value
+			if (studentList.isNullOrEmpty()) {
+				toastLong(R.string.hint_action_not_login)
 				return@setOnClickListener
 			}
-			val map = queryClassScoreViewModel.studentInfoList.value!!.data!!
-			val studentList = map.keys.toList()
 			val studentTextArray = Array(studentList.size) { i -> "${studentList[i].studentName}(${studentList[i].username})" }
 			var nowIndex = studentList.indexOf(queryClassScoreViewModel.student.value)
 			if (nowIndex == -1) nowIndex = 0
@@ -172,18 +127,18 @@ class QueryClassScoreActivity : XhuBaseActivity(R.layout.activity_query_class_sc
 						selectIndex = index
 					}
 					.setPositiveButton(R.string.action_ok) { _, _ ->
-						queryClassScoreViewModel.student.value = studentList[selectIndex]
+						queryClassScoreViewModel.student.postValue(studentList[selectIndex])
 					}
 					.setNegativeButton(R.string.action_cancel, null)
 					.show()
 		}
 		textViewYear.setOnClickListener {
-			if (queryClassScoreViewModel.studentList.value == null || queryClassScoreViewModel.studentList.value!!.data == null || queryClassScoreViewModel.studentList.value!!.data!!.isEmpty()) {
-				toastMessage(R.string.hint_action_not_login, true)
+			val studentInfoList = queryClassScoreViewModel.studentInfoList.value
+			if (studentInfoList.isNullOrEmpty()) {
+				toastLong(R.string.hint_action_not_login)
 				return@setOnClickListener
 			}
-			val map = queryClassScoreViewModel.studentInfoList.value!!.data!!
-			val studentInfo = map[queryClassScoreViewModel.student.value]
+			val studentInfo = studentInfoList[queryClassScoreViewModel.student.value]
 			val yearTextArray = CalendarUtil.getSelectArray(studentInfo?.grade)
 			var nowIndex = yearTextArray.indexOf(queryClassScoreViewModel.year.value)
 			if (nowIndex == -1) nowIndex = 0
@@ -210,16 +165,18 @@ class QueryClassScoreActivity : XhuBaseActivity(R.layout.activity_query_class_sc
 						selectIndex = index
 					}
 					.setPositiveButton(R.string.action_ok) { _, _ ->
-						queryClassScoreViewModel.term.value = termTextArray[selectIndex]
+						queryClassScoreViewModel.term.postValue(termTextArray[selectIndex])
 					}
 					.setNegativeButton(R.string.action_cancel, null)
 					.show()
 		}
 		queryButton.setOnClickListener {
-			if (queryClassScoreViewModel.studentList.value == null || queryClassScoreViewModel.studentList.value!!.data == null || queryClassScoreViewModel.studentList.value!!.data!!.isEmpty())
-				toastMessage(R.string.hint_action_not_login, true)
-			else
-				ScoreRepository.queryClassScore(queryClassScoreViewModel)
+			val student = queryClassScoreViewModel.student.value
+			if (student == null) {
+				toastLong(R.string.hint_action_not_login)
+				return@setOnClickListener
+			}
+			queryClassScoreViewModel.query(student, queryClassScoreViewModel.year.value!!, queryClassScoreViewModel.term.value!!)
 		}
 	}
 
@@ -294,7 +251,7 @@ class QueryClassScoreActivity : XhuBaseActivity(R.layout.activity_query_class_sc
 
 	private fun showEmpty() {
 		dismissLoading()
-		toastMessage(R.string.hint_data_null, true)
+		toastLong(R.string.hint_data_null)
 	}
 
 	private fun showContent() {

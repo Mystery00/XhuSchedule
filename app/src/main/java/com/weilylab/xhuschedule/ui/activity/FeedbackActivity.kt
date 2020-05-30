@@ -80,6 +80,11 @@ class FeedbackActivity : XhuBaseActivity(R.layout.activity_feedback) {
 	private fun initViewModel() {
 		feedBackViewModel.mainStudent.observe(this, Observer {
 			hideInitDialog()
+			if (it == null) {
+				toastLong(R.string.hint_action_not_login)
+				finish()
+				return@Observer
+			}
 			feedBackViewModel.startReceiveMessage(it)
 		})
 		feedBackViewModel.feedBackMessageList.observe(this, feedBackMessageObserver)

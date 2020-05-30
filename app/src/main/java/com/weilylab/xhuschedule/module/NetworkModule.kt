@@ -15,6 +15,8 @@ import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import vip.mystery0.tools.ResourceException
+import vip.mystery0.tools.utils.isConnectInternet
 import java.util.concurrent.TimeUnit
 
 val networkModule = module {
@@ -79,4 +81,14 @@ suspend fun <T : BaseResponse> T.redoAfterLogin(student: Student, repeat: suspen
 	if (!response.isSuccessful)
 		throw Exception(response.msg)
 	response
+}
+
+fun <T : BaseResponse> T.check(): T = if (isSuccessful) this else throw Exception(msg)
+
+suspend fun <R> checkConnect(block: suspend () -> R): R {
+	if (isConnectInternet()) {
+		return block()
+	} else {
+		throw ResourceException(com.weilylab.xhuschedule.R.string.hint_network_error)
+	}
 }

@@ -1,77 +1,78 @@
 package com.weilylab.xhuschedule.repository
 
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.util.Base64
+import com.weilylab.xhuschedule.api.ScoreAPI
+import com.weilylab.xhuschedule.model.CetScore
+import com.weilylab.xhuschedule.model.ClassScore
+import com.weilylab.xhuschedule.model.ExpScore
 import com.weilylab.xhuschedule.model.Student
-import com.weilylab.xhuschedule.repository.local.StudentLocalDataSource
-import com.weilylab.xhuschedule.repository.remote.ScoreRemoteDataSource
-import com.weilylab.xhuschedule.viewmodel.QueryCetScoreViewModelHelper
-import com.weilylab.xhuschedule.viewmodel.QueryClassScoreViewModel
-import com.weilylab.xhuschedule.viewmodel.QueryExpScoreViewModel
-import vip.mystery0.rx.PackageData
-import vip.mystery0.rx.Status.*
+import com.weilylab.xhuschedule.module.check
+import com.weilylab.xhuschedule.module.checkConnect
+import com.weilylab.xhuschedule.module.redoAfterLogin
+import com.weilylab.xhuschedule.repository.local.dao.ScoreDao
+import org.koin.core.KoinComponent
+import org.koin.core.inject
 
-object ScoreRepository {
-	fun queryClassScore(scoreViewModel: QueryClassScoreViewModel) {
-		scoreViewModel.scoreList.value = PackageData.loading()
-		ScoreRemoteDataSource.queryClassScoreByUsername(scoreViewModel.scoreList, scoreViewModel.student.value!!, scoreViewModel.year.value!!, scoreViewModel.term.value!!)
-	}
+class ScoreRepository : KoinComponent {
+	private val scoreDao: ScoreDao by inject()
 
-	fun queryExpScore(scoreViewModel: QueryExpScoreViewModel) {
-		scoreViewModel.scoreList.value = PackageData.loading()
-		ScoreRemoteDataSource.queryExpScoreByUsername(scoreViewModel.scoreList, scoreViewModel.student.value!!, scoreViewModel.year.value!!, scoreViewModel.term.value!!)
-	}
+	private val scoreAPI: ScoreAPI by inject()
 
-	fun queryAllStudentInfo(scoreViewModel: QueryClassScoreViewModel) {
-		scoreViewModel.studentInfoList.value = PackageData.loading()
-		scoreViewModel.studentInfoList.removeSource(scoreViewModel.studentList)
-		scoreViewModel.studentInfoList.addSource(scoreViewModel.studentList) {
-			when (it.status) {
-				Content -> if (it.data!!.isNotEmpty())
-					StudentLocalDataSource.queryManyStudentInfo(scoreViewModel.studentInfoList, it.data!!)
-				Error -> scoreViewModel.studentInfoList.value = PackageData.error(it.error)
-				Empty -> scoreViewModel.studentInfoList.value = PackageData.empty()
-				Loading -> scoreViewModel.studentInfoList.value = PackageData.loading()
-			}
+	suspend fun queryClassScoreOnline(student: Student, year: String, term: String): List<ClassScore> = checkConnect {
+		val response = scoreAPI.getScores(student.username, year, term).redoAfterLogin(student) {
+			scoreAPI.getScores(student.username, year, term)
+		}.check()
+		response.scores.forEach {
+			it.studentID = student.username
+			it.year = year
+			it.term = term
+			it.failed = false
+			scoreDao.saveClassScore(it)
 		}
-		StudentLocalDataSource.queryAllStudentList(scoreViewModel.studentList)
-	}
-
-	fun queryAllStudentInfo(scoreViewModel: QueryExpScoreViewModel) {
-		scoreViewModel.studentInfoList.value = PackageData.loading()
-		scoreViewModel.studentInfoList.removeSource(scoreViewModel.studentList)
-		scoreViewModel.studentInfoList.addSource(scoreViewModel.studentList) {
-			when (it.status) {
-				Content -> if (it.data!!.isNotEmpty())
-					StudentLocalDataSource.queryManyStudentInfo(scoreViewModel.studentInfoList, it.data!!)
-				Error -> scoreViewModel.studentInfoList.value = PackageData.error(it.error)
-				Empty -> scoreViewModel.studentInfoList.value = PackageData.empty()
-				Loading -> scoreViewModel.studentInfoList.value = PackageData.loading()
-			}
+		response.failScores.forEach {
+			it.studentID = student.username
+			it.year = year
+			it.term = term
+			it.failed = true
+			scoreDao.saveClassScore(it)
 		}
-		StudentLocalDataSource.queryAllStudentList(scoreViewModel.studentList)
+		val list = ArrayList<ClassScore>(response.scores.size + response.failScores.size)
+		list.addAll(response.scores)
+		list.addAll(response.failScores)
+		list
 	}
 
-	fun queryAllStudentInfo() {
-		QueryCetScoreViewModelHelper.studentInfoList.value = PackageData.loading()
-		QueryCetScoreViewModelHelper.studentInfoList.removeSource(QueryCetScoreViewModelHelper.studentList)
-		QueryCetScoreViewModelHelper.studentInfoList.addSource(QueryCetScoreViewModelHelper.studentList) {
-			when (it.status) {
-				Content -> if (it.data!!.isNotEmpty())
-					StudentLocalDataSource.queryManyStudentInfo(QueryCetScoreViewModelHelper.studentInfoList, it.data!!)
-				Error -> QueryCetScoreViewModelHelper.studentInfoList.value = PackageData.error(it.error)
-				Empty -> QueryCetScoreViewModelHelper.studentInfoList.value = PackageData.empty()
-				Loading -> QueryCetScoreViewModelHelper.studentInfoList.value = PackageData.loading()
-			}
+	suspend fun queryClassScoreLocal(student: Student, year: String, term: String): List<ClassScore> = scoreDao.queryClassScore(student.username, year, term)
+
+	suspend fun queryExpScoreOnline(student: Student, year: String, term: String): List<ExpScore> = checkConnect {
+		val response = scoreAPI.getExpScores(student.username, year, term).redoAfterLogin(student) {
+			scoreAPI.getExpScores(student.username, year, term)
+		}.check()
+		response.expScores.forEach {
+			it.studentID = student.username
+			it.year = year
+			it.term = term
+			scoreDao.saveExpScore(it)
 		}
-		StudentLocalDataSource.queryAllStudentList(QueryCetScoreViewModelHelper.studentList)
+		response.expScores
 	}
 
-	fun getCetVCode(student: Student = QueryCetScoreViewModelHelper.student.value!!) {
-		QueryCetScoreViewModelHelper.cetVCodeLiveData.value = PackageData.loading()
-		ScoreRemoteDataSource.getCetVCode(QueryCetScoreViewModelHelper.cetVCodeLiveData, student, QueryCetScoreViewModelHelper.no.value!!)
+	suspend fun queryExpScoreLocal(student: Student, year: String, term: String): List<ExpScore> = scoreDao.queryExpScore(student.username, year, term)
+
+	suspend fun getCetVCode(student: Student, no: String): Bitmap = checkConnect {
+		val response = scoreAPI.getCETVCode(student.username, no, null).redoAfterLogin(student) {
+			scoreAPI.getCETVCode(student.username, no, null)
+		}.check()
+		val bytes = Base64.decode(response.vcode.substring(response.vcode.indexOfFirst { it == ',' }), Base64.DEFAULT)
+		return@checkConnect BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
 	}
 
-	fun getCetScore(vcode: String, student: Student = QueryCetScoreViewModelHelper.student.value!!) {
-		QueryCetScoreViewModelHelper.cetScoreLiveData.value = PackageData.loading()
-		ScoreRemoteDataSource.queryCetScores(QueryCetScoreViewModelHelper.cetScoreLiveData, student, QueryCetScoreViewModelHelper.no.value!!, QueryCetScoreViewModelHelper.name.value!!, vcode)
+	suspend fun getCetScore(student: Student, no: String, name: String, vcode: String): CetScore = checkConnect {
+		val response = scoreAPI.getCETScores(student.username, no, name, vcode).redoAfterLogin(student) {
+			scoreAPI.getCETScores(student.username, no, name, vcode)
+		}.check()
+		return@checkConnect response.cetScore
 	}
 }
