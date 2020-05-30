@@ -1,6 +1,5 @@
 package com.weilylab.xhuschedule.ui.activity
 
-import android.annotation.SuppressLint
 import android.app.Dialog
 import android.view.Menu
 import android.view.MenuItem
@@ -8,7 +7,6 @@ import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.weilylab.xhuschedule.R
@@ -16,84 +14,44 @@ import com.weilylab.xhuschedule.base.XhuBaseActivity
 import com.weilylab.xhuschedule.databinding.LayoutNullDataViewBinding
 import com.weilylab.xhuschedule.model.Student
 import com.weilylab.xhuschedule.model.Test
-import com.weilylab.xhuschedule.repository.TestRepository
 import com.weilylab.xhuschedule.ui.adapter.QueryTestRecyclerViewAdapter
-import com.weilylab.xhuschedule.utils.userDo.UserUtil
 import com.weilylab.xhuschedule.viewmodel.QueryTestViewModel
-import com.zyao89.view.zloading.ZLoadingDialog
-import com.zyao89.view.zloading.Z_TYPE
-import io.reactivex.Observable
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_query_test.*
 import kotlinx.android.synthetic.main.content_query_test.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import vip.mystery0.logs.Logs
-import vip.mystery0.rx.PackageData
-import vip.mystery0.rx.PackageDataObserver
+import vip.mystery0.rx.DataObserver
 import vip.mystery0.tools.toastLong
 
 class QueryTestActivity : XhuBaseActivity(R.layout.activity_query_test) {
-	private val queryTestViewModel: QueryTestViewModel by lazy {
-		ViewModelProvider(this)[QueryTestViewModel::class.java]
-	}
+	private val queryTestViewModel: QueryTestViewModel by viewModel()
 	private lateinit var menu: Menu
 	private lateinit var viewStubBinding: LayoutNullDataViewBinding
-	private val dialog: Dialog by lazy {
-		ZLoadingDialog(this)
-				.setLoadingBuilder(Z_TYPE.SINGLE_CIRCLE)
-				.setHintText(getString(R.string.hint_dialog_get_tests))
-				.setHintTextSize(16F)
-				.setCanceledOnTouchOutside(false)
-				.setDialogBackgroundColor(ContextCompat.getColor(this, R.color.colorWhiteBackground))
-				.setLoadingColor(ContextCompat.getColor(this, R.color.colorAccent))
-				.setHintTextColor(ContextCompat.getColor(this, R.color.colorAccent))
-				.create()
-	}
+	private val dialog: Dialog by lazy { buildDialog(R.string.hint_dialog_get_tests) }
 	private val queryTestRecyclerViewAdapter: QueryTestRecyclerViewAdapter by lazy { QueryTestRecyclerViewAdapter(this) }
 
-	private val queryStudentListObserver = object : PackageDataObserver<List<Student>> {
-		override fun content(data: List<Student>?) {
-			generateStudentMenuList(data!!)
-			val mainStudent = UserUtil.findMainStudent(data)
-			if (mainStudent == null)
-				queryTestViewModel.testList.value = PackageData.empty()
-			else
-				queryTestForStudent(mainStudent)
-		}
-
-		override fun error(data: List<Student>?, e: Throwable?) {
-			queryTestViewModel.testList.value = PackageData.error(e)
-		}
-
-		override fun empty(data: List<Student>?) {
-			queryTestViewModel.testList.value = PackageData.empty()
-		}
-
-		override fun loading() {
-			queryTestViewModel.testList.value = PackageData.loading()
-		}
-	}
-
-	private val queryTestListObserver = object : PackageDataObserver<List<Test>> {
+	private val queryTestListObserver = object : DataObserver<List<Test>> {
 		override fun loading() {
 			showDialog()
 		}
 
-		override fun content(data: List<Test>?) {
+		override fun contentNoEmpty(data: List<Test>) {
 			hideDialog()
 			hideNoDataLayout()
 			queryTestRecyclerViewAdapter.items.clear()
-			queryTestRecyclerViewAdapter.items.addAll(data!!)
+			queryTestRecyclerViewAdapter.items.addAll(data)
 		}
 
-		override fun error(data: List<Test>?, e: Throwable?) {
+		override fun error(e: Throwable?) {
 			Logs.wtfm("queryTestListObserver: ", e)
 			hideDialog()
 			hideNoDataLayout()
 			e.toastLong(this@QueryTestActivity)
 		}
 
-		override fun empty(data: List<Test>?) {
+		override fun empty() {
 			hideDialog()
 			showNoDataLayout()
 		}
@@ -118,7 +76,7 @@ class QueryTestActivity : XhuBaseActivity(R.layout.activity_query_test) {
 	override fun initData() {
 		super.initData()
 		initViewModel()
-		TestRepository.queryStudentList(queryTestViewModel)
+		queryTestViewModel.init()
 	}
 
 	override fun monitor() {
@@ -130,46 +88,44 @@ class QueryTestActivity : XhuBaseActivity(R.layout.activity_query_test) {
 	}
 
 	private fun initViewModel() {
-		queryTestViewModel.studentList.observe(this, queryStudentListObserver)
+		queryTestViewModel.studentList.observe(this, Observer {
+			generateStudentMenuList(it)
+		})
+		queryTestViewModel.student.observe(this, Observer {
+			if (it == null) {
+				toastLong(R.string.hint_action_not_login)
+				finish()
+			}
+		})
 		queryTestViewModel.testList.observe(this, queryTestListObserver)
 		queryTestViewModel.html.observe(this, queryTestHtmlObserver)
 	}
 
 	private fun queryTestForStudent(student: Student) {
-		queryTestViewModel.student.value = student.username
-		TestRepository.queryTests(queryTestViewModel, student)
+		queryTestViewModel.query(student)
 	}
 
-	@SuppressLint("CheckResult")
 	private fun generateStudentMenuList(list: List<Student>) {
-		Observable.create<Boolean> {
-			var index = 0
-			while (!::menu.isInitialized) {
-				Thread.sleep(500)
-				if (index >= 3)
-					break
-				index++
-			}
-			it.onNext(::menu.isInitialized)
-			it.onComplete()
-		}
-				.subscribeOn(Schedulers.newThread())
-				.observeOn(AndroidSchedulers.mainThread())
-				.subscribe {
-					if (it) {
-						val groupId = 1
-						var nowCheckId = 0
-						list.forEachIndexed { index, student ->
-							val itemId = 100 + index
-							menu.add(groupId, itemId, 1, "${student.studentName}(${student.username})")
-							if (student.username == queryTestViewModel.student.value)
-								nowCheckId = itemId
-						}
-						menu.setGroupCheckable(groupId, true, true)
-						menu.findItem(nowCheckId).isChecked = true
-					}
+		launch(Dispatchers.Default) {
+			repeat(3) {
+				if (!::menu.isInitialized) {
+					Thread.sleep(500)
 				}
-
+			}
+			if (!::menu.isInitialized) {
+				return@launch
+			}
+			val groupId = 1
+			var nowCheckId = 0
+			list.forEachIndexed { index, student ->
+				val itemId = 100 + index
+				menu.add(groupId, itemId, 1, "${student.studentName}(${student.username})")
+				if (student.username == queryTestViewModel.student.value!!.username)
+					nowCheckId = itemId
+			}
+			menu.setGroupCheckable(groupId, true, true)
+			menu.findItem(nowCheckId).isChecked = true
+		}
 	}
 
 	private fun showDialog() {
@@ -214,7 +170,7 @@ class QueryTestActivity : XhuBaseActivity(R.layout.activity_query_test) {
 				true
 			}
 			else -> {
-				queryTestViewModel.studentList.value?.data?.forEachIndexed { index, student ->
+				queryTestViewModel.studentList.value?.forEachIndexed { index, student ->
 					val itemId = 100 + index
 					if (item.itemId == itemId) {
 						queryTestForStudent(student)

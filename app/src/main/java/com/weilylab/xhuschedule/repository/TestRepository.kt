@@ -1,16 +1,20 @@
 package com.weilylab.xhuschedule.repository
 
+import com.weilylab.xhuschedule.api.TestAPI
 import com.weilylab.xhuschedule.model.Student
-import com.weilylab.xhuschedule.repository.local.StudentLocalDataSource
-import com.weilylab.xhuschedule.repository.remote.TestRemoteDataSource
-import com.weilylab.xhuschedule.viewmodel.QueryTestViewModel
-import vip.mystery0.rx.PackageData
+import com.weilylab.xhuschedule.model.Test
+import com.weilylab.xhuschedule.module.check
+import com.weilylab.xhuschedule.module.redoAfterLogin
+import org.koin.core.KoinComponent
+import org.koin.core.inject
 
-object TestRepository {
-	fun queryStudentList(queryTestViewModel: QueryTestViewModel) = StudentLocalDataSource.queryAllStudentList(queryTestViewModel.studentList)
+class TestRepository : KoinComponent {
+	private val testAPI: TestAPI by inject()
 
-	fun queryTests(queryTestViewModel: QueryTestViewModel, student: Student) {
-		queryTestViewModel.testList.value = PackageData.loading()
-		TestRemoteDataSource.queryAllTestsByUsername(queryTestViewModel.testList, queryTestViewModel.html, student)
+	suspend fun queryTests(student: Student): Pair<List<Test>, String> {
+		val response = testAPI.getTests(student.username).redoAfterLogin(student) {
+			testAPI.getTests(student.username)
+		}.check()
+		return response.tests to response.html
 	}
 }
