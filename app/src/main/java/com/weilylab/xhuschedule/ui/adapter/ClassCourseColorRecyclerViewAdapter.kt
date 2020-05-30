@@ -7,7 +7,6 @@ import com.jrummyapps.android.colorpicker.ColorPickerDialogListener
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.databinding.ItemClassCourseColorBinding
 import com.weilylab.xhuschedule.model.Course
-import com.weilylab.xhuschedule.repository.local.CourseLocalDataSource
 import com.weilylab.xhuschedule.utils.ConfigUtil
 import vip.mystery0.tools.base.binding.BaseBindingRecyclerViewAdapter
 

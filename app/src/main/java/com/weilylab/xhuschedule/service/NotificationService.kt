@@ -10,7 +10,6 @@ import com.weilylab.xhuschedule.constant.Constants
 import com.weilylab.xhuschedule.model.CustomThing
 import com.weilylab.xhuschedule.model.Test
 import com.weilylab.xhuschedule.repository.NotificationRepository
-import com.weilylab.xhuschedule.repository.local.StudentLocalDataSource
 import com.weilylab.xhuschedule.ui.notification.TomorrowNotification
 import com.weilylab.xhuschedule.utils.ConfigurationUtil
 import com.zhuangfei.timetable.model.Schedule

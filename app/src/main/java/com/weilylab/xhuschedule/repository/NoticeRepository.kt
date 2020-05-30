@@ -3,7 +3,6 @@ package com.weilylab.xhuschedule.repository
 import com.weilylab.xhuschedule.api.NoticeAPI
 import com.weilylab.xhuschedule.constant.Constants
 import com.weilylab.xhuschedule.model.Notice
-import com.weilylab.xhuschedule.repository.local.NoticeLocalDataSource
 import com.weilylab.xhuschedule.repository.local.dao.NoticeDao
 import com.weilylab.xhuschedule.repository.remote.NoticeRemoteDataSource
 import com.weilylab.xhuschedule.viewmodel.BottomNavigationViewModel

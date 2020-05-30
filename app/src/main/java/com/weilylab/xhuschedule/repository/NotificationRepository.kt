@@ -5,10 +5,6 @@ import com.weilylab.xhuschedule.config.ColorPoolHelper
 import com.weilylab.xhuschedule.model.CustomThing
 import com.weilylab.xhuschedule.model.Student
 import com.weilylab.xhuschedule.model.Test
-import com.weilylab.xhuschedule.repository.local.CourseLocalDataSource
-import com.weilylab.xhuschedule.repository.local.CustomThingLocalDataSource
-import com.weilylab.xhuschedule.repository.local.InitLocalDataSource
-import com.weilylab.xhuschedule.repository.local.TestLocalDataSource
 import com.weilylab.xhuschedule.utils.CalendarUtil
 import com.weilylab.xhuschedule.utils.userDo.TestUtil
 import com.weilylab.xhuschedule.utils.userDo.UserUtil

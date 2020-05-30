@@ -3,10 +3,6 @@ package com.weilylab.xhuschedule.repository
 import android.graphics.Color
 import com.weilylab.xhuschedule.config.ColorPoolHelper
 import com.weilylab.xhuschedule.model.Test
-import com.weilylab.xhuschedule.repository.local.CourseLocalDataSource
-import com.weilylab.xhuschedule.repository.local.InitLocalDataSource
-import com.weilylab.xhuschedule.repository.local.StudentLocalDataSource
-import com.weilylab.xhuschedule.repository.local.TestLocalDataSource
 import com.weilylab.xhuschedule.utils.CalendarUtil
 import com.weilylab.xhuschedule.utils.userDo.CourseUtil
 import com.weilylab.xhuschedule.utils.userDo.TestUtil
