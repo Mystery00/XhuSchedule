@@ -3,106 +3,48 @@ package com.weilylab.xhuschedule.ui.activity
 import android.app.Dialog
 import android.view.View
 import androidx.appcompat.app.AlertDialog
-import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.base.XhuBaseActivity
 import com.weilylab.xhuschedule.model.Classroom
-import com.weilylab.xhuschedule.model.Student
-import com.weilylab.xhuschedule.repository.ClassRoomRepository
 import com.weilylab.xhuschedule.ui.adapter.QueryClassroomRecyclerViewAdapter
 import com.weilylab.xhuschedule.utils.CalendarUtil
 import com.weilylab.xhuschedule.viewmodel.QueryClassroomViewModel
-import com.zyao89.view.zloading.ZLoadingDialog
-import com.zyao89.view.zloading.Z_TYPE
 import kotlinx.android.synthetic.main.activity_query_class_room.*
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import vip.mystery0.logs.Logs
-import vip.mystery0.rx.PackageDataObserver
-import vip.mystery0.tools.toastLong
-import vip.mystery0.tools.utils.DensityTools
+import vip.mystery0.rx.DataObserver
+import vip.mystery0.tools.utils.screenWidth
 
 class QueryClassroomActivity : XhuBaseActivity(R.layout.activity_query_class_room) {
-	private val queryClassroomViewModel: QueryClassroomViewModel by lazy {
-		ViewModelProvider(this)[QueryClassroomViewModel::class.java]
-	}
+	private val queryClassroomViewModel: QueryClassroomViewModel by viewModel()
 	private val queryClassroomRecyclerViewAdapter: QueryClassroomRecyclerViewAdapter by lazy { QueryClassroomRecyclerViewAdapter(this) }
 	private var hasData = false
-	private val dialog: Dialog by lazy {
-		ZLoadingDialog(this)
-				.setLoadingBuilder(Z_TYPE.SINGLE_CIRCLE)
-				.setHintText(getString(R.string.hint_dialog_init))
-				.setHintTextSize(16F)
-				.setCanceledOnTouchOutside(false)
-				.setDialogBackgroundColor(ContextCompat.getColor(this, R.color.colorWhiteBackground))
-				.setLoadingColor(ContextCompat.getColor(this, R.color.colorAccent))
-				.setHintTextColor(ContextCompat.getColor(this, R.color.colorAccent))
-				.create()
-	}
+	private val dialog: Dialog by lazy { buildDialog(R.string.hint_dialog_init) }
 
-	private val studentObserver = object : PackageDataObserver<Student> {
-		override fun loading() {
-			dialog.show()
-		}
-
-		override fun content(data: Student?) {
-			dialog.dismiss()
-		}
-
-		override fun error(data: Student?, e: Throwable?) {
-			dialog.dismiss()
-			e.toastLong(this@QueryClassroomActivity)
-			finish()
-		}
-
-		override fun empty(data: Student?) {
-			toastMessage(R.string.error_init_failed)
-		}
-	}
-
-	private val locationObserver = Observer<String> {
-		textViewLocation.text = it
-	}
-
-	private val weekObserver = Observer<String> {
-		val string = "第${it.replace(",", "，")}周"
-		textViewWeek.text = string
-	}
-
-	private val dayObserver = Observer<String> { s ->
-		val list = s.split(",")
-		val string = list.joinToString("，") { CalendarUtil.getWeekIndexInString(it.toInt()) }
-		textViewDay.text = string
-	}
-
-	private val timeObserver = Observer<String> {
-		val string = "第${it.replace(",", "，")}节"
-		textViewTime.text = string
-	}
-
-	private val classroomObserver = object : PackageDataObserver<List<Classroom>> {
+	private val classroomObserver = object : DataObserver<List<Classroom>> {
 		override fun loading() {
 			showLoading()
 		}
 
-		override fun empty(data: List<Classroom>?) {
+		override fun empty() {
 			showEmpty()
 		}
 
-		override fun content(data: List<Classroom>?) {
+		override fun contentNoEmpty(data: List<Classroom>) {
 			hasData = true
-			updateClassroomList(data!!)
+			updateClassroomList(data)
 			showContent()
 		}
 
-		override fun error(data: List<Classroom>?, e: Throwable?) {
+		override fun error(e: Throwable?) {
 			Logs.wtfm("scoreListObserver: ", e)
 			dismissLoading()
-			e.toastLong(this@QueryClassroomActivity)
+			toastLong(e)
 		}
 	}
 
@@ -115,7 +57,7 @@ class QueryClassroomActivity : XhuBaseActivity(R.layout.activity_query_class_roo
 		scoreListRecyclerView.addItemDecoration(dividerItemDecoration)
 		scoreListRecyclerView.adapter = queryClassroomRecyclerViewAdapter
 		val layoutParams = scoreListRecyclerView.layoutParams
-		layoutParams.width = DensityTools.instance.getScreenWidth()
+		layoutParams.width = screenWidth
 		scoreListRecyclerView.layoutParams = layoutParams
 
 		textViewLocation.setText(R.string.hint_dialog_choose_location)
@@ -127,15 +69,33 @@ class QueryClassroomActivity : XhuBaseActivity(R.layout.activity_query_class_roo
 	override fun initData() {
 		super.initData()
 		initViewModel()
-		ClassRoomRepository.queryStudentList(queryClassroomViewModel)
+		queryClassroomViewModel.init()
 	}
 
 	private fun initViewModel() {
-		queryClassroomViewModel.student.observe(this, studentObserver)
-		queryClassroomViewModel.location.observe(this, locationObserver)
-		queryClassroomViewModel.week.observe(this, weekObserver)
-		queryClassroomViewModel.day.observe(this, dayObserver)
-		queryClassroomViewModel.time.observe(this, timeObserver)
+		queryClassroomViewModel.student.observe(this, Observer {
+			dialog.dismiss()
+			if (it == null) {
+				toastLong(R.string.hint_action_not_login)
+				finish()
+				return@Observer
+			}
+
+		})
+		queryClassroomViewModel.location.observe(this, Observer { textViewLocation.text = it })
+		queryClassroomViewModel.week.observe(this, Observer {
+			val string = "第${it.replace(",", "，")}周"
+			textViewWeek.text = string
+		})
+		queryClassroomViewModel.day.observe(this, Observer { s ->
+			val list = s.split(",")
+			val string = list.joinToString("，") { CalendarUtil.getWeekIndexInString(it.toInt()) }
+			textViewDay.text = string
+		})
+		queryClassroomViewModel.time.observe(this, Observer {
+			val string = "第${it.replace(",", "，")}节"
+			textViewTime.text = string
+		})
 		queryClassroomViewModel.classroomList.observe(this, classroomObserver)
 	}
 
@@ -160,8 +120,8 @@ class QueryClassroomActivity : XhuBaseActivity(R.layout.activity_query_class_roo
 			}
 		})
 		textViewLocation.setOnClickListener {
-			if (queryClassroomViewModel.student.value == null || queryClassroomViewModel.student.value!!.data == null) {
-				toastMessage(R.string.hint_action_not_login, true)
+			if (queryClassroomViewModel.student.value == null) {
+				toastLong(R.string.hint_action_not_login)
 				return@setOnClickListener
 			}
 			val array = resources.getStringArray(R.array.classroom_location)
@@ -180,8 +140,8 @@ class QueryClassroomActivity : XhuBaseActivity(R.layout.activity_query_class_roo
 					.show()
 		}
 		textViewWeek.setOnClickListener {
-			if (queryClassroomViewModel.student.value == null || queryClassroomViewModel.student.value!!.data == null) {
-				toastMessage(R.string.hint_action_not_login, true)
+			if (queryClassroomViewModel.student.value == null) {
+				toastLong(R.string.hint_action_not_login)
 				return@setOnClickListener
 			}
 			val array = Array(20) { i -> "第${i + 1}周" }
@@ -203,8 +163,8 @@ class QueryClassroomActivity : XhuBaseActivity(R.layout.activity_query_class_roo
 					.show()
 		}
 		textViewDay.setOnClickListener {
-			if (queryClassroomViewModel.student.value == null || queryClassroomViewModel.student.value!!.data == null) {
-				toastMessage(R.string.hint_action_not_login, true)
+			if (queryClassroomViewModel.student.value == null) {
+				toastLong(R.string.hint_action_not_login)
 				return@setOnClickListener
 			}
 			val array = Array(7) { i -> CalendarUtil.getWeekIndexInString(i + 1) }
@@ -226,8 +186,8 @@ class QueryClassroomActivity : XhuBaseActivity(R.layout.activity_query_class_roo
 					.show()
 		}
 		textViewTime.setOnClickListener {
-			if (queryClassroomViewModel.student.value == null || queryClassroomViewModel.student.value!!.data == null) {
-				toastMessage(R.string.hint_action_not_login, true)
+			if (queryClassroomViewModel.student.value == null) {
+				toastLong(R.string.hint_action_not_login)
 				return@setOnClickListener
 			}
 			val array = Array(11) { i -> "第${i + 1}节" }
@@ -249,27 +209,32 @@ class QueryClassroomActivity : XhuBaseActivity(R.layout.activity_query_class_roo
 					.show()
 		}
 		queryButton.setOnClickListener {
-			if (queryClassroomViewModel.student.value == null || queryClassroomViewModel.student.value!!.data == null) {
-				toastMessage(R.string.hint_action_not_login, true)
+			val student = queryClassroomViewModel.student.value
+			if (student == null) {
+				toastLong(R.string.hint_action_not_login)
 				return@setOnClickListener
 			}
-			if (queryClassroomViewModel.location.value.isNullOrEmpty()) {
-				toastMessage(R.string.hint_dialog_choose_location, true)
+			val location = queryClassroomViewModel.location.value
+			if (location.isNullOrEmpty()) {
+				toastLong(R.string.hint_dialog_choose_location)
 				return@setOnClickListener
 			}
-			if (queryClassroomViewModel.week.value.isNullOrEmpty()) {
-				toastMessage(R.string.hint_dialog_choose_week, true)
+			val week = queryClassroomViewModel.week.value
+			if (week.isNullOrEmpty()) {
+				toastLong(R.string.hint_dialog_choose_week)
 				return@setOnClickListener
 			}
-			if (queryClassroomViewModel.day.value.isNullOrEmpty()) {
-				toastMessage(R.string.hint_dialog_choose_day, true)
+			val day = queryClassroomViewModel.day.value
+			if (day.isNullOrEmpty()) {
+				toastLong(R.string.hint_dialog_choose_day)
 				return@setOnClickListener
 			}
-			if (queryClassroomViewModel.time.value.isNullOrEmpty()) {
-				toastMessage(R.string.hint_dialog_choose_time, true)
+			val time = queryClassroomViewModel.time.value
+			if (time.isNullOrEmpty()) {
+				toastLong(R.string.hint_dialog_choose_time)
 				return@setOnClickListener
 			}
-			ClassRoomRepository.queryClassroom(queryClassroomViewModel)
+			queryClassroomViewModel.queryClassRoomList(student, location, week, day, time)
 		}
 	}
 
@@ -299,7 +264,7 @@ class QueryClassroomActivity : XhuBaseActivity(R.layout.activity_query_class_roo
 
 	private fun showEmpty() {
 		dismissLoading()
-		toastMessage(R.string.hint_data_null, true)
+		toastLong(R.string.hint_data_null)
 	}
 
 	private fun showContent() {
