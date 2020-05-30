@@ -14,39 +14,25 @@ import com.weilylab.xhuschedule.model.Student
 import com.weilylab.xhuschedule.model.StudentInfo
 import com.weilylab.xhuschedule.repository.ScoreRepository
 import com.weilylab.xhuschedule.viewmodel.QueryCetScoreViewModelHelper
-import com.zyao89.view.zloading.ZLoadingDialog
-import com.zyao89.view.zloading.Z_TYPE
 import kotlinx.android.synthetic.main.activity_query_cet_score_first.*
 import vip.mystery0.logs.Logs
-import vip.mystery0.rx.PackageDataObserver
-import vip.mystery0.tools.toastLong
+import vip.mystery0.rx.DataObserver
 
 class QueryCetScoreFirstActivity : XhuBaseActivity(R.layout.activity_query_cet_score_first) {
-	private val dialog: Dialog by lazy {
-		ZLoadingDialog(this)
-				.setLoadingBuilder(Z_TYPE.SINGLE_CIRCLE)
-				.setHintText(getString(R.string.hint_dialog_get_cet_vcode))
-				.setHintTextSize(16F)
-				.setCanceledOnTouchOutside(false)
-				.setDialogBackgroundColor(ContextCompat.getColor(this, R.color.colorWhiteBackground))
-				.setLoadingColor(ContextCompat.getColor(this, R.color.colorAccent))
-				.setHintTextColor(ContextCompat.getColor(this, R.color.colorAccent))
-				.create()
-	}
+	private val dialog: Dialog by lazy { buildDialog(R.string.hint_dialog_get_cet_vcode) }
 
-	private val studentInfoListObserver = object : PackageDataObserver<Map<Student, StudentInfo?>> {
-		override fun content(data: Map<Student, StudentInfo?>?) {
-			val map = data!!
-			if (map.keys.isNotEmpty()) {
-				val student = map.keys.first { it.isMain }
+	private val studentInfoListObserver = object : DataObserver<Map<Student, StudentInfo?>> {
+		override fun contentNoEmpty(data: Map<Student, StudentInfo?>) {
+			if (data.keys.isNotEmpty()) {
+				val student = data.keys.first { it.isMain }
 				QueryCetScoreViewModelHelper.student.value = student
 				cetNameEditText.setText(student.studentName)
 			}
 		}
 	}
 
-	private val cetVCodeObserver = object : PackageDataObserver<Bitmap> {
-		override fun content(data: Bitmap?) {
+	private val cetVCodeObserver = object : DataObserver<Bitmap> {
+		override fun contentNoEmpty(data: Bitmap) {
 			hideDialog()
 			startActivity(Intent(this@QueryCetScoreFirstActivity, QueryCetScoreSecondActivity::class.java))
 		}
@@ -55,15 +41,15 @@ class QueryCetScoreFirstActivity : XhuBaseActivity(R.layout.activity_query_cet_s
 			showDialog()
 		}
 
-		override fun empty(data: Bitmap?) {
+		override fun empty() {
 			hideDialog()
-			toastMessage(R.string.hint_data_null, true)
+			toastLong(R.string.hint_data_null)
 		}
 
-		override fun error(data: Bitmap?, e: Throwable?) {
+		override fun error(e: Throwable?) {
 			Logs.wtfm("cetVCodeObserver: ", e)
 			hideDialog()
-			e.toastLong(this@QueryCetScoreFirstActivity)
+			toastLong(e)
 		}
 	}
 
@@ -118,7 +104,7 @@ class QueryCetScoreFirstActivity : XhuBaseActivity(R.layout.activity_query_cet_s
 
 	private fun requestVCode() {
 		if (QueryCetScoreViewModelHelper.studentList.value == null || QueryCetScoreViewModelHelper.studentList.value!!.data == null || QueryCetScoreViewModelHelper.studentList.value!!.data!!.isEmpty()) {
-			toastMessage(R.string.hint_action_not_login, true)
+			toastLong(R.string.hint_action_not_login)
 			return
 		}
 		cetNoEditText.error = null

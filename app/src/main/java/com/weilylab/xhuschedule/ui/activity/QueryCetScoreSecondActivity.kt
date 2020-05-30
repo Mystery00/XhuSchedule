@@ -12,39 +12,16 @@ import com.weilylab.xhuschedule.base.XhuBaseActivity
 import com.weilylab.xhuschedule.model.CetScore
 import com.weilylab.xhuschedule.repository.ScoreRepository
 import com.weilylab.xhuschedule.viewmodel.QueryCetScoreViewModelHelper
-import com.zyao89.view.zloading.ZLoadingDialog
-import com.zyao89.view.zloading.Z_TYPE
 import kotlinx.android.synthetic.main.activity_query_cet_score_second.*
 import vip.mystery0.logs.Logs
-import vip.mystery0.rx.PackageDataObserver
-import vip.mystery0.tools.toastLong
+import vip.mystery0.rx.DataObserver
 
 class QueryCetScoreSecondActivity : XhuBaseActivity(R.layout.activity_query_cet_score_second) {
-	private val vCodeDialog: Dialog by lazy {
-		ZLoadingDialog(this)
-				.setLoadingBuilder(Z_TYPE.SINGLE_CIRCLE)
-				.setHintText(getString(R.string.hint_dialog_get_cet_vcode))
-				.setHintTextSize(16F)
-				.setCanceledOnTouchOutside(false)
-				.setDialogBackgroundColor(ContextCompat.getColor(this, R.color.colorWhiteBackground))
-				.setLoadingColor(ContextCompat.getColor(this, R.color.colorAccent))
-				.setHintTextColor(ContextCompat.getColor(this, R.color.colorAccent))
-				.create()
-	}
-	private val dialog: Dialog by lazy {
-		ZLoadingDialog(this)
-				.setLoadingBuilder(Z_TYPE.SINGLE_CIRCLE)
-				.setHintText(getString(R.string.hint_dialog_query_cet_score))
-				.setHintTextSize(16F)
-				.setCanceledOnTouchOutside(false)
-				.setDialogBackgroundColor(ContextCompat.getColor(this, R.color.colorWhiteBackground))
-				.setLoadingColor(ContextCompat.getColor(this, R.color.colorAccent))
-				.setHintTextColor(ContextCompat.getColor(this, R.color.colorAccent))
-				.create()
-	}
+	private val vCodeDialog: Dialog by lazy { buildDialog(R.string.hint_dialog_get_cet_vcode) }
+	private val dialog: Dialog by lazy { buildDialog(R.string.hint_dialog_query_cet_score) }
 
-	private val cetVCodeObserver = object : PackageDataObserver<Bitmap> {
-		override fun content(data: Bitmap?) {
+	private val cetVCodeObserver = object : DataObserver<Bitmap> {
+		override fun contentNoEmpty(data: Bitmap) {
 			hideVCodeDialog()
 			imageView.setImageBitmap(data)
 		}
@@ -53,20 +30,20 @@ class QueryCetScoreSecondActivity : XhuBaseActivity(R.layout.activity_query_cet_
 			showVCodeDialog()
 		}
 
-		override fun empty(data: Bitmap?) {
+		override fun empty() {
 			hideVCodeDialog()
-			toastMessage(R.string.hint_data_null, true)
+			toastLong(R.string.hint_data_null)
 		}
 
-		override fun error(data: Bitmap?, e: Throwable?) {
+		override fun error(e: Throwable?) {
 			Logs.wtfm("cetVCodeObserver: ", e)
 			hideVCodeDialog()
-			e.toastLong(this@QueryCetScoreSecondActivity)
+			toastLong(e)
 		}
 	}
 
-	private val cetScoreObserver = object : PackageDataObserver<CetScore> {
-		override fun content(data: CetScore?) {
+	private val cetScoreObserver = object : DataObserver<CetScore> {
+		override fun contentNoEmpty(data: CetScore) {
 			hideDialog()
 			startActivity(Intent(this@QueryCetScoreSecondActivity, QueryCetScoreShowActivity::class.java))
 			finish()
@@ -76,15 +53,15 @@ class QueryCetScoreSecondActivity : XhuBaseActivity(R.layout.activity_query_cet_
 			showDialog()
 		}
 
-		override fun empty(data: CetScore?) {
+		override fun empty() {
 			hideDialog()
-			toastMessage(R.string.hint_data_null, true)
+			toastLong(R.string.hint_data_null)
 		}
 
-		override fun error(data: CetScore?, e: Throwable?) {
+		override fun error(e: Throwable?) {
 			Logs.wtfm("cetScoreObserver: ", e)
 			hideDialog()
-			e.toastLong(this@QueryCetScoreSecondActivity)
+			toastLong(e)
 		}
 	}
 

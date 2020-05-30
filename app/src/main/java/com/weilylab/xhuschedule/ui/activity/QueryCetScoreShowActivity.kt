@@ -6,20 +6,18 @@ import com.weilylab.xhuschedule.base.XhuBaseActivity
 import com.weilylab.xhuschedule.databinding.ActivityQueryCetScoreShowBinding
 import com.weilylab.xhuschedule.model.CetScore
 import com.weilylab.xhuschedule.viewmodel.QueryCetScoreViewModelHelper
-import io.reactivex.Observable
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_query_cet_score_show.*
-import vip.mystery0.logs.Logs
-import vip.mystery0.rx.OnlyCompleteObserver
-import vip.mystery0.rx.PackageDataObserver
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import vip.mystery0.rx.DataObserver
 
 class QueryCetScoreShowActivity : XhuBaseActivity(R.layout.activity_query_cet_score_show) {
 	private lateinit var activityQueryCetScoreShowBinding: ActivityQueryCetScoreShowBinding
 
-	private val cetScoreObserver = object : PackageDataObserver<CetScore> {
-		override fun content(data: CetScore?) {
-			doShow(data!!)
+	private val cetScoreObserver = object : DataObserver<CetScore> {
+		override fun contentNoEmpty(data: CetScore) {
+			doShow(data)
 		}
 	}
 
@@ -59,28 +57,17 @@ class QueryCetScoreShowActivity : XhuBaseActivity(R.layout.activity_query_cet_sc
 	}
 
 	private fun doShow(cetScore: CetScore) {
-		Observable.create<Boolean> {
+		launch(Dispatchers.Default) {
 			while (!::activityQueryCetScoreShowBinding.isInitialized) {
 				Thread.sleep(200)
 			}
-			it.onComplete()
+			withContext(Dispatchers.Main) {
+				activityQueryCetScoreShowBinding.cetScore = cetScore
+				val nameText = "姓名：${cetScore.name}"
+				val schoolText = "学校：${cetScore.school}"
+				activityQueryCetScoreShowBinding.textViewName.text = nameText
+				activityQueryCetScoreShowBinding.textViewSchool.text = schoolText
+			}
 		}
-				.subscribeOn(Schedulers.single())
-				.observeOn(AndroidSchedulers.mainThread())
-				.subscribe(object : OnlyCompleteObserver<Boolean>() {
-					override fun onError(e: Throwable) {
-						Logs.wtf("onError: ", e)
-					}
-
-					override fun onFinish(data: Boolean?) {
-						if (::activityQueryCetScoreShowBinding.isInitialized) {
-							activityQueryCetScoreShowBinding.cetScore = cetScore
-							val nameText = "姓名：${cetScore.name}"
-							val schoolText = "学校：${cetScore.school}"
-							activityQueryCetScoreShowBinding.textViewName.text = nameText
-							activityQueryCetScoreShowBinding.textViewSchool.text = schoolText
-						}
-					}
-				})
 	}
 }

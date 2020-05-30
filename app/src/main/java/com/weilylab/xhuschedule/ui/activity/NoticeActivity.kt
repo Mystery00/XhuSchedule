@@ -51,8 +51,7 @@ import org.greenrobot.eventbus.EventBus
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import vip.mystery0.logs.Logs
-import vip.mystery0.rx.PackageDataObserver
-import vip.mystery0.tools.toastLong
+import vip.mystery0.rx.DataObserver
 
 class NoticeActivity : XhuBaseActivity(R.layout.activity_notice) {
 	private val noticeViewModel: NoticeViewModel by viewModel()
@@ -60,26 +59,26 @@ class NoticeActivity : XhuBaseActivity(R.layout.activity_notice) {
 	private val noticeAdapter: NoticeAdapter by lazy { NoticeAdapter(this) }
 	private lateinit var viewStubBinding: LayoutNullDataViewBinding
 
-	private val noticeObserver = object : PackageDataObserver<List<Notice>> {
+	private val noticeObserver = object : DataObserver<List<Notice>> {
 		override fun loading() {
 			showRefresh()
 		}
 
-		override fun content(data: List<Notice>?) {
+		override fun contentNoEmpty(data: List<Notice>) {
 			hideRefresh()
 			hideNoDataLayout()
 			noticeAdapter.items.clear()
-			noticeAdapter.items.addAll(data!!)
+			noticeAdapter.items.addAll(data)
 		}
 
-		override fun error(data: List<Notice>?, e: Throwable?) {
+		override fun error(e: Throwable?) {
 			Logs.wtfm("noticeObserver: ", e)
 			hideRefresh()
 			hideNoDataLayout()
-			e.toastLong(this@NoticeActivity)
+			toastLong(e)
 		}
 
-		override fun empty(data: List<Notice>?) {
+		override fun empty() {
 			hideRefresh()
 			showNoDataLayout()
 		}
