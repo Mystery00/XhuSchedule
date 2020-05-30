@@ -35,25 +35,28 @@ package com.weilylab.xhuschedule.ui.activity
 
 import android.view.View
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.base.XhuBaseActivity
 import com.weilylab.xhuschedule.databinding.LayoutNullDataViewBinding
 import com.weilylab.xhuschedule.model.Notice
+import com.weilylab.xhuschedule.model.event.UI
+import com.weilylab.xhuschedule.model.event.UIConfigEvent
 import com.weilylab.xhuschedule.repository.NoticeRepository
 import com.weilylab.xhuschedule.ui.adapter.NoticeAdapter
 import com.weilylab.xhuschedule.viewmodel.NoticeViewModel
 import kotlinx.android.synthetic.main.activity_notice.*
+import org.greenrobot.eventbus.EventBus
+import org.koin.android.ext.android.inject
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import vip.mystery0.logs.Logs
 import vip.mystery0.rx.PackageDataObserver
 import vip.mystery0.tools.toastLong
 
 class NoticeActivity : XhuBaseActivity(R.layout.activity_notice) {
-	private val noticeViewModel: NoticeViewModel by lazy {
-		ViewModelProvider(this).get(NoticeViewModel::class.java)
-	}
+	private val noticeViewModel: NoticeViewModel by viewModel()
+	private val eventBus: EventBus by inject()
 	private val noticeAdapter: NoticeAdapter by lazy { NoticeAdapter(this) }
 	private lateinit var viewStubBinding: LayoutNullDataViewBinding
 
@@ -110,7 +113,7 @@ class NoticeActivity : XhuBaseActivity(R.layout.activity_notice) {
 	override fun monitor() {
 		super.monitor()
 		toolbar.setNavigationOnClickListener {
-			LayoutRefreshConfigUtil.isRefreshNoticeDot = true
+			eventBus.post(UIConfigEvent(arrayListOf(UI.NOTICE_DOT)))
 			finish()
 		}
 		swipeRefreshLayout.setOnRefreshListener {
@@ -153,7 +156,7 @@ class NoticeActivity : XhuBaseActivity(R.layout.activity_notice) {
 	}
 
 	override fun onDestroy() {
-		LayoutRefreshConfigUtil.isRefreshNoticeDot = true
+		eventBus.post(UIConfigEvent(arrayListOf(UI.NOTICE_DOT)))
 		NoticeRepository.markNoticesAsRead(noticeAdapter.items)
 		super.onDestroy()
 	}

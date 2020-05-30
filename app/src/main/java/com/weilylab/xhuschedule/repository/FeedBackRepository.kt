@@ -1,25 +1,24 @@
 package com.weilylab.xhuschedule.repository
 
 import com.weilylab.xhuschedule.api.FeedbackAPI
-import com.weilylab.xhuschedule.constant.StringConstant
+import com.weilylab.xhuschedule.model.FeedBackMessage
 import com.weilylab.xhuschedule.model.FeedBackToken
 import com.weilylab.xhuschedule.model.Student
 import com.weilylab.xhuschedule.module.redoAfterLogin
 import com.weilylab.xhuschedule.repository.local.dao.FBTokenDao
 import com.weilylab.xhuschedule.repository.local.dao.FeedBackMessageDao
-import com.weilylab.xhuschedule.repository.remote.FeedBackRemoteDataSource
-import com.weilylab.xhuschedule.viewmodel.FeedBackViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.koin.core.KoinComponent
 import org.koin.core.inject
-import vip.mystery0.rx.PackageData
 
 class FeedBackRepository : KoinComponent {
 	private val fbTokenDao: FBTokenDao by inject()
 	private val feedBackMessageDao: FeedBackMessageDao by inject()
 
 	private val feedBackApi: FeedbackAPI by inject()
+
+	private val studentRepository: StudentRepository by inject()
 
 	suspend fun registerFeedBackToken(student: Student, feedBackToken: String) {
 		withContext(Dispatchers.IO) {
@@ -47,6 +46,14 @@ class FeedBackRepository : KoinComponent {
 		if (list.isNullOrEmpty()) {
 			return false
 		}
+		val saveList = saveFeedbackMessageList(mainStudent, list)
+		return saveList.any { it.status != 0 }.or(list.any { it.status != 0 })
+	}
+
+	private suspend fun saveFeedbackMessageList(mainStudent: Student, list: List<FeedBackMessage>): List<FeedBackMessage> {
+		if (list.isNullOrEmpty()) {
+			return emptyList()
+		}
 		val saveList = feedBackMessageDao.queryMessageForStudent(mainStudent.username, 0)
 		list.forEach { message ->
 			val s = saveList.find { it.id == message.id && it.createTime == message.createTime }
@@ -63,28 +70,45 @@ class FeedBackRepository : KoinComponent {
 				feedBackMessageDao.update(s)
 			}
 		}
-		return saveList.any { it.status != 0 }.or(list.any { it.status != 0 })
+		return saveList
 	}
 
-	fun sendMessage(content: String, feedBackViewModel: FeedBackViewModel) {
-		if (feedBackViewModel.mainStudent.value?.data == null)
-			feedBackViewModel.feedBackMessageList.value = PackageData.error(Exception(StringConstant.hint_null_student))
-		else
-			FeedBackRemoteDataSource.sendFeedBackMessage(feedBackViewModel.feedBackMessageList, feedBackViewModel.maxId, feedBackViewModel.mainStudent.value!!.data!!, content, feedBackViewModel.feedBackToken.value!!.data!!)
+	suspend fun sendMessage(student: Student, maxId: Int, content: String): List<FeedBackMessage> {
+		var fbToken = fbTokenDao.queryFeedBackTokenForUsername(student.username)
+		if (fbToken == null) {
+			studentRepository.doLoginOnly(student)
+			fbToken = fbTokenDao.queryFeedBackTokenForUsername(student.username)
+		}
+		if (fbToken == null) {
+			throw Exception("token请求失败")
+		}
+		val response = feedBackApi.sendFBMessage(student.username, fbToken.fbToken, content).redoAfterLogin(student) {
+			feedBackApi.sendFBMessage(student.username, fbToken.fbToken, content)
+		}
+		if (!response.isSuccessful) {
+			throw Exception(response.msg)
+		}
+		return getMessageFromLocal(student, maxId)
 	}
 
-	fun getMessageFromLocal(feedBackViewModel: FeedBackViewModel) {
-		if (feedBackViewModel.mainStudent.value?.data == null)
-			feedBackViewModel.feedBackMessageList.value = PackageData.error(Exception(StringConstant.hint_null_student))
-		else
-			FeedBackLocalDataSource.queryFeedBackForStudent(feedBackViewModel.feedBackMessageList, feedBackViewModel.maxId, feedBackViewModel.mainStudent.value!!.data!!)
-	}
+	suspend fun getMessageFromLocal(student: Student, maxId: Int): List<FeedBackMessage> = feedBackMessageDao.queryMessageForStudent(student.username, maxId)
 
-	fun getMessageFromServer(feedBackViewModel: FeedBackViewModel) {
-		feedBackViewModel.feedBackMessageList.value = PackageData.loading()
-		if (feedBackViewModel.mainStudent.value?.data == null)
-			feedBackViewModel.feedBackMessageList.value = PackageData.error(Exception(StringConstant.hint_null_student))
-		else
-			FeedBackRemoteDataSource.queryFeedBackForStudent(feedBackViewModel.feedBackMessageList, feedBackViewModel.maxId, feedBackViewModel.mainStudent.value!!.data!!, feedBackViewModel.feedBackToken.value!!.data!!)
+	suspend fun getMessageFromRemote(student: Student, maxId: Int): List<FeedBackMessage> {
+		var fbToken = fbTokenDao.queryFeedBackTokenForUsername(student.username)
+		if (fbToken == null) {
+			studentRepository.doLoginOnly(student)
+			fbToken = fbTokenDao.queryFeedBackTokenForUsername(student.username)
+		}
+		if (fbToken == null) {
+			throw Exception("token请求失败")
+		}
+		val response = feedBackApi.getFBMessage(student.username, fbToken.fbToken, maxId).redoAfterLogin(student) {
+			feedBackApi.getFBMessage(student.username, fbToken.fbToken, maxId)
+		}
+		if (!response.isSuccessful) {
+			throw Exception(response.msg)
+		}
+		saveFeedbackMessageList(student, response.fBMessages)
+		return getMessageFromLocal(student, maxId)
 	}
 }

@@ -4,101 +4,36 @@ import android.app.Dialog
 import android.text.Editable
 import android.text.TextWatcher
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.base.XhuBaseActivity
 import com.weilylab.xhuschedule.config.ColorPoolHelper
 import com.weilylab.xhuschedule.model.FeedBackMessage
-import com.weilylab.xhuschedule.model.Student
-import com.weilylab.xhuschedule.repository.FeedBackRepository
-import com.weilylab.xhuschedule.repository.local.StudentLocalDataSource
+import com.weilylab.xhuschedule.model.event.UI
+import com.weilylab.xhuschedule.model.event.UIConfigEvent
 import com.weilylab.xhuschedule.ui.adapter.FeedBackMessageAdapter
 import com.weilylab.xhuschedule.viewmodel.FeedBackViewModel
-import com.zyao89.view.zloading.ZLoadingDialog
-import com.zyao89.view.zloading.Z_TYPE
-import io.reactivex.Observable
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.Disposable
-import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_feedback.*
 import kotlinx.android.synthetic.main.content_feedback.*
+import org.greenrobot.eventbus.EventBus
+import org.koin.android.ext.android.inject
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import vip.mystery0.logs.Logs
-import vip.mystery0.rx.PackageDataObserver
-import vip.mystery0.tools.toastLong
+import vip.mystery0.rx.DataObserver
+import vip.mystery0.tools.ResourceException
 
 class FeedbackActivity : XhuBaseActivity(R.layout.activity_feedback) {
-	private val feedBackViewModel: FeedBackViewModel by lazy {
-		ViewModelProvider(this)[FeedBackViewModel::class.java]
-	}
-	private val dialog: Dialog by lazy {
-		ZLoadingDialog(this)
-				.setLoadingBuilder(Z_TYPE.SINGLE_CIRCLE)
-				.setHintText(getString(R.string.hint_dialog_init))
-				.setHintTextSize(16F)
-				.setCanceledOnTouchOutside(false)
-				.setDialogBackgroundColor(ContextCompat.getColor(this, R.color.colorWhiteBackground))
-				.setLoadingColor(ContextCompat.getColor(this, R.color.colorAccent))
-				.setHintTextColor(ContextCompat.getColor(this, R.color.colorAccent))
-				.create()
-	}
+	private val feedBackViewModel: FeedBackViewModel by viewModel()
+	private val eventBus: EventBus by inject()
+	private val dialog: Dialog by lazy { buildDialog(R.string.hint_dialog_init) }
 	private val feedBackMessageAdapter: FeedBackMessageAdapter by lazy { FeedBackMessageAdapter() }
 	private var isRefreshByManual = true
-	private var isRefreshPause = false
-	private var isRefreshDone = true
-	private var isRefreshFinish = true
 
-	private val mainStudentObserver = object : PackageDataObserver<Student> {
-		override fun content(data: Student?) {
-			FeedBackRepository.queryFeedBackToken(feedBackViewModel)
-		}
-
-		override fun loading() {
-			showInitDialog()
-		}
-
-		override fun empty(data: Student?) {
-			hideInitDialog()
-			toastMessage(R.string.hint_null_student)
-			finish()
-		}
-
-		override fun error(data: Student?, e: Throwable?) {
-			Logs.wtfm("mainStudentObserver: ", e)
-			hideInitDialog()
-			e.toastLong(this@FeedbackActivity)
-		}
-	}
-
-	private val feedBackTokenObserver = object : PackageDataObserver<String> {
-		override fun content(data: String?) {
-			hideInitDialog()
-			initAutoRefreshMessage()
-			FeedBackRepository.getMessageFromLocal(feedBackViewModel)
-		}
-
-		override fun loading() {
-			showInitDialog()
-		}
-
-		override fun empty(data: String?) {
-			hideInitDialog()
-			toastMessage(R.string.hint_null_student)
-			disableInput()
-		}
-
-		override fun error(data: String?, e: Throwable?) {
-			Logs.wtfm("feedBackTokenObserver: ", e)
-			hideInitDialog()
-			e.toastLong(this@FeedbackActivity)
-			disableInput()
-		}
-	}
-
-	private val feedBackMessageObserver = object : PackageDataObserver<List<FeedBackMessage>> {
-		override fun content(data: List<FeedBackMessage>?) {
+	private val feedBackMessageObserver = object : DataObserver<List<FeedBackMessage>> {
+		override fun contentNoEmpty(data: List<FeedBackMessage>) {
 			hideRefresh()
-			addMessage(data!!)
+			addMessage(data)
 			isRefreshByManual = false
 		}
 
@@ -107,14 +42,17 @@ class FeedbackActivity : XhuBaseActivity(R.layout.activity_feedback) {
 				showRefresh()
 		}
 
-		override fun empty(data: List<FeedBackMessage>?) {
+		override fun empty() {
 			hideRefresh()
 		}
 
-		override fun error(data: List<FeedBackMessage>?, e: Throwable?) {
+		override fun error(e: Throwable?) {
 			Logs.wtfm("feedBackMessageObserver: ", e)
 			hideRefresh()
-			e.toastLong(this@FeedbackActivity)
+			toastLong(e)
+			if (e is ResourceException && feedBackViewModel.mainStudent.value == null) {
+				finish()
+			}
 		}
 	}
 
@@ -135,44 +73,16 @@ class FeedbackActivity : XhuBaseActivity(R.layout.activity_feedback) {
 	override fun initData() {
 		super.initData()
 		initViewModel()
-		StudentLocalDataSource.queryMainStudent(feedBackViewModel.mainStudent)
+		showInitDialog()
+		feedBackViewModel.init()
 	}
 
 	private fun initViewModel() {
-		feedBackViewModel.mainStudent.observe(this, mainStudentObserver)
-		feedBackViewModel.feedBackToken.observe(this, feedBackTokenObserver)
+		feedBackViewModel.mainStudent.observe(this, Observer {
+			hideInitDialog()
+			feedBackViewModel.startReceiveMessage(it)
+		})
 		feedBackViewModel.feedBackMessageList.observe(this, feedBackMessageObserver)
-	}
-
-	private fun initAutoRefreshMessage() {
-		if (!isRefreshFinish)
-			return
-		isRefreshFinish = false
-		Observable.create<Boolean> {
-			while (!isRefreshFinish) {
-				if (!isRefreshPause)
-					it.onNext(isRefreshDone)
-				Thread.sleep(30 * 1000)
-			}
-			it.onComplete()
-		}
-				.subscribeOn(Schedulers.single())
-				.observeOn(AndroidSchedulers.mainThread())
-				.subscribe(object : io.reactivex.Observer<Boolean> {
-					override fun onComplete() {
-					}
-
-					override fun onSubscribe(d: Disposable) {
-					}
-
-					override fun onNext(t: Boolean) {
-						if (t) FeedBackRepository.getMessageFromServer(feedBackViewModel)
-					}
-
-					override fun onError(e: Throwable) {
-						Logs.wtfm("onError: ", e)
-					}
-				})
 	}
 
 	override fun monitor() {
@@ -182,13 +92,18 @@ class FeedbackActivity : XhuBaseActivity(R.layout.activity_feedback) {
 		}
 		swipeRefreshLayout.setOnRefreshListener {
 			isRefreshByManual = true
-			FeedBackRepository.getMessageFromLocal(feedBackViewModel)
+			val student = feedBackViewModel.mainStudent.value
+			if (student == null) {
+				toastLong(R.string.hint_action_not_login)
+				return@setOnRefreshListener
+			}
+			feedBackViewModel.getMessageFromLocal(student)
 		}
 		buttonSubmit.setOnClickListener {
 			if (inputEditText.text.toString().trim() == "")
-				toastMessage(R.string.hint_feedback_empty)
+				toast(R.string.hint_feedback_empty)
 			else {
-				FeedBackRepository.sendMessage(inputEditText.text.toString(), feedBackViewModel)
+				feedBackViewModel.sendMessage(inputEditText.text.toString())
 				inputEditText.setText("")
 			}
 		}
@@ -208,20 +123,10 @@ class FeedbackActivity : XhuBaseActivity(R.layout.activity_feedback) {
 		})
 	}
 
-	override fun onStart() {
-		super.onStart()
-		isRefreshPause = false
-	}
-
-	override fun onStop() {
-		super.onStop()
-		isRefreshPause = true
-	}
-
 	override fun onDestroy() {
 		super.onDestroy()
-		isRefreshFinish = true
-		LayoutRefreshConfigUtil.isRefreshFeedBackDot = true
+		feedBackViewModel.stopReceiveMessage()
+		eventBus.post(UIConfigEvent(arrayListOf(UI.FEEDBACK_DOT)))
 	}
 
 	private fun showInitDialog() {
@@ -266,7 +171,7 @@ class FeedbackActivity : XhuBaseActivity(R.layout.activity_feedback) {
 		}
 		if (feedBackMessageAdapter.items.size == messageList.size) {
 			var startIndex = -1
-			for (i in 0 until messageList.size) {
+			for (i in messageList.indices) {
 				val oldMessage = feedBackMessageAdapter.items[i]
 				val newMessage = messageList[i]
 				if (oldMessage.createTime == newMessage.createTime && oldMessage.id == newMessage.id && oldMessage.id != -1)
