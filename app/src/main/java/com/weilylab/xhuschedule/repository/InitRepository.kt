@@ -1,6 +1,7 @@
 package com.weilylab.xhuschedule.repository
 
 import com.weilylab.xhuschedule.api.XhuScheduleCloudAPI
+import com.weilylab.xhuschedule.utils.CalendarUtil.parseCalendar
 import com.weilylab.xhuschedule.utils.ConfigurationUtil
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -18,10 +19,7 @@ class InitRepository : KoinComponent {
 			val response = xhuScheduleCloudAPI.requestStartDateTime()
 			if (response.isSuccessful) {
 				setStartDateTime(response.data)
-				val calendar = Calendar.getInstance()
-				val dateArray = response.data.split('-')
-				calendar.set(dateArray[0].toInt(), dateArray[1].toInt() - 1, dateArray[2].toInt(), 0, 0, 0)
-				calendar
+				response.data.parseCalendar()
 			} else {
 				getStartDateTime()
 			}
@@ -45,9 +43,7 @@ class InitRepository : KoinComponent {
 		if (dateString == "")
 			return calendar
 		return withContext(Dispatchers.Default) {
-			val dateArray = dateString.split('-')
-			calendar.set(dateArray[0].toInt(), dateArray[1].toInt() - 1, dateArray[2].toInt(), 0, 0, 0)
-			calendar
+			dateString.parseCalendar()
 		}
 	}
 }

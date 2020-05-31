@@ -106,7 +106,7 @@ class TodayFragment : BaseBottomNavigationFragment<FragmentTodayBinding>(R.layou
 	override fun updateTitle() {
 		bottomNavigationViewModel.currentWeek.value?.data?.let {
 			val shouldShowTomorrow = CalendarUtil.shouldShowTomorrowInfo()
-			val whenTime = CalendarUtil.whenBeginSchool(shouldShowTomorrow)
+			val whenTime = CalendarUtil.whenBeginSchool(bottomNavigationViewModel.startDateTime.value!!, shouldShowTomorrow)
 			val weekIndex = CalendarUtil.getWeekIndexInString(if (shouldShowTomorrow) CalendarUtil.getTomorrowIndex() else CalendarUtil.getWeekIndex())
 			if (bottomNavigationViewModel.currentWeek.value!!.data!! <= 0 && whenTime > 0) {
 				bottomNavigationViewModel.title.postValue(Pair(javaClass, "距离开学还有${whenTime}天 $weekIndex"))

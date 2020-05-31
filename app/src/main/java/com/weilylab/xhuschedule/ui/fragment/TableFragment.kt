@@ -20,6 +20,7 @@ import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import vip.mystery0.logs.Logs
 import vip.mystery0.rx.DataObserver
 import vip.mystery0.tools.utils.dpTopx
+import vip.mystery0.tools.utils.toDateTimeString
 
 class TableFragment : BaseBottomNavigationFragment<FragmentTableBinding>(R.layout.fragment_table) {
 	companion object {
@@ -54,6 +55,9 @@ class TableFragment : BaseBottomNavigationFragment<FragmentTableBinding>(R.layou
 						.setBackground(Color.BLACK)
 						.setTextSize(12f)
 						.setTextColor(Color.WHITE))
+				.callback(ISchedule.OnWeekChangedListener {
+					bottomNavigationViewModel.week.postValue(it)
+				})
 				.showView()
 	}
 
@@ -65,8 +69,8 @@ class TableFragment : BaseBottomNavigationFragment<FragmentTableBinding>(R.layou
 			binding.timeTableView.onDateBuildListener()
 					.onUpdateDate(binding.timeTableView.curWeek(), it)
 		})
-		bottomNavigationViewModel.currentWeek.observe(requireActivity(), Observer {
-			binding.timeTableView.curWeek(it.data!!)
+		bottomNavigationViewModel.startDateTime.observe(requireActivity(), Observer {
+			binding.timeTableView.curWeek(it.toDateTimeString())
 		})
 	}
 
@@ -92,7 +96,7 @@ class TableFragment : BaseBottomNavigationFragment<FragmentTableBinding>(R.layou
 
 	override fun updateTitle() {
 		bottomNavigationViewModel.week.value?.let {
-			val whenTime = CalendarUtil.whenBeginSchool()
+			val whenTime = CalendarUtil.whenBeginSchool(bottomNavigationViewModel.startDateTime.value!!)
 			if (it <= 0 && whenTime > 0) {
 				bottomNavigationViewModel.title.postValue(Pair(javaClass, getString(R.string.hint_remain_day_of_start_term, whenTime)))
 			} else {

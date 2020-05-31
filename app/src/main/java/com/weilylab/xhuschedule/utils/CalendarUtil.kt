@@ -117,9 +117,8 @@ object CalendarUtil {
 		return calendar.timeInMillis
 	}
 
-	fun whenBeginSchool(shouldShowTomorrow: Boolean = false): Int {
+	fun whenBeginSchool(startDateTime: Calendar, shouldShowTomorrow: Boolean = false): Int {
 		val calendar = Calendar.getInstance()
-		val startDateTime: Calendar = Calendar.getInstance()
 		if (shouldShowTomorrow)
 			calendar.add(Calendar.DAY_OF_MONTH, 1)
 		startDateTime.set(Calendar.HOUR_OF_DAY, 0)
@@ -140,9 +139,8 @@ object CalendarUtil {
 		return num
 	}
 
-	fun getTrueWeek(): Int {
+	fun getTrueWeek(startDateTime: Calendar): Int {
 		val calendar = Calendar.getInstance()
-		val startDateTime: Calendar = Calendar.getInstance()
 		calendar.set(Calendar.HOUR_OF_DAY, 0)
 		calendar.set(Calendar.MINUTE, 0)
 		calendar.set(Calendar.SECOND, 0)
@@ -248,5 +246,12 @@ object CalendarUtil {
 		if (nowHour > setHour)
 			return true
 		return nowMinute >= setMinute
+	}
+
+	fun String.parseCalendar(): Calendar {
+		val calendar = Calendar.getInstance()
+		val dateArray = split('-')
+		calendar.set(dateArray[0].toInt(), dateArray[1].toInt() - 1, dateArray[2].toInt(), 0, 0, 0)
+		return calendar
 	}
 }
