@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?><!--
-  ~ Created by Mystery0 on 18-1-13 上午10:09.
-  ~ Copyright (c) 2018. All Rights reserved.
+  ~                     GNU GENERAL PUBLIC LICENSE
+  ~                        Version 3, 29 June 2007
   ~
-  ~ Last modified 18-1-13 上午10:09
+  ~  Copyright (C) 2007 Free Software Foundation, Inc. <http://fsf.org/>
+  ~  Everyone is permitted to copy and distribute verbatim copies
+  ~  of this license document, but changing it is not allowed.
   -->
 
 <shape xmlns:android="http://schemas.android.com/apk/res/android"
