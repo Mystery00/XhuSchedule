@@ -44,7 +44,7 @@ class QueryCetScoreFirstActivity : XhuBaseActivity(R.layout.activity_query_cet_s
 		}
 
 		override fun error(e: Throwable?) {
-			Logs.wtfm("cetVCodeObserver: ", e)
+			Logs.wm(e)
 			hideDialog()
 			toastLong(e)
 		}

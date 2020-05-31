@@ -92,7 +92,7 @@ class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_naviga
 
 		override fun error(e: Throwable?) {
 			super.error(e)
-			Logs.wtfm("studentListObserver: ", e)
+			Logs.wm(e)
 			toastLong(e)
 			hideDialog()
 		}
@@ -112,7 +112,7 @@ class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_naviga
 		}
 
 		override fun error(e: Throwable?) {
-			Logs.wtfm("courseListObserver: ", e)
+			Logs.wm(e)
 			toastLong(e)
 			cancelLoading()
 			hideDialog()

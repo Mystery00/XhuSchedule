@@ -30,7 +30,7 @@ class FeedBackRepository : KoinComponent {
 				fbTokenDao.register(fbToken)
 			} else {
 				fbToken.fbToken = feedBackToken
-				fbTokenDao.register(fbToken)
+				fbTokenDao.updateToken(fbToken)
 			}
 		}
 	}

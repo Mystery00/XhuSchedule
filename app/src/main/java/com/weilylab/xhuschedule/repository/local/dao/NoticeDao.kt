@@ -6,23 +6,23 @@ import com.weilylab.xhuschedule.model.Notice
 @Dao
 interface NoticeDao {
 	@Insert
-	fun add(notice: Notice): Long
+	suspend fun add(notice: Notice): Long
 
 	@Delete
-	fun remove(notice: Notice): Int
+	suspend fun remove(notice: Notice): Int
 
 	@Query("select * from tb_notice")
-	fun queryAllNotice(): List<Notice>
+	suspend fun queryAllNotice(): List<Notice>
 
 	@Query("select * from tb_notice where notice_is_read = 1 limit 1")
-	fun queryAllReadNotice(): List<Notice>
+	suspend fun queryAllReadNotice(): List<Notice>
 
 	@Query("select * from tb_notice where notice_platform = :platform")
-	fun queryNoticeByPlatform(platform: String): List<Notice>
+	suspend fun queryNoticeByPlatform(platform: String): List<Notice>
 
 	@Query("select * from tb_notice where notice_id = :id limit 1")
-	fun queryNoticeById(id: Int): Notice?
+	suspend fun queryNoticeById(id: Int): Notice?
 
 	@Update
-	fun update(notice: Notice)
+	suspend fun update(notice: Notice)
 }

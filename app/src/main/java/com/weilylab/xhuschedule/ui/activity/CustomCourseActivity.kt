@@ -63,7 +63,7 @@ class CustomCourseActivity : XhuBaseActivity(R.layout.activity_custom_course), K
 
 		override fun error(e: Throwable?) {
 			dialog.dismiss()
-			Logs.wtf("studentInfoListObserver: ", e)
+			Logs.wm(e)
 			toastLong(R.string.error_init_failed)
 			finish()
 		}
@@ -107,7 +107,7 @@ class CustomCourseActivity : XhuBaseActivity(R.layout.activity_custom_course), K
 		}
 
 		override fun error(e: Throwable?) {
-			Logs.wtfm("customCourseListObserver: ", e)
+			Logs.wm(e)
 			hideRefresh()
 			checkData()
 			toastLong(e)

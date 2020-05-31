@@ -65,7 +65,7 @@ class CustomThingActivity : XhuBaseActivity(R.layout.activity_custom_thing) {
 		}
 
 		override fun error(e: Throwable?) {
-			Logs.wtfm("customThingListObserver: ", e)
+			Logs.wm(e)
 			hideRefresh()
 			checkData()
 			toastLong(e)

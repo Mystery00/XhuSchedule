@@ -45,7 +45,7 @@ class QueryTestActivity : XhuBaseActivity(R.layout.activity_query_test) {
 		}
 
 		override fun error(e: Throwable?) {
-			Logs.wtfm("queryTestListObserver: ", e)
+			Logs.wm(e)
 			hideDialog()
 			hideNoDataLayout()
 			toastLong(e)

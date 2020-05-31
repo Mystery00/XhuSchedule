@@ -71,7 +71,7 @@ class NoticeActivity : XhuBaseActivity(R.layout.activity_notice) {
 		}
 
 		override fun error(e: Throwable?) {
-			Logs.wtfm("noticeObserver: ", e)
+			Logs.wm(e)
 			hideRefresh()
 			hideNoDataLayout()
 			toastLong(e)

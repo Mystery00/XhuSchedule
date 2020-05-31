@@ -30,8 +30,6 @@ import java.io.File
 
 class ProfileFragment : BaseBottomNavigationFragment<FragmentProfileBinding>(R.layout.fragment_profile) {
 	companion object {
-		private const val TAG = "ProfileFragment"
-
 		fun newInstance() = ProfileFragment()
 	}
 
@@ -72,7 +70,7 @@ class ProfileFragment : BaseBottomNavigationFragment<FragmentProfileBinding>(R.l
 
 			override fun error(e: Throwable?) {
 				super.error(e)
-				Logs.w(TAG, "newNotice error: ", e)
+				Logs.wm(e)
 				binding.redDotView.visibility = View.GONE
 			}
 
@@ -89,7 +87,7 @@ class ProfileFragment : BaseBottomNavigationFragment<FragmentProfileBinding>(R.l
 
 			override fun error(e: Throwable?) {
 				super.error(e)
-				Logs.w(TAG, "newFeedback error: ", e)
+				Logs.wm(e)
 				binding.feedBackRedDotView.visibility = View.GONE
 			}
 

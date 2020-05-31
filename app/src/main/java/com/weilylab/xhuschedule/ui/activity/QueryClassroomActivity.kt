@@ -42,7 +42,7 @@ class QueryClassroomActivity : XhuBaseActivity(R.layout.activity_query_class_roo
 		}
 
 		override fun error(e: Throwable?) {
-			Logs.wtfm("scoreListObserver: ", e)
+			Logs.wm(e)
 			dismissLoading()
 			toastLong(e)
 		}

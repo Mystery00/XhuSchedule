@@ -35,7 +35,7 @@ class QueryCetScoreSecondActivity : XhuBaseActivity(R.layout.activity_query_cet_
 		}
 
 		override fun error(e: Throwable?) {
-			Logs.wtfm("cetVCodeObserver: ", e)
+			Logs.wm(e)
 			hideVCodeDialog()
 			toastLong(e)
 		}
@@ -58,7 +58,7 @@ class QueryCetScoreSecondActivity : XhuBaseActivity(R.layout.activity_query_cet_
 		}
 
 		override fun error(e: Throwable?) {
-			Logs.wtfm("cetScoreObserver: ", e)
+			Logs.wm(e)
 			hideDialog()
 			toastLong(e)
 		}

@@ -16,7 +16,7 @@ class NoticeRepository : KoinComponent {
 	private val noticeAPI: NoticeAPI by inject()
 
 	suspend fun queryNotice(queryOnline: Boolean): Boolean {
-		fun queryLocal(): Boolean {
+		suspend fun queryLocal(): Boolean {
 			val noticeList = noticeDao.queryNoticeByPlatform(Constants.NOTICE_PLATFORM_ANDROID)
 			return noticeList.any { !it.isRead }
 		}
@@ -24,15 +24,15 @@ class NoticeRepository : KoinComponent {
 			return withContext(Dispatchers.IO) {
 				val noticeResponse = noticeAPI.getNotices(Constants.NOTICE_PLATFORM_ANDROID)
 				if (noticeResponse.isSuccessful) {
-					val result = noticeResponse.notices.any { !it.isRead }
 					noticeResponse.notices.forEach {
 						val save = noticeDao.queryNoticeById(it.id)
-						if (save != null)
+						if (save != null) {
+							it.isRead = save.isRead
 							noticeDao.update(it)
-						else
+						} else
 							noticeDao.add(it)
 					}
-					result
+					noticeResponse.notices.any { !it.isRead }
 				} else {
 					queryLocal()
 				}
@@ -43,7 +43,7 @@ class NoticeRepository : KoinComponent {
 	}
 
 	suspend fun queryNoticeForAndroid(): List<Notice> {
-		fun queryLocal(): List<Notice> {
+		suspend fun queryLocal(): List<Notice> {
 			return noticeDao.queryNoticeByPlatform(Constants.NOTICE_PLATFORM_ANDROID)
 		}
 		if (isConnectInternet()) {
