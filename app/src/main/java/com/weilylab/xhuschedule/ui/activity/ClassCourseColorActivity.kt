@@ -14,6 +14,8 @@ import com.weilylab.xhuschedule.ui.adapter.ClassCourseColorRecyclerViewAdapter
 import com.weilylab.xhuschedule.viewmodel.ClassCourseColorViewModel
 import kotlinx.android.synthetic.main.activity_class_course_color.*
 import kotlinx.android.synthetic.main.content_class_course_color.*
+import org.greenrobot.eventbus.EventBus
+import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import vip.mystery0.logs.Logs
 import vip.mystery0.rx.DataObserver
@@ -21,6 +23,7 @@ import vip.mystery0.tools.toastLong
 
 class ClassCourseColorActivity : XhuBaseActivity(R.layout.activity_class_course_color) {
 	private val classCourseColorViewModel: ClassCourseColorViewModel by viewModel()
+	private val eventBus: EventBus by inject()
 
 	private lateinit var viewStubBinding: LayoutNullDataViewBinding
 	private val classCourseColorRecyclerViewAdapter: ClassCourseColorRecyclerViewAdapter by lazy { ClassCourseColorRecyclerViewAdapter(this) }
