@@ -53,19 +53,31 @@ val networkModule = module {
 				.build()
 	}
 	single {
-		get<Retrofit>(named("retrofit")).create(XhuScheduleCloudAPI::class.java)
-	}
-	single {
-		get<Retrofit>(named("retrofit")).create(UserAPI::class.java)
+		get<Retrofit>(named("retrofit")).create(ClassRoomAPI::class.java)
 	}
 	single {
 		get<Retrofit>(named("retrofit")).create(CourseAPI::class.java)
 	}
 	single {
+		get<Retrofit>(named("retrofit")).create(FeedbackAPI::class.java)
+	}
+	single {
 		get<Retrofit>(named("retrofit")).create(NoticeAPI::class.java)
 	}
 	single {
-		get<Retrofit>(named("retrofit")).create(FeedbackAPI::class.java)
+		get<Retrofit>(named("retrofit")).create(QiniuAPI::class.java)
+	}
+	single {
+		get<Retrofit>(named("retrofit")).create(ScoreAPI::class.java)
+	}
+	single {
+		get<Retrofit>(named("retrofit")).create(TestAPI::class.java)
+	}
+	single {
+		get<Retrofit>(named("retrofit")).create(UserAPI::class.java)
+	}
+	single {
+		get<Retrofit>(named("retrofit")).create(XhuScheduleCloudAPI::class.java)
 	}
 }
 

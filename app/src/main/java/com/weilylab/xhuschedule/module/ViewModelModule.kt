@@ -6,21 +6,42 @@ import org.koin.dsl.module
 
 val viewModelModule = module {
 	viewModel {
-		SplashViewModel()
-	}
-	viewModel {
-		LoginViewModel()
-	}
-	viewModel {
 		BottomNavigationViewModel()
-	}
-	viewModel {
-		SettingsViewModel()
 	}
 	viewModel {
 		ClassCourseColorViewModel()
 	}
 	viewModel {
 		CustomCourseViewModel()
+	}
+	viewModel {
+		CustomThingViewModel()
+	}
+	viewModel {
+		FeedBackViewModel()
+	}
+	viewModel {
+		LoginViewModel()
+	}
+	viewModel {
+		NoticeViewModel()
+	}
+	viewModel {
+		QueryClassroomViewModel()
+	}
+	viewModel {
+		QueryClassScoreViewModel()
+	}
+	viewModel {
+		QueryExpScoreViewModel()
+	}
+	viewModel {
+		QueryTestViewModel()
+	}
+	viewModel {
+		SettingsViewModel()
+	}
+	viewModel {
+		SplashViewModel()
 	}
 }
