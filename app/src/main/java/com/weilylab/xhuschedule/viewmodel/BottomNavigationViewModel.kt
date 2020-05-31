@@ -151,17 +151,21 @@ class BottomNavigationViewModel : ViewModel(), KoinComponent {
 
 	fun queryNewNotice() {
 		launch(newNotice) {
-			newNotice.content(noticeRepository.queryNotice(true))
+			withContext(Dispatchers.Default) {
+				newNotice.content(noticeRepository.queryNotice(true))
+			}
 		}
 	}
 
 	fun queryNewFeedbackMessage() {
 		launch(newFeedback) {
-			val list = studentRepository.queryAllStudentList()
-			//查询主用户信息
-			val mainStudent = list.find { it.isMain }
-					?: throw ResourceException(R.string.hint_null_student)
-			newFeedback.content(feedBackRepository.queryNewFeedback(mainStudent))
+			withContext(Dispatchers.Default) {
+				val list = studentRepository.queryAllStudentList()
+				//查询主用户信息
+				val mainStudent = list.find { it.isMain }
+						?: throw ResourceException(R.string.hint_null_student)
+				newFeedback.content(feedBackRepository.queryNewFeedback(mainStudent))
+			}
 		}
 	}
 }

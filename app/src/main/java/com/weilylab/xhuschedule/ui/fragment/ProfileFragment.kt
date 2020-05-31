@@ -1,8 +1,10 @@
 package com.weilylab.xhuschedule.ui.fragment
 
 import android.content.Intent
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import coil.api.load
 import coil.request.CachePolicy
@@ -17,9 +19,11 @@ import com.weilylab.xhuschedule.ui.activity.*
 import com.weilylab.xhuschedule.utils.ConfigurationUtil
 import com.weilylab.xhuschedule.utils.ShareUtil
 import com.weilylab.xhuschedule.viewmodel.BottomNavigationViewModel
+import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
-import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.android.ext.android.inject
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import vip.mystery0.logs.Logs
 import vip.mystery0.rx.DataObserver
 import java.io.File
@@ -31,14 +35,17 @@ class ProfileFragment : BaseBottomNavigationFragment<FragmentProfileBinding>(R.l
 		fun newInstance() = ProfileFragment()
 	}
 
-	private val bottomNavigationViewModel: BottomNavigationViewModel by viewModel()
+	private val bottomNavigationViewModel: BottomNavigationViewModel by sharedViewModel()
+	private val eventBus: EventBus by inject()
 	private val bottomSheetDialog: BottomSheetDialog by lazy { BottomSheetDialog(requireActivity()) }
 
 	override fun initView() {
 		showUserImage()
 		initViewModel()
 		initShareMenu()
-		updateTitle()
+		bottomNavigationViewModel.studentInfo.value?.let {
+			bottomNavigationViewModel.studentInfo.postValue(it)
+		}
 	}
 
 	private fun showUserImage() {
@@ -54,6 +61,7 @@ class ProfileFragment : BaseBottomNavigationFragment<FragmentProfileBinding>(R.l
 
 	private fun initViewModel() {
 		bottomNavigationViewModel.studentInfo.observe(requireActivity(), Observer {
+			Logs.i("initViewModel: $it")
 			binding.studentInfo = it
 		})
 		bottomNavigationViewModel.newNotice.observe(this, object : DataObserver<Boolean> {
@@ -165,9 +173,19 @@ class ProfileFragment : BaseBottomNavigationFragment<FragmentProfileBinding>(R.l
 		bottomNavigationViewModel.title.postValue(Pair(javaClass, getString(R.string.main_title_mine)))
 	}
 
+	override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+		eventBus.register(this)
+		return super.onCreateView(inflater, container, savedInstanceState)
+	}
+
+	override fun onDestroyView() {
+		eventBus.unregister(this)
+		super.onDestroyView()
+	}
+
 	@Subscribe(threadMode = ThreadMode.MAIN)
 	fun updateUIFromConfig(uiConfigEvent: UIConfigEvent) {
-		if (uiConfigEvent.refreshUI.contains(UI.BACKGROUND_IMG)) {
+		if (uiConfigEvent.refreshUI.contains(UI.USER_IMG)) {
 			showUserImage()
 		}
 	}

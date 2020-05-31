@@ -60,7 +60,7 @@ class LoginActivity : XhuBaseActivity(R.layout.activity_login, false) {
 			finish()
 		}
 
-		override fun error(data: Student?, e: Throwable?) {
+		override fun error(e: Throwable?) {
 			Logs.wtfm("loginObserver: ", e)
 			hideDialog()
 			toastLong(e)

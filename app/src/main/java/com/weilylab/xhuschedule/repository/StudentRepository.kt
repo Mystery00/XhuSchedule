@@ -62,6 +62,7 @@ class StudentRepository : KoinComponent {
 		return when (info.rt) {
 			ResponseCodeConstants.DONE -> {
 				//请求成功，保存信息
+				info.studentID = student.username
 				studentDao.saveStudentInfo(info)
 				info
 			}

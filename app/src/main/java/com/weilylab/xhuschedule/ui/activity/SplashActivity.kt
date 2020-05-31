@@ -66,7 +66,7 @@ class SplashActivity : XhuBaseActivity(null, false) {
 			gotoMain()
 		}
 
-		override fun error(data: Pair<Splash, Boolean>?, e: Throwable?) {
+		override fun error(e: Throwable?) {
 			Logs.wtf("error: ", e)
 			empty()
 		}

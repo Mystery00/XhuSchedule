@@ -150,7 +150,7 @@ dependencies {
 
     //Mystery0Tools
     implementation 'vip.mystery0.tools:logs:1.4.4'
-    implementation 'vip.mystery0.tools:tools:2.2.6'
+    implementation 'vip.mystery0.tools:tools:2.2.8'
     implementation 'vip.mystery0.tools:crashhandler:1.1.4'
     implementation 'vip.mystery0.tools:bottomtabview:1.1.0'
     implementation 'vip.mystery0.tools:circleimageview:1.1.0'

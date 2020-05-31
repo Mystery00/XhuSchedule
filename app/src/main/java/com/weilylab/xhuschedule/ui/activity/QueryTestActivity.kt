@@ -20,10 +20,10 @@ import kotlinx.android.synthetic.main.activity_query_test.*
 import kotlinx.android.synthetic.main.content_query_test.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import vip.mystery0.logs.Logs
 import vip.mystery0.rx.DataObserver
-import vip.mystery0.tools.toastLong
 
 class QueryTestActivity : XhuBaseActivity(R.layout.activity_query_test) {
 	private val queryTestViewModel: QueryTestViewModel by viewModel()
@@ -48,7 +48,7 @@ class QueryTestActivity : XhuBaseActivity(R.layout.activity_query_test) {
 			Logs.wtfm("queryTestListObserver: ", e)
 			hideDialog()
 			hideNoDataLayout()
-			e.toastLong(this@QueryTestActivity)
+			toastLong(e)
 		}
 
 		override fun empty() {
@@ -115,16 +115,18 @@ class QueryTestActivity : XhuBaseActivity(R.layout.activity_query_test) {
 			if (!::menu.isInitialized) {
 				return@launch
 			}
-			val groupId = 1
-			var nowCheckId = 0
-			list.forEachIndexed { index, student ->
-				val itemId = 100 + index
-				menu.add(groupId, itemId, 1, "${student.studentName}(${student.username})")
-				if (student.username == queryTestViewModel.student.value!!.username)
-					nowCheckId = itemId
+			withContext(Dispatchers.Main) {
+				val groupId = 1
+				var nowCheckId = 0
+				list.forEachIndexed { index, student ->
+					val itemId = 100 + index
+					menu.add(groupId, itemId, 1, "${student.studentName}(${student.username})")
+					if (student.username == queryTestViewModel.student.value!!.username)
+						nowCheckId = itemId
+				}
+				menu.setGroupCheckable(groupId, true, true)
+				menu.findItem(nowCheckId).isChecked = true
 			}
-			menu.setGroupCheckable(groupId, true, true)
-			menu.findItem(nowCheckId).isChecked = true
 		}
 	}
 

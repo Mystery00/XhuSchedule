@@ -7,6 +7,7 @@ import android.app.Dialog
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.os.Bundle
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -43,8 +44,10 @@ import com.zhuangfei.timetable.listener.IWeekView
 import com.zhuangfei.timetable.model.Schedule
 import kotlinx.android.synthetic.main.activity_bottom_navigation.*
 import kotlinx.android.synthetic.main.content_bottom_navigation.*
+import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
+import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import vip.mystery0.bottomTabView.BottomTabItem
 import vip.mystery0.logs.Logs
@@ -61,6 +64,7 @@ class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_naviga
 
 	private val viewPagerAdapter: ViewPagerAdapter by lazy { ViewPagerAdapter(supportFragmentManager) }
 	private val dialog: Dialog by lazy { buildDialog(getString(R.string.hint_dialog_init)) }
+	private val eventBus: EventBus by inject()
 
 	private var animation: ObjectAnimator? = null
 	private var arrowAnimation: ObjectAnimator? = null
@@ -214,7 +218,6 @@ class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_naviga
 	override fun initData() {
 		super.initData()
 		initViewModel()
-		viewPagerAdapter.getItem(0).updateTitle()
 		configWeekView(0)
 		bottomNavigationViewModel.init()
 		bottomNavigationViewModel.queryNewNotice()
@@ -403,7 +406,13 @@ class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_naviga
 		return list
 	}
 
+	override fun onCreate(savedInstanceState: Bundle?) {
+		eventBus.register(this)
+		super.onCreate(savedInstanceState)
+	}
+
 	override fun onDestroy() {
+		eventBus.unregister(this)
 		super.onDestroy()
 		animation?.cancel()
 		arrowAnimation?.cancel()
@@ -416,6 +425,12 @@ class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_naviga
 		}
 		if (uiConfigEvent.refreshUI.contains(UI.BACKGROUND_IMG)) {
 			showBackground()
+		}
+		if (uiConfigEvent.refreshUI.contains(UI.NOTICE_DOT)) {
+			bottomNavigationViewModel.queryNewNotice()
+		}
+		if (uiConfigEvent.refreshUI.contains(UI.FEEDBACK_DOT)) {
+			bottomNavigationViewModel.queryNewFeedbackMessage()
 		}
 	}
 }

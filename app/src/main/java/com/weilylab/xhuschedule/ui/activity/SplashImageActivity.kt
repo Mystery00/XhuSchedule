@@ -87,7 +87,6 @@ class SplashImageActivity : XhuBaseActivity(R.layout.activity_splash_image, fals
 			}
 
 			override fun contentNoEmpty(data: Pair<Splash, File>) {
-				super.content(data)
 				imageView.load(data.second) {
 					size(screenWidth, screenHeight)
 					diskCachePolicy(CachePolicy.DISABLED)

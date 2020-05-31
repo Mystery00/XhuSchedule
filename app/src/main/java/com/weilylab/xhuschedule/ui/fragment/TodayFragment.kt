@@ -21,14 +21,14 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 class TodayFragment : BaseBottomNavigationFragment<FragmentTodayBinding>(R.layout.fragment_today) {
 	companion object {
 		fun newInstance() = TodayFragment()
 	}
 
-	private val bottomNavigationViewModel: BottomNavigationViewModel by viewModel()
+	private val bottomNavigationViewModel: BottomNavigationViewModel by sharedViewModel()
 	private val adapter: FragmentTodayRecyclerViewAdapter by lazy { FragmentTodayRecyclerViewAdapter(requireActivity()) }
 	private lateinit var viewStubBinding: LayoutNullDataViewBinding
 	private var sortJob: Job? = null
@@ -125,7 +125,7 @@ class TodayFragment : BaseBottomNavigationFragment<FragmentTodayBinding>(R.layou
 	private fun sortItemList(doneListener: () -> Unit) {
 		sortJob?.cancel()
 		sortJob = bottomNavigationViewModel.viewModelScope.launch {
-			withContext(Dispatchers.Default) {
+			val list = withContext(Dispatchers.Default) {
 				val poetySentenceList = ArrayList<PoetySentence>()
 				val courseList = ArrayList<Schedule>()
 				val customThingList = ArrayList<CustomThing>()
@@ -145,12 +145,15 @@ class TodayFragment : BaseBottomNavigationFragment<FragmentTodayBinding>(R.layou
 					list.addAll(courseList)
 					list.addAll(customThingList)
 				}
+				list
+			}
+			withContext(Dispatchers.Main) {
 				adapter.items.clear()
 				adapter.items.addAll(list)
 				list.clear()
-				sortJob = null
-				doneListener()
 			}
+			sortJob = null
+			doneListener()
 		}
 	}
 }

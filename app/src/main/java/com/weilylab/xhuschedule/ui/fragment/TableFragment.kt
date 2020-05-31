@@ -16,7 +16,7 @@ import com.weilylab.xhuschedule.viewmodel.BottomNavigationViewModel
 import com.zhuangfei.timetable.listener.ISchedule
 import com.zhuangfei.timetable.listener.OnSlideBuildAdapter
 import com.zhuangfei.timetable.model.Schedule
-import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import vip.mystery0.logs.Logs
 import vip.mystery0.rx.DataObserver
 import vip.mystery0.tools.utils.dpTopx
@@ -27,7 +27,7 @@ class TableFragment : BaseBottomNavigationFragment<FragmentTableBinding>(R.layou
 		fun newInstance() = TableFragment()
 	}
 
-	private val bottomNavigationViewModel: BottomNavigationViewModel by viewModel()
+	private val bottomNavigationViewModel: BottomNavigationViewModel by sharedViewModel()
 
 	private val courseListObserver = object : DataObserver<List<Schedule>> {
 		override fun contentNoEmpty(data: List<Schedule>) {
