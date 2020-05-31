@@ -13,8 +13,13 @@ import com.weilylab.xhuschedule.utils.CalendarUtil
 import com.weilylab.xhuschedule.utils.Color
 import com.weilylab.xhuschedule.utils.ConfigurationUtil
 import com.weilylab.xhuschedule.utils.WidgetUtil
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import org.koin.android.ext.android.inject
 
 class TestListWidgetService : RemoteViewsService() {
+	private val widgetRepository: WidgetRepository by inject()
+
 	override fun onGetViewFactory(intent: Intent?): RemoteViewsFactory = ListRemoteViewFactory(this)
 
 	private inner class ListRemoteViewFactory(private val context: Context) : RemoteViewsFactory {
@@ -29,17 +34,19 @@ class TestListWidgetService : RemoteViewsService() {
 		override fun getItemId(position: Int): Long = position.toLong()
 
 		override fun onDataSetChanged() {
-			data.clear()
-			if (ConfigurationUtil.isEnableMultiUserMode)
-				data.addAll(WidgetRepository.queryTestsForManyStudent())
-			else
-				data.addAll(WidgetRepository.queryTests())
-			if (data.isEmpty())
-				sendBroadcast(Intent(Constants.ACTION_WIDGET_UPDATE_BROADCAST)
-						.putExtra("name", TestListWidgetService::class.java.name)
-						.putExtra("hasData", false))
-			else
-				colorArray = WidgetRepository.generateColorList(data)
+			GlobalScope.launch {
+				data.clear()
+				if (ConfigurationUtil.isEnableMultiUserMode)
+					data.addAll(widgetRepository.queryTestsForManyStudent())
+				else
+					data.addAll(widgetRepository.queryTests())
+				if (data.isEmpty())
+					sendBroadcast(Intent(Constants.ACTION_WIDGET_UPDATE_BROADCAST)
+							.putExtra("name", TestListWidgetService::class.java.name)
+							.putExtra("hasData", false))
+				else
+					colorArray = widgetRepository.generateColorList(data)
+			}
 		}
 
 		override fun hasStableIds(): Boolean = true

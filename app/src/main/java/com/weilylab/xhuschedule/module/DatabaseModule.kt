@@ -5,8 +5,6 @@ import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.weilylab.xhuschedule.config.APP.Companion.context
 import com.weilylab.xhuschedule.repository.local.db.DB
-import com.weilylab.xhuschedule.repository.local.service.*
-import com.weilylab.xhuschedule.repository.local.service.impl.*
 import org.koin.dsl.module
 
 private const val DATABASE_NAME = "db_xhuschedule"

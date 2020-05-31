@@ -10,8 +10,6 @@ import com.weilylab.xhuschedule.model.StudentInfo
 import com.weilylab.xhuschedule.repository.*
 import com.weilylab.xhuschedule.utils.CalendarUtil
 import com.weilylab.xhuschedule.utils.ConfigurationUtil
-import com.weilylab.xhuschedule.utils.userDo.CourseUtil
-import com.weilylab.xhuschedule.utils.userDo.UserUtil
 import com.zhuangfei.timetable.model.Schedule
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -27,6 +25,7 @@ class BottomNavigationViewModel : ViewModel(), KoinComponent {
 	private val customThingRepository: CustomThingRepository by inject()
 	private val noticeRepository: NoticeRepository by inject()
 	private val feedBackRepository: FeedBackRepository by inject()
+	private val courseRepository: CourseRepository by inject()
 
 	//学生列表
 	val studentList by lazy { MutableLiveData<PackageData<List<Student>>>() }
@@ -77,7 +76,7 @@ class BottomNavigationViewModel : ViewModel(), KoinComponent {
 			}
 			studentList.content(list)
 			//查询主用户信息
-			val mainStudent = UserUtil.findMainStudent(list)
+			val mainStudent = list.find { it.isMain }
 					?: throw ResourceException(R.string.hint_null_student)
 			val info = studentRepository.queryStudentInfo(mainStudent)
 			studentInfo.postValue(info)
@@ -89,7 +88,7 @@ class BottomNavigationViewModel : ViewModel(), KoinComponent {
 				val courses = bottomNavigationRepository.queryCoursesForManyStudent(list, fromCache = true, throwError = false)
 				courseList.content(courses)
 				//处理今日课程
-				val todayCourse = CourseUtil.getTodayCourse(courses)
+				val todayCourse = courseRepository.getTodayCourse(courses)
 				todayCourseList.postValue(todayCourse)
 			} else {
 				val courses = bottomNavigationRepository.queryCourses(mainStudent, fromCache = true, throwError = false)
@@ -120,11 +119,11 @@ class BottomNavigationViewModel : ViewModel(), KoinComponent {
 			val courses = bottomNavigationRepository.queryCoursesForManyStudent(list, fromCache = false, throwError = throwError)
 			courseList.content(courses)
 			//处理今日课程
-			val todayCourse = CourseUtil.getTodayCourse(courses)
+			val todayCourse = courseRepository.getTodayCourse(courses)
 			todayCourseList.postValue(todayCourse)
 		} else {
 			//查询主用户信息
-			val mainStudent = UserUtil.findMainStudent(list)
+			val mainStudent = list.find { it.isMain }
 					?: throw ResourceException(R.string.hint_null_student)
 			val courses = bottomNavigationRepository.queryCourses(mainStudent, fromCache = false, throwError = throwError)
 			courseList.content(courses)
@@ -160,7 +159,7 @@ class BottomNavigationViewModel : ViewModel(), KoinComponent {
 		launch(newFeedback) {
 			val list = studentRepository.queryAllStudentList()
 			//查询主用户信息
-			val mainStudent = UserUtil.findMainStudent(list)
+			val mainStudent = list.find { it.isMain }
 					?: throw ResourceException(R.string.hint_null_student)
 			newFeedback.content(feedBackRepository.queryNewFeedback(mainStudent))
 		}

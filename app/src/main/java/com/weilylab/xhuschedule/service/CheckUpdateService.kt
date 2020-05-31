@@ -13,28 +13,30 @@ import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.api.XhuScheduleCloudAPI
 import com.weilylab.xhuschedule.constant.Constants
 import com.weilylab.xhuschedule.constant.ResponseCodeConstants
-import com.weilylab.xhuschedule.factory.RetrofitFactory
-import com.weilylab.xhuschedule.factory.fromJson
 import com.weilylab.xhuschedule.model.Version
-import com.weilylab.xhuschedule.model.response.VersionResponse
 import com.weilylab.xhuschedule.ui.activity.GuideActivity
 import com.weilylab.xhuschedule.ui.activity.SplashActivity
 import com.weilylab.xhuschedule.ui.activity.SplashImageActivity
 import com.weilylab.xhuschedule.ui.fragment.settings.SettingsPreferenceFragment
 import com.weilylab.xhuschedule.utils.ConfigUtil
 import com.weilylab.xhuschedule.utils.ConfigurationUtil
-import io.reactivex.Observable
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
-import vip.mystery0.logs.Logs
-import vip.mystery0.rx.OnlyCompleteObserver
-import vip.mystery0.tools.utils.ActivityManagerTools
-import vip.mystery0.tools.utils.FileTools
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import org.koin.android.ext.android.inject
+import vip.mystery0.tools.utils.ActivityManagerTools.finishAllActivity
+import vip.mystery0.tools.utils.currentActivity
+import vip.mystery0.tools.utils.toFormatFileSize
 
 class CheckUpdateService : Service() {
 	companion object {
 		const val CHECK_ACTION_BY_MANUAL = "check_action_by_manual"
 	}
+
+	private val xhuScheduleCloudAPI: XhuScheduleCloudAPI by inject()
+
+	private val localBroadcastManager: LocalBroadcastManager by inject()
 
 	override fun onBind(intent: Intent): IBinder? = null
 
@@ -57,27 +59,18 @@ class CheckUpdateService : Service() {
 		val manufacturer = Build.MANUFACTURER
 		val model = Build.MODEL
 		val rom = Build.DISPLAY
-		RetrofitFactory.retrofit
-				.create(XhuScheduleCloudAPI::class.java)
-				.checkVersion(appVersion, systemVersion, manufacturer, model, rom, ConfigUtil.getDeviceID())
-				.subscribeOn(Schedulers.io())
-				.map { it.fromJson<VersionResponse>() }
-				.observeOn(AndroidSchedulers.mainThread())
-				.subscribe(object : OnlyCompleteObserver<VersionResponse>() {
-					override fun onFinish(data: VersionResponse?) {
-						if (data != null && data.code == ResponseCodeConstants.DONE.toInt())
-							if (data.data.versionCode.toInt() > getString(R.string.app_version_code).toInt())
-								showUpdateDialog(data.data, intent.getBooleanExtra(CHECK_ACTION_BY_MANUAL, false), data.data.must == "1")
-						stopSelf()
-						LocalBroadcastManager.getInstance(this@CheckUpdateService)
-								.sendBroadcast(Intent(SettingsPreferenceFragment.ACTION_CHECK_UPDATE_DONE))
+		GlobalScope.launch {
+			val response = xhuScheduleCloudAPI.checkVersion(appVersion, systemVersion, manufacturer, model, rom, ConfigUtil.getDeviceID())
+			if (response.code == ResponseCodeConstants.DONE.toInt()) {
+				if (response.data.versionCode.toInt() > getString(R.string.app_version_code).toInt()) {
+					withContext(Dispatchers.Main) {
+						showUpdateDialog(response.data, intent.getBooleanExtra(CHECK_ACTION_BY_MANUAL, false), response.data.must == "1")
 					}
-
-					override fun onError(e: Throwable) {
-						Logs.wtf("onError: ", e)
-						stopSelf()
-					}
-				})
+					localBroadcastManager.sendBroadcast(Intent(SettingsPreferenceFragment.ACTION_CHECK_UPDATE_DONE))
+				}
+			}
+			stopSelf()
+		}
 		return super.onStartCommand(intent, flags, startId)
 	}
 
@@ -87,54 +80,46 @@ class CheckUpdateService : Service() {
 			if (ignoreVersionList.indexOf(version.versionCode) != -1)
 				return
 		}
-		Observable.create<Boolean> {
-			while (ActivityManagerTools.instance.currentActivity() is SplashActivity || ActivityManagerTools.instance.currentActivity() is GuideActivity || ActivityManagerTools.instance.currentActivity() is SplashImageActivity)
-				Thread.sleep(1000)
-			when {
-				//自动检查更新
-				ConfigurationUtil.autoCheckUpdate -> it.onNext(true)
-				//没有开启自动更新但是是必须的更新
-				!ConfigurationUtil.autoCheckUpdate && isMust -> it.onNext(true)
-				//手动检查更新
-				checkByManual -> it.onNext(true)
-				//其他情况
-				else -> it.onNext(false)
+		GlobalScope.launch {
+			val show = withContext(Dispatchers.Default) {
+				while (currentActivity() is SplashActivity || currentActivity() is GuideActivity || currentActivity() is SplashImageActivity)
+					Thread.sleep(1000)
+				when {
+					//自动检查更新
+					ConfigurationUtil.autoCheckUpdate -> true
+					//没有开启自动更新但是是必须的更新
+					!ConfigurationUtil.autoCheckUpdate && isMust -> true
+					//手动检查更新
+					checkByManual -> true
+					//其他情况
+					else -> false
+				}
 			}
-			it.onComplete()
-		}
-				.subscribeOn(Schedulers.single())
-				.observeOn(AndroidSchedulers.mainThread())
-				.subscribe(object : OnlyCompleteObserver<Boolean>() {
-					override fun onError(e: Throwable) {
-						Logs.wtf("onError: ", e)
-					}
-
-					override fun onFinish(data: Boolean?) {
-						if (data != null && data) {
-							val activity = ActivityManagerTools.instance.currentActivity() ?: return
-							val title = getString(R.string.dialog_update_title, getString(R.string.app_version_name), version.versionName)
-							val text = getString(R.string.dialog_update_text, version.updateLog)
-							val builder = AlertDialog.Builder(activity)
-									.setTitle(title)
-									.setMessage(text)
-									.setPositiveButton("${getString(R.string.action_download_apk)}(${FileTools.instance.formatFileSize(version.apkSize.toLong())})") { _, _ ->
-										DownloadService.intentTo(activity, Constants.DOWNLOAD_TYPE_APK, version.apkQiniuPath, version.apkMD5, version.patchMD5)
-									}
-							if (version.lastVersionCode == getString(R.string.app_version_code))
-								builder.setNegativeButton("${getString(R.string.action_download_patch)}(${FileTools.instance.formatFileSize(version.patchSize.toLong())})") { _, _ ->
-									DownloadService.intentTo(activity, Constants.DOWNLOAD_TYPE_PATCH, version.patchQiniuPath, version.apkMD5, version.patchMD5)
-								}
-							if (version.must == "1")
-								builder.setOnCancelListener {
-									ActivityManagerTools.instance.finishAllActivity()
-								}
-							else
-								builder.setNeutralButton(R.string.action_download_cancel) { _, _ ->
-									ConfigurationUtil.ignoreUpdateVersion = "${version.versionCode}!${ConfigurationUtil.ignoreUpdateVersion}"
-								}
-							builder.show()
+			if (!show) return@launch
+			withContext(Dispatchers.Main) {
+				val activity = currentActivity() ?: return@withContext
+				val title = getString(R.string.dialog_update_title, getString(R.string.app_version_name), version.versionName)
+				val text = getString(R.string.dialog_update_text, version.updateLog)
+				val builder = AlertDialog.Builder(activity)
+						.setTitle(title)
+						.setMessage(text)
+						.setPositiveButton("${getString(R.string.action_download_apk)}(${version.apkSize.toLong().toFormatFileSize()})") { _, _ ->
+							DownloadService.intentTo(activity, Constants.DOWNLOAD_TYPE_APK, version.apkQiniuPath, version.apkMD5, version.patchMD5)
 						}
+				if (version.lastVersionCode == getString(R.string.app_version_code))
+					builder.setNegativeButton("${getString(R.string.action_download_patch)}(${version.patchSize.toLong().toFormatFileSize()})") { _, _ ->
+						DownloadService.intentTo(activity, Constants.DOWNLOAD_TYPE_PATCH, version.patchQiniuPath, version.apkMD5, version.patchMD5)
 					}
-				})
+				if (version.must == "1")
+					builder.setOnCancelListener {
+						finishAllActivity()
+					}
+				else
+					builder.setNeutralButton(R.string.action_download_cancel) { _, _ ->
+						ConfigurationUtil.ignoreUpdateVersion = "${version.versionCode}!${ConfigurationUtil.ignoreUpdateVersion}"
+					}
+				builder.show()
+			}
+		}
 	}
 }

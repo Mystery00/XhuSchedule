@@ -38,7 +38,6 @@ import com.weilylab.xhuschedule.utils.AnimationUtil
 import com.weilylab.xhuschedule.utils.CalendarUtil
 import com.weilylab.xhuschedule.utils.ConfigUtil
 import com.weilylab.xhuschedule.utils.ConfigurationUtil
-import com.weilylab.xhuschedule.utils.userDo.CourseUtil
 import com.weilylab.xhuschedule.viewmodel.BottomNavigationViewModel
 import com.zhuangfei.timetable.listener.IWeekView
 import com.zhuangfei.timetable.model.Schedule
@@ -163,7 +162,7 @@ class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_naviga
 	private val showCourseObserver = Observer<List<Schedule>> {
 		showAdapter.items.clear()
 		val week = bottomNavigationViewModel.week.value ?: 0
-		showAdapter.items.addAll(CourseUtil.filterShowCourse(it, week))
+		showAdapter.items.addAll(filterShowCourse(it, week))
 		showPopupWindow()
 	}
 
@@ -391,6 +390,17 @@ class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_naviga
 				}
 			}
 		}
+	}
+
+	private fun filterShowCourse(courseList: List<Schedule>, week: Int): List<Schedule> {
+		if (ConfigurationUtil.isShowNotWeek)
+			return courseList
+		val list = ArrayList<Schedule>()
+		courseList.forEach {
+			if (it.weekList.contains(week))
+				list.add(it)
+		}
+		return list
 	}
 
 	override fun onDestroy() {

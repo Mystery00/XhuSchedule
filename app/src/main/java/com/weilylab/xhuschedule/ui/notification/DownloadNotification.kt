@@ -42,11 +42,12 @@ import androidx.core.app.NotificationCompat
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.constant.Constants
 import com.weilylab.xhuschedule.model.Download
-import vip.mystery0.tools.utils.FileTools
+import vip.mystery0.tools.utils.toFormatFileSize
 
 object DownloadNotification {
 	private const val NOTIFICATION_TAG = "DownloadNotification"
 	private var NOTIFICATION_ID = Constants.NOTIFICATION_ID_DOWNLOAD
+
 	@SuppressLint("StaticFieldLeak")
 	private lateinit var notificationBuilder: NotificationCompat.Builder
 
@@ -63,7 +64,7 @@ object DownloadNotification {
 
 	fun updateProgress(context: Context, download: Download) {
 		notificationBuilder.setProgress(100, download.progress, false)
-				.setContentText(context.getString(R.string.download_notification_title_download, FileTools.instance.formatFileSize(download.currentFileSize), FileTools.instance.formatFileSize(download.totalFileSize)))
+				.setContentText(context.getString(R.string.download_notification_title_download, download.currentFileSize.toFormatFileSize(), download.totalFileSize.toFormatFileSize()))
 				.setSubText(context.getString(R.string.download_notification_text, download.progress))
 		notify(context, notificationBuilder.build())
 	}

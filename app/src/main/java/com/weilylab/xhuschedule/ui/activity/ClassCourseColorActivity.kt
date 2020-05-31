@@ -26,7 +26,7 @@ class ClassCourseColorActivity : XhuBaseActivity(R.layout.activity_class_course_
 	private val eventBus: EventBus by inject()
 
 	private lateinit var viewStubBinding: LayoutNullDataViewBinding
-	private val classCourseColorRecyclerViewAdapter: ClassCourseColorRecyclerViewAdapter by lazy { ClassCourseColorRecyclerViewAdapter(this) }
+	private val classCourseColorRecyclerViewAdapter: ClassCourseColorRecyclerViewAdapter by lazy { ClassCourseColorRecyclerViewAdapter(this, classCourseColorViewModel, eventBus) }
 	private val dialog: Dialog by lazy { buildDialog(" ") }
 
 	private val classCourseColorObserver = object : DataObserver<List<Course>> {

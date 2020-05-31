@@ -71,10 +71,9 @@ object ConfigUtil {
 
 	fun toHexEncoding(color: Int): String = color.toColorString()
 
-	fun getCurrentYearAndTerm() {
+	fun getCurrentYearAndTerm(startTime: Calendar) {
 		if (ConfigurationUtil.isCustomYearAndTerm)
 			return
-		val startTime = InitLocalDataSource.getStartDateTime()
 		val year = startTime.get(Calendar.YEAR)
 		val month = startTime.get(Calendar.MONTH)
 		if (month < Calendar.JUNE) {//开始时间月份小于6月 第二学期

@@ -43,7 +43,6 @@ import com.weilylab.xhuschedule.databinding.LayoutNullDataViewBinding
 import com.weilylab.xhuschedule.model.Notice
 import com.weilylab.xhuschedule.model.event.UI
 import com.weilylab.xhuschedule.model.event.UIConfigEvent
-import com.weilylab.xhuschedule.repository.NoticeRepository
 import com.weilylab.xhuschedule.ui.adapter.NoticeAdapter
 import com.weilylab.xhuschedule.viewmodel.NoticeViewModel
 import kotlinx.android.synthetic.main.activity_notice.*
@@ -126,7 +125,7 @@ class NoticeActivity : XhuBaseActivity(R.layout.activity_notice) {
 	}
 
 	private fun refresh() {
-		NoticeRepository.queryNoticeForAndroid(noticeViewModel)
+		noticeViewModel.queryNotice()
 	}
 
 	private fun showRefresh() {
@@ -156,7 +155,7 @@ class NoticeActivity : XhuBaseActivity(R.layout.activity_notice) {
 
 	override fun onDestroy() {
 		eventBus.post(UIConfigEvent(arrayListOf(UI.NOTICE_DOT)))
-		NoticeRepository.markNoticesAsRead(noticeAdapter.items)
+		noticeViewModel.markListAsRead(noticeAdapter.items)
 		super.onDestroy()
 	}
 }

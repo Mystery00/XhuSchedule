@@ -34,7 +34,7 @@ class InitRepository : KoinComponent {
 		}
 	}
 
-	private suspend fun getStartDateTime(): Calendar {
+	suspend fun getStartDateTime(): Calendar {
 		val calendar = Calendar.getInstance()
 		val dateString = withContext(Dispatchers.IO) {
 			if (ConfigurationUtil.isCustomStartTime)

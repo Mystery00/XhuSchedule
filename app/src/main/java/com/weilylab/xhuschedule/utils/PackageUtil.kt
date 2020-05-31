@@ -1,6 +1,6 @@
 package com.weilylab.xhuschedule.utils
 
-import vip.mystery0.tools.utils.PackageTools
+import vip.mystery0.tools.utils.isApplicationAvailable
 
 
 object PackageUtil {
@@ -10,7 +10,7 @@ object PackageUtil {
 	private const val wbPackage = "com.sina.weibo"
 	private const val weicoPackage = "com.weico.international"
 
-	fun isQQApplicationAvailable(): Boolean = PackageTools.instance.isApplicationAvailable(arrayListOf(qqPackage, timPackage))
-	fun isWeiXinApplicationAvailable(): Boolean = PackageTools.instance.isApplicationAvailable(arrayListOf(wxPackage))
-	fun isWeiBoApplicationAvailable(): Boolean = PackageTools.instance.isApplicationAvailable(arrayListOf(wbPackage, weicoPackage))
+	fun isQQApplicationAvailable(): Boolean = isApplicationAvailable(arrayListOf(qqPackage, timPackage))
+	fun isWeiXinApplicationAvailable(): Boolean = isApplicationAvailable(arrayListOf(wxPackage))
+	fun isWeiBoApplicationAvailable(): Boolean = isApplicationAvailable(arrayListOf(wbPackage, weicoPackage))
 }

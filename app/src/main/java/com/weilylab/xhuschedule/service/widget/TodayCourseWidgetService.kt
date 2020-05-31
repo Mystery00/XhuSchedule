@@ -8,8 +8,13 @@ import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.constant.Constants
 import com.weilylab.xhuschedule.repository.WidgetRepository
 import com.zhuangfei.timetable.model.Schedule
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import org.koin.android.ext.android.inject
 
 class TodayCourseWidgetService : RemoteViewsService() {
+	private val widgetRepository: WidgetRepository by inject()
+
 	override fun onGetViewFactory(intent: Intent?): RemoteViewsFactory = ListRemoteViewFactory(this)
 
 	private inner class ListRemoteViewFactory(private val context: Context) : RemoteViewsFactory {
@@ -23,12 +28,14 @@ class TodayCourseWidgetService : RemoteViewsService() {
 		override fun getItemId(position: Int): Long = position.toLong()
 
 		override fun onDataSetChanged() {
-			data.clear()
-			data.addAll(WidgetRepository.queryTodayCourse())
-			if (data.isEmpty())
-				sendBroadcast(Intent(Constants.ACTION_WIDGET_UPDATE_BROADCAST)
-						.putExtra("name", TodayCourseWidgetService::class.java.name)
-						.putExtra("hasData", false))
+			GlobalScope.launch {
+				data.clear()
+				data.addAll(widgetRepository.queryTodayCourse())
+				if (data.isEmpty())
+					sendBroadcast(Intent(Constants.ACTION_WIDGET_UPDATE_BROADCAST)
+							.putExtra("name", TodayCourseWidgetService::class.java.name)
+							.putExtra("hasData", false))
+			}
 		}
 
 		override fun hasStableIds(): Boolean = true

@@ -12,8 +12,6 @@ import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.base.XhuBasePreferenceFragment
 import com.weilylab.xhuschedule.model.event.UI
 import com.weilylab.xhuschedule.model.event.UIConfigEvent
-import com.weilylab.xhuschedule.repository.SchoolCalendarRepository
-import com.weilylab.xhuschedule.utils.ConfigUtil
 import com.weilylab.xhuschedule.utils.ConfigurationUtil
 import com.weilylab.xhuschedule.viewmodel.SettingsViewModel
 import com.zyao89.view.zloading.ZLoadingDialog
@@ -99,7 +97,7 @@ class ClassSettingsFragment : XhuBasePreferenceFragment(R.xml.preference_class) 
 						.setPositiveButton(R.string.action_ok) { _, _ ->
 							if (selectedIndex == 0) {
 								ConfigurationUtil.isCustomYearAndTerm = false
-								ConfigUtil.getCurrentYearAndTerm()
+								settingsViewModel.updateCurrentYearAndTerm()
 							} else {
 								ConfigurationUtil.isCustomYearAndTerm = true
 								val select = selectArray[selectedIndex]
@@ -157,7 +155,7 @@ class ClassSettingsFragment : XhuBasePreferenceFragment(R.xml.preference_class) 
 			}
 			if (schoolCalendarUrl == null) {
 				dialog.show()
-				SchoolCalendarRepository.getUrl { url ->
+				settingsViewModel.getSchoolCalendarUrl { url ->
 					if (url != null) {
 						schoolCalendarUrl = url
 						jumpToImageView(schoolCalendarUrl!!)

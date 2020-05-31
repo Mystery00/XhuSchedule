@@ -37,32 +37,38 @@ import android.app.IntentService
 import android.content.Intent
 import com.weilylab.xhuschedule.api.QiniuAPI
 import com.weilylab.xhuschedule.constant.IntentConstant
-import com.weilylab.xhuschedule.factory.RetrofitFactory
-import com.weilylab.xhuschedule.utils.FileUtil
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
-import vip.mystery0.rx.DoNothingObserver
-import vip.mystery0.tools.utils.FileTools
-import java.io.InputStream
+import com.weilylab.xhuschedule.utils.getSplashImageFile
+import kotlinx.coroutines.*
+import org.koin.android.ext.android.inject
+import vip.mystery0.logs.Logs
+import vip.mystery0.tools.utils.copyToFile
+import vip.mystery0.tools.utils.md5
 
 class DownloadSplashIntentService : IntentService("DownloadSplashIntentService") {
+	companion object {
+		private val TAG = "DownloadSplashIntentService"
+	}
+
+	private val qiniuAPI: QiniuAPI by inject()
+
 	override fun onHandleIntent(intent: Intent?) {
 		if (intent == null)
 			return
 		val qiniuPath = intent.getStringExtra(IntentConstant.INTENT_TAG_NAME_QINIU_PATH) ?: return
 		val objectId = intent.getStringExtra(IntentConstant.INTENT_TAG_NAME_SPLASH_FILE_NAME)
 				?: return
-		val file = FileUtil.getSplashImageFile(this, objectId) ?: return
+		val file = getSplashImageFile(objectId) ?: return
 		if (!file.parentFile!!.exists())
 			file.parentFile!!.mkdirs()
 		if (!file.exists())
-			RetrofitFactory.qiniuRetrofit
-					.create(QiniuAPI::class.java)
-					.download(qiniuPath)
-					.subscribeOn(Schedulers.io())
-					.map { responseBody -> responseBody.byteStream() }
-					.doOnNext { inputStream -> FileTools.instance.copyInputStreamToFile(inputStream, file) }
-					.observeOn(AndroidSchedulers.mainThread())
-					.subscribe(DoNothingObserver<InputStream>())
+			GlobalScope.launch(CoroutineExceptionHandler { _, throwable ->
+				Logs.wtf(TAG, "download: ", throwable)
+			}) {
+				withContext(Dispatchers.IO) {
+					val body = qiniuAPI.download(qiniuPath)
+					body.byteStream().copyToFile(file)
+					file.md5()
+				}
+			}
 	}
 }

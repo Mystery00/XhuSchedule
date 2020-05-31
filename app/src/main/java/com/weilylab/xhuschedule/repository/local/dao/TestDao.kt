@@ -9,17 +9,17 @@ import com.weilylab.xhuschedule.model.Test
 @Dao
 interface TestDao {
 	@Insert
-	fun insert(test: Test): Long
+	suspend fun insert(test: Test): Long
 
 	@Delete
-	fun delete(test: Test): Int
+	suspend fun delete(test: Test): Int
 
 	@Query("select * from tb_test")
-	fun queryAllTest(): List<Test>
+	suspend fun queryAllTest(): List<Test>
 
 	@Query("select * from tb_test where student_id = :username")
-	fun queryTestsForStudent(username: String): List<Test>
+	suspend fun queryTestsForStudent(username: String): List<Test>
 
 	@Query("select * from tb_test where test_date = :date")
-	fun queryTestsOnThisDay(date: String): List<Test>
+	suspend fun queryTestsOnThisDay(date: String): List<Test>
 }

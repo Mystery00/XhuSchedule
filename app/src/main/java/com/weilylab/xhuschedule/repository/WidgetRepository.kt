@@ -4,28 +4,34 @@ import android.graphics.Color
 import com.weilylab.xhuschedule.config.ColorPoolHelper
 import com.weilylab.xhuschedule.model.Test
 import com.weilylab.xhuschedule.utils.CalendarUtil
-import com.weilylab.xhuschedule.utils.userDo.CourseUtil
-import com.weilylab.xhuschedule.utils.userDo.TestUtil
-import com.weilylab.xhuschedule.utils.userDo.UserUtil
+import com.weilylab.xhuschedule.utils.ConfigurationUtil
 import com.zhuangfei.timetable.model.Schedule
+import org.koin.core.KoinComponent
+import org.koin.core.inject
 import vip.mystery0.logs.Logs
-import vip.mystery0.tools.utils.StringTools
+import vip.mystery0.tools.utils.md5
 import java.util.*
 import kotlin.collections.ArrayList
 
-object WidgetRepository {
+class WidgetRepository : KoinComponent {
+	private val studentRepository: StudentRepository by inject()
+	private val courseRepository: CourseRepository by inject()
+	private val customThingRepository: CustomThingRepository by inject()
+	private val testRepository: TestRepository by inject()
+	private val initRepository: InitRepository by inject()
+
 	/**
 	 * 查询学生的今日课程信息
 	 * 查询主用户的信息
 	 * 同步方法
 	 */
-	fun queryTodayCourse(): List<Schedule> {
-		val studentList = StudentLocalDataSource.queryAllStudentListDo()
-		val mainStudent = UserUtil.findMainStudent(studentList) ?: return emptyList()
-		val week = CalendarUtil.getWeekFromCalendar(InitLocalDataSource.getStartDateTime())
+	suspend fun queryTodayCourse(): List<Schedule> {
+		val mainStudent = studentRepository.queryMainStudent() ?: return emptyList()
+		val week = CalendarUtil.getWeekFromCalendar(initRepository.getStartDateTime())
 		val weekIndex = CalendarUtil.getWeekIndex()
-		return CourseLocalDataSource.getRowCourseList(mainStudent)
-				.filter { CourseUtil.isTodayCourse(it, week, weekIndex) }
+		return courseRepository.queryCourseByUsernameAndTerm(mainStudent, ConfigurationUtil.currentYear, ConfigurationUtil.currentTerm, fromCache = true, throwError = true)
+				.map { it.schedule }
+				.filter { it.day == weekIndex && it.weekList.contains(week) }
 	}
 
 	/**
@@ -33,10 +39,10 @@ object WidgetRepository {
 	 * 查询主用户的信息
 	 * 同步方法
 	 */
-	fun queryTests(): List<Test> {
-		val studentList = StudentLocalDataSource.queryAllStudentListDo()
-		val mainStudent = UserUtil.findMainStudent(studentList) ?: return emptyList()
-		return sortTests(TestUtil.filterTestList(TestLocalDataSource.getRawTestList(mainStudent)))
+	suspend fun queryTests(): List<Test> {
+		val mainStudent = studentRepository.queryMainStudent() ?: return emptyList()
+		return sortTests(testRepository.queryAll(mainStudent)
+				.filter { it.date != "" || it.testno != "" || it.time != "" || it.location != "" })
 	}
 
 	/**
@@ -44,11 +50,12 @@ object WidgetRepository {
 	 * 查询多个用户的信息
 	 * 同步方法
 	 */
-	fun queryTestsForManyStudent(): List<Test> {
-		val studentList = StudentLocalDataSource.queryAllStudentListDo()
+	suspend fun queryTestsForManyStudent(): List<Test> {
+		val studentList = studentRepository.queryAllStudentList()
 		val tests = ArrayList<Test>()
-		studentList.forEach {
-			tests.addAll(TestUtil.filterTestList(TestLocalDataSource.getRawTestList(it)))
+		studentList.forEach { student ->
+			tests.addAll(testRepository.queryAll(student)
+					.filter { it.date != "" || it.testno != "" || it.time != "" || it.location != "" })
 		}
 		return sortTests(tests)
 	}
@@ -56,15 +63,15 @@ object WidgetRepository {
 	/**
 	 * 根据考试列表生成对应的文字颜色
 	 */
-	fun generateColorList(list: List<Test>): IntArray {
+	suspend fun generateColorList(list: List<Test>): IntArray {
 		val colorList = ArrayList<Int>()
-		val courseList = CourseLocalDataSource.getDistinctRowCourseList()
+		val courseList = courseRepository.queryDistinctCourseByUsernameAndTerm()
 		list.forEach { test ->
 			val course = courseList.find { it.name == test.name }
 			val color = try {
 				Color.parseColor(course!!.color)
 			} catch (e: Exception) {
-				val md5Int = StringTools.instance.md5(test.name).substring(0, 1).toInt(16)
+				val md5Int = test.name.md5().substring(0, 1).toInt(16)
 				ColorPoolHelper.colorPool.getColorAuto(md5Int)
 			}
 			colorList.add(color)

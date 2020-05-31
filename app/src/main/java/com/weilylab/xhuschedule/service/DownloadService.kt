@@ -50,18 +50,14 @@ import com.weilylab.xhuschedule.listener.DownloadProgressListener
 import com.weilylab.xhuschedule.model.Download
 import com.weilylab.xhuschedule.ui.notification.DownloadNotification
 import com.weilylab.xhuschedule.utils.BsPatch
-import io.reactivex.Observer
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.Disposable
-import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.*
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import vip.mystery0.logs.Logs
-import vip.mystery0.tools.utils.FileTools
+import vip.mystery0.tools.utils.copyToFile
+import vip.mystery0.tools.utils.md5
 import java.io.File
-import java.io.IOException
-import java.io.InputStream
 import java.util.concurrent.TimeUnit
 
 /**
@@ -69,6 +65,8 @@ import java.util.concurrent.TimeUnit
  */
 class DownloadService : IntentService("DownloadService") {
 	companion object {
+		private val TAG = "DownloadService"
+
 		fun intentTo(context: Context, type: String, qiniuPath: String, apkMD5: String, patchMD5: String) {
 			val intent = Intent(context, DownloadService::class.java)
 			intent.putExtra(IntentConstant.INTENT_TAG_NAME_TYPE, type)
@@ -122,84 +120,58 @@ class DownloadService : IntentService("DownloadService") {
 	}
 
 	private fun download(context: Context, type: String, qiniuPath: String, file: File, apkMD5: String, patchMD5: String) {
-		retrofit.create(QiniuAPI::class.java)
-				.download(qiniuPath)
-				.subscribeOn(Schedulers.io())
-				.map { responseBody ->
-					val inputStream = responseBody.byteStream()
-					try {
-						FileTools.instance.copyInputStreamToFile(inputStream, file)
-					} catch (e: IOException) {
-						e.printStackTrace()
-					}
-					inputStream
+		GlobalScope.launch(CoroutineExceptionHandler { _, throwable ->
+			Logs.wtf(TAG, "download: ", throwable)
+			DownloadNotification.downloadError(context)
+		}) {
+			DownloadNotification.notify(context, qiniuPath)
+			val downloadFileMD5 = withContext(Dispatchers.IO) {
+				val body = retrofit.create(QiniuAPI::class.java).download(qiniuPath)
+				body.byteStream().copyToFile(file)
+				file.md5()
+			}
+			DownloadNotification.downloadFileMD5Matching(context)
+			isDownloadMD5Matched = when (type) {
+				Constants.DOWNLOAD_TYPE_APK -> downloadFileMD5 == apkMD5
+				Constants.DOWNLOAD_TYPE_PATCH -> downloadFileMD5 == patchMD5
+				else -> false
+			}
+			withContext(Dispatchers.IO) {
+				if (isDownloadMD5Matched && type == Constants.DOWNLOAD_TYPE_PATCH) {
+					val newApkPath = getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS)!!.absolutePath + File.separator + "apk" + File.separator + qiniuPath + ".apk"
+					val newAPK = File(newApkPath)
+					if (!newAPK.parentFile!!.exists())
+						newAPK.parentFile!!.mkdirs()
+					BsPatch.patch(applicationContext.applicationInfo.sourceDir,
+							newApkPath,
+							file.absolutePath)
+					newApkPath
+				} else {
+					null
 				}
-				.observeOn(Schedulers.computation())
-				.map {
-					val downloadFileMD5 = FileTools.instance.getMD5(file)
-					isDownloadMD5Matched = when (type) {
-						Constants.DOWNLOAD_TYPE_APK -> downloadFileMD5 == apkMD5
-						Constants.DOWNLOAD_TYPE_PATCH -> downloadFileMD5 == patchMD5
-						else -> false
-					}
-					it
+			}
+			withContext(Dispatchers.Main) {
+				if (!isDownloadMD5Matched) {
+					DownloadNotification.downloadFileMD5NotMatch(context)
+					return@withContext
 				}
-				.observeOn(Schedulers.io())
-				.map {
-					if (isDownloadMD5Matched && type == Constants.DOWNLOAD_TYPE_PATCH) {
-						val newApkPath = getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS)!!.absolutePath + File.separator + "apk" + File.separator + qiniuPath + ".apk"
-						val newAPK = File(newApkPath)
-						if (!newAPK.parentFile!!.exists())
-							newAPK.parentFile!!.mkdirs()
-						Pair(it, newApkPath)
-					} else
-						Pair(it, null)
-				}
-				.observeOn(Schedulers.newThread())
-				.map {
-					if (it.second != null)
-						BsPatch.patch(applicationContext.applicationInfo.sourceDir,
-								it.second!!,
-								file.absolutePath)
-					it.first
-				}
-				.observeOn(AndroidSchedulers.mainThread())
-				.subscribe(object : Observer<InputStream> {
-					override fun onSubscribe(d: Disposable) {
-						DownloadNotification.notify(context, qiniuPath)
-					}
-
-					override fun onComplete() {
-						if (!isDownloadMD5Matched) {
-							DownloadNotification.downloadFileMD5NotMatch(context)
-							return
-						}
-						val installIntent = Intent(Intent.ACTION_VIEW)
-						installIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-						installIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
-						val installFile = if (type == Constants.DOWNLOAD_TYPE_PATCH)
-							File(getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS)!!.absolutePath + File.separator + "apk" + File.separator + qiniuPath + ".apk")
-						else
-							file
-						val uri = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
-							FileProvider.getUriForFile(context, getString(R.string.app_package_name), installFile)
-						else
-							Uri.fromFile(installFile)
-						installIntent.setDataAndType(uri, "application/vnd.android.package-archive")
-						startActivity(installIntent)
-						DownloadNotification.cancel(context)
-						stopSelf()
-					}
-
-					override fun onNext(t: InputStream) {
-						DownloadNotification.downloadFileMD5Matching(context)
-					}
-
-					override fun onError(e: Throwable) {
-						DownloadNotification.downloadError(context)
-						e.printStackTrace()
-					}
-				})
+				val installIntent = Intent(Intent.ACTION_VIEW)
+				installIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+				installIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
+				val installFile = if (type == Constants.DOWNLOAD_TYPE_PATCH)
+					File(getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS)!!.absolutePath + File.separator + "apk" + File.separator + qiniuPath + ".apk")
+				else
+					file
+				val uri = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
+					FileProvider.getUriForFile(context, getString(R.string.app_package_name), installFile)
+				else
+					Uri.fromFile(installFile)
+				installIntent.setDataAndType(uri, "application/vnd.android.package-archive")
+				startActivity(installIntent)
+				DownloadNotification.cancel(context)
+				stopSelf()
+			}
+		}
 	}
 
 	override fun onTaskRemoved(rootIntent: Intent?) {

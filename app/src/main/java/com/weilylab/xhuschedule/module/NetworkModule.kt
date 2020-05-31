@@ -8,6 +8,7 @@ import com.weilylab.xhuschedule.interceptor.LoadCookiesInterceptor
 import com.weilylab.xhuschedule.interceptor.SaveCookiesInterceptor
 import com.weilylab.xhuschedule.model.Student
 import com.weilylab.xhuschedule.model.response.BaseResponse
+import com.weilylab.xhuschedule.model.response.CloudResponse
 import com.weilylab.xhuschedule.repository.StudentRepository
 import okhttp3.OkHttpClient
 import org.koin.core.inject
@@ -84,6 +85,8 @@ suspend fun <T : BaseResponse> T.redoAfterLogin(student: Student, repeat: suspen
 }
 
 fun <T : BaseResponse> T.check(): T = if (isSuccessful) this else throw Exception(msg)
+
+fun <T : CloudResponse> T.check(): T = if (isSuccessful) this else throw Exception(message)
 
 suspend fun <R> checkConnect(block: suspend () -> R): R {
 	if (isConnectInternet()) {

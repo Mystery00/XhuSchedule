@@ -21,8 +21,8 @@ import com.tencent.tauth.UiError
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.config.APP
 import com.weilylab.xhuschedule.constant.Constants
-import vip.mystery0.tools.utils.ActivityManagerTools
-import vip.mystery0.tools.utils.FileTools
+import vip.mystery0.tools.utils.currentActivity
+import vip.mystery0.tools.utils.toByteArray
 import kotlin.math.roundToInt
 
 object ShareUtil {
@@ -40,7 +40,7 @@ object ShareUtil {
 					params.putString(QQShare.SHARE_TO_QQ_TARGET_URL, Constants.SHARE_TARGET_URL)
 					params.putString(QQShare.SHARE_TO_QQ_IMAGE_URL, Constants.SHARE_IMAGE_URL)
 					params.putString(QQShare.SHARE_TO_QQ_APP_NAME, context.getString(R.string.app_name))
-					APP.tencent!!.shareToQQ(ActivityManagerTools.instance.currentActivity(), params, object : IUiListener {
+					APP.tencent!!.shareToQQ(currentActivity(), params, object : IUiListener {
 						override fun onComplete(p0: Any?) {
 						}
 
@@ -64,7 +64,7 @@ object ShareUtil {
 					params.putString(QQShare.SHARE_TO_QQ_IMAGE_URL, Constants.SHARE_IMAGE_URL)
 					params.putString(QQShare.SHARE_TO_QQ_APP_NAME, context.getString(R.string.app_name))
 					params.putInt(QQShare.SHARE_TO_QQ_EXT_INT, QQShare.SHARE_TO_QQ_FLAG_QZONE_AUTO_OPEN)
-					APP.tencent!!.shareToQQ(ActivityManagerTools.instance.currentActivity(), params, object : IUiListener {
+					APP.tencent!!.shareToQQ(currentActivity(), params, object : IUiListener {
 						override fun onComplete(p0: Any?) {
 						}
 
@@ -81,7 +81,7 @@ object ShareUtil {
 			}
 			ShareType.WEIBO -> {//分享到微博
 				if (PackageUtil.isWeiBoApplicationAvailable()) {
-					val shareHandler = WbShareHandler(ActivityManagerTools.instance.currentActivity())
+					val shareHandler = WbShareHandler(currentActivity())
 					shareHandler.registerApp()
 					val weiboMultiMessage = WeiboMultiMessage()
 					val imageObject = ImageObject()
@@ -108,7 +108,7 @@ object ShareUtil {
 					wxMediaMessage.description = getRandomText(context)
 					val thumbBmp = Bitmap.createScaledBitmap(bitmap, 100, 100, true)
 					bitmap.recycle()
-					wxMediaMessage.thumbData = FileTools.instance.bitmapToByteArray(Bitmap.CompressFormat.PNG, thumbBmp)
+					wxMediaMessage.thumbData = thumbBmp.toByteArray(Bitmap.CompressFormat.PNG)
 
 					val request = SendMessageToWX.Req()
 					request.transaction = "ShareWithWeiXin${System.currentTimeMillis()}"
@@ -132,7 +132,7 @@ object ShareUtil {
 					wxMediaMessage.description = getRandomText(context)
 					val thumbBmp = Bitmap.createScaledBitmap(bitmap, 100, 100, true)
 					bitmap.recycle()
-					wxMediaMessage.thumbData = FileTools.instance.bitmapToByteArray(Bitmap.CompressFormat.PNG, thumbBmp)
+					wxMediaMessage.thumbData = thumbBmp.toByteArray(Bitmap.CompressFormat.PNG)
 
 					val req = SendMessageToWX.Req()
 					req.transaction = "ShareWithFriends${System.currentTimeMillis()}"

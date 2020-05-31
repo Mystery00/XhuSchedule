@@ -16,7 +16,7 @@ import com.zhuangfei.timetable.model.Schedule
 import com.zhuangfei.timetable.model.ScheduleEnable
 import com.zhuangfei.timetable.model.ScheduleSupport
 import com.zhuangfei.timetable.model.WeekViewEnable
-import vip.mystery0.tools.utils.DensityTools
+import vip.mystery0.tools.utils.dpTopx
 import java.util.*
 
 class CustomWeekView : LinearLayout, WeekViewEnable<CustomWeekView> {
@@ -81,7 +81,7 @@ class CustomWeekView : LinearLayout, WeekViewEnable<CustomWeekView> {
 			val itemView = layoutWeekViewBinding.weekViewContainer.getChildAt(curWeek - 1)
 			itemView.background = ContextCompat.getDrawable(context, R.drawable.weekview_thisweek)
 		}
-		layoutWeekViewBinding.nestedScrollView.scrollTo(curWeek * DensityTools.instance.dp2px(59F), 0)
+		layoutWeekViewBinding.nestedScrollView.scrollTo(curWeek * dpTopx(59F), 0)
 		return this
 	}
 

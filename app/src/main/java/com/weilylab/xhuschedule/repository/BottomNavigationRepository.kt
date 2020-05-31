@@ -4,7 +4,6 @@ import com.weilylab.xhuschedule.api.XhuScheduleCloudAPI
 import com.weilylab.xhuschedule.model.Course
 import com.weilylab.xhuschedule.model.Student
 import com.weilylab.xhuschedule.utils.ConfigurationUtil
-import com.weilylab.xhuschedule.utils.userDo.CourseUtil
 import com.zhuangfei.timetable.model.Schedule
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -29,13 +28,13 @@ class BottomNavigationRepository : KoinComponent {
 		val year = withContext(Dispatchers.IO) { ConfigurationUtil.currentYear }
 		val term = withContext(Dispatchers.IO) { ConfigurationUtil.currentTerm }
 		val result = ArrayList<Schedule>()
-		studentList.forEach {
-			val courseList = courseRepository.queryCourseByUsernameAndTerm(it, year, term, fromCache, throwError)
-			val customCourseList = courseRepository.queryCustomCourseByTerm(it, year, term)
+		studentList.forEach { student ->
+			val courseList = courseRepository.queryCourseByUsernameAndTerm(student, year, term, fromCache, throwError)
+			val customCourseList = courseRepository.queryCustomCourseByTerm(student, year, term)
 			val all = ArrayList<Course>()
 			all.addAll(courseList)
 			all.addAll(customCourseList)
-			result.addAll(CourseUtil.convertCourseToSchedule(all))
+			result.addAll(all.map { it.schedule })
 		}
 		return result
 	}
@@ -53,7 +52,7 @@ class BottomNavigationRepository : KoinComponent {
 		val all = ArrayList<Course>()
 		all.addAll(courseList)
 		all.addAll(customCourseList)
-		return CourseUtil.convertCourseToSchedule(all)
+		return all.map { it.schedule }
 	}
 
 	private suspend fun getLocalStartDateTime(): Calendar = withContext(Dispatchers.Default) {

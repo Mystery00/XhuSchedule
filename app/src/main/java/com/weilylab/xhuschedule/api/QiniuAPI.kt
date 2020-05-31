@@ -33,7 +33,6 @@
 
 package com.weilylab.xhuschedule.api
 
-import io.reactivex.Observable
 import okhttp3.ResponseBody
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -42,5 +41,5 @@ import retrofit2.http.Streaming
 interface QiniuAPI {
 	@Streaming
 	@GET("/{path}")
-	fun download(@Path("path") path: String): Observable<ResponseBody>
+	suspend fun download(@Path("path") path: String): ResponseBody
 }

@@ -41,11 +41,14 @@ import com.weilylab.xhuschedule.base.XhuBaseActivity
 import com.weilylab.xhuschedule.config.APP
 import com.weilylab.xhuschedule.constant.IntentConstant
 import com.weilylab.xhuschedule.model.Splash
+import com.weilylab.xhuschedule.repository.InitRepository
 import com.weilylab.xhuschedule.service.CheckUpdateService
 import com.weilylab.xhuschedule.service.DownloadSplashIntentService
 import com.weilylab.xhuschedule.utils.ConfigUtil
 import com.weilylab.xhuschedule.utils.ConfigurationUtil
 import com.weilylab.xhuschedule.viewmodel.SplashViewModel
+import kotlinx.coroutines.launch
+import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import vip.mystery0.logs.Logs
 import vip.mystery0.rx.DataObserver
@@ -56,6 +59,7 @@ import vip.mystery0.tools.utils.sha1
  */
 class SplashActivity : XhuBaseActivity(null, false) {
 	private val splashViewModel: SplashViewModel by viewModel()
+	private val initRepository: InitRepository by inject()
 
 	private val splashObserver = object : DataObserver<Pair<Splash, Boolean>> {
 		override fun empty() {
@@ -106,7 +110,9 @@ class SplashActivity : XhuBaseActivity(null, false) {
 		splashViewModel.requestSplash()
 		ContextCompat.startForegroundService(this, Intent(APP.context, CheckUpdateService::class.java))
 		ConfigUtil.setTrigger(this)
-		ConfigUtil.getCurrentYearAndTerm()
+		launch {
+			ConfigUtil.getCurrentYearAndTerm(initRepository.getStartTime())
+		}
 	}
 
 	private fun initViewModel() {
