@@ -10,6 +10,7 @@ import org.koin.core.KoinComponent
 import org.koin.core.inject
 import vip.mystery0.rx.PackageData
 import vip.mystery0.rx.content
+import vip.mystery0.rx.empty
 import vip.mystery0.rx.launch
 
 class ClassCourseColorViewModel : ViewModel(), KoinComponent {
@@ -19,7 +20,12 @@ class ClassCourseColorViewModel : ViewModel(), KoinComponent {
 
 	fun queryDistinctCourseByUsernameAndTerm() {
 		launch(classCourseList) {
-			classCourseList.content(courseRepository.queryDistinctCourseByUsernameAndTerm())
+			val list = courseRepository.queryDistinctCourseByUsernameAndTerm()
+			if (list.isNullOrEmpty()) {
+				classCourseList.empty()
+			} else {
+				classCourseList.content(list)
+			}
 		}
 	}
 

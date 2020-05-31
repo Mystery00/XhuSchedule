@@ -95,7 +95,9 @@ class QueryTestActivity : XhuBaseActivity(R.layout.activity_query_test) {
 			if (it == null) {
 				toastLong(R.string.hint_action_not_login)
 				finish()
+				return@Observer
 			}
+			queryTestForStudent(it)
 		})
 		queryTestViewModel.testList.observe(this, queryTestListObserver)
 		queryTestViewModel.html.observe(this, queryTestHtmlObserver)

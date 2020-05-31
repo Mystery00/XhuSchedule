@@ -8,6 +8,7 @@ import org.koin.core.KoinComponent
 import org.koin.core.inject
 import vip.mystery0.rx.PackageData
 import vip.mystery0.rx.content
+import vip.mystery0.rx.empty
 import vip.mystery0.rx.launch
 
 class NoticeViewModel : ViewModel(), KoinComponent {
@@ -16,7 +17,12 @@ class NoticeViewModel : ViewModel(), KoinComponent {
 
 	fun queryNotice() {
 		launch(noticeList) {
-			noticeList.content(noticeRepository.queryNoticeForAndroid())
+			val list = noticeRepository.queryNoticeForAndroid()
+			if (list.isNullOrEmpty()) {
+				noticeList.empty()
+			} else {
+				noticeList.content(list)
+			}
 		}
 	}
 

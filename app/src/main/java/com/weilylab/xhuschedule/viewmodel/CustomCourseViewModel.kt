@@ -12,10 +12,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.koin.core.KoinComponent
 import org.koin.core.inject
-import vip.mystery0.rx.PackageData
-import vip.mystery0.rx.content
-import vip.mystery0.rx.launch
-import vip.mystery0.rx.loading
+import vip.mystery0.rx.*
 import java.util.*
 import kotlin.collections.HashMap
 
@@ -48,7 +45,11 @@ class CustomCourseViewModel : ViewModel(), KoinComponent {
 					student?.username = info.name
 				}
 			}
-			studentInfoList.content(infoMap)
+			if (infoMap.isNullOrEmpty()) {
+				studentInfoList.empty()
+			} else {
+				studentInfoList.content(infoMap)
+			}
 			mainStudent.postValue(student)
 			withContext(Dispatchers.Default) {
 				year.postValue(CalendarUtil.getSelectArray(null).last())
@@ -70,7 +71,12 @@ class CustomCourseViewModel : ViewModel(), KoinComponent {
 	}
 
 	private suspend fun getAllCustomCourseInCoroutine() {
-		customCourseList.content(customCourseRepository.getAll())
+		val list = customCourseRepository.getAll()
+		if (list.isNullOrEmpty()) {
+			customCourseList.empty()
+		} else {
+			customCourseList.content(list)
+		}
 	}
 
 	fun saveCustomCourse(course: Course, block: () -> Unit) {
@@ -96,13 +102,23 @@ class CustomCourseViewModel : ViewModel(), KoinComponent {
 
 	fun syncForLocal(student: Student) {
 		launch(customCourseList) {
-			customCourseList.content(customCourseRepository.syncCustomCourseForLocal(student))
+			val list = customCourseRepository.syncCustomCourseForLocal(student)
+			if (list.isNullOrEmpty()) {
+				customCourseList.empty()
+			} else {
+				customCourseList.content(list)
+			}
 		}
 	}
 
 	fun syncForRemote(student: Student) {
 		launch(customCourseList) {
-			customCourseList.content(customCourseRepository.syncCustomCourseForServer(student))
+			val list = customCourseRepository.syncCustomCourseForServer(student)
+			if (list.isNullOrEmpty()) {
+				customCourseList.empty()
+			} else {
+				customCourseList.content(list)
+			}
 		}
 	}
 }

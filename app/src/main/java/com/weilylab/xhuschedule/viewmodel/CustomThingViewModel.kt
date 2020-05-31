@@ -8,6 +8,7 @@ import org.koin.core.KoinComponent
 import org.koin.core.inject
 import vip.mystery0.rx.PackageData
 import vip.mystery0.rx.content
+import vip.mystery0.rx.empty
 import vip.mystery0.rx.launch
 
 class CustomThingViewModel : ViewModel(), KoinComponent {
@@ -22,7 +23,12 @@ class CustomThingViewModel : ViewModel(), KoinComponent {
 	}
 
 	private suspend fun getAllCustomThingInCoroutine() {
-		customThingList.content(customThingRepository.getAll())
+		val list = customThingRepository.getAll()
+		if (list.isNullOrEmpty()) {
+			customThingList.empty()
+		} else {
+			customThingList.content(list)
+		}
 	}
 
 	fun saveCustomThing(thing: CustomThing, block: () -> Unit) {
@@ -48,13 +54,23 @@ class CustomThingViewModel : ViewModel(), KoinComponent {
 
 	fun syncForLocal() {
 		launch(customThingList) {
-			customThingList.content(customThingRepository.syncCustomThingForLocal())
+			val list = customThingRepository.syncCustomThingForLocal()
+			if (list.isNullOrEmpty()) {
+				customThingList.empty()
+			} else {
+				customThingList.content(list)
+			}
 		}
 	}
 
 	fun syncForRemote() {
 		launch(customThingList) {
-			customThingList.content(customThingRepository.syncCustomThingForServer())
+			val list = customThingRepository.syncCustomThingForServer()
+			if (list.isNullOrEmpty()) {
+				customThingList.empty()
+			} else {
+				customThingList.content(list)
+			}
 		}
 	}
 }

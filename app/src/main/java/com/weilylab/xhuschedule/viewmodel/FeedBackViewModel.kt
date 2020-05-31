@@ -14,6 +14,7 @@ import org.koin.core.KoinComponent
 import org.koin.core.inject
 import vip.mystery0.rx.PackageData
 import vip.mystery0.rx.content
+import vip.mystery0.rx.empty
 import vip.mystery0.rx.launch
 import vip.mystery0.tools.ResourceException
 
@@ -42,7 +43,11 @@ class FeedBackViewModel : ViewModel(), KoinComponent {
 		job = launch(feedBackMessageList) {
 			while (true) {
 				val list = feedBackRepository.getMessageFromRemote(student, maxId.value ?: 0)
-				feedBackMessageList.content(list)
+				if (list.isNullOrEmpty()) {
+					feedBackMessageList.empty()
+				} else {
+					feedBackMessageList.content(list)
+				}
 				withContext(Dispatchers.Default) {
 					Thread.sleep(30 * 1000)
 				}
@@ -64,7 +69,11 @@ class FeedBackViewModel : ViewModel(), KoinComponent {
 		val list = feedBackRepository.getMessageFromLocal(student, maxId.value
 				?: 0)
 		maxId.postValue(list.maxBy { it.id }?.id)
-		feedBackMessageList.content(list)
+		if (list.isNullOrEmpty()) {
+			feedBackMessageList.empty()
+		} else {
+			feedBackMessageList.content(list)
+		}
 	}
 
 	fun sendMessage(content: String) {
@@ -75,7 +84,11 @@ class FeedBackViewModel : ViewModel(), KoinComponent {
 			val loadingList = ArrayList<FeedBackMessage>()
 			loadingList.addAll(list)
 			loadingList.add(feedBackMessage)
-			feedBackMessageList.content(loadingList)
+			if (loadingList.isNullOrEmpty()) {
+				feedBackMessageList.empty()
+			} else {
+				feedBackMessageList.content(loadingList)
+			}
 		}
 	}
 }

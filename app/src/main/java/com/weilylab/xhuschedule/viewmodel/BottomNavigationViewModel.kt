@@ -86,13 +86,21 @@ class BottomNavigationViewModel : ViewModel(), KoinComponent {
 			courseList.loading()
 			if (enableMultiUserMode) {
 				val courses = bottomNavigationRepository.queryCoursesForManyStudent(list, fromCache = true, throwError = false)
-				courseList.content(courses)
+				if (courses.isNullOrEmpty()) {
+					courseList.empty()
+				} else {
+					courseList.content(courses)
+				}
 				//处理今日课程
 				val todayCourse = courseRepository.getTodayCourse(courses)
 				todayCourseList.postValue(todayCourse)
 			} else {
 				val courses = bottomNavigationRepository.queryCourses(mainStudent, fromCache = true, throwError = false)
-				courseList.content(courses)
+				if (courses.isNullOrEmpty()) {
+					courseList.empty()
+				} else {
+					courseList.content(courses)
+				}
 			}
 			//查询自定义事项
 			val today = customThingRepository.getToday()

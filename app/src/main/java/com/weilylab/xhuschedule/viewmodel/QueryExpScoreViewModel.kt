@@ -10,10 +10,7 @@ import com.weilylab.xhuschedule.repository.StudentRepository
 import com.weilylab.xhuschedule.utils.CalendarUtil
 import org.koin.core.KoinComponent
 import org.koin.core.inject
-import vip.mystery0.rx.PackageData
-import vip.mystery0.rx.content
-import vip.mystery0.rx.launch
-import vip.mystery0.rx.loading
+import vip.mystery0.rx.*
 import java.util.*
 import kotlin.collections.HashMap
 
@@ -54,7 +51,11 @@ class QueryExpScoreViewModel : ViewModel(), KoinComponent {
 		scoreList.loading()
 		launch(scoreList) {
 			val list = scoreRepository.queryExpScoreOnline(student, year, term)
-			scoreList.content(list)
+			if (list.isNullOrEmpty()) {
+				scoreList.empty()
+			} else {
+				scoreList.content(list)
+			}
 		}
 	}
 }

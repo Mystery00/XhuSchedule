@@ -16,6 +16,7 @@ import org.koin.core.KoinComponent
 import org.koin.core.inject
 import vip.mystery0.rx.PackageData
 import vip.mystery0.rx.content
+import vip.mystery0.rx.empty
 import vip.mystery0.rx.launch
 
 class SettingsViewModel : ViewModel(), KoinComponent {
@@ -31,7 +32,12 @@ class SettingsViewModel : ViewModel(), KoinComponent {
 
 	fun initStudentList() {
 		launch(studentList) {
-			studentList.content(studentRepository.queryAllStudentList())
+			val list = studentRepository.queryAllStudentList()
+			if (list.isNullOrEmpty()) {
+				studentList.empty()
+			} else {
+				studentList.content(list)
+			}
 		}
 	}
 
@@ -52,14 +58,23 @@ class SettingsViewModel : ViewModel(), KoinComponent {
 	fun queryAllStudentInfoListAndThen(block: (ArrayList<StudentInfo>) -> Unit) {
 		launch(studentInfoList) {
 			if (studentList.value == null) {
-				studentList.content(studentRepository.queryAllStudentList())
+				val list = studentRepository.queryAllStudentList()
+				if (list.isNullOrEmpty()) {
+					studentList.empty()
+				} else {
+					studentList.content(list)
+				}
 			}
 			val infoList = ArrayList<StudentInfo>()
 			studentList.value?.data?.forEach {
 				val info = studentRepository.queryStudentInfo(it)
 				infoList.add(info)
 			}
-			studentInfoList.content(infoList)
+			if (infoList.isNullOrEmpty()) {
+				studentInfoList.empty()
+			} else {
+				studentInfoList.content(infoList)
+			}
 			withContext(Dispatchers.Main) {
 				block(infoList)
 			}

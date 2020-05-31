@@ -10,6 +10,7 @@ import org.koin.core.KoinComponent
 import org.koin.core.inject
 import vip.mystery0.rx.PackageData
 import vip.mystery0.rx.content
+import vip.mystery0.rx.empty
 import vip.mystery0.rx.launch
 
 class QueryTestViewModel : ViewModel(), KoinComponent {
@@ -37,7 +38,11 @@ class QueryTestViewModel : ViewModel(), KoinComponent {
 	fun query(student: Student) {
 		launch(testList) {
 			val response = testRepository.queryTests(student)
-			testList.content(response.first)
+			if (response.first.isNullOrEmpty()) {
+				testList.empty()
+			} else {
+				testList.content(response.first)
+			}
 			html.postValue(response.second)
 		}
 	}

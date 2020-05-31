@@ -9,10 +9,7 @@ import com.weilylab.xhuschedule.module.redoAfterLogin
 import com.weilylab.xhuschedule.repository.StudentRepository
 import org.koin.core.KoinComponent
 import org.koin.core.inject
-import vip.mystery0.rx.PackageData
-import vip.mystery0.rx.content
-import vip.mystery0.rx.launch
-import vip.mystery0.rx.loading
+import vip.mystery0.rx.*
 
 class QueryClassroomViewModel : ViewModel(), KoinComponent {
 	private val classRoomAPI: ClassRoomAPI by inject()
@@ -58,7 +55,12 @@ class QueryClassroomViewModel : ViewModel(), KoinComponent {
 						   time: String) {
 		classroomList.loading()
 		launch(classroomList) {
-			classroomList.content(queryClassRoomListInCoroutine(student, location, week, day, time))
+			val list = queryClassRoomListInCoroutine(student, location, week, day, time)
+			if (list.isNullOrEmpty()) {
+				classroomList.empty()
+			} else {
+				classroomList.content(list)
+			}
 		}
 	}
 }
