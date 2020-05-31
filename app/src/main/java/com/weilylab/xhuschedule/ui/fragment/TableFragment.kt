@@ -20,7 +20,6 @@ import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import vip.mystery0.logs.Logs
 import vip.mystery0.rx.DataObserver
 import vip.mystery0.tools.utils.dpTopx
-import vip.mystery0.tools.utils.toDateTimeString
 
 class TableFragment : BaseBottomNavigationFragment<FragmentTableBinding>(R.layout.fragment_table) {
 	companion object {
@@ -66,8 +65,8 @@ class TableFragment : BaseBottomNavigationFragment<FragmentTableBinding>(R.layou
 			binding.timeTableView.onDateBuildListener()
 					.onUpdateDate(binding.timeTableView.curWeek(), it)
 		})
-		bottomNavigationViewModel.startDateTime.observe(requireActivity(), Observer {
-			binding.timeTableView.curWeek(it.toDateTimeString())
+		bottomNavigationViewModel.currentWeek.observe(requireActivity(), Observer {
+			binding.timeTableView.curWeek(it.data!!)
 		})
 	}
 
