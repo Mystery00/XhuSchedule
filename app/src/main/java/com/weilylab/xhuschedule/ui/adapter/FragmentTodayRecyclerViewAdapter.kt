@@ -18,12 +18,6 @@ import com.weilylab.xhuschedule.databinding.ItemFragmentTodayThingBinding
 import com.weilylab.xhuschedule.model.CustomThing
 import com.weilylab.xhuschedule.utils.ConfigurationUtil
 import com.zhuangfei.timetable.model.Schedule
-import io.reactivex.Observable
-import io.reactivex.Observer
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.Disposable
-import io.reactivex.schedulers.Schedulers
-import vip.mystery0.logs.Logs
 import vip.mystery0.tools.base.binding.BaseMultiBindingRecyclerViewAdapter
 
 class FragmentTodayRecyclerViewAdapter(private val context: Context) : BaseMultiBindingRecyclerViewAdapter() {

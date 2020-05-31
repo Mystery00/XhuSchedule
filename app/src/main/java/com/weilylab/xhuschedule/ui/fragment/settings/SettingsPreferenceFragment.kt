@@ -29,7 +29,6 @@ import com.weilylab.xhuschedule.service.CheckUpdateService
 import com.weilylab.xhuschedule.ui.activity.SettingsActivity
 import com.weilylab.xhuschedule.ui.custom.CustomGlideEngine
 import com.weilylab.xhuschedule.utils.*
-import com.weilylab.xhuschedule.viewmodel.SettingsViewModel
 import com.yalantis.ucrop.UCrop
 import com.zhihu.matisse.Matisse
 import com.zhihu.matisse.MimeType
@@ -37,7 +36,6 @@ import com.zyao89.view.zloading.ZLoadingDialog
 import com.zyao89.view.zloading.Z_TYPE
 import org.greenrobot.eventbus.EventBus
 import org.koin.android.ext.android.inject
-import org.koin.androidx.viewmodel.ext.android.viewModel
 import vip.mystery0.tools.utils.AndroidVersionCode
 import vip.mystery0.tools.utils.screenHeight
 import vip.mystery0.tools.utils.screenWidth

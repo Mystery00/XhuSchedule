@@ -19,20 +19,28 @@ class ExpScore {
 
 	@ColumnInfo(name = "score_no")
 	lateinit var no: String
+
 	@ColumnInfo(name = "score")
 	lateinit var score: String
+
 	@ColumnInfo(name = "score_course_name")
 	lateinit var coursename: String
+
 	@ColumnInfo(name = "score_name")
 	lateinit var name: String
+
 	@ColumnInfo(name = "score_credit")
 	lateinit var credit: String
+
 	@ColumnInfo(name = "score_exp_type")
 	lateinit var exptype: String
+
 	@ColumnInfo(name = "score_year")
 	lateinit var year: String
+
 	@ColumnInfo(name = "score_term")
 	lateinit var term: String
+
 	@ColumnInfo(name = "student_id")
 	lateinit var studentID: String
 }

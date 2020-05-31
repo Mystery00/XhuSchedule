@@ -80,7 +80,7 @@ class SplashImageActivity : XhuBaseActivity(R.layout.activity_splash_image, fals
 				gotoMain()
 			}
 
-			override fun error( e: Throwable?) {
+			override fun error(e: Throwable?) {
 				super.error(e)
 				Logs.wm(e)
 				empty()

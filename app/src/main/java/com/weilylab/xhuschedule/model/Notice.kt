@@ -45,12 +45,16 @@ class Notice {
 
 	@ColumnInfo(name = "notice_create_time")
 	var createTime = ""
+
 	@ColumnInfo(name = "notice_title")
 	var title = ""
+
 	@ColumnInfo(name = "notice_content")
 	var content = ""
+
 	@ColumnInfo(name = "notice_platform")
 	var platform = ""
+
 	@ColumnInfo(name = "notice_is_read")
 	var isRead: Boolean = false
 }

@@ -22,9 +22,11 @@ import java.util.*
 class CustomWeekView : LinearLayout, WeekViewEnable<CustomWeekView> {
 	private var layoutWeekViewBinding: LayoutWeekViewBinding
 	private val courseList by lazy { ArrayList<Schedule>() }
+
 	//当前周
 	private var curWeek = 1
 	private var preIndex = 1
+
 	//多少项
 	private var itemCount = 20
 

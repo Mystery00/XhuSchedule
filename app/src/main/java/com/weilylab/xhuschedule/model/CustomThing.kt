@@ -11,16 +11,22 @@ class CustomThing {
 
 	@ColumnInfo(name = "title")
 	lateinit var title: String
+
 	@ColumnInfo(name = "start_time")
 	lateinit var startTime: String
+
 	@ColumnInfo(name = "endTime")
 	lateinit var endTime: String
+
 	@ColumnInfo(name = "is_all_day")
 	var isAllDay: Boolean = false
+
 	@ColumnInfo(name = "location")
 	lateinit var location: String
+
 	@ColumnInfo(name = "color")
 	lateinit var color: String
+
 	@ColumnInfo(name = "mark")
 	lateinit var mark: String
 }

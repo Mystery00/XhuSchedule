@@ -11,6 +11,7 @@ class FeedBackToken {
 
 	@ColumnInfo(name = "username")
 	lateinit var username: String
+
 	@ColumnInfo(name = "fb_token")
 	lateinit var fbToken: String
 }

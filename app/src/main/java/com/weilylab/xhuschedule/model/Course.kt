@@ -27,26 +27,37 @@ class Course : ScheduleEnable {
 
 	@ColumnInfo(name = "course_teacher")
 	lateinit var teacher: String
+
 	@ColumnInfo(name = "course_week")
 	lateinit var week: String
+
 	@ColumnInfo(name = "course_name")
 	lateinit var name: String
+
 	@ColumnInfo(name = "course_location")
 	lateinit var location: String
+
 	@ColumnInfo(name = "course_time")
 	lateinit var time: String
+
 	@ColumnInfo(name = "course_type")
 	lateinit var type: String
+
 	@ColumnInfo(name = "course_day")
 	lateinit var day: String
+
 	@ColumnInfo(name = "course_color")
 	lateinit var color: String
+
 	@ColumnInfo(name = "course_year")
 	lateinit var year: String
+
 	@ColumnInfo(name = "course_term")
 	lateinit var term: String
+
 	@ColumnInfo(name = "student_id")
 	lateinit var studentID: String
+
 	@ColumnInfo(name = "edit_type")
 	var editType = 0//事项类型，课程默认为0，自定义的课程为1
 

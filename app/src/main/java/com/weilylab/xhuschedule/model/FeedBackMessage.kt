@@ -22,16 +22,22 @@ class FeedBackMessage {
 
 	@ColumnInfo(name = "origin_id")
 	var id = 0
+
 	@ColumnInfo(name = "receiver")
 	lateinit var receiver: String
+
 	@ColumnInfo(name = "create_time")
 	lateinit var createTime: String
+
 	@ColumnInfo(name = "sender")
 	lateinit var sender: String
+
 	@ColumnInfo(name = "content")
 	var content: String = ""
+
 	@ColumnInfo(name = "platform")
 	lateinit var platform: String
+
 	@ColumnInfo(name = "status")
 	var status: Int = 0
 

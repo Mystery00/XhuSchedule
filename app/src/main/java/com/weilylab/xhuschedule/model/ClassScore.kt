@@ -19,22 +19,31 @@ class ClassScore {
 
 	@ColumnInfo(name = "score_course_type")
 	lateinit var coursetype: String
+
 	@ColumnInfo(name = "score_no")
 	lateinit var no: String
+
 	@ColumnInfo(name = "score")
 	lateinit var score: String
+
 	@ColumnInfo(name = "score_name")
 	lateinit var name: String
+
 	@ColumnInfo(name = "score_gpa")
 	lateinit var gpa: String
+
 	@ColumnInfo(name = "score_credit")
 	lateinit var credit: String
+
 	@ColumnInfo(name = "score_failed")
 	var failed = false
+
 	@ColumnInfo(name = "score_year")
 	lateinit var year: String
+
 	@ColumnInfo(name = "score_term")
 	lateinit var term: String
+
 	@ColumnInfo(name = "student_id")
 	lateinit var studentID: String
 }
