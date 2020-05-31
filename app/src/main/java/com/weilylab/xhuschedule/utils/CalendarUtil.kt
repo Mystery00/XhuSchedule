@@ -7,8 +7,6 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 object CalendarUtil {
-	var startDateTime: Calendar = Calendar.getInstance()
-
 	fun getWeekFromCalendar(startDateTime: Calendar): Int {
 		val now = Calendar.getInstance()
 		now.set(Calendar.HOUR_OF_DAY, 0)
@@ -121,6 +119,7 @@ object CalendarUtil {
 
 	fun whenBeginSchool(shouldShowTomorrow: Boolean = false): Int {
 		val calendar = Calendar.getInstance()
+		val startDateTime: Calendar = Calendar.getInstance()
 		if (shouldShowTomorrow)
 			calendar.add(Calendar.DAY_OF_MONTH, 1)
 		startDateTime.set(Calendar.HOUR_OF_DAY, 0)
@@ -143,6 +142,7 @@ object CalendarUtil {
 
 	fun getTrueWeek(): Int {
 		val calendar = Calendar.getInstance()
+		val startDateTime: Calendar = Calendar.getInstance()
 		calendar.set(Calendar.HOUR_OF_DAY, 0)
 		calendar.set(Calendar.MINUTE, 0)
 		calendar.set(Calendar.SECOND, 0)

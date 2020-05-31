@@ -97,8 +97,7 @@ class TableFragment : BaseBottomNavigationFragment<FragmentTableBinding>(R.layou
 			if (it <= 0 && whenTime > 0) {
 				bottomNavigationViewModel.title.postValue(Pair(javaClass, getString(R.string.hint_remain_day_of_start_term, whenTime)))
 			} else {
-				bottomNavigationViewModel.title.postValue(Pair(javaClass, getString(R.string.hint_week_number_s, bottomNavigationViewModel.week.value
-						?: "0")))
+				bottomNavigationViewModel.title.postValue(Pair(javaClass, getString(R.string.hint_week_number, it)))
 			}
 		}
 	}

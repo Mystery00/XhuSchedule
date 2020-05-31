@@ -59,7 +59,6 @@ class ProfileFragment : BaseBottomNavigationFragment<FragmentProfileBinding>(R.l
 
 	private fun initViewModel() {
 		bottomNavigationViewModel.studentInfo.observe(requireActivity(), Observer {
-			Logs.i("initViewModel: $it")
 			binding.studentInfo = it
 		})
 		bottomNavigationViewModel.newNotice.observe(this, object : DataObserver<Boolean> {

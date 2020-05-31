@@ -26,6 +26,7 @@ class BottomNavigationViewModel : ViewModel(), KoinComponent {
 	private val noticeRepository: NoticeRepository by inject()
 	private val feedBackRepository: FeedBackRepository by inject()
 	private val courseRepository: CourseRepository by inject()
+	private val initRepository: InitRepository by inject()
 
 	//学生列表
 	val studentList by lazy { MutableLiveData<PackageData<List<Student>>>() }
@@ -142,15 +143,14 @@ class BottomNavigationViewModel : ViewModel(), KoinComponent {
 		launch(currentWeek) {
 			startDateTime.value?.let {
 				withContext(Dispatchers.Default) {
-					val weekIndex = CalendarUtil.getWeekFromCalendar(CalendarUtil.startDateTime)
+					val weekIndex = CalendarUtil.getWeekFromCalendar(it)
 					week.postValue(weekIndex)
 					currentWeek.content(weekIndex)
 				}
 				return@launch
 			}
-			val startTime = bottomNavigationRepository.getOnlineStartDateTime()
+			val startTime = initRepository.getStartTime()
 			startDateTime.postValue(startTime)
-			CalendarUtil.startDateTime = startTime
 			val weekIndex = CalendarUtil.getWeekFromCalendar(startTime)
 			week.postValue(weekIndex)
 			currentWeek.content(weekIndex)

@@ -154,8 +154,8 @@ class NoticeActivity : XhuBaseActivity(R.layout.activity_notice) {
 	}
 
 	override fun onDestroy() {
-		eventBus.post(UIConfigEvent(arrayListOf(UI.NOTICE_DOT)))
 		noticeViewModel.markListAsRead(noticeAdapter.items)
+		eventBus.post(UIConfigEvent(arrayListOf(UI.NOTICE_DOT)))
 		super.onDestroy()
 	}
 }

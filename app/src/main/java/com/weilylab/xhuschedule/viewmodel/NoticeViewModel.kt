@@ -4,6 +4,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.weilylab.xhuschedule.model.Notice
 import com.weilylab.xhuschedule.repository.NoticeRepository
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import org.koin.core.KoinComponent
 import org.koin.core.inject
 import vip.mystery0.rx.PackageData
@@ -27,7 +29,7 @@ class NoticeViewModel : ViewModel(), KoinComponent {
 	}
 
 	fun markListAsRead(list: List<Notice>) {
-		launch(noticeList) {
+		GlobalScope.launch {
 			noticeRepository.markListAsRead(list)
 		}
 	}

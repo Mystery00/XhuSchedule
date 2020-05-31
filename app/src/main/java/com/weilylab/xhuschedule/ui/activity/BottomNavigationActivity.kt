@@ -52,8 +52,6 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import vip.mystery0.bottomTabView.BottomTabItem
 import vip.mystery0.logs.Logs
 import vip.mystery0.rx.DataObserver
-import vip.mystery0.rx.PackageDataObserver
-import vip.mystery0.tools.toastLong
 import vip.mystery0.tools.utils.dpTopx
 import vip.mystery0.tools.utils.screenWidth
 import java.io.File
@@ -90,6 +88,11 @@ class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_naviga
 			hideDialog()
 		}
 
+		override fun contentNoEmpty(data: List<Student>) {
+			super.contentNoEmpty(data)
+			hideDialog()
+		}
+
 		override fun error(e: Throwable?) {
 			super.error(e)
 			Logs.wm(e)
@@ -103,8 +106,6 @@ class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_naviga
 			weekView.data(data).showView()
 			toast(R.string.hint_course_sync_done)
 			cancelLoading()
-			hideDialog()
-			bottomNavigationViewModel.queryCurrentWeek()
 		}
 
 		override fun loading() {
@@ -115,40 +116,37 @@ class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_naviga
 			Logs.wm(e)
 			toastLong(e)
 			cancelLoading()
-			hideDialog()
 		}
 
 		override fun empty() {
 			cancelLoading()
-			hideDialog()
 		}
 	}
 
 
-	private val currentWeekObserver = object : PackageDataObserver<Int> {
-		override fun content(data: Int?) {
+	private val currentWeekObserver = object : DataObserver<Int> {
+		override fun contentNoEmpty(data: Int) {
 			val week = when {
-				data!! < 1 -> 1
+				data < 1 -> 1
 				data > 20 -> 20
 				else -> data
 			}
 			weekView.curWeek(week).showView()
-			bottomNavigationViewModel.week.value = week
+			bottomNavigationViewModel.week.postValue(week)
 			viewPagerAdapter.getItem(viewPager.currentItem).updateTitle()
 		}
 
-		override fun error(data: Int?, e: Throwable?) {
-			Logs.wtfm("currentWeekObserver: ", e)
-			e.toastLong(this@BottomNavigationActivity)
+		override fun error(e: Throwable?) {
+			Logs.wm(e)
+			toastLong(e)
 			cancelLoading()
-			hideDialog()
 		}
 
 		override fun loading() {
 			showLoading()
 		}
 
-		override fun empty(data: Int?) {
+		override fun empty() {
 			cancelLoading()
 			hideDialog()
 		}
@@ -159,7 +157,7 @@ class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_naviga
 	}
 
 	private val titleObserver = Observer<Pair<Class<*>, String>> {
-		if (it.first == viewPagerAdapter.getItem(0).javaClass)
+		if (it.first == viewPagerAdapter.getItem(viewPager.currentItem).javaClass)
 			titleTextView.text = it.second
 	}
 
@@ -185,7 +183,7 @@ class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_naviga
 		weekView.data(emptyList())
 				.curWeek(1)
 				.callback(IWeekView.OnWeekItemClickedListener {
-					bottomNavigationViewModel.week.value = it
+					bottomNavigationViewModel.week.postValue(it)
 					configWeekView(viewPager.currentItem)
 					viewPagerAdapter.getItem(viewPager.currentItem).updateTitle()
 				})
@@ -220,6 +218,7 @@ class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_naviga
 		initViewModel()
 		configWeekView(0)
 		bottomNavigationViewModel.init()
+		bottomNavigationViewModel.queryCurrentWeek()
 		bottomNavigationViewModel.queryNewNotice()
 		bottomNavigationViewModel.queryNewFeedbackMessage()
 	}
