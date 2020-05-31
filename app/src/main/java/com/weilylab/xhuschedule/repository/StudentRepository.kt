@@ -64,6 +64,8 @@ class StudentRepository : KoinComponent {
 				//请求成功，保存信息
 				info.studentID = student.username
 				studentDao.saveStudentInfo(info)
+				student.studentName = info.name
+				studentDao.updateStudent(student)
 				info
 			}
 			ResponseCodeConstants.ERROR_NOT_LOGIN -> {
