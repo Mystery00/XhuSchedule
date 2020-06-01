@@ -120,7 +120,6 @@ dependencies {
 
     //Retrofit
     implementation 'com.squareup.retrofit2:retrofit:2.8.1'
-    implementation 'com.squareup.retrofit2:adapter-rxjava2:2.8.1'
     implementation 'com.squareup.retrofit2:converter-gson:2.8.1'
     implementation 'com.squareup.okhttp3:logging-interceptor:4.6.0'
 
@@ -141,10 +140,6 @@ dependencies {
 
     //BigImageView
     implementation 'com.github.Mystery00:BigImageViewPager:v4_4.0.2-fork07'
-
-    //RxAndroid
-    implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
-    implementation 'io.reactivex.rxjava2:rxjava:2.2.19'
 
     //ZLoading
     implementation 'com.zyao89:zloading:1.2.0'

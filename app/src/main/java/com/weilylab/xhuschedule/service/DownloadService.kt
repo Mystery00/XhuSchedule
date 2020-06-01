@@ -29,7 +29,6 @@ import com.weilylab.xhuschedule.utils.BsPatch
 import kotlinx.coroutines.*
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
-import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import vip.mystery0.logs.Logs
 import vip.mystery0.tools.utils.copyToFile
 import vip.mystery0.tools.utils.md5
@@ -91,7 +90,6 @@ class DownloadService : IntentService("DownloadService") {
 		retrofit = Retrofit.Builder()
 				.baseUrl("https://download.xhuschedule.mostpan.com")
 				.client(client)
-				.addCallAdapterFactory(RxJava2CallAdapterFactory.create())
 				.build()
 	}
 

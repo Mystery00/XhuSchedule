@@ -15,9 +15,10 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.view.View
-import io.reactivex.Observable
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 object AnimationUtil {
 	@SuppressLint("CheckResult")
@@ -25,21 +26,17 @@ object AnimationUtil {
 		val layoutParams = (context as Activity).window.attributes
 		val step: Float = (endAlpha - startAlpha) / time.toFloat()
 		val interval: Long = duration / time
-		Observable.create<Float> {
+		GlobalScope.launch(Dispatchers.Default) {
 			for ((index, _) in (0 until duration step interval).withIndex()) {
-				val alpha = startAlpha + index * step
-				it.onNext(alpha)
-				Thread.sleep(interval)
-			}
-			it.onComplete()
-		}
-				.subscribeOn(Schedulers.computation())
-				.observeOn(AndroidSchedulers.mainThread())
-				.subscribe {
-					val alpha = if (it !in 0F..1F) if (it > 1F) 1F else 0F else it
+				val alpha1 = startAlpha + index * step
+				withContext(Dispatchers.Main) {
+					val alpha = if (alpha1 !in 0F..1F) if (alpha1 > 1F) 1F else 0F else alpha1
 					layoutParams.alpha = alpha
 					context.window.attributes = layoutParams
 				}
+				Thread.sleep(interval)
+			}
+		}
 	}
 
 	private var animator: ValueAnimator? = null
