@@ -41,26 +41,30 @@ class SettingsViewModel : ViewModel(), KoinComponent {
 
 	fun initStudentList() {
 		launch(studentList) {
-			val list = studentRepository.queryAllStudentList()
-			if (list.isNullOrEmpty()) {
-				studentList.empty()
-			} else {
-				studentList.content(list)
-			}
+			initStudentListInCoroutine()
+		}
+	}
+
+	private suspend fun initStudentListInCoroutine() {
+		val list = studentRepository.queryAllStudentList()
+		if (list.isNullOrEmpty()) {
+			studentList.empty()
+		} else {
+			studentList.content(list)
 		}
 	}
 
 	fun updateStudentList(updateList: List<Student>) {
 		launch(studentList) {
 			studentRepository.updateStudentList(updateList)
-			initStudentList()
+			initStudentListInCoroutine()
 		}
 	}
 
 	fun deleteStudentList(deleteList: List<Student>) {
 		launch(studentList) {
 			studentRepository.deleteStudentList(deleteList)
-			initStudentList()
+			initStudentListInCoroutine()
 		}
 	}
 

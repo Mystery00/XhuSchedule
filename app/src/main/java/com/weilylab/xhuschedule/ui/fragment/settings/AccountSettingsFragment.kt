@@ -31,7 +31,6 @@ import vip.mystery0.rx.DataObserver
 
 class AccountSettingsFragment : XhuBasePreferenceFragment(R.xml.preference_account) {
 	companion object {
-		private const val TAG = "AccountSettingsFragment"
 		const val ADD_ACCOUNT_CODE = 233
 	}
 
@@ -44,7 +43,6 @@ class AccountSettingsFragment : XhuBasePreferenceFragment(R.xml.preference_accou
 	private val delAccountPreference by lazy { findPreferenceById<Preference>(R.string.key_del_account) }
 	private val setMainAccountPreference by lazy { findPreferenceById<Preference>(R.string.key_set_main_account) }
 	private val enableMultiUserModePreference by lazy { findPreferenceById<CheckBoxPreference>(R.string.key_enable_multi_user_mode) }
-	private val studentList = ArrayList<Student>()
 
 	override fun initPreference() {
 		super.initPreference()
@@ -58,7 +56,12 @@ class AccountSettingsFragment : XhuBasePreferenceFragment(R.xml.preference_accou
 		settingsViewModel.studentList.observe(requireActivity(), object : DataObserver<List<Student>> {
 			override fun contentNoEmpty(data: List<Student>) {
 				super.contentNoEmpty(data)
-				initStudentCategory()
+				initStudentCategory(data)
+			}
+
+			override fun empty() {
+				super.empty()
+				initStudentCategory(emptyList())
 			}
 
 			override fun error(e: Throwable?) {
@@ -75,45 +78,49 @@ class AccountSettingsFragment : XhuBasePreferenceFragment(R.xml.preference_accou
 			true
 		}
 		delAccountPreference.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-			val valueArray = Array(studentList.size) { i -> "${studentList[i].username}(${studentList[i].studentName})" }
-			val checkedArray = BooleanArray(studentList.size) { false }
-			AlertDialog.Builder(requireActivity())
-					.setTitle(R.string.title_del_account)
-					.setMultiChoiceItems(valueArray, checkedArray) { _, which, isChecked ->
-						checkedArray[which] = isChecked
-					}
-					.setPositiveButton(android.R.string.ok) { _, _ ->
-						val needDeleteStudentList = ArrayList<Student>()
-						checkedArray.forEachIndexed { index, bool ->
-							if (bool) needDeleteStudentList.add(studentList[index])
+			settingsViewModel.studentList.value?.data?.let {
+				val valueArray = Array(it.size) { i -> "${it[i].username}(${it[i].studentName})" }
+				val checkedArray = BooleanArray(it.size) { false }
+				AlertDialog.Builder(requireActivity())
+						.setTitle(R.string.title_del_account)
+						.setMultiChoiceItems(valueArray, checkedArray) { _, which, isChecked ->
+							checkedArray[which] = isChecked
 						}
-						settingsViewModel.deleteStudentList(needDeleteStudentList)
-						eventBus.post(UIConfigEvent(arrayListOf(UI.MAIN_INIT)))
-					}
-					.setNegativeButton(android.R.string.cancel, null)
-					.show()
+						.setPositiveButton(android.R.string.ok) { _, _ ->
+							val needDeleteStudentList = ArrayList<Student>()
+							checkedArray.forEachIndexed { index, bool ->
+								if (bool) needDeleteStudentList.add(it[index])
+							}
+							settingsViewModel.deleteStudentList(needDeleteStudentList)
+							eventBus.post(UIConfigEvent(arrayListOf(UI.MAIN_INIT)))
+						}
+						.setNegativeButton(android.R.string.cancel, null)
+						.show()
+			}
 			true
 		}
 		setMainAccountPreference.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-			val valueArray = Array(studentList.size) { i -> studentList[i].username }
-			val oldMainIndex = studentList.indexOfFirst { s -> s.isMain }
-			var newMainIndex = oldMainIndex
-			AlertDialog.Builder(requireActivity())
-					.setTitle(R.string.title_set_main_account)
-					.setSingleChoiceItems(valueArray, oldMainIndex) { _, which ->
-						newMainIndex = which
-					}
-					.setPositiveButton(android.R.string.ok) { _, _ ->
-						if (oldMainIndex == newMainIndex)
-							return@setPositiveButton
-						val oldMainStudent = studentList[oldMainIndex]
-						val newMainStudent = studentList[newMainIndex]
-						oldMainStudent.isMain = false
-						newMainStudent.isMain = true
-						settingsViewModel.updateStudentList(arrayListOf(oldMainStudent, newMainStudent))
-						eventBus.post(UIConfigEvent(arrayListOf(UI.MAIN_INIT)))
-					}
-					.show()
+			settingsViewModel.studentList.value?.data?.let {
+				val valueArray = Array(it.size) { i -> it[i].username }
+				val oldMainIndex = it.indexOfFirst { s -> s.isMain }
+				var newMainIndex = oldMainIndex
+				AlertDialog.Builder(requireActivity())
+						.setTitle(R.string.title_set_main_account)
+						.setSingleChoiceItems(valueArray, oldMainIndex) { _, which ->
+							newMainIndex = which
+						}
+						.setPositiveButton(android.R.string.ok) { _, _ ->
+							if (oldMainIndex == newMainIndex)
+								return@setPositiveButton
+							val oldMainStudent = it[oldMainIndex]
+							val newMainStudent = it[newMainIndex]
+							oldMainStudent.isMain = false
+							newMainStudent.isMain = true
+							settingsViewModel.updateStudentList(arrayListOf(oldMainStudent, newMainStudent))
+							eventBus.post(UIConfigEvent(arrayListOf(UI.MAIN_INIT)))
+						}
+						.show()
+			}
 			true
 		}
 		enableMultiUserModePreference.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, _ ->
@@ -152,7 +159,7 @@ class AccountSettingsFragment : XhuBasePreferenceFragment(R.xml.preference_accou
 		}
 	}
 
-	private fun initStudentCategory() {
+	private fun initStudentCategory(studentList: List<Student>) {
 		loggedStudentCategory.removeAll()
 		studentList.forEach {
 			val preference = Preference(activity)
