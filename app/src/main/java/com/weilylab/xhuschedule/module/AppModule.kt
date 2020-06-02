@@ -10,6 +10,7 @@
 package com.weilylab.xhuschedule.module
 
 import android.app.AlarmManager
+import android.app.NotificationManager
 import android.content.ClipboardManager
 import android.content.Context
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
@@ -23,6 +24,8 @@ val appModule = module {
 	single { LocalBroadcastManager.getInstance(androidContext()) }
 
 	single { androidContext().getSystemService(Context.ALARM_SERVICE) as AlarmManager }
+
+	single { androidContext().getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager }
 
 	single { EventBus.getDefault() }
 }

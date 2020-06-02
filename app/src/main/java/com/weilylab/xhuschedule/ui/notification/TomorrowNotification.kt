@@ -30,9 +30,9 @@ import com.zhuangfei.timetable.model.Schedule
 object TomorrowNotification {
 	private const val NOTIFICATION_TAG = "TomorrowNotification"
 
-	fun notifyCustomThing(context: Context, customThingList: List<CustomThing>) {
+	fun notifyCustomThing(context: Context, notificationManager: NotificationManager, customThingList: List<CustomThing>) {
 		if (customThingList.isEmpty()) {
-			cancel(context, Constants.NOTIFICATION_ID_TOMORROW_CUSTOM_THING)
+			cancel(notificationManager, Constants.NOTIFICATION_ID_TOMORROW_CUSTOM_THING)
 			return
 		}
 		val title = "您明天有${customThingList.size}件事项哦~"
@@ -54,12 +54,12 @@ object TomorrowNotification {
 		}
 		style.addLine("具体详情请点击查看")
 		builder.setStyle(style)
-		notify(context, Constants.NOTIFICATION_ID_TOMORROW_CUSTOM_THING, builder.build())
+		notify(notificationManager, Constants.NOTIFICATION_ID_TOMORROW_CUSTOM_THING, builder.build())
 	}
 
-	fun notifyCourse(context: Context, courseList: List<Schedule>) {
+	fun notifyCourse(context: Context, notificationManager: NotificationManager, courseList: List<Schedule>) {
 		if (courseList.isEmpty()) {
-			cancel(context, Constants.NOTIFICATION_ID_TOMORROW_COURSE)
+			cancel(notificationManager, Constants.NOTIFICATION_ID_TOMORROW_COURSE)
 			return
 		}
 		val title = "您明天有${courseList.size}节课要上哦~"
@@ -83,12 +83,12 @@ object TomorrowNotification {
 		}
 		style.addLine("具体详情请点击查看")
 		builder.setStyle(style)
-		notify(context, Constants.NOTIFICATION_ID_TOMORROW_COURSE, builder.build())
+		notify(notificationManager, Constants.NOTIFICATION_ID_TOMORROW_COURSE, builder.build())
 	}
 
-	fun notifyTest(context: Context, testList: List<Test>, colorArray: IntArray) {
+	fun notifyTest(context: Context, notificationManager: NotificationManager, testList: List<Test>, colorArray: IntArray) {
 		if (testList.isEmpty()) {
-			cancel(context, Constants.NOTIFICATION_ID_TOMORROW_TEST)
+			cancel(notificationManager, Constants.NOTIFICATION_ID_TOMORROW_TEST)
 			return
 		}
 		val title = "您明天有${testList.size}门考试，记得带上学生证和文具哦~"
@@ -110,18 +110,14 @@ object TomorrowNotification {
 		}
 		style.addLine("具体详情请点击查看")
 		builder.setStyle(style)
-		notify(context, Constants.NOTIFICATION_ID_TOMORROW_TEST, builder.build())
+		notify(notificationManager, Constants.NOTIFICATION_ID_TOMORROW_TEST, builder.build())
 	}
 
-	private fun notify(context: Context, id: Int, notification: Notification) {
-		val notificationManager = context
-				.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+	private fun notify(notificationManager: NotificationManager, id: Int, notification: Notification) {
 		notificationManager.notify(NOTIFICATION_TAG, id, notification)
 	}
 
-	fun cancel(context: Context, id: Int) {
-		val notificationManager = context
-				.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+	fun cancel(notificationManager: NotificationManager, id: Int) {
 		notificationManager.cancel(NOTIFICATION_TAG, id)
 	}
 }
