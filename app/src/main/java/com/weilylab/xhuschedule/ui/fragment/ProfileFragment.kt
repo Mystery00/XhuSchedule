@@ -60,7 +60,7 @@ class ProfileFragment : BaseBottomNavigationFragment<FragmentProfileBinding>(R.l
 		if (path == "" || !File(path).exists()) {
 			binding.studentProfileImage.load(R.mipmap.share_launcher)
 		} else {
-			binding.studentProfileImage.load(path) {
+			binding.studentProfileImage.load(File(path)) {
 				diskCachePolicy(CachePolicy.DISABLED)
 			}
 		}
