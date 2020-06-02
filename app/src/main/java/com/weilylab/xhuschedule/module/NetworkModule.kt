@@ -74,7 +74,7 @@ val networkModule = module {
 		get<Retrofit>(named("retrofit")).create(NoticeAPI::class.java)
 	}
 	single {
-		get<Retrofit>(named("retrofit")).create(QiniuAPI::class.java)
+		get<Retrofit>(named("fileRetrofit")).create(QiniuAPI::class.java)
 	}
 	single {
 		get<Retrofit>(named("retrofit")).create(ScoreAPI::class.java)
