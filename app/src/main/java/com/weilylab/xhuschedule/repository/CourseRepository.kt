@@ -36,7 +36,21 @@ class CourseRepository : KoinComponent {
 			courseAPI.getCourses(student.username, year, term)
 		}
 		if (response.isSuccessful) {
-			//请求成功，返回数据
+			//请求成功，保存数据
+			val savedList = courseDao.queryCourseByUsernameAndTerm(student.username, year, term)
+			savedList.forEach {
+				courseDao.deleteCourse(it)
+			}
+			response.courses.forEach { course ->
+				course.studentID = student.username
+				course.year = year
+				course.term = term
+				course.color = ""
+				savedList.find { it.name == course.name }?.let {
+					course.color = it.color
+				}
+				courseDao.addCourse(course)
+			}
 			response.courses
 		} else {
 			if (throwError)
