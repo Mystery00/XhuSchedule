@@ -440,5 +440,9 @@ class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_naviga
 		if (uiConfigEvent.refreshUI.contains(UI.FEEDBACK_DOT)) {
 			bottomNavigationViewModel.queryNewFeedbackMessage()
 		}
+		if (uiConfigEvent.refreshUI.contains(UI.MENU)) {
+			bottomNavigationView.findItem(0).name = if (CalendarUtil.shouldShowTomorrowInfo()) getString(R.string.nav_tomorrow) else getString(R.string.nav_today)
+			bottomNavigationView.init()
+		}
 	}
 }

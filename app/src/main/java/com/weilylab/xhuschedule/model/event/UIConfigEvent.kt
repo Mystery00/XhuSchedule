@@ -17,4 +17,5 @@ enum class UI {
 	BACKGROUND_IMG,
 	NOTICE_DOT,
 	FEEDBACK_DOT,
+	MENU,
 }
