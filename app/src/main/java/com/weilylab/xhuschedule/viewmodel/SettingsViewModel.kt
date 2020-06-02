@@ -18,6 +18,7 @@ import com.weilylab.xhuschedule.repository.InitRepository
 import com.weilylab.xhuschedule.repository.SchoolCalendarRepository
 import com.weilylab.xhuschedule.repository.StudentRepository
 import com.weilylab.xhuschedule.utils.ConfigUtil
+import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -113,7 +114,10 @@ class SettingsViewModel : ViewModel(), KoinComponent {
 	}
 
 	fun getSchoolCalendarUrl(block: (String?) -> Unit) {
-		viewModelScope.launch {
+		viewModelScope.launch(CoroutineExceptionHandler { _, throwable ->
+			Logs.wm(throwable)
+			block(null)
+		}) {
 			schoolCalendarRepository.getUrl(block)
 		}
 	}

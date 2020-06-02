@@ -139,7 +139,7 @@ dependencies {
     kapt 'com.github.bumptech.glide:compiler:4.11.0'
 
     //BigImageView
-    implementation 'com.github.Mystery00:BigImageViewPager:v4_4.0.2-fork07'
+    implementation 'com.github.SherlockGougou:BigImageViewPager:androidx-6.0.1'
 
     //ZLoading
     implementation 'com.zyao89:zloading:1.2.0'

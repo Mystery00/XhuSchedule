@@ -20,6 +20,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
+        tools:replace="android:networkSecurityConfig"
         tools:targetApi="n">
 
         <uses-library

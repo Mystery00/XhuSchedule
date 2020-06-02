@@ -150,9 +150,9 @@ class ClassSettingsFragment : XhuBasePreferenceFragment(R.xml.preference_class) 
 				ImagePreview.getInstance()
 						.setContext(requireActivity())
 						.setImage(url)
-						.setCustomDownButtonView(downloadButton)
+//						.setCustomDownButtonView(downloadButton)
 						.setShowIndicator(false)
-						.setPickDirectoryWhenDownloadImage(true)
+//						.setPickDirectoryWhenDownloadImage(true)
 						.start()
 			}
 			if (schoolCalendarUrl == null) {

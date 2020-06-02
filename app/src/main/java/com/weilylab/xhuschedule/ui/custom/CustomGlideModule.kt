@@ -11,7 +11,7 @@ package com.weilylab.xhuschedule.ui.custom
 
 import android.content.Context
 import androidx.annotation.NonNull
-import cc.shinichi.library.glide.sunfusheng.progress.ProgressManager
+import cc.shinichi.library.glide.progress.ProgressManager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.Registry
 import com.bumptech.glide.annotation.GlideModule
