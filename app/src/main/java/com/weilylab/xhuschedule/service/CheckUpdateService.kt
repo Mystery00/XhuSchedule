@@ -16,13 +16,13 @@ import android.os.IBinder
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
-import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.weilylab.xhuschedule.BuildConfig
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.api.XhuScheduleCloudAPI
 import com.weilylab.xhuschedule.constant.Constants
 import com.weilylab.xhuschedule.constant.ResponseCodeConstants
 import com.weilylab.xhuschedule.model.Version
+import com.weilylab.xhuschedule.model.event.CheckUpdateEvent
 import com.weilylab.xhuschedule.ui.activity.GuideActivity
 import com.weilylab.xhuschedule.ui.activity.SplashActivity
 import com.weilylab.xhuschedule.ui.activity.SplashImageActivity
@@ -33,6 +33,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.greenrobot.eventbus.EventBus
 import org.koin.android.ext.android.inject
 import vip.mystery0.tools.utils.ActivityManagerTools.finishAllActivity
 import vip.mystery0.tools.utils.currentActivity
@@ -45,7 +46,7 @@ class CheckUpdateService : Service() {
 
 	private val xhuScheduleCloudAPI: XhuScheduleCloudAPI by inject()
 
-	private val localBroadcastManager: LocalBroadcastManager by inject()
+	private val eventBus: EventBus by inject()
 
 	override fun onBind(intent: Intent): IBinder? = null
 
@@ -75,60 +76,58 @@ class CheckUpdateService : Service() {
 					withContext(Dispatchers.Main) {
 						showUpdateDialog(response.data, intent.getBooleanExtra(CHECK_ACTION_BY_MANUAL, false), response.data.must == "1")
 					}
-					localBroadcastManager.sendBroadcast(Intent(SettingsPreferenceFragment.ACTION_CHECK_UPDATE_DONE))
 				}
 			}
+			eventBus.post(CheckUpdateEvent(SettingsPreferenceFragment.ACTION_CHECK_UPDATE_DONE))
 			stopSelf()
 		}
 		return super.onStartCommand(intent, flags, startId)
 	}
 
-	private fun showUpdateDialog(version: Version, checkByManual: Boolean, isMust: Boolean) {
+	private suspend fun showUpdateDialog(version: Version, checkByManual: Boolean, isMust: Boolean) {
 		if (!checkByManual) {
 			val ignoreVersionList = ConfigurationUtil.ignoreUpdateVersion.split('!')
 			if (ignoreVersionList.indexOf(version.versionCode) != -1)
 				return
 		}
-		GlobalScope.launch {
-			val show = withContext(Dispatchers.Default) {
-				while (currentActivity() is SplashActivity || currentActivity() is GuideActivity || currentActivity() is SplashImageActivity)
-					Thread.sleep(1000)
-				when {
-					//自动检查更新
-					ConfigurationUtil.autoCheckUpdate -> true
-					//没有开启自动更新但是是必须的更新
-					!ConfigurationUtil.autoCheckUpdate && isMust -> true
-					//手动检查更新
-					checkByManual -> true
-					//其他情况
-					else -> false
+		val show = withContext(Dispatchers.Default) {
+			while (currentActivity() is SplashActivity || currentActivity() is GuideActivity || currentActivity() is SplashImageActivity)
+				Thread.sleep(1000)
+			when {
+				//自动检查更新
+				ConfigurationUtil.autoCheckUpdate -> true
+				//没有开启自动更新但是是必须的更新
+				!ConfigurationUtil.autoCheckUpdate && isMust -> true
+				//手动检查更新
+				checkByManual -> true
+				//其他情况
+				else -> false
+			}
+		}
+		if (!show) return
+		withContext(Dispatchers.Main) {
+			val activity = currentActivity() ?: return@withContext
+			val title = getString(R.string.dialog_update_title, getString(R.string.app_version_name), version.versionName)
+			val text = getString(R.string.dialog_update_text, version.updateLog)
+			val builder = AlertDialog.Builder(activity)
+					.setTitle(title)
+					.setMessage(text)
+					.setPositiveButton("${getString(R.string.action_download_apk)}(${version.apkSize.toLong().toFormatFileSize()})") { _, _ ->
+						DownloadService.intentTo(activity, Constants.DOWNLOAD_TYPE_APK, version.apkQiniuPath, version.apkMD5, version.patchMD5)
+					}
+			if (version.lastVersionCode == getString(R.string.app_version_code))
+				builder.setNegativeButton("${getString(R.string.action_download_patch)}(${version.patchSize.toLong().toFormatFileSize()})") { _, _ ->
+					DownloadService.intentTo(activity, Constants.DOWNLOAD_TYPE_PATCH, version.patchQiniuPath, version.apkMD5, version.patchMD5)
 				}
-			}
-			if (!show) return@launch
-			withContext(Dispatchers.Main) {
-				val activity = currentActivity() ?: return@withContext
-				val title = getString(R.string.dialog_update_title, getString(R.string.app_version_name), version.versionName)
-				val text = getString(R.string.dialog_update_text, version.updateLog)
-				val builder = AlertDialog.Builder(activity)
-						.setTitle(title)
-						.setMessage(text)
-						.setPositiveButton("${getString(R.string.action_download_apk)}(${version.apkSize.toLong().toFormatFileSize()})") { _, _ ->
-							DownloadService.intentTo(activity, Constants.DOWNLOAD_TYPE_APK, version.apkQiniuPath, version.apkMD5, version.patchMD5)
-						}
-				if (version.lastVersionCode == getString(R.string.app_version_code))
-					builder.setNegativeButton("${getString(R.string.action_download_patch)}(${version.patchSize.toLong().toFormatFileSize()})") { _, _ ->
-						DownloadService.intentTo(activity, Constants.DOWNLOAD_TYPE_PATCH, version.patchQiniuPath, version.apkMD5, version.patchMD5)
-					}
-				if (version.must == "1")
-					builder.setOnCancelListener {
-						finishAllActivity()
-					}
-				else
-					builder.setNeutralButton(R.string.action_download_cancel) { _, _ ->
-						ConfigurationUtil.ignoreUpdateVersion = "${version.versionCode}!${ConfigurationUtil.ignoreUpdateVersion}"
-					}
-				builder.show()
-			}
+			if (version.must == "1")
+				builder.setOnCancelListener {
+					finishAllActivity()
+				}
+			else
+				builder.setNeutralButton(R.string.action_download_cancel) { _, _ ->
+					ConfigurationUtil.ignoreUpdateVersion = "${version.versionCode}!${ConfigurationUtil.ignoreUpdateVersion}"
+				}
+			builder.show()
 		}
 	}
 }

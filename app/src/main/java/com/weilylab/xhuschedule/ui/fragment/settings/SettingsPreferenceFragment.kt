@@ -13,25 +13,26 @@ import android.Manifest
 import android.app.Activity
 import android.app.Dialog
 import android.app.TimePickerDialog
-import android.content.BroadcastReceiver
-import android.content.Context
 import android.content.Intent
-import android.content.IntentFilter
 import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
 import android.graphics.Color
 import android.net.Uri
 import android.os.Build
+import android.os.Bundle
 import android.provider.MediaStore
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
-import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.preference.CheckBoxPreference
 import androidx.preference.Preference
 import com.google.android.material.snackbar.Snackbar
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.base.XhuBasePreferenceFragment
+import com.weilylab.xhuschedule.model.event.CheckUpdateEvent
 import com.weilylab.xhuschedule.model.event.UI
 import com.weilylab.xhuschedule.model.event.UIConfigEvent
 import com.weilylab.xhuschedule.service.CheckUpdateService
@@ -44,6 +45,8 @@ import com.zhihu.matisse.MimeType
 import com.zyao89.view.zloading.ZLoadingDialog
 import com.zyao89.view.zloading.Z_TYPE
 import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 import org.koin.android.ext.android.inject
 import vip.mystery0.tools.utils.AndroidVersionCode
 import vip.mystery0.tools.utils.screenHeight
@@ -94,7 +97,6 @@ class SettingsPreferenceFragment : XhuBasePreferenceFragment(R.xml.preference_se
 				.setHintTextColor(ContextCompat.getColor(requireActivity(), R.color.colorAccent))
 				.create()
 	}
-	private val localBroadcastManager: LocalBroadcastManager by lazy { LocalBroadcastManager.getInstance(requireActivity()) }
 
 	override fun initPreference() {
 		super.initPreference()
@@ -261,8 +263,6 @@ class SettingsPreferenceFragment : XhuBasePreferenceFragment(R.xml.preference_se
 		}
 		checkUpdatePreference.onPreferenceClickListener = Preference.OnPreferenceClickListener {
 			showCheckUpdateDialog()
-			val intentFilter = IntentFilter(ACTION_CHECK_UPDATE_DONE)
-			localBroadcastManager.registerReceiver(CheckUpdateLocalBroadcastReceiver(), intentFilter)
 			val intent = Intent(requireActivity(), CheckUpdateService::class.java)
 			intent.putExtra(CheckUpdateService.CHECK_ACTION_BY_MANUAL, true)
 			requireActivity().startService(intent)
@@ -362,12 +362,20 @@ class SettingsPreferenceFragment : XhuBasePreferenceFragment(R.xml.preference_se
 		toast(R.string.hint_check_update_done)
 	}
 
-	inner class CheckUpdateLocalBroadcastReceiver : BroadcastReceiver() {
-		override fun onReceive(context: Context?, intent: Intent?) {
-			if (intent?.action == ACTION_CHECK_UPDATE_DONE) {
-				dismissCheckUpdateDialog()
-				localBroadcastManager.unregisterReceiver(this)
-			}
+	override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+		eventBus.register(this)
+		return super.onCreateView(inflater, container, savedInstanceState)
+	}
+
+	override fun onDestroyView() {
+		eventBus.unregister(this)
+		super.onDestroyView()
+	}
+
+	@Subscribe(threadMode = ThreadMode.MAIN)
+	fun checkUploadDialog(event: CheckUpdateEvent) {
+		if (event.action == ACTION_CHECK_UPDATE_DONE) {
+			dismissCheckUpdateDialog()
 		}
 	}
 }
