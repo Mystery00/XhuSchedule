@@ -135,7 +135,7 @@ class ClassSettingsFragment : XhuBasePreferenceFragment(R.xml.preference_class) 
 				val newString = "$hourString:$minuteString"
 				ConfigurationUtil.showTomorrowCourseAfterTime = newString
 				showTomorrowCourseAfterPreference.summary = getString(R.string.summary_show_tomorrow_after_time, ConfigurationUtil.showTomorrowCourseAfterTime)
-				eventBus.post(UIConfigEvent(arrayListOf(UI.MAIN_INIT)))
+				eventBus.post(UIConfigEvent(arrayListOf(UI.MAIN_INIT, UI.MENU)))
 			}, oldHour, oldMinute, true)
 			timePickerDialog.setButton(AlertDialog.BUTTON_NEUTRAL, getString(R.string.action_disable)) { _, _ ->
 				ConfigurationUtil.showTomorrowCourseAfterTime = "disable"

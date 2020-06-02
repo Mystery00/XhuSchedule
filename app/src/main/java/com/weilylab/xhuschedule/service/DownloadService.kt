@@ -40,7 +40,7 @@ import java.util.concurrent.TimeUnit
  */
 class DownloadService : IntentService("DownloadService") {
 	companion object {
-		private val TAG = "DownloadService"
+		private const val TAG = "DownloadService"
 
 		fun intentTo(context: Context, type: String, qiniuPath: String, apkMD5: String, patchMD5: String) {
 			val intent = Intent(context, DownloadService::class.java)
