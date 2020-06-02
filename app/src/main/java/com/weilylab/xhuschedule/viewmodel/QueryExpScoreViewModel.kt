@@ -19,6 +19,7 @@ import com.weilylab.xhuschedule.repository.StudentRepository
 import com.weilylab.xhuschedule.utils.CalendarUtil
 import org.koin.core.KoinComponent
 import org.koin.core.inject
+import vip.mystery0.logs.Logs
 import vip.mystery0.rx.*
 import java.util.*
 import kotlin.collections.HashMap
@@ -46,8 +47,12 @@ class QueryExpScoreViewModel : ViewModel(), KoinComponent {
 			student.postValue(main)
 			val map = HashMap<Student, StudentInfo>()
 			studentArray.forEach {
-				val info = studentRepository.queryStudentInfo(it)
-				map[it] = info
+				try {
+					val info = studentRepository.queryStudentInfo(it)
+					map[it] = info
+				} catch (e: Exception) {
+					Logs.wm(e)
+				}
 			}
 			studentInfoList.postValue(map)
 			year.postValue(CalendarUtil.getSelectArray(null).last())

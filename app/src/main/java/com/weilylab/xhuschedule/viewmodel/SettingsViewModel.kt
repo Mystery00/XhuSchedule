@@ -23,6 +23,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.koin.core.KoinComponent
 import org.koin.core.inject
+import vip.mystery0.logs.Logs
 import vip.mystery0.rx.PackageData
 import vip.mystery0.rx.content
 import vip.mystery0.rx.empty
@@ -80,8 +81,12 @@ class SettingsViewModel : ViewModel(), KoinComponent {
 			}
 			val infoList = ArrayList<StudentInfo>()
 			studentList.value?.data?.forEach {
-				val info = studentRepository.queryStudentInfo(it)
-				infoList.add(info)
+				try {
+					val info = studentRepository.queryStudentInfo(it)
+					infoList.add(info)
+				} catch (e: Exception) {
+					Logs.wm(e)
+				}
 			}
 			if (infoList.isNullOrEmpty()) {
 				studentInfoList.empty()

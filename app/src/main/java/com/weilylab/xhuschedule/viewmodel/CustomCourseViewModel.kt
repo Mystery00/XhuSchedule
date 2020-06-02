@@ -21,6 +21,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.koin.core.KoinComponent
 import org.koin.core.inject
+import vip.mystery0.logs.Logs
 import vip.mystery0.rx.*
 import java.util.*
 import kotlin.collections.HashMap
@@ -47,11 +48,15 @@ class CustomCourseViewModel : ViewModel(), KoinComponent {
 			var student: Student? = null
 			val infoMap = HashMap<Student, StudentInfo?>()
 			studentList.value?.forEach {
-				val info = studentRepository.queryStudentInfo(it)
-				infoMap[it] = info
-				if (it.isMain) {
-					student = it
-					student?.username = info.name
+				try {
+					val info = studentRepository.queryStudentInfo(it)
+					infoMap[it] = info
+					if (it.isMain) {
+						student = it
+						student?.username = info.name
+					}
+				} catch (e: Exception) {
+					Logs.wm(e)
 				}
 			}
 			if (infoMap.isNullOrEmpty()) {
