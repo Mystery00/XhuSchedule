@@ -44,6 +44,11 @@ class TableFragment : BaseBottomNavigationFragment<FragmentTableBinding>(R.layou
 					.data(data)
 					.isShowNotCurWeek(ConfigurationUtil.isShowNotWeek)
 					.updateView()
+			bottomNavigationViewModel.week.value?.let {
+				binding.timeTableView.changeWeekOnly(it)
+				binding.timeTableView.onDateBuildListener()
+						.onUpdateDate(binding.timeTableView.curWeek(), it)
+			}
 		}
 	}
 
@@ -64,9 +69,6 @@ class TableFragment : BaseBottomNavigationFragment<FragmentTableBinding>(R.layou
 						.setBackground(Color.BLACK)
 						.setTextSize(12f)
 						.setTextColor(Color.WHITE))
-				.callback(ISchedule.OnWeekChangedListener {
-					bottomNavigationViewModel.week.postValue(it)
-				})
 				.showView()
 	}
 

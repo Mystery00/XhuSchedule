@@ -14,7 +14,7 @@
 	<HorizontalScrollView xmlns:android="http://schemas.android.com/apk/res/android"
 		android:id="@+id/nestedScrollView"
 		android:layout_width="match_parent"
-		android:layout_height="72dp"
+		android:layout_height="74dp"
 		android:background="@color/app_course_chooseweek_bg"
 		android:orientation="horizontal"
 		android:scrollbars="none">
