@@ -7,124 +7,126 @@
   ~  of this license document, but changing it is not allowed.
   -->
 
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-	<PreferenceCategory android:title="@string/screen_category_ui">
+    <PreferenceCategory android:title="@string/screen_category_ui">
 
-		<Preference
-			android:key="@string/key_user_img"
-			android:title="@string/title_user_img" />
+        <Preference
+            android:key="@string/key_user_img"
+            android:title="@string/title_user_img" />
 
-		<Preference
-			android:key="@string/key_background_img"
-			android:title="@string/title_background_img" />
+        <Preference
+            android:key="@string/key_background_img"
+            android:title="@string/title_background_img" />
 
-		<Preference
-			android:icon="@drawable/ic_night_mode"
-			android:key="@string/key_night_mode"
-			android:title="@string/title_night_mode" />
+        <Preference
+            android:icon="@drawable/ic_night_mode"
+            android:key="@string/key_night_mode"
+            android:title="@string/title_night_mode" />
 
-		<CheckBoxPreference
-			android:icon="@drawable/ic_enable_viewpager_transform"
-			android:key="@string/key_enable_viewpager_transform"
-			android:title="@string/title_enable_viewpager_transform" />
+        <CheckBoxPreference
+            android:icon="@drawable/ic_enable_viewpager_transform"
+            android:key="@string/key_enable_viewpager_transform"
+            android:title="@string/title_enable_viewpager_transform" />
 
-		<CheckBoxPreference
-			android:key="@string/key_use_in_app_image_selector"
-			android:summary="@string/summary_use_in_app_image_selector"
-			android:title="@string/title_use_in_app_image_selector" />
+        <CheckBoxPreference
+            android:key="@string/key_use_in_app_image_selector"
+            android:summary="@string/summary_use_in_app_image_selector"
+            android:title="@string/title_use_in_app_image_selector" />
 
-		<CheckBoxPreference
-			android:key="@string/key_tint_navigation_bar"
-			android:summary="@string/summary_tint_navigation_bar"
-			android:title="@string/title_tint_navigation_bar" />
+        <CheckBoxPreference
+            android:key="@string/key_tint_navigation_bar"
+            android:summary="@string/summary_tint_navigation_bar"
+            android:title="@string/title_tint_navigation_bar" />
 
 
-	</PreferenceCategory>
+    </PreferenceCategory>
 
-	<PreferenceCategory android:title="@string/screen_category_reset_ui">
+    <PreferenceCategory android:title="@string/screen_category_reset_ui">
 
-		<Preference
-			android:key="@string/key_reset_user_img"
-			android:title="@string/title_reset_user_img" />
+        <Preference
+            android:key="@string/key_reset_user_img"
+            android:title="@string/title_reset_user_img" />
 
-		<Preference
-			android:key="@string/key_reset_background_img"
-			android:title="@string/title_reset_background_img" />
+        <Preference
+            android:key="@string/key_reset_background_img"
+            android:title="@string/title_reset_background_img" />
 
-	</PreferenceCategory>
+    </PreferenceCategory>
 
-	<PreferenceCategory android:title="@string/screen_category_notification">
+    <PreferenceCategory android:title="@string/screen_category_notification">
 
-		<CheckBoxPreference
-			android:key="@string/key_notification_course"
-			android:title="@string/title_notification_course" />
+        <CheckBoxPreference
+            android:key="@string/key_notification_course"
+            android:title="@string/title_notification_course" />
 
-		<CheckBoxPreference
-			android:key="@string/key_notification_exam"
-			android:title="@string/title_notification_exam" />
+        <CheckBoxPreference
+            android:key="@string/key_notification_exam"
+            android:title="@string/title_notification_exam" />
 
-		<Preference
-			android:icon="@drawable/ic_notifications"
-			android:key="@string/key_notification_time"
-			android:title="@string/title_notification_time" />
+        <Preference
+            android:icon="@drawable/ic_notifications"
+            android:key="@string/key_notification_time"
+            android:title="@string/title_notification_time" />
 
-	</PreferenceCategory>
+    </PreferenceCategory>
 
-	<PreferenceCategory android:title="@string/title_jrsc_settings">
+    <PreferenceCategory android:title="@string/title_jrsc_settings">
 
-		<CheckBoxPreference
-			android:key="@string/key_disable_jrsc"
-			android:title="@string/title_disable_jrsc" />
+        <CheckBoxPreference
+            android:key="@string/key_disable_jrsc"
+            android:title="@string/title_disable_jrsc" />
 
-		<CheckBoxPreference
-			android:key="@string/key_show_jrsc_translation"
-			android:title="@string/title_show_jrsc_translation" />
+        <CheckBoxPreference
+            android:key="@string/key_show_jrsc_translation"
+            android:title="@string/title_show_jrsc_translation" />
 
-	</PreferenceCategory>
+    </PreferenceCategory>
 
-	<PreferenceCategory android:title="@string/title_other">
+    <PreferenceCategory android:title="@string/title_other">
 
-		<CheckBoxPreference
-			android:icon="@drawable/ic_auto_check_update"
-			android:key="@string/key_auto_check_update"
-			android:summary="@string/summary_auto_check_update"
-			android:title="@string/title_auto_check_update" />
+        <CheckBoxPreference
+            android:icon="@drawable/ic_auto_check_update"
+            android:key="@string/key_auto_check_update"
+            android:summary="@string/summary_auto_check_update"
+            android:title="@string/title_auto_check_update" />
 
-		<Preference
-			android:icon="@drawable/ic_weily_studio"
-			android:summary="@string/summary_weily_product"
-			android:title="@string/title_weily_product">
-			<intent
-				android:action="android.intent.action.VIEW"
-				android:data="https://weilylab.com" />
-		</Preference>
+        <Preference
+            android:icon="@drawable/ic_weily_studio"
+            android:summary="@string/summary_weily_product"
+            android:title="@string/title_weily_product"
+            app:isPreferenceVisible="false">
+            <intent
+                android:action="android.intent.action.VIEW"
+                android:data="https://weilylab.com" />
+        </Preference>
 
-		<Preference
-			android:icon="@drawable/ic_wx_mini_program"
-			android:key="@string/key_weixin"
-			android:summary="@string/summary_weixin"
-			android:title="@string/title_weixin" />
+        <Preference
+            android:icon="@drawable/ic_wx_mini_program"
+            android:key="@string/key_weixin"
+            android:summary="@string/summary_weixin"
+            android:title="@string/title_weixin" />
 
-		<Preference
-			android:icon="@drawable/ic_check_update"
-			android:key="@string/key_check_update"
-			android:title="@string/title_check_update" />
+        <Preference
+            android:icon="@drawable/ic_check_update"
+            android:key="@string/key_check_update"
+            android:title="@string/title_check_update" />
 
-		<Preference
-			android:icon="@drawable/ic_qq_group"
-			android:title="@string/title_community_link">
+        <Preference
+            android:icon="@drawable/ic_qq_group"
+            android:title="@string/title_community_link">
 
-			<intent
-				android:action="android.intent.action.VIEW"
-				android:data="@string/link_community_link" />
+            <intent
+                android:action="android.intent.action.VIEW"
+                android:data="@string/link_community_link" />
 
-		</Preference>
+        </Preference>
 
-	</PreferenceCategory>
+    </PreferenceCategory>
 
-	<Preference
-		android:key="@string/key_about"
-		android:title="@string/screen_category_about" />
+    <Preference
+        android:key="@string/key_about"
+        android:title="@string/screen_category_about" />
 
 </PreferenceScreen>
