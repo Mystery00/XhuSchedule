@@ -11,6 +11,7 @@ package com.weilylab.xhuschedule.ui.fragment.settings
 
 import android.Manifest
 import android.app.Activity
+import android.app.AlarmManager
 import android.app.Dialog
 import android.app.TimePickerDialog
 import android.content.Intent
@@ -67,6 +68,7 @@ class SettingsPreferenceFragment : XhuBasePreferenceFragment(R.xml.preference_se
 	}
 
 	private val eventBus: EventBus by inject()
+	private val alarmManager: AlarmManager by inject()
 
 	private val userImgPreference by lazy { findPreferenceById<Preference>(R.string.key_user_img) }
 	private val backgroundImgPreference by lazy { findPreferenceById<Preference>(R.string.key_background_img) }
@@ -232,7 +234,7 @@ class SettingsPreferenceFragment : XhuBasePreferenceFragment(R.xml.preference_se
 				val newString = "$hourString:$minuteString"
 				ConfigurationUtil.notificationTime = newString
 				notificationTimePreference.summary = getString(R.string.summary_notification_time, ConfigurationUtil.notificationTime)
-				ConfigUtil.setTrigger(requireActivity())
+				ConfigUtil.setTrigger(requireActivity(), alarmManager)
 			}, oldHour, oldMinute, true)
 					.show()
 			true

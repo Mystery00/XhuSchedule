@@ -9,6 +9,7 @@
 
 package com.weilylab.xhuschedule.ui.activity
 
+import android.app.AlarmManager
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatDelegate
@@ -36,6 +37,7 @@ import vip.mystery0.tools.utils.sha1
 class SplashActivity : XhuBaseActivity(null, false) {
 	private val splashViewModel: SplashViewModel by viewModel()
 	private val initRepository: InitRepository by inject()
+	private val alarmManager: AlarmManager by inject()
 
 	private val splashObserver = object : DataObserver<Pair<Splash, Boolean>> {
 		override fun empty() {
@@ -85,7 +87,7 @@ class SplashActivity : XhuBaseActivity(null, false) {
 		initViewModel()
 		splashViewModel.requestSplash()
 		ContextCompat.startForegroundService(this, Intent(APP.context, CheckUpdateService::class.java))
-		ConfigUtil.setTrigger(this)
+		ConfigUtil.setTrigger(this, alarmManager)
 		launch {
 			ConfigUtil.getCurrentYearAndTerm(initRepository.getStartTime())
 		}

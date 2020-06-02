@@ -63,10 +63,9 @@ object ConfigUtil {
 				.show()
 	}
 
-	fun setTrigger(context: Context) {
+	fun setTrigger(context: Context, alarmManager: AlarmManager) {
 		if (!ConfigurationUtil.notificationCourse && !ConfigurationUtil.notificationExam)
 			return
-		val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
 		val alarmIntent = Intent(context, NotificationService::class.java)
 		val pendingIntent = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 			PendingIntent.getForegroundService(context, 0, alarmIntent, PendingIntent.FLAG_UPDATE_CURRENT)
