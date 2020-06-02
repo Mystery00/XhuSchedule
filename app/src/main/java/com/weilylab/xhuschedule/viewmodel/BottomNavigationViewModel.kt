@@ -26,6 +26,7 @@ import org.koin.core.KoinComponent
 import org.koin.core.inject
 import vip.mystery0.rx.*
 import vip.mystery0.tools.ResourceException
+import vip.mystery0.tools.utils.toDateString
 import java.util.*
 
 class BottomNavigationViewModel : ViewModel(), KoinComponent {
@@ -116,7 +117,7 @@ class BottomNavigationViewModel : ViewModel(), KoinComponent {
 			val today = customThingRepository.getToday()
 			customThingList.postValue(today)
 			//如果是当天第一次启动，那么刷新在线数据
-			val nowString = CalendarUtil.getTodayDateString()
+			val nowString = Calendar.getInstance().toDateString()
 			if (nowString != ConfigurationUtil.lastUpdateDate) {
 				queryOnline(throwError = false)
 			}
@@ -146,6 +147,7 @@ class BottomNavigationViewModel : ViewModel(), KoinComponent {
 			val courses = bottomNavigationRepository.queryCourses(mainStudent, fromCache = false, throwError = throwError)
 			courseList.content(courses)
 		}
+		ConfigurationUtil.lastUpdateDate = Calendar.getInstance().toDateString()
 	}
 
 	fun queryCurrentWeek() {

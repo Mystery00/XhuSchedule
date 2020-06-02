@@ -57,16 +57,13 @@ class CourseRepository : KoinComponent {
 		}
 	}
 
-	suspend fun getTodayCourse(courseList: List<Schedule>): List<Schedule> {
-		val pair = withContext(Dispatchers.Default) {
-			val shouldShowTomorrow = CalendarUtil.shouldShowTomorrowInfo()
-			val week = if (shouldShowTomorrow) CalendarUtil.getTomorrowWeekFromCalendar(initRepository.getStartDateTime())
-			else CalendarUtil.getWeekFromCalendar(initRepository.getStartDateTime())
-			val weekIndex = if (shouldShowTomorrow) CalendarUtil.getTomorrowIndex()
-			else CalendarUtil.getWeekIndex()
-			Pair(week, weekIndex)
-		}
-		return courseList.filter { it.day == pair.second && it.weekList.contains(pair.first) }
+	suspend fun getTodayCourse(courseList: List<Schedule>): List<Schedule> = withContext(Dispatchers.Default) {
+		val shouldShowTomorrow = CalendarUtil.shouldShowTomorrowInfo()
+		val week = if (shouldShowTomorrow) CalendarUtil.getTomorrowWeekFromCalendar(initRepository.getStartDateTime())
+		else CalendarUtil.getWeekFromCalendar(initRepository.getStartDateTime())
+		val weekIndex = if (shouldShowTomorrow) CalendarUtil.getTomorrowIndex()
+		else CalendarUtil.getWeekIndex()
+		courseList.filter { it.day == weekIndex && it.weekList.contains(week) }
 				.sortedBy { it.start }
 	}
 }

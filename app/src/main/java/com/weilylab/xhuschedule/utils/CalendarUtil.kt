@@ -201,11 +201,6 @@ object CalendarUtil {
 		ConfigurationUtil.isCustomStartTime = true
 	}
 
-	fun getTodayDateString(): String {
-		val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.CHINA)
-		return simpleDateFormat.format(Calendar.getInstance().time)
-	}
-
 	private val dateFormatter by lazy { SimpleDateFormat("yyyy年MM月dd日", Locale.CHINA) }
 	private val dateTimeFormatter by lazy { SimpleDateFormat("yyyy年MM月dd日 HH:mm", Locale.CHINA) }
 

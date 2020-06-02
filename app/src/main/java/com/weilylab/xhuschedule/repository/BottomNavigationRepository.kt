@@ -30,16 +30,18 @@ class BottomNavigationRepository : KoinComponent {
 										   throwError: Boolean): List<Schedule> {
 		val year = withContext(Dispatchers.IO) { ConfigurationUtil.currentYear }
 		val term = withContext(Dispatchers.IO) { ConfigurationUtil.currentTerm }
-		val result = ArrayList<Schedule>()
-		studentList.forEach { student ->
-			val courseList = courseRepository.queryCourseByUsernameAndTerm(student, year, term, fromCache, throwError)
-			val customCourseList = courseRepository.queryCustomCourseByTerm(student, year, term)
-			val all = ArrayList<Course>()
-			all.addAll(courseList)
-			all.addAll(customCourseList)
-			result.addAll(all.map { it.schedule })
+		return withContext(Dispatchers.Default) {
+			val result = ArrayList<Schedule>()
+			studentList.forEach { student ->
+				val courseList = courseRepository.queryCourseByUsernameAndTerm(student, year, term, fromCache, throwError)
+				val customCourseList = courseRepository.queryCustomCourseByTerm(student, year, term)
+				val all = ArrayList<Course>()
+				all.addAll(courseList)
+				all.addAll(customCourseList)
+				result.addAll(all.map { it.schedule })
+			}
+			result
 		}
-		return result
 	}
 
 	/**
@@ -50,11 +52,13 @@ class BottomNavigationRepository : KoinComponent {
 							 throwError: Boolean): List<Schedule> {
 		val year = withContext(Dispatchers.IO) { ConfigurationUtil.currentYear }
 		val term = withContext(Dispatchers.IO) { ConfigurationUtil.currentTerm }
-		val courseList = courseRepository.queryCourseByUsernameAndTerm(mainStudent, year, term, fromCache, throwError)
-		val customCourseList = courseRepository.queryCustomCourseByTerm(mainStudent, year, term)
-		val all = ArrayList<Course>()
-		all.addAll(courseList)
-		all.addAll(customCourseList)
-		return all.map { it.schedule }
+		return withContext(Dispatchers.Default) {
+			val courseList = courseRepository.queryCourseByUsernameAndTerm(mainStudent, year, term, fromCache, throwError)
+			val customCourseList = courseRepository.queryCustomCourseByTerm(mainStudent, year, term)
+			val all = ArrayList<Course>()
+			all.addAll(courseList)
+			all.addAll(customCourseList)
+			all.map { it.schedule }
+		}
 	}
 }
