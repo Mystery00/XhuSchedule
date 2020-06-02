@@ -38,7 +38,7 @@ class StudentRepository : KoinComponent {
 			throw ResourceException(R.string.hint_network_error)
 		}
 		doLogin(student)
-		val info = queryStudentInfo(student)
+		val info = queryStudentInfo(student, false)
 		student.studentName = info.name
 		return student
 	}
@@ -61,7 +61,15 @@ class StudentRepository : KoinComponent {
 		}
 	}
 
-	suspend fun queryStudentInfo(student: Student): StudentInfo = queryStudentInfo(student, 0)
+	suspend fun queryStudentInfo(student: Student, fromCache: Boolean = true): StudentInfo {
+		if (fromCache) {
+			val info = studentDao.queryStudentInfoByUsername(student.username)
+			if (info != null) {
+				return info
+			}
+		}
+		return queryStudentInfo(student, 0)
+	}
 
 	private suspend fun queryStudentInfo(student: Student, repeatTime: Int = 0): StudentInfo {
 		if (repeatTime > Constants.API_RETRY_TIME) {

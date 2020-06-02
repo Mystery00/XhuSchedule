@@ -69,32 +69,39 @@ class SettingsViewModel : ViewModel(), KoinComponent {
 		}
 	}
 
-	fun queryAllStudentInfoListAndThen(block: (ArrayList<StudentInfo>) -> Unit) {
+	fun queryAllStudentInfoListAndThen(block: (List<StudentInfo>) -> Unit) {
 		launch(studentInfoList) {
-			if (studentList.value == null) {
-				val list = studentRepository.queryAllStudentList()
-				if (list.isNullOrEmpty()) {
-					studentList.empty()
+			val list = if (studentInfoList.value == null) {
+				if (studentList.value == null) {
+					val list = studentRepository.queryAllStudentList()
+					if (list.isNullOrEmpty()) {
+						studentList.empty()
+					} else {
+						studentList.content(list)
+					}
+				}
+				val infoList = ArrayList<StudentInfo>()
+				studentList.value?.data?.forEach {
+					try {
+						val info = studentRepository.queryStudentInfo(it)
+						infoList.add(info)
+					} catch (e: Exception) {
+						Logs.wm(e)
+					}
+				}
+				if (infoList.isNullOrEmpty()) {
+					studentInfoList.empty()
 				} else {
-					studentList.content(list)
+					studentInfoList.content(infoList)
 				}
-			}
-			val infoList = ArrayList<StudentInfo>()
-			studentList.value?.data?.forEach {
-				try {
-					val info = studentRepository.queryStudentInfo(it)
-					infoList.add(info)
-				} catch (e: Exception) {
-					Logs.wm(e)
-				}
-			}
-			if (infoList.isNullOrEmpty()) {
-				studentInfoList.empty()
+				infoList
 			} else {
-				studentInfoList.content(infoList)
+				studentInfoList.value?.data
 			}
-			withContext(Dispatchers.Main) {
-				block(infoList)
+			list?.let {
+				withContext(Dispatchers.Main) {
+					block(it)
+				}
 			}
 		}
 	}

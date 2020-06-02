@@ -62,7 +62,6 @@ class ClassSettingsFragment : XhuBasePreferenceFragment(R.xml.preference_class) 
 
 	override fun initPreference() {
 		super.initPreference()
-		initViewModel()
 		settingsViewModel.initStudentList()
 		showNotWeekPreference.isChecked = ConfigurationUtil.isShowNotWeek
 		currentYearAndTermPreference.summary = getString(R.string.summary_current_year_and_term, ConfigurationUtil.currentYear, ConfigurationUtil.currentTerm)
@@ -71,12 +70,6 @@ class ClassSettingsFragment : XhuBasePreferenceFragment(R.xml.preference_class) 
 			showTomorrowCourseAfterPreference.summary = getString(R.string.summary_show_tomorrow_after_time, ConfigurationUtil.showTomorrowCourseAfterTime)
 		else
 			showTomorrowCourseAfterPreference.summary = getString(R.string.summary_show_tomorrow_after_time_disable)
-	}
-
-	private fun initViewModel() {
-		settingsViewModel.studentInfoList.observe(this, androidx.lifecycle.Observer {
-
-		})
 	}
 
 	override fun monitor() {
@@ -147,7 +140,7 @@ class ClassSettingsFragment : XhuBasePreferenceFragment(R.xml.preference_class) 
 			timePickerDialog.setButton(AlertDialog.BUTTON_NEUTRAL, getString(R.string.action_disable)) { _, _ ->
 				ConfigurationUtil.showTomorrowCourseAfterTime = "disable"
 				showTomorrowCourseAfterPreference.summary = getString(R.string.summary_show_tomorrow_after_time_disable)
-				eventBus.post(UIConfigEvent(arrayListOf(UI.MAIN_INIT)))
+				eventBus.post(UIConfigEvent(arrayListOf(UI.MAIN_INIT, UI.MENU)))
 			}
 			timePickerDialog.show()
 			true
