@@ -113,15 +113,15 @@ dependencies {
     implementation "org.koin:koin-androidx-ext:$koin_version"
 
     //coil
-    implementation 'io.coil-kt:coil:0.10.0'
+    implementation 'io.coil-kt:coil:0.11.0'
 
     //EventBus
     implementation 'org.greenrobot:eventbus:3.2.0'
 
     //Retrofit
-    implementation 'com.squareup.retrofit2:retrofit:2.8.1'
-    implementation 'com.squareup.retrofit2:converter-gson:2.8.1'
-    implementation 'com.squareup.okhttp3:logging-interceptor:4.6.0'
+    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
+    implementation 'com.squareup.okhttp3:logging-interceptor:4.7.2'
 
     //Mystery0Tools
     implementation 'vip.mystery0.tools:logs:1.4.4'
@@ -173,7 +173,7 @@ dependencies {
     implementation 'com.github.iMeiji:SetupWizardLayout:0.1'
 
     //About Library
-    implementation 'com.mikepenz:aboutlibraries:8.1.2'
+    implementation 'com.mikepenz:aboutlibraries:8.1.6'
 
     //Color Picker
     implementation 'com.jrummyapps:colorpicker:2.1.7'
