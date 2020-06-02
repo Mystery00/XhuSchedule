@@ -17,10 +17,7 @@ import com.weilylab.xhuschedule.repository.StudentRepository
 import com.weilylab.xhuschedule.repository.TestRepository
 import org.koin.core.KoinComponent
 import org.koin.core.inject
-import vip.mystery0.rx.PackageData
-import vip.mystery0.rx.content
-import vip.mystery0.rx.empty
-import vip.mystery0.rx.launch
+import vip.mystery0.rx.*
 
 class QueryTestViewModel : ViewModel(), KoinComponent {
 	private val studentRepository: StudentRepository by inject()
@@ -33,6 +30,7 @@ class QueryTestViewModel : ViewModel(), KoinComponent {
 
 	fun init() {
 		launch(testList) {
+			testList.loading()
 			val list = studentRepository.queryAllStudentList()
 			val mainStudent = list.find { it.isMain }
 			if (mainStudent == null) {
@@ -41,18 +39,24 @@ class QueryTestViewModel : ViewModel(), KoinComponent {
 			}
 			student.postValue(mainStudent)
 			studentList.postValue(list)
+			queryInCoroutine(mainStudent)
 		}
+	}
+
+	private suspend fun queryInCoroutine(student: Student) {
+		val response = testRepository.queryTests(student)
+		if (response.first.isNullOrEmpty()) {
+			testList.empty()
+		} else {
+			testList.content(response.first)
+		}
+		html.postValue(response.second)
 	}
 
 	fun query(student: Student) {
 		launch(testList) {
-			val response = testRepository.queryTests(student)
-			if (response.first.isNullOrEmpty()) {
-				testList.empty()
-			} else {
-				testList.content(response.first)
-			}
-			html.postValue(response.second)
+			testList.loading()
+			queryInCoroutine(student)
 		}
 	}
 }
