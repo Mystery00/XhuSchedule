@@ -86,10 +86,11 @@ class BottomNavigationViewModel : ViewModel(), KoinComponent {
 				return@launch
 			}
 			studentList.content(list)
+			val nowString = Calendar.getInstance().toDateString()
 			//查询主用户信息
 			val mainStudent = list.find { it.isMain }
 					?: throw ResourceException(R.string.hint_null_student)
-			val info = studentRepository.queryStudentInfo(mainStudent, false)
+			val info = studentRepository.queryStudentInfo(mainStudent, nowString == ConfigurationUtil.lastUpdateDate)
 			studentInfo.postValue(info)
 
 			val enableMultiUserMode = withContext(Dispatchers.IO) { ConfigurationUtil.isEnableMultiUserMode }
@@ -120,7 +121,6 @@ class BottomNavigationViewModel : ViewModel(), KoinComponent {
 			val today = customThingRepository.getToday()
 			customThingList.postValue(today)
 			//如果是当天第一次启动，那么刷新在线数据
-			val nowString = Calendar.getInstance().toDateString()
 			if (nowString != ConfigurationUtil.lastUpdateDate) {
 				queryOnline(throwError = false)
 			}
