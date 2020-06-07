@@ -84,7 +84,7 @@ class SettingsViewModel : ViewModel(), KoinComponent {
 				val infoList = ArrayList<StudentInfo>()
 				studentList.value?.data?.forEach {
 					try {
-						val info = studentRepository.queryStudentInfo(it)
+						val info = studentRepository.queryStudentInfo(it, fromCache = true)
 						infoList.add(info)
 					} catch (e: Exception) {
 						Logs.w(e)

@@ -48,7 +48,7 @@ class QueryClassScoreViewModel : ViewModel(), KoinComponent {
 			val map = HashMap<Student, StudentInfo>()
 			studentArray.forEach {
 				try {
-					val info = studentRepository.queryStudentInfo(it)
+					val info = studentRepository.queryStudentInfo(it, fromCache = true)
 					map[it] = info
 				} catch (e: Exception) {
 					Logs.w(e)

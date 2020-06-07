@@ -40,7 +40,7 @@ object QueryCetScoreViewModelHelper : KoinComponent {
 				student.postValue(null)
 				return@launch
 			}
-			val info = studentRepository.queryStudentInfo(mainStudent)
+			val info = studentRepository.queryStudentInfo(mainStudent, fromCache = true)
 			mainStudent.studentName = info.name
 			student.postValue(mainStudent)
 		}

@@ -37,6 +37,9 @@ interface StudentDao {
 	suspend fun updateStudent(student: Student)
 
 	@Insert
+	suspend fun insertStudentInfo(studentInfo: StudentInfo): Long
+
+	@Update
 	suspend fun saveStudentInfo(studentInfo: StudentInfo): Long
 
 	@Query("select * from tb_student_info where student_id = :username limit 1")
