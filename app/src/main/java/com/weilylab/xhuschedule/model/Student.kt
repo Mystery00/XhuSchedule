@@ -29,4 +29,7 @@ class Student {
 
 	@ColumnInfo(name = "student_name")
 	var studentName: String = ""
+
+	@ColumnInfo(name = "key")
+	var key: String? = null
 }
