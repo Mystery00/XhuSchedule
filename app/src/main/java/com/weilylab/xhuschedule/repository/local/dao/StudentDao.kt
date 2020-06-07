@@ -39,12 +39,15 @@ interface StudentDao {
 	@Insert
 	suspend fun insertStudentInfo(studentInfo: StudentInfo): Long
 
-	@Update
-	suspend fun saveStudentInfo(studentInfo: StudentInfo)
+	@Delete
+	suspend fun deleteStudentInfo(studentInfo: StudentInfo)
+
+	@Query("select * from tb_student_info where student_id = :username")
+	suspend fun queryStudentInfoListByUsername(username: String): List<StudentInfo>
 
 	@Query("select * from tb_student_info where student_id = :username limit 1")
 	suspend fun queryStudentInfoByUsername(username: String): StudentInfo?
 
-	@Query("select tb_student_info.* from tb_student join tb_student_info on tb_student.username=tb_student_info.student_id")
+	@Query("select tb_student_info.* from tb_student join tb_student_info on tb_student.username = tb_student_info.student_id")
 	suspend fun queryAllStudentInfo(): List<StudentInfo>
 }

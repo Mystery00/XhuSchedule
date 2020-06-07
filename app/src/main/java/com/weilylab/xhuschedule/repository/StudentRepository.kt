@@ -104,14 +104,12 @@ class StudentRepository : KoinComponent {
 		return when (info.rt) {
 			ResponseCodeConstants.DONE -> {
 				//请求成功，保存信息
-				info.studentID = student.username
-				val save = studentDao.queryStudentInfoByUsername(student.username)
-				if (save != null) {
-					info.id = save.id
-					studentDao.saveStudentInfo(info)
-				} else {
-					studentDao.insertStudentInfo(info)
+				//删除旧的所有数据
+				studentDao.queryStudentInfoListByUsername(student.username).forEach {
+					studentDao.deleteStudentInfo(it)
 				}
+				info.studentID = student.username
+				studentDao.insertStudentInfo(info)
 				student.studentName = info.name
 				studentDao.updateStudent(student)
 				info
