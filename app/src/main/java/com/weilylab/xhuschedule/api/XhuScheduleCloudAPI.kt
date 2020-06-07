@@ -15,7 +15,7 @@ import retrofit2.http.*
 
 interface XhuScheduleCloudAPI {
 	@FormUrlEncoded
-	@POST("/api/rest/v1/xhuschedulecloud/version")
+	@POST("/9783/api/rest/v1/xhuschedulecloud/version")
 	suspend fun checkVersion(@Field("appVersion") appVersion: String,
 							 @Field("systemVersion") systemVersion: String,
 							 @Field("factory") vendor: String,
@@ -23,19 +23,19 @@ interface XhuScheduleCloudAPI {
 							 @Field("rom") rom: String,
 							 @Field("deviceID") deviceID: String): VersionResponse
 
-	@GET("/api/rest/v1/xhuschedulecloud/schoolcalendar/url")
+	@GET("/9783/api/rest/v1/xhuschedulecloud/schoolcalendar/url")
 	suspend fun schoolCalendar(): SchoolCalendarResponse
 
-	@GET("/api/rest/v1/xhuschedulecloud/splash")
+	@GET("/9783/api/rest/v1/xhuschedulecloud/splash")
 	suspend fun requestSplashInfo(): SplashResponse
 
-	@GET("/api/rest/v1/xhuschedulecloud/starttime")
+	@GET("/9783/api/rest/v1/xhuschedulecloud/starttime")
 	suspend fun requestStartDateTime(): StartDateTimeResponse
 
 	@FormUrlEncoded
-	@POST("/api/rest/v1/xhuschedulecloud/publicKey")
+	@POST("/9783/api/rest/v1/xhuschedulecloud/publicKey")
 	suspend fun getPublicKey(@Field("username") username: String): PublicKeyResponse
 
-	@POST("/api/rest/v1/xhuschedulecloud/login")
+	@POST("/9783/api/rest/v1/xhuschedulecloud/login")
 	suspend fun login(@Body loginParam: LoginParam): LoginResponse
 }
