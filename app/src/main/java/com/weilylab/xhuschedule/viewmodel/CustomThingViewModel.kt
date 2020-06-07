@@ -63,23 +63,15 @@ class CustomThingViewModel : ViewModel(), KoinComponent {
 
 	fun syncForLocal() {
 		launch(customThingList) {
-			val list = customThingRepository.syncCustomThingForLocal()
-			if (list.isNullOrEmpty()) {
-				customThingList.empty()
-			} else {
-				customThingList.content(list)
-			}
+			customThingRepository.syncCustomThingForLocal()
+			getAllCustomThingInCoroutine()
 		}
 	}
 
 	fun syncForRemote() {
 		launch(customThingList) {
-			val list = customThingRepository.syncCustomThingForServer()
-			if (list.isNullOrEmpty()) {
-				customThingList.empty()
-			} else {
-				customThingList.content(list)
-			}
+			customThingRepository.syncCustomThingForServer()
+			getAllCustomThingInCoroutine()
 		}
 	}
 }

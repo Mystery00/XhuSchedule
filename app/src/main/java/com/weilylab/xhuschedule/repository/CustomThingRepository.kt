@@ -40,7 +40,7 @@ class CustomThingRepository : KoinComponent {
 
 	suspend fun delete(thing: CustomThing) = customThingDao.deleteThing(thing)
 
-	suspend fun syncCustomThingForLocal(): List<CustomThing> {
+	suspend fun syncCustomThingForLocal() {
 		val student = studentRepository.queryMainStudent()
 				?: throw ResourceException(R.string.hint_action_not_login)
 		if (isConnectInternet()) {
@@ -50,13 +50,13 @@ class CustomThingRepository : KoinComponent {
 			}
 			if (response.isSuccessful) {
 				if (response.value.isBlank()) {
-					return emptyList()
+					return
 				}
 				val courseList = response.value.fromJson<SyncCustomThing>().list
 				val savedList = customThingDao.queryAllThings()
 				savedList.forEach { thing -> delete(thing) }
 				courseList.forEach { thing -> save(thing) }
-				return courseList
+				return
 			} else {
 				throw Exception(response.msg)
 			}
@@ -65,7 +65,7 @@ class CustomThingRepository : KoinComponent {
 		}
 	}
 
-	suspend fun syncCustomThingForServer(): List<CustomThing> {
+	suspend fun syncCustomThingForServer() {
 		val student = studentRepository.queryMainStudent()
 				?: throw ResourceException(R.string.hint_action_not_login)
 		if (isConnectInternet()) {
@@ -76,7 +76,7 @@ class CustomThingRepository : KoinComponent {
 				userAPI.setUserData(student.username, key, value)
 			}
 			if (response.isSuccessful) {
-				return localList
+				return
 			} else {
 				throw Exception(response.msg)
 			}

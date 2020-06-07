@@ -45,7 +45,7 @@ class CustomCourseRepository : KoinComponent {
 
 	suspend fun delete(course: Course) = courseDao.deleteCourse(course)
 
-	suspend fun syncCustomCourseForLocal(student: Student): List<Course> {
+	suspend fun syncCustomCourseForLocal(student: Student) {
 		if (isConnectInternet()) {
 			val key = "customCourse"
 			val response = userAPI.getUserData(student.username, key).redoAfterLogin(student) {
@@ -53,7 +53,7 @@ class CustomCourseRepository : KoinComponent {
 			}
 			if (response.isSuccessful) {
 				if (response.value.isBlank()) {
-					return emptyList()
+					return
 				}
 				val courseList = response.value.fromJson<SyncCustomCourse>().list
 				val savedList = courseDao.queryCustomCourseByStudent(student.username)
@@ -63,7 +63,7 @@ class CustomCourseRepository : KoinComponent {
 					course.studentID = student.username
 					save(course)
 				}
-				return courseList
+				return
 			} else {
 				throw Exception(response.msg)
 			}
@@ -72,7 +72,7 @@ class CustomCourseRepository : KoinComponent {
 		}
 	}
 
-	suspend fun syncCustomCourseForServer(student: Student): List<Course> {
+	suspend fun syncCustomCourseForServer(student: Student) {
 		if (isConnectInternet()) {
 			val key = "customCourse"
 			val localList = courseDao.queryCustomCourseByStudent(student.username)
@@ -81,7 +81,7 @@ class CustomCourseRepository : KoinComponent {
 				userAPI.setUserData(student.username, key, value)
 			}
 			if (response.isSuccessful) {
-				return localList
+				return
 			} else {
 				throw Exception(response.msg)
 			}

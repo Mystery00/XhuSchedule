@@ -119,23 +119,15 @@ class CustomCourseViewModel : ViewModel(), KoinComponent {
 
 	fun syncForLocal(student: Student) {
 		launch(customCourseList) {
-			val list = customCourseRepository.syncCustomCourseForLocal(student)
-			if (list.isNullOrEmpty()) {
-				customCourseList.empty()
-			} else {
-				customCourseList.content(list)
-			}
+			customCourseRepository.syncCustomCourseForLocal(student)
+			getAllCustomCourseInCoroutine()
 		}
 	}
 
 	fun syncForRemote(student: Student) {
 		launch(customCourseList) {
-			val list = customCourseRepository.syncCustomCourseForServer(student)
-			if (list.isNullOrEmpty()) {
-				customCourseList.empty()
-			} else {
-				customCourseList.content(list)
-			}
+			customCourseRepository.syncCustomCourseForServer(student)
+			getAllCustomCourseInCoroutine()
 		}
 	}
 }

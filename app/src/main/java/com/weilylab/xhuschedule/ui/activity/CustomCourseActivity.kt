@@ -90,6 +90,7 @@ class CustomCourseActivity : XhuBaseActivity(R.layout.activity_custom_course), K
 	private val studentObserver = Observer<Student> {
 		val text = getString(R.string.prompt_custom_course_student, it.studentName, it.username)
 		textViewStudent.text = text
+		expandLayout.text = getString(R.string.hint_custom_course_sync, it.studentName)
 	}
 
 	private val yearObserver = Observer<String> {
@@ -109,6 +110,7 @@ class CustomCourseActivity : XhuBaseActivity(R.layout.activity_custom_course), K
 
 		override fun contentNoEmpty(data: List<Any>) {
 			hideRefresh()
+			toast(R.string.hint_course_sync_done)
 			customCourseAdapter.items.clear()
 			customCourseAdapter.items.addAll(data)
 			customCourseAdapter.updateMap()

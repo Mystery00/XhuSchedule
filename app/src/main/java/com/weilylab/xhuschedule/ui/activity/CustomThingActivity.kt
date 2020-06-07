@@ -68,6 +68,7 @@ class CustomThingActivity : XhuBaseActivity(R.layout.activity_custom_thing) {
 
 		override fun contentNoEmpty(data: List<CustomThing>) {
 			hideRefresh()
+			toast(R.string.hint_course_sync_done)
 			customThingAdapter.items.clear()
 			customThingAdapter.items.addAll(data)
 			checkData()
