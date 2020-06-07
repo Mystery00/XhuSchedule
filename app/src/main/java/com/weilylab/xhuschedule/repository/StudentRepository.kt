@@ -71,7 +71,7 @@ class StudentRepository : KoinComponent {
 			secretKey = generateKey()
 		} else {
 			//如果密钥不为空，说明是加密数据，解密出原始信息
-			plainPassword = aesDecrypt(plainPassword, secretKey)
+			plainPassword = aesDecrypt(plainPassword, secretKey, student.iv)
 		}
 		val encryptPassword = RSAUtil.encryptString(plainPassword, publicKey)
 		val loginResponse = xhuScheduleCloudAPI.login(LoginParam(student.username, encryptPassword, publicKey))
@@ -80,7 +80,9 @@ class StudentRepository : KoinComponent {
 			CookieManger.putCookie(student.username, Constants.SERVER_HOST, loginResponse.data.cookie)
 			feedBackRepository.registerFeedBackToken(student, loginResponse.data.fbToken)
 			student.key = secretKey
-			student.password = aesEncrypt(plainPassword, secretKey)
+			val pair = aesEncrypt(plainPassword, secretKey)
+			student.password = pair.first
+			student.iv = pair.second
 			studentDao.updateStudent(student)
 		} else {
 			throw Exception(loginResponse.message)

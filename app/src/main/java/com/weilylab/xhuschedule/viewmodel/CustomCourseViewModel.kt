@@ -52,7 +52,7 @@ class CustomCourseViewModel : ViewModel(), KoinComponent {
 			val infoMap = HashMap<Student, StudentInfo?>()
 			studentArray.forEach {
 				try {
-					val info = studentRepository.queryStudentInfo(it)
+					val info = studentRepository.queryStudentInfo(it, fromCache = true)
 					infoMap[it] = info
 					if (it.isMain) {
 						student = it

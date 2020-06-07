@@ -32,16 +32,18 @@ fun generateKey(): String {
 	return encryptBASE64(keygen.generateKey().encoded)
 }
 
-fun aesDecrypt(data: String, key: String): String {
+fun aesDecrypt(data: String, key: String, iv: String): String {
 	val k: Key = toKey(decryptBASE64(key))
 	val cipher = Cipher.getInstance(ALGORITHM)
-	cipher.init(Cipher.DECRYPT_MODE, k)
+	cipher.init(Cipher.DECRYPT_MODE, k, SecureRandom(decryptBASE64(iv)))
 	return String(cipher.doFinal(decryptBASE64(data)))
 }
 
-fun aesEncrypt(data: String, key: String): String {
+fun aesEncrypt(data: String, key: String): Pair<String, String> {
 	val k: Key = toKey(decryptBASE64(key))
 	val cipher = Cipher.getInstance(ALGORITHM)
 	cipher.init(Cipher.ENCRYPT_MODE, k)
-	return encryptBASE64(cipher.doFinal(data.toByteArray()))
+	val result = encryptBASE64(cipher.doFinal(data.toByteArray()))
+	val iv = encryptBASE64(cipher.iv)
+	return result to iv
 }
