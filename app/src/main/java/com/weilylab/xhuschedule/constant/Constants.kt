@@ -10,7 +10,8 @@
 package com.weilylab.xhuschedule.constant
 
 object Constants {
-	const val SERVER_URL = "https://mirror.xhuschedule.mystery0.vip"
+	const val SERVER_HOST = "mirror.xhuschedule.mystery0.vip"
+	const val SERVER_URL = "https://$SERVER_HOST"
 	const val API_RETRY_TIME = 1
 
 	const val NOTICE_PLATFORM_ANDROID = "Android"

@@ -7,13 +7,8 @@
  *  of this license document, but changing it is not allowed.
  */
 
-package com.weilylab.xhuschedule.model.response
+package com.weilylab.xhuschedule.model
 
-class LoginResponse : CloudResponse() {
-	lateinit var data: LoginData
-}
-
-class LoginData {
-	lateinit var cookie: String
-	lateinit var fbToken: String
-}
+data class LoginParam(var username: String,
+					  var password: String,
+					  var publicKey: String)

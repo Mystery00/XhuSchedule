@@ -11,11 +11,17 @@ package com.weilylab.xhuschedule.repository
 
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.api.UserAPI
+import com.weilylab.xhuschedule.api.XhuScheduleCloudAPI
 import com.weilylab.xhuschedule.constant.Constants
 import com.weilylab.xhuschedule.constant.ResponseCodeConstants
+import com.weilylab.xhuschedule.interceptor.CookieManger
+import com.weilylab.xhuschedule.model.LoginParam
 import com.weilylab.xhuschedule.model.Student
 import com.weilylab.xhuschedule.model.StudentInfo
 import com.weilylab.xhuschedule.repository.local.dao.StudentDao
+import com.weilylab.xhuschedule.utils.RSAUtil
+import com.weilylab.xhuschedule.utils.aesDecrypt
+import com.weilylab.xhuschedule.utils.generateKey
 import org.koin.core.KoinComponent
 import org.koin.core.inject
 import vip.mystery0.tools.ResourceException
@@ -27,6 +33,7 @@ class StudentRepository : KoinComponent {
 	private val feedBackRepository: FeedBackRepository by inject()
 
 	private val userAPI: UserAPI by inject()
+	private val xhuScheduleCloudAPI: XhuScheduleCloudAPI by inject()
 
 	suspend fun login(student: Student): Student {
 		val studentList = studentDao.queryAllStudentList()
@@ -52,12 +59,30 @@ class StudentRepository : KoinComponent {
 	}
 
 	suspend fun doLoginOnly(student: Student) {
-		val loginResponse = userAPI.autoLogin(student.username, student.password)
+		val publicKeyResponse = xhuScheduleCloudAPI.getPublicKey(student.username)
+		if (!publicKeyResponse.isSuccessful) {
+			throw ResourceException(R.string.error_get_public_key_failed)
+		}
+		val publicKey = publicKeyResponse.data
+		var secretKey = student.key
+		var plainPassword: String = student.password
+		if (secretKey == null) {
+			secretKey = generateKey()
+		} else {
+			//如果密钥不为空，说明是加密数据，解密出原始信息
+			plainPassword = aesDecrypt(plainPassword, secretKey)
+		}
+		val encryptPassword = RSAUtil.encryptString(plainPassword, publicKey)
+		val loginResponse = xhuScheduleCloudAPI.login(LoginParam(student.username, encryptPassword, publicKey))
 		if (loginResponse.isSuccessful) {
 			//存储意见反馈的token
-			feedBackRepository.registerFeedBackToken(student, loginResponse.fbToken)
+			CookieManger.putCookie(student.username, Constants.SERVER_HOST, loginResponse.data.cookie)
+			feedBackRepository.registerFeedBackToken(student, loginResponse.data.fbToken)
+			student.key = secretKey
+			student.password = aesDecrypt(plainPassword, secretKey)
+			studentDao.updateStudent(student)
 		} else {
-			throw Exception(loginResponse.msg)
+			throw Exception(loginResponse.message)
 		}
 	}
 

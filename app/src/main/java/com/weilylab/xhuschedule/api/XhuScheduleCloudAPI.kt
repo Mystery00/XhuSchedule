@@ -9,18 +9,13 @@
 
 package com.weilylab.xhuschedule.api
 
-import com.weilylab.xhuschedule.model.response.SchoolCalendarResponse
-import com.weilylab.xhuschedule.model.response.SplashResponse
-import com.weilylab.xhuschedule.model.response.StartDateTimeResponse
-import com.weilylab.xhuschedule.model.response.VersionResponse
-import retrofit2.http.Field
-import retrofit2.http.FormUrlEncoded
-import retrofit2.http.GET
-import retrofit2.http.POST
+import com.weilylab.xhuschedule.model.LoginParam
+import com.weilylab.xhuschedule.model.response.*
+import retrofit2.http.*
 
 interface XhuScheduleCloudAPI {
 	@FormUrlEncoded
-	@POST("/9783/api/rest/v1/xhuschedulecloud/version")
+	@POST("/api/rest/v1/xhuschedulecloud/version")
 	suspend fun checkVersion(@Field("appVersion") appVersion: String,
 							 @Field("systemVersion") systemVersion: String,
 							 @Field("factory") vendor: String,
@@ -28,12 +23,19 @@ interface XhuScheduleCloudAPI {
 							 @Field("rom") rom: String,
 							 @Field("deviceID") deviceID: String): VersionResponse
 
-	@GET("/9783/api/rest/v1/xhuschedulecloud/schoolcalendar/url")
+	@GET("/api/rest/v1/xhuschedulecloud/schoolcalendar/url")
 	suspend fun schoolCalendar(): SchoolCalendarResponse
 
-	@GET("/9783/api/rest/v1/xhuschedulecloud/splash")
+	@GET("/api/rest/v1/xhuschedulecloud/splash")
 	suspend fun requestSplashInfo(): SplashResponse
 
-	@GET("/9783/api/rest/v1/xhuschedulecloud/starttime")
+	@GET("/api/rest/v1/xhuschedulecloud/starttime")
 	suspend fun requestStartDateTime(): StartDateTimeResponse
+
+	@FormUrlEncoded
+	@POST("/api/rest/v1/xhuschedulecloud/publicKey")
+	suspend fun getPublicKey(@Field("username") username: String): PublicKeyResponse
+
+	@POST("/api/rest/v1/xhuschedulecloud/login")
+	suspend fun login(@Body loginParam: LoginParam): LoginResponse
 }

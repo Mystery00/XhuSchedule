@@ -163,6 +163,7 @@
     <string name="error_end_before_start">结束时间不能早于开始时间</string>
     <string name="error_db_action">操作失败！</string>
     <string name="error_init_failed">初始化出错，请重试……\n如果频繁出现此信息，请联系开发者！</string>
+    <string name="error_get_public_key_failed">获取公钥失败，请重试……\n如果频繁出现此信息，请联系开发者！</string>
     <string name="error_delete_account">删除失败，错误详情：%1$s</string>
     <string name="error_set_main_account">设置主用户失败，错误详情：%1$s</string>
 
