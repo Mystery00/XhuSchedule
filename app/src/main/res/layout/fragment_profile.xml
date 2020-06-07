@@ -9,636 +9,638 @@
 
 <layout>
 
-	<data>
-
-		<variable
-			name="studentInfo"
-			type="com.weilylab.xhuschedule.model.StudentInfo" />
-	</data>
-
-	<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-		xmlns:app="http://schemas.android.com/apk/res-auto"
-		xmlns:tools="http://schemas.android.com/tools"
-		android:layout_width="match_parent"
-		android:layout_height="match_parent"
-		android:background="@color/colorWhiteBackground"
-		android:orientation="vertical"
-		tools:context=".ui.fragment.ProfileFragment">
-
-		<LinearLayout
-			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
-			android:orientation="vertical">
-
-			<androidx.constraintlayout.widget.ConstraintLayout
-				android:id="@+id/profileLayout"
-				android:layout_width="match_parent"
-				android:layout_height="96dp">
-
-				<vip.mystery0.circleimageview.CircleImageView
-					android:id="@+id/studentProfileImage"
-					android:layout_width="60dp"
-					android:layout_height="60dp"
-					android:layout_marginStart="16dp"
-					android:src="@mipmap/share_launcher"
-					app:draw_additional="false"
-					app:draw_border="false"
-					app:draw_circle="true"
-					app:layout_constraintBottom_toBottomOf="parent"
-					app:layout_constraintStart_toStartOf="parent"
-					app:layout_constraintTop_toTopOf="parent" />
-
-				<TextView
-					android:id="@+id/studentNameTextView"
-					android:layout_width="0dp"
-					android:layout_height="wrap_content"
-					android:layout_marginStart="27dp"
-					android:layout_marginBottom="3dp"
-					android:text="@{studentInfo.name}"
-					android:textColor="@color/colorBlackText"
-					android:textSize="17sp"
-					app:layout_constraintBottom_toTopOf="@+id/guideline"
-					app:layout_constraintEnd_toStartOf="@+id/imageViewHeaderMore"
-					app:layout_constraintStart_toEndOf="@id/studentProfileImage" />
-
-				<TextView
-					android:id="@+id/studentClassNameTextView"
-					android:layout_width="0dp"
-					android:layout_height="wrap_content"
-					android:layout_marginStart="27dp"
-					android:layout_marginTop="3dp"
-					android:text="@{studentInfo.classname}"
-					android:textColor="@color/colorGrayText"
-					android:textSize="13.67sp"
-					app:layout_constraintEnd_toStartOf="@+id/imageViewHeaderMore"
-					app:layout_constraintStart_toEndOf="@id/studentProfileImage"
-					app:layout_constraintTop_toTopOf="@+id/guideline" />
-
-				<ImageView
-					android:id="@+id/imageViewHeaderMore"
-					android:layout_width="10dp"
-					android:layout_height="12dp"
-					android:layout_marginEnd="14dp"
-					android:contentDescription="@string/app_name"
-					android:tint="@color/colorMoreProfile"
-					app:layout_constraintBottom_toBottomOf="parent"
-					app:layout_constraintEnd_toEndOf="parent"
-					app:layout_constraintTop_toTopOf="parent"
-					app:srcCompat="@drawable/ic_more" />
-
-				<androidx.constraintlayout.widget.Guideline
-					android:id="@+id/guideline"
-					android:layout_width="wrap_content"
-					android:layout_height="wrap_content"
-					android:orientation="horizontal"
-					app:layout_constraintGuide_percent="0.5" />
-
-			</androidx.constraintlayout.widget.ConstraintLayout>
-
-			<View
-				android:layout_width="match_parent"
-				android:layout_height="6dp"
-				android:background="@color/colorDividerProfile" />
-
-			<androidx.constraintlayout.widget.ConstraintLayout
-				android:id="@+id/queryTestLayout"
-				android:layout_width="match_parent"
-				android:layout_height="44.67dp">
-
-				<FrameLayout
-					android:id="@+id/imageLayoutQueryTest"
-					android:layout_width="48dp"
-					android:layout_height="0dp"
-					app:layout_constraintBottom_toBottomOf="parent"
-					app:layout_constraintStart_toStartOf="parent"
-					app:layout_constraintTop_toTopOf="parent">
-
-					<ImageView
-						android:id="@+id/imageViewQueryTest"
-						android:layout_width="16.33dp"
-						android:layout_height="18dp"
-						android:layout_gravity="center"
-						android:contentDescription="@string/app_name"
-						android:src="@mipmap/ic_query_test"
-						android:tint="@color/colorBlackText"
-						app:layout_constraintBottom_toBottomOf="parent"
-						app:layout_constraintStart_toStartOf="parent"
-						app:layout_constraintTop_toTopOf="parent" />
-
-				</FrameLayout>
-
-				<TextView
-					android:id="@+id/textViewQueryTest"
-					android:layout_width="0dp"
-					android:layout_height="wrap_content"
-					android:text="@string/profile_action_query_test"
-					android:textColor="@color/colorBlackText"
-					android:textSize="15sp"
-					app:layout_constraintBottom_toBottomOf="parent"
-					app:layout_constraintEnd_toStartOf="@id/imageViewMoreQueryTest"
-					app:layout_constraintStart_toEndOf="@id/imageLayoutQueryTest"
-					app:layout_constraintTop_toTopOf="parent" />
-
-				<ImageView
-					android:id="@+id/imageViewMoreQueryTest"
-					android:layout_width="10dp"
-					android:layout_height="12dp"
-					android:layout_marginEnd="14dp"
-					android:contentDescription="@string/app_name"
-					android:tint="@color/colorMoreProfile"
-					app:layout_constraintBottom_toBottomOf="parent"
-					app:layout_constraintEnd_toEndOf="parent"
-					app:layout_constraintTop_toTopOf="parent"
-					app:srcCompat="@drawable/ic_more" />
-
-			</androidx.constraintlayout.widget.ConstraintLayout>
-
-			<View
-				android:layout_width="match_parent"
-				android:layout_height="0.33dp"
-				android:background="@color/colorItemBackgroundProfile" />
-
-			<androidx.constraintlayout.widget.ConstraintLayout
-				android:id="@+id/queryScoreLayout"
-				android:layout_width="match_parent"
-				android:layout_height="44.67dp">
-
-				<FrameLayout
-					android:id="@+id/imageViewQueryScore"
-					android:layout_width="48dp"
-					android:layout_height="0dp"
-					app:layout_constraintBottom_toBottomOf="parent"
-					app:layout_constraintStart_toStartOf="parent"
-					app:layout_constraintTop_toTopOf="parent">
-
-					<ImageView
-						android:layout_width="16.67dp"
-						android:layout_height="18dp"
-						android:layout_gravity="center"
-						android:contentDescription="@string/app_name"
-						android:src="@mipmap/ic_query_score"
-						android:tint="@color/colorBlackText"
-						app:layout_constraintBottom_toBottomOf="parent"
-						app:layout_constraintStart_toStartOf="parent"
-						app:layout_constraintTop_toTopOf="parent" />
-
-				</FrameLayout>
-
-				<TextView
-					android:id="@+id/textViewQueryScore"
-					android:layout_width="0dp"
-					android:layout_height="wrap_content"
-					android:text="@string/profile_action_query_score"
-					android:textColor="@color/colorBlackText"
-					android:textSize="15sp"
-					app:layout_constraintBottom_toBottomOf="parent"
-					app:layout_constraintEnd_toStartOf="@id/imageViewMoreQueryScore"
-					app:layout_constraintStart_toEndOf="@id/imageViewQueryScore"
-					app:layout_constraintTop_toTopOf="parent" />
-
-				<ImageView
-					android:id="@+id/imageViewMoreQueryScore"
-					android:layout_width="10dp"
-					android:layout_height="12dp"
-					android:layout_marginEnd="14dp"
-					android:contentDescription="@string/app_name"
-					android:tint="@color/colorMoreProfile"
-					app:layout_constraintBottom_toBottomOf="parent"
-					app:layout_constraintEnd_toEndOf="parent"
-					app:layout_constraintTop_toTopOf="parent"
-					app:srcCompat="@drawable/ic_more" />
-
-			</androidx.constraintlayout.widget.ConstraintLayout>
-
-			<View
-				android:layout_width="match_parent"
-				android:layout_height="0.33dp"
-				android:background="@color/colorItemBackgroundProfile" />
-
-			<androidx.constraintlayout.widget.ConstraintLayout
-				android:id="@+id/queryClassroomLayout"
-				android:layout_width="match_parent"
-				android:layout_height="44.67dp">
-
-				<FrameLayout
-					android:id="@+id/imageLayoutQueryClassroom"
-					android:layout_width="48dp"
-					android:layout_height="0dp"
-					app:layout_constraintBottom_toBottomOf="parent"
-					app:layout_constraintStart_toStartOf="parent"
-					app:layout_constraintTop_toTopOf="parent">
-
-					<ImageView
-						android:id="@+id/imageViewQueryClassroom"
-						android:layout_width="18dp"
-						android:layout_height="18dp"
-						android:layout_gravity="center"
-						android:contentDescription="@string/app_name"
-						android:src="@drawable/ic_query_classroom"
-						android:tint="@color/colorBlackText"
-						app:layout_constraintBottom_toBottomOf="parent"
-						app:layout_constraintStart_toStartOf="parent"
-						app:layout_constraintTop_toTopOf="parent" />
-
-				</FrameLayout>
-
-				<TextView
-					android:id="@+id/textViewQueryClassroom"
-					android:layout_width="0dp"
-					android:layout_height="wrap_content"
-					android:text="@string/profile_action_query_classroom"
-					android:textColor="@color/colorBlackText"
-					android:textSize="15sp"
-					app:layout_constraintBottom_toBottomOf="parent"
-					app:layout_constraintEnd_toStartOf="@id/imageViewMoreQueryClassroom"
-					app:layout_constraintStart_toEndOf="@id/imageLayoutQueryClassroom"
-					app:layout_constraintTop_toTopOf="parent" />
-
-				<ImageView
-					android:id="@+id/imageViewMoreQueryClassroom"
-					android:layout_width="10dp"
-					android:layout_height="12dp"
-					android:layout_marginEnd="14dp"
-					android:contentDescription="@string/app_name"
-					android:tint="@color/colorMoreProfile"
-					app:layout_constraintBottom_toBottomOf="parent"
-					app:layout_constraintEnd_toEndOf="parent"
-					app:layout_constraintTop_toTopOf="parent"
-					app:srcCompat="@drawable/ic_more" />
-
-			</androidx.constraintlayout.widget.ConstraintLayout>
-
-			<View
-				android:layout_width="match_parent"
-				android:layout_height="6dp"
-				android:background="@color/colorDividerProfile" />
-
-			<androidx.constraintlayout.widget.ConstraintLayout
-				android:id="@+id/accountSettingsLayout"
-				android:layout_width="match_parent"
-				android:layout_height="44.67dp">
-
-				<FrameLayout
-					android:id="@+id/imageViewAccountSettings"
-					android:layout_width="48dp"
-					android:layout_height="0dp"
-					app:layout_constraintBottom_toBottomOf="parent"
-					app:layout_constraintStart_toStartOf="parent"
-					app:layout_constraintTop_toTopOf="parent">
-
-					<ImageView
-						android:layout_width="16.67dp"
-						android:layout_height="16.33dp"
-						android:layout_gravity="center"
-						android:contentDescription="@string/app_name"
-						android:src="@mipmap/ic_account_settings"
-						android:tint="@color/colorBlackText"
-						app:layout_constraintBottom_toBottomOf="parent"
-						app:layout_constraintStart_toStartOf="parent"
-						app:layout_constraintTop_toTopOf="parent" />
-
-				</FrameLayout>
-
-				<TextView
-					android:id="@+id/textViewAccountSettings"
-					android:layout_width="0dp"
-					android:layout_height="wrap_content"
-					android:text="@string/profile_action_account_settings"
-					android:textColor="@color/colorBlackText"
-					android:textSize="15sp"
-					app:layout_constraintBottom_toBottomOf="parent"
-					app:layout_constraintEnd_toStartOf="@id/imageViewMoreAccountSettings"
-					app:layout_constraintStart_toEndOf="@id/imageViewAccountSettings"
-					app:layout_constraintTop_toTopOf="parent" />
-
-				<ImageView
-					android:id="@+id/imageViewMoreAccountSettings"
-					android:layout_width="10dp"
-					android:layout_height="12dp"
-					android:layout_marginEnd="14dp"
-					android:contentDescription="@string/app_name"
-					android:tint="@color/colorMoreProfile"
-					app:layout_constraintBottom_toBottomOf="parent"
-					app:layout_constraintEnd_toEndOf="parent"
-					app:layout_constraintTop_toTopOf="parent"
-					app:srcCompat="@drawable/ic_more" />
-
-			</androidx.constraintlayout.widget.ConstraintLayout>
-
-			<View
-				android:layout_width="match_parent"
-				android:layout_height="0.33dp"
-				android:background="@color/colorItemBackgroundProfile" />
-
-			<androidx.constraintlayout.widget.ConstraintLayout
-				android:id="@+id/classSettingsLayout"
-				android:layout_width="match_parent"
-				android:layout_height="44.67dp">
-
-				<FrameLayout
-					android:id="@+id/imageViewClassSettings"
-					android:layout_width="48dp"
-					android:layout_height="0dp"
-					app:layout_constraintBottom_toBottomOf="parent"
-					app:layout_constraintStart_toStartOf="parent"
-					app:layout_constraintTop_toTopOf="parent">
-
-					<ImageView
-						android:layout_width="16.67dp"
-						android:layout_height="17.67dp"
-						android:layout_gravity="center"
-						android:contentDescription="@string/app_name"
-						android:src="@mipmap/ic_class_settings"
-						android:tint="@color/colorBlackText"
-						app:layout_constraintBottom_toBottomOf="parent"
-						app:layout_constraintStart_toStartOf="parent"
-						app:layout_constraintTop_toTopOf="parent" />
-
-				</FrameLayout>
-
-				<TextView
-					android:id="@+id/textViewClassSettings"
-					android:layout_width="0dp"
-					android:layout_height="wrap_content"
-					android:text="@string/profile_action_class_settings"
-					android:textColor="@color/colorBlackText"
-					android:textSize="15sp"
-					app:layout_constraintBottom_toBottomOf="parent"
-					app:layout_constraintEnd_toStartOf="@id/imageViewMoreClassSettings"
-					app:layout_constraintStart_toEndOf="@id/imageViewClassSettings"
-					app:layout_constraintTop_toTopOf="parent" />
-
-				<ImageView
-					android:id="@+id/imageViewMoreClassSettings"
-					android:layout_width="10dp"
-					android:layout_height="12dp"
-					android:layout_marginEnd="14dp"
-					android:contentDescription="@string/app_name"
-					android:tint="@color/colorMoreProfile"
-					app:layout_constraintBottom_toBottomOf="parent"
-					app:layout_constraintEnd_toEndOf="parent"
-					app:layout_constraintTop_toTopOf="parent"
-					app:srcCompat="@drawable/ic_more" />
-
-			</androidx.constraintlayout.widget.ConstraintLayout>
-
-			<View
-				android:layout_width="match_parent"
-				android:layout_height="0.33dp"
-				android:background="@color/colorItemBackgroundProfile" />
-
-			<androidx.constraintlayout.widget.ConstraintLayout
-				android:id="@+id/softwareSettingsLayout"
-				android:layout_width="match_parent"
-				android:layout_height="44.67dp">
-
-				<FrameLayout
-					android:id="@+id/imageViewSoftwareSettings"
-					android:layout_width="48dp"
-					android:layout_height="0dp"
-					app:layout_constraintBottom_toBottomOf="parent"
-					app:layout_constraintStart_toStartOf="parent"
-					app:layout_constraintTop_toTopOf="parent">
-
-					<ImageView
-						android:layout_width="18.67dp"
-						android:layout_height="18dp"
-						android:layout_gravity="center"
-						android:contentDescription="@string/app_name"
-						android:src="@mipmap/ic_software_settings"
-						android:tint="@color/colorBlackText"
-						app:layout_constraintBottom_toBottomOf="parent"
-						app:layout_constraintStart_toStartOf="parent"
-						app:layout_constraintTop_toTopOf="parent" />
-
-				</FrameLayout>
-
-				<TextView
-					android:id="@+id/textViewSoftwareSettings"
-					android:layout_width="0dp"
-					android:layout_height="wrap_content"
-					android:text="@string/profile_action_software_settings"
-					android:textColor="@color/colorBlackText"
-					android:textSize="15sp"
-					app:layout_constraintBottom_toBottomOf="parent"
-					app:layout_constraintEnd_toStartOf="@id/imageViewMoreSoftwareSettings"
-					app:layout_constraintStart_toEndOf="@id/imageViewSoftwareSettings"
-					app:layout_constraintTop_toTopOf="parent" />
-
-				<ImageView
-					android:id="@+id/imageViewMoreSoftwareSettings"
-					android:layout_width="10dp"
-					android:layout_height="12dp"
-					android:layout_marginEnd="14dp"
-					android:contentDescription="@string/app_name"
-					android:tint="@color/colorMoreProfile"
-					app:layout_constraintBottom_toBottomOf="parent"
-					app:layout_constraintEnd_toEndOf="parent"
-					app:layout_constraintTop_toTopOf="parent"
-					app:srcCompat="@drawable/ic_more" />
-
-			</androidx.constraintlayout.widget.ConstraintLayout>
-
-			<View
-				android:layout_width="match_parent"
-				android:layout_height="6dp"
-				android:background="@color/colorDividerProfile" />
-
-			<androidx.constraintlayout.widget.ConstraintLayout
-				android:id="@+id/noticeLayout"
-				android:layout_width="match_parent"
-				android:layout_height="44.67dp">
-
-				<FrameLayout
-					android:id="@+id/imageViewNotice"
-					android:layout_width="48dp"
-					android:layout_height="0dp"
-					app:layout_constraintBottom_toBottomOf="parent"
-					app:layout_constraintStart_toStartOf="parent"
-					app:layout_constraintTop_toTopOf="parent">
-
-					<ImageView
-						android:layout_width="17.67dp"
-						android:layout_height="17dp"
-						android:layout_gravity="center"
-						android:contentDescription="@string/app_name"
-						android:src="@mipmap/ic_notice"
-						android:tint="@color/colorBlackText"
-						app:layout_constraintBottom_toBottomOf="parent"
-						app:layout_constraintStart_toStartOf="parent"
-						app:layout_constraintTop_toTopOf="parent" />
-
-				</FrameLayout>
-
-				<TextView
-					android:id="@+id/textViewNotice"
-					android:layout_width="0dp"
-					android:layout_height="wrap_content"
-					android:text="@string/profile_action_notice"
-					android:textColor="@color/colorBlackText"
-					android:textSize="15sp"
-					app:layout_constraintBottom_toBottomOf="parent"
-					app:layout_constraintEnd_toStartOf="@id/imageViewMoreNotice"
-					app:layout_constraintStart_toEndOf="@id/imageViewNotice"
-					app:layout_constraintTop_toTopOf="parent" />
-
-				<ImageView
-					android:id="@+id/imageViewMoreNotice"
-					android:layout_width="10dp"
-					android:layout_height="12dp"
-					android:layout_marginEnd="14dp"
-					android:contentDescription="@string/app_name"
-					android:tint="@color/colorMoreProfile"
-					app:layout_constraintBottom_toBottomOf="parent"
-					app:layout_constraintEnd_toEndOf="parent"
-					app:layout_constraintTop_toTopOf="parent"
-					app:srcCompat="@drawable/ic_more" />
-
-				<View
-					android:id="@+id/redDotView"
-					android:layout_width="6dp"
-					android:layout_height="6dp"
-					android:layout_marginEnd="5dp"
-					android:background="@drawable/drawable_badge_view"
-					android:contentDescription="@string/app_name"
-					app:layout_constraintBottom_toBottomOf="parent"
-					app:layout_constraintEnd_toStartOf="@id/imageViewMoreNotice"
-					app:layout_constraintTop_toTopOf="parent" />
-
-			</androidx.constraintlayout.widget.ConstraintLayout>
-
-			<View
-				android:layout_width="match_parent"
-				android:layout_height="0.33dp"
-				android:background="@color/colorItemBackgroundProfile" />
-
-			<androidx.constraintlayout.widget.ConstraintLayout
-				android:id="@+id/feedbackLayout"
-				android:layout_width="match_parent"
-				android:layout_height="44.67dp">
-
-				<FrameLayout
-					android:id="@+id/imageViewFeedback"
-					android:layout_width="48dp"
-					android:layout_height="0dp"
-					app:layout_constraintBottom_toBottomOf="parent"
-					app:layout_constraintStart_toStartOf="parent"
-					app:layout_constraintTop_toTopOf="parent">
-
-					<ImageView
-						android:layout_width="16.67dp"
-						android:layout_height="18dp"
-						android:layout_gravity="center"
-						android:contentDescription="@string/app_name"
-						android:src="@mipmap/ic_feedback"
-						android:tint="@color/colorBlackText"
-						app:layout_constraintBottom_toBottomOf="parent"
-						app:layout_constraintStart_toStartOf="parent"
-						app:layout_constraintTop_toTopOf="parent" />
-
-				</FrameLayout>
-
-				<TextView
-					android:id="@+id/textViewFeedback"
-					android:layout_width="0dp"
-					android:layout_height="wrap_content"
-					android:text="@string/profile_action_feedback"
-					android:textColor="@color/colorBlackText"
-					android:textSize="15sp"
-					app:layout_constraintBottom_toBottomOf="parent"
-					app:layout_constraintEnd_toStartOf="@id/imageViewMoreFeedback"
-					app:layout_constraintStart_toEndOf="@id/imageViewFeedback"
-					app:layout_constraintTop_toTopOf="parent" />
-
-				<ImageView
-					android:id="@+id/imageViewMoreFeedback"
-					android:layout_width="10dp"
-					android:layout_height="12dp"
-					android:layout_marginEnd="14dp"
-					android:contentDescription="@string/app_name"
-					android:tint="@color/colorMoreProfile"
-					app:layout_constraintBottom_toBottomOf="parent"
-					app:layout_constraintEnd_toEndOf="parent"
-					app:layout_constraintTop_toTopOf="parent"
-					app:srcCompat="@drawable/ic_more" />
-
-				<View
-					android:id="@+id/feedBackRedDotView"
-					android:layout_width="6dp"
-					android:layout_height="6dp"
-					android:layout_marginEnd="5dp"
-					android:background="@drawable/drawable_badge_view"
-					android:contentDescription="@string/app_name"
-					app:layout_constraintBottom_toBottomOf="parent"
-					app:layout_constraintEnd_toStartOf="@id/imageViewMoreFeedback"
-					app:layout_constraintTop_toTopOf="parent" />
-
-			</androidx.constraintlayout.widget.ConstraintLayout>
-
-			<View
-				android:layout_width="match_parent"
-				android:layout_height="0.33dp"
-				android:background="@color/colorItemBackgroundProfile" />
-
-			<androidx.constraintlayout.widget.ConstraintLayout
-				android:id="@+id/shareWithFriendsLayout"
-				android:layout_width="match_parent"
-				android:layout_height="44.67dp">
-
-				<FrameLayout
-					android:id="@+id/imageViewShareWithFriends"
-					android:layout_width="48dp"
-					android:layout_height="0dp"
-					app:layout_constraintBottom_toBottomOf="parent"
-					app:layout_constraintStart_toStartOf="parent"
-					app:layout_constraintTop_toTopOf="parent">
-
-					<ImageView
-						android:layout_width="18dp"
-						android:layout_height="18dp"
-						android:layout_gravity="center"
-						android:contentDescription="@string/app_name"
-						android:src="@mipmap/ic_share_with_friends"
-						android:tint="@color/colorBlackText"
-						app:layout_constraintBottom_toBottomOf="parent"
-						app:layout_constraintStart_toStartOf="parent"
-						app:layout_constraintTop_toTopOf="parent" />
-
-				</FrameLayout>
-
-				<TextView
-					android:id="@+id/textViewShareWithFriends"
-					android:layout_width="0dp"
-					android:layout_height="wrap_content"
-					android:text="@string/profile_action_share_with_friends"
-					android:textColor="@color/colorBlackText"
-					android:textSize="15sp"
-					app:layout_constraintBottom_toBottomOf="parent"
-					app:layout_constraintEnd_toStartOf="@id/imageViewMoreShareWithFriends"
-					app:layout_constraintStart_toEndOf="@id/imageViewShareWithFriends"
-					app:layout_constraintTop_toTopOf="parent" />
-
-				<ImageView
-					android:id="@+id/imageViewMoreShareWithFriends"
-					android:layout_width="10dp"
-					android:layout_height="12dp"
-					android:layout_marginEnd="14dp"
-					android:contentDescription="@string/app_name"
-					android:tint="@color/colorMoreProfile"
-					app:layout_constraintBottom_toBottomOf="parent"
-					app:layout_constraintEnd_toEndOf="parent"
-					app:layout_constraintTop_toTopOf="parent"
-					app:srcCompat="@drawable/ic_more" />
-
-			</androidx.constraintlayout.widget.ConstraintLayout>
-
-			<View
-				android:layout_width="match_parent"
-				android:layout_height="6dp"
-				android:background="@color/colorDividerProfile" />
-
-		</LinearLayout>
-
-	</androidx.core.widget.NestedScrollView>
+    <data>
+
+        <variable
+            name="studentInfo"
+            type="com.weilylab.xhuschedule.model.StudentInfo" />
+    </data>
+
+    <androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorWhiteBackground"
+        android:orientation="vertical"
+        tools:context=".ui.fragment.ProfileFragment">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/profileLayout"
+                android:layout_width="match_parent"
+                android:layout_height="96dp">
+
+                <vip.mystery0.circleimageview.CircleImageView
+                    android:id="@+id/studentProfileImage"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_marginStart="16dp"
+                    android:src="@mipmap/share_launcher"
+                    app:draw_additional="false"
+                    app:draw_border="false"
+                    app:draw_circle="true"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/studentNameTextView"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="27dp"
+                    android:layout_marginBottom="3dp"
+                    android:text="@{studentInfo.name}"
+                    android:textColor="@color/colorBlackText"
+                    android:textSize="17sp"
+                    app:layout_constraintBottom_toTopOf="@+id/guideline"
+                    app:layout_constraintEnd_toStartOf="@+id/imageViewHeaderMore"
+                    app:layout_constraintStart_toEndOf="@id/studentProfileImage" />
+
+                <TextView
+                    android:id="@+id/studentClassNameTextView"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="27dp"
+                    android:layout_marginTop="3dp"
+                    android:text="@{studentInfo.classname}"
+                    android:textColor="@color/colorGrayText"
+                    android:textSize="13.67sp"
+                    app:layout_constraintEnd_toStartOf="@+id/imageViewHeaderMore"
+                    app:layout_constraintStart_toEndOf="@id/studentProfileImage"
+                    app:layout_constraintTop_toTopOf="@+id/guideline" />
+
+                <ImageView
+                    android:id="@+id/imageViewHeaderMore"
+                    android:layout_width="10dp"
+                    android:layout_height="12dp"
+                    android:layout_marginEnd="14dp"
+                    android:contentDescription="@string/app_name"
+                    android:tint="@color/colorMoreProfile"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/ic_more" />
+
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/guideline"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    app:layout_constraintGuide_percent="0.5" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="6dp"
+                android:background="@color/colorDividerProfile" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/queryTestLayout"
+                android:layout_width="match_parent"
+                android:layout_height="44.67dp">
+
+                <FrameLayout
+                    android:id="@+id/imageLayoutQueryTest"
+                    android:layout_width="48dp"
+                    android:layout_height="0dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <ImageView
+                        android:id="@+id/imageViewQueryTest"
+                        android:layout_width="16.33dp"
+                        android:layout_height="18dp"
+                        android:layout_gravity="center"
+                        android:contentDescription="@string/app_name"
+                        android:src="@mipmap/ic_query_test"
+                        android:tint="@color/colorBlackText"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                </FrameLayout>
+
+                <TextView
+                    android:id="@+id/textViewQueryTest"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/profile_action_query_test"
+                    android:textColor="@color/colorBlackText"
+                    android:textSize="15sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/imageViewMoreQueryTest"
+                    app:layout_constraintStart_toEndOf="@id/imageLayoutQueryTest"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:id="@+id/imageViewMoreQueryTest"
+                    android:layout_width="10dp"
+                    android:layout_height="12dp"
+                    android:layout_marginEnd="14dp"
+                    android:contentDescription="@string/app_name"
+                    android:tint="@color/colorMoreProfile"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/ic_more" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.33dp"
+                android:background="@color/colorItemBackgroundProfile" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/queryScoreLayout"
+                android:layout_width="match_parent"
+                android:layout_height="44.67dp">
+
+                <FrameLayout
+                    android:id="@+id/imageViewQueryScore"
+                    android:layout_width="48dp"
+                    android:layout_height="0dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <ImageView
+                        android:layout_width="16.67dp"
+                        android:layout_height="18dp"
+                        android:layout_gravity="center"
+                        android:contentDescription="@string/app_name"
+                        android:src="@mipmap/ic_query_score"
+                        android:tint="@color/colorBlackText"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                </FrameLayout>
+
+                <TextView
+                    android:id="@+id/textViewQueryScore"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/profile_action_query_score"
+                    android:textColor="@color/colorBlackText"
+                    android:textSize="15sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/imageViewMoreQueryScore"
+                    app:layout_constraintStart_toEndOf="@id/imageViewQueryScore"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:id="@+id/imageViewMoreQueryScore"
+                    android:layout_width="10dp"
+                    android:layout_height="12dp"
+                    android:layout_marginEnd="14dp"
+                    android:contentDescription="@string/app_name"
+                    android:tint="@color/colorMoreProfile"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/ic_more" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.33dp"
+                android:background="@color/colorItemBackgroundProfile" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/queryClassroomLayout"
+                android:layout_width="match_parent"
+                android:layout_height="44.67dp">
+
+                <FrameLayout
+                    android:id="@+id/imageLayoutQueryClassroom"
+                    android:layout_width="48dp"
+                    android:layout_height="0dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <ImageView
+                        android:id="@+id/imageViewQueryClassroom"
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
+                        android:layout_gravity="center"
+                        android:contentDescription="@string/app_name"
+                        android:src="@drawable/ic_query_classroom"
+                        android:tint="@color/colorBlackText"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                </FrameLayout>
+
+                <TextView
+                    android:id="@+id/textViewQueryClassroom"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/profile_action_query_classroom"
+                    android:textColor="@color/colorBlackText"
+                    android:textSize="15sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/imageViewMoreQueryClassroom"
+                    app:layout_constraintStart_toEndOf="@id/imageLayoutQueryClassroom"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:id="@+id/imageViewMoreQueryClassroom"
+                    android:layout_width="10dp"
+                    android:layout_height="12dp"
+                    android:layout_marginEnd="14dp"
+                    android:contentDescription="@string/app_name"
+                    android:tint="@color/colorMoreProfile"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/ic_more" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="6dp"
+                android:background="@color/colorDividerProfile" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/accountSettingsLayout"
+                android:layout_width="match_parent"
+                android:layout_height="44.67dp">
+
+                <FrameLayout
+                    android:id="@+id/imageViewAccountSettings"
+                    android:layout_width="48dp"
+                    android:layout_height="0dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <ImageView
+                        android:layout_width="16.67dp"
+                        android:layout_height="16.33dp"
+                        android:layout_gravity="center"
+                        android:contentDescription="@string/app_name"
+                        android:src="@mipmap/ic_account_settings"
+                        android:tint="@color/colorBlackText"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                </FrameLayout>
+
+                <TextView
+                    android:id="@+id/textViewAccountSettings"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/profile_action_account_settings"
+                    android:textColor="@color/colorBlackText"
+                    android:textSize="15sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/imageViewMoreAccountSettings"
+                    app:layout_constraintStart_toEndOf="@id/imageViewAccountSettings"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:id="@+id/imageViewMoreAccountSettings"
+                    android:layout_width="10dp"
+                    android:layout_height="12dp"
+                    android:layout_marginEnd="14dp"
+                    android:contentDescription="@string/app_name"
+                    android:tint="@color/colorMoreProfile"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/ic_more" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.33dp"
+                android:background="@color/colorItemBackgroundProfile" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/classSettingsLayout"
+                android:layout_width="match_parent"
+                android:layout_height="44.67dp">
+
+                <FrameLayout
+                    android:id="@+id/imageViewClassSettings"
+                    android:layout_width="48dp"
+                    android:layout_height="0dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <ImageView
+                        android:layout_width="16.67dp"
+                        android:layout_height="17.67dp"
+                        android:layout_gravity="center"
+                        android:contentDescription="@string/app_name"
+                        android:src="@mipmap/ic_class_settings"
+                        android:tint="@color/colorBlackText"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                </FrameLayout>
+
+                <TextView
+                    android:id="@+id/textViewClassSettings"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/profile_action_class_settings"
+                    android:textColor="@color/colorBlackText"
+                    android:textSize="15sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/imageViewMoreClassSettings"
+                    app:layout_constraintStart_toEndOf="@id/imageViewClassSettings"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:id="@+id/imageViewMoreClassSettings"
+                    android:layout_width="10dp"
+                    android:layout_height="12dp"
+                    android:layout_marginEnd="14dp"
+                    android:contentDescription="@string/app_name"
+                    android:tint="@color/colorMoreProfile"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/ic_more" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.33dp"
+                android:background="@color/colorItemBackgroundProfile" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/softwareSettingsLayout"
+                android:layout_width="match_parent"
+                android:layout_height="44.67dp">
+
+                <FrameLayout
+                    android:id="@+id/imageViewSoftwareSettings"
+                    android:layout_width="48dp"
+                    android:layout_height="0dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <ImageView
+                        android:layout_width="18.67dp"
+                        android:layout_height="18dp"
+                        android:layout_gravity="center"
+                        android:contentDescription="@string/app_name"
+                        android:src="@mipmap/ic_software_settings"
+                        android:tint="@color/colorBlackText"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                </FrameLayout>
+
+                <TextView
+                    android:id="@+id/textViewSoftwareSettings"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/profile_action_software_settings"
+                    android:textColor="@color/colorBlackText"
+                    android:textSize="15sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/imageViewMoreSoftwareSettings"
+                    app:layout_constraintStart_toEndOf="@id/imageViewSoftwareSettings"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:id="@+id/imageViewMoreSoftwareSettings"
+                    android:layout_width="10dp"
+                    android:layout_height="12dp"
+                    android:layout_marginEnd="14dp"
+                    android:contentDescription="@string/app_name"
+                    android:tint="@color/colorMoreProfile"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/ic_more" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="6dp"
+                android:background="@color/colorDividerProfile" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/noticeLayout"
+                android:layout_width="match_parent"
+                android:layout_height="44.67dp">
+
+                <FrameLayout
+                    android:id="@+id/imageViewNotice"
+                    android:layout_width="48dp"
+                    android:layout_height="0dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <ImageView
+                        android:layout_width="17.67dp"
+                        android:layout_height="17dp"
+                        android:layout_gravity="center"
+                        android:contentDescription="@string/app_name"
+                        android:src="@mipmap/ic_notice"
+                        android:tint="@color/colorBlackText"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                </FrameLayout>
+
+                <TextView
+                    android:id="@+id/textViewNotice"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/profile_action_notice"
+                    android:textColor="@color/colorBlackText"
+                    android:textSize="15sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/imageViewMoreNotice"
+                    app:layout_constraintStart_toEndOf="@id/imageViewNotice"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:id="@+id/imageViewMoreNotice"
+                    android:layout_width="10dp"
+                    android:layout_height="12dp"
+                    android:layout_marginEnd="14dp"
+                    android:contentDescription="@string/app_name"
+                    android:tint="@color/colorMoreProfile"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/ic_more" />
+
+                <View
+                    android:id="@+id/redDotView"
+                    android:layout_width="6dp"
+                    android:layout_height="6dp"
+                    android:layout_marginEnd="5dp"
+                    android:background="@drawable/drawable_badge_view"
+                    android:contentDescription="@string/app_name"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/imageViewMoreNotice"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.33dp"
+                android:background="@color/colorItemBackgroundProfile"
+                android:visibility="gone" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/feedbackLayout"
+                android:layout_width="match_parent"
+                android:layout_height="44.67dp"
+                android:visibility="gone">
+
+                <FrameLayout
+                    android:id="@+id/imageViewFeedback"
+                    android:layout_width="48dp"
+                    android:layout_height="0dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <ImageView
+                        android:layout_width="16.67dp"
+                        android:layout_height="18dp"
+                        android:layout_gravity="center"
+                        android:contentDescription="@string/app_name"
+                        android:src="@mipmap/ic_feedback"
+                        android:tint="@color/colorBlackText"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                </FrameLayout>
+
+                <TextView
+                    android:id="@+id/textViewFeedback"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/profile_action_feedback"
+                    android:textColor="@color/colorBlackText"
+                    android:textSize="15sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/imageViewMoreFeedback"
+                    app:layout_constraintStart_toEndOf="@id/imageViewFeedback"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:id="@+id/imageViewMoreFeedback"
+                    android:layout_width="10dp"
+                    android:layout_height="12dp"
+                    android:layout_marginEnd="14dp"
+                    android:contentDescription="@string/app_name"
+                    android:tint="@color/colorMoreProfile"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/ic_more" />
+
+                <View
+                    android:id="@+id/feedBackRedDotView"
+                    android:layout_width="6dp"
+                    android:layout_height="6dp"
+                    android:layout_marginEnd="5dp"
+                    android:background="@drawable/drawable_badge_view"
+                    android:contentDescription="@string/app_name"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/imageViewMoreFeedback"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.33dp"
+                android:background="@color/colorItemBackgroundProfile" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/shareWithFriendsLayout"
+                android:layout_width="match_parent"
+                android:layout_height="44.67dp">
+
+                <FrameLayout
+                    android:id="@+id/imageViewShareWithFriends"
+                    android:layout_width="48dp"
+                    android:layout_height="0dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <ImageView
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
+                        android:layout_gravity="center"
+                        android:contentDescription="@string/app_name"
+                        android:src="@mipmap/ic_share_with_friends"
+                        android:tint="@color/colorBlackText"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                </FrameLayout>
+
+                <TextView
+                    android:id="@+id/textViewShareWithFriends"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/profile_action_share_with_friends"
+                    android:textColor="@color/colorBlackText"
+                    android:textSize="15sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/imageViewMoreShareWithFriends"
+                    app:layout_constraintStart_toEndOf="@id/imageViewShareWithFriends"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:id="@+id/imageViewMoreShareWithFriends"
+                    android:layout_width="10dp"
+                    android:layout_height="12dp"
+                    android:layout_marginEnd="14dp"
+                    android:contentDescription="@string/app_name"
+                    android:tint="@color/colorMoreProfile"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/ic_more" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="6dp"
+                android:background="@color/colorDividerProfile" />
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
 
 </layout>
