@@ -66,7 +66,7 @@ class StudentRepository : KoinComponent {
 		val publicKey = publicKeyResponse.data
 		var secretKey = student.key
 		var plainPassword: String = student.password
-		if (secretKey == null) {
+		if (secretKey.isNullOrBlank()) {
 			secretKey = generateSeed()
 		} else {
 			//如果密钥不为空，说明是加密数据，解密出原始信息
