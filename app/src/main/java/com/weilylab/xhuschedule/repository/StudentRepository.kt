@@ -21,6 +21,7 @@ import com.weilylab.xhuschedule.model.StudentInfo
 import com.weilylab.xhuschedule.repository.local.dao.StudentDao
 import com.weilylab.xhuschedule.utils.RSAUtil
 import com.weilylab.xhuschedule.utils.aesDecrypt
+import com.weilylab.xhuschedule.utils.aesEncrypt
 import com.weilylab.xhuschedule.utils.generateKey
 import org.koin.core.KoinComponent
 import org.koin.core.inject
@@ -79,7 +80,7 @@ class StudentRepository : KoinComponent {
 			CookieManger.putCookie(student.username, Constants.SERVER_HOST, loginResponse.data.cookie)
 			feedBackRepository.registerFeedBackToken(student, loginResponse.data.fbToken)
 			student.key = secretKey
-			student.password = aesDecrypt(plainPassword, secretKey)
+			student.password = aesEncrypt(plainPassword, secretKey)
 			studentDao.updateStudent(student)
 		} else {
 			throw Exception(loginResponse.message)
