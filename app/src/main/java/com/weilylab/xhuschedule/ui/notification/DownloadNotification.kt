@@ -31,7 +31,7 @@ object DownloadNotification {
 		notificationBuilder = NotificationCompat.Builder(context, Constants.NOTIFICATION_CHANNEL_ID_DOWNLOAD)
 				.setSound(null)
 				.setVibrate(null)
-				.setSmallIcon(R.drawable.ic_file_download_black_24dp)
+				.setSmallIcon(R.drawable.ic_file_download_white_24dp)
 				.setContentTitle(context.getString(R.string.download_notification_title, fileName))
 				.setOngoing(true)
 				.setAutoCancel(true)
