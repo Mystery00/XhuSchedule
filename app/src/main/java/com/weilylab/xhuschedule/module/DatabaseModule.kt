@@ -38,7 +38,7 @@ private val MIGRATION_2_3: Migration = object : Migration(2, 3) {
 private val MIGRATION_3_4: Migration = object : Migration(3, 4) {
 	override fun migrate(database: SupportSQLiteDatabase) {
 		database.execSQL("alter table tb_student rename to _temp_tb_student")
-		database.execSQL("CREATE TABLE IF NOT EXISTS `tb_student` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `username` TEXT NOT NULL, `password` TEXT NOT NULL, `is_main` INTEGER NOT NULL, `student_name` TEXT NOT NULL, `key` TEXT, `iv` TEXT NOT NULL)")
+		database.execSQL("CREATE TABLE IF NOT EXISTS `tb_student` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `username` TEXT NOT NULL, `password` TEXT NOT NULL, `is_main` INTEGER NOT NULL, `student_name` TEXT NOT NULL, `key` TEXT)")
 		database.execSQL("insert into tb_student select *,' ' from _temp_tb_student")
 		database.execSQL("drop table _temp_tb_student")
 	}

@@ -32,7 +32,4 @@ class Student {
 
 	@ColumnInfo(name = "key")
 	var key: String? = null
-
-	@ColumnInfo(name = "iv")
-	lateinit var iv: String
 }

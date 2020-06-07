@@ -19,10 +19,9 @@ import com.weilylab.xhuschedule.model.LoginParam
 import com.weilylab.xhuschedule.model.Student
 import com.weilylab.xhuschedule.model.StudentInfo
 import com.weilylab.xhuschedule.repository.local.dao.StudentDao
+import com.weilylab.xhuschedule.utils.AESUtils
 import com.weilylab.xhuschedule.utils.RSAUtil
-import com.weilylab.xhuschedule.utils.aesDecrypt
-import com.weilylab.xhuschedule.utils.aesEncrypt
-import com.weilylab.xhuschedule.utils.generateKey
+import com.weilylab.xhuschedule.utils.generateSeed
 import org.koin.core.KoinComponent
 import org.koin.core.inject
 import vip.mystery0.tools.ResourceException
@@ -68,10 +67,10 @@ class StudentRepository : KoinComponent {
 		var secretKey = student.key
 		var plainPassword: String = student.password
 		if (secretKey == null) {
-			secretKey = generateKey()
+			secretKey = generateSeed()
 		} else {
 			//如果密钥不为空，说明是加密数据，解密出原始信息
-			plainPassword = aesDecrypt(plainPassword, secretKey, student.iv)
+			plainPassword = AESUtils.aesDecrypt(secretKey, plainPassword)
 		}
 		val encryptPassword = RSAUtil.encryptString(plainPassword, publicKey)
 		val loginResponse = xhuScheduleCloudAPI.login(LoginParam(student.username, encryptPassword, publicKey))
@@ -80,9 +79,7 @@ class StudentRepository : KoinComponent {
 			CookieManger.putCookie(student.username, Constants.SERVER_HOST, loginResponse.data.cookie)
 			feedBackRepository.registerFeedBackToken(student, loginResponse.data.fbToken)
 			student.key = secretKey
-			val pair = aesEncrypt(plainPassword, secretKey)
-			student.password = pair.first
-			student.iv = pair.second
+			student.password = AESUtils.aesEncrypt(secretKey, plainPassword)
 			studentDao.updateStudent(student)
 		} else {
 			throw Exception(loginResponse.message)
