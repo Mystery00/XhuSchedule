@@ -9,10 +9,12 @@
 
 <resources>
     <string-array name="update_log">
-        <item>新增：查询空闲教室</item>
+        <item>修复：较为频繁出现的各种异常情况</item>
         <item> </item>
-        <item>修复：部分情况下会一直请求后台接口的bug</item>
-        <item>修复：同一设备启动时会被标记为不同设备的bug</item>
-        <item>修复：查询考试失败时不显示缓存数据，以免造成误解</item>
+        <item>优化：重写线程同步逻辑，优化使用体验</item>
+        <item>优化：保护用户账号密码等信息</item>
+        <item> </item>
+        <item>修改：因为团队成员工作、学习原因，暂时禁用Android端意见反馈功能，如果出现问题请在群里@开发者</item>
+        <item>修改：因为桌面小部件使用频率较低并且存在很多问题，暂时禁用桌面小部件</item>
     </string-array>
 </resources>
