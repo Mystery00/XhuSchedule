@@ -56,7 +56,7 @@ class CustomCourseViewModel : ViewModel(), KoinComponent {
 						student?.username = info.name
 					}
 				} catch (e: Exception) {
-					Logs.wm(e)
+					Logs.w(e)
 				}
 			}
 			if (infoMap.isNullOrEmpty()) {

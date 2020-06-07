@@ -66,7 +66,7 @@ class AccountSettingsFragment : XhuBasePreferenceFragment(R.xml.preference_accou
 
 			override fun error(e: Throwable?) {
 				super.error(e)
-				Logs.wm(e)
+				Logs.w(e)
 			}
 		})
 	}

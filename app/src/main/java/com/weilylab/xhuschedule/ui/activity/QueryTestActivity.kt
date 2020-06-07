@@ -54,7 +54,7 @@ class QueryTestActivity : XhuBaseActivity(R.layout.activity_query_test) {
 		}
 
 		override fun error(e: Throwable?) {
-			Logs.wm(e)
+			Logs.w(e)
 			hideDialog()
 			hideNoDataLayout()
 			toastLong(e)

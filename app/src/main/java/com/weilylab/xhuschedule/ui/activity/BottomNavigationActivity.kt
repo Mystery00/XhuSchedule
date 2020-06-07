@@ -104,7 +104,7 @@ class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_naviga
 
 		override fun error(e: Throwable?) {
 			super.error(e)
-			Logs.wm(e)
+			Logs.w(e)
 			toastLong(e)
 			hideDialog()
 		}
@@ -122,7 +122,7 @@ class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_naviga
 		}
 
 		override fun error(e: Throwable?) {
-			Logs.wm(e)
+			Logs.w(e)
 			toastLong(e)
 			cancelLoading()
 		}
@@ -146,7 +146,7 @@ class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_naviga
 		}
 
 		override fun error(e: Throwable?) {
-			Logs.wm(e)
+			Logs.w(e)
 			toastLong(e)
 			cancelLoading()
 		}

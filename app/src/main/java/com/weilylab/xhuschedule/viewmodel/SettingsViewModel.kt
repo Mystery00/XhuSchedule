@@ -87,7 +87,7 @@ class SettingsViewModel : ViewModel(), KoinComponent {
 						val info = studentRepository.queryStudentInfo(it)
 						infoList.add(info)
 					} catch (e: Exception) {
-						Logs.wm(e)
+						Logs.w(e)
 					}
 				}
 				if (infoList.isNullOrEmpty()) {

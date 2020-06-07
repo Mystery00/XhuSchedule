@@ -56,7 +56,7 @@ class FeedbackActivity : XhuBaseActivity(R.layout.activity_feedback) {
 		}
 
 		override fun error(e: Throwable?) {
-			Logs.wm(e)
+			Logs.w(e)
 			hideRefresh()
 			toastLong(e)
 			if (e is ResourceException && feedBackViewModel.mainStudent.value == null) {

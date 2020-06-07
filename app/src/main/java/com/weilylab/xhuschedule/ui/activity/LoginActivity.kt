@@ -37,7 +37,7 @@ class LoginActivity : XhuBaseActivity(R.layout.activity_login, false) {
 		}
 
 		override fun error(e: Throwable?) {
-			Logs.wm(e)
+			Logs.w(e)
 			hideDialog()
 			toastLong(e)
 		}

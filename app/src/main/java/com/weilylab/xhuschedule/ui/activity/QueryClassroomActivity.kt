@@ -51,7 +51,7 @@ class QueryClassroomActivity : XhuBaseActivity(R.layout.activity_query_class_roo
 		}
 
 		override fun error(e: Throwable?) {
-			Logs.wm(e)
+			Logs.w(e)
 			dismissLoading()
 			toastLong(e)
 		}

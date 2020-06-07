@@ -78,7 +78,7 @@ class ProfileFragment : BaseBottomNavigationFragment<FragmentProfileBinding>(R.l
 
 			override fun error(e: Throwable?) {
 				super.error(e)
-				Logs.wm(e)
+				Logs.w(e)
 				binding.redDotView.visibility = View.GONE
 			}
 
@@ -95,7 +95,7 @@ class ProfileFragment : BaseBottomNavigationFragment<FragmentProfileBinding>(R.l
 
 			override fun error(e: Throwable?) {
 				super.error(e)
-				Logs.wm(e)
+				Logs.w(e)
 				binding.feedBackRedDotView.visibility = View.GONE
 			}
 

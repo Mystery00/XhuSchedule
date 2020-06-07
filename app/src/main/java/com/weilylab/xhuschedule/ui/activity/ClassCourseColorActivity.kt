@@ -56,7 +56,7 @@ class ClassCourseColorActivity : XhuBaseActivity(R.layout.activity_class_course_
 		}
 
 		override fun error(e: Throwable?) {
-			Logs.wm(e)
+			Logs.w(e)
 			hideDialog()
 			hideNoDataLayout()
 			e.toastLong(this@ClassCourseColorActivity)

@@ -51,7 +51,7 @@ class QueryExpScoreViewModel : ViewModel(), KoinComponent {
 					val info = studentRepository.queryStudentInfo(it)
 					map[it] = info
 				} catch (e: Exception) {
-					Logs.wm(e)
+					Logs.w(e)
 				}
 			}
 			studentInfoList.postValue(map)
