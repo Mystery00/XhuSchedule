@@ -113,7 +113,6 @@ class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_naviga
 	private val courseListObserver = object : DataObserver<List<Schedule>> {
 		override fun contentNoEmpty(data: List<Schedule>) {
 			weekView.data(data).showView()
-			toast(R.string.hint_course_sync_done)
 			cancelLoading()
 		}
 
@@ -239,6 +238,7 @@ class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_naviga
 		bottomNavigationViewModel.week.observe(this, weekObserver)
 		bottomNavigationViewModel.title.observe(this, titleObserver)
 		bottomNavigationViewModel.showCourse.observe(this, showCourseObserver)
+		bottomNavigationViewModel.toastMessage.observe(this, Observer { toast(it) })
 	}
 
 	override fun monitor() {

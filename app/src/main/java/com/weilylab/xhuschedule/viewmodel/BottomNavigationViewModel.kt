@@ -77,6 +77,9 @@ class BottomNavigationViewModel : ViewModel(), KoinComponent {
 	//顶部标题
 	val title by lazy { MutableLiveData<Pair<Class<*>, String>>() }
 
+	//Toast信息
+	val toastMessage by lazy { MutableLiveData<Int>() }
+
 	fun init() {
 		launch(studentList) {
 			studentList.loading()
@@ -150,6 +153,7 @@ class BottomNavigationViewModel : ViewModel(), KoinComponent {
 			val courses = bottomNavigationRepository.queryCourses(mainStudent, fromCache = false, throwError = throwError)
 			courseList.content(courses)
 		}
+		toastMessage.postValue(R.string.hint_course_sync_done)
 		ConfigurationUtil.lastUpdateDate = Calendar.getInstance().toDateString()
 	}
 
