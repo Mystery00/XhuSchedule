@@ -112,6 +112,9 @@ class BottomNavigationViewModel : ViewModel(), KoinComponent {
 				} else {
 					courseList.content(courses)
 				}
+				//处理今日课程
+				val todayCourse = courseRepository.getTodayCourse(courses)
+				todayCourseList.postValue(todayCourse)
 			}
 			//查询自定义事项
 			val today = customThingRepository.getToday()
