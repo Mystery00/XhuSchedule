@@ -42,18 +42,21 @@ class CustomCourseViewModel : ViewModel(), KoinComponent {
 	fun init() {
 		customCourseList.loading()
 		launch(customCourseList) {
-			if (studentList.value == null) {
-				studentList.postValue(studentRepository.queryAllStudentList())
+			var studentArray = studentList.value
+			if (studentArray.isNullOrEmpty()) {
+				val list = studentRepository.queryAllStudentList()
+				studentList.postValue(list)
+				studentArray = list
 			}
 			var student: Student? = null
 			val infoMap = HashMap<Student, StudentInfo?>()
-			studentList.value?.forEach {
+			studentArray.forEach {
 				try {
 					val info = studentRepository.queryStudentInfo(it)
 					infoMap[it] = info
 					if (it.isMain) {
 						student = it
-						student?.username = info.name
+						student?.studentName = info.name
 					}
 				} catch (e: Exception) {
 					Logs.w(e)
