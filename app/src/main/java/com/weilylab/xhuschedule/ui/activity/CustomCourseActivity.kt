@@ -123,6 +123,7 @@ class CustomCourseActivity : XhuBaseActivity(R.layout.activity_custom_course), K
 		}
 
 		override fun empty() {
+			toast(R.string.hint_data_null)
 			hideRefresh()
 			showNoDataLayout()
 		}

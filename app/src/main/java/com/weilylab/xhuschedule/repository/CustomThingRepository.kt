@@ -49,6 +49,9 @@ class CustomThingRepository : KoinComponent {
 				userAPI.getUserData(student.username, key)
 			}
 			if (response.isSuccessful) {
+				if (response.value.isBlank()) {
+					return emptyList()
+				}
 				val courseList = response.value.fromJson<SyncCustomThing>().list
 				val savedList = customThingDao.queryAllThings()
 				savedList.forEach { thing -> delete(thing) }

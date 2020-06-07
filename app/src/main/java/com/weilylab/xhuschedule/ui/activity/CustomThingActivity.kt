@@ -81,6 +81,7 @@ class CustomThingActivity : XhuBaseActivity(R.layout.activity_custom_thing) {
 		}
 
 		override fun empty() {
+			toast(R.string.hint_data_null)
 			hideRefresh()
 			showNoDataLayout()
 		}

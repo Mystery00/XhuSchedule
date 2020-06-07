@@ -52,6 +52,9 @@ class CustomCourseRepository : KoinComponent {
 				userAPI.getUserData(student.username, key)
 			}
 			if (response.isSuccessful) {
+				if (response.value.isBlank()) {
+					return emptyList()
+				}
 				val courseList = response.value.fromJson<SyncCustomCourse>().list
 				val savedList = courseDao.queryCustomCourseByStudent(student.username)
 				savedList.forEach { course -> delete(course) }
