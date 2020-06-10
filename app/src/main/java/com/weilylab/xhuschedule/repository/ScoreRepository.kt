@@ -38,6 +38,7 @@ class ScoreRepository : KoinComponent {
 			it.year = year
 			it.term = term
 			it.failed = false
+			if (it.coursetype == null) it.coursetype = ""
 			scoreDao.saveClassScore(it)
 		}
 		response.failScores.forEach {
@@ -45,6 +46,7 @@ class ScoreRepository : KoinComponent {
 			it.year = year
 			it.term = term
 			it.failed = true
+			if (it.coursetype == null) it.coursetype = ""
 			scoreDao.saveClassScore(it)
 		}
 		val list = ArrayList<ClassScore>(response.scores.size + response.failScores.size)

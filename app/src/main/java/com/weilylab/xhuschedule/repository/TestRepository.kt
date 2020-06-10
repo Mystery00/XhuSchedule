@@ -28,6 +28,7 @@ class TestRepository : KoinComponent {
 			testAPI.getTests(student.username)
 		}.check()
 		response.tests.forEach {
+			it.studentID = student.username
 			testDao.insert(it)
 		}
 		return response.tests to response.html
