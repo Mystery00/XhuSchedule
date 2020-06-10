@@ -27,7 +27,7 @@ class ClassScore {
 	var id = 0
 
 	@ColumnInfo(name = "score_course_type")
-	var coursetype: String? = null
+	lateinit var coursetype: String
 
 	@ColumnInfo(name = "score_no")
 	lateinit var no: String
