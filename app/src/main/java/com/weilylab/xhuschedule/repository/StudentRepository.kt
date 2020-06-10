@@ -45,9 +45,7 @@ class StudentRepository : KoinComponent {
 			throw ResourceException(R.string.hint_network_error)
 		}
 		doLogin(student)
-		val info = queryStudentInfo(student, false)
-		student.studentName = info.name
-		studentDao.updateStudent(student)
+		queryStudentInfo(student, false)
 		return student
 	}
 
@@ -81,6 +79,10 @@ class StudentRepository : KoinComponent {
 			feedBackRepository.registerFeedBackToken(student, loginResponse.data.fbToken)
 			student.key = secretKey
 			student.password = AESUtils.aesEncrypt(secretKey, plainPassword)
+			if (student.id == 0) {
+				val save = studentDao.queryStudentByUsername(student.username)
+				student.id = save?.id ?: 0
+			}
 			studentDao.updateStudent(student)
 		} else {
 			throw Exception(loginResponse.message)
@@ -91,6 +93,7 @@ class StudentRepository : KoinComponent {
 		if (fromCache) {
 			val info = studentDao.queryStudentInfoByUsername(student.username)
 			if (info != null) {
+				student.studentName = info.name
 				return info
 			}
 		}
@@ -98,6 +101,10 @@ class StudentRepository : KoinComponent {
 	}
 
 	private suspend fun queryStudentInfo(student: Student, repeatTime: Int = 0): StudentInfo {
+		if (student.id == 0) {
+			val save = studentDao.queryStudentByUsername(student.username)
+			student.id = save?.id ?: 0
+		}
 		if (repeatTime > Constants.API_RETRY_TIME) {
 			throw ResourceException(R.string.hint_do_too_many)
 		}
@@ -140,6 +147,12 @@ class StudentRepository : KoinComponent {
 	suspend fun queryMainStudent(): Student? = studentDao.queryMainStudent()
 
 	suspend fun updateStudentList(updateList: List<Student>) {
-		updateList.forEach { studentDao.updateStudent(it) }
+		updateList.forEach {
+			if (it.id == 0) {
+				val save = studentDao.queryStudentByUsername(it.username)
+				it.id = save?.id ?: 0
+			}
+			studentDao.updateStudent(it)
+		}
 	}
 }
