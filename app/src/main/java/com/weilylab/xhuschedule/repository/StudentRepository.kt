@@ -47,6 +47,7 @@ class StudentRepository : KoinComponent {
 		doLogin(student)
 		val info = queryStudentInfo(student, false)
 		student.studentName = info.name
+		studentDao.updateStudent(student)
 		return student
 	}
 
