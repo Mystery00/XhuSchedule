@@ -37,7 +37,7 @@ class WebViewActivity : XhuBaseActivity(R.layout.activity_web_view) {
 
 	override fun initData() {
 		super.initData()
-		val html = intent.getStringExtra("html")
+		val html = intent.getStringExtra("html")!!
 		val webSettings = webView.settings
 		webSettings.javaScriptEnabled = false
 		webSettings.loadWithOverviewMode = true
