@@ -10,7 +10,6 @@
 package com.weilylab.xhuschedule.repository
 
 import com.weilylab.xhuschedule.R
-import com.weilylab.xhuschedule.api.UserAPI
 import com.weilylab.xhuschedule.api.XhuScheduleCloudAPI
 import com.weilylab.xhuschedule.constant.Constants
 import com.weilylab.xhuschedule.constant.ResponseCodeConstants
@@ -32,12 +31,11 @@ class StudentRepository : KoinComponent {
 
 	private val feedBackRepository: FeedBackRepository by inject()
 
-	private val userAPI: UserAPI by inject()
 	private val xhuScheduleCloudAPI: XhuScheduleCloudAPI by inject()
 
 	suspend fun login(student: Student): Student {
 		val studentList = studentDao.queryAllStudentList()
-		val loggedStudent = studentList.findLast { logged -> logged.username == student.username }
+		val loggedStudent = studentList.find { logged -> logged.username == student.username }
 		if (loggedStudent != null) {
 			throw ResourceException(R.string.hint_student_logged)
 		}
@@ -45,7 +43,7 @@ class StudentRepository : KoinComponent {
 			throw ResourceException(R.string.hint_network_error)
 		}
 		doLogin(student)
-		queryStudentInfo(student, false)
+		queryStudentInfo(student, fromCache = false)
 		return student
 	}
 

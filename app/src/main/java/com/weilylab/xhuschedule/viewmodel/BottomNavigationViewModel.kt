@@ -93,7 +93,7 @@ class BottomNavigationViewModel : ViewModel(), KoinComponent {
 			//查询主用户信息
 			val mainStudent = list.find { it.isMain }
 					?: throw ResourceException(R.string.hint_null_student)
-			val info = studentRepository.queryStudentInfo(mainStudent, nowString == ConfigurationUtil.lastUpdateDate)
+			val info = studentRepository.queryStudentInfo(mainStudent, fromCache = false)
 			studentInfo.postValue(info)
 
 			val enableMultiUserMode = withContext(Dispatchers.IO) { ConfigurationUtil.isEnableMultiUserMode }
