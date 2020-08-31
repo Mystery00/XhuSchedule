@@ -11,7 +11,7 @@ package com.weilylab.xhuschedule.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.weilylab.xhuschedule.api.ClassRoomAPI
+import com.weilylab.xhuschedule.api.XhuScheduleCloudAPI
 import com.weilylab.xhuschedule.model.Classroom
 import com.weilylab.xhuschedule.model.Student
 import com.weilylab.xhuschedule.module.redoAfterLogin
@@ -21,7 +21,7 @@ import org.koin.core.inject
 import vip.mystery0.rx.*
 
 class QueryClassroomViewModel : ViewModel(), KoinComponent {
-	private val classRoomAPI: ClassRoomAPI by inject()
+	private val xhuScheduleCloudAPI: XhuScheduleCloudAPI by inject()
 
 	private val studentRepository: StudentRepository by inject()
 
@@ -48,13 +48,10 @@ class QueryClassroomViewModel : ViewModel(), KoinComponent {
 													  week: String,
 													  day: String,
 													  time: String): List<Classroom> {
-		val response = classRoomAPI.getClassrooms(student.username, location, week, day, time).redoAfterLogin(student) {
-			classRoomAPI.getClassrooms(student.username, location, week, day, time)
+		val response = xhuScheduleCloudAPI.getClassrooms(student.username, location, week, day, time).redoAfterLogin(student) {
+			xhuScheduleCloudAPI.getClassrooms(student.username, location, week, day, time)
 		}
-		if (!response.isSuccessful) {
-			throw Exception(response.msg)
-		}
-		return response.classrooms
+		return response.data
 	}
 
 	fun queryClassRoomList(student: Student,

@@ -9,12 +9,8 @@
 
 package com.weilylab.xhuschedule.model.response
 
-import org.koin.core.KoinComponent
+import com.weilylab.xhuschedule.model.StudentInfo
 
-abstract class CloudResponse : KoinComponent {
-	val code: Int = -1
-	lateinit var message: String
-
-	val isSuccessful: Boolean
-		get() = code == 0
+class UserInfoResponse : CloudResponse() {
+	lateinit var data: StudentInfo
 }

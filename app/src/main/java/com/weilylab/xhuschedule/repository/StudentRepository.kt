@@ -108,25 +108,26 @@ class StudentRepository : KoinComponent {
 		if (repeatTime > Constants.API_RETRY_TIME) {
 			throw ResourceException(R.string.hint_do_too_many)
 		}
-		val info = userAPI.getInfo(student.username)
-		return when (info.rt) {
-			ResponseCodeConstants.DONE -> {
-				//请求成功，保存信息
-				//删除旧的所有数据
-				studentDao.queryStudentInfoListByUsername(student.username).forEach {
-					studentDao.deleteStudentInfo(it)
-				}
-				info.studentID = student.username
-				studentDao.insertStudentInfo(info)
-				student.studentName = info.name
-				studentDao.updateStudent(student)
-				info
+		val infoResponse = xhuScheduleCloudAPI.getMe(student.username)
+		if (infoResponse.isSuccessful) {
+			//请求成功，保存信息
+			val info = infoResponse.data
+			//删除旧的所有数据
+			studentDao.queryStudentInfoListByUsername(student.username).forEach {
+				studentDao.deleteStudentInfo(it)
 			}
-			ResponseCodeConstants.ERROR_NOT_LOGIN -> {
+			info.studentID = student.username
+			studentDao.insertStudentInfo(info)
+			student.studentName = info.name
+			studentDao.updateStudent(student)
+			return info
+		} else {
+			if (infoResponse.code == ResponseCodeConstants.ERROR_NOT_LOGIN_CODE) {
 				doLoginOnly(student)
-				queryStudentInfo(student, repeatTime + 1)
+				return queryStudentInfo(student, repeatTime + 1)
+			} else {
+				throw Exception(infoResponse.message)
 			}
-			else -> throw Exception(info.msg)
 		}
 	}
 

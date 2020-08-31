@@ -57,12 +57,9 @@ val networkModule = module {
 	}
 	single(named("fileRetrofit")) {
 		Retrofit.Builder()
-				.baseUrl("https://download.xhuschedule.mostpan.com")
+				.baseUrl(Constants.SERVER_QINIU)
 				.client(get(named("fileClient")))
 				.build()
-	}
-	single {
-		get<Retrofit>(named("retrofit")).create(ClassRoomAPI::class.java)
 	}
 	single {
 		get<Retrofit>(named("retrofit")).create(CourseAPI::class.java)
@@ -103,6 +100,22 @@ suspend fun <T : BaseResponse> T.redoAfterLogin(student: Student, repeat: suspen
 	if (!response.isSuccessful)
 		throw Exception(response.msg)
 	response
+}
+
+suspend fun <T : CloudResponse> T.redoAfterLogin(student: Student, repeat: suspend () -> T): T {
+	if (isSuccessful) {
+		return this
+	}
+	if (code == ResponseCodeConstants.ERROR_NOT_LOGIN_CODE) {
+		val studentRepository: StudentRepository by inject()
+		studentRepository.doLoginOnly(student)
+		val response = repeat()
+		if (!response.isSuccessful)
+			throw Exception(response.message)
+		return response
+	} else {
+		throw Exception(message)
+	}
 }
 
 fun <T : BaseResponse> T.check(): T = if (isSuccessful) this else throw Exception(msg)

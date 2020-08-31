@@ -9,7 +9,6 @@
 
 package com.weilylab.xhuschedule.api
 
-import com.weilylab.xhuschedule.model.StudentInfo
 import com.weilylab.xhuschedule.model.response.BaseResponse
 import com.weilylab.xhuschedule.model.response.GetUserDataResponse
 import com.weilylab.xhuschedule.model.response.SetUserDataResponse
@@ -18,10 +17,6 @@ import retrofit2.http.FormUrlEncoded
 import retrofit2.http.POST
 
 interface UserAPI {
-	@FormUrlEncoded
-	@POST("/User/getInfo")
-	suspend fun getInfo(@Field("username") username: String): StudentInfo
-
 	@FormUrlEncoded
 	@POST("/User/setUserData")
 	suspend fun setUserData(@Field("username") username: String, @Field("key") key: String, @Field("value") value: String, @Field("platform") platform: String = "Android"): SetUserDataResponse

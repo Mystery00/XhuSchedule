@@ -38,4 +38,14 @@ interface XhuScheduleCloudAPI {
 
 	@POST("/9783/api/rest/v1/xhuschedulecloud/login")
 	suspend fun login(@Body loginParam: LoginParam): LoginResponse
+
+	@GET("/9783/api/rest/v1/cloud/xhuschedule/proxy/user/me")
+	suspend fun getMe(@Query("username") username: String): UserInfoResponse
+
+	@GET("/9783/api/rest/v1/cloud/xhuschedule/proxy/classroom")
+	suspend fun getClassrooms(@Query("username") username: String,
+							  @Query("location") location: String,
+							  @Query("week") week: String,
+							  @Query("day") day: String,
+							  @Query("time") time: String): ClassroomResponse
 }

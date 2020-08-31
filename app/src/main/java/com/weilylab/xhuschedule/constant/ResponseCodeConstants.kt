@@ -35,4 +35,6 @@ object ResponseCodeConstants {
 	const val ERROR_VERIFY_CODE = "403"
 	const val ERROR_NOT_LOGIN = "405"
 	const val ERROR_API = "406"
+
+	const val ERROR_NOT_LOGIN_CODE = 405
 }
