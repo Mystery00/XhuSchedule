@@ -49,7 +49,7 @@ object TomorrowNotification {
 			val item = SpannableStringBuilder()
 			item.append(it.title)
 			item.setSpan(ForegroundColorSpan(Color.parseColor(it.color)), 0, item.length, 0)
-			item.appendln("  ${it.startTime} - ${it.endTime} at ${it.location}")
+			item.appendLine("  ${it.startTime} - ${it.endTime} at ${it.location}")
 			style.addLine(item)
 		}
 		style.addLine("具体详情请点击查看")

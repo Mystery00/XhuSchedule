@@ -16,7 +16,6 @@ import androidx.core.content.ContextCompat
 import androidx.preference.CheckBoxPreference
 import androidx.preference.Preference
 import cc.shinichi.library.ImagePreview
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.base.XhuBasePreferenceFragment
 import com.weilylab.xhuschedule.model.event.UI
@@ -53,11 +52,6 @@ class ClassSettingsFragment : XhuBasePreferenceFragment(R.xml.preference_class) 
 				.setHintTextColor(ContextCompat.getColor(requireActivity(), R.color.colorAccent))
 				.create()
 	}
-	private val downloadButton by lazy {
-		val instance = FloatingActionButton(requireActivity())
-		instance.setImageResource(R.drawable.ic_school_calendar_download)
-		instance
-	}
 	private var schoolCalendarUrl: String? = null
 
 	override fun initPreference() {
@@ -79,7 +73,7 @@ class ClassSettingsFragment : XhuBasePreferenceFragment(R.xml.preference_class) 
 			eventBus.post(UIConfigEvent(arrayListOf(UI.MAIN_INIT)))
 			true
 		}
-		currentYearAndTermPreference.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+		currentYearAndTermPreference.setOnPreferenceClickListener {
 			settingsViewModel.queryAllStudentInfoListAndThen { list ->
 				val sortList = list.sortedBy { it.grade.toInt() }
 				val oldGrade = sortList.first().grade.toInt()
@@ -129,7 +123,7 @@ class ClassSettingsFragment : XhuBasePreferenceFragment(R.xml.preference_class) 
 				oldHour = array[0].toInt()
 				oldMinute = array[1].toInt()
 			}
-			val timePickerDialog = TimePickerDialog(requireActivity(), TimePickerDialog.OnTimeSetListener { _, hourOfDay, minute ->
+			val timePickerDialog = TimePickerDialog(requireActivity(), { _, hourOfDay, minute ->
 				val hourString = if (hourOfDay < 10) "0$hourOfDay" else hourOfDay.toString()
 				val minuteString = if (minute < 10) "0$minute" else minute.toString()
 				val newString = "$hourString:$minuteString"
@@ -145,7 +139,7 @@ class ClassSettingsFragment : XhuBasePreferenceFragment(R.xml.preference_class) 
 			timePickerDialog.show()
 			true
 		}
-		schoolCalendarPreference.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+		schoolCalendarPreference.setOnPreferenceClickListener {
 			fun jumpToImageView(url: String) {
 				ImagePreview.getInstance()
 						.setContext(requireActivity())
