@@ -164,7 +164,7 @@ class QueryClassScoreActivity : XhuBaseActivity(R.layout.activity_query_class_sc
 					.show()
 		}
 		textViewTerm.setOnClickListener {
-			val termTextArray = Array(3) { i -> (i + 1).toString() }
+			val termTextArray = Array(2) { i -> (i + 1).toString() }
 			var nowIndex = termTextArray.indexOf(queryClassScoreViewModel.term.value)
 			if (nowIndex == -1) nowIndex = 0
 			var selectIndex = nowIndex
