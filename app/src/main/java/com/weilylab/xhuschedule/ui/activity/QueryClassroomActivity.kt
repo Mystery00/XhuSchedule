@@ -10,11 +10,15 @@
 package com.weilylab.xhuschedule.ui.activity
 
 import android.app.Dialog
+import android.content.Intent
+import android.content.pm.ShortcutInfo
+import android.content.pm.ShortcutManager
+import android.graphics.drawable.Icon
+import android.os.Build
 import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
-import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.weilylab.xhuschedule.R
@@ -24,6 +28,7 @@ import com.weilylab.xhuschedule.ui.adapter.QueryClassroomRecyclerViewAdapter
 import com.weilylab.xhuschedule.utils.CalendarUtil
 import com.weilylab.xhuschedule.viewmodel.QueryClassroomViewModel
 import kotlinx.android.synthetic.main.activity_query_class_room.*
+import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import vip.mystery0.logs.Logs
 import vip.mystery0.rx.DataObserver
@@ -31,6 +36,7 @@ import vip.mystery0.tools.utils.screenWidth
 
 class QueryClassroomActivity : XhuBaseActivity(R.layout.activity_query_class_room) {
 	private val queryClassroomViewModel: QueryClassroomViewModel by viewModel()
+	private val shortcutManager: ShortcutManager by inject()
 	private val queryClassroomRecyclerViewAdapter: QueryClassroomRecyclerViewAdapter by lazy { QueryClassroomRecyclerViewAdapter(this) }
 	private var hasData = false
 	private val dialog: Dialog by lazy { buildDialog(R.string.hint_dialog_init) }
@@ -79,27 +85,38 @@ class QueryClassroomActivity : XhuBaseActivity(R.layout.activity_query_class_roo
 		super.initData()
 		initViewModel()
 		queryClassroomViewModel.init()
+		//添加Shortcut
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
+			val intent = Intent(this, QueryClassroomActivity::class.java)
+			intent.action = "com.weilylab.xhuschedule.QUERY_CLASSROOM"
+			val shortcutInfoBuilder = ShortcutInfo.Builder(this, "shortcut_title_query_classroom")
+					.setShortLabel(getString(R.string.shortcut_title_query_classroom))
+					.setLongLabel(getString(R.string.shortcut_title_query_classroom))
+					.setIcon(Icon.createWithResource(this, R.mipmap.ic_short_query_classroom))
+					.setIntent(intent)
+			shortcutManager.addDynamicShortcuts(listOf(shortcutInfoBuilder.build()))
+		}
 	}
 
 	private fun initViewModel() {
-		queryClassroomViewModel.student.observe(this, Observer {
+		queryClassroomViewModel.student.observe(this, {
 			dialog.dismiss()
 			if (it == null) {
 				toastLong(R.string.hint_action_not_login)
 				finish()
 			}
 		})
-		queryClassroomViewModel.location.observe(this, Observer { textViewLocation.text = it })
-		queryClassroomViewModel.week.observe(this, Observer {
+		queryClassroomViewModel.location.observe(this, { textViewLocation.text = it })
+		queryClassroomViewModel.week.observe(this, {
 			val string = "第${it.replace(",", "，")}周"
 			textViewWeek.text = string
 		})
-		queryClassroomViewModel.day.observe(this, Observer { s ->
+		queryClassroomViewModel.day.observe(this, { s ->
 			val list = s.split(",")
 			val string = list.joinToString("，") { CalendarUtil.getWeekIndexInString(it.toInt()) }
 			textViewDay.text = string
 		})
-		queryClassroomViewModel.time.observe(this, Observer {
+		queryClassroomViewModel.time.observe(this, {
 			val string = "第${it.replace(",", "，")}节"
 			textViewTime.text = string
 		})

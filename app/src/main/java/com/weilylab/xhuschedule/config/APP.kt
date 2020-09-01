@@ -12,6 +12,7 @@ package com.weilylab.xhuschedule.config
 import android.annotation.SuppressLint
 import android.app.Application
 import android.content.Context
+import android.os.Build
 import androidx.multidex.MultiDexApplication
 import com.oasisfeng.condom.CondomContext
 import com.sina.weibo.sdk.WbSdk
@@ -44,7 +45,11 @@ class APP : MultiDexApplication() {
 		startKoin {
 			logsLogger(Level.ERROR)
 			androidContext(this@APP)
-			modules(listOf(appModule, databaseModule, networkModule, repositoryModule, viewModelModule))
+			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
+				modules(listOf(appModule, shortcutModule, databaseModule, networkModule, repositoryModule, viewModelModule))
+			} else {
+				modules(listOf(appModule, databaseModule, networkModule, repositoryModule, viewModelModule))
+			}
 		}
 		CrashHandler.config {
 			setFileNameSuffix("log")

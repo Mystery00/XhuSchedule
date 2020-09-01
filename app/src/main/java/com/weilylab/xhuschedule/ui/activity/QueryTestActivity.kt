@@ -10,6 +10,11 @@
 package com.weilylab.xhuschedule.ui.activity
 
 import android.app.Dialog
+import android.content.Intent
+import android.content.pm.ShortcutInfo
+import android.content.pm.ShortcutManager
+import android.graphics.drawable.Icon
+import android.os.Build
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -30,12 +35,14 @@ import kotlinx.android.synthetic.main.content_query_test.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import vip.mystery0.logs.Logs
 import vip.mystery0.rx.DataObserver
 
 class QueryTestActivity : XhuBaseActivity(R.layout.activity_query_test) {
 	private val queryTestViewModel: QueryTestViewModel by viewModel()
+	private val shortcutManager: ShortcutManager by inject()
 	private lateinit var menu: Menu
 	private lateinit var viewStubBinding: LayoutNullDataViewBinding
 	private val dialog: Dialog by lazy { buildDialog(R.string.hint_dialog_get_tests) }
@@ -86,6 +93,17 @@ class QueryTestActivity : XhuBaseActivity(R.layout.activity_query_test) {
 		super.initData()
 		initViewModel()
 		queryTestViewModel.init()
+		//添加Shortcut
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
+			val intent = Intent(this, QueryTestActivity::class.java)
+			intent.action = "com.weilylab.xhuschedule.QUERY_TEST"
+			val shortcutInfoBuilder = ShortcutInfo.Builder(this, "shortcut_title_query_test")
+					.setShortLabel(getString(R.string.shortcut_title_query_test))
+					.setLongLabel(getString(R.string.shortcut_title_query_test))
+					.setIcon(Icon.createWithResource(this, R.mipmap.ic_short_query_test))
+					.setIntent(intent)
+			shortcutManager.addDynamicShortcuts(listOf(shortcutInfoBuilder.build()))
+		}
 	}
 
 	override fun monitor() {

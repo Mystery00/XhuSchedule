@@ -1,12 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><!--
-  ~                     GNU GENERAL PUBLIC LICENSE
-  ~                        Version 3, 29 June 2007
-  ~
-  ~  Copyright (C) 2007 Free Software Foundation, Inc. <http://fsf.org/>
-  ~  Everyone is permitted to copy and distribute verbatim copies
-  ~  of this license document, but changing it is not allowed.
-  -->
-
+<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.weilylab.xhuschedule">
@@ -44,6 +36,13 @@
             android:required="false" />
 
         <activity
+            android:name=".ui.activity.BubbleActivity"
+            android:allowEmbedded="true"
+            android:documentLaunchMode="always"
+            android:label="@string/title_activity_bubble"
+            android:resizeableActivity="true"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
             android:name=".ui.activity.SplashActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
@@ -62,10 +61,6 @@
                     android:host="main"
                     android:scheme="xhuschedule" />
             </intent-filter>
-
-            <meta-data
-                android:name="android.app.shortcuts"
-                android:resource="@xml/shortcuts" />
         </activity>
         <activity
             android:name=".ui.activity.GuideActivity"
@@ -178,38 +173,34 @@
             android:name=".service.DownloadService"
             android:exported="false" />
         <service android:name=".service.NotificationService" />
-        <!--        <service-->
-        <!--            android:name=".service.widget.TodayCourseWidgetService"-->
-        <!--            android:exported="false"-->
-        <!--            android:permission="android.permission.BIND_REMOTEVIEWS" />-->
-        <!--        <service-->
-        <!--            android:name=".service.widget.TestListWidgetService"-->
-        <!--            android:exported="false"-->
-        <!--            android:permission="android.permission.BIND_REMOTEVIEWS" />-->
-
-        <!--        <receiver-->
-        <!--            android:name=".ui.widget.TodayCourseWidget"-->
-        <!--            android:label="@string/widget_title_query_today_course">-->
-        <!--            <intent-filter>-->
-        <!--                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />-->
-        <!--            </intent-filter>-->
-
-        <!--            <meta-data-->
-        <!--                android:name="android.appwidget.provider"-->
-        <!--                android:resource="@xml/today_course_widget_info" />-->
-        <!--        </receiver>-->
-        <!--        <receiver-->
-        <!--            android:name=".ui.widget.TestListWidget"-->
-        <!--            android:label="@string/widget_title_query_test">-->
-        <!--            <intent-filter>-->
-        <!--                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />-->
-        <!--            </intent-filter>-->
-
-        <!--            <meta-data-->
-        <!--                android:name="android.appwidget.provider"-->
-        <!--                android:resource="@xml/test_list_widget_info" />-->
-        <!--        </receiver>-->
-
+        <!-- <service -->
+        <!-- android:name=".service.widget.TodayCourseWidgetService" -->
+        <!-- android:exported="false" -->
+        <!-- android:permission="android.permission.BIND_REMOTEVIEWS" /> -->
+        <!-- <service -->
+        <!-- android:name=".service.widget.TestListWidgetService" -->
+        <!-- android:exported="false" -->
+        <!-- android:permission="android.permission.BIND_REMOTEVIEWS" /> -->
+        <!-- <receiver -->
+        <!-- android:name=".ui.widget.TodayCourseWidget" -->
+        <!-- android:label="@string/widget_title_query_today_course"> -->
+        <!-- <intent-filter> -->
+        <!-- <action android:name="android.appwidget.action.APPWIDGET_UPDATE" /> -->
+        <!-- </intent-filter> -->
+        <!-- <meta-data -->
+        <!-- android:name="android.appwidget.provider" -->
+        <!-- android:resource="@xml/today_course_widget_info" /> -->
+        <!-- </receiver> -->
+        <!-- <receiver -->
+        <!-- android:name=".ui.widget.TestListWidget" -->
+        <!-- android:label="@string/widget_title_query_test"> -->
+        <!-- <intent-filter> -->
+        <!-- <action android:name="android.appwidget.action.APPWIDGET_UPDATE" /> -->
+        <!-- </intent-filter> -->
+        <!-- <meta-data -->
+        <!-- android:name="android.appwidget.provider" -->
+        <!-- android:resource="@xml/test_list_widget_info" /> -->
+        <!-- </receiver> -->
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}"

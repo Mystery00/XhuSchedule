@@ -10,6 +10,11 @@
 package com.weilylab.xhuschedule.ui.activity
 
 import android.app.Dialog
+import android.content.Intent
+import android.content.pm.ShortcutInfo
+import android.content.pm.ShortcutManager
+import android.graphics.drawable.Icon
+import android.os.Build
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -27,14 +32,17 @@ import com.weilylab.xhuschedule.utils.CalendarUtil
 import com.weilylab.xhuschedule.utils.ConfigurationUtil
 import com.weilylab.xhuschedule.viewmodel.QueryClassScoreViewModel
 import kotlinx.android.synthetic.main.activity_query_class_score.*
+import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import vip.mystery0.logs.Logs
 import vip.mystery0.rx.PackageDataObserver
 import vip.mystery0.tools.toastLong
 import vip.mystery0.tools.utils.screenWidth
 
+
 class QueryClassScoreActivity : XhuBaseActivity(R.layout.activity_query_class_score) {
 	private val queryClassScoreViewModel: QueryClassScoreViewModel by viewModel()
+	private val shortcutManager: ShortcutManager by inject()
 	private val queryClassScoreRecyclerViewAdapter: QueryClassScoreRecyclerViewAdapter by lazy { QueryClassScoreRecyclerViewAdapter(this) }
 	private var hasData = false
 	private val dialog: Dialog by lazy { buildDialog(R.string.hint_dialog_init) }
@@ -79,6 +87,17 @@ class QueryClassScoreActivity : XhuBaseActivity(R.layout.activity_query_class_sc
 		initViewModel()
 		dialog.show()
 		queryClassScoreViewModel.init()
+		//添加Shortcut
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
+			val intent = Intent(this, QueryClassScoreActivity::class.java)
+			intent.action = "com.weilylab.xhuschedule.QUERY_CLASS_SCORE"
+			val shortcutInfoBuilder = ShortcutInfo.Builder(this, "shortcut_title_query_class_score")
+					.setShortLabel(getString(R.string.shortcut_title_query_class_score))
+					.setLongLabel(getString(R.string.shortcut_title_query_class_score))
+					.setIcon(Icon.createWithResource(this, R.mipmap.ic_short_query_score))
+					.setIntent(intent)
+			shortcutManager.addDynamicShortcuts(listOf(shortcutInfoBuilder.build()))
+		}
 	}
 
 	private fun initViewModel() {

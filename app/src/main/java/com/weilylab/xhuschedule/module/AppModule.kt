@@ -13,6 +13,9 @@ import android.app.AlarmManager
 import android.app.NotificationManager
 import android.content.ClipboardManager
 import android.content.Context
+import android.content.pm.ShortcutManager
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import org.greenrobot.eventbus.EventBus
 import org.koin.android.ext.koin.androidContext
@@ -28,4 +31,9 @@ val appModule = module {
 	single { androidContext().getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager }
 
 	single { EventBus.getDefault() }
+}
+
+@RequiresApi(Build.VERSION_CODES.N_MR1)
+val shortcutModule = module {
+	single { androidContext().getSystemService(Context.SHORTCUT_SERVICE) as ShortcutManager }
 }

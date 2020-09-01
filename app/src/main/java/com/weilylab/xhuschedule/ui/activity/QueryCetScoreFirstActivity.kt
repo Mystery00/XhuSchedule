@@ -11,7 +11,11 @@ package com.weilylab.xhuschedule.ui.activity
 
 import android.app.Dialog
 import android.content.Intent
+import android.content.pm.ShortcutInfo
+import android.content.pm.ShortcutManager
 import android.graphics.Bitmap
+import android.graphics.drawable.Icon
+import android.os.Build
 import android.text.TextUtils
 import android.view.View
 import android.widget.ScrollView
@@ -23,11 +27,13 @@ import com.weilylab.xhuschedule.base.XhuBaseActivity
 import com.weilylab.xhuschedule.model.Student
 import com.weilylab.xhuschedule.viewmodel.QueryCetScoreViewModelHelper
 import kotlinx.android.synthetic.main.activity_query_cet_score_first.*
+import org.koin.android.ext.android.inject
 import vip.mystery0.logs.Logs
 import vip.mystery0.rx.DataObserver
 
 class QueryCetScoreFirstActivity : XhuBaseActivity(R.layout.activity_query_cet_score_first) {
 	private val dialog: Dialog by lazy { buildDialog(R.string.hint_dialog_get_cet_vcode) }
+	private val shortcutManager: ShortcutManager by inject()
 
 	private val studentObserver = Observer<Student> {
 		if (it == null) {
@@ -71,6 +77,16 @@ class QueryCetScoreFirstActivity : XhuBaseActivity(R.layout.activity_query_cet_s
 		super.initData()
 		initViewModel()
 		QueryCetScoreViewModelHelper.init(this)
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
+			val intent = Intent(this, QueryCetScoreFirstActivity::class.java)
+			intent.action = "com.weilylab.xhuschedule.QUERY_CET_SCORE"
+			val shortcutInfoBuilder = ShortcutInfo.Builder(this, "shortcut_title_query_cet_score")
+					.setShortLabel(getString(R.string.shortcut_title_query_cet_score))
+					.setLongLabel(getString(R.string.shortcut_title_query_cet_score))
+					.setIcon(Icon.createWithResource(this, R.mipmap.ic_short_query_cet))
+					.setIntent(intent)
+			shortcutManager.addDynamicShortcuts(listOf(shortcutInfoBuilder.build()))
+		}
 	}
 
 	private fun initViewModel() {
