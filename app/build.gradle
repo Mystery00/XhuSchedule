@@ -125,7 +125,7 @@ dependencies {
 
     //Mystery0Tools
     implementation 'vip.mystery0.tools:logs:1.4.5'
-    implementation 'vip.mystery0.tools:tools:2.2.8'
+    implementation 'vip.mystery0.tools:tools:2.2.9'
     implementation 'vip.mystery0.tools:crashhandler:1.1.4'
     implementation 'vip.mystery0.tools:bottomtabview:1.1.0'
     implementation 'vip.mystery0.tools:circleimageview:1.1.0'
@@ -176,7 +176,7 @@ dependencies {
     implementation 'com.mikepenz:aboutlibraries:8.3.0'
 
     //Color Picker
-    implementation 'com.jrummyapps:colorpicker:2.1.7'
+    implementation 'com.jaredrummler:colorpicker:1.1.0'
 
     //CosmoCalendar
     implementation 'com.github.applikeysolutions:cosmocalendar:1.0.4'

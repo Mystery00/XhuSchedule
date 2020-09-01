@@ -24,8 +24,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.snackbar.Snackbar
-import com.jrummyapps.android.colorpicker.ColorPickerDialog
-import com.jrummyapps.android.colorpicker.ColorPickerDialogListener
+import com.jaredrummler.android.colorpicker.ColorPickerDialog
+import com.jaredrummler.android.colorpicker.ColorPickerDialogListener
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.base.XhuBaseActivity
 import com.weilylab.xhuschedule.databinding.LayoutNullDataViewBinding
@@ -319,7 +319,7 @@ class CustomCourseActivity : XhuBaseActivity(R.layout.activity_custom_course), K
 					imageViewColor.imageTintList = ColorStateList.valueOf(color)
 				}
 			})
-			colorPickerDialog.show(fragmentManager, "custom-course-color")
+			colorPickerDialog.show(supportFragmentManager, "custom-course-color")
 		}
 		expandClose.setOnClickListener {
 			collapse()

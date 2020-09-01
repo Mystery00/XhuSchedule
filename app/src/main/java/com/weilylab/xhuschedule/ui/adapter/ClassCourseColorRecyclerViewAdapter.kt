@@ -9,10 +9,10 @@
 
 package com.weilylab.xhuschedule.ui.adapter
 
-import android.app.Activity
 import android.content.Context
-import com.jrummyapps.android.colorpicker.ColorPickerDialog
-import com.jrummyapps.android.colorpicker.ColorPickerDialogListener
+import androidx.fragment.app.FragmentActivity
+import com.jaredrummler.android.colorpicker.ColorPickerDialog
+import com.jaredrummler.android.colorpicker.ColorPickerDialogListener
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.databinding.ItemClassCourseColorBinding
 import com.weilylab.xhuschedule.model.Course
@@ -48,7 +48,7 @@ class ClassCourseColorRecyclerViewAdapter(private val context: Context,
 					eventBus.post(UIConfigEvent(arrayListOf(UI.MAIN_INIT)))
 				}
 			})
-			colorPickerDialog.show((context as Activity).fragmentManager, "color-picker-dialog")
+			colorPickerDialog.show((context as FragmentActivity).supportFragmentManager, "color-picker-dialog")
 		}
 	}
 }
