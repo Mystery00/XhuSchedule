@@ -8,10 +8,10 @@
   -->
 
 <appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
-	android:initialKeyguardLayout="@layout/test_list_widget"
-	android:initialLayout="@layout/test_list_widget"
-	android:minWidth="40dp"
-	android:minHeight="40dp"
-	android:resizeMode="horizontal|vertical"
-	android:updatePeriodMillis="1800001"
-	android:widgetCategory="home_screen"/>
+    android:initialKeyguardLayout="@layout/test_list_widget"
+    android:initialLayout="@layout/test_list_widget"
+    android:minWidth="40dp"
+    android:minHeight="40dp"
+    android:resizeMode="horizontal|vertical"
+    android:updatePeriodMillis="1800001"
+    android:widgetCategory="home_screen" />

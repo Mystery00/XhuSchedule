@@ -9,59 +9,63 @@
 
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-	<CheckBoxPreference
-		android:key="@string/key_show_not_week"
-		android:title="@string/title_show_not" />
+    <CheckBoxPreference
+        android:key="@string/key_show_not_week"
+        android:title="@string/title_show_not" />
 
-	<Preference
-		android:key="@string/key_current_year_and_term"
-		android:title="@string/title_current_year_and_term" />
+    <Preference
+        android:key="@string/key_current_year_and_term"
+        android:title="@string/title_current_year_and_term" />
 
-	<Preference
-		android:key="@string/key_custom_start_time"
-		android:title="@string/title_custom_start_time">
-		<intent
-			android:action="android.intent.action.VIEW"
-			android:targetClass="com.weilylab.xhuschedule.ui.activity.CustomStartTimeActivity"
-			android:targetPackage="@string/app_package_name" />
-	</Preference>
+    <Preference
+        android:key="@string/key_custom_start_time"
+        android:title="@string/title_custom_start_time">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetClass="com.weilylab.xhuschedule.ui.activity.CustomStartTimeActivity"
+            android:targetPackage="@string/app_package_name" />
+    </Preference>
 
-	<Preference
-		android:icon="@drawable/ic_custom_course_color"
-		android:key="@string/key_custom_course_color"
-		android:title="@string/title_custom_course_color">
-		<intent
-			android:action="android.intent.action.VIEW"
-			android:targetClass="com.weilylab.xhuschedule.ui.activity.ClassCourseColorActivity"
-			android:targetPackage="@string/app_package_name" />
-	</Preference>
+    <Preference
+        android:icon="@drawable/ic_custom_course_color"
+        android:key="@string/key_custom_course_color"
+        android:title="@string/title_custom_course_color">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetClass="com.weilylab.xhuschedule.ui.activity.ClassCourseColorActivity"
+            android:targetPackage="@string/app_package_name" />
+    </Preference>
 
-	<Preference
-		android:key="@string/key_show_tomorrow_course_after"
-		android:title="@string/title_show_tomorrow_course_after" />
+    <Preference
+        android:key="@string/key_show_tomorrow_course_after"
+        android:title="@string/title_show_tomorrow_course_after" />
 
-	<Preference
-		android:icon="@drawable/ic_school_calendar"
-		android:key="@string/key_action_school_calendar"
-		android:title="@string/title_action_school_calendar" />
+    <Preference
+        android:icon="@drawable/ic_school_calendar"
+        android:key="@string/key_action_school_calendar"
+        android:title="@string/title_action_school_calendar" />
 
-	<Preference android:title="@string/title_action_custom_course">
-		<intent
-			android:action="android.intent.action.VIEW"
-			android:targetClass="com.weilylab.xhuschedule.ui.activity.CustomCourseActivity"
-			android:targetPackage="@string/app_package_name" />
+    <Preference
+        android:key="@string/key_action_to_calendar"
+        android:title="@string/title_action_to_calendar" />
 
-	</Preference>
+    <Preference android:title="@string/title_action_custom_course">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetClass="com.weilylab.xhuschedule.ui.activity.CustomCourseActivity"
+            android:targetPackage="@string/app_package_name" />
 
-	<Preference android:title="@string/title_action_custom_thing">
-		<intent
-			android:action="android.intent.action.VIEW"
-			android:targetClass="com.weilylab.xhuschedule.ui.activity.CustomThingActivity"
-			android:targetPackage="@string/app_package_name" />
-	</Preference>
+    </Preference>
 
-	<CheckBoxPreference
-		android:key="@string/key_show_custom_thing_first"
-		android:title="@string/title_show_custom_thing_first" />
+    <Preference android:title="@string/title_action_custom_thing">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetClass="com.weilylab.xhuschedule.ui.activity.CustomThingActivity"
+            android:targetPackage="@string/app_package_name" />
+    </Preference>
+
+    <CheckBoxPreference
+        android:key="@string/key_show_custom_thing_first"
+        android:title="@string/title_show_custom_thing_first" />
 
 </PreferenceScreen>

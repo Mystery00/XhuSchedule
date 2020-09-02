@@ -10,21 +10,21 @@
   -->
 
 <resources>
-	<string name="define_int_condom"/>
-	<!-- Author section -->
-	<string name="library_condom_author">oasisfeng</string>
-	<string name="library_condom_authorWebsite">https://github.com/oasisfeng</string>
-	<!-- Library section -->
-	<string name="library_condom_libraryName">Condom</string>
-	<string name="library_condom_libraryDescription">一个超轻超薄的Android工具库，阻止三方SDK中常见的有害行为，而不影响应用自身的功能。（例如严重影响用户体验的『链式唤醒』）</string>
-	<string name="library_condom_libraryWebsite">https://github.com/oasisfeng/condom</string>
-	<string name="library_condom_libraryVersion">2.2.0</string>
-	<!-- OpenSource section -->
-	<string name="library_condom_isOpenSource">true</string>
-	<string name="library_condom_repositoryLink">https://github.com/oasisfeng/condom</string>
-	<!-- ClassPath for autoDetect section -->
-	<string name="library_condom_classPath">com.oasisfeng.condom</string>
-	<!-- License section -->
-	<string name="library_condom_licenseId">apache_2_0</string>
-	<!-- Custom variables section -->
+    <string name="define_int_condom" />
+    <!-- Author section -->
+    <string name="library_condom_author">oasisfeng</string>
+    <string name="library_condom_authorWebsite">https://github.com/oasisfeng</string>
+    <!-- Library section -->
+    <string name="library_condom_libraryName">Condom</string>
+    <string name="library_condom_libraryDescription">一个超轻超薄的Android工具库，阻止三方SDK中常见的有害行为，而不影响应用自身的功能。（例如严重影响用户体验的『链式唤醒』）</string>
+    <string name="library_condom_libraryWebsite">https://github.com/oasisfeng/condom</string>
+    <string name="library_condom_libraryVersion">2.2.0</string>
+    <!-- OpenSource section -->
+    <string name="library_condom_isOpenSource">true</string>
+    <string name="library_condom_repositoryLink">https://github.com/oasisfeng/condom</string>
+    <!-- ClassPath for autoDetect section -->
+    <string name="library_condom_classPath">com.oasisfeng.condom</string>
+    <!-- License section -->
+    <string name="library_condom_licenseId">apache_2_0</string>
+    <!-- Custom variables section -->
 </resources>

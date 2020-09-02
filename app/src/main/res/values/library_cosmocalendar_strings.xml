@@ -10,21 +10,21 @@
   -->
 
 <resources>
-	<string name="define_int_cosmocalendar"/>
-	<!-- Author section -->
-	<string name="library_cosmocalendar_author">ApplikeySolutions</string>
-	<string name="library_cosmocalendar_authorWebsite">https://github.com/ApplikeySolutions</string>
-	<!-- Library section -->
-	<string name="library_cosmocalendar_libraryName">CosmoCalendar</string>
-	<string name="library_cosmocalendar_libraryDescription">📅 CosmoCalendar is a fully customizable calendar with a wide variety of features and displaying modes.</string>
-	<string name="library_cosmocalendar_libraryWebsite">https://applikeysolutions.com/</string>
-	<string name="library_cosmocalendar_libraryVersion">1.0.4</string>
-	<!-- OpenSource section -->
-	<string name="library_cosmocalendar_isOpenSource">true</string>
-	<string name="library_cosmocalendar_repositoryLink">https://github.com/ApplikeySolutions/CosmoCalendar</string>
-	<!-- ClassPath for autoDetect section -->
-	<string name="library_cosmocalendar_classPath">com.applikeysolutions</string>
-	<!-- License section -->
-	<string name="library_cosmocalendar_licenseId">mit</string>
-	<!-- Custom variables section -->
+    <string name="define_int_cosmocalendar" />
+    <!-- Author section -->
+    <string name="library_cosmocalendar_author">ApplikeySolutions</string>
+    <string name="library_cosmocalendar_authorWebsite">https://github.com/ApplikeySolutions</string>
+    <!-- Library section -->
+    <string name="library_cosmocalendar_libraryName">CosmoCalendar</string>
+    <string name="library_cosmocalendar_libraryDescription">📅 CosmoCalendar is a fully customizable calendar with a wide variety of features and displaying modes.</string>
+    <string name="library_cosmocalendar_libraryWebsite">https://applikeysolutions.com/</string>
+    <string name="library_cosmocalendar_libraryVersion">1.0.4</string>
+    <!-- OpenSource section -->
+    <string name="library_cosmocalendar_isOpenSource">true</string>
+    <string name="library_cosmocalendar_repositoryLink">https://github.com/ApplikeySolutions/CosmoCalendar</string>
+    <!-- ClassPath for autoDetect section -->
+    <string name="library_cosmocalendar_classPath">com.applikeysolutions</string>
+    <!-- License section -->
+    <string name="library_cosmocalendar_licenseId">mit</string>
+    <!-- Custom variables section -->
 </resources>

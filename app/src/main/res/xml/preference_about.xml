@@ -8,7 +8,7 @@
   -->
 
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-	<PreferenceCategory android:title="@string/screen_category_about_application">
+    <PreferenceCategory android:title="@string/screen_category_about_application">
 
 		<Preference
 			android:key="@string/key_update_log"

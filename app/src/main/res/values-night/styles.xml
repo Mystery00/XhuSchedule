@@ -8,12 +8,13 @@
   -->
 
 <resources>
-	<style name="AppTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar.Bridge">
-		<item name="colorPrimary">@color/colorPrimary</item>
-		<item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-		<item name="colorAccent">@color/colorAccent</item>
-		<item name="android:navigationBarColor">@color/colorPrimaryDark</item>
-	</style>
 
-	<style name="AppTheme.PopupOverlay" parent="ThemeOverlay.MaterialComponents.Dark" />
+    <style name="AppTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar.Bridge">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:navigationBarColor">@color/colorPrimaryDark</item>
+    </style>
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.MaterialComponents.Dark" />
 </resources>
