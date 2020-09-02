@@ -8,101 +8,101 @@
   -->
 
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	xmlns:app="http://schemas.android.com/apk/res-auto"
-	xmlns:tools="http://schemas.android.com/tools"
-	android:id="@+id/coordinatorLayout"
-	android:layout_width="match_parent"
-	android:layout_height="match_parent"
-	tools:context=".ui.activity.BottomNavigationActivity">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/coordinatorLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.activity.BottomNavigationActivity">
 
-	<androidx.constraintlayout.widget.ConstraintLayout
-		android:layout_width="match_parent"
-		android:layout_height="match_parent">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-		<ImageView
-			android:id="@+id/backgroundImageView"
-			android:layout_width="0dp"
-			android:layout_height="0dp"
-			android:contentDescription="@string/app_name"
-			android:scaleType="centerCrop"
-			android:tint="@color/colorTableBackground"
-			app:layout_constraintBottom_toBottomOf="parent"
-			app:layout_constraintEnd_toEndOf="parent"
-			app:layout_constraintStart_toStartOf="parent"
-			app:layout_constraintTop_toTopOf="parent" />
+        <ImageView
+            android:id="@+id/backgroundImageView"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:contentDescription="@string/app_name"
+            android:scaleType="centerCrop"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@color/colorTableBackground" />
 
-		<include
-			layout="@layout/content_bottom_navigation"
-			android:layout_width="0dp"
-			android:layout_height="0dp"
-			app:layout_constraintBottom_toBottomOf="parent"
-			app:layout_constraintEnd_toEndOf="parent"
-			app:layout_constraintStart_toStartOf="parent"
-			app:layout_constraintTop_toBottomOf="@id/line" />
+        <include
+            layout="@layout/content_bottom_navigation"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/line" />
 
-		<com.weilylab.xhuschedule.ui.custom.CustomWeekView
-			android:id="@+id/weekView"
-			android:layout_width="0dp"
-			android:layout_height="wrap_content"
-			app:layout_constraintBottom_toBottomOf="@id/appBarLayout"
-			app:layout_constraintEnd_toEndOf="parent"
-			app:layout_constraintStart_toStartOf="parent" />
+        <com.weilylab.xhuschedule.ui.custom.CustomWeekView
+            android:id="@+id/weekView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="@id/appBarLayout"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
-		<androidx.constraintlayout.widget.ConstraintLayout
-			android:id="@+id/appBarLayout"
-			android:layout_width="0dp"
-			android:layout_height="45dp"
-			android:background="@color/colorPrimary"
-			app:layout_constraintEnd_toEndOf="parent"
-			app:layout_constraintStart_toStartOf="parent"
-			app:layout_constraintTop_toTopOf="parent">
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/appBarLayout"
+            android:layout_width="0dp"
+            android:layout_height="45dp"
+            android:background="@color/colorPrimary"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-			<TextView
-				android:id="@+id/titleTextView"
-				android:layout_width="wrap_content"
-				android:layout_height="0dp"
-				android:gravity="center"
-				android:textAppearance="@style/ToolbarTitleText"
-				android:textColor="@color/colorCustomToolbarTextIcon"
-				app:layout_constraintBottom_toBottomOf="parent"
-				app:layout_constraintEnd_toEndOf="parent"
-				app:layout_constraintStart_toStartOf="parent"
-				app:layout_constraintTop_toTopOf="parent" />
+            <TextView
+                android:id="@+id/titleTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:gravity="center"
+                android:textAppearance="@style/ToolbarTitleText"
+                android:textColor="@color/colorCustomToolbarTextIcon"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-			<ImageView
-				android:id="@+id/arrowImageView"
-				android:layout_width="wrap_content"
-				android:layout_height="0dp"
-				android:contentDescription="@string/app_name"
-				android:src="@drawable/ic_arrow_drop_down_black_24dp"
-				android:tint="@color/colorCustomToolbarTextIcon"
-				app:layout_constraintBottom_toBottomOf="@id/titleTextView"
-				app:layout_constraintStart_toEndOf="@id/titleTextView"
-				app:layout_constraintTop_toTopOf="@id/titleTextView" />
+            <ImageView
+                android:id="@+id/arrowImageView"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:contentDescription="@string/app_name"
+                android:src="@drawable/ic_arrow_drop_down_black_24dp"
+                app:layout_constraintBottom_toBottomOf="@id/titleTextView"
+                app:layout_constraintStart_toEndOf="@id/titleTextView"
+                app:layout_constraintTop_toTopOf="@id/titleTextView"
+                app:tint="@color/colorCustomToolbarTextIcon" />
 
-			<ImageView
-				android:id="@+id/imageSync"
-				android:layout_width="22dp"
-				android:layout_height="22dp"
-				android:layout_marginEnd="18dp"
-				android:contentDescription="@string/app_name"
-				android:tint="@color/colorCustomToolbarTextIcon"
-				app:layout_constraintBottom_toBottomOf="parent"
-				app:layout_constraintEnd_toEndOf="parent"
-				app:layout_constraintTop_toTopOf="parent"
-				app:srcCompat="@drawable/ic_sync" />
+            <ImageView
+                android:id="@+id/imageSync"
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:layout_marginEnd="18dp"
+                android:contentDescription="@string/app_name"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_sync"
+                app:tint="@color/colorCustomToolbarTextIcon" />
 
-		</androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-		<View
-			android:id="@+id/line"
-			android:layout_width="0dp"
-			android:layout_height="0.33dp"
-			android:background="@color/colorDivider"
-			app:layout_constraintEnd_toEndOf="parent"
-			app:layout_constraintStart_toStartOf="parent"
-			app:layout_constraintTop_toBottomOf="@id/appBarLayout" />
+        <View
+            android:id="@+id/line"
+            android:layout_width="0dp"
+            android:layout_height="0.33dp"
+            android:background="@color/colorDivider"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/appBarLayout" />
 
-	</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

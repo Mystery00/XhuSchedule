@@ -8,118 +8,118 @@
   -->
 
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	xmlns:app="http://schemas.android.com/apk/res-auto"
-	xmlns:tools="http://schemas.android.com/tools"
-	android:id="@+id/coordinatorLayout"
-	android:layout_width="match_parent"
-	android:layout_height="match_parent"
-	tools:context="com.weilylab.xhuschedule.ui.activity.CustomThingActivity">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/coordinatorLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.weilylab.xhuschedule.ui.activity.CustomThingActivity">
 
-	<com.google.android.material.appbar.AppBarLayout
-		android:id="@+id/appBarLayout"
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		app:elevation="0dp">
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:elevation="0dp">
 
-		<androidx.appcompat.widget.Toolbar
-			android:id="@+id/toolbar"
-			style="@style/NoSpaceActionBarTheme"
-			android:layout_width="match_parent"
-			android:layout_height="45dp"
-			android:background="?attr/colorPrimary"
-			app:navigationIcon="@drawable/ic_chevron_left_black"
-			app:popupTheme="@style/AppTheme.PopupOverlay"
-			app:titleTextAppearance="@style/ToolbarTitleText" />
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            style="@style/NoSpaceActionBarTheme"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:background="?attr/colorPrimary"
+            app:navigationIcon="@drawable/ic_chevron_left_black"
+            app:popupTheme="@style/AppTheme.PopupOverlay"
+            app:titleTextAppearance="@style/ToolbarTitleText" />
 
-		<View
-			android:id="@+id/line"
-			android:layout_width="match_parent"
-			android:layout_height="0.33dp"
-			android:background="@color/colorDivider" />
+        <View
+            android:id="@+id/line"
+            android:layout_width="match_parent"
+            android:layout_height="0.33dp"
+            android:background="@color/colorDivider" />
 
-	</com.google.android.material.appbar.AppBarLayout>
+    </com.google.android.material.appbar.AppBarLayout>
 
-	<androidx.constraintlayout.widget.ConstraintLayout
-		android:layout_width="match_parent"
-		android:layout_height="match_parent"
-		app:layout_behavior="@string/appbar_scrolling_view_behavior">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-		<androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-			android:id="@+id/swipeRefreshLayout"
-			android:layout_width="0dp"
-			android:layout_height="0dp"
-			app:layout_constraintBottom_toBottomOf="parent"
-			app:layout_constraintEnd_toEndOf="parent"
-			app:layout_constraintStart_toStartOf="parent"
-			app:layout_constraintTop_toTopOf="parent">
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/swipeRefreshLayout"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-			<androidx.constraintlayout.widget.ConstraintLayout
-				android:layout_width="match_parent"
-				android:layout_height="match_parent"
-				android:background="@color/colorGrayBackground">
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/colorGrayBackground">
 
-				<TextView
-					android:id="@+id/expandLayout"
-					android:layout_width="0dp"
-					android:layout_height="wrap_content"
-					android:layout_margin="8dp"
-					android:background="@drawable/drawable_shape_corner"
-					android:backgroundTint="@color/customHintBackgroundColor"
-					android:maxLines="1"
-					android:padding="8dp"
-					android:text="@string/hint_custom_thing_sync"
-					android:textColor="#8A000000"
-					android:textSize="12sp"
-					app:layout_constraintBottom_toTopOf="@id/recyclerView"
-					app:layout_constraintEnd_toEndOf="parent"
-					app:layout_constraintStart_toStartOf="parent"
-					app:layout_constraintTop_toTopOf="parent" />
+                <TextView
+                    android:id="@+id/expandLayout"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:background="@drawable/drawable_shape_corner"
+                    android:backgroundTint="@color/customHintBackgroundColor"
+                    android:maxLines="1"
+                    android:padding="8dp"
+                    android:text="@string/hint_custom_thing_sync"
+                    android:textColor="#8A000000"
+                    android:textSize="12sp"
+                    app:layout_constraintBottom_toTopOf="@id/recyclerView"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-				<ImageView
-					android:id="@+id/expandClose"
-					android:layout_width="24dp"
-					android:layout_height="24dp"
-					android:layout_margin="4dp"
-					android:contentDescription="@string/app_name"
-					android:src="@drawable/ic_action_close"
-					android:tint="#8A000000"
-					app:layout_constraintEnd_toEndOf="@id/expandLayout"
-					app:layout_constraintTop_toTopOf="@id/expandLayout" />
+                <ImageView
+                    android:id="@+id/expandClose"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_margin="4dp"
+                    android:contentDescription="@string/app_name"
+                    android:src="@drawable/ic_action_close"
+                    app:layout_constraintEnd_toEndOf="@id/expandLayout"
+                    app:layout_constraintTop_toTopOf="@id/expandLayout"
+                    app:tint="#8A000000" />
 
-				<androidx.recyclerview.widget.RecyclerView
-					android:id="@+id/recyclerView"
-					android:layout_width="0dp"
-					android:layout_height="0dp"
-					app:layout_constraintBottom_toBottomOf="parent"
-					app:layout_constraintEnd_toEndOf="parent"
-					app:layout_constraintStart_toStartOf="parent"
-					app:layout_constraintTop_toBottomOf="@id/expandLayout" />
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recyclerView"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/expandLayout" />
 
-				<ViewStub
-					android:id="@+id/nullDataViewStub"
-					android:layout_width="0dp"
-					android:layout_height="0dp"
-					android:inflatedId="@id/nullDataView"
-					android:layout="@layout/layout_null_data_view"
-					app:layout_constraintBottom_toBottomOf="parent"
-					app:layout_constraintEnd_toEndOf="parent"
-					app:layout_constraintStart_toStartOf="parent"
-					app:layout_constraintTop_toTopOf="parent" />
+                <ViewStub
+                    android:id="@+id/nullDataViewStub"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:inflatedId="@id/nullDataView"
+                    android:layout="@layout/layout_null_data_view"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-				<com.google.android.material.floatingactionbutton.FloatingActionButton
-					android:id="@+id/floatingActionButton"
-					android:layout_width="wrap_content"
-					android:layout_height="wrap_content"
-					android:layout_margin="@dimen/fab_margin"
-					app:layout_behavior="com.weilylab.xhuschedule.ui.custom.FloatingActionButtonScrollBehavior"
-					app:layout_constraintBottom_toBottomOf="parent"
-					app:layout_constraintEnd_toEndOf="parent"
-					app:srcCompat="@drawable/ic_add_button" />
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/floatingActionButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/fab_margin"
+                    app:layout_behavior="com.weilylab.xhuschedule.ui.custom.FloatingActionButtonScrollBehavior"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:srcCompat="@drawable/ic_add_button" />
 
-			</androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
-		</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
-	</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

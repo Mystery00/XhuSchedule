@@ -9,277 +9,277 @@
 
 <layout>
 
-	<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-		xmlns:app="http://schemas.android.com/apk/res-auto"
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:background="@color/colorWhiteBackground"
-		android:focusable="true"
-		android:focusableInTouchMode="true"
-		android:orientation="vertical"
-		android:paddingBottom="12dp">
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorWhiteBackground"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:orientation="vertical"
+        android:paddingBottom="12dp">
 
-		<androidx.constraintlayout.widget.ConstraintLayout
-			android:layout_width="match_parent"
-			android:layout_height="wrap_content">
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-			<ImageView
-				android:id="@+id/imageViewClose"
-				android:layout_width="56dp"
-				android:layout_height="56dp"
-				android:contentDescription="@string/app_name"
-				android:padding="16dp"
-				android:src="@drawable/ic_close"
-				android:tint="@color/colorBlackText"
-				app:layout_constraintBottom_toTopOf="@id/editTextTitle"
-				app:layout_constraintStart_toStartOf="parent"
-				app:layout_constraintTop_toTopOf="parent" />
+            <ImageView
+                android:id="@+id/imageViewClose"
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                android:contentDescription="@string/app_name"
+                android:padding="16dp"
+                android:src="@drawable/ic_close"
+                app:layout_constraintBottom_toTopOf="@id/editTextTitle"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:tint="@color/colorBlackText" />
 
-			<com.google.android.material.button.MaterialButton
-				android:id="@+id/buttonSave"
-				style="@style/Widget.MaterialComponents.Button.TextButton"
-				android:layout_width="64dp"
-				android:layout_height="wrap_content"
-				android:layout_marginEnd="16dp"
-				android:text="@string/action_save"
-				android:textColor="@color/colorAccent"
-				app:layout_constraintBottom_toTopOf="@id/editTextTitle"
-				app:layout_constraintEnd_toEndOf="parent"
-				app:layout_constraintTop_toTopOf="parent" />
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/buttonSave"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
+                android:layout_width="64dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:text="@string/action_save"
+                android:textColor="@color/colorAccent"
+                app:layout_constraintBottom_toTopOf="@id/editTextTitle"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-			<EditText
-				android:id="@+id/editTextTitle"
-				android:layout_width="0dp"
-				android:layout_height="wrap_content"
-				android:layout_marginStart="56dp"
-				android:layout_marginEnd="16dp"
-				android:layout_marginBottom="4dp"
-				android:background="@null"
-				android:hint="@string/hint_input_title"
-				android:inputType="text"
-				android:paddingTop="4dp"
-				android:paddingBottom="4dp"
-				android:textColor="@color/colorBlackText"
-				android:textColorHint="@color/colorGrayText"
-				android:textSize="20sp"
-				app:layout_constraintBottom_toBottomOf="parent"
-				app:layout_constraintEnd_toEndOf="parent"
-				app:layout_constraintStart_toStartOf="parent" />
+            <EditText
+                android:id="@+id/editTextTitle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="56dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="4dp"
+                android:background="@null"
+                android:hint="@string/hint_input_title"
+                android:inputType="text"
+                android:paddingTop="4dp"
+                android:paddingBottom="4dp"
+                android:textColor="@color/colorBlackText"
+                android:textColorHint="@color/colorGrayText"
+                android:textSize="20sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
 
-		</androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-		<View
-			android:layout_width="match_parent"
-			android:layout_height="0.33dp"
-			android:background="@color/colorDivider" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.33dp"
+            android:background="@color/colorDivider" />
 
-		<androidx.constraintlayout.widget.ConstraintLayout
-			android:layout_width="match_parent"
-			android:layout_height="wrap_content">
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-			<ImageView
-				android:id="@+id/imageViewAllDay"
-				android:layout_width="56dp"
-				android:layout_height="56dp"
-				android:contentDescription="@string/app_name"
-				android:padding="16dp"
-				android:src="@drawable/ic_all_day"
-				android:tint="@color/colorBlackText"
-				app:layout_constraintBottom_toBottomOf="@id/textViewAllDay"
-				app:layout_constraintEnd_toStartOf="@id/textViewAllDay"
-				app:layout_constraintStart_toStartOf="parent"
-				app:layout_constraintTop_toTopOf="@id/textViewAllDay" />
+            <ImageView
+                android:id="@+id/imageViewAllDay"
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                android:contentDescription="@string/app_name"
+                android:padding="16dp"
+                android:src="@drawable/ic_all_day"
+                app:layout_constraintBottom_toBottomOf="@id/textViewAllDay"
+                app:layout_constraintEnd_toStartOf="@id/textViewAllDay"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@id/textViewAllDay"
+                app:tint="@color/colorBlackText" />
 
-			<TextView
-				android:id="@+id/textViewAllDay"
-				android:layout_width="0dp"
-				android:layout_height="48dp"
-				android:gravity="center_vertical"
-				android:text="@string/prompt_all_day"
-				android:textColor="@color/colorBlackText"
-				android:textSize="16sp"
-				app:layout_constraintBottom_toTopOf="@id/textViewStartDate"
-				app:layout_constraintEnd_toStartOf="@id/switchAllDay"
-				app:layout_constraintStart_toEndOf="@id/imageViewAllDay"
-				app:layout_constraintTop_toTopOf="parent" />
+            <TextView
+                android:id="@+id/textViewAllDay"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:gravity="center_vertical"
+                android:text="@string/prompt_all_day"
+                android:textColor="@color/colorBlackText"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toTopOf="@id/textViewStartDate"
+                app:layout_constraintEnd_toStartOf="@id/switchAllDay"
+                app:layout_constraintStart_toEndOf="@id/imageViewAllDay"
+                app:layout_constraintTop_toTopOf="parent" />
 
-			<Switch
-				android:id="@+id/switchAllDay"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:layout_marginEnd="16dp"
-				app:layout_constraintBottom_toBottomOf="@id/textViewAllDay"
-				app:layout_constraintEnd_toEndOf="parent"
-				app:layout_constraintStart_toEndOf="@id/textViewAllDay"
-				app:layout_constraintTop_toTopOf="@id/textViewAllDay" />
+            <com.google.android.material.switchmaterial.SwitchMaterial
+                android:id="@+id/switchAllDay"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                app:layout_constraintBottom_toBottomOf="@id/textViewAllDay"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/textViewAllDay"
+                app:layout_constraintTop_toTopOf="@id/textViewAllDay" />
 
-			<TextView
-				android:id="@+id/textViewStartDate"
-				android:layout_width="0dp"
-				android:layout_height="48dp"
-				android:gravity="center_vertical"
-				android:textColor="@color/colorBlackText"
-				android:textSize="16sp"
-				app:layout_constraintEnd_toStartOf="@id/textViewStartTime"
-				app:layout_constraintStart_toStartOf="@id/textViewAllDay"
-				app:layout_constraintTop_toBottomOf="@id/textViewAllDay" />
+            <TextView
+                android:id="@+id/textViewStartDate"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:gravity="center_vertical"
+                android:textColor="@color/colorBlackText"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toStartOf="@id/textViewStartTime"
+                app:layout_constraintStart_toStartOf="@id/textViewAllDay"
+                app:layout_constraintTop_toBottomOf="@id/textViewAllDay" />
 
-			<TextView
-				android:id="@+id/textViewStartTime"
-				android:layout_width="wrap_content"
-				android:layout_height="0dp"
-				android:gravity="center"
-				android:padding="12dp"
-				android:textColor="@color/colorBlackText"
-				android:textSize="16sp"
-				app:layout_constraintBottom_toBottomOf="@id/textViewStartDate"
-				app:layout_constraintEnd_toEndOf="parent"
-				app:layout_constraintTop_toTopOf="@id/textViewStartDate" />
+            <TextView
+                android:id="@+id/textViewStartTime"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:gravity="center"
+                android:padding="12dp"
+                android:textColor="@color/colorBlackText"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toBottomOf="@id/textViewStartDate"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/textViewStartDate" />
 
-			<TextView
-				android:id="@+id/textViewEndDate"
-				android:layout_width="0dp"
-				android:layout_height="48dp"
-				android:gravity="center_vertical"
-				android:textColor="@color/colorBlackText"
-				android:textSize="16sp"
-				app:layout_constraintBottom_toBottomOf="parent"
-				app:layout_constraintEnd_toStartOf="@id/textViewEndTime"
-				app:layout_constraintStart_toStartOf="@id/textViewStartDate"
-				app:layout_constraintTop_toBottomOf="@id/textViewStartDate" />
+            <TextView
+                android:id="@+id/textViewEndDate"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:gravity="center_vertical"
+                android:textColor="@color/colorBlackText"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/textViewEndTime"
+                app:layout_constraintStart_toStartOf="@id/textViewStartDate"
+                app:layout_constraintTop_toBottomOf="@id/textViewStartDate" />
 
-			<TextView
-				android:id="@+id/textViewEndTime"
-				android:layout_width="wrap_content"
-				android:layout_height="0dp"
-				android:gravity="center"
-				android:padding="12dp"
-				android:textColor="@color/colorBlackText"
-				android:textSize="16sp"
-				app:layout_constraintBottom_toBottomOf="@id/textViewEndDate"
-				app:layout_constraintEnd_toEndOf="parent"
-				app:layout_constraintTop_toTopOf="@id/textViewEndDate" />
+            <TextView
+                android:id="@+id/textViewEndTime"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:gravity="center"
+                android:padding="12dp"
+                android:textColor="@color/colorBlackText"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toBottomOf="@id/textViewEndDate"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/textViewEndDate" />
 
-		</androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-		<View
-			android:layout_width="match_parent"
-			android:layout_height="0.33dp"
-			android:background="@color/colorDivider" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.33dp"
+            android:background="@color/colorDivider" />
 
-		<androidx.constraintlayout.widget.ConstraintLayout
-			android:layout_width="match_parent"
-			android:layout_height="48dp">
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="48dp">
 
-			<ImageView
-				android:id="@+id/imageViewLocation"
-				android:layout_width="56dp"
-				android:layout_height="56dp"
-				android:contentDescription="@string/app_name"
-				android:padding="16dp"
-				android:src="@drawable/ic_location"
-				android:tint="@color/colorBlackText"
-				app:layout_constraintBottom_toBottomOf="@id/editTextLocation"
-				app:layout_constraintEnd_toStartOf="@id/editTextLocation"
-				app:layout_constraintStart_toStartOf="parent"
-				app:layout_constraintTop_toTopOf="@id/editTextLocation" />
+            <ImageView
+                android:id="@+id/imageViewLocation"
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                android:contentDescription="@string/app_name"
+                android:padding="16dp"
+                android:src="@drawable/ic_location"
+                app:layout_constraintBottom_toBottomOf="@id/editTextLocation"
+                app:layout_constraintEnd_toStartOf="@id/editTextLocation"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@id/editTextLocation"
+                app:tint="@color/colorBlackText" />
 
-			<EditText
-				android:id="@+id/editTextLocation"
-				android:layout_width="0dp"
-				android:layout_height="0dp"
-				android:background="@null"
-				android:gravity="center_vertical"
-				android:hint="@string/hint_input_location"
-				android:inputType="text"
-				android:textColor="@color/colorBlackText"
-				android:textColorHint="@color/colorGrayText"
-				android:textSize="16sp"
-				app:layout_constraintBottom_toBottomOf="parent"
-				app:layout_constraintEnd_toEndOf="parent"
-				app:layout_constraintStart_toEndOf="@id/imageViewLocation"
-				app:layout_constraintTop_toTopOf="parent" />
+            <EditText
+                android:id="@+id/editTextLocation"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@null"
+                android:gravity="center_vertical"
+                android:hint="@string/hint_input_location"
+                android:inputType="text"
+                android:textColor="@color/colorBlackText"
+                android:textColorHint="@color/colorGrayText"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/imageViewLocation"
+                app:layout_constraintTop_toTopOf="parent" />
 
-		</androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-		<View
-			android:layout_width="match_parent"
-			android:layout_height="0.33dp"
-			android:background="@color/colorDivider" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.33dp"
+            android:background="@color/colorDivider" />
 
-		<androidx.constraintlayout.widget.ConstraintLayout
-			android:layout_width="match_parent"
-			android:layout_height="48dp">
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="48dp">
 
-			<ImageView
-				android:id="@+id/imageViewColor"
-				android:layout_width="56dp"
-				android:layout_height="56dp"
-				android:contentDescription="@string/app_name"
-				android:padding="16dp"
-				android:src="@drawable/ic_point"
-				android:tint="@color/colorAccent"
-				app:layout_constraintBottom_toBottomOf="@id/textViewColor"
-				app:layout_constraintEnd_toStartOf="@id/textViewColor"
-				app:layout_constraintStart_toStartOf="parent"
-				app:layout_constraintTop_toTopOf="@id/textViewColor" />
+            <ImageView
+                android:id="@+id/imageViewColor"
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                android:contentDescription="@string/app_name"
+                android:padding="16dp"
+                android:src="@drawable/ic_point"
+                app:layout_constraintBottom_toBottomOf="@id/textViewColor"
+                app:layout_constraintEnd_toStartOf="@id/textViewColor"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@id/textViewColor"
+                app:tint="@color/colorAccent" />
 
-			<TextView
-				android:id="@+id/textViewColor"
-				android:layout_width="0dp"
-				android:layout_height="0dp"
-				android:background="@null"
-				android:gravity="center_vertical"
-				android:text="@string/hint_input_color"
-				android:textColor="@color/colorBlackText"
-				android:textSize="16sp"
-				app:layout_constraintBottom_toBottomOf="parent"
-				app:layout_constraintEnd_toEndOf="parent"
-				app:layout_constraintStart_toEndOf="@id/imageViewColor"
-				app:layout_constraintTop_toTopOf="parent" />
+            <TextView
+                android:id="@+id/textViewColor"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@null"
+                android:gravity="center_vertical"
+                android:text="@string/hint_input_color"
+                android:textColor="@color/colorBlackText"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/imageViewColor"
+                app:layout_constraintTop_toTopOf="parent" />
 
-		</androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-		<View
-			android:layout_width="match_parent"
-			android:layout_height="0.33dp"
-			android:background="@color/colorDivider" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.33dp"
+            android:background="@color/colorDivider" />
 
-		<androidx.constraintlayout.widget.ConstraintLayout
-			android:layout_width="match_parent"
-			android:layout_height="48dp">
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="48dp">
 
-			<ImageView
-				android:id="@+id/imageViewMark"
-				android:layout_width="56dp"
-				android:layout_height="56dp"
-				android:contentDescription="@string/app_name"
-				android:padding="16dp"
-				android:src="@drawable/ic_mark"
-				android:tint="@color/colorBlackText"
-				app:layout_constraintBottom_toBottomOf="@id/textViewMark"
-				app:layout_constraintEnd_toStartOf="@id/textViewMark"
-				app:layout_constraintStart_toStartOf="parent"
-				app:layout_constraintTop_toTopOf="@id/textViewMark" />
+            <ImageView
+                android:id="@+id/imageViewMark"
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                android:contentDescription="@string/app_name"
+                android:padding="16dp"
+                android:src="@drawable/ic_mark"
+                app:layout_constraintBottom_toBottomOf="@id/textViewMark"
+                app:layout_constraintEnd_toStartOf="@id/textViewMark"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@id/textViewMark"
+                app:tint="@color/colorBlackText" />
 
-			<EditText
-				android:id="@+id/textViewMark"
-				android:layout_width="0dp"
-				android:layout_height="0dp"
-				android:background="@null"
-				android:gravity="center_vertical"
-				android:hint="@string/hint_input_mark"
-				android:inputType="text"
-				android:textColor="@color/colorBlackText"
-				android:textColorHint="@color/colorGrayText"
-				android:textSize="16sp"
-				app:layout_constraintBottom_toBottomOf="parent"
-				app:layout_constraintEnd_toEndOf="parent"
-				app:layout_constraintStart_toEndOf="@id/imageViewMark"
-				app:layout_constraintTop_toTopOf="parent" />
+            <EditText
+                android:id="@+id/textViewMark"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@null"
+                android:gravity="center_vertical"
+                android:hint="@string/hint_input_mark"
+                android:inputType="text"
+                android:textColor="@color/colorBlackText"
+                android:textColorHint="@color/colorGrayText"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/imageViewMark"
+                app:layout_constraintTop_toTopOf="parent" />
 
-		</androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-	</LinearLayout>
+    </LinearLayout>
 
 </layout>

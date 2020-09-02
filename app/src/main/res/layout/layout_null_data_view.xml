@@ -7,23 +7,23 @@
   ~  of this license document, but changing it is not allowed.
   -->
 
-<layout>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto">
 
-	<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-		android:id="@+id/nullDataView"
-		android:layout_width="match_parent"
-		android:layout_height="match_parent"
-		android:background="@color/colorGrayBackground">
+    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/nullDataView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorGrayBackground">
 
-		<TextView
-			style="@style/NullDataViewTheme"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:layout_gravity="center"
-			android:drawableTop="@mipmap/ic_null_course_data"
-			android:drawablePadding="16dp"
-			android:text="@string/hint_null_course_data" />
+        <TextView
+            style="@style/NullDataViewTheme"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:drawablePadding="16dp"
+            android:text="@string/hint_null_course_data"
+            app:drawableTopCompat="@mipmap/ic_null_course_data" />
 
-	</FrameLayout>
+    </FrameLayout>
 
 </layout>

@@ -28,10 +28,10 @@
             android:contentDescription="@string/app_name"
             android:padding="16dp"
             android:src="@drawable/ic_close"
-            android:tint="@color/colorBlackText"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@color/colorBlackText" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/buttonSave"
@@ -63,11 +63,11 @@
             android:contentDescription="@string/app_name"
             android:padding="16dp"
             android:src="@drawable/ic_course_name"
-            android:tint="@color/colorBlackText"
             app:layout_constraintBottom_toBottomOf="@id/editTextName"
             app:layout_constraintEnd_toStartOf="@id/editTextName"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@id/editTextName" />
+            app:layout_constraintTop_toTopOf="@id/editTextName"
+            app:tint="@color/colorBlackText" />
 
         <EditText
             android:id="@+id/editTextName"
@@ -103,11 +103,11 @@
             android:contentDescription="@string/app_name"
             android:padding="16dp"
             android:src="@drawable/ic_course_teacher"
-            android:tint="@color/colorBlackText"
             app:layout_constraintBottom_toBottomOf="@id/editTextTeacher"
             app:layout_constraintEnd_toStartOf="@id/editTextTeacher"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@id/editTextTeacher" />
+            app:layout_constraintTop_toTopOf="@id/editTextTeacher"
+            app:tint="@color/colorBlackText" />
 
         <EditText
             android:id="@+id/editTextTeacher"
@@ -143,11 +143,11 @@
             android:contentDescription="@string/app_name"
             android:padding="16dp"
             android:src="@drawable/ic_week"
-            android:tint="@color/colorBlackText"
             app:layout_constraintBottom_toBottomOf="@id/textViewWeek"
             app:layout_constraintEnd_toStartOf="@id/textViewWeek"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@id/textViewWeek" />
+            app:layout_constraintTop_toTopOf="@id/textViewWeek"
+            app:tint="@color/colorBlackText" />
 
         <TextView
             android:id="@+id/textViewWeek"
@@ -193,11 +193,11 @@
             android:contentDescription="@string/app_name"
             android:padding="16dp"
             android:src="@drawable/ic_location"
-            android:tint="@color/colorBlackText"
             app:layout_constraintBottom_toBottomOf="@id/editTextLocation"
             app:layout_constraintEnd_toStartOf="@id/editTextLocation"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@id/editTextLocation" />
+            app:layout_constraintTop_toTopOf="@id/editTextLocation"
+            app:tint="@color/colorBlackText" />
 
         <EditText
             android:id="@+id/editTextLocation"
@@ -233,11 +233,11 @@
             android:contentDescription="@string/app_name"
             android:padding="16dp"
             android:src="@drawable/ic_all_day"
-            android:tint="@color/colorBlackText"
             app:layout_constraintBottom_toBottomOf="@id/textViewTime"
             app:layout_constraintEnd_toStartOf="@id/textViewTime"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@id/textViewTime" />
+            app:layout_constraintTop_toTopOf="@id/textViewTime"
+            app:tint="@color/colorBlackText" />
 
         <TextView
             android:id="@+id/textViewTime"
@@ -284,11 +284,11 @@
             android:contentDescription="@string/app_name"
             android:padding="16dp"
             android:src="@drawable/ic_point"
-            android:tint="@color/colorAccent"
             app:layout_constraintBottom_toBottomOf="@id/textViewColor"
             app:layout_constraintEnd_toStartOf="@id/textViewColor"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@id/textViewColor" />
+            app:layout_constraintTop_toTopOf="@id/textViewColor"
+            app:tint="@color/colorAccent" />
 
         <TextView
             android:id="@+id/textViewColor"

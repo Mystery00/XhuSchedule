@@ -8,43 +8,43 @@
   -->
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	android:id="@+id/background"
-	android:layout_width="match_parent"
-	android:layout_height="wrap_content"
-	android:layout_margin="8dp">
+    android:id="@+id/background"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp">
 
-	<TextView
-		android:id="@+id/course_name_textView"
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:paddingStart="8dp"
-		android:paddingTop="8dp"
-		android:paddingEnd="8dp"
-		android:paddingBottom="4dp"
-		android:textColor="@android:color/white"
-		android:textStyle="bold" />
+    <TextView
+        android:id="@+id/course_name_textView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingStart="8dp"
+        android:paddingTop="8dp"
+        android:paddingEnd="8dp"
+        android:paddingBottom="4dp"
+        android:textColor="@android:color/white"
+        android:textStyle="bold" />
 
-	<TextView
-		android:id="@+id/course_teacher_textView"
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:layout_below="@id/course_name_textView"
-		android:paddingStart="8dp"
-		android:paddingTop="4dp"
-		android:paddingEnd="8dp"
-		android:paddingBottom="4dp"
-		android:textColor="@android:color/white" />
+    <TextView
+        android:id="@+id/course_teacher_textView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/course_name_textView"
+        android:paddingStart="8dp"
+        android:paddingTop="4dp"
+        android:paddingEnd="8dp"
+        android:paddingBottom="4dp"
+        android:textColor="@android:color/white" />
 
 
-	<TextView
-		android:id="@+id/course_time_location_textView"
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:layout_below="@id/course_teacher_textView"
-		android:paddingStart="8dp"
-		android:paddingTop="4dp"
-		android:paddingEnd="8dp"
-		android:paddingBottom="8dp"
-		android:textColor="@android:color/white" />
+    <TextView
+        android:id="@+id/course_time_location_textView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/course_teacher_textView"
+        android:paddingStart="8dp"
+        android:paddingTop="4dp"
+        android:paddingEnd="8dp"
+        android:paddingBottom="8dp"
+        android:textColor="@android:color/white" />
 
 </RelativeLayout>

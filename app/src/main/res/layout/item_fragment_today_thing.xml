@@ -9,112 +9,112 @@
 
 <layout>
 
-	<data>
+    <data>
 
-		<variable
-			name="thing"
-			type="com.weilylab.xhuschedule.model.CustomThing" />
-	</data>
+        <variable
+            name="thing"
+            type="com.weilylab.xhuschedule.model.CustomThing" />
+    </data>
 
-	<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-		xmlns:app="http://schemas.android.com/apk/res-auto"
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content">
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-		<ImageView
-			android:id="@+id/point"
-			android:layout_width="8dp"
-			android:layout_height="8dp"
-			android:contentDescription="@string/app_name"
-			app:layout_constraintBottom_toBottomOf="@id/cardView"
-			app:layout_constraintEnd_toStartOf="@id/cardView"
-			app:layout_constraintStart_toStartOf="parent"
-			app:layout_constraintTop_toTopOf="@id/cardView"
-			app:srcCompat="@drawable/ic_point" />
+        <ImageView
+            android:id="@+id/point"
+            android:layout_width="8dp"
+            android:layout_height="8dp"
+            android:contentDescription="@string/app_name"
+            app:layout_constraintBottom_toBottomOf="@id/cardView"
+            app:layout_constraintEnd_toStartOf="@id/cardView"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/cardView"
+            app:srcCompat="@drawable/ic_point" />
 
-		<androidx.constraintlayout.widget.ConstraintLayout
-			android:id="@+id/cardView"
-			android:layout_width="0dp"
-			android:layout_height="wrap_content"
-			android:layout_marginStart="16dp"
-			android:layout_marginTop="8dp"
-			android:layout_marginEnd="16dp"
-			android:layout_marginBottom="8dp"
-			android:background="@drawable/drawable_shape_corner"
-			android:backgroundTint="@color/colorTodayBackground"
-			android:padding="8dp"
-			app:layout_constraintBottom_toBottomOf="parent"
-			app:layout_constraintEnd_toEndOf="parent"
-			app:layout_constraintStart_toStartOf="parent"
-			app:layout_constraintTop_toTopOf="parent">
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cardView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="8dp"
+            android:background="@drawable/drawable_shape_corner"
+            android:backgroundTint="@color/colorTodayBackground"
+            android:padding="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-			<ImageView
-				android:id="@+id/imageView"
-				android:layout_width="20dp"
-				android:layout_height="20dp"
-				android:contentDescription="@string/app_name"
-				android:src="@mipmap/ic_today_course_bottom_watermelon"
-				app:layout_constraintBottom_toBottomOf="parent"
-				app:layout_constraintStart_toStartOf="parent"
-				app:layout_constraintTop_toTopOf="parent" />
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:contentDescription="@string/app_name"
+                android:src="@mipmap/ic_today_course_bottom_watermelon"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-			<TextView
-				android:id="@+id/textViewName"
-				android:layout_width="0dp"
-				android:layout_height="wrap_content"
-				android:layout_marginStart="12dp"
-				android:layout_marginEnd="4dp"
-				android:text="@{thing.title}"
-				android:textColor="@color/colorBlackText"
-				android:textSize="16sp"
-				app:layout_constraintBottom_toTopOf="@id/textViewTime"
-				app:layout_constraintEnd_toEndOf="parent"
-				app:layout_constraintStart_toEndOf="@id/imageView"
-				app:layout_constraintTop_toTopOf="parent" />
+            <TextView
+                android:id="@+id/textViewName"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_marginEnd="4dp"
+                android:text="@{thing.title}"
+                android:textColor="@color/colorBlackText"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toTopOf="@id/textViewTime"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/imageView"
+                app:layout_constraintTop_toTopOf="parent" />
 
-			<TextView
-				android:id="@+id/textViewTime"
-				android:layout_width="0dp"
-				android:layout_height="wrap_content"
-				android:layout_marginStart="12dp"
-				android:ellipsize="end"
-				android:maxLines="1"
-				android:textColor="@color/colorBlackText"
-				android:textSize="12sp"
-				app:layout_constraintBottom_toTopOf="@id/textViewLocation"
-				app:layout_constraintEnd_toEndOf="parent"
-				app:layout_constraintStart_toEndOf="@id/imageView"
-				app:layout_constraintTop_toBottomOf="@id/textViewName" />
+            <TextView
+                android:id="@+id/textViewTime"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:textColor="@color/colorBlackText"
+                android:textSize="12sp"
+                app:layout_constraintBottom_toTopOf="@id/textViewLocation"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/imageView"
+                app:layout_constraintTop_toBottomOf="@id/textViewName" />
 
-			<TextView
-				android:id="@+id/textViewLocation"
-				android:layout_width="0dp"
-				android:layout_height="wrap_content"
-				android:layout_marginStart="12dp"
-				android:text="@{thing.location}"
-				android:textColor="@color/colorBlackText"
-				android:textSize="12sp"
-				app:layout_constraintBottom_toTopOf="@id/textViewMark"
-				app:layout_constraintEnd_toEndOf="parent"
-				app:layout_constraintStart_toEndOf="@id/imageView"
-				app:layout_constraintTop_toBottomOf="@id/textViewTime" />
+            <TextView
+                android:id="@+id/textViewLocation"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:text="@{thing.location}"
+                android:textColor="@color/colorBlackText"
+                android:textSize="12sp"
+                app:layout_constraintBottom_toTopOf="@id/textViewMark"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/imageView"
+                app:layout_constraintTop_toBottomOf="@id/textViewTime" />
 
-			<TextView
-				android:id="@+id/textViewMark"
-				android:layout_width="0dp"
-				android:layout_height="wrap_content"
-				android:layout_marginStart="12dp"
-				android:text="@{thing.mark}"
-				android:textColor="@color/colorBlackText"
-				android:textSize="12sp"
-				android:textStyle="italic"
-				app:layout_constraintBottom_toBottomOf="parent"
-				app:layout_constraintEnd_toEndOf="parent"
-				app:layout_constraintStart_toEndOf="@id/imageView"
-				app:layout_constraintTop_toBottomOf="@id/textViewLocation" />
+            <TextView
+                android:id="@+id/textViewMark"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:text="@{thing.mark}"
+                android:textColor="@color/colorBlackText"
+                android:textSize="12sp"
+                android:textStyle="italic"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/imageView"
+                app:layout_constraintTop_toBottomOf="@id/textViewLocation" />
 
-		</androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-	</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>

@@ -9,111 +9,111 @@
 
 <layout xmlns:app="http://schemas.android.com/apk/res-auto">
 
-	<data>
+    <data>
 
-		<import type="android.view.View" />
+        <import type="android.view.View" />
 
-		<variable
-			name="message"
-			type="com.weilylab.xhuschedule.model.FeedBackMessage" />
-	</data>
+        <variable
+            name="message"
+            type="com.weilylab.xhuschedule.model.FeedBackMessage" />
+    </data>
 
-	<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:padding="8dp">
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="8dp">
 
-		<androidx.constraintlayout.widget.Guideline
-			android:id="@+id/guideLineLeft"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:orientation="vertical"
-			app:layout_constraintGuide_percent="0.85" />
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideLineLeft"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.85" />
 
-		<androidx.constraintlayout.widget.Guideline
-			android:id="@+id/guideLineRight"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:orientation="vertical"
-			app:layout_constraintGuide_percent="0.15" />
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideLineRight"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.15" />
 
-		<TextView
-			android:id="@+id/dateTextView"
-			android:layout_width="0dp"
-			android:layout_height="wrap_content"
-			android:gravity="center"
-			android:textSize="12sp"
-			app:layout_constraintEnd_toEndOf="parent"
-			app:layout_constraintStart_toStartOf="parent"
-			app:layout_constraintTop_toTopOf="parent" />
+        <TextView
+            android:id="@+id/dateTextView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textSize="12sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-		<FrameLayout
-			android:id="@+id/receivedLayout"
-			android:layout_width="0dp"
-			android:layout_height="wrap_content"
-			android:layout_marginTop="4dp"
-			app:layout_constraintBottom_toBottomOf="parent"
-			app:layout_constraintEnd_toStartOf="@id/guideLineLeft"
-			app:layout_constraintStart_toStartOf="parent"
-			app:layout_constraintTop_toBottomOf="@id/dateTextView">
+        <FrameLayout
+            android:id="@+id/receivedLayout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/guideLineLeft"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/dateTextView">
 
-			<TextView
-				android:id="@+id/receivedTextView"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:layout_gravity="start"
-				android:background="@drawable/drawable_shape_corner"
-				android:backgroundTint="@android:color/white"
-				android:padding="8dp"
-				android:text="@{message.content}"
-				android:textColor="@android:color/black"
-				android:textSize="15sp" />
+            <TextView
+                android:id="@+id/receivedTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:background="@drawable/drawable_shape_corner"
+                android:backgroundTint="@android:color/white"
+                android:padding="8dp"
+                android:text="@{message.content}"
+                android:textColor="@android:color/black"
+                android:textSize="15sp" />
 
-		</FrameLayout>
+        </FrameLayout>
 
-		<FrameLayout
-			android:id="@+id/sendLayout"
-			android:layout_width="0dp"
-			android:layout_height="wrap_content"
-			android:layout_marginTop="4dp"
-			app:layout_constraintBottom_toBottomOf="parent"
-			app:layout_constraintEnd_toEndOf="parent"
-			app:layout_constraintStart_toEndOf="@id/guideLineRight"
-			app:layout_constraintTop_toBottomOf="@id/dateTextView">
+        <FrameLayout
+            android:id="@+id/sendLayout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/guideLineRight"
+            app:layout_constraintTop_toBottomOf="@id/dateTextView">
 
-			<LinearLayout
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:layout_gravity="end"
-				android:orientation="horizontal">
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:orientation="horizontal">
 
-				<FrameLayout
-					android:layout_width="12dp"
-					android:layout_height="12dp"
-					android:layout_gravity="center_vertical">
+                <FrameLayout
+                    android:layout_width="12dp"
+                    android:layout_height="12dp"
+                    android:layout_gravity="center_vertical">
 
-					<ProgressBar
-						android:id="@+id/progressBar"
-						android:layout_width="match_parent"
-						android:layout_height="match_parent" />
+                    <ProgressBar
+                        android:id="@+id/progressBar"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
 
-				</FrameLayout>
+                </FrameLayout>
 
-				<TextView
-					android:id="@+id/sendTextView"
-					android:layout_width="wrap_content"
-					android:layout_height="wrap_content"
-					android:background="@drawable/drawable_shape_corner"
-					android:backgroundTint="@color/colorAccent"
-					android:padding="8dp"
-					android:text="@{message.content}"
-					android:textColor="@android:color/white"
-					android:textSize="15sp" />
+                <TextView
+                    android:id="@+id/sendTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/drawable_shape_corner"
+                    android:backgroundTint="@color/colorAccent"
+                    android:padding="8dp"
+                    android:text="@{message.content}"
+                    android:textColor="@android:color/white"
+                    android:textSize="15sp" />
 
-			</LinearLayout>
+            </LinearLayout>
 
-		</FrameLayout>
+        </FrameLayout>
 
-	</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>

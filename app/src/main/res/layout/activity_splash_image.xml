@@ -8,59 +8,59 @@
   -->
 
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	xmlns:app="http://schemas.android.com/apk/res-auto"
-	android:layout_width="match_parent"
-	android:layout_height="match_parent">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
-	<ImageView
-		android:id="@+id/imageView"
-		android:layout_width="0dp"
-		android:layout_height="0dp"
-		android:contentDescription="@string/app_name"
-		android:scaleType="centerCrop"
-		app:layout_constraintBottom_toTopOf="@id/bottomLayout"
-		app:layout_constraintEnd_toEndOf="parent"
-		app:layout_constraintStart_toStartOf="parent"
-		app:layout_constraintTop_toTopOf="parent" />
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:contentDescription="@string/app_name"
+        android:scaleType="centerCrop"
+        app:layout_constraintBottom_toTopOf="@id/bottomLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-	<com.weilylab.xhuschedule.ui.custom.SkipView
-		android:id="@+id/skipView"
-		android:layout_width="36dp"
-		android:layout_height="36dp"
-		android:layout_marginTop="32dp"
-		android:layout_marginEnd="16dp"
-		app:layout_constraintEnd_toEndOf="parent"
-		app:layout_constraintTop_toTopOf="parent" />
+    <com.weilylab.xhuschedule.ui.custom.SkipView
+        android:id="@+id/skipView"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-	<LinearLayout
-		android:id="@+id/bottomLayout"
-		android:layout_width="0dp"
-		android:layout_height="wrap_content"
-		android:background="@android:color/white"
-		android:orientation="horizontal"
-		android:paddingStart="64dp"
-		android:paddingEnd="64dp"
-		app:layout_constraintBottom_toBottomOf="parent"
-		app:layout_constraintEnd_toEndOf="parent"
-		app:layout_constraintStart_toStartOf="parent">
+    <LinearLayout
+        android:id="@+id/bottomLayout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@android:color/white"
+        android:orientation="horizontal"
+        android:paddingStart="64dp"
+        android:paddingEnd="64dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
 
-		<ImageView
-			android:layout_width="0dp"
-			android:layout_height="wrap_content"
-			android:layout_gravity="center_vertical"
-			android:layout_weight="1"
-			android:contentDescription="@string/app_name"
-			android:src="@mipmap/share_launcher" />
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:contentDescription="@string/app_name"
+            android:src="@mipmap/share_launcher" />
 
-		<ImageView
-			android:layout_width="0dp"
-			android:layout_height="wrap_content"
-			android:layout_gravity="center_vertical"
-			android:layout_weight="4"
-			android:contentDescription="@string/app_name"
-			android:src="@mipmap/splash_image_bottom"
-			android:tint="@color/colorAccent" />
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="4"
+            android:contentDescription="@string/app_name"
+            android:src="@mipmap/splash_image_bottom"
+            app:tint="@color/colorAccent" />
 
-	</LinearLayout>
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

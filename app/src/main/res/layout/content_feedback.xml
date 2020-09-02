@@ -8,77 +8,77 @@
   -->
 
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	xmlns:app="http://schemas.android.com/apk/res-auto"
-	xmlns:tools="http://schemas.android.com/tools"
-	android:layout_width="match_parent"
-	android:layout_height="match_parent"
-	android:background="@color/colorFeedBackBackground"
-	app:layout_behavior="@string/appbar_scrolling_view_behavior"
-	tools:context=".ui.activity.FeedbackActivity"
-	tools:showIn="@layout/activity_feedback">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorFeedBackBackground"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context=".ui.activity.FeedbackActivity"
+    tools:showIn="@layout/activity_feedback">
 
-	<androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-		android:id="@+id/swipeRefreshLayout"
-		android:layout_width="0dp"
-		android:layout_height="0dp"
-		app:layout_constraintBottom_toTopOf="@id/bottomLine"
-		app:layout_constraintEnd_toEndOf="parent"
-		app:layout_constraintStart_toStartOf="parent"
-		app:layout_constraintTop_toTopOf="parent">
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefreshLayout"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@id/bottomLine"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-		<androidx.recyclerview.widget.RecyclerView
-			android:id="@+id/recyclerView"
-			android:layout_width="match_parent"
-			android:layout_height="match_parent" />
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
 
-	</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
-	<View
-		android:id="@+id/bottomLine"
-		android:layout_width="0dp"
-		android:layout_height="0.33dp"
-		android:background="@color/colorDivider"
-		app:layout_constraintBottom_toTopOf="@id/sendLayout"
-		app:layout_constraintEnd_toEndOf="parent"
-		app:layout_constraintStart_toStartOf="parent" />
+    <View
+        android:id="@+id/bottomLine"
+        android:layout_width="0dp"
+        android:layout_height="0.33dp"
+        android:background="@color/colorDivider"
+        app:layout_constraintBottom_toTopOf="@id/sendLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
-	<LinearLayout
-		android:id="@+id/sendLayout"
-		android:layout_width="0dp"
-		android:layout_height="wrap_content"
-		android:background="@color/colorWhiteBackground"
-		android:orientation="horizontal"
-		android:paddingTop="2dp"
-		android:paddingBottom="2dp"
-		app:layout_constraintBottom_toBottomOf="parent"
-		app:layout_constraintEnd_toEndOf="parent"
-		app:layout_constraintStart_toStartOf="parent">
+    <LinearLayout
+        android:id="@+id/sendLayout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@color/colorWhiteBackground"
+        android:orientation="horizontal"
+        android:paddingTop="2dp"
+        android:paddingBottom="2dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
 
-		<EditText
-			android:id="@+id/inputEditText"
-			android:layout_width="0dp"
-			android:layout_height="match_parent"
-			android:layout_margin="6dp"
-			android:layout_weight="1"
-			android:background="@drawable/drawable_shape_corner"
-			android:backgroundTint="@color/colorFeedBackBackground"
-			android:gravity="center_vertical"
-			android:hint="@string/hint_feedback_hint"
-			android:inputType="text"
-			android:paddingStart="4dp"
-			android:paddingEnd="4dp"
-			android:textSize="15sp" />
+        <EditText
+            android:id="@+id/inputEditText"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_margin="6dp"
+            android:layout_weight="1"
+            android:background="@drawable/drawable_shape_corner"
+            android:backgroundTint="@color/colorFeedBackBackground"
+            android:gravity="center_vertical"
+            android:hint="@string/hint_feedback_hint"
+            android:inputType="text"
+            android:paddingStart="4dp"
+            android:paddingEnd="4dp"
+            android:textSize="15sp" />
 
-		<ImageView
-			android:id="@+id/buttonSubmit"
-			android:layout_width="33dp"
-			android:layout_height="33dp"
-			android:layout_margin="6dp"
-			android:contentDescription="@string/app_name"
-			android:padding="5dp"
-			android:src="@drawable/ic_send_black"
-			android:tint="@color/colorAccent" />
+        <ImageView
+            android:id="@+id/buttonSubmit"
+            android:layout_width="33dp"
+            android:layout_height="33dp"
+            android:layout_margin="6dp"
+            android:contentDescription="@string/app_name"
+            android:padding="5dp"
+            android:src="@drawable/ic_send_black"
+            app:tint="@color/colorAccent" />
 
-	</LinearLayout>
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

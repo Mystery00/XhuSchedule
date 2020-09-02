@@ -8,71 +8,71 @@
   -->
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	android:id="@+id/background"
-	android:layout_width="match_parent"
-	android:layout_height="wrap_content"
-	android:layout_margin="8dp">
+    android:id="@+id/background"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp">
 
-	<TextView
-		android:id="@+id/exam_no"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:layout_alignParentTop="true"
-		android:layout_alignParentEnd="true"
-		android:layout_marginStart="6dp"
-		android:layout_marginTop="6dp"
-		android:layout_marginEnd="6dp"
-		android:layout_marginBottom="3dp"
-		android:textStyle="bold" />
+    <TextView
+        android:id="@+id/exam_no"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="6dp"
+        android:layout_marginTop="6dp"
+        android:layout_marginEnd="6dp"
+        android:layout_marginBottom="3dp"
+        android:textStyle="bold" />
 
-	<TextView
-		android:id="@+id/exam_days"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:layout_below="@id/exam_no"
-		android:layout_alignParentEnd="true"
-		android:layout_marginStart="6dp"
-		android:layout_marginTop="3dp"
-		android:layout_marginEnd="6dp"
-		android:layout_marginBottom="3dp"
-		android:gravity="center"
-		android:textSize="18sp"
-		android:textStyle="bold" />
+    <TextView
+        android:id="@+id/exam_days"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/exam_no"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="6dp"
+        android:layout_marginTop="3dp"
+        android:layout_marginEnd="6dp"
+        android:layout_marginBottom="3dp"
+        android:gravity="center"
+        android:textSize="18sp"
+        android:textStyle="bold" />
 
-	<TextView
-		android:id="@+id/exam_student"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:layout_below="@id/exam_days"
-		android:layout_alignParentEnd="true"
-		android:layout_marginStart="6dp"
-		android:layout_marginTop="3dp"
-		android:layout_marginEnd="6dp"
-		android:layout_marginBottom="6dp"
-		android:textSize="16sp" />
+    <TextView
+        android:id="@+id/exam_student"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/exam_days"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="6dp"
+        android:layout_marginTop="3dp"
+        android:layout_marginEnd="6dp"
+        android:layout_marginBottom="6dp"
+        android:textSize="16sp" />
 
-	<TextView
-		android:id="@+id/exam_name"
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:layout_margin="6dp"
-		android:layout_toStartOf="@id/exam_no"
-		android:textStyle="bold" />
+    <TextView
+        android:id="@+id/exam_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="6dp"
+        android:layout_toStartOf="@id/exam_no"
+        android:textStyle="bold" />
 
-	<TextView
-		android:id="@+id/exam_location"
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:layout_below="@id/exam_name"
-		android:layout_margin="4dp"
-		android:layout_toStartOf="@id/exam_days" />
+    <TextView
+        android:id="@+id/exam_location"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/exam_name"
+        android:layout_margin="4dp"
+        android:layout_toStartOf="@id/exam_days" />
 
-	<TextView
-		android:id="@+id/exam_time"
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:layout_below="@id/exam_location"
-		android:layout_margin="4dp"
-		android:layout_toStartOf="@id/exam_days" />
+    <TextView
+        android:id="@+id/exam_time"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/exam_location"
+        android:layout_margin="4dp"
+        android:layout_toStartOf="@id/exam_days" />
 
 </RelativeLayout>
