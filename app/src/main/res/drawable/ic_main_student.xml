@@ -1,19 +1,10 @@
-<!--
-  ~                     GNU GENERAL PUBLIC LICENSE
-  ~                        Version 3, 29 June 2007
-  ~
-  ~  Copyright (C) 2007 Free Software Foundation, Inc. <http://fsf.org/>
-  ~  Everyone is permitted to copy and distribute verbatim copies
-  ~  of this license document, but changing it is not allowed.
-  -->
-
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:width="24dp"
     android:height="24dp"
     android:tint="#000000"
-    android:viewportWidth="24.0"
-    android:viewportHeight="24.0">
+    android:viewportWidth="1024"
+    android:viewportHeight="1024">
     <path
-        android:fillColor="#FFFFFF"
-        android:pathData="M12,17.27L18.18,21l-1.64,-7.03L22,9.24l-7.19,-0.61L12,2 9.19,8.63 2,9.24l5.46,4.73L5.82,21z" />
+        android:fillColor="#FF000000"
+        android:pathData="M395.59,620.84l-116.37,-116.37a18.29,18.29 0,0 1,0 -25.89l51.75,-51.71a18.29,18.29 0,0 1,12.95 -5.38h95.85l188.6,-188.6 -12.95,-12.91a18.29,18.29 0,1 1,25.89 -25.86l25.82,25.82 0.07,0.07 155.06,155.06 0.04,0.04 0.04,0.04 25.82,25.82a18.29,18.29 0,1 1,-25.86 25.89l-12.91,-12.95 -188.6,188.6v95.85a18.29,18.29 0,0 1,-5.38 12.95l-51.71,51.75a18.29,18.29 0,0 1,-25.89 0l-116.37,-116.37 -116.3,116.33a18.29,18.29 0,0 1,-25.89 -25.86l116.33,-116.33zM433.59,607.09a18.58,18.58 0,0 1,1.61 1.61l115.57,115.57 33.46,-33.46v-95.85a18.29,18.29 0,0 1,5.34 -12.95l193.97,-193.94 -129.32,-129.32 -193.94,193.97a18.29,18.29 0,0 1,-12.95 5.34L351.49,458.06l-33.46,33.46 115.57,115.57z" />
 </vector>

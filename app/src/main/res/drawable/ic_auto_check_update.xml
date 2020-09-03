@@ -1,19 +1,19 @@
-<!--
-  ~                     GNU GENERAL PUBLIC LICENSE
-  ~                        Version 3, 29 June 2007
-  ~
-  ~  Copyright (C) 2007 Free Software Foundation, Inc. <http://fsf.org/>
-  ~  Everyone is permitted to copy and distribute verbatim copies
-  ~  of this license document, but changing it is not allowed.
-  -->
-
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:width="24dp"
     android:height="24dp"
     android:tint="#000000"
-    android:viewportWidth="24.0"
-    android:viewportHeight="24.0">
+    android:viewportWidth="1024"
+    android:viewportHeight="1024">
     <path
-        android:fillColor="#FFFFFF"
-        android:pathData="M21,10.12h-6.78l2.74,-2.82c-2.73,-2.7 -7.15,-2.8 -9.88,-0.1 -2.73,2.71 -2.73,7.08 0,9.79 2.73,2.71 7.15,2.71 9.88,0C18.32,15.65 19,14.08 19,12.1h2c0,1.98 -0.88,4.55 -2.64,6.29 -3.51,3.48 -9.21,3.48 -12.72,0 -3.5,-3.47 -3.53,-9.11 -0.02,-12.58 3.51,-3.47 9.14,-3.47 12.65,0L21,3v7.12zM12.5,8v4.25l3.5,2.08 -0.72,1.21L11,13V8h1.5z" />
+        android:fillColor="#FF000000"
+        android:pathData="M357.31,758.09h-35.16a210.94,210.94 0,0 1,0 -421.88h49.22a28.13,28.13 0,0 1,0 56.25h-49.22a154.69,154.69 0,0 0,0 309.38h35.16a28.13,28.13 0,0 1,0 56.25z" />
+    <path
+        android:fillColor="#FF000000"
+        android:pathData="M708.88,438.17a28.13,28.13 0,0 1,-28.13 -28.13V374.89a168.75,168.75 0,0 0,-335.81 -24.12,28.13 28.13,0 1,1 -55.69,-7.95A225,225 0,0 1,737 374.89v35.16a28.13,28.13 0,0 1,-28.13 28.13z" />
+    <path
+        android:fillColor="#FF000000"
+        android:pathData="M701.84,758.09H497.94a28.13,28.13 0,0 1,0 -56.25h203.91a156.02,156.02 0,0 0,5.98 -311.91,28.55 28.55,0 0,1 -27.07,-29.6 28.13,28.13 0,0 1,29.18 -27.28,212.63 212.63,0 0,1 -8.09,425.04z" />
+    <path
+        android:fillColor="#FF000000"
+        android:pathData="M582.31,874.11a28.13,28.13 0,0 1,-19.9 -8.23L453.08,756.48a42.19,42.19 0,0 1,0 -59.63l109.34,-109.41a28.13,28.13 0,0 1,39.8 39.8l-99.42,99.42 99.42,99.42a28.13,28.13 0,0 1,-19.9 48.02z" />
 </vector>

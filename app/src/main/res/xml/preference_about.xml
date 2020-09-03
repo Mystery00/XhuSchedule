@@ -11,6 +11,7 @@
     <PreferenceCategory android:title="@string/screen_category_about_application">
 
 		<Preference
+			android:icon="@drawable/ic_update_log"
 			android:key="@string/key_update_log"
 			android:title="@string/title_update_log" />
 

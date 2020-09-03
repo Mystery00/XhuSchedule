@@ -14,10 +14,12 @@
         android:title="@string/title_show_not" />
 
     <Preference
+        android:icon="@drawable/ic_current_year_and_term"
         android:key="@string/key_current_year_and_term"
         android:title="@string/title_current_year_and_term" />
 
     <Preference
+        android:icon="@drawable/ic_custom_start_time"
         android:key="@string/key_custom_start_time"
         android:title="@string/title_custom_start_time">
         <intent
@@ -46,10 +48,13 @@
         android:title="@string/title_action_school_calendar" />
 
     <Preference
-        android:key="@string/key_action_to_calendar"
-        android:title="@string/title_action_to_calendar" />
+        android:icon="@drawable/ic_action_export_to_calendar"
+        android:key="@string/key_action_export_to_calendar"
+        android:title="@string/title_action_export_to_calendar" />
 
-    <Preference android:title="@string/title_action_custom_course">
+    <Preference
+        android:icon="@drawable/ic_custom_course"
+        android:title="@string/title_action_custom_course">
         <intent
             android:action="android.intent.action.VIEW"
             android:targetClass="com.weilylab.xhuschedule.ui.activity.CustomCourseActivity"
@@ -57,7 +62,9 @@
 
     </Preference>
 
-    <Preference android:title="@string/title_action_custom_thing">
+    <Preference
+        android:icon="@drawable/ic_custom_thing"
+        android:title="@string/title_action_custom_thing">
         <intent
             android:action="android.intent.action.VIEW"
             android:targetClass="com.weilylab.xhuschedule.ui.activity.CustomThingActivity"

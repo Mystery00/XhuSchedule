@@ -9,31 +9,32 @@
 
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-	<PreferenceCategory
-		android:key="@string/key_logged_account"
-		android:title="@string/title_current_account" />
+    <PreferenceCategory
+        android:key="@string/key_logged_account"
+        android:title="@string/title_current_account" />
 
-	<PreferenceCategory android:title="@string/title_account_manager">
+    <PreferenceCategory android:title="@string/title_account_manager">
 
-		<Preference
-			android:key="@string/key_add_account"
-			android:title="@string/title_add_account" />
+        <Preference
+            android:icon="@drawable/ic_add_account"
+            android:key="@string/key_add_account"
+            android:title="@string/title_add_account" />
 
-		<Preference
-			android:key="@string/key_del_account"
-			android:title="@string/title_del_account" />
+        <Preference
+            android:key="@string/key_del_account"
+            android:title="@string/title_del_account" />
 
-		<Preference
-			android:icon="@drawable/ic_set_main_account"
-			android:key="@string/key_set_main_account"
-			android:title="@string/title_set_main_account" />
+        <Preference
+            android:icon="@drawable/ic_set_main_account"
+            android:key="@string/key_set_main_account"
+            android:title="@string/title_set_main_account" />
 
-		<CheckBoxPreference
-			android:icon="@drawable/ic_enable_multi_student"
-			android:key="@string/key_enable_multi_user_mode"
-			android:summary="@string/summary_enable_multi_user_mode"
-			android:title="@string/title_enable_multi_user_mode" />
+        <CheckBoxPreference
+            android:icon="@drawable/ic_enable_multi_student"
+            android:key="@string/key_enable_multi_user_mode"
+            android:summary="@string/summary_enable_multi_user_mode"
+            android:title="@string/title_enable_multi_user_mode" />
 
-	</PreferenceCategory>
+    </PreferenceCategory>
 
 </PreferenceScreen>

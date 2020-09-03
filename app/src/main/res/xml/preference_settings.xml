@@ -58,10 +58,12 @@
     <PreferenceCategory android:title="@string/screen_category_notification">
 
         <CheckBoxPreference
+            android:icon="@drawable/ic_notification_course"
             android:key="@string/key_notification_course"
             android:title="@string/title_notification_course" />
 
         <CheckBoxPreference
+            android:icon="@drawable/ic_notification_exam"
             android:key="@string/key_notification_exam"
             android:title="@string/title_notification_exam" />
 
@@ -75,6 +77,7 @@
     <PreferenceCategory android:title="@string/title_jrsc_settings">
 
         <CheckBoxPreference
+            android:icon="@drawable/ic_disable_jrsc"
             android:key="@string/key_disable_jrsc"
             android:title="@string/title_disable_jrsc" />
 
@@ -126,6 +129,7 @@
     </PreferenceCategory>
 
     <Preference
+        android:icon="@drawable/ic_about"
         android:key="@string/key_about"
         android:title="@string/screen_category_about" />
 
