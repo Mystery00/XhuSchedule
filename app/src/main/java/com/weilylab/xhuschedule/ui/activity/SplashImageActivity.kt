@@ -34,6 +34,7 @@ class SplashImageActivity : XhuBaseActivity(R.layout.activity_splash_image, fals
 
 	override fun inflateView(layoutId: Int) {
 		if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.R) {
+			super.inflateView(layoutId)
 			window.setDecorFitsSystemWindows(false)
 			val controller = window.insetsController
 			if (controller != null) {
@@ -47,8 +48,8 @@ class SplashImageActivity : XhuBaseActivity(R.layout.activity_splash_image, fals
 					or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
 					or View.SYSTEM_UI_FLAG_FULLSCREEN
 					or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY)
+			super.inflateView(layoutId)
 		}
-		super.inflateView(layoutId)
 	}
 
 	override fun initView() {

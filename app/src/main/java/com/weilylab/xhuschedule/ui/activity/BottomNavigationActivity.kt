@@ -15,6 +15,7 @@ import android.animation.ValueAnimator
 import android.app.Activity
 import android.app.Dialog
 import android.content.Intent
+import android.content.res.Configuration
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -229,6 +230,11 @@ class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_naviga
 	}
 
 	private fun showBackground() {
+		val isDark = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
+		if (isDark) {
+			backgroundImageView.setBackgroundResource(R.color.colorTableBackground)
+			return
+		}
 		val path = ConfigurationUtil.customBackgroundImage
 		val file = File(path)
 		if (path == "" || !file.exists()) {
