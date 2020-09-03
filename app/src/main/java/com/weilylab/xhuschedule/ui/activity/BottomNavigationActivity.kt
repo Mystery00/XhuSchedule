@@ -9,6 +9,7 @@
 
 package com.weilylab.xhuschedule.ui.activity
 
+import android.animation.Animator
 import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
 import android.app.Activity
@@ -75,10 +76,28 @@ class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_naviga
 
 	private var animation: ObjectAnimator? = null
 	private var arrowAnimation: ObjectAnimator? = null
+	private var showLoading = false
 	private val loadingAnimation: ObjectAnimator by lazy {
 		val animation = ObjectAnimator.ofFloat(imageSync, "rotation", 0F, 360F)
 				.setDuration(1000)
 		animation.repeatCount = ValueAnimator.INFINITE
+		animation.addListener(object : Animator.AnimatorListener {
+			override fun onAnimationStart(p0: Animator?) {
+				showLoading = true
+			}
+
+			override fun onAnimationEnd(p0: Animator?) {
+			}
+
+			override fun onAnimationCancel(p0: Animator?) {
+			}
+
+			override fun onAnimationRepeat(p0: Animator?) {
+				if (!showLoading) {
+					p0?.cancel()
+				}
+			}
+		})
 		animation
 	}
 
@@ -326,7 +345,7 @@ class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_naviga
 	}
 
 	private fun cancelLoading() {
-		loadingAnimation.cancel()
+		showLoading = false
 	}
 
 	private lateinit var popupWindow: PopupWindow

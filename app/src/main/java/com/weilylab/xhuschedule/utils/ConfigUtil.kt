@@ -18,6 +18,7 @@ import android.graphics.Color
 import android.os.Build
 import android.provider.Settings
 import android.view.View
+import android.view.WindowInsetsController
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.weilylab.xhuschedule.BuildConfig
 import com.weilylab.xhuschedule.R
@@ -93,13 +94,19 @@ object ConfigUtil {
 		}
 	}
 
+	@Suppress("DEPRECATION")
 	fun setStatusBar(activity: Activity) {
 		when {
 			Build.VERSION.SDK_INT >= Build.VERSION_CODES.M -> {//6.0
 				activity.window.statusBarColor = Color.WHITE
 				if (ConfigurationUtil.tintNavigationBar && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 					activity.window.navigationBarColor = Color.WHITE
-					activity.window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR or View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR
+					if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+						activity.window.insetsController?.setSystemBarsAppearance(WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS or WindowInsetsController.APPEARANCE_LIGHT_NAVIGATION_BARS,
+								WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS or WindowInsetsController.APPEARANCE_LIGHT_NAVIGATION_BARS)
+					} else {
+						activity.window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR or View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR
+					}
 				} else
 					activity.window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
 			}

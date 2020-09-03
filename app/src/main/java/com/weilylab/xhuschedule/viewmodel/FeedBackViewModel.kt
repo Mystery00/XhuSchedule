@@ -77,7 +77,7 @@ class FeedBackViewModel : ViewModel(), KoinComponent {
 	private suspend fun queryMessageFromLocalInCoroutine(student: Student) {
 		val list = feedBackRepository.getMessageFromLocal(student, maxId.value
 				?: 0)
-		maxId.postValue(list.maxBy { it.id }?.id)
+		maxId.postValue(list.maxByOrNull { it.id }?.id)
 		if (list.isNullOrEmpty()) {
 			feedBackMessageList.empty()
 		} else {

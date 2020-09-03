@@ -12,6 +12,8 @@ package com.weilylab.xhuschedule.ui.activity
 import android.content.Intent
 import android.graphics.Color
 import android.view.View
+import android.view.WindowInsets
+import android.view.WindowInsetsController
 import android.widget.LinearLayout
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
@@ -26,6 +28,8 @@ import com.weilylab.xhuschedule.utils.ConfigurationUtil
 import kotlinx.android.synthetic.main.activity_guide.*
 import kotlin.math.roundToInt
 
+
+@Suppress("DEPRECATION")
 class GuideActivity : XhuBaseActivity(R.layout.activity_guide) {
 	private val imageArray = arrayOf(R.mipmap.welcome1, R.mipmap.welcome2, R.mipmap.welcome3, R.mipmap.welcome4)
 	private val sectionsPagerAdapter: SectionsPagerAdapter by lazy { SectionsPagerAdapter(supportFragmentManager) }
@@ -34,7 +38,16 @@ class GuideActivity : XhuBaseActivity(R.layout.activity_guide) {
 	private var currentIndex = 0
 
 	override fun inflateView(layoutId: Int) {
-		window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or View.SYSTEM_UI_FLAG_FULLSCREEN or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+		if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.R) {
+			window.setDecorFitsSystemWindows(false)
+			val controller = window.insetsController
+			if (controller != null) {
+				controller.hide(WindowInsets.Type.statusBars() or WindowInsets.Type.navigationBars())
+				controller.systemBarsBehavior = WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+			}
+		} else {
+			window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or View.SYSTEM_UI_FLAG_FULLSCREEN or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+		}
 		super.inflateView(layoutId)
 	}
 

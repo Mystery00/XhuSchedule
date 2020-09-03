@@ -41,7 +41,7 @@ class FragmentTodayRecyclerViewAdapter(private val context: Context) : BaseMulti
 				binding.jrscAuthorTextView.text = text
 				binding.cardView.setOnClickListener {
 					val stringBuilder = StringBuilder()
-					data.data.origin.content.forEach { s -> stringBuilder.appendln(s) }
+					data.data.origin.content.forEach { s -> stringBuilder.appendLine(s) }
 					val dialogShowJrscBinding = DialogShowJrscBinding.inflate(LayoutInflater.from(context))
 					val title = "《${data.data.origin.title}》"
 					dialogShowJrscBinding.title.text = title

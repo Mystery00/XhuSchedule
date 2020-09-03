@@ -9,8 +9,10 @@
 
 package com.weilylab.xhuschedule.ui.fragment.settings
 
+import android.Manifest
 import android.app.Dialog
 import android.app.TimePickerDialog
+import android.content.pm.PackageManager
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.preference.CheckBoxPreference
@@ -39,6 +41,7 @@ class ClassSettingsFragment : XhuBasePreferenceFragment(R.xml.preference_class) 
 	private val customStartTimePreference by lazy { findPreferenceById<Preference>(R.string.key_custom_start_time) }
 	private val showTomorrowCourseAfterPreference by lazy { findPreferenceById<Preference>(R.string.key_show_tomorrow_course_after) }
 	private val schoolCalendarPreference by lazy { findPreferenceById<Preference>(R.string.key_action_school_calendar) }
+	private val toCalendarPreference by lazy { findPreferenceById<Preference>(R.string.key_action_export_to_calendar) }
 	private val showCustomThingFirstPreference by lazy { findPreferenceById<CheckBoxPreference>(R.string.key_show_custom_thing_first) }
 
 	private val dialog: Dialog by lazy {
@@ -161,6 +164,18 @@ class ClassSettingsFragment : XhuBasePreferenceFragment(R.xml.preference_class) 
 				}
 			} else {
 				jumpToImageView(schoolCalendarUrl!!)
+			}
+			true
+		}
+		toCalendarPreference.setOnPreferenceClickListener {
+			requestPermissionsOnFragment(arrayOf(Manifest.permission.WRITE_CALENDAR)) { _, result ->
+				if (result.isEmpty() || result[0] == PackageManager.PERMISSION_GRANTED) {
+//					deleteAllEvent(requireContext())
+//					val calendarEvent = CalendarEvent("测试事项", nowMillis(), nowMillis() + 1000 * 60 * 60, "位置地点", "描述", allDay = false, hasAlarm = false)
+//					calendarEvent.reminder.add(10)
+//					calendarEvent.attendees.add(CalendarAttendee("老师名字"))
+//					addEvent(requireContext(), calendarEvent)
+				}
 			}
 			true
 		}

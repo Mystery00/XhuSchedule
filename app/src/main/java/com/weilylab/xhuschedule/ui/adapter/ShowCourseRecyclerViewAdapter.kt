@@ -24,9 +24,9 @@ class ShowCourseRecyclerViewAdapter(private val context: Context) : BaseBindingR
 		val endTimeArray = context.resources.getStringArray(R.array.end_time)
 		val courseTimeText = "${startTimeArray[data.start - 1]} - ${endTimeArray[data.start + data.step - 2]}"
 		val stringBuilder = StringBuilder()
-		stringBuilder.appendln(data.teacher)
-				.appendln(data.room)
-				.append(CourseUtil.splitWeekString(data.weekList).replace(",", "周 ")).appendln("周")
+		stringBuilder.appendLine(data.teacher)
+				.appendLine(data.room)
+				.append(CourseUtil.splitWeekString(data.weekList).replace(",", "周 ")).appendLine("周")
 				.append(courseTimeText)
 		binding.textView.text = stringBuilder.toString()
 		binding.textView.setLineSpacing(binding.textView.textSize * 0.6f, 1f)
