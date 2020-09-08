@@ -70,6 +70,27 @@ class SettingsViewModel : ViewModel(), KoinComponent {
 		}
 	}
 
+	fun queryAllStudentListAndThen(block: (List<Student>) -> Unit) {
+		launch(studentList) {
+			val list = if (studentList.value == null) {
+				val list = studentRepository.queryAllStudentList()
+				if (list.isNullOrEmpty()) {
+					studentList.empty()
+				} else {
+					studentList.content(list)
+				}
+				list
+			} else {
+				studentList.value?.data
+			}
+			list?.let {
+				withContext(Dispatchers.Main) {
+					block(it)
+				}
+			}
+		}
+	}
+
 	fun queryAllStudentInfoListAndThen(block: (List<StudentInfo>) -> Unit) {
 		launch(studentInfoList) {
 			val list = if (studentInfoList.value == null) {

@@ -44,6 +44,8 @@
     <string name="action_cancel_do">撤销</string>
     <string name="action_re_request">重新申请</string>
     <string name="action_disable">禁用</string>
+    <string name="action_add_student">添加账号</string>
+    <string name="action_export">导出</string>
 
     <string name="shortcut_title_query_test">考试查询</string>
     <string name="shortcut_title_query_class_score">成绩查询</string>
@@ -79,6 +81,11 @@
     <string name="prompt_custom_course_term">学期：%1$s</string>
     <string name="prompt_custom_course_week_">第 %1$s 周</string>
     <string name="prompt_custom_course_time_">第 %1$s 节</string>
+
+    <string name="prompt_export_select_student">添加导出的账号</string>
+    <string name="prompt_export_custom_course">包含自定义课程</string>
+    <string name="prompt_export_custom_thing">包含自定义事项</string>
+    <string name="prompt_export_set_reminder">添加提醒</string>
 
     <string name="share_qq">QQ</string>
     <string name="share_weixin">微信</string>
@@ -149,6 +156,12 @@
     <string name="hint_dialog_custom_course_choose_time_start">请选择开始上课节次</string>
     <string name="hint_dialog_custom_course_choose_time_end">请选择结束上课节次</string>
     <string name="hint_dialog_custom_course_choose_week_index">上课星期</string>
+    <string name="hint_dialog_export_select_student">请选择需要导出的账号</string>
+    <string name="hint_dialog_export_reminder_5">上课前5分钟</string>
+    <string name="hint_dialog_export_reminder_10">上课前10分钟</string>
+    <string name="hint_dialog_export_reminder_custom1">上课前</string>
+    <string name="hint_dialog_export_reminder_custom2">分钟</string>
+    <string name="hint_dialog_export_reminder_custom">上课前%1$d分钟</string>
 
     <string name="hint_confirm_reset_user_img">确定要重置个人头像吗？</string>
     <string name="hint_confirm_reset_background_img">确定要重置背景图片吗？</string>
@@ -168,6 +181,8 @@
     <string name="error_set_main_account">设置主用户失败，错误详情：%1$s</string>
     <string name="error_calendar_insert_failed">课程（%1$s）转换失败！</string>
     <string name="error_calendar_account_create_failed">创建日历账号失败！</string>
+    <string name="error_export_calendar_empty_account">导出账号为空，不执行操作！</string>
+    <string name="error_set_reminder_empty_input">时间输入格式错误</string>
 
     <string name="success_login">登陆成功，欢迎使用%1$s！</string>
 

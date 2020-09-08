@@ -13,13 +13,26 @@ import android.Manifest
 import android.app.Dialog
 import android.app.TimePickerDialog
 import android.content.pm.PackageManager
+import android.os.Bundle
+import android.view.ContextThemeWrapper
+import android.view.LayoutInflater
+import android.view.View
+import android.widget.ImageView
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
+import androidx.core.view.get
 import androidx.preference.CheckBoxPreference
 import androidx.preference.Preference
 import cc.shinichi.library.ImagePreview
+import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.chip.Chip
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.base.XhuBasePreferenceFragment
+import com.weilylab.xhuschedule.databinding.DialogSetReminderBinding
+import com.weilylab.xhuschedule.databinding.ItemReminderBinding
+import com.weilylab.xhuschedule.databinding.LayoutExportToCalendarBinding
+import com.weilylab.xhuschedule.model.Student
 import com.weilylab.xhuschedule.model.event.UI
 import com.weilylab.xhuschedule.model.event.UIConfigEvent
 import com.weilylab.xhuschedule.utils.ConfigurationUtil
@@ -29,7 +42,9 @@ import com.zyao89.view.zloading.Z_TYPE
 import org.greenrobot.eventbus.EventBus
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import vip.mystery0.logs.Logs
 import java.util.*
+import kotlin.collections.ArrayList
 
 class ClassSettingsFragment : XhuBasePreferenceFragment(R.xml.preference_class) {
 	private val eventBus: EventBus by inject()
@@ -44,6 +59,33 @@ class ClassSettingsFragment : XhuBasePreferenceFragment(R.xml.preference_class) 
 	private val toCalendarPreference by lazy { findPreferenceById<Preference>(R.string.key_action_export_to_calendar) }
 	private val showCustomThingFirstPreference by lazy { findPreferenceById<CheckBoxPreference>(R.string.key_show_custom_thing_first) }
 
+	private val exportToCalendarBinding by lazy { LayoutExportToCalendarBinding.inflate(LayoutInflater.from(requireContext())) }
+	private val dialogSetReminderBinding by lazy { DialogSetReminderBinding.inflate(LayoutInflater.from(requireContext())) }
+	private val bottomSheetDialog by lazy { BottomSheetDialog(requireActivity()) }
+	private val setReminderDialog by lazy {
+		MaterialAlertDialogBuilder(requireActivity())
+				.setView(dialogSetReminderBinding.root)
+				.setPositiveButton(android.R.string.ok) { dialog, _ ->
+					val remindTime = when (dialogSetReminderBinding.radioGroup.checkedRadioButtonId) {
+						R.id.radioButton5 -> 5
+						R.id.radioButton10 -> 10
+						R.id.radioButtonCustom -> {
+							val input = dialogSetReminderBinding.editTextNumber.text.toString()
+							if (input.isBlank()) {
+								toastLong(R.string.error_set_reminder_empty_input)
+								return@setPositiveButton
+							}
+							input.toInt()
+						}
+						else -> 0
+					}
+					dialog.dismiss()
+					handleAddRemindLayout(remindTime)
+				}
+				.setNegativeButton(android.R.string.cancel, null)
+				.create()
+	}
+
 	private val dialog: Dialog by lazy {
 		ZLoadingDialog(requireActivity())
 				.setLoadingBuilder(Z_TYPE.SINGLE_CIRCLE)
@@ -56,6 +98,13 @@ class ClassSettingsFragment : XhuBasePreferenceFragment(R.xml.preference_class) 
 				.create()
 	}
 	private var schoolCalendarUrl: String? = null
+	private val selectedStudentList = ArrayList<Student>()
+	private val remindTimeList = ArrayList<Int>()
+
+	override fun onActivityCreated(savedInstanceState: Bundle?) {
+		super.onActivityCreated(savedInstanceState)
+		initExportLayout()
+	}
 
 	override fun initPreference() {
 		super.initPreference()
@@ -67,6 +116,76 @@ class ClassSettingsFragment : XhuBasePreferenceFragment(R.xml.preference_class) 
 			showTomorrowCourseAfterPreference.summary = getString(R.string.summary_show_tomorrow_after_time, ConfigurationUtil.showTomorrowCourseAfterTime)
 		else
 			showTomorrowCourseAfterPreference.summary = getString(R.string.summary_show_tomorrow_after_time_disable)
+	}
+
+	private fun initExportLayout() {
+		bottomSheetDialog.setContentView(exportToCalendarBinding.root)
+		bottomSheetDialog.setCancelable(true)
+		bottomSheetDialog.setCanceledOnTouchOutside(true)
+		exportToCalendarBinding.imageViewClose.setOnClickListener {
+			bottomSheetDialog.dismiss()
+		}
+		exportToCalendarBinding.buttonExport.setOnClickListener {
+			requestPermissionsOnFragment(arrayOf(Manifest.permission.WRITE_CALENDAR)) { _, result ->
+				if (result.isEmpty() || result[0] == PackageManager.PERMISSION_GRANTED) {
+					if (selectedStudentList.isEmpty()) {
+						//空的账号列表
+						toast(R.string.error_export_calendar_empty_account)
+					} else {
+						Logs.i("initExportLayout: $selectedStudentList")
+						Logs.i("initExportLayout: $remindTimeList")
+						bottomSheetDialog.dismiss()
+					}
+//					deleteAllEvent(requireContext())
+//					val calendarEvent = CalendarEvent("测试事项", nowMillis(), nowMillis() + 1000 * 60 * 60, "位置地点", "描述", allDay = false, hasAlarm = false)
+//					calendarEvent.reminder.add(10)
+//					calendarEvent.attendees.add(CalendarAttendee("老师名字"))
+//					addEvent(requireContext(), calendarEvent)
+				}
+			}
+		}
+		exportToCalendarBinding.textViewExportSelectStudent.setOnClickListener {
+			settingsViewModel.queryAllStudentListAndThen { list ->
+				val selectArray = Array(list.size) { "${list[it].username}(${list[it].studentName})" }
+				val selectBooleanArray = BooleanArray(list.size) { selectedStudentList.contains(list[it]) }
+				MaterialAlertDialogBuilder(requireActivity())
+						.setTitle(R.string.hint_dialog_export_select_student)
+						.setMultiChoiceItems(selectArray, selectBooleanArray) { _, i: Int, b: Boolean ->
+							selectBooleanArray[i] = b
+						}
+						.setPositiveButton(android.R.string.ok) { _, _ ->
+							selectBooleanArray.forEachIndexed { index, b ->
+								val student = list[index]
+								if (b) {
+									if (!selectedStudentList.contains(student)) {
+										selectedStudentList.add(student)
+									}
+								} else {
+									if (selectedStudentList.contains(student)) {
+										selectedStudentList.remove(student)
+									}
+								}
+							}
+							exportToCalendarBinding.chipGroupSelect.removeAllViews()
+							selectedStudentList.forEach { student ->
+								val chip = Chip(ContextThemeWrapper(requireActivity(), R.style.Widget_MaterialComponents_Chip_Entry))
+								chip.isCloseIconVisible = true
+								val text = "${student.username}(${student.studentName})"
+								chip.text = text
+								chip.setOnCloseIconClickListener { view ->
+									selectedStudentList.remove(student)
+									exportToCalendarBinding.chipGroupSelect.removeView(view)
+								}
+								exportToCalendarBinding.chipGroupSelect.addView(chip)
+							}
+						}
+						.setNegativeButton(android.R.string.cancel, null)
+						.show()
+			}
+		}
+		exportToCalendarBinding.textViewAddReminder.setOnClickListener {
+			setReminderDialog.show()
+		}
 	}
 
 	override fun monitor() {
@@ -168,15 +287,7 @@ class ClassSettingsFragment : XhuBasePreferenceFragment(R.xml.preference_class) 
 			true
 		}
 		toCalendarPreference.setOnPreferenceClickListener {
-			requestPermissionsOnFragment(arrayOf(Manifest.permission.WRITE_CALENDAR)) { _, result ->
-				if (result.isEmpty() || result[0] == PackageManager.PERMISSION_GRANTED) {
-//					deleteAllEvent(requireContext())
-//					val calendarEvent = CalendarEvent("测试事项", nowMillis(), nowMillis() + 1000 * 60 * 60, "位置地点", "描述", allDay = false, hasAlarm = false)
-//					calendarEvent.reminder.add(10)
-//					calendarEvent.attendees.add(CalendarAttendee("老师名字"))
-//					addEvent(requireContext(), calendarEvent)
-				}
-			}
+			bottomSheetDialog.show()
 			true
 		}
 		showCustomThingFirstPreference.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, _ ->
@@ -197,5 +308,32 @@ class ClassSettingsFragment : XhuBasePreferenceFragment(R.xml.preference_class) 
 		else
 			ConfigurationUtil.startTime
 		customStartTimePreference.summary = getString(R.string.summary_custom_start_time, summary)
+	}
+
+	private fun handleAddRemindLayout(remindTime: Int) {
+		if (remindTimeList.contains(remindTime))
+			return
+		if (remindTimeList.isEmpty()) {
+			//列表为空，清除占位的图标
+			exportToCalendarBinding.imageViewIcon.setImageDrawable(null)
+		}
+		//创建新的项
+		val binding = ItemReminderBinding.inflate(LayoutInflater.from(requireContext()))
+		//设置是否展示图标
+		if (remindTimeList.isNotEmpty()) {
+			binding.imageViewIcon.setImageDrawable(null)
+		}
+		binding.textViewReminder.text = getString(R.string.hint_dialog_export_reminder_custom, remindTime)
+		binding.imageViewDelete.setOnClickListener {
+			handleRemoveRemindLayout(binding.root, remindTime)
+		}
+		exportToCalendarBinding.setRemindLayout.addView(binding.root, remindTimeList.size)
+		remindTimeList.add(remindTime)
+	}
+
+	private fun handleRemoveRemindLayout(view: View, remindTime: Int) {
+		exportToCalendarBinding.setRemindLayout.removeView(view)
+		remindTimeList.remove(remindTime)
+		exportToCalendarBinding.setRemindLayout[0].findViewById<ImageView>(R.id.imageViewIcon).setImageResource(R.drawable.ic_all_day)
 	}
 }
