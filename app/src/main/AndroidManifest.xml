@@ -38,6 +38,14 @@
         tools:replace="android:networkSecurityConfig"
         tools:targetApi="n">
 
+        <meta-data
+            android:name="BUILD_CHANNEL"
+            android:value="${channel}" />
+
+        <meta-data
+            android:name="DEBUG"
+            android:value="${debug}" />
+
         <uses-library
             android:name="org.apache.http.legacy"
             android:required="false" />
@@ -214,7 +222,7 @@
         </provider>
         <provider
             android:name=".provider.TodaySliceProvider"
-            android:authorities="com.weilylab.xhuschedule.provider"
+            android:authorities="${applicationId}.provider"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />

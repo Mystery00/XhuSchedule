@@ -12,6 +12,7 @@ package com.weilylab.xhuschedule.config
 import android.annotation.SuppressLint
 import android.app.Application
 import android.content.Context
+import android.content.pm.PackageManager
 import android.os.Build
 import androidx.multidex.MultiDexApplication
 import com.oasisfeng.condom.CondomContext
@@ -20,7 +21,6 @@ import com.sina.weibo.sdk.auth.AuthInfo
 import com.tencent.mm.opensdk.openapi.IWXAPI
 import com.tencent.mm.opensdk.openapi.WXAPIFactory
 import com.tencent.tauth.Tencent
-import com.weilylab.xhuschedule.BuildConfig
 import com.weilylab.xhuschedule.module.*
 import com.weilylab.xhuschedule.utils.NotificationUtil
 import com.weilylab.xhuschedule.utils.PackageUtil
@@ -31,6 +31,7 @@ import vip.mystery0.crashhandler.CrashHandler
 import vip.mystery0.logs.Logs
 import vip.mystery0.logs.logsLogger
 import vip.mystery0.tools.ToolsClient
+import vip.mystery0.tools.context
 import vip.mystery0.tools.utils.registerActivityLifecycle
 import java.io.File
 
@@ -51,11 +52,12 @@ class APP : MultiDexApplication() {
 				modules(listOf(appModule, databaseModule, networkModule, repositoryModule, viewModelModule))
 			}
 		}
+		val debug = applicationContext.applicationInfo.metaData.getBoolean("DEBUG")
 		CrashHandler.config {
 			setFileNameSuffix("log")
 					.setDir(File(externalCacheDir, "crash"))
 					.setAutoClean(true)
-					.setDebug(BuildConfig.DEBUG)
+					.setDebug(debug)
 		}.init()
 		NotificationUtil.initChannelID(this)//初始化NotificationChannelID
 		ToolsClient.initWithContext(this)
@@ -79,7 +81,7 @@ class APP : MultiDexApplication() {
 				WbSdk.install(CondomContext.wrap(applicationContext, "WeiBo"), AuthInfo(applicationContext, "2170085314", "https://api.weibo.com/oauth2/default.html", "statuses/share"))
 			}
 		Logs.setConfig {
-			it.setShowLog(BuildConfig.DEBUG)
+			it.setShowLog(debug)
 		}
 	}
 
@@ -97,4 +99,10 @@ class APP : MultiDexApplication() {
 		var wxAPI: IWXAPI? = null
 			private set
 	}
+}
+
+fun getChannel(): String? {
+	val context = context()
+	val info = context.packageManager.getApplicationInfo(context.packageName, PackageManager.GET_META_DATA)
+	return info.metaData.getString("BUILD_CHANNEL");
 }

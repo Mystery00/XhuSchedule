@@ -16,13 +16,22 @@ apply plugin: 'kotlin-kapt'
 autoVersion {
     major 2
     minor 6
-    patch 2
-    beta 0
+    patch 3
+    beta 1
     alpha 0
     isShowBuild false
 }
 
 android {
+    flavorDimensions "default"
+    productFlavors {
+        common {
+            manifestPlaceholders = [channel: "common"]
+        }
+        play {
+            manifestPlaceholders = [channel: "google_play"]
+        }
+    }
     packagingOptions {
         exclude 'META-INF/library-core_release.kotlin_module'
     }
@@ -60,9 +69,11 @@ android {
     }
     buildTypes {
         debug {
+            applicationIdSuffix ".debug"
             resValue "string", "app_version_name", autoVersion.name
             resValue "string", "app_version_code", autoVersion.code + ''
-            resValue "string", "app_package_name", android.defaultConfig.applicationId
+            resValue "string", "app_package_name", android.defaultConfig.applicationId + '.debug'
+            manifestPlaceholders = [debug: true]
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
@@ -70,6 +81,7 @@ android {
             resValue "string", "app_version_name", autoVersion.name
             resValue "string", "app_version_code", autoVersion.code + ''
             resValue "string", "app_package_name", android.defaultConfig.applicationId
+            manifestPlaceholders = [debug: false]
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
@@ -97,7 +109,7 @@ def koin_version = '2.1.5'
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation 'com.google.android.material:material:1.2.0'
+    implementation 'com.google.android.material:material:1.2.1'
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
@@ -116,7 +128,7 @@ dependencies {
     implementation "org.koin:koin-androidx-ext:$koin_version"
 
     //coil
-    implementation 'io.coil-kt:coil:0.11.0'
+    implementation 'io.coil-kt:coil:0.12.0'
 
     //EventBus
     implementation 'org.greenrobot:eventbus:3.2.0'

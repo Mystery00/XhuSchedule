@@ -13,9 +13,9 @@ import android.app.Service
 import android.content.Intent
 import android.os.Build
 import android.os.IBinder
-import androidx.appcompat.app.AlertDialog
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.weilylab.xhuschedule.BuildConfig
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.api.XhuScheduleCloudAPI
@@ -109,7 +109,7 @@ class CheckUpdateService : Service() {
 			val activity = currentActivity() ?: return@withContext
 			val title = getString(R.string.dialog_update_title, getString(R.string.app_version_name), version.versionName)
 			val text = getString(R.string.dialog_update_text, version.updateLog)
-			val builder = AlertDialog.Builder(activity)
+			val builder = MaterialAlertDialogBuilder(activity)
 					.setTitle(title)
 					.setMessage(text)
 					.setPositiveButton("${getString(R.string.action_download_apk)}(${version.apkSize.toLong().toFormatFileSize()})") { _, _ ->
