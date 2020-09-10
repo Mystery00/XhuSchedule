@@ -150,8 +150,8 @@ class ClassSettingsFragment : XhuBasePreferenceFragment(R.xml.preference_class) 
 			bottomSheetDialog.dismiss()
 		}
 		exportToCalendarBinding.buttonExport.setOnClickListener {
-			requestPermissionsOnFragment(arrayOf(Manifest.permission.WRITE_CALENDAR)) { _, result ->
-				if (result.isEmpty() || result[0] == PackageManager.PERMISSION_GRANTED) {
+			requestPermissionsOnFragment(arrayOf(Manifest.permission.WRITE_CALENDAR, Manifest.permission.READ_CALENDAR)) { _, result ->
+				if (result.isEmpty() || result[0] == PackageManager.PERMISSION_GRANTED || result[1] == PackageManager.PERMISSION_GRANTED) {
 					if (selectedStudentList.isEmpty()) {
 						//空的账号列表
 						toast(R.string.error_export_calendar_empty_account)
@@ -160,6 +160,8 @@ class ClassSettingsFragment : XhuBasePreferenceFragment(R.xml.preference_class) 
 						exportDialog.show()
 						settingsViewModel.exportToCalendar(selectedStudentList, remindTimeList, exportToCalendarBinding.switchExportCustomCourse.isChecked, exportToCalendarBinding.switchExportCustomThing.isChecked)
 					}
+				} else {
+					toast(R.string.error_no_calendar_permission)
 				}
 			}
 		}
