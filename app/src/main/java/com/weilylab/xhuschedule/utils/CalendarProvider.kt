@@ -18,7 +18,6 @@ import android.provider.CalendarContract
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.model.CalendarAttendee
 import com.weilylab.xhuschedule.model.CalendarEvent
-import com.weilylab.xhuschedule.model.Student
 import vip.mystery0.tools.ResourceException
 import vip.mystery0.tools.packageName
 import java.util.*
@@ -28,17 +27,18 @@ private val CALENDARS_ACCOUNT_TYPE = packageName
 /**
  * 检查是否已经添加了日历账户，如果没有添加先添加一个日历账户再查询
  */
-private fun checkAndAddCalendarAccount(context: Context, student: Student): Long {
-	return checkCalendarAccount(context, student) ?: return addCalendarAccount(context, student)
-			?: throw ResourceException(R.string.error_calendar_account_create_failed)
+private fun checkAndAddCalendarAccount(context: Context, accountName: String): Long {
+	return checkCalendarAccount(context, accountName)
+			?: return addCalendarAccount(context, accountName)
+					?: throw ResourceException(R.string.error_calendar_account_create_failed)
 }
 
 /**
  * 检查是否存在现有账户
  */
-private fun checkCalendarAccount(context: Context, student: Student): Long? {
+private fun checkCalendarAccount(context: Context, accountName: String): Long? {
 	val selection = "${CalendarContract.Calendars.ACCOUNT_NAME} = ? and ${CalendarContract.Calendars.ACCOUNT_TYPE} = ?"
-	val selectionArgs = arrayOf(student.calendarAccountName, CALENDARS_ACCOUNT_TYPE)
+	val selectionArgs = arrayOf(accountName, CALENDARS_ACCOUNT_TYPE)
 	val userCursor = context.contentResolver.query(CalendarContract.Calendars.CONTENT_URI, null, selection, selectionArgs, null)
 	return userCursor.use { cursor ->
 		if (cursor == null) { //查询返回空值
@@ -57,33 +57,32 @@ private fun checkCalendarAccount(context: Context, student: Student): Long? {
 /**
  * 添加日历账户，账户创建成功则返回账户id
  */
-private fun addCalendarAccount(context: Context, student: Student): Long? {
-	val name = student.calendarAccountName
+private fun addCalendarAccount(context: Context, accountName: String): Long? {
 	val values = ContentValues().apply {
-		put(CalendarContract.Calendars.NAME, name)
-		put(CalendarContract.Calendars.ACCOUNT_NAME, name)
+		put(CalendarContract.Calendars.NAME, accountName)
+		put(CalendarContract.Calendars.ACCOUNT_NAME, accountName)
 		put(CalendarContract.Calendars.ACCOUNT_TYPE, CALENDARS_ACCOUNT_TYPE)
-		put(CalendarContract.Calendars.CALENDAR_DISPLAY_NAME, name)
+		put(CalendarContract.Calendars.CALENDAR_DISPLAY_NAME, accountName)
 		put(CalendarContract.Calendars.VISIBLE, 1)
 		put(CalendarContract.Calendars.CALENDAR_COLOR, Color.BLUE)
 		put(CalendarContract.Calendars.CALENDAR_ACCESS_LEVEL, CalendarContract.Calendars.CAL_ACCESS_OWNER)
 		put(CalendarContract.Calendars.SYNC_EVENTS, 1)
 		put(CalendarContract.Calendars.CALENDAR_TIME_ZONE, TimeZone.getDefault().id)
-		put(CalendarContract.Calendars.OWNER_ACCOUNT, name)
+		put(CalendarContract.Calendars.OWNER_ACCOUNT, accountName)
 	}
-	val uri = CalendarContract.Calendars.CONTENT_URI.asSyncAdapter(student)
+	val uri = CalendarContract.Calendars.CONTENT_URI.asSyncAdapter(accountName)
 	val result = context.contentResolver.insert(uri, values)
 	return if (result == null) null else ContentUris.parseId(result)
 }
 
-fun deleteAllEvent(context: Context, student: Student) {
-	val calendarId = checkCalendarAccount(context, student) ?: return
+fun deleteAllEvent(context: Context, accountName: String) {
+	val calendarId = checkCalendarAccount(context, accountName) ?: return
 	val deleteUri = ContentUris.withAppendedId(CalendarContract.Calendars.CONTENT_URI, calendarId)
 	context.contentResolver.delete(deleteUri, null, null)
 }
 
-fun addEvent(context: Context, student: Student, event: CalendarEvent) {
-	val calendarId = checkAndAddCalendarAccount(context, student)
+fun addEvent(context: Context, accountName: String, event: CalendarEvent) {
+	val calendarId = checkAndAddCalendarAccount(context, accountName)
 	val values = ContentValues().apply {
 		put(CalendarContract.Events.CALENDAR_ID, calendarId)
 		put(CalendarContract.Events.TITLE, event.title)
@@ -118,13 +117,10 @@ private fun addReminder(context: Context, eventId: Long, minutes: Int) {
 	context.contentResolver.insert(CalendarContract.Reminders.CONTENT_URI, values)
 }
 
-private val Student.calendarAccountName
-	get() = "${username}@西瓜课表"
-
-private fun Uri.asSyncAdapter(student: Student): Uri {
+private fun Uri.asSyncAdapter(accountName: String): Uri {
 	return buildUpon()
 			.appendQueryParameter(CalendarContract.CALLER_IS_SYNCADAPTER, "true")
-			.appendQueryParameter(CalendarContract.Calendars.ACCOUNT_NAME, student.calendarAccountName)
+			.appendQueryParameter(CalendarContract.Calendars.ACCOUNT_NAME, accountName)
 			.appendQueryParameter(CalendarContract.Calendars.ACCOUNT_TYPE, CALENDARS_ACCOUNT_TYPE)
 			.build()
 }

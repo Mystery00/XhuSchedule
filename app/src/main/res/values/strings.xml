@@ -131,6 +131,7 @@
     <string name="hint_permission_deny">权限被拒绝，无法使用</string>
     <string name="hint_check_update_done">检查更新完成！</string>
     <string name="hint_sync_done">同步完成！</string>
+    <string name="hint_export_done">导出完成！</string>
 
     <string name="hint_null_course_data">这里什么都没有(ŎдŎ;)</string>
 
@@ -150,6 +151,7 @@
     <string name="hint_dialog_choose_day">请选择要查询的周数</string>
     <string name="hint_dialog_choose_time">请选择要查询的节次</string>
     <string name="hint_dialog_school_calendar">获取校历数据中……</string>
+    <string name="hint_dialog_export_calendar">正在导出数据，请稍后……</string>
     <string name="hint_dialog_custom_course_choose_student">保存到该学生的数据中</string>
     <string name="hint_dialog_custom_course_choose_year">课程的学年</string>
     <string name="hint_dialog_custom_course_choose_term">课程的学期</string>

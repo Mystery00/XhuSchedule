@@ -207,14 +207,17 @@ object CalendarUtil {
 	fun isThingOnDay(thing: CustomThing, now: Calendar = Calendar.getInstance()): Boolean {
 		if (shouldShowTomorrowInfo())
 			now.add(Calendar.DAY_OF_MONTH, 1)
-		val startCalendar = if (thing.isAllDay)
-			dateFormatter.parse(thing.startTime)
-		else {
+		val startCalendar = if (thing.isAllDay) {
+			val cal = Calendar.getInstance()
+			cal.timeInMillis = 0
+			cal.time = dateFormatter.parse(thing.startTime)!!
+			cal.set(Calendar.HOUR_OF_DAY, 0)
+			cal.set(Calendar.MINUTE, 0)
+			cal.time
+		} else {
 			val cal = Calendar.getInstance()
 			cal.timeInMillis = 0
 			cal.time = dateTimeFormatter.parse(thing.startTime)!!
-			cal.set(Calendar.HOUR_OF_DAY, 0)
-			cal.set(Calendar.MINUTE, 0)
 			cal.time
 		}
 		val endCalendar = if (thing.isAllDay) {
@@ -229,9 +232,6 @@ object CalendarUtil {
 			val cal = Calendar.getInstance()
 			cal.timeInMillis = 0
 			cal.time = dateTimeFormatter.parse(thing.endTime)!!
-			cal.set(Calendar.HOUR_OF_DAY, 0)
-			cal.set(Calendar.MINUTE, 0)
-			cal.add(Calendar.DAY_OF_YEAR, 1)
 			cal.time
 		}
 		return now.time.after(startCalendar) && now.time.before(endCalendar)
@@ -257,5 +257,52 @@ object CalendarUtil {
 		val dateArray = split('-')
 		calendar.set(dateArray[0].toInt(), dateArray[1].toInt() - 1, dateArray[2].toInt(), 0, 0, 0)
 		return calendar
+	}
+
+	fun parseMillis(week: Int, day: Int, startCalendar: Calendar): Long {
+		val startDate = Calendar.getInstance()
+		startDate.time = startCalendar.time
+		startDate.add(Calendar.WEEK_OF_YEAR, week - 1)
+		startDate.add(Calendar.DATE, day - 1)
+		//清空毫秒
+		return startDate.timeInMillis / 1000 * 1000
+	}
+
+	fun parseMillis(base: Long, time: String): Long {
+		val array = time.split(':')
+		val setHour = array[0].toInt()
+		val setMinute = array[1].toInt()
+		return base + (setHour * 60 + setMinute) * 60 * 1000
+	}
+
+	fun parseCustomThingStartTime(thing: CustomThing): Pair<Long, Long> {
+		val startCalendar = if (thing.isAllDay) {
+			val cal = Calendar.getInstance()
+			cal.timeInMillis = 0
+			cal.time = dateFormatter.parse(thing.startTime)!!
+			cal.set(Calendar.HOUR_OF_DAY, 0)
+			cal.set(Calendar.MINUTE, 0)
+			cal.timeInMillis
+		} else {
+			val cal = Calendar.getInstance()
+			cal.timeInMillis = 0
+			cal.time = dateTimeFormatter.parse(thing.startTime)!!
+			cal.timeInMillis
+		}
+		val endCalendar = if (thing.isAllDay) {
+			val cal = Calendar.getInstance()
+			cal.timeInMillis = 0
+			cal.time = dateFormatter.parse(thing.endTime)!!
+			cal.set(Calendar.HOUR_OF_DAY, 0)
+			cal.set(Calendar.MINUTE, 0)
+			cal.add(Calendar.DAY_OF_YEAR, 1)
+			cal.timeInMillis
+		} else {
+			val cal = Calendar.getInstance()
+			cal.timeInMillis = 0
+			cal.time = dateTimeFormatter.parse(thing.endTime)!!
+			cal.timeInMillis
+		}
+		return Pair(startCalendar, endCalendar)
 	}
 }

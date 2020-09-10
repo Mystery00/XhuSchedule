@@ -42,7 +42,7 @@ import com.zyao89.view.zloading.Z_TYPE
 import org.greenrobot.eventbus.EventBus
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import vip.mystery0.logs.Logs
+import vip.mystery0.rx.DataObserver
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -97,12 +97,36 @@ class ClassSettingsFragment : XhuBasePreferenceFragment(R.xml.preference_class) 
 				.setHintTextColor(ContextCompat.getColor(requireActivity(), R.color.colorAccent))
 				.create()
 	}
+	private val exportDialog: Dialog by lazy {
+		ZLoadingDialog(requireActivity())
+				.setLoadingBuilder(Z_TYPE.STAR_LOADING)
+				.setHintText(getString(R.string.hint_dialog_export_calendar))
+				.setHintTextSize(16F)
+				.setCanceledOnTouchOutside(false)
+				.setDialogBackgroundColor(ContextCompat.getColor(requireActivity(), R.color.colorWhiteBackground))
+				.setLoadingColor(ContextCompat.getColor(requireActivity(), R.color.colorAccent))
+				.setHintTextColor(ContextCompat.getColor(requireActivity(), R.color.colorAccent))
+				.create()
+	}
 	private var schoolCalendarUrl: String? = null
 	private val selectedStudentList = ArrayList<Student>()
 	private val remindTimeList = ArrayList<Int>()
 
 	override fun onActivityCreated(savedInstanceState: Bundle?) {
 		super.onActivityCreated(savedInstanceState)
+		settingsViewModel.exportCalendar.observe(requireActivity(), object : DataObserver<Boolean> {
+			override fun contentNoEmpty(data: Boolean) {
+				super.contentNoEmpty(data)
+				toast(R.string.hint_export_done)
+				exportDialog.dismiss()
+			}
+
+			override fun error(e: Throwable?) {
+				super.error(e)
+				toast(e)
+				exportDialog.dismiss()
+			}
+		})
 		initExportLayout()
 	}
 
@@ -132,15 +156,10 @@ class ClassSettingsFragment : XhuBasePreferenceFragment(R.xml.preference_class) 
 						//空的账号列表
 						toast(R.string.error_export_calendar_empty_account)
 					} else {
-						Logs.i("initExportLayout: $selectedStudentList")
-						Logs.i("initExportLayout: $remindTimeList")
 						bottomSheetDialog.dismiss()
+						exportDialog.show()
+						settingsViewModel.exportToCalendar(selectedStudentList, remindTimeList, exportToCalendarBinding.switchExportCustomCourse.isChecked, exportToCalendarBinding.switchExportCustomThing.isChecked)
 					}
-//					deleteAllEvent(requireContext())
-//					val calendarEvent = CalendarEvent("测试事项", nowMillis(), nowMillis() + 1000 * 60 * 60, "位置地点", "描述", allDay = false, hasAlarm = false)
-//					calendarEvent.reminder.add(10)
-//					calendarEvent.attendees.add(CalendarAttendee("老师名字"))
-//					addEvent(requireContext(), calendarEvent)
 				}
 			}
 		}
