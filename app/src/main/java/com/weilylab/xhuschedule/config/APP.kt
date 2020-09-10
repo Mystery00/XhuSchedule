@@ -52,7 +52,8 @@ class APP : MultiDexApplication() {
 				modules(listOf(appModule, databaseModule, networkModule, repositoryModule, viewModelModule))
 			}
 		}
-		val debug = applicationContext.applicationInfo.metaData.getBoolean("DEBUG")
+		val info = context.packageManager.getApplicationInfo(context.packageName, PackageManager.GET_META_DATA)
+		val debug = info.metaData.getBoolean("DEBUG")
 		CrashHandler.config {
 			setFileNameSuffix("log")
 					.setDir(File(externalCacheDir, "crash"))
