@@ -15,7 +15,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
-import coil.api.load
+import coil.load
 import coil.request.CachePolicy
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.weilylab.xhuschedule.R
