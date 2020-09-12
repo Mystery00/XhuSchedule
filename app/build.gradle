@@ -23,17 +23,6 @@ autoVersion {
 }
 
 android {
-    flavorDimensions "default"
-    productFlavors {
-        common {
-            manifestPlaceholders = [channel: "common"]
-            resValue "string", "app_version_name", autoVersion.name
-        }
-        play {
-            manifestPlaceholders = [channel: "google_play"]
-            resValue "string", "app_version_name", autoVersion.name + '.G'
-        }
-    }
     packagingOptions {
         exclude 'META-INF/library-core_release.kotlin_module'
     }
@@ -57,7 +46,7 @@ android {
         ndk {
             moduleName = 'bspatch'
             // 设置支持的SO库架构
-//			abiFilters 'armeabi' , 'armeabi-v7a', 'arm64-v8a'//, 'x86_64', 'x86'
+			abiFilters 'armeabi-v7a', 'arm64-v8a'//, 'x86_64', 'x86'
         }
         // Enabling multi dex support.
         multiDexEnabled true
@@ -73,6 +62,7 @@ android {
         debug {
             applicationIdSuffix ".debug"
             resValue "string", "app_name", "西瓜课表-开发版"
+            resValue "string", "app_version_name", autoVersion.name
             resValue "string", "app_version_code", autoVersion.code + ''
             resValue "string", "app_package_name", android.defaultConfig.applicationId + '.debug'
             manifestPlaceholders = [debug: true]
@@ -81,6 +71,7 @@ android {
         }
         release {
             resValue "string", "app_name", "西瓜课表"
+            resValue "string", "app_version_name", autoVersion.name
             resValue "string", "app_version_code", autoVersion.code + ''
             resValue "string", "app_package_name", android.defaultConfig.applicationId
             manifestPlaceholders = [debug: false]

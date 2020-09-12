@@ -39,10 +39,6 @@
         tools:targetApi="n">
 
         <meta-data
-            android:name="BUILD_CHANNEL"
-            android:value="${channel}" />
-
-        <meta-data
             android:name="DEBUG"
             android:value="${debug}" />
 
