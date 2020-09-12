@@ -11,16 +11,20 @@ package com.weilylab.xhuschedule.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.jinrishici.sdk.android.model.PoetySentence
+import androidx.lifecycle.viewModelScope
 import com.weilylab.xhuschedule.R
+import com.weilylab.xhuschedule.api.JinrishiciAPI
+import com.weilylab.xhuschedule.config.JRSCConfig
 import com.weilylab.xhuschedule.model.CustomThing
 import com.weilylab.xhuschedule.model.Student
 import com.weilylab.xhuschedule.model.StudentInfo
+import com.weilylab.xhuschedule.model.jrsc.PoetySentence
 import com.weilylab.xhuschedule.repository.*
 import com.weilylab.xhuschedule.utils.CalendarUtil
 import com.weilylab.xhuschedule.utils.ConfigurationUtil
 import com.zhuangfei.timetable.model.Schedule
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.koin.core.KoinComponent
 import org.koin.core.inject
@@ -37,6 +41,7 @@ class BottomNavigationViewModel : ViewModel(), KoinComponent {
 	private val feedBackRepository: FeedBackRepository by inject()
 	private val courseRepository: CourseRepository by inject()
 	private val initRepository: InitRepository by inject()
+	private val jrscApi: JinrishiciAPI by inject()
 
 	//学生列表
 	val studentList by lazy { MutableLiveData<PackageData<List<Student>>>() }
@@ -192,6 +197,18 @@ class BottomNavigationViewModel : ViewModel(), KoinComponent {
 						?: throw ResourceException(R.string.hint_null_student)
 				newFeedback.content(feedBackRepository.queryNewFeedback(mainStudent))
 			}
+		}
+	}
+
+	fun loadJRSC() {
+		if (ConfigurationUtil.disableJRSC)
+			return
+		viewModelScope.launch(Dispatchers.Default) {
+			val token = JRSCConfig.token
+			if (token == null) {
+				JRSCConfig.token = jrscApi.getToken().token
+			}
+			poetySentence.postValue(jrscApi.getSentence())
 		}
 	}
 }

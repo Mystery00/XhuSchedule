@@ -13,6 +13,7 @@ import com.weilylab.xhuschedule.api.*
 import com.weilylab.xhuschedule.constant.Constants
 import com.weilylab.xhuschedule.constant.ResponseCodeConstants
 import com.weilylab.xhuschedule.interceptor.DebugInterceptor
+import com.weilylab.xhuschedule.interceptor.JinrishiciInterceptor
 import com.weilylab.xhuschedule.interceptor.LoadCookiesInterceptor
 import com.weilylab.xhuschedule.interceptor.SaveCookiesInterceptor
 import com.weilylab.xhuschedule.model.Student
@@ -41,6 +42,11 @@ val networkModule = module {
 				.addInterceptor(DebugInterceptor())
 				.build()
 	}
+	single(named("jrscClient")) {
+		OkHttpClient.Builder()
+				.addInterceptor(JinrishiciInterceptor())
+				.build()
+	}
 	single(named("fileClient")) {
 		OkHttpClient.Builder()
 				.retryOnConnectionFailure(true)
@@ -52,6 +58,13 @@ val networkModule = module {
 		Retrofit.Builder()
 				.baseUrl(Constants.SERVER_URL)
 				.client(get(named("client")))
+				.addConverterFactory(GsonConverterFactory.create())
+				.build()
+	}
+	single(named("jrscRetrofit")) {
+		Retrofit.Builder()
+				.baseUrl(Constants.SERVER_JRSC)
+				.client(get(named("jrscClient")))
 				.addConverterFactory(GsonConverterFactory.create())
 				.build()
 	}
@@ -84,6 +97,9 @@ val networkModule = module {
 	}
 	single {
 		get<Retrofit>(named("retrofit")).create(XhuScheduleCloudAPI::class.java)
+	}
+	single {
+		get<Retrofit>(named("jrscRetrofit")).create(JinrishiciAPI::class.java)
 	}
 }
 

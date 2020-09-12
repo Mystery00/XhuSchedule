@@ -11,9 +11,13 @@ package com.weilylab.xhuschedule.config
 
 import android.annotation.SuppressLint
 import android.app.Application
+import android.content.ActivityNotFoundException
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Build
+import androidx.browser.customtabs.CustomTabsIntent
 import androidx.multidex.MultiDexApplication
 import com.oasisfeng.condom.CondomContext
 import com.sina.weibo.sdk.WbSdk
@@ -21,6 +25,7 @@ import com.sina.weibo.sdk.auth.AuthInfo
 import com.tencent.mm.opensdk.openapi.IWXAPI
 import com.tencent.mm.opensdk.openapi.WXAPIFactory
 import com.tencent.tauth.Tencent
+import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.module.*
 import com.weilylab.xhuschedule.utils.NotificationUtil
 import com.weilylab.xhuschedule.utils.PackageUtil
@@ -33,6 +38,7 @@ import vip.mystery0.logs.logsLogger
 import vip.mystery0.tools.ToolsClient
 import vip.mystery0.tools.context
 import vip.mystery0.tools.utils.registerActivityLifecycle
+import vip.mystery0.tools.utils.toastLong
 import java.io.File
 
 /**
@@ -106,4 +112,25 @@ fun getChannel(): String? {
 	val context = context()
 	val info = context.packageManager.getApplicationInfo(context.packageName, PackageManager.GET_META_DATA)
 	return info.metaData.getString("BUILD_CHANNEL");
+}
+
+fun Context.toCustomTabs(url: String) {
+	try {
+		val builder = CustomTabsIntent.Builder()
+		val intent = builder.build()
+		intent.launchUrl(this, Uri.parse(url))
+	} catch (e: Exception) {
+		loadInBrowser(url)
+	}
+}
+
+fun Context.loadInBrowser(url: String) {
+	try {
+		val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url)).apply {
+			flags = Intent.FLAG_ACTIVITY_NEW_TASK
+		}
+		startActivity(intent)
+	} catch (e: ActivityNotFoundException) {
+		toastLong(R.string.hint_no_browser)
+	}
 }

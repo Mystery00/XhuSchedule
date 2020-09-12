@@ -44,6 +44,7 @@
     <string name="action_disable">禁用</string>
     <string name="action_add_student">添加账号</string>
     <string name="action_export">导出</string>
+    <string name="action_go_to_play">前往Play商店检查更新</string>
 
     <string name="shortcut_title_query_test">考试查询</string>
     <string name="shortcut_title_query_class_score">成绩查询</string>
@@ -130,6 +131,7 @@
     <string name="hint_check_update_done">检查更新完成！</string>
     <string name="hint_sync_done">同步完成！</string>
     <string name="hint_export_done">导出完成！</string>
+    <string name="hint_no_browser">请先安装一个浏览器。</string>
 
     <string name="hint_null_course_data">这里什么都没有(ŎдŎ;)</string>
 

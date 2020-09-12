@@ -7,8 +7,7 @@
   ~  of this license document, but changing it is not allowed.
   -->
 
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
     <PreferenceCategory android:title="@string/screen_category_ui">
 
@@ -95,15 +94,15 @@
             android:summary="@string/summary_auto_check_update"
             android:title="@string/title_auto_check_update" />
 
-        <Preference
-            android:icon="@drawable/ic_weily_studio"
-            android:summary="@string/summary_weily_product"
-            android:title="@string/title_weily_product"
-            app:isPreferenceVisible="false">
-            <intent
-                android:action="android.intent.action.VIEW"
-                android:data="https://weilylab.com" />
-        </Preference>
+        <!--        <Preference-->
+        <!--            android:icon="@drawable/ic_weily_studio"-->
+        <!--            android:summary="@string/summary_weily_product"-->
+        <!--            android:title="@string/title_weily_product"-->
+        <!--            app:isPreferenceVisible="false">-->
+        <!--            <intent-->
+        <!--                android:action="android.intent.action.VIEW"-->
+        <!--                android:data="https://weilylab.com" />-->
+        <!--        </Preference>-->
 
         <Preference
             android:icon="@drawable/ic_wx_mini_program"

@@ -131,7 +131,7 @@
     <string name="summary_weixin">点击跳转，也可以在微信小程序页面直接搜索『西瓜课表』即可使用</string>
     <string name="summary_jrsc">感谢作者@xenv，点击访问『今日诗词』官网</string>
 
-    <string name="link_developer" translatable="false">https://mystery0.vip/</string>
+    <string name="link_developer" translatable="false">https://blog.mystery0.vip/</string>
     <string name="link_open_source_license" translatable="false">https://github.com/Mystery00/XhuSchedule/blob/master/LICENSE.TXT</string>
     <string name="link_community_link" translatable="false">xhuschedule://goto_qq_group?key=JwFjXuBEWPJuevlxn9QhtMRGFSh-geZV</string>
     <string name="link_jrsc">https://www.jinrishici.com</string>

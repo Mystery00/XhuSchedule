@@ -13,6 +13,7 @@ object Constants {
 	const val SERVER_HOST = "mirror.xhuschedule.mystery0.vip"
 	const val SERVER_URL = "https://$SERVER_HOST"
 	const val SERVER_QINIU = "https://download.xhuschedule.mostpan.com"
+	const val SERVER_JRSC = "https://v2.jinrishici.com"
 	const val API_RETRY_TIME = 1
 
 	const val NOTICE_PLATFORM_ANDROID = "Android"

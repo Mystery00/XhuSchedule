@@ -17,7 +17,6 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
-import com.jinrishici.sdk.android.model.PoetySentence
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.config.ColorPoolHelper
 import com.weilylab.xhuschedule.databinding.DialogShowJrscBinding
@@ -25,6 +24,7 @@ import com.weilylab.xhuschedule.databinding.ItemFragmentTodayBinding
 import com.weilylab.xhuschedule.databinding.ItemFragmentTodayJrscBinding
 import com.weilylab.xhuschedule.databinding.ItemFragmentTodayThingBinding
 import com.weilylab.xhuschedule.model.CustomThing
+import com.weilylab.xhuschedule.model.jrsc.PoetySentence
 import com.weilylab.xhuschedule.utils.ConfigurationUtil
 import com.zhuangfei.timetable.model.Schedule
 import vip.mystery0.tools.base.binding.BaseMultiBindingRecyclerViewAdapter
@@ -50,8 +50,11 @@ class FragmentTodayRecyclerViewAdapter(private val context: Context) : BaseMulti
 					dialogShowJrscBinding.content.text = stringBuilder.toString()
 					val translationStringBuilder = StringBuilder()
 					translationStringBuilder.append("诗词大意：")
+
 					if (data.data.origin.translate != null)
-						data.data.origin.translate.forEach { s -> translationStringBuilder.append(s) }
+						data.data.origin.translate?.let {
+							it.forEach { s -> translationStringBuilder.append(s) }
+						}
 					else
 						translationStringBuilder.append("暂无")
 					dialogShowJrscBinding.translation.text = translationStringBuilder.toString()
