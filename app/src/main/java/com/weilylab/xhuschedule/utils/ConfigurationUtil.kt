@@ -72,11 +72,6 @@ object ConfigurationUtil {
 			putBoolean(SharedPreferenceConstant.FIELD_SHOW_FAILED, value)
 		}
 		get() = sharedPreferences.getBoolean(SharedPreferenceConstant.FIELD_SHOW_FAILED, true)
-	var deviceID: String
-		set(value) = sharedPreferences.edit {
-			putString(SharedPreferenceConstant.FIELD_DEVICE_ID, value)
-		}
-		get() = sharedPreferences.getString(SharedPreferenceConstant.FIELD_DEVICE_ID, "")!!
 	var updatedVersion: Int
 		set(value) = sharedPreferences.edit {
 			putInt(SharedPreferenceConstant.FIELD_UPDATED_VERSION, value)

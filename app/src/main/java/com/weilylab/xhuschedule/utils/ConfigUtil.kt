@@ -43,13 +43,7 @@ object ConfigUtil {
 	fun getDeviceID(): String {
 		if (BuildConfig.DEBUG)
 			return "debug"
-		val deviceID = ConfigurationUtil.deviceID
-		return if (deviceID == "") {
-			val id = Settings.Secure.getString(APP.context.contentResolver, Settings.Secure.ANDROID_ID)
-			ConfigurationUtil.deviceID = id
-			id
-		} else
-			deviceID
+		return Settings.Secure.getString(APP.context.contentResolver, Settings.Secure.ANDROID_ID)
 	}
 
 	fun showUpdateLog(context: Context) {

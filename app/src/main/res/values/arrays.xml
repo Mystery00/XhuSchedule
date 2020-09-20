@@ -61,4 +61,12 @@
         <item>查课查课表，我就用西瓜课表~ 下载链接：https://www.coolapk.com/apk/com.weilylab.xhuschedule</item>
         <item>西瓜子都在用的课表~ 下载链接：https://www.coolapk.com/apk/com.weilylab.xhuschedule</item>
     </string-array>
+
+    <string-array name="version_name">
+        <item>～(￣▽￣～)(～￣▽￣)～</item>
+        <item>╮(｀▽′)╭</item>
+        <item>(→_→)  (←_←)</item>
+        <item>（ˇ＾ˇ〉</item>
+        <item>╭ (′  ▽ `)╯ ╭ (′  ▽ `)╯</item>
+    </string-array>
 </resources>

@@ -17,20 +17,23 @@ import android.content.pm.ShortcutManager
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import com.weilylab.xhuschedule.repository.DebugDataKeeper
 import org.greenrobot.eventbus.EventBus
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 
 val appModule = module {
-	single { androidContext().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager }
-
 	single { LocalBroadcastManager.getInstance(androidContext()) }
+
+	single { androidContext().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager }
 
 	single { androidContext().getSystemService(Context.ALARM_SERVICE) as AlarmManager }
 
 	single { androidContext().getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager }
 
 	single { EventBus.getDefault() }
+
+	single { DebugDataKeeper() }
 }
 
 @RequiresApi(Build.VERSION_CODES.N_MR1)

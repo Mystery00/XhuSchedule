@@ -23,6 +23,7 @@ import com.weilylab.xhuschedule.constant.Constants
 import com.weilylab.xhuschedule.constant.ResponseCodeConstants
 import com.weilylab.xhuschedule.model.Version
 import com.weilylab.xhuschedule.model.event.CheckUpdateEvent
+import com.weilylab.xhuschedule.repository.DebugDataKeeper
 import com.weilylab.xhuschedule.ui.activity.GuideActivity
 import com.weilylab.xhuschedule.ui.activity.SplashActivity
 import com.weilylab.xhuschedule.ui.activity.SplashImageActivity
@@ -48,6 +49,8 @@ class CheckUpdateService : Service() {
 
 	private val eventBus: EventBus by inject()
 
+	private val debugDataKeeper: DebugDataKeeper by inject()
+
 	override fun onBind(intent: Intent): IBinder? = null
 
 	override fun onCreate() {
@@ -72,6 +75,9 @@ class CheckUpdateService : Service() {
 		GlobalScope.launch {
 			val response = xhuScheduleCloudAPI.checkVersion(appVersion, systemVersion, manufacturer, model, rom, ConfigUtil.getDeviceID())
 			if (response.code == ResponseCodeConstants.DONE.toInt()) {
+				debugDataKeeper.data["latestVersion"] = "${response.data.versionName}-${response.data.versionCode}"
+				debugDataKeeper.data["apkPath"] = response.data.apkQiniuPath
+				debugDataKeeper.data["patchPath"] = response.data.patchQiniuPath
 				if (response.data.versionCode.toInt() > getString(R.string.app_version_code).toInt()) {
 					withContext(Dispatchers.Main) {
 						showUpdateDialog(response.data, intent.getBooleanExtra(CHECK_ACTION_BY_MANUAL, false), response.data.must == "1")

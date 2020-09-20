@@ -12,6 +12,7 @@ package com.weilylab.xhuschedule.viewmodel
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.ViewModel
 import com.weilylab.xhuschedule.model.Splash
+import com.weilylab.xhuschedule.repository.DebugDataKeeper
 import com.weilylab.xhuschedule.repository.SplashRepository
 import com.weilylab.xhuschedule.utils.getSplashImageFile
 import org.koin.core.KoinComponent
@@ -26,12 +27,16 @@ import java.io.File
 
 class SplashViewModel : ViewModel(), KoinComponent {
 	private val splashRepository: SplashRepository by inject()
+	private val debugDataKeeper: DebugDataKeeper by inject()
 	val splashData by lazy { MediatorLiveData<PackageData<Pair<Splash, Boolean>>>() }
 	val splashFile by lazy { MediatorLiveData<PackageData<Pair<Splash, File>>>() }
 
 	fun requestSplash() {
 		launch(splashData) {
 			val splash = splashRepository.requestSplash()
+			debugDataKeeper.data["splashUrl"] = splash.splashUrl
+			debugDataKeeper.data["splashTime"] = splash.splashTime
+			debugDataKeeper.data["splashLocationUrl"] = splash.locationUrl
 			if (splash.enable) {
 				val fileName = splash.splashUrl.sha1()
 				val splashFile = getSplashImageFile(fileName)

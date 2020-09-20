@@ -13,6 +13,7 @@ import android.app.IntentService
 import android.content.Intent
 import com.weilylab.xhuschedule.api.QiniuAPI
 import com.weilylab.xhuschedule.constant.IntentConstant
+import com.weilylab.xhuschedule.repository.DebugDataKeeper
 import com.weilylab.xhuschedule.utils.getSplashImageFile
 import kotlinx.coroutines.*
 import org.koin.android.ext.android.inject
@@ -26,6 +27,7 @@ class DownloadSplashIntentService : IntentService("DownloadSplashIntentService")
 	}
 
 	private val qiniuAPI: QiniuAPI by inject()
+	private val debugDataKeeper: DebugDataKeeper by inject()
 
 	override fun onHandleIntent(intent: Intent?) {
 		if (intent == null)
@@ -39,6 +41,8 @@ class DownloadSplashIntentService : IntentService("DownloadSplashIntentService")
 		if (!file.exists())
 			GlobalScope.launch(CoroutineExceptionHandler { _, throwable ->
 				Logs.wtf(TAG, "download: ", throwable)
+				debugDataKeeper.data["downloadSplashError"] = throwable.message
+						?: "empty error message"
 			}) {
 				withContext(Dispatchers.IO) {
 					val body = qiniuAPI.download(qiniuPath)
