@@ -14,6 +14,7 @@ import android.net.Uri
 import android.view.View
 import android.view.WindowInsets
 import android.view.WindowInsetsController
+import android.view.WindowManager
 import coil.api.load
 import coil.request.CachePolicy
 import com.weilylab.xhuschedule.R
@@ -33,6 +34,11 @@ class SplashImageActivity : XhuBaseActivity(R.layout.activity_splash_image, fals
 	private val splashViewModel: SplashViewModel by viewModel()
 
 	override fun inflateView(layoutId: Int) {
+		if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.P) {
+			window.attributes = window.attributes.apply {
+				layoutInDisplayCutoutMode = WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES
+			}
+		}
 		if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.R) {
 			super.inflateView(layoutId)
 			window.setDecorFitsSystemWindows(false)

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~                     GNU GENERAL PUBLIC LICENSE
+  ~                        Version 3, 29 June 2007
+  ~
+  ~  Copyright (C) 2007 Free Software Foundation, Inc. <http://fsf.org/>
+  ~  Everyone is permitted to copy and distribute verbatim copies
+  ~  of this license document, but changing it is not allowed.
+  -->
+
+<resources>
+
+    <style name="SplashTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="android:windowBackground">@drawable/drawable_splash</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowLayoutInDisplayCutoutMode">shortEdges</item>
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowTranslucentNavigation">true</item>
+    </style>
+</resources>

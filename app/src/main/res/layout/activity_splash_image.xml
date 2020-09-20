@@ -50,7 +50,7 @@
             android:layout_gravity="center_vertical"
             android:layout_weight="1"
             android:contentDescription="@string/app_name"
-            android:src="@mipmap/share_launcher" />
+            android:src="@mipmap/share_launcher_round" />
 
         <ImageView
             android:layout_width="0dp"

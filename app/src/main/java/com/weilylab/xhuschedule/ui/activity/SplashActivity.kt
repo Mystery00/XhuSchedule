@@ -12,6 +12,7 @@ package com.weilylab.xhuschedule.ui.activity
 import android.app.AlarmManager
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat
 import com.weilylab.xhuschedule.base.XhuBaseActivity
@@ -64,6 +65,8 @@ class SplashActivity : XhuBaseActivity(null, false) {
 	}
 
 	override fun onCreate(savedInstanceState: Bundle?) {
+		@Suppress("DEPRECATION")
+		window.decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or View.SYSTEM_UI_FLAG_FULLSCREEN)
 		when (ConfigurationUtil.nightMode) {
 			0 -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY)
 			1 -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
