@@ -9,11 +9,7 @@
 
 <resources>
     <string-array name="update_log">
-        <item>新增：导出到日历功能</item>
-        <item>修复：主界面刷新图标位置错误</item>
-        <item>优化：接口响应速度</item>
-        <item>优化：设置界面图标</item>
-        <item>优化：快捷方式修改为动态（为Android 11气泡功能做准备）</item>
-        <item>优化：恢复小部件的添加（不再维护相关功能）</item>
+        <item>修复：日历导出自动删除问题</item>
+        <item>优化：刘海屏适配</item>
     </string-array>
 </resources>
