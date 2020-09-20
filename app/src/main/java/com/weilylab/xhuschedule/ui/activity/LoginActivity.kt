@@ -11,7 +11,6 @@ package com.weilylab.xhuschedule.ui.activity
 
 import android.app.Activity
 import android.app.Dialog
-import android.graphics.Color
 import android.text.TextUtils
 import android.view.View
 import android.view.WindowManager
@@ -47,12 +46,13 @@ class LoginActivity : XhuBaseActivity(R.layout.activity_login, false) {
 		}
 	}
 
-	override fun initView() {
-		super.initView()
-		window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
-		window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION)
-		window.statusBarColor = Color.TRANSPARENT
-		window.navigationBarColor = Color.TRANSPARENT
+	override fun inflateView(layoutId: Int) {
+		if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.P) {
+			window.attributes = window.attributes.apply {
+				layoutInDisplayCutoutMode = WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES
+			}
+		}
+		super.inflateView(layoutId)
 	}
 
 	override fun initData() {
