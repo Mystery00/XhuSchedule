@@ -19,10 +19,9 @@ import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.model.CalendarAttendee
 import com.weilylab.xhuschedule.model.CalendarEvent
 import vip.mystery0.tools.ResourceException
-import vip.mystery0.tools.packageName
 import java.util.*
 
-private val CALENDARS_ACCOUNT_TYPE = packageName
+private const val CALENDARS_ACCOUNT_TYPE = CalendarContract.ACCOUNT_TYPE_LOCAL
 
 /**
  * 检查是否已经添加了日历账户，如果没有添加先添加一个日历账户再查询
