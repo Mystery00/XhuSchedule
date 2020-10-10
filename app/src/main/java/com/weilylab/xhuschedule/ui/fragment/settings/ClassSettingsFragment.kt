@@ -36,6 +36,7 @@ import com.weilylab.xhuschedule.model.Student
 import com.weilylab.xhuschedule.model.event.UI
 import com.weilylab.xhuschedule.model.event.UIConfigEvent
 import com.weilylab.xhuschedule.utils.ConfigurationUtil
+import com.weilylab.xhuschedule.utils.deleteCalendarAccount
 import com.weilylab.xhuschedule.viewmodel.SettingsViewModel
 import com.zyao89.view.zloading.ZLoadingDialog
 import com.zyao89.view.zloading.Z_TYPE
@@ -57,6 +58,7 @@ class ClassSettingsFragment : XhuBasePreferenceFragment(R.xml.preference_class) 
 	private val showTomorrowCourseAfterPreference by lazy { findPreferenceById<Preference>(R.string.key_show_tomorrow_course_after) }
 	private val schoolCalendarPreference by lazy { findPreferenceById<Preference>(R.string.key_action_school_calendar) }
 	private val toCalendarPreference by lazy { findPreferenceById<Preference>(R.string.key_action_export_to_calendar) }
+	private val toCalendarManagementPreference by lazy { findPreferenceById<Preference>(R.string.key_action_export_to_calendar_management) }
 	private val showCustomThingFirstPreference by lazy { findPreferenceById<CheckBoxPreference>(R.string.key_show_custom_thing_first) }
 
 	private val exportToCalendarBinding by lazy { LayoutExportToCalendarBinding.inflate(LayoutInflater.from(requireContext())) }
@@ -309,6 +311,30 @@ class ClassSettingsFragment : XhuBasePreferenceFragment(R.xml.preference_class) 
 		}
 		toCalendarPreference.setOnPreferenceClickListener {
 			bottomSheetDialog.show()
+			true
+		}
+		toCalendarManagementPreference.setOnPreferenceClickListener {
+			settingsViewModel.getAllCalendarAccount { list ->
+				if (list.isEmpty()) {
+					toast(R.string.hint_no_calendar_account)
+					return@getAllCalendarAccount
+				}
+				val checked = BooleanArray(list.size)
+				MaterialAlertDialogBuilder(requireActivity())
+						.setTitle(R.string.hint_dialog_export_calendar_remove)
+						.setMultiChoiceItems(list.map { it.first }.toTypedArray(), checked) { _, index, b ->
+							checked[index] = b
+						}
+						.setPositiveButton(R.string.action_remove) { _, _ ->
+							list.forEachIndexed { index, pair ->
+								if (checked[index]) {
+									deleteCalendarAccount(requireContext(), pair.second)
+								}
+							}
+						}
+						.setNegativeButton(android.R.string.cancel, null)
+						.show()
+			}
 			true
 		}
 		showCustomThingFirstPreference.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, _ ->

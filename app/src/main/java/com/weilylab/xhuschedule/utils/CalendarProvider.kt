@@ -19,7 +19,9 @@ import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.model.CalendarAttendee
 import com.weilylab.xhuschedule.model.CalendarEvent
 import vip.mystery0.tools.ResourceException
+import vip.mystery0.tools.packageName
 import java.util.*
+import kotlin.collections.ArrayList
 
 private const val CALENDARS_ACCOUNT_TYPE = CalendarContract.ACCOUNT_TYPE_LOCAL
 
@@ -54,6 +56,33 @@ private fun checkCalendarAccount(context: Context, accountName: String): Long? {
 }
 
 /**
+ * 查询所有的日历账号
+ */
+fun getAllCalendarAccount(context: Context): List<Pair<String, Long>> {
+	val selection = "${CalendarContract.Calendars.OWNER_ACCOUNT} = ? and ${CalendarContract.Calendars.ACCOUNT_TYPE} = ?"
+	val selectionArgs = arrayOf(packageName, CALENDARS_ACCOUNT_TYPE)
+	val userCursor = context.contentResolver.query(CalendarContract.Calendars.CONTENT_URI, null, selection, selectionArgs, null)
+	return userCursor.use { cursor ->
+		if (cursor == null) { //查询返回空值
+			return emptyList()
+		}
+		val result = ArrayList<Pair<String, Long>>()
+		while (cursor.moveToNext()) {
+			result.add(Pair(cursor.getString(cursor.getColumnIndex(CalendarContract.Calendars.ACCOUNT_NAME)), cursor.getLong(cursor.getColumnIndex(CalendarContract.Calendars._ID))))
+		}
+		result
+	}
+}
+
+/**
+ * 删除日历账号
+ */
+fun deleteCalendarAccount(context: Context, calendarId: Long) {
+	val deleteUri = ContentUris.withAppendedId(CalendarContract.Calendars.CONTENT_URI, calendarId)
+	context.contentResolver.delete(deleteUri, null, null)
+}
+
+/**
  * 添加日历账户，账户创建成功则返回账户id
  */
 private fun addCalendarAccount(context: Context, accountName: String): Long? {
@@ -67,7 +96,7 @@ private fun addCalendarAccount(context: Context, accountName: String): Long? {
 		put(CalendarContract.Calendars.CALENDAR_ACCESS_LEVEL, CalendarContract.Calendars.CAL_ACCESS_OWNER)
 		put(CalendarContract.Calendars.SYNC_EVENTS, 1)
 		put(CalendarContract.Calendars.CALENDAR_TIME_ZONE, TimeZone.getDefault().id)
-		put(CalendarContract.Calendars.OWNER_ACCOUNT, accountName)
+		put(CalendarContract.Calendars.OWNER_ACCOUNT, packageName)
 	}
 	val uri = CalendarContract.Calendars.CONTENT_URI.asSyncAdapter(accountName)
 	val result = context.contentResolver.insert(uri, values)

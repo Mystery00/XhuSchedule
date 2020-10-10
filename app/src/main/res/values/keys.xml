@@ -23,6 +23,7 @@
     <string name="key_show_tomorrow_course_after" translatable="false">key_show_tomorrow_course_after</string>
     <string name="key_action_school_calendar" translatable="false">key_action_school_calendar</string>
     <string name="key_action_export_to_calendar" translatable="false">key_action_export_to_calendar</string>
+    <string name="key_action_export_to_calendar_management" translatable="false">key_action_export_to_calendar_management</string>
     <string name="key_show_custom_thing_first" translatable="false">key_show_custom_thing_first</string>
     <string name="key_logged_account" translatable="false">key_logged_account</string>
     <string name="key_add_account" translatable="false">key_add_account</string>
@@ -66,6 +67,7 @@
     <string name="title_show_tomorrow_course_after">自动显示明日课程</string>
     <string name="title_action_school_calendar">查看校历</string>
     <string name="title_action_export_to_calendar">导出到日历</string>
+    <string name="title_action_export_to_calendar_management">导出日历账号管理</string>
     <string name="title_show_custom_thing_first">优先显示自定义事项</string>
     <string name="title_action_custom_course">自定义课程</string>
     <string name="title_action_custom_thing">自定义事项</string>

@@ -53,6 +53,11 @@
         android:title="@string/title_action_export_to_calendar" />
 
     <Preference
+        android:icon="@drawable/ic_action_export_to_calendar_management"
+        android:key="@string/key_action_export_to_calendar_management"
+        android:title="@string/title_action_export_to_calendar_management" />
+
+    <Preference
         android:icon="@drawable/ic_custom_course"
         android:title="@string/title_action_custom_course">
         <intent

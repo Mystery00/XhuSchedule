@@ -236,4 +236,16 @@ class SettingsViewModel : ViewModel(), KoinComponent {
 			}
 		}
 	}
+
+	fun getAllCalendarAccount(listener: (List<Pair<String, Long>>) -> Unit) {
+		viewModelScope.launch {
+			val context = context()
+			val accountList = withContext(Dispatchers.Default) {
+				getAllCalendarAccount(context)
+			}
+			withContext(Dispatchers.Main) {
+				listener(accountList)
+			}
+		}
+	}
 }

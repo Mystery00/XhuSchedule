@@ -45,6 +45,7 @@
     <string name="action_add_student">添加账号</string>
     <string name="action_export">导出</string>
     <string name="action_go_to_play">前往Play商店检查更新</string>
+    <string name="action_remove">移除</string>
 
     <string name="shortcut_title_query_test">考试查询</string>
     <string name="shortcut_title_query_class_score">成绩查询</string>
@@ -132,6 +133,7 @@
     <string name="hint_sync_done">同步完成！</string>
     <string name="hint_export_done">导出完成！</string>
     <string name="hint_no_browser">请先安装一个浏览器。</string>
+    <string name="hint_no_calendar_account">没有已导出的日历数据</string>
 
     <string name="hint_null_course_data">这里什么都没有(ŎдŎ;)</string>
 
@@ -164,6 +166,7 @@
     <string name="hint_dialog_export_reminder_custom1">上课前</string>
     <string name="hint_dialog_export_reminder_custom2">分钟</string>
     <string name="hint_dialog_export_reminder_custom">上课前%1$d分钟</string>
+    <string name="hint_dialog_export_calendar_remove">请选择需要删除的日历账号</string>
 
     <string name="hint_confirm_reset_user_img">确定要重置个人头像吗？</string>
     <string name="hint_confirm_reset_background_img">确定要重置背景图片吗？</string>
