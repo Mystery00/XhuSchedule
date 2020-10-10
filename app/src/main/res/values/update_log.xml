@@ -9,7 +9,12 @@
 
 <resources>
     <string-array name="update_log">
-        <item>修复：日历导出自动删除问题</item>
+        <item>新增：导出到日历功能</item>
+        <item> </item>
+        <item>优化：适配 Android 11</item>
         <item>优化：刘海屏适配</item>
+        <item>优化：Shortcuts修改为动态生成</item>
+        <item> </item>
+        <item>修改：回撤桌面小部件（除出现完全无法使用问题外，不再维护）</item>
     </string-array>
 </resources>
