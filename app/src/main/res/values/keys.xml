@@ -36,6 +36,7 @@
     <string name="key_show_jrsc_translation" translatable="false">key_show_jrsc_translation</string>
     <string name="key_auto_check_update" translatable="false">key_auto_check_update</string>
     <string name="key_update_log" translatable="false">key_update_log</string>
+    <string name="key_source_code" translatable="false">key_source_code</string>
     <string name="key_weixin" translatable="false">key_weixin</string>
     <string name="key_check_update" translatable="false">key_check_update</string>
     <string name="key_version_name" translatable="false">key_version_name</string>
@@ -52,8 +53,12 @@
     <string name="key_query_score_class" translatable="false">key_query_score_class</string>
     <string name="key_query_score_experiment" translatable="false">key_query_score_experiment</string>
     <string name="key_query_score_cet" translatable="false">key_query_score_cet</string>
+    <string name="key_open_source_license" translatable="false">key_open_source_license</string>
     <string name="key_open_source_license_about" translatable="false">key_open_source_license_about</string>
+    <string name="key_jrsc" translatable="false">key_jrsc</string>
     <string name="key_about" translatable="false">key_about</string>
+
+    <string name="key_developer_mystery0" translatable="false">key_developer_mystery0</string>
 
     <string name="title_icon_ui">图标以及界面设计</string>
     <string name="title_back">数据提供</string>
@@ -133,7 +138,8 @@
     <string name="summary_weixin">点击跳转，也可以在微信小程序页面直接搜索『西瓜课表』即可使用</string>
     <string name="summary_jrsc">感谢作者@xenv，点击访问『今日诗词』官网</string>
 
-    <string name="link_developer" translatable="false">https://blog.mystery0.vip/</string>
+    <string name="link_developer_mystery0" translatable="false">https://blog.mystery0.vip/</string>
+
     <string name="link_open_source_license" translatable="false">https://github.com/Mystery00/XhuSchedule/blob/master/LICENSE.TXT</string>
     <string name="link_community_link" translatable="false">xhuschedule://goto_qq_group?key=JwFjXuBEWPJuevlxn9QhtMRGFSh-geZV</string>
     <string name="link_jrsc">https://www.jinrishici.com</string>

@@ -18,6 +18,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.mikepenz.aboutlibraries.LibsBuilder
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.base.XhuBasePreferenceFragment
+import com.weilylab.xhuschedule.config.toCustomTabs
 import com.weilylab.xhuschedule.repository.DebugDataKeeper
 import com.weilylab.xhuschedule.utils.ConfigUtil
 import com.weilylab.xhuschedule.utils.ConfigurationUtil
@@ -32,14 +33,23 @@ class AboutSettingFragment : XhuBasePreferenceFragment(R.xml.preference_about) {
 	private val debugDataKeeper: DebugDataKeeper by inject()
 
 	private val updateLogPreference by lazy { findPreferenceById<Preference>(R.string.key_update_log) }
+	private val sourceCodePreference by lazy { findPreferenceById<Preference>(R.string.key_source_code) }
 	private val versionNamePreference by lazy { findPreferenceById<Preference>(R.string.key_version_name) }
 	private val versionCodePreference by lazy { findPreferenceById<Preference>(R.string.key_version_code) }
+	private val openSourceLicensePreference by lazy { findPreferenceById<Preference>(R.string.key_open_source_license) }
 	private val openSourceLicenseAboutPreference by lazy { findPreferenceById<Preference>(R.string.key_open_source_license_about) }
+	private val jrscPreference by lazy { findPreferenceById<Preference>(R.string.key_jrsc) }
+
+	private val developerMystery0Preference by lazy { findPreferenceById<Preference>(R.string.key_developer_mystery0) }
 
 	override fun monitor() {
 		super.monitor()
 		updateLogPreference.setOnPreferenceClickListener {
 			ConfigUtil.showUpdateLog(requireActivity())
+			true
+		}
+		sourceCodePreference.setOnPreferenceClickListener {
+			requireActivity().toCustomTabs(getString(R.string.summary_source_code))
 			true
 		}
 		versionNamePreference.setOnPreferenceClickListener {
@@ -80,6 +90,10 @@ class AboutSettingFragment : XhuBasePreferenceFragment(R.xml.preference_about) {
 			}
 			true
 		}
+		openSourceLicensePreference.setOnPreferenceClickListener {
+			requireActivity().toCustomTabs(getString(R.string.link_open_source_license))
+			true
+		}
 		openSourceLicenseAboutPreference.setOnPreferenceClickListener {
 			LibsBuilder()
 					.withLicenseShown(true)
@@ -100,6 +114,15 @@ class AboutSettingFragment : XhuBasePreferenceFragment(R.xml.preference_about) {
 							"ViewModel",
 							"ZLoading")
 					.start(requireActivity())
+			true
+		}
+		jrscPreference.setOnPreferenceClickListener {
+			requireActivity().toCustomTabs(getString(R.string.link_jrsc))
+			true
+		}
+
+		developerMystery0Preference.setOnPreferenceClickListener {
+			requireActivity().toCustomTabs(getString(R.string.link_developer_mystery0))
 			true
 		}
 	}

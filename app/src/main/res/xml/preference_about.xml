@@ -10,91 +10,75 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     <PreferenceCategory android:title="@string/screen_category_about_application">
 
-		<Preference
-			android:icon="@drawable/ic_update_log"
-			android:key="@string/key_update_log"
-			android:title="@string/title_update_log" />
+        <Preference
+            android:icon="@drawable/ic_update_log"
+            android:key="@string/key_update_log"
+            android:title="@string/title_update_log" />
 
-		<Preference
-			android:icon="@drawable/ic_source_code"
-			android:summary="@string/summary_source_code"
-			android:title="@string/title_source_code">
-			<intent
-				android:action="android.intent.action.VIEW"
-				android:data="@string/summary_source_code" />
-		</Preference>
+        <Preference
+            android:icon="@drawable/ic_source_code"
+            android:key="@string/key_source_code"
+            android:summary="@string/summary_source_code"
+            android:title="@string/title_source_code" />
 
-		<Preference
-			android:icon="@drawable/ic_open_source_license"
-			android:summary="@string/summary_open_source_license"
-			android:title="@string/title_open_source_license">
-			<intent
-				android:action="android.intent.action.VIEW"
-				android:data="@string/link_open_source_license" />
-		</Preference>
+        <Preference
+            android:icon="@drawable/ic_open_source_license"
+            android:key="@string/key_open_source_license"
+            android:summary="@string/summary_open_source_license"
+            android:title="@string/title_open_source_license" />
 
-		<Preference
-			android:key="@string/key_open_source_license_about"
-			android:title="@string/title_open_source_license_about" />
+        <Preference
+            android:key="@string/key_open_source_license_about"
+            android:title="@string/title_open_source_license_about" />
 
-		<Preference
-			android:icon="@mipmap/ic_jrsc"
-			android:summary="@string/summary_jrsc"
-			android:title="@string/title_jrsc">
+        <Preference
+            android:icon="@mipmap/ic_jrsc"
+            android:key="@string/key_jrsc"
+            android:summary="@string/summary_jrsc"
+            android:title="@string/title_jrsc" />
 
-			<intent
-				android:action="android.intent.action.VIEW"
-				android:data="@string/link_jrsc" />
+    </PreferenceCategory>
 
-		</Preference>
+    <PreferenceCategory android:title="@string/screen_category_about_version">
 
-	</PreferenceCategory>
+        <Preference
+            android:key="@string/key_version_name"
+            android:summary="@string/summary_version_name"
+            android:title="@string/title_version_name" />
 
-	<PreferenceCategory android:title="@string/screen_category_about_version">
+        <Preference
+            android:key="@string/key_version_code"
+            android:summary="@string/summary_version_code"
+            android:title="@string/title_version_code" />
 
-		<Preference
-			android:key="@string/key_version_name"
-			android:summary="@string/summary_version_name"
-			android:title="@string/title_version_name" />
+    </PreferenceCategory>
 
-		<Preference
-			android:key="@string/key_version_code"
-			android:summary="@string/summary_version_code"
-			android:title="@string/title_version_code" />
+    <PreferenceCategory android:title="@string/screen_category_developer">
 
-	</PreferenceCategory>
+        <Preference
+            android:icon="@mipmap/img_yue"
+            android:summary="@string/summary_icon"
+            android:title="@string/title_icon_ui" />
 
-	<PreferenceCategory android:title="@string/screen_category_developer">
+        <Preference
+            android:icon="@mipmap/img_pan"
+            android:summary="@string/summary_back"
+            android:title="@string/title_back" />
 
-		<Preference
-			android:icon="@mipmap/img_yue"
-			android:summary="@string/summary_icon"
-			android:title="@string/title_icon_ui" />
+        <Preference
+            android:icon="@mipmap/img_johnny"
+            android:summary="@string/summary_ui"
+            android:title="@string/title_ui" />
 
-		<Preference
-			android:icon="@mipmap/img_pan"
-			android:summary="@string/summary_back"
-			android:title="@string/title_back" />
+        <Preference
+            android:icon="@mipmap/img_quinn"
+            android:summary="@string/summary_wx"
+            android:title="@string/title_wx" />
 
-		<Preference
-			android:icon="@mipmap/img_johnny"
-			android:summary="@string/summary_ui"
-			android:title="@string/title_ui" />
-
-		<Preference
-			android:icon="@mipmap/img_quinn"
-			android:summary="@string/summary_wx"
-			android:title="@string/title_wx" />
-
-		<Preference
-			android:icon="@mipmap/img_mystery0"
-			android:summary="@string/summary_developer"
-			android:title="@string/title_developer">
-
-			<intent
-				android:action="android.intent.action.VIEW"
-				android:data="@string/link_developer" />
-
-		</Preference>
-	</PreferenceCategory>
+        <Preference
+            android:icon="@mipmap/img_mystery0"
+            android:key="@string/key_developer_mystery0"
+            android:summary="@string/summary_developer"
+            android:title="@string/title_developer" />
+    </PreferenceCategory>
 </PreferenceScreen>

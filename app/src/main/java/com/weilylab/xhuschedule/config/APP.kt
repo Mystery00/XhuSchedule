@@ -36,7 +36,6 @@ import vip.mystery0.crashhandler.CrashHandler
 import vip.mystery0.logs.Logs
 import vip.mystery0.logs.logsLogger
 import vip.mystery0.tools.ToolsClient
-import vip.mystery0.tools.context
 import vip.mystery0.tools.utils.registerActivityLifecycle
 import vip.mystery0.tools.utils.toastLong
 import java.io.File
@@ -106,12 +105,6 @@ class APP : MultiDexApplication() {
 		var wxAPI: IWXAPI? = null
 			private set
 	}
-}
-
-fun getChannel(): String? {
-	val context = context()
-	val info = context.packageManager.getApplicationInfo(context.packageName, PackageManager.GET_META_DATA)
-	return info.metaData.getString("BUILD_CHANNEL");
 }
 
 fun Context.toCustomTabs(url: String) {
