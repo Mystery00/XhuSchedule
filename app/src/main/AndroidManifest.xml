@@ -216,16 +216,7 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
         </provider>
-        <provider
-            android:name=".provider.TodaySliceProvider"
-            android:authorities="${applicationId}.provider"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.app.slice.category.SLICE" />
-            </intent-filter>
-        </provider> <!-- 腾讯开放平台 -->
+       <!-- 腾讯开放平台 -->
         <activity
             android:name="com.tencent.tauth.AuthActivity"
             android:launchMode="singleTask"
