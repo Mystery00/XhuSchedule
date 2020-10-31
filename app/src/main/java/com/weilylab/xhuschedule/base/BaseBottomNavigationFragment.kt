@@ -17,21 +17,21 @@ import com.weilylab.xhuschedule.R
 import vip.mystery0.tools.base.binding.BaseBindingFragment
 
 abstract class BaseBottomNavigationFragment<B : ViewDataBinding>(layoutId: Int) : BaseBindingFragment<B>(layoutId) {
-	private var snackbar: Snackbar? = null
-	abstract fun updateTitle()
+    private var snackbar: Snackbar? = null
+    abstract fun updateTitle()
 
-	fun toast(throwable: Throwable?) = toast(throwable?.message)
-	fun toastLong(throwable: Throwable?) = toastLong(throwable?.message)
+    fun toast(throwable: Throwable?) = toast(throwable?.message)
+    fun toastLong(throwable: Throwable?) = toastLong(throwable?.message)
 
-	fun snackbar(@StringRes stringRes: Int) = snackBarMessage(stringRes, {}, Snackbar.LENGTH_SHORT)
-	fun snackbar(message: String) = snackBarMessage(message, {}, Snackbar.LENGTH_SHORT)
-	fun snackbarLong(@StringRes stringRes: Int) = snackBarMessage(stringRes, {}, Snackbar.LENGTH_LONG)
-	fun snackbarLong(message: String) = snackBarMessage(message, {}, Snackbar.LENGTH_LONG)
-	fun snackBarMessage(@StringRes stringId: Int, doOther: Snackbar.() -> Unit, @BaseTransientBottomBar.Duration duration: Int) = snackBarMessage(getString(stringId), doOther, duration)
-	fun snackBarMessage(message: String, doOther: Snackbar.() -> Unit, @BaseTransientBottomBar.Duration duration: Int) {
-		snackbar?.dismiss()
-		snackbar = Snackbar.make(findViewById(R.id.coordinatorLayout), message, duration)
-		doOther.invoke(snackbar!!)
-		snackbar!!.show()
-	}
+    fun snackbar(@StringRes stringRes: Int) = snackBarMessage(stringRes, {}, Snackbar.LENGTH_SHORT)
+    fun snackbar(message: String) = snackBarMessage(message, {}, Snackbar.LENGTH_SHORT)
+    fun snackbarLong(@StringRes stringRes: Int) = snackBarMessage(stringRes, {}, Snackbar.LENGTH_LONG)
+    fun snackbarLong(message: String) = snackBarMessage(message, {}, Snackbar.LENGTH_LONG)
+    fun snackBarMessage(@StringRes stringId: Int, doOther: Snackbar.() -> Unit, @BaseTransientBottomBar.Duration duration: Int) = snackBarMessage(getString(stringId), doOther, duration)
+    fun snackBarMessage(message: String, doOther: Snackbar.() -> Unit, @BaseTransientBottomBar.Duration duration: Int) {
+        snackbar?.dismiss()
+        snackbar = Snackbar.make(findViewById(R.id.coordinatorLayout), message, duration)
+        doOther.invoke(snackbar!!)
+        snackbar!!.show()
+    }
 }

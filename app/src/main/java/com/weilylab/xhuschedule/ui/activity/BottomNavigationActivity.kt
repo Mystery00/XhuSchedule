@@ -69,405 +69,405 @@ import java.io.File
 import kotlin.math.roundToInt
 
 class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_navigation) {
-	private val bottomNavigationViewModel: BottomNavigationViewModel by viewModel()
+    private val bottomNavigationViewModel: BottomNavigationViewModel by viewModel()
 
-	private val viewPagerAdapter: ViewPagerAdapter by lazy { ViewPagerAdapter(supportFragmentManager) }
-	private val dialog: Dialog by lazy { buildDialog(getString(R.string.hint_dialog_init)) }
-	private val eventBus: EventBus by inject()
+    private val viewPagerAdapter: ViewPagerAdapter by lazy { ViewPagerAdapter(supportFragmentManager) }
+    private val dialog: Dialog by lazy { buildDialog(getString(R.string.hint_dialog_init)) }
+    private val eventBus: EventBus by inject()
 
-	private var animation: ObjectAnimator? = null
-	private var arrowAnimation: ObjectAnimator? = null
-	private var showLoading = false
-	private val loadingAnimation: ObjectAnimator by lazy {
-		val animation = ObjectAnimator.ofFloat(imageSync, "rotation", 0F, 360F)
-				.setDuration(1000)
-		animation.repeatCount = ValueAnimator.INFINITE
-		animation.addListener(object : Animator.AnimatorListener {
-			override fun onAnimationStart(p0: Animator?) {
-				showLoading = true
-			}
+    private var animation: ObjectAnimator? = null
+    private var arrowAnimation: ObjectAnimator? = null
+    private var showLoading = false
+    private val loadingAnimation: ObjectAnimator by lazy {
+        val animation = ObjectAnimator.ofFloat(imageSync, "rotation", 0F, 360F)
+                .setDuration(1000)
+        animation.repeatCount = ValueAnimator.INFINITE
+        animation.addListener(object : Animator.AnimatorListener {
+            override fun onAnimationStart(p0: Animator?) {
+                showLoading = true
+            }
 
-			override fun onAnimationEnd(p0: Animator?) {
-			}
+            override fun onAnimationEnd(p0: Animator?) {
+            }
 
-			override fun onAnimationCancel(p0: Animator?) {
-			}
+            override fun onAnimationCancel(p0: Animator?) {
+            }
 
-			override fun onAnimationRepeat(p0: Animator?) {
-				if (!showLoading) {
-					p0?.cancel()
-				}
-			}
-		})
-		animation
-	}
+            override fun onAnimationRepeat(p0: Animator?) {
+                if (!showLoading) {
+                    p0?.cancel()
+                }
+            }
+        })
+        animation
+    }
 
-	private var isShowWeekView = false
-	private val showAdapter: ShowCourseRecyclerViewAdapter by lazy { ShowCourseRecyclerViewAdapter(this) }
+    private var isShowWeekView = false
+    private val showAdapter: ShowCourseRecyclerViewAdapter by lazy { ShowCourseRecyclerViewAdapter(this) }
 
-	private val studentListObserver = object : DataObserver<List<Student>> {
-		override fun loading() {
-			super.loading()
-			showDialog()
-		}
+    private val studentListObserver = object : DataObserver<List<Student>> {
+        override fun loading() {
+            super.loading()
+            showDialog()
+        }
 
-		override fun empty() {
-			super.empty()
-			startActivityForResult(Intent(this@BottomNavigationActivity, LoginActivity::class.java), ADD_ACCOUNT_CODE)
-			hideDialog()
-		}
+        override fun empty() {
+            super.empty()
+            startActivityForResult(Intent(this@BottomNavigationActivity, LoginActivity::class.java), ADD_ACCOUNT_CODE)
+            hideDialog()
+        }
 
-		override fun contentNoEmpty(data: List<Student>) {
-			super.contentNoEmpty(data)
-			hideDialog()
-		}
+        override fun contentNoEmpty(data: List<Student>) {
+            super.contentNoEmpty(data)
+            hideDialog()
+        }
 
-		override fun error(e: Throwable?) {
-			super.error(e)
-			Logs.w(e)
-			toastLong(e)
-			hideDialog()
-		}
-	}
+        override fun error(e: Throwable?) {
+            super.error(e)
+            Logs.w(e)
+            toastLong(e)
+            hideDialog()
+        }
+    }
 
-	private val courseListObserver = object : DataObserver<List<Schedule>> {
-		override fun contentNoEmpty(data: List<Schedule>) {
-			weekView.data(data).showView()
-			cancelLoading()
-		}
+    private val courseListObserver = object : DataObserver<List<Schedule>> {
+        override fun contentNoEmpty(data: List<Schedule>) {
+            weekView.data(data).showView()
+            cancelLoading()
+        }
 
-		override fun loading() {
-			showLoading()
-		}
+        override fun loading() {
+            showLoading()
+        }
 
-		override fun error(e: Throwable?) {
-			Logs.w(e)
-			toastLong(e)
-			cancelLoading()
-		}
+        override fun error(e: Throwable?) {
+            Logs.w(e)
+            toastLong(e)
+            cancelLoading()
+        }
 
-		override fun empty() {
-			cancelLoading()
-		}
-	}
+        override fun empty() {
+            cancelLoading()
+        }
+    }
 
 
-	private val currentWeekObserver = object : DataObserver<Int> {
-		override fun contentNoEmpty(data: Int) {
-			val week = when {
-				data < 1 -> 1
-				data > 20 -> 20
-				else -> data
-			}
-			weekView.curWeek(week).showView()
-			bottomNavigationViewModel.week.postValue(week)
-			viewPagerAdapter.getItem(viewPager.currentItem).updateTitle()
-		}
+    private val currentWeekObserver = object : DataObserver<Int> {
+        override fun contentNoEmpty(data: Int) {
+            val week = when {
+                data < 1 -> 1
+                data > 20 -> 20
+                else -> data
+            }
+            weekView.curWeek(week).showView()
+            bottomNavigationViewModel.week.postValue(week)
+            viewPagerAdapter.getItem(viewPager.currentItem).updateTitle()
+        }
 
-		override fun error(e: Throwable?) {
-			Logs.w(e)
-			toastLong(e)
-			cancelLoading()
-		}
+        override fun error(e: Throwable?) {
+            Logs.w(e)
+            toastLong(e)
+            cancelLoading()
+        }
 
-		override fun loading() {
-			showLoading()
-		}
+        override fun loading() {
+            showLoading()
+        }
 
-		override fun empty() {
-			cancelLoading()
-			hideDialog()
-		}
-	}
+        override fun empty() {
+            cancelLoading()
+            hideDialog()
+        }
+    }
 
-	private val weekObserver = Observer<Int> {
-		viewPagerAdapter.getItem(viewPager.currentItem).updateTitle()
-	}
+    private val weekObserver = Observer<Int> {
+        viewPagerAdapter.getItem(viewPager.currentItem).updateTitle()
+    }
 
-	private val titleObserver = Observer<Pair<Class<*>, String>> {
-		if (it.first == viewPagerAdapter.getItem(viewPager.currentItem).javaClass)
-			titleTextView.text = it.second
-	}
+    private val titleObserver = Observer<Pair<Class<*>, String>> {
+        if (it.first == viewPagerAdapter.getItem(viewPager.currentItem).javaClass)
+            titleTextView.text = it.second
+    }
 
-	private val showCourseObserver = Observer<List<Schedule>> {
-		showAdapter.items.clear()
-		val week = bottomNavigationViewModel.week.value ?: 0
-		showAdapter.items.addAll(filterShowCourse(it, week))
-		showPopupWindow()
-	}
+    private val showCourseObserver = Observer<List<Schedule>> {
+        showAdapter.items.clear()
+        val week = bottomNavigationViewModel.week.value ?: 0
+        showAdapter.items.addAll(filterShowCourse(it, week))
+        showPopupWindow()
+    }
 
-	override fun initView() {
-		super.initView()
-		titleTextView.text = title
-		showBackground()
-		initPopupWindow()
-		viewPagerAdapter.addFragment(TodayFragment.newInstance())
-		viewPagerAdapter.addFragment(TableFragment.newInstance())
-		viewPagerAdapter.addFragment(ProfileFragment.newInstance())
-		viewPager.offscreenPageLimit = 2
-		viewPager.adapter = viewPagerAdapter
-		if (ConfigurationUtil.enableViewPagerTransform)
-			viewPager.setPageTransformer(true, ZoomOutPageTransformer())
-		weekView.data(emptyList())
-				.curWeek(1)
-				.callback(IWeekView.OnWeekItemClickedListener {
-					bottomNavigationViewModel.week.postValue(it)
-					configWeekView(viewPager.currentItem)
-					viewPagerAdapter.getItem(viewPager.currentItem).updateTitle()
-				})
-				.showView()
-		bottomNavigationView.config { it.setGradientColors(intArrayOf(Color.parseColor("#0297fe"), Color.parseColor("#0fc8ff"))) }
-				.setMenuList(arrayListOf(
-						BottomTabItem(
-								if (CalendarUtil.shouldShowTomorrowInfo()) getString(R.string.nav_tomorrow)
-								else getString(R.string.nav_today),
-								R.drawable.ic_today_selected,
-								R.drawable.ic_today),
-						BottomTabItem(getString(R.string.nav_week), R.drawable.ic_week_selected, R.drawable.ic_week),
-						BottomTabItem(getString(R.string.nav_profile), R.drawable.ic_profile_selected, R.drawable.ic_profile)
-				))
-				.init()
-	}
+    override fun initView() {
+        super.initView()
+        titleTextView.text = title
+        showBackground()
+        initPopupWindow()
+        viewPagerAdapter.addFragment(TodayFragment.newInstance())
+        viewPagerAdapter.addFragment(TableFragment.newInstance())
+        viewPagerAdapter.addFragment(ProfileFragment.newInstance())
+        viewPager.offscreenPageLimit = 2
+        viewPager.adapter = viewPagerAdapter
+        if (ConfigurationUtil.enableViewPagerTransform)
+            viewPager.setPageTransformer(true, ZoomOutPageTransformer())
+        weekView.data(emptyList())
+                .curWeek(1)
+                .callback(IWeekView.OnWeekItemClickedListener {
+                    bottomNavigationViewModel.week.postValue(it)
+                    configWeekView(viewPager.currentItem)
+                    viewPagerAdapter.getItem(viewPager.currentItem).updateTitle()
+                })
+                .showView()
+        bottomNavigationView.config { it.setGradientColors(intArrayOf(Color.parseColor("#0297fe"), Color.parseColor("#0fc8ff"))) }
+                .setMenuList(arrayListOf(
+                        BottomTabItem(
+                                if (CalendarUtil.shouldShowTomorrowInfo()) getString(R.string.nav_tomorrow)
+                                else getString(R.string.nav_today),
+                                R.drawable.ic_today_selected,
+                                R.drawable.ic_today),
+                        BottomTabItem(getString(R.string.nav_week), R.drawable.ic_week_selected, R.drawable.ic_week),
+                        BottomTabItem(getString(R.string.nav_profile), R.drawable.ic_profile_selected, R.drawable.ic_profile)
+                ))
+                .init()
+    }
 
-	private fun showBackground() {
-		val isDark = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
-		if (isDark) {
-			backgroundImageView.setBackgroundResource(R.color.colorTableBackground)
-			return
-		}
-		val path = ConfigurationUtil.customBackgroundImage
-		val file = File(path)
-		if (path == "" || !file.exists()) {
-			backgroundImageView.load(R.mipmap.bg1)
-		} else {
-			backgroundImageView.load(file) {
-				diskCachePolicy(CachePolicy.DISABLED)
-			}
-		}
-	}
+    private fun showBackground() {
+        val isDark = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
+        if (isDark) {
+            backgroundImageView.setBackgroundResource(R.color.colorTableBackground)
+            return
+        }
+        val path = ConfigurationUtil.customBackgroundImage
+        val file = File(path)
+        if (path == "" || !file.exists()) {
+            backgroundImageView.load(R.mipmap.bg1)
+        } else {
+            backgroundImageView.load(file) {
+                diskCachePolicy(CachePolicy.DISABLED)
+            }
+        }
+    }
 
-	override fun initData() {
-		super.initData()
-		initViewModel()
-		configWeekView(0)
-		bottomNavigationViewModel.init()
-		bottomNavigationViewModel.queryCurrentWeek()
-		bottomNavigationViewModel.queryNewNotice()
-		bottomNavigationViewModel.queryNewFeedbackMessage()
-	}
+    override fun initData() {
+        super.initData()
+        initViewModel()
+        configWeekView(0)
+        bottomNavigationViewModel.init()
+        bottomNavigationViewModel.queryCurrentWeek()
+        bottomNavigationViewModel.queryNewNotice()
+        bottomNavigationViewModel.queryNewFeedbackMessage()
+    }
 
-	private fun initViewModel() {
-		bottomNavigationViewModel.studentList.observe(this, studentListObserver)
-		bottomNavigationViewModel.currentWeek.observe(this, currentWeekObserver)
-		bottomNavigationViewModel.courseList.observe(this, courseListObserver)
-		bottomNavigationViewModel.week.observe(this, weekObserver)
-		bottomNavigationViewModel.title.observe(this, titleObserver)
-		bottomNavigationViewModel.showCourse.observe(this, showCourseObserver)
-		bottomNavigationViewModel.toastMessage.observe(this, Observer { toast(it) })
-	}
+    private fun initViewModel() {
+        bottomNavigationViewModel.studentList.observe(this, studentListObserver)
+        bottomNavigationViewModel.currentWeek.observe(this, currentWeekObserver)
+        bottomNavigationViewModel.courseList.observe(this, courseListObserver)
+        bottomNavigationViewModel.week.observe(this, weekObserver)
+        bottomNavigationViewModel.title.observe(this, titleObserver)
+        bottomNavigationViewModel.showCourse.observe(this, showCourseObserver)
+        bottomNavigationViewModel.toastMessage.observe(this, Observer { toast(it) })
+    }
 
-	override fun monitor() {
-		super.monitor()
-		bottomNavigationView.linkViewPager(viewPager, {
-			viewPagerAdapter.getItem(it).updateTitle()
-			configWeekView(it)
-		}, false)
-		appBarLayout.setOnClickListener { }
-		arrowImageView.setOnClickListener {
-			if (isShowWeekView)
-				hideWeekView()
-			else
-				showWeekView()
-		}
-		titleTextView.setOnClickListener {
-			if (isShowWeekView)
-				hideWeekView()
-			else
-				showWeekView()
-		}
-		imageSync.setOnClickListener {
-			bottomNavigationViewModel.queryOnline()
-		}
-	}
+    override fun monitor() {
+        super.monitor()
+        bottomNavigationView.linkViewPager(viewPager, {
+            viewPagerAdapter.getItem(it).updateTitle()
+            configWeekView(it)
+        }, false)
+        appBarLayout.setOnClickListener { }
+        arrowImageView.setOnClickListener {
+            if (isShowWeekView)
+                hideWeekView()
+            else
+                showWeekView()
+        }
+        titleTextView.setOnClickListener {
+            if (isShowWeekView)
+                hideWeekView()
+            else
+                showWeekView()
+        }
+        imageSync.setOnClickListener {
+            bottomNavigationViewModel.queryOnline()
+        }
+    }
 
-	override fun onBackPressed() {
-		if (ConfigUtil.isTwiceClick())
-			super.onBackPressed()
-		else
-			toastLong(R.string.hint_twice_press_exit)
-	}
+    override fun onBackPressed() {
+        if (ConfigUtil.isTwiceClick())
+            super.onBackPressed()
+        else
+            toastLong(R.string.hint_twice_press_exit)
+    }
 
-	private fun configWeekView(position: Int) {
-		when (position) {
-			0 -> {
-				if (isShowWeekView) hideWeekView()
-				titleTextView.isClickable = false
-				arrowImageView.visibility = View.GONE
-			}
-			1 -> {
-				titleTextView.isClickable = true
-				arrowImageView.visibility = View.VISIBLE
-			}
-			2 -> {
-				if (isShowWeekView) hideWeekView()
-				titleTextView.isClickable = false
-				arrowImageView.visibility = View.GONE
-			}
-		}
-	}
+    private fun configWeekView(position: Int) {
+        when (position) {
+            0 -> {
+                if (isShowWeekView) hideWeekView()
+                titleTextView.isClickable = false
+                arrowImageView.visibility = View.GONE
+            }
+            1 -> {
+                titleTextView.isClickable = true
+                arrowImageView.visibility = View.VISIBLE
+            }
+            2 -> {
+                if (isShowWeekView) hideWeekView()
+                titleTextView.isClickable = false
+                arrowImageView.visibility = View.GONE
+            }
+        }
+    }
 
-	private fun showWeekView() {
-		animation?.cancel()
-		arrowAnimation?.cancel()
-		animation = ObjectAnimator.ofFloat(weekView, "translationY", 0F, dpTopx(74F).toFloat())
-		arrowAnimation = ObjectAnimator.ofFloat(arrowImageView, "rotation", 0F, 180F)
-		animation?.start()
-		arrowAnimation?.start()
-		isShowWeekView = true
-	}
+    private fun showWeekView() {
+        animation?.cancel()
+        arrowAnimation?.cancel()
+        animation = ObjectAnimator.ofFloat(weekView, "translationY", 0F, dpTopx(74F).toFloat())
+        arrowAnimation = ObjectAnimator.ofFloat(arrowImageView, "rotation", 0F, 180F)
+        animation?.start()
+        arrowAnimation?.start()
+        isShowWeekView = true
+    }
 
-	private fun hideWeekView() {
-		animation?.cancel()
-		arrowAnimation?.cancel()
-		animation = ObjectAnimator.ofFloat(weekView, "translationY", dpTopx(74F).toFloat(), 0F)
-		arrowAnimation = ObjectAnimator.ofFloat(arrowImageView, "rotation", 180F, 0F)
-		animation?.start()
-		arrowAnimation?.start()
-		isShowWeekView = false
-	}
+    private fun hideWeekView() {
+        animation?.cancel()
+        arrowAnimation?.cancel()
+        animation = ObjectAnimator.ofFloat(weekView, "translationY", dpTopx(74F).toFloat(), 0F)
+        arrowAnimation = ObjectAnimator.ofFloat(arrowImageView, "rotation", 180F, 0F)
+        animation?.start()
+        arrowAnimation?.start()
+        isShowWeekView = false
+    }
 
-	private fun showDialog() {
-		if (!dialog.isShowing)
-			dialog.show()
-	}
+    private fun showDialog() {
+        if (!dialog.isShowing)
+            dialog.show()
+    }
 
-	private fun hideDialog() {
-		if (dialog.isShowing)
-			dialog.dismiss()
-	}
+    private fun hideDialog() {
+        if (dialog.isShowing)
+            dialog.dismiss()
+    }
 
-	private fun showLoading() {
-		loadingAnimation.start()
-	}
+    private fun showLoading() {
+        loadingAnimation.start()
+    }
 
-	private fun cancelLoading() {
-		showLoading = false
-	}
+    private fun cancelLoading() {
+        showLoading = false
+    }
 
-	private lateinit var popupWindow: PopupWindow
-	private lateinit var dialogShowCourseBinding: DialogShowCourseBinding
-	private var distance = 40
+    private lateinit var popupWindow: PopupWindow
+    private lateinit var dialogShowCourseBinding: DialogShowCourseBinding
+    private var distance = 40
 
-	private fun initPopupWindow() {
-		dialogShowCourseBinding = DialogShowCourseBinding.inflate(LayoutInflater.from(this))
-		dialogShowCourseBinding.recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-		dialogShowCourseBinding.recyclerView.adapter = showAdapter
-		dialogShowCourseBinding.recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-			override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-				val horizontalOffset = recyclerView.computeHorizontalScrollOffset().toFloat() / screenWidth
-				val params = dialogShowCourseBinding.point.layoutParams as ConstraintLayout.LayoutParams
-				super.onScrolled(recyclerView, dx, dy)
-				params.leftMargin = (distance * horizontalOffset).roundToInt()
-				dialogShowCourseBinding.point.layoutParams = params
-			}
-		})
-		PagerSnapHelper().attachToRecyclerView(dialogShowCourseBinding.recyclerView)
-		val viewSize = screenWidth - dpTopx(96F)
-		popupWindow = PopupWindow(dialogShowCourseBinding.root, ViewGroup.LayoutParams.MATCH_PARENT, viewSize)
-		popupWindow.isOutsideTouchable = true
-		popupWindow.isFocusable = true
-		popupWindow.animationStyle = R.style.ShowCourseAnimation
-		popupWindow.setOnDismissListener {
-			AnimationUtil.setWindowAlpha(this, 0.5F, 1F, 200)
-		}
-		popupWindow.setBackgroundDrawable(ColorDrawable(0x00000000))
-	}
+    private fun initPopupWindow() {
+        dialogShowCourseBinding = DialogShowCourseBinding.inflate(LayoutInflater.from(this))
+        dialogShowCourseBinding.recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+        dialogShowCourseBinding.recyclerView.adapter = showAdapter
+        dialogShowCourseBinding.recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                val horizontalOffset = recyclerView.computeHorizontalScrollOffset().toFloat() / screenWidth
+                val params = dialogShowCourseBinding.point.layoutParams as ConstraintLayout.LayoutParams
+                super.onScrolled(recyclerView, dx, dy)
+                params.leftMargin = (distance * horizontalOffset).roundToInt()
+                dialogShowCourseBinding.point.layoutParams = params
+            }
+        })
+        PagerSnapHelper().attachToRecyclerView(dialogShowCourseBinding.recyclerView)
+        val viewSize = screenWidth - dpTopx(96F)
+        popupWindow = PopupWindow(dialogShowCourseBinding.root, ViewGroup.LayoutParams.MATCH_PARENT, viewSize)
+        popupWindow.isOutsideTouchable = true
+        popupWindow.isFocusable = true
+        popupWindow.animationStyle = R.style.ShowCourseAnimation
+        popupWindow.setOnDismissListener {
+            AnimationUtil.setWindowAlpha(this, 0.5F, 1F, 200)
+        }
+        popupWindow.setBackgroundDrawable(ColorDrawable(0x00000000))
+    }
 
-	private fun showPopupWindow() {
-		generatePoint()
-		val params = dialogShowCourseBinding.point.layoutParams as ConstraintLayout.LayoutParams
-		params.leftMargin = 0
-		dialogShowCourseBinding.point.layoutParams = params
-		dialogShowCourseBinding.recyclerView.scrollToPosition(0)
-		AnimationUtil.setWindowAlpha(this, 1F, 0.5F, 200)
-		weekView.post {
-			popupWindow.showAtLocation(weekView, Gravity.CENTER, 0, 0)
-		}
-	}
+    private fun showPopupWindow() {
+        generatePoint()
+        val params = dialogShowCourseBinding.point.layoutParams as ConstraintLayout.LayoutParams
+        params.leftMargin = 0
+        dialogShowCourseBinding.point.layoutParams = params
+        dialogShowCourseBinding.recyclerView.scrollToPosition(0)
+        AnimationUtil.setWindowAlpha(this, 1F, 0.5F, 200)
+        weekView.post {
+            popupWindow.showAtLocation(weekView, Gravity.CENTER, 0, 0)
+        }
+    }
 
-	private fun generatePoint() {
-		dialogShowCourseBinding.pointLayout.removeAllViews()
-		val grayPointDrawable = VectorDrawableCompat.create(resources, R.drawable.ic_point, null)!!
-		grayPointDrawable.setBounds(0, 0, 20, 20)
-		grayPointDrawable.setTint(Color.LTGRAY)
-		for (i in 0 until showAdapter.items.size) {
-			val view = View(applicationContext)
-			view.background = grayPointDrawable
-			val params = LinearLayout.LayoutParams(20, 20)
-			if (i != 0)
-				params.leftMargin = 20
-			view.layoutParams = params
-			dialogShowCourseBinding.pointLayout.addView(view)
-		}
-		val pointParams = dialogShowCourseBinding.point.layoutParams
-		pointParams.height = 20
-		pointParams.width = 20
-		dialogShowCourseBinding.point.layoutParams = pointParams
-	}
+    private fun generatePoint() {
+        dialogShowCourseBinding.pointLayout.removeAllViews()
+        val grayPointDrawable = VectorDrawableCompat.create(resources, R.drawable.ic_point, null)!!
+        grayPointDrawable.setBounds(0, 0, 20, 20)
+        grayPointDrawable.setTint(Color.LTGRAY)
+        for (i in 0 until showAdapter.items.size) {
+            val view = View(applicationContext)
+            view.background = grayPointDrawable
+            val params = LinearLayout.LayoutParams(20, 20)
+            if (i != 0)
+                params.leftMargin = 20
+            view.layoutParams = params
+            dialogShowCourseBinding.pointLayout.addView(view)
+        }
+        val pointParams = dialogShowCourseBinding.point.layoutParams
+        pointParams.height = 20
+        pointParams.width = 20
+        dialogShowCourseBinding.point.layoutParams = pointParams
+    }
 
-	override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-		super.onActivityResult(requestCode, resultCode, data)
-		when (requestCode) {
-			ADD_ACCOUNT_CODE -> {
-				if (resultCode == Activity.RESULT_OK) {
-					bottomNavigationViewModel.init()
-				} else {
-					finish()
-				}
-			}
-		}
-	}
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        when (requestCode) {
+            ADD_ACCOUNT_CODE -> {
+                if (resultCode == Activity.RESULT_OK) {
+                    bottomNavigationViewModel.init()
+                } else {
+                    finish()
+                }
+            }
+        }
+    }
 
-	private fun filterShowCourse(courseList: List<Schedule>, week: Int): List<Schedule> {
-		if (ConfigurationUtil.isShowNotWeek)
-			return courseList
-		val list = ArrayList<Schedule>()
-		courseList.forEach {
-			if (it.weekList.contains(week))
-				list.add(it)
-		}
-		return list
-	}
+    private fun filterShowCourse(courseList: List<Schedule>, week: Int): List<Schedule> {
+        if (ConfigurationUtil.isShowNotWeek)
+            return courseList
+        val list = ArrayList<Schedule>()
+        courseList.forEach {
+            if (it.weekList.contains(week))
+                list.add(it)
+        }
+        return list
+    }
 
-	override fun onCreate(savedInstanceState: Bundle?) {
-		eventBus.register(this)
-		super.onCreate(savedInstanceState)
-	}
+    override fun onCreate(savedInstanceState: Bundle?) {
+        eventBus.register(this)
+        super.onCreate(savedInstanceState)
+    }
 
-	override fun onDestroy() {
-		eventBus.unregister(this)
-		super.onDestroy()
-		animation?.cancel()
-		arrowAnimation?.cancel()
-	}
+    override fun onDestroy() {
+        eventBus.unregister(this)
+        super.onDestroy()
+        animation?.cancel()
+        arrowAnimation?.cancel()
+    }
 
-	@Subscribe(threadMode = ThreadMode.MAIN)
-	fun updateUIFromConfig(uiConfigEvent: UIConfigEvent) {
-		if (uiConfigEvent.refreshUI.contains(UI.MAIN_INIT)) {
-			bottomNavigationViewModel.init()
-		}
-		if (uiConfigEvent.refreshUI.contains(UI.BACKGROUND_IMG)) {
-			showBackground()
-		}
-		if (uiConfigEvent.refreshUI.contains(UI.NOTICE_DOT)) {
-			bottomNavigationViewModel.queryNewNotice()
-		}
-		if (uiConfigEvent.refreshUI.contains(UI.FEEDBACK_DOT)) {
-			bottomNavigationViewModel.queryNewFeedbackMessage()
-		}
-		if (uiConfigEvent.refreshUI.contains(UI.MENU)) {
-			bottomNavigationView.findItem(0).name = if (CalendarUtil.shouldShowTomorrowInfo()) getString(R.string.nav_tomorrow) else getString(R.string.nav_today)
-			bottomNavigationView.init()
-		}
-	}
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun updateUIFromConfig(uiConfigEvent: UIConfigEvent) {
+        if (uiConfigEvent.refreshUI.contains(UI.MAIN_INIT)) {
+            bottomNavigationViewModel.init()
+        }
+        if (uiConfigEvent.refreshUI.contains(UI.BACKGROUND_IMG)) {
+            showBackground()
+        }
+        if (uiConfigEvent.refreshUI.contains(UI.NOTICE_DOT)) {
+            bottomNavigationViewModel.queryNewNotice()
+        }
+        if (uiConfigEvent.refreshUI.contains(UI.FEEDBACK_DOT)) {
+            bottomNavigationViewModel.queryNewFeedbackMessage()
+        }
+        if (uiConfigEvent.refreshUI.contains(UI.MENU)) {
+            bottomNavigationView.findItem(0).name = if (CalendarUtil.shouldShowTomorrowInfo()) getString(R.string.nav_tomorrow) else getString(R.string.nav_today)
+            bottomNavigationView.init()
+        }
+    }
 }

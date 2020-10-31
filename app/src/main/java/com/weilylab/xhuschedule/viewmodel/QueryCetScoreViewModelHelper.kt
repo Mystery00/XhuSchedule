@@ -23,38 +23,38 @@ import vip.mystery0.rx.PackageData
 import vip.mystery0.rx.content
 
 object QueryCetScoreViewModelHelper : KoinComponent {
-	private val studentRepository: StudentRepository by inject()
+    private val studentRepository: StudentRepository by inject()
 
-	private val scoreRepository: ScoreRepository by inject()
+    private val scoreRepository: ScoreRepository by inject()
 
-	var no = MutableLiveData<String>()
-	var name = MutableLiveData<String>()
-	val student by lazy { MutableLiveData<Student>() }
-	var cetVCodeLiveData = MutableLiveData<PackageData<Bitmap>>()
-	var cetScoreLiveData = MutableLiveData<PackageData<CetScore>>()
+    var no = MutableLiveData<String>()
+    var name = MutableLiveData<String>()
+    val student by lazy { MutableLiveData<Student>() }
+    var cetVCodeLiveData = MutableLiveData<PackageData<Bitmap>>()
+    var cetScoreLiveData = MutableLiveData<PackageData<CetScore>>()
 
-	fun init(scope: CoroutineScope) {
-		scope.launch {
-			val mainStudent = studentRepository.queryMainStudent()
-			if (mainStudent == null) {
-				student.postValue(null)
-				return@launch
-			}
-			val info = studentRepository.queryStudentInfo(mainStudent, fromCache = true)
-			mainStudent.studentName = info.name
-			student.postValue(mainStudent)
-		}
-	}
+    fun init(scope: CoroutineScope) {
+        scope.launch {
+            val mainStudent = studentRepository.queryMainStudent()
+            if (mainStudent == null) {
+                student.postValue(null)
+                return@launch
+            }
+            val info = studentRepository.queryStudentInfo(mainStudent, fromCache = true)
+            mainStudent.studentName = info.name
+            student.postValue(mainStudent)
+        }
+    }
 
-	fun getCetVCode(scope: CoroutineScope) {
-		scope.launch {
-			cetVCodeLiveData.content(scoreRepository.getCetVCode(student.value!!, no.value!!))
-		}
-	}
+    fun getCetVCode(scope: CoroutineScope) {
+        scope.launch {
+            cetVCodeLiveData.content(scoreRepository.getCetVCode(student.value!!, no.value!!))
+        }
+    }
 
-	fun getCetScore(scope: CoroutineScope, cetVCodeStr: String) {
-		scope.launch {
-			cetScoreLiveData.content(scoreRepository.getCetScore(student.value!!, no.value!!, name.value!!, cetVCodeStr))
-		}
-	}
+    fun getCetScore(scope: CoroutineScope, cetVCodeStr: String) {
+        scope.launch {
+            cetScoreLiveData.content(scoreRepository.getCetScore(student.value!!, no.value!!, name.value!!, cetVCodeStr))
+        }
+    }
 }

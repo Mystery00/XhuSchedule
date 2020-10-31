@@ -29,57 +29,57 @@ import org.koin.android.ext.android.inject
 import vip.mystery0.logs.Logs
 
 class NotificationService : Service() {
-	override fun onBind(intent: Intent?): IBinder? = null
+    override fun onBind(intent: Intent?): IBinder? = null
 
-	private val studentRepository: StudentRepository by inject()
-	private val notificationRepository: NotificationRepository by inject()
-	private val notificationManager: NotificationManager by inject()
+    private val studentRepository: StudentRepository by inject()
+    private val notificationRepository: NotificationRepository by inject()
+    private val notificationManager: NotificationManager by inject()
 
-	override fun onCreate() {
-		super.onCreate()
-		val notification = NotificationCompat.Builder(this, Constants.NOTIFICATION_CHANNEL_ID_DEFAULT)
-				.setSmallIcon(R.mipmap.ic_stat_init)
-				.setContentText(getString(R.string.hint_foreground_notification))
-				.setAutoCancel(true)
-				.setPriority(NotificationManagerCompat.IMPORTANCE_NONE)
-				.build()
-		startForeground(Constants.NOTIFICATION_ID_TOMORROW_INIT, notification)
-		Logs.i("onStartJob: 任务执行了")
+    override fun onCreate() {
+        super.onCreate()
+        val notification = NotificationCompat.Builder(this, Constants.NOTIFICATION_CHANNEL_ID_DEFAULT)
+                .setSmallIcon(R.mipmap.ic_stat_init)
+                .setContentText(getString(R.string.hint_foreground_notification))
+                .setAutoCancel(true)
+                .setPriority(NotificationManagerCompat.IMPORTANCE_NONE)
+                .build()
+        startForeground(Constants.NOTIFICATION_ID_TOMORROW_INIT, notification)
+        Logs.i("onStartJob: 任务执行了")
 
-		GlobalScope.launch {
-			val studentList = studentRepository.queryAllStudentList()
-			val customThingList = notificationRepository.queryTomorrowCustomThing()
-			withContext(Dispatchers.Main) {
-				TomorrowNotification.notifyCustomThing(this@NotificationService, notificationManager, customThingList)
-			}
-			if (ConfigurationUtil.isEnableMultiUserMode) {
-				val courseList = notificationRepository.queryTomorrowCourseForManyStudent(studentList)
-				withContext(Dispatchers.Main) {
-					TomorrowNotification.notifyCourse(this@NotificationService, notificationManager, courseList)
-				}
-				val testList = notificationRepository.queryTestsForManyStudent(studentList)
-				val testColor = notificationRepository.generateColorList(testList)
-				withContext(Dispatchers.Main) {
-					TomorrowNotification.notifyTest(this@NotificationService, notificationManager, testList, testColor)
-				}
-			} else {
-				val courseList = notificationRepository.queryTomorrowCourse(studentList)
-				withContext(Dispatchers.Main) {
-					TomorrowNotification.notifyCourse(this@NotificationService, notificationManager, courseList)
-				}
-				val testList = notificationRepository.queryTests(studentList)
-				val testColor = notificationRepository.generateColorList(testList)
-				withContext(Dispatchers.Main) {
-					TomorrowNotification.notifyTest(this@NotificationService, notificationManager, testList, testColor)
-				}
-			}
-			stopSelf()
-		}
-	}
+        GlobalScope.launch {
+            val studentList = studentRepository.queryAllStudentList()
+            val customThingList = notificationRepository.queryTomorrowCustomThing()
+            withContext(Dispatchers.Main) {
+                TomorrowNotification.notifyCustomThing(this@NotificationService, notificationManager, customThingList)
+            }
+            if (ConfigurationUtil.isEnableMultiUserMode) {
+                val courseList = notificationRepository.queryTomorrowCourseForManyStudent(studentList)
+                withContext(Dispatchers.Main) {
+                    TomorrowNotification.notifyCourse(this@NotificationService, notificationManager, courseList)
+                }
+                val testList = notificationRepository.queryTestsForManyStudent(studentList)
+                val testColor = notificationRepository.generateColorList(testList)
+                withContext(Dispatchers.Main) {
+                    TomorrowNotification.notifyTest(this@NotificationService, notificationManager, testList, testColor)
+                }
+            } else {
+                val courseList = notificationRepository.queryTomorrowCourse(studentList)
+                withContext(Dispatchers.Main) {
+                    TomorrowNotification.notifyCourse(this@NotificationService, notificationManager, courseList)
+                }
+                val testList = notificationRepository.queryTests(studentList)
+                val testColor = notificationRepository.generateColorList(testList)
+                withContext(Dispatchers.Main) {
+                    TomorrowNotification.notifyTest(this@NotificationService, notificationManager, testList, testColor)
+                }
+            }
+            stopSelf()
+        }
+    }
 
-	override fun onDestroy() {
-		Logs.i("onDestroy: 任务结束")
-		stopForeground(true)
-		super.onDestroy()
-	}
+    override fun onDestroy() {
+        Logs.i("onDestroy: 任务结束")
+        stopForeground(true)
+        super.onDestroy()
+    }
 }

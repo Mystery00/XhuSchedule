@@ -15,22 +15,22 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "tb_notice")
 class Notice {
-	@PrimaryKey()
-	@ColumnInfo(name = "notice_id")
-	var id = 0
+    @PrimaryKey()
+    @ColumnInfo(name = "notice_id")
+    var id = 0
 
-	@ColumnInfo(name = "notice_create_time")
-	var createTime = ""
+    @ColumnInfo(name = "notice_create_time")
+    var createTime = ""
 
-	@ColumnInfo(name = "notice_title")
-	var title = ""
+    @ColumnInfo(name = "notice_title")
+    var title = ""
 
-	@ColumnInfo(name = "notice_content")
-	var content = ""
+    @ColumnInfo(name = "notice_content")
+    var content = ""
 
-	@ColumnInfo(name = "notice_platform")
-	var platform = ""
+    @ColumnInfo(name = "notice_platform")
+    var platform = ""
 
-	@ColumnInfo(name = "notice_is_read")
-	var isRead: Boolean = false
+    @ColumnInfo(name = "notice_is_read")
+    var isRead: Boolean = false
 }

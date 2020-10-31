@@ -28,44 +28,44 @@ import vip.mystery0.tools.utils.fastClick
 
 
 class AboutSettingFragment : XhuBasePreferenceFragment(R.xml.preference_about) {
-	private val clipboardManager: ClipboardManager by inject()
-	private val shortcutManager: ShortcutManager by inject()
-	private val debugDataKeeper: DebugDataKeeper by inject()
+    private val clipboardManager: ClipboardManager by inject()
+    private val shortcutManager: ShortcutManager by inject()
+    private val debugDataKeeper: DebugDataKeeper by inject()
 
-	private val updateLogPreference by lazy { findPreferenceById<Preference>(R.string.key_update_log) }
-	private val sourceCodePreference by lazy { findPreferenceById<Preference>(R.string.key_source_code) }
-	private val versionNamePreference by lazy { findPreferenceById<Preference>(R.string.key_version_name) }
-	private val versionCodePreference by lazy { findPreferenceById<Preference>(R.string.key_version_code) }
-	private val openSourceLicensePreference by lazy { findPreferenceById<Preference>(R.string.key_open_source_license) }
-	private val openSourceLicenseAboutPreference by lazy { findPreferenceById<Preference>(R.string.key_open_source_license_about) }
-	private val jrscPreference by lazy { findPreferenceById<Preference>(R.string.key_jrsc) }
+    private val updateLogPreference by lazy { findPreferenceById<Preference>(R.string.key_update_log) }
+    private val sourceCodePreference by lazy { findPreferenceById<Preference>(R.string.key_source_code) }
+    private val versionNamePreference by lazy { findPreferenceById<Preference>(R.string.key_version_name) }
+    private val versionCodePreference by lazy { findPreferenceById<Preference>(R.string.key_version_code) }
+    private val openSourceLicensePreference by lazy { findPreferenceById<Preference>(R.string.key_open_source_license) }
+    private val openSourceLicenseAboutPreference by lazy { findPreferenceById<Preference>(R.string.key_open_source_license_about) }
+    private val jrscPreference by lazy { findPreferenceById<Preference>(R.string.key_jrsc) }
 
-	private val developerMystery0Preference by lazy { findPreferenceById<Preference>(R.string.key_developer_mystery0) }
+    private val developerMystery0Preference by lazy { findPreferenceById<Preference>(R.string.key_developer_mystery0) }
 
-	override fun monitor() {
-		super.monitor()
-		updateLogPreference.setOnPreferenceClickListener {
-			ConfigUtil.showUpdateLog(requireActivity())
-			true
-		}
-		sourceCodePreference.setOnPreferenceClickListener {
-			requireActivity().toCustomTabs(getString(R.string.summary_source_code))
-			true
-		}
-		versionNamePreference.setOnPreferenceClickListener {
-			fastClick(3) {
-				toast(resources.getStringArray(R.array.version_name).random())
-			}
-			true
-		}
-		versionCodePreference.setOnPreferenceClickListener {
-			fastClick(5) {
-				val shortcuts = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
-					shortcutManager.dynamicShortcuts.map { "${it.id}-${it.shortLabel}" }.toJson()
-				} else {
-					""
-				}
-				val message = """
+    override fun monitor() {
+        super.monitor()
+        updateLogPreference.setOnPreferenceClickListener {
+            ConfigUtil.showUpdateLog(requireActivity())
+            true
+        }
+        sourceCodePreference.setOnPreferenceClickListener {
+            requireActivity().toCustomTabs(getString(R.string.summary_source_code))
+            true
+        }
+        versionNamePreference.setOnPreferenceClickListener {
+            fastClick(3) {
+                toast(resources.getStringArray(R.array.version_name).random())
+            }
+            true
+        }
+        versionCodePreference.setOnPreferenceClickListener {
+            fastClick(5) {
+                val shortcuts = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
+                    shortcutManager.dynamicShortcuts.map { "${it.id}-${it.shortLabel}" }.toJson()
+                } else {
+                    ""
+                }
+                val message = """
 					deviceId: ${ConfigUtil.getDeviceID()},
 					startTime: ${ConfigurationUtil.startTime},
 					customStartTime: ${ConfigurationUtil.customStartTime},
@@ -79,51 +79,51 @@ class AboutSettingFragment : XhuBasePreferenceFragment(R.xml.preference_about) {
 					=========
 					${debugDataKeeper.data.map { "${it.key}: ${it.value.toJson()}" }.sorted().joinToString()}
 				""".trimIndent()
-				MaterialAlertDialogBuilder(requireActivity())
-						.setTitle("debug")
-						.setMessage(message)
-						.setPositiveButton(android.R.string.copy) { _, _ ->
-							clipboardManager.setPrimaryClip(ClipData.newPlainText("XhuSchedule-Debug-Data", message))
-						}
-						.setPositiveButton(android.R.string.ok, null)
-						.show()
-			}
-			true
-		}
-		openSourceLicensePreference.setOnPreferenceClickListener {
-			requireActivity().toCustomTabs(getString(R.string.link_open_source_license))
-			true
-		}
-		openSourceLicenseAboutPreference.setOnPreferenceClickListener {
-			LibsBuilder()
-					.withLicenseShown(true)
-					.withLicenseDialog(true)
-					.withShowLoadingProgress(true)
-					.withLibraries(
-							"BottomTabView",
-							"ColorPicker",
-							"Condom",
-							"CosmoCalendar",
-							"DataBinding",
-							"Lifecycles",
-							"Matisse",
-							"Mystery0Tools",
-							"Room",
-							"TimetableView",
-							"uCrop",
-							"ViewModel",
-							"ZLoading")
-					.start(requireActivity())
-			true
-		}
-		jrscPreference.setOnPreferenceClickListener {
-			requireActivity().toCustomTabs(getString(R.string.link_jrsc))
-			true
-		}
+                MaterialAlertDialogBuilder(requireActivity())
+                        .setTitle("debug")
+                        .setMessage(message)
+                        .setPositiveButton(android.R.string.copy) { _, _ ->
+                            clipboardManager.setPrimaryClip(ClipData.newPlainText("XhuSchedule-Debug-Data", message))
+                        }
+                        .setPositiveButton(android.R.string.ok, null)
+                        .show()
+            }
+            true
+        }
+        openSourceLicensePreference.setOnPreferenceClickListener {
+            requireActivity().toCustomTabs(getString(R.string.link_open_source_license))
+            true
+        }
+        openSourceLicenseAboutPreference.setOnPreferenceClickListener {
+            LibsBuilder()
+                    .withLicenseShown(true)
+                    .withLicenseDialog(true)
+                    .withShowLoadingProgress(true)
+                    .withLibraries(
+                            "BottomTabView",
+                            "ColorPicker",
+                            "Condom",
+                            "CosmoCalendar",
+                            "DataBinding",
+                            "Lifecycles",
+                            "Matisse",
+                            "Mystery0Tools",
+                            "Room",
+                            "TimetableView",
+                            "uCrop",
+                            "ViewModel",
+                            "ZLoading")
+                    .start(requireActivity())
+            true
+        }
+        jrscPreference.setOnPreferenceClickListener {
+            requireActivity().toCustomTabs(getString(R.string.link_jrsc))
+            true
+        }
 
-		developerMystery0Preference.setOnPreferenceClickListener {
-			requireActivity().toCustomTabs(getString(R.string.link_developer_mystery0))
-			true
-		}
-	}
+        developerMystery0Preference.setOnPreferenceClickListener {
+            requireActivity().toCustomTabs(getString(R.string.link_developer_mystery0))
+            true
+        }
+    }
 }

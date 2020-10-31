@@ -19,40 +19,40 @@ import org.koin.core.inject
 import java.util.*
 
 class InitRepository : KoinComponent {
-	private val xhuScheduleCloudAPI: XhuScheduleCloudAPI by inject()
+    private val xhuScheduleCloudAPI: XhuScheduleCloudAPI by inject()
 
-	suspend fun getStartTime(): Calendar {
-		return if (ConfigurationUtil.isCustomStartTime) {
-			getStartDateTime()
-		} else {
-			val response = xhuScheduleCloudAPI.requestStartDateTime()
-			if (response.isSuccessful) {
-				setStartDateTime(response.data)
-				response.data.parseCalendar()
-			} else {
-				getStartDateTime()
-			}
-		}
-	}
+    suspend fun getStartTime(): Calendar {
+        return if (ConfigurationUtil.isCustomStartTime) {
+            getStartDateTime()
+        } else {
+            val response = xhuScheduleCloudAPI.requestStartDateTime()
+            if (response.isSuccessful) {
+                setStartDateTime(response.data)
+                response.data.parseCalendar()
+            } else {
+                getStartDateTime()
+            }
+        }
+    }
 
-	private suspend fun setStartDateTime(startDateTime: String) {
-		withContext(Dispatchers.IO) {
-			ConfigurationUtil.startTime = startDateTime
-		}
-	}
+    private suspend fun setStartDateTime(startDateTime: String) {
+        withContext(Dispatchers.IO) {
+            ConfigurationUtil.startTime = startDateTime
+        }
+    }
 
-	suspend fun getStartDateTime(): Calendar {
-		val calendar = Calendar.getInstance()
-		val dateString = withContext(Dispatchers.IO) {
-			if (ConfigurationUtil.isCustomStartTime)
-				ConfigurationUtil.customStartTime
-			else
-				ConfigurationUtil.startTime
-		}
-		if (dateString == "")
-			return calendar
-		return withContext(Dispatchers.Default) {
-			dateString.parseCalendar()
-		}
-	}
+    suspend fun getStartDateTime(): Calendar {
+        val calendar = Calendar.getInstance()
+        val dateString = withContext(Dispatchers.IO) {
+            if (ConfigurationUtil.isCustomStartTime)
+                ConfigurationUtil.customStartTime
+            else
+                ConfigurationUtil.startTime
+        }
+        if (dateString == "")
+            return calendar
+        return withContext(Dispatchers.Default) {
+            dateString.parseCalendar()
+        }
+    }
 }

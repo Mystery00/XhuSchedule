@@ -22,61 +22,61 @@ import kotlinx.coroutines.withContext
 import vip.mystery0.rx.DataObserver
 
 class QueryCetScoreShowActivity : XhuBaseActivity(R.layout.activity_query_cet_score_show) {
-	private lateinit var activityQueryCetScoreShowBinding: ActivityQueryCetScoreShowBinding
+    private lateinit var activityQueryCetScoreShowBinding: ActivityQueryCetScoreShowBinding
 
-	private val cetScoreObserver = object : DataObserver<CetScore> {
-		override fun contentNoEmpty(data: CetScore) {
-			doShow(data)
-		}
-	}
+    private val cetScoreObserver = object : DataObserver<CetScore> {
+        override fun contentNoEmpty(data: CetScore) {
+            doShow(data)
+        }
+    }
 
-	override fun inflateView(layoutId: Int) {
-		activityQueryCetScoreShowBinding = DataBindingUtil.setContentView(this, layoutId)
-	}
+    override fun inflateView(layoutId: Int) {
+        activityQueryCetScoreShowBinding = DataBindingUtil.setContentView(this, layoutId)
+    }
 
-	override fun initView() {
-		super.initView()
-		setSupportActionBar(toolbar)
-		supportActionBar?.setDisplayHomeAsUpEnabled(true)
-	}
+    override fun initView() {
+        super.initView()
+        setSupportActionBar(toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+    }
 
-	override fun initData() {
-		super.initData()
-		initViewModel()
-	}
+    override fun initData() {
+        super.initData()
+        initViewModel()
+    }
 
-	private fun initViewModel() {
-		QueryCetScoreViewModelHelper.cetScoreLiveData.observe(this, cetScoreObserver)
-	}
+    private fun initViewModel() {
+        QueryCetScoreViewModelHelper.cetScoreLiveData.observe(this, cetScoreObserver)
+    }
 
-	private fun removeObserver() {
-		QueryCetScoreViewModelHelper.cetScoreLiveData.removeObserver(cetScoreObserver)
-	}
+    private fun removeObserver() {
+        QueryCetScoreViewModelHelper.cetScoreLiveData.removeObserver(cetScoreObserver)
+    }
 
-	override fun monitor() {
-		super.monitor()
-		toolbar.setNavigationOnClickListener {
-			finish()
-		}
-	}
+    override fun monitor() {
+        super.monitor()
+        toolbar.setNavigationOnClickListener {
+            finish()
+        }
+    }
 
-	override fun onDestroy() {
-		super.onDestroy()
-		removeObserver()
-	}
+    override fun onDestroy() {
+        super.onDestroy()
+        removeObserver()
+    }
 
-	private fun doShow(cetScore: CetScore) {
-		launch(Dispatchers.Default) {
-			while (!::activityQueryCetScoreShowBinding.isInitialized) {
-				Thread.sleep(200)
-			}
-			withContext(Dispatchers.Main) {
-				activityQueryCetScoreShowBinding.cetScore = cetScore
-				val nameText = "姓名：${cetScore.name}"
-				val schoolText = "学校：${cetScore.school}"
-				activityQueryCetScoreShowBinding.textViewName.text = nameText
-				activityQueryCetScoreShowBinding.textViewSchool.text = schoolText
-			}
-		}
-	}
+    private fun doShow(cetScore: CetScore) {
+        launch(Dispatchers.Default) {
+            while (!::activityQueryCetScoreShowBinding.isInitialized) {
+                Thread.sleep(200)
+            }
+            withContext(Dispatchers.Main) {
+                activityQueryCetScoreShowBinding.cetScore = cetScore
+                val nameText = "姓名：${cetScore.name}"
+                val schoolText = "学校：${cetScore.school}"
+                activityQueryCetScoreShowBinding.textViewName.text = nameText
+                activityQueryCetScoreShowBinding.textViewSchool.text = schoolText
+            }
+        }
+    }
 }

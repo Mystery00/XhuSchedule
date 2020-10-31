@@ -15,14 +15,14 @@ import okhttp3.Response
 import okhttp3.logging.HttpLoggingInterceptor
 
 class DebugInterceptor : Interceptor {
-	private val httpLoggingInterceptor by lazy {
-		val interceptor = HttpLoggingInterceptor()
-		interceptor.level = HttpLoggingInterceptor.Level.BODY
-		interceptor
-	}
+    private val httpLoggingInterceptor by lazy {
+        val interceptor = HttpLoggingInterceptor()
+        interceptor.level = HttpLoggingInterceptor.Level.BODY
+        interceptor
+    }
 
-	override fun intercept(chain: Interceptor.Chain): Response = if (BuildConfig.DEBUG)
-		httpLoggingInterceptor.intercept(chain)
-	else
-		chain.proceed(chain.request())
+    override fun intercept(chain: Interceptor.Chain): Response = if (BuildConfig.DEBUG)
+        httpLoggingInterceptor.intercept(chain)
+    else
+        chain.proceed(chain.request())
 }

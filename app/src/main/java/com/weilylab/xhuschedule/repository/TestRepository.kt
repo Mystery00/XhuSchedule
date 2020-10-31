@@ -19,20 +19,20 @@ import org.koin.core.KoinComponent
 import org.koin.core.inject
 
 class TestRepository : KoinComponent {
-	private val testAPI: TestAPI by inject()
+    private val testAPI: TestAPI by inject()
 
-	private val testDao: TestDao by inject()
+    private val testDao: TestDao by inject()
 
-	suspend fun queryTests(student: Student): Pair<List<Test>, String> {
-		val response = testAPI.getTests(student.username).redoAfterLogin(student) {
-			testAPI.getTests(student.username)
-		}.check()
-		response.tests.forEach {
-			it.studentID = student.username
-			testDao.insert(it)
-		}
-		return response.tests to response.html
-	}
+    suspend fun queryTests(student: Student): Pair<List<Test>, String> {
+        val response = testAPI.getTests(student.username).redoAfterLogin(student) {
+            testAPI.getTests(student.username)
+        }.check()
+        response.tests.forEach {
+            it.studentID = student.username
+            testDao.insert(it)
+        }
+        return response.tests to response.html
+    }
 
-	suspend fun queryAll(student: Student): List<Test> = testDao.queryTestsForStudent(student.username)
+    suspend fun queryAll(student: Student): List<Test> = testDao.queryTestsForStudent(student.username)
 }

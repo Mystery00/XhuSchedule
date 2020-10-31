@@ -18,21 +18,21 @@ import com.weilylab.xhuschedule.model.ExpScore
 
 @Dao
 interface ScoreDao {
-	@Insert
-	suspend fun saveClassScore(classScore: ClassScore): Long
+    @Insert
+    suspend fun saveClassScore(classScore: ClassScore): Long
 
-	@Delete
-	suspend fun deleteClassScore(classScore: ClassScore): Int
+    @Delete
+    suspend fun deleteClassScore(classScore: ClassScore): Int
 
-	@Query("select * from tb_class_score where student_id = :username and score_year = :year and score_term = :term")
-	suspend fun queryClassScore(username: String, year: String, term: String): List<ClassScore>
+    @Query("select * from tb_class_score where student_id = :username and score_year = :year and score_term = :term")
+    suspend fun queryClassScore(username: String, year: String, term: String): List<ClassScore>
 
-	@Insert
-	suspend fun saveExpScore(expScore: ExpScore): Long
+    @Insert
+    suspend fun saveExpScore(expScore: ExpScore): Long
 
-	@Delete
-	suspend fun deleteExpScore(expScore: ExpScore): Int
+    @Delete
+    suspend fun deleteExpScore(expScore: ExpScore): Int
 
-	@Query("select * from tb_exp_score where student_id = :username and score_year = :year and score_term = :term")
-	suspend fun queryExpScore(username: String, year: String, term: String): List<ExpScore>
+    @Query("select * from tb_exp_score where student_id = :username and score_year = :year and score_term = :term")
+    suspend fun queryExpScore(username: String, year: String, term: String): List<ExpScore>
 }

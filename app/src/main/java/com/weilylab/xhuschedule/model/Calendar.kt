@@ -12,12 +12,12 @@ package com.weilylab.xhuschedule.model
 data class CalendarAttendee(var name: String)
 
 data class CalendarEvent(var title: String,
-						 var startTime: Long,
-						 var endTime: Long,
-						 var location: String,
-						 var description: String,
-						 var allDay: Boolean,
-						 var hasAlarm: Boolean) {
-	var attendees = ArrayList<CalendarAttendee>()
-	var reminder = ArrayList<Int>()
+                         var startTime: Long,
+                         var endTime: Long,
+                         var location: String,
+                         var description: String,
+                         var allDay: Boolean,
+                         var hasAlarm: Boolean) {
+    var attendees = ArrayList<CalendarAttendee>()
+    var reminder = ArrayList<Int>()
 }

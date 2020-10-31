@@ -14,9 +14,9 @@ import com.weilylab.xhuschedule.model.jrsc.PoetyToken
 import retrofit2.http.GET
 
 interface JinrishiciAPI {
-	@GET("/token")
-	suspend fun getToken(): PoetyToken
+    @GET("/token")
+    suspend fun getToken(): PoetyToken
 
-	@GET("/one.json")
-	suspend fun getSentence(): PoetySentence
+    @GET("/one.json")
+    suspend fun getSentence(): PoetySentence
 }

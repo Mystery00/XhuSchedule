@@ -19,35 +19,35 @@ import coil.load
 import com.weilylab.xhuschedule.R
 
 class PlaceholderFragment : Fragment() {
-	private var imageID: Int? = null
-	private lateinit var imageView: ImageView
+    private var imageID: Int? = null
+    private lateinit var imageView: ImageView
 
-	companion object {
-		fun newInstance(imageID: Int): PlaceholderFragment {
-			val fragment = PlaceholderFragment()
-			val args = Bundle()
-			args.putInt("image", imageID)
-			fragment.arguments = args
-			return fragment
-		}
-	}
+    companion object {
+        fun newInstance(imageID: Int): PlaceholderFragment {
+            val fragment = PlaceholderFragment()
+            val args = Bundle()
+            args.putInt("image", imageID)
+            fragment.arguments = args
+            return fragment
+        }
+    }
 
-	override fun onCreate(savedInstanceState: Bundle?) {
-		super.onCreate(savedInstanceState)
-		imageID = arguments?.getInt("image")
-	}
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        imageID = arguments?.getInt("image")
+    }
 
-	override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-							  savedInstanceState: Bundle?): View? {
-		val rootView = inflater.inflate(R.layout.fragment_welcome, container, false)
-		imageView = rootView.findViewById(R.id.imageView)
-		return rootView
-	}
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
+                              savedInstanceState: Bundle?): View? {
+        val rootView = inflater.inflate(R.layout.fragment_welcome, container, false)
+        imageView = rootView.findViewById(R.id.imageView)
+        return rootView
+    }
 
-	override fun onActivityCreated(savedInstanceState: Bundle?) {
-		super.onActivityCreated(savedInstanceState)
-		imageID?.let {
-			imageView.load(it)
-		}
-	}
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        imageID?.let {
+            imageView.load(it)
+        }
+    }
 }

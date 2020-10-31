@@ -23,20 +23,20 @@ import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 
 val appModule = module {
-	single { LocalBroadcastManager.getInstance(androidContext()) }
+    single { LocalBroadcastManager.getInstance(androidContext()) }
 
-	single { androidContext().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager }
+    single { androidContext().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager }
 
-	single { androidContext().getSystemService(Context.ALARM_SERVICE) as AlarmManager }
+    single { androidContext().getSystemService(Context.ALARM_SERVICE) as AlarmManager }
 
-	single { androidContext().getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager }
+    single { androidContext().getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager }
 
-	single { EventBus.getDefault() }
+    single { EventBus.getDefault() }
 
-	single { DebugDataKeeper() }
+    single { DebugDataKeeper() }
 }
 
 @RequiresApi(Build.VERSION_CODES.N_MR1)
 val shortcutModule = module {
-	single { androidContext().getSystemService(Context.SHORTCUT_SERVICE) as ShortcutManager }
+    single { androidContext().getSystemService(Context.SHORTCUT_SERVICE) as ShortcutManager }
 }

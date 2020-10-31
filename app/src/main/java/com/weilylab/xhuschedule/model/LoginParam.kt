@@ -10,5 +10,5 @@
 package com.weilylab.xhuschedule.model
 
 data class LoginParam(var username: String,
-					  var password: String,
-					  var publicKey: String)
+                      var password: String,
+                      var publicKey: String)

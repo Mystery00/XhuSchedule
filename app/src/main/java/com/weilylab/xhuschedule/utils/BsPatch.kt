@@ -10,9 +10,9 @@
 package com.weilylab.xhuschedule.utils
 
 object BsPatch {
-	init {
-		System.loadLibrary("bspatch")
-	}
+    init {
+        System.loadLibrary("bspatch")
+    }
 
-	external fun patch(oldApk: String, newApk: String, patch: String): Int
+    external fun patch(oldApk: String, newApk: String, patch: String): Int
 }

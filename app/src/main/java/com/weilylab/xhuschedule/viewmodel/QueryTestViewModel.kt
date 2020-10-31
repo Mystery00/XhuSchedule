@@ -20,43 +20,43 @@ import org.koin.core.inject
 import vip.mystery0.rx.*
 
 class QueryTestViewModel : ViewModel(), KoinComponent {
-	private val studentRepository: StudentRepository by inject()
-	private val testRepository: TestRepository by inject()
+    private val studentRepository: StudentRepository by inject()
+    private val testRepository: TestRepository by inject()
 
-	val studentList by lazy { MutableLiveData<List<Student>>() }
-	val student by lazy { MutableLiveData<Student>() }
-	val testList by lazy { MutableLiveData<PackageData<List<Test>>>() }
-	val html by lazy { MutableLiveData<String>() }
+    val studentList by lazy { MutableLiveData<List<Student>>() }
+    val student by lazy { MutableLiveData<Student>() }
+    val testList by lazy { MutableLiveData<PackageData<List<Test>>>() }
+    val html by lazy { MutableLiveData<String>() }
 
-	fun init() {
-		launch(testList) {
-			testList.loading()
-			val list = studentRepository.queryAllStudentList()
-			val mainStudent = list.find { it.isMain }
-			if (mainStudent == null) {
-				student.postValue(null)
-				return@launch
-			}
-			student.postValue(mainStudent)
-			studentList.postValue(list)
-			queryInCoroutine(mainStudent)
-		}
-	}
+    fun init() {
+        launch(testList) {
+            testList.loading()
+            val list = studentRepository.queryAllStudentList()
+            val mainStudent = list.find { it.isMain }
+            if (mainStudent == null) {
+                student.postValue(null)
+                return@launch
+            }
+            student.postValue(mainStudent)
+            studentList.postValue(list)
+            queryInCoroutine(mainStudent)
+        }
+    }
 
-	private suspend fun queryInCoroutine(student: Student) {
-		val response = testRepository.queryTests(student)
-		if (response.first.isNullOrEmpty()) {
-			testList.empty()
-		} else {
-			testList.content(response.first)
-		}
-		html.postValue(response.second)
-	}
+    private suspend fun queryInCoroutine(student: Student) {
+        val response = testRepository.queryTests(student)
+        if (response.first.isNullOrEmpty()) {
+            testList.empty()
+        } else {
+            testList.content(response.first)
+        }
+        html.postValue(response.second)
+    }
 
-	fun query(student: Student) {
-		launch(testList) {
-			testList.loading()
-			queryInCoroutine(student)
-		}
-	}
+    fun query(student: Student) {
+        launch(testList) {
+            testList.loading()
+            queryInCoroutine(student)
+        }
+    }
 }

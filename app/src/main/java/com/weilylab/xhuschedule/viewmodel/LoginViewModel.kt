@@ -21,15 +21,15 @@ import vip.mystery0.rx.launch
 import vip.mystery0.rx.loading
 
 class LoginViewModel : ViewModel(), KoinComponent {
-	private val studentRepository: StudentRepository by inject()
+    private val studentRepository: StudentRepository by inject()
 
-	val loginLiveData by lazy { MutableLiveData<PackageData<Student>>() }
+    val loginLiveData by lazy { MutableLiveData<PackageData<Student>>() }
 
-	fun login(student: Student) {
-		loginLiveData.loading()
-		launch(loginLiveData) {
-			val logged = studentRepository.login(student)
-			loginLiveData.content(logged)
-		}
-	}
+    fun login(student: Student) {
+        loginLiveData.loading()
+        launch(loginLiveData) {
+            val logged = studentRepository.login(student)
+            loginLiveData.content(logged)
+        }
+    }
 }

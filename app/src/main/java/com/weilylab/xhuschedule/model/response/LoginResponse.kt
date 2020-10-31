@@ -10,10 +10,10 @@
 package com.weilylab.xhuschedule.model.response
 
 class LoginResponse : CloudResponse() {
-	lateinit var data: LoginData
+    lateinit var data: LoginData
 }
 
 class LoginData {
-	lateinit var cookie: String
-	lateinit var fbToken: String
+    lateinit var cookie: String
+    lateinit var fbToken: String
 }

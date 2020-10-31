@@ -22,51 +22,51 @@ import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 
 class TodayCourseWidgetService : RemoteViewsService() {
-	private val widgetRepository: WidgetRepository by inject()
+    private val widgetRepository: WidgetRepository by inject()
 
-	override fun onGetViewFactory(intent: Intent?): RemoteViewsFactory = ListRemoteViewFactory(this)
+    override fun onGetViewFactory(intent: Intent?): RemoteViewsFactory = ListRemoteViewFactory(this)
 
-	private inner class ListRemoteViewFactory(private val context: Context) : RemoteViewsFactory {
-		private val data by lazy { ArrayList<Schedule>() }
+    private inner class ListRemoteViewFactory(private val context: Context) : RemoteViewsFactory {
+        private val data by lazy { ArrayList<Schedule>() }
 
-		override fun onCreate() {
-		}
+        override fun onCreate() {
+        }
 
-		override fun getLoadingView(): RemoteViews? = null
+        override fun getLoadingView(): RemoteViews? = null
 
-		override fun getItemId(position: Int): Long = position.toLong()
+        override fun getItemId(position: Int): Long = position.toLong()
 
-		override fun onDataSetChanged() {
-			GlobalScope.launch {
-				data.clear()
-				data.addAll(widgetRepository.queryTodayCourse())
-				if (data.isEmpty())
-					sendBroadcast(Intent(Constants.ACTION_WIDGET_UPDATE_BROADCAST)
-							.putExtra("name", TodayCourseWidgetService::class.java.name)
-							.putExtra("hasData", false))
-			}
-		}
+        override fun onDataSetChanged() {
+            GlobalScope.launch {
+                data.clear()
+                data.addAll(widgetRepository.queryTodayCourse())
+                if (data.isEmpty())
+                    sendBroadcast(Intent(Constants.ACTION_WIDGET_UPDATE_BROADCAST)
+                            .putExtra("name", TodayCourseWidgetService::class.java.name)
+                            .putExtra("hasData", false))
+            }
+        }
 
-		override fun hasStableIds(): Boolean = true
+        override fun hasStableIds(): Boolean = true
 
-		override fun getViewAt(position: Int): RemoteViews {
-			val remotesView = RemoteViews(context.packageName, R.layout.item_widget_today)
-			val course = data[position]
-			remotesView.setTextViewText(R.id.course_name_textView, course.name)
-			remotesView.setTextViewText(R.id.course_teacher_textView, course.teacher)
-			val startTimeArray = context.resources.getStringArray(R.array.start_time)
-			val endTimeArray = context.resources.getStringArray(R.array.end_time)
-			remotesView.setTextViewText(R.id.course_time_location_textView, "${startTimeArray[course.start - 1]}-${endTimeArray[course.start + course.step - 2]} at ${course.room}")
-			remotesView.setInt(R.id.background, "setBackgroundColor", course.extras["colorInt"] as Int)
-			return remotesView
-		}
+        override fun getViewAt(position: Int): RemoteViews {
+            val remotesView = RemoteViews(context.packageName, R.layout.item_widget_today)
+            val course = data[position]
+            remotesView.setTextViewText(R.id.course_name_textView, course.name)
+            remotesView.setTextViewText(R.id.course_teacher_textView, course.teacher)
+            val startTimeArray = context.resources.getStringArray(R.array.start_time)
+            val endTimeArray = context.resources.getStringArray(R.array.end_time)
+            remotesView.setTextViewText(R.id.course_time_location_textView, "${startTimeArray[course.start - 1]}-${endTimeArray[course.start + course.step - 2]} at ${course.room}")
+            remotesView.setInt(R.id.background, "setBackgroundColor", course.extras["colorInt"] as Int)
+            return remotesView
+        }
 
-		override fun getCount(): Int = data.size
+        override fun getCount(): Int = data.size
 
-		override fun getViewTypeCount(): Int = 1
+        override fun getViewTypeCount(): Int = 1
 
-		override fun onDestroy() {
-			data.clear()
-		}
-	}
+        override fun onDestroy() {
+            data.clear()
+        }
+    }
 }

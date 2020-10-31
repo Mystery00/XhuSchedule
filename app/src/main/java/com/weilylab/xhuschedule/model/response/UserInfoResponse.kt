@@ -12,5 +12,5 @@ package com.weilylab.xhuschedule.model.response
 import com.weilylab.xhuschedule.model.StudentInfo
 
 class UserInfoResponse : CloudResponse() {
-	lateinit var data: StudentInfo
+    lateinit var data: StudentInfo
 }

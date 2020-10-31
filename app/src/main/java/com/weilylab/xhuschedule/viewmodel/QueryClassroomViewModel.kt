@@ -21,52 +21,52 @@ import org.koin.core.inject
 import vip.mystery0.rx.*
 
 class QueryClassroomViewModel : ViewModel(), KoinComponent {
-	private val xhuScheduleCloudAPI: XhuScheduleCloudAPI by inject()
+    private val xhuScheduleCloudAPI: XhuScheduleCloudAPI by inject()
 
-	private val studentRepository: StudentRepository by inject()
+    private val studentRepository: StudentRepository by inject()
 
-	val classroomList by lazy { MutableLiveData<PackageData<List<Classroom>>>() }
-	val student by lazy { MutableLiveData<Student>() }
-	val location by lazy { MutableLiveData<String>() }
-	val week by lazy { MutableLiveData<String>() }
-	val day by lazy { MutableLiveData<String>() }
-	val time by lazy { MutableLiveData<String>() }
+    val classroomList by lazy { MutableLiveData<PackageData<List<Classroom>>>() }
+    val student by lazy { MutableLiveData<Student>() }
+    val location by lazy { MutableLiveData<String>() }
+    val week by lazy { MutableLiveData<String>() }
+    val day by lazy { MutableLiveData<String>() }
+    val time by lazy { MutableLiveData<String>() }
 
-	fun init() {
-		launch(classroomList) {
-			val mainStudent = studentRepository.queryMainStudent()
-			if (mainStudent == null) {
-				student.postValue(null)
-				return@launch
-			}
-			student.postValue(mainStudent)
-		}
-	}
+    fun init() {
+        launch(classroomList) {
+            val mainStudent = studentRepository.queryMainStudent()
+            if (mainStudent == null) {
+                student.postValue(null)
+                return@launch
+            }
+            student.postValue(mainStudent)
+        }
+    }
 
-	private suspend fun queryClassRoomListInCoroutine(student: Student,
-													  location: String,
-													  week: String,
-													  day: String,
-													  time: String): List<Classroom> {
-		val response = xhuScheduleCloudAPI.getClassrooms(student.username, location, week, day, time).redoAfterLogin(student) {
-			xhuScheduleCloudAPI.getClassrooms(student.username, location, week, day, time)
-		}
-		return response.data
-	}
+    private suspend fun queryClassRoomListInCoroutine(student: Student,
+                                                      location: String,
+                                                      week: String,
+                                                      day: String,
+                                                      time: String): List<Classroom> {
+        val response = xhuScheduleCloudAPI.getClassrooms(student.username, location, week, day, time).redoAfterLogin(student) {
+            xhuScheduleCloudAPI.getClassrooms(student.username, location, week, day, time)
+        }
+        return response.data
+    }
 
-	fun queryClassRoomList(student: Student,
-						   location: String,
-						   week: String,
-						   day: String,
-						   time: String) {
-		classroomList.loading()
-		launch(classroomList) {
-			val list = queryClassRoomListInCoroutine(student, location, week, day, time)
-			if (list.isNullOrEmpty()) {
-				classroomList.empty()
-			} else {
-				classroomList.content(list)
-			}
-		}
-	}
+    fun queryClassRoomList(student: Student,
+                           location: String,
+                           week: String,
+                           day: String,
+                           time: String) {
+        classroomList.loading()
+        launch(classroomList) {
+            val list = queryClassRoomListInCoroutine(student, location, week, day, time)
+            if (list.isNullOrEmpty()) {
+                classroomList.empty()
+            } else {
+                classroomList.content(list)
+            }
+        }
+    }
 }

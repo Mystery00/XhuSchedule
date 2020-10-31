@@ -23,45 +23,45 @@ import org.koin.android.ext.android.inject
 import java.util.*
 
 class CustomStartTimeActivity : XhuBaseActivity(R.layout.activity_custom_start_time) {
-	private val eventBus: EventBus by inject()
+    private val eventBus: EventBus by inject()
 
-	private val initRepository: InitRepository by inject()
+    private val initRepository: InitRepository by inject()
 
-	override fun initData() {
-		super.initData()
-		launch {
-			calendarView.selectionManager.toggleDay(Day(initRepository.getStartTime()))
-		}
-	}
+    override fun initData() {
+        super.initData()
+        launch {
+            calendarView.selectionManager.toggleDay(Day(initRepository.getStartTime()))
+        }
+    }
 
-	override fun monitor() {
-		super.monitor()
-		buttonOk.setOnClickListener {
-			finishAndSetStartTime(calendarView.selectedDates[0])
-		}
-		buttonCancel.setOnClickListener {
-			finish()
-		}
-		buttonDefault.setOnClickListener {
-			finishAndSetStartTime(null)
-		}
-	}
+    override fun monitor() {
+        super.monitor()
+        buttonOk.setOnClickListener {
+            finishAndSetStartTime(calendarView.selectedDates[0])
+        }
+        buttonCancel.setOnClickListener {
+            finish()
+        }
+        buttonDefault.setOnClickListener {
+            finishAndSetStartTime(null)
+        }
+    }
 
-	private fun finishAndSetStartTime(startDateTime: Calendar?) {
-		CalendarUtil.setCustomStartTime(getMondayForCalendar(startDateTime))
-		eventBus.post(UIConfigEvent(arrayListOf(UI.MAIN_INIT)))
-		finish()
-	}
+    private fun finishAndSetStartTime(startDateTime: Calendar?) {
+        CalendarUtil.setCustomStartTime(getMondayForCalendar(startDateTime))
+        eventBus.post(UIConfigEvent(arrayListOf(UI.MAIN_INIT)))
+        finish()
+    }
 
-	private fun getMondayForCalendar(calendar: Calendar?): Calendar? {
-		if (calendar == null)
-			return null
-		return if (calendar.get(Calendar.DAY_OF_WEEK) == Calendar.MONDAY)
-			calendar
-		else {
-			while (calendar.get(Calendar.DAY_OF_WEEK) != Calendar.MONDAY)
-				calendar.add(Calendar.DATE, -1)
-			calendar
-		}
-	}
+    private fun getMondayForCalendar(calendar: Calendar?): Calendar? {
+        if (calendar == null)
+            return null
+        return if (calendar.get(Calendar.DAY_OF_WEEK) == Calendar.MONDAY)
+            calendar
+        else {
+            while (calendar.get(Calendar.DAY_OF_WEEK) != Calendar.MONDAY)
+                calendar.add(Calendar.DATE, -1)
+            calendar
+        }
+    }
 }

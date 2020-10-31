@@ -18,21 +18,21 @@ import com.zhuangfei.timetable.model.Schedule
 import vip.mystery0.tools.base.binding.BaseBindingRecyclerViewAdapter
 
 class ShowCourseRecyclerViewAdapter(private val context: Context) : BaseBindingRecyclerViewAdapter<Schedule, ItemShowCourseBinding>(R.layout.item_show_course) {
-	override fun setItemView(binding: ItemShowCourseBinding, position: Int, data: Schedule) {
-		binding.textViewTitle.text = data.name
-		val startTimeArray = context.resources.getStringArray(R.array.start_time)
-		val endTimeArray = context.resources.getStringArray(R.array.end_time)
-		val courseTimeText = "${startTimeArray[data.start - 1]} - ${endTimeArray[data.start + data.step - 2]}"
-		val stringBuilder = StringBuilder()
-		stringBuilder.appendLine(data.teacher)
-				.appendLine(data.room)
-				.append(CourseUtil.splitWeekString(data.weekList).replace(",", "周 ")).appendLine("周")
-				.append(courseTimeText)
-		binding.textView.text = stringBuilder.toString()
-		binding.textView.setLineSpacing(binding.textView.textSize * 0.6f, 1f)
-		val gradientDrawable = GradientDrawable()
-		gradientDrawable.setColor(data.extras["colorInt"] as Int)
-		gradientDrawable.cornerRadius = 48F
-		binding.linearLayout.background = gradientDrawable
-	}
+    override fun setItemView(binding: ItemShowCourseBinding, position: Int, data: Schedule) {
+        binding.textViewTitle.text = data.name
+        val startTimeArray = context.resources.getStringArray(R.array.start_time)
+        val endTimeArray = context.resources.getStringArray(R.array.end_time)
+        val courseTimeText = "${startTimeArray[data.start - 1]} - ${endTimeArray[data.start + data.step - 2]}"
+        val stringBuilder = StringBuilder()
+        stringBuilder.appendLine(data.teacher)
+                .appendLine(data.room)
+                .append(CourseUtil.splitWeekString(data.weekList).replace(",", "周 ")).appendLine("周")
+                .append(courseTimeText)
+        binding.textView.text = stringBuilder.toString()
+        binding.textView.setLineSpacing(binding.textView.textSize * 0.6f, 1f)
+        val gradientDrawable = GradientDrawable()
+        gradientDrawable.setColor(data.extras["colorInt"] as Int)
+        gradientDrawable.cornerRadius = 48F
+        binding.linearLayout.background = gradientDrawable
+    }
 }

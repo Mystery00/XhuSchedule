@@ -16,7 +16,7 @@ import com.weilylab.xhuschedule.model.ExpScore
 import vip.mystery0.tools.base.binding.BaseBindingRecyclerViewAdapter
 
 class QueryExpScoreRecyclerViewAdapter(val context: Context) : BaseBindingRecyclerViewAdapter<ExpScore, ItemQueryExpScoreBinding>(R.layout.item_query_exp_score) {
-	override fun setItemView(binding: ItemQueryExpScoreBinding, position: Int, data: ExpScore) {
-		binding.expScore = data
-	}
+    override fun setItemView(binding: ItemQueryExpScoreBinding, position: Int, data: ExpScore) {
+        binding.expScore = data
+    }
 }

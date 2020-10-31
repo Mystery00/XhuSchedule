@@ -24,69 +24,69 @@ import vip.mystery0.tools.factory.toJson
 import vip.mystery0.tools.utils.isConnectInternet
 
 class CustomCourseRepository : KoinComponent {
-	private val courseDao: CourseDao by inject()
+    private val courseDao: CourseDao by inject()
 
-	private val userAPI: UserAPI by inject()
+    private val userAPI: UserAPI by inject()
 
-	suspend fun getAll(): List<Any> {
-		val list = courseDao.queryAllCustomCourse()
-		val map = list.groupBy { c -> c.studentID }
-		val result = ArrayList<Any>()
-		for (key in map.keys) {
-			result.add(key)
-			map.getValue(key).sortedBy { c -> c.name }.forEach { c -> result.add(c) }
-		}
-		return result
-	}
+    suspend fun getAll(): List<Any> {
+        val list = courseDao.queryAllCustomCourse()
+        val map = list.groupBy { c -> c.studentID }
+        val result = ArrayList<Any>()
+        for (key in map.keys) {
+            result.add(key)
+            map.getValue(key).sortedBy { c -> c.name }.forEach { c -> result.add(c) }
+        }
+        return result
+    }
 
-	suspend fun save(course: Course) = courseDao.addCourse(course)
+    suspend fun save(course: Course) = courseDao.addCourse(course)
 
-	suspend fun update(course: Course) = courseDao.updateCourse(course)
+    suspend fun update(course: Course) = courseDao.updateCourse(course)
 
-	suspend fun delete(course: Course) = courseDao.deleteCourse(course)
+    suspend fun delete(course: Course) = courseDao.deleteCourse(course)
 
-	suspend fun syncCustomCourseForLocal(student: Student) {
-		if (isConnectInternet()) {
-			val key = "customCourse"
-			val response = userAPI.getUserData(student.username, key).redoAfterLogin(student) {
-				userAPI.getUserData(student.username, key)
-			}
-			if (response.isSuccessful) {
-				if (response.value.isBlank()) {
-					return
-				}
-				val courseList = response.value.fromJson<SyncCustomCourse>().list
-				val savedList = courseDao.queryCustomCourseByStudent(student.username)
-				savedList.forEach { course -> delete(course) }
-				courseList.forEach { course ->
-					course.id = 0
-					course.studentID = student.username
-					save(course)
-				}
-				return
-			} else {
-				throw Exception(response.msg)
-			}
-		} else {
-			throw ResourceException(R.string.hint_network_error)
-		}
-	}
+    suspend fun syncCustomCourseForLocal(student: Student) {
+        if (isConnectInternet()) {
+            val key = "customCourse"
+            val response = userAPI.getUserData(student.username, key).redoAfterLogin(student) {
+                userAPI.getUserData(student.username, key)
+            }
+            if (response.isSuccessful) {
+                if (response.value.isBlank()) {
+                    return
+                }
+                val courseList = response.value.fromJson<SyncCustomCourse>().list
+                val savedList = courseDao.queryCustomCourseByStudent(student.username)
+                savedList.forEach { course -> delete(course) }
+                courseList.forEach { course ->
+                    course.id = 0
+                    course.studentID = student.username
+                    save(course)
+                }
+                return
+            } else {
+                throw Exception(response.msg)
+            }
+        } else {
+            throw ResourceException(R.string.hint_network_error)
+        }
+    }
 
-	suspend fun syncCustomCourseForServer(student: Student) {
-		if (isConnectInternet()) {
-			val key = "customCourse"
-			val localList = courseDao.queryCustomCourseByStudent(student.username)
-			val value = SyncCustomCourse(localList).toJson()
-			val response = userAPI.setUserData(student.username, key, value).redoAfterLogin(student) {
-				userAPI.setUserData(student.username, key, value)
-			}
-			if (response.isSuccessful) {
-				return
-			} else {
-				throw Exception(response.msg)
-			}
-		} else {
-			throw ResourceException(R.string.hint_network_error)
-		}
-	}
+    suspend fun syncCustomCourseForServer(student: Student) {
+        if (isConnectInternet()) {
+            val key = "customCourse"
+            val localList = courseDao.queryCustomCourseByStudent(student.username)
+            val value = SyncCustomCourse(localList).toJson()
+            val response = userAPI.setUserData(student.username, key, value).redoAfterLogin(student) {
+                userAPI.setUserData(student.username, key, value)
+            }
+            if (response.isSuccessful) {
+                return
+            } else {
+                throw Exception(response.msg)
+            }
+        } else {
+            throw ResourceException(R.string.hint_network_error)
+        }
+    }
 }

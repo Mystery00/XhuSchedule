@@ -29,81 +29,81 @@ import vip.mystery0.tools.utils.toColorString
 import java.util.*
 
 object ConfigUtil {
-	private var lastClick = 0L
+    private var lastClick = 0L
 
-	fun isTwiceClick(): Boolean {
-		val nowClick = Calendar.getInstance().timeInMillis
-		if (nowClick - lastClick >= 1000) {
-			lastClick = nowClick
-			return false
-		}
-		return true
-	}
+    fun isTwiceClick(): Boolean {
+        val nowClick = Calendar.getInstance().timeInMillis
+        if (nowClick - lastClick >= 1000) {
+            lastClick = nowClick
+            return false
+        }
+        return true
+    }
 
-	fun getDeviceID(): String {
-		if (BuildConfig.DEBUG)
-			return "debug"
-		return Settings.Secure.getString(APP.context.contentResolver, Settings.Secure.ANDROID_ID)
-	}
+    fun getDeviceID(): String {
+        if (BuildConfig.DEBUG)
+            return "debug"
+        return Settings.Secure.getString(APP.context.contentResolver, Settings.Secure.ANDROID_ID)
+    }
 
-	fun showUpdateLog(context: Context) {
-		val logArray = context.resources.getStringArray(R.array.update_log)
-		MaterialAlertDialogBuilder(context)
-				.setTitle("${context.getString(R.string.app_name)} V${context.getString(R.string.app_version_name)} 更新日志")
-				.setMessage(logArray.joinToString("\n"))
-				.setPositiveButton(R.string.action_ok, null)
-				.setOnDismissListener {
-					ConfigurationUtil.updatedVersion = context.getString(R.string.app_version_code).toInt()
-				}
-				.show()
-	}
+    fun showUpdateLog(context: Context) {
+        val logArray = context.resources.getStringArray(R.array.update_log)
+        MaterialAlertDialogBuilder(context)
+                .setTitle("${context.getString(R.string.app_name)} V${context.getString(R.string.app_version_name)} 更新日志")
+                .setMessage(logArray.joinToString("\n"))
+                .setPositiveButton(R.string.action_ok, null)
+                .setOnDismissListener {
+                    ConfigurationUtil.updatedVersion = context.getString(R.string.app_version_code).toInt()
+                }
+                .show()
+    }
 
-	fun setTrigger(context: Context, alarmManager: AlarmManager) {
-		if (!ConfigurationUtil.notificationCourse && !ConfigurationUtil.notificationExam)
-			return
-		val alarmIntent = Intent(context, NotificationService::class.java)
-		val pendingIntent = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-			PendingIntent.getForegroundService(context, 0, alarmIntent, PendingIntent.FLAG_UPDATE_CURRENT)
-		} else {
-			PendingIntent.getService(context, 0, alarmIntent, PendingIntent.FLAG_UPDATE_CURRENT)
-		}
-		alarmManager.cancel(pendingIntent)//关闭定时器
-		alarmManager.set(AlarmManager.RTC_WAKEUP, CalendarUtil.getNotificationTime(), pendingIntent)
-		Logs.i("setTrigger: 设置定时任务")
-	}
+    fun setTrigger(context: Context, alarmManager: AlarmManager) {
+        if (!ConfigurationUtil.notificationCourse && !ConfigurationUtil.notificationExam)
+            return
+        val alarmIntent = Intent(context, NotificationService::class.java)
+        val pendingIntent = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            PendingIntent.getForegroundService(context, 0, alarmIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+        } else {
+            PendingIntent.getService(context, 0, alarmIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+        }
+        alarmManager.cancel(pendingIntent)//关闭定时器
+        alarmManager.set(AlarmManager.RTC_WAKEUP, CalendarUtil.getNotificationTime(), pendingIntent)
+        Logs.i("setTrigger: 设置定时任务")
+    }
 
-	fun toHexEncoding(color: Int): String = color.toColorString()
+    fun toHexEncoding(color: Int): String = color.toColorString()
 
-	fun getCurrentYearAndTerm(startTime: Calendar) {
-		if (ConfigurationUtil.isCustomYearAndTerm)
-			return
-		val year = startTime.get(Calendar.YEAR)
-		val month = startTime.get(Calendar.MONTH)
-		if (month < Calendar.JUNE) {//开始时间月份小于6月 第二学期
-			ConfigurationUtil.currentYear = "${year - 1}-$year"
-			ConfigurationUtil.currentTerm = "2"
-		} else {//开始时间月份大于6月 第一学期
-			ConfigurationUtil.currentYear = "$year-${year + 1}"
-			ConfigurationUtil.currentTerm = "1"
-		}
-	}
+    fun getCurrentYearAndTerm(startTime: Calendar) {
+        if (ConfigurationUtil.isCustomYearAndTerm)
+            return
+        val year = startTime.get(Calendar.YEAR)
+        val month = startTime.get(Calendar.MONTH)
+        if (month < Calendar.JUNE) {//开始时间月份小于6月 第二学期
+            ConfigurationUtil.currentYear = "${year - 1}-$year"
+            ConfigurationUtil.currentTerm = "2"
+        } else {//开始时间月份大于6月 第一学期
+            ConfigurationUtil.currentYear = "$year-${year + 1}"
+            ConfigurationUtil.currentTerm = "1"
+        }
+    }
 
-	@Suppress("DEPRECATION")
-	fun setStatusBar(activity: Activity) {
-		when {
-			Build.VERSION.SDK_INT >= Build.VERSION_CODES.M -> {//6.0
-				activity.window.statusBarColor = Color.WHITE
-				if (ConfigurationUtil.tintNavigationBar && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-					activity.window.navigationBarColor = Color.WHITE
-					if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-						activity.window.insetsController?.setSystemBarsAppearance(WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS or WindowInsetsController.APPEARANCE_LIGHT_NAVIGATION_BARS,
-								WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS or WindowInsetsController.APPEARANCE_LIGHT_NAVIGATION_BARS)
-					} else {
-						activity.window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR or View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR
-					}
-				} else
-					activity.window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
-			}
-		}
-	}
+    @Suppress("DEPRECATION")
+    fun setStatusBar(activity: Activity) {
+        when {
+            Build.VERSION.SDK_INT >= Build.VERSION_CODES.M -> {//6.0
+                activity.window.statusBarColor = Color.WHITE
+                if (ConfigurationUtil.tintNavigationBar && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    activity.window.navigationBarColor = Color.WHITE
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                        activity.window.insetsController?.setSystemBarsAppearance(WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS or WindowInsetsController.APPEARANCE_LIGHT_NAVIGATION_BARS,
+                                WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS or WindowInsetsController.APPEARANCE_LIGHT_NAVIGATION_BARS)
+                    } else {
+                        activity.window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR or View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR
+                    }
+                } else
+                    activity.window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+            }
+        }
+    }
 }

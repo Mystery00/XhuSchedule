@@ -29,109 +29,109 @@ import vip.mystery0.logs.Logs
 import vip.mystery0.rx.DataObserver
 
 class NoticeActivity : XhuBaseActivity(R.layout.activity_notice) {
-	private val noticeViewModel: NoticeViewModel by viewModel()
-	private val eventBus: EventBus by inject()
-	private val noticeAdapter: NoticeAdapter by lazy { NoticeAdapter(this) }
-	private lateinit var viewStubBinding: LayoutNullDataViewBinding
+    private val noticeViewModel: NoticeViewModel by viewModel()
+    private val eventBus: EventBus by inject()
+    private val noticeAdapter: NoticeAdapter by lazy { NoticeAdapter(this) }
+    private lateinit var viewStubBinding: LayoutNullDataViewBinding
 
-	private val noticeObserver = object : DataObserver<List<Notice>> {
-		override fun loading() {
-			showRefresh()
-		}
+    private val noticeObserver = object : DataObserver<List<Notice>> {
+        override fun loading() {
+            showRefresh()
+        }
 
-		override fun contentNoEmpty(data: List<Notice>) {
-			hideRefresh()
-			hideNoDataLayout()
-			noticeAdapter.items.clear()
-			noticeAdapter.items.addAll(data)
-		}
+        override fun contentNoEmpty(data: List<Notice>) {
+            hideRefresh()
+            hideNoDataLayout()
+            noticeAdapter.items.clear()
+            noticeAdapter.items.addAll(data)
+        }
 
-		override fun error(e: Throwable?) {
-			Logs.w(e)
-			hideRefresh()
-			hideNoDataLayout()
-			toastLong(e)
-		}
+        override fun error(e: Throwable?) {
+            Logs.w(e)
+            hideRefresh()
+            hideNoDataLayout()
+            toastLong(e)
+        }
 
-		override fun empty() {
-			hideRefresh()
-			showNoDataLayout()
-		}
-	}
+        override fun empty() {
+            hideRefresh()
+            showNoDataLayout()
+        }
+    }
 
-	override fun initView() {
-		super.initView()
-		setSupportActionBar(toolbar)
-		supportActionBar?.setDisplayHomeAsUpEnabled(true)
-		recyclerView.layoutManager = LinearLayoutManager(this)
-		recyclerView.adapter = noticeAdapter
-		recyclerView.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
-		swipeRefreshLayout.setColorSchemeResources(
-				android.R.color.holo_blue_light,
-				android.R.color.holo_green_light,
-				android.R.color.holo_orange_light,
-				android.R.color.holo_red_light)
-		showRefresh()
-	}
+    override fun initView() {
+        super.initView()
+        setSupportActionBar(toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        recyclerView.layoutManager = LinearLayoutManager(this)
+        recyclerView.adapter = noticeAdapter
+        recyclerView.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
+        swipeRefreshLayout.setColorSchemeResources(
+                android.R.color.holo_blue_light,
+                android.R.color.holo_green_light,
+                android.R.color.holo_orange_light,
+                android.R.color.holo_red_light)
+        showRefresh()
+    }
 
-	override fun initData() {
-		super.initData()
-		initViewModel()
-	}
+    override fun initData() {
+        super.initData()
+        initViewModel()
+    }
 
-	override fun requestData() {
-		super.requestData()
-		refresh()
-	}
+    override fun requestData() {
+        super.requestData()
+        refresh()
+    }
 
-	override fun monitor() {
-		super.monitor()
-		toolbar.setNavigationOnClickListener {
-			eventBus.post(UIConfigEvent(arrayListOf(UI.NOTICE_DOT)))
-			finish()
-		}
-		swipeRefreshLayout.setOnRefreshListener {
-			refresh()
-		}
-		nullDataViewStub.setOnInflateListener { _, inflated -> viewStubBinding = DataBindingUtil.bind(inflated)!! }
-	}
+    override fun monitor() {
+        super.monitor()
+        toolbar.setNavigationOnClickListener {
+            eventBus.post(UIConfigEvent(arrayListOf(UI.NOTICE_DOT)))
+            finish()
+        }
+        swipeRefreshLayout.setOnRefreshListener {
+            refresh()
+        }
+        nullDataViewStub.setOnInflateListener { _, inflated -> viewStubBinding = DataBindingUtil.bind(inflated)!! }
+    }
 
-	private fun initViewModel() {
-		noticeViewModel.noticeList.observe(this, noticeObserver)
-	}
+    private fun initViewModel() {
+        noticeViewModel.noticeList.observe(this, noticeObserver)
+    }
 
-	private fun refresh() {
-		noticeViewModel.queryNotice()
-	}
+    private fun refresh() {
+        noticeViewModel.queryNotice()
+    }
 
-	private fun showRefresh() {
-		if (!swipeRefreshLayout.isRefreshing)
-			swipeRefreshLayout.isRefreshing = true
-	}
+    private fun showRefresh() {
+        if (!swipeRefreshLayout.isRefreshing)
+            swipeRefreshLayout.isRefreshing = true
+    }
 
-	private fun hideRefresh() {
-		if (swipeRefreshLayout.isRefreshing)
-			swipeRefreshLayout.isRefreshing = false
-	}
+    private fun hideRefresh() {
+        if (swipeRefreshLayout.isRefreshing)
+            swipeRefreshLayout.isRefreshing = false
+    }
 
-	private fun showNoDataLayout() {
-		try {
-			nullDataViewStub.inflate()
-		} catch (e: Exception) {
-			viewStubBinding.root.visibility = View.VISIBLE
-		}
-		recyclerView.visibility = View.GONE
-	}
+    private fun showNoDataLayout() {
+        try {
+            nullDataViewStub.inflate()
+        } catch (e: Exception) {
+            viewStubBinding.root.visibility = View.VISIBLE
+        }
+        recyclerView.visibility = View.GONE
+    }
 
-	private fun hideNoDataLayout() {
-		if (::viewStubBinding.isInitialized)
-			viewStubBinding.root.visibility = View.GONE
-		recyclerView.visibility = View.VISIBLE
-	}
+    private fun hideNoDataLayout() {
+        if (::viewStubBinding.isInitialized)
+            viewStubBinding.root.visibility = View.GONE
+        recyclerView.visibility = View.VISIBLE
+    }
 
-	override fun onDestroy() {
-		noticeViewModel.markListAsRead(noticeAdapter.items)
-		eventBus.post(UIConfigEvent(arrayListOf(UI.NOTICE_DOT)))
-		super.onDestroy()
-	}
+    override fun onDestroy() {
+        noticeViewModel.markListAsRead(noticeAdapter.items)
+        eventBus.post(UIConfigEvent(arrayListOf(UI.NOTICE_DOT)))
+        super.onDestroy()
+    }
 }

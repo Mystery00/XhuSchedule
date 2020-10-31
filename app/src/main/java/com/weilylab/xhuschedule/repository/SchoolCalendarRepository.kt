@@ -16,10 +16,10 @@ import org.koin.core.KoinComponent
 import org.koin.core.inject
 
 class SchoolCalendarRepository : KoinComponent {
-	private val xhuScheduleCloudAPI: XhuScheduleCloudAPI by inject()
+    private val xhuScheduleCloudAPI: XhuScheduleCloudAPI by inject()
 
-	suspend fun getUrl(listener: (String?) -> Unit) = checkConnect {
-		val response = xhuScheduleCloudAPI.schoolCalendar().check()
-		listener(response.data)
-	}
+    suspend fun getUrl(listener: (String?) -> Unit) = checkConnect {
+        val response = xhuScheduleCloudAPI.schoolCalendar().check()
+        listener(response.data)
+    }
 }

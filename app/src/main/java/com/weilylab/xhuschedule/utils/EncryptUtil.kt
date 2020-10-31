@@ -18,8 +18,8 @@ private const val KEY_ALGORITHM = "AES"
 private fun encryptBASE64(key: ByteArray): String = Base64.encodeToString(key, Base64.DEFAULT)
 
 fun generateSeed(): String {
-	val secureRandom = SecureRandom()
-	val keygen = KeyGenerator.getInstance(KEY_ALGORITHM)
-	keygen.init(secureRandom)
-	return encryptBASE64(keygen.generateKey().encoded)
+    val secureRandom = SecureRandom()
+    val keygen = KeyGenerator.getInstance(KEY_ALGORITHM)
+    keygen.init(secureRandom)
+    return encryptBASE64(keygen.generateKey().encoded)
 }

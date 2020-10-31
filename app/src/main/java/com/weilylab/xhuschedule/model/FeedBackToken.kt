@@ -15,12 +15,12 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "tb_fb_token")
 class FeedBackToken {
-	@PrimaryKey(autoGenerate = true)
-	var id = 0
+    @PrimaryKey(autoGenerate = true)
+    var id = 0
 
-	@ColumnInfo(name = "username")
-	lateinit var username: String
+    @ColumnInfo(name = "username")
+    lateinit var username: String
 
-	@ColumnInfo(name = "fb_token")
-	lateinit var fbToken: String
+    @ColumnInfo(name = "fb_token")
+    lateinit var fbToken: String
 }

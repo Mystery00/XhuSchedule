@@ -21,57 +21,57 @@ import vip.mystery0.rx.empty
 import vip.mystery0.rx.launch
 
 class CustomThingViewModel : ViewModel(), KoinComponent {
-	private val customThingRepository: CustomThingRepository by inject()
+    private val customThingRepository: CustomThingRepository by inject()
 
-	val customThingList by lazy { MutableLiveData<PackageData<List<CustomThing>>>() }
+    val customThingList by lazy { MutableLiveData<PackageData<List<CustomThing>>>() }
 
-	fun getAllCustomThing() {
-		launch(customThingList) {
-			getAllCustomThingInCoroutine()
-		}
-	}
+    fun getAllCustomThing() {
+        launch(customThingList) {
+            getAllCustomThingInCoroutine()
+        }
+    }
 
-	private suspend fun getAllCustomThingInCoroutine() {
-		val list = customThingRepository.getAll()
-		if (list.isNullOrEmpty()) {
-			customThingList.empty()
-		} else {
-			customThingList.content(list)
-		}
-	}
+    private suspend fun getAllCustomThingInCoroutine() {
+        val list = customThingRepository.getAll()
+        if (list.isNullOrEmpty()) {
+            customThingList.empty()
+        } else {
+            customThingList.content(list)
+        }
+    }
 
-	fun saveCustomThing(thing: CustomThing, block: () -> Unit) {
-		launch(customThingList) {
-			customThingRepository.save(thing)
-			block()
-		}
-	}
+    fun saveCustomThing(thing: CustomThing, block: () -> Unit) {
+        launch(customThingList) {
+            customThingRepository.save(thing)
+            block()
+        }
+    }
 
-	fun updateCustomThing(thing: CustomThing, block: () -> Unit) {
-		launch(customThingList) {
-			customThingRepository.update(thing)
-			block()
-		}
-	}
+    fun updateCustomThing(thing: CustomThing, block: () -> Unit) {
+        launch(customThingList) {
+            customThingRepository.update(thing)
+            block()
+        }
+    }
 
-	fun deleteCustomThing(thing: CustomThing, block: () -> Unit) {
-		launch(customThingList) {
-			customThingRepository.delete(thing)
-			block()
-		}
-	}
+    fun deleteCustomThing(thing: CustomThing, block: () -> Unit) {
+        launch(customThingList) {
+            customThingRepository.delete(thing)
+            block()
+        }
+    }
 
-	fun syncForLocal() {
-		launch(customThingList) {
-			customThingRepository.syncCustomThingForLocal()
-			getAllCustomThingInCoroutine()
-		}
-	}
+    fun syncForLocal() {
+        launch(customThingList) {
+            customThingRepository.syncCustomThingForLocal()
+            getAllCustomThingInCoroutine()
+        }
+    }
 
-	fun syncForRemote() {
-		launch(customThingList) {
-			customThingRepository.syncCustomThingForServer()
-			getAllCustomThingInCoroutine()
-		}
-	}
+    fun syncForRemote() {
+        launch(customThingList) {
+            customThingRepository.syncCustomThingForServer()
+            getAllCustomThingInCoroutine()
+        }
+    }
 }

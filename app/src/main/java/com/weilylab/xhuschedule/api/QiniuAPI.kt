@@ -15,7 +15,7 @@ import retrofit2.http.Path
 import retrofit2.http.Streaming
 
 interface QiniuAPI {
-	@Streaming
-	@GET("/{path}")
-	suspend fun download(@Path("path") path: String): ResponseBody
+    @Streaming
+    @GET("/{path}")
+    suspend fun download(@Path("path") path: String): ResponseBody
 }

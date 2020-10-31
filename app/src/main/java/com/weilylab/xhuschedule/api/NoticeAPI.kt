@@ -14,6 +14,6 @@ import retrofit2.http.GET
 import retrofit2.http.Query
 
 interface NoticeAPI {
-	@GET("/Common/getNotices")
-	suspend fun getNotices(@Query("platform") platform: String?): NoticeResponse
+    @GET("/Common/getNotices")
+    suspend fun getNotices(@Query("platform") platform: String?): NoticeResponse
 }

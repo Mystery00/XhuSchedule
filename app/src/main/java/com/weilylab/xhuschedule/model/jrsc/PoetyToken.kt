@@ -11,6 +11,6 @@ package com.weilylab.xhuschedule.model.jrsc
 import com.google.gson.annotations.SerializedName
 
 class PoetyToken {
-	@SerializedName("data")
-	lateinit var token: String
+    @SerializedName("data")
+    lateinit var token: String
 }

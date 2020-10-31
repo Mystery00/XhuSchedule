@@ -23,24 +23,24 @@ import vip.mystery0.rx.empty
 import vip.mystery0.rx.launch
 
 class ClassCourseColorViewModel : ViewModel(), KoinComponent {
-	private val courseRepository: CourseRepository by inject()
+    private val courseRepository: CourseRepository by inject()
 
-	val classCourseList by lazy { MutableLiveData<PackageData<List<Course>>>() }
+    val classCourseList by lazy { MutableLiveData<PackageData<List<Course>>>() }
 
-	fun queryDistinctCourseByUsernameAndTerm() {
-		launch(classCourseList) {
-			val list = courseRepository.queryDistinctCourseByUsernameAndTerm()
-			if (list.isNullOrEmpty()) {
-				classCourseList.empty()
-			} else {
-				classCourseList.content(list)
-			}
-		}
-	}
+    fun queryDistinctCourseByUsernameAndTerm() {
+        launch(classCourseList) {
+            val list = courseRepository.queryDistinctCourseByUsernameAndTerm()
+            if (list.isNullOrEmpty()) {
+                classCourseList.empty()
+            } else {
+                classCourseList.content(list)
+            }
+        }
+    }
 
-	fun updateCourseColor(course: Course, color: String) {
-		viewModelScope.launch {
-			courseRepository.updateCourseColor(course, color)
-		}
-	}
+    fun updateCourseColor(course: Course, color: String) {
+        viewModelScope.launch {
+            courseRepository.updateCourseColor(course, color)
+        }
+    }
 }

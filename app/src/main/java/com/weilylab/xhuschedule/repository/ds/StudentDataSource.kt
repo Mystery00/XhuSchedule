@@ -15,5 +15,5 @@ import com.weilylab.xhuschedule.model.StudentInfo
 import vip.mystery0.rx.PackageData
 
 interface StudentDataSource {
-	fun queryStudentInfo(studentInfoLiveData: MutableLiveData<PackageData<StudentInfo>>, student: Student)
+    fun queryStudentInfo(studentInfoLiveData: MutableLiveData<PackageData<StudentInfo>>, student: Student)
 }

@@ -16,7 +16,7 @@ import com.weilylab.xhuschedule.model.Notice
 import vip.mystery0.tools.base.binding.BaseBindingRecyclerViewAdapter
 
 class NoticeAdapter(private val context: Context) : BaseBindingRecyclerViewAdapter<Notice, ItemNoticeBinding>(R.layout.item_notice) {
-	override fun setItemView(binding: ItemNoticeBinding, position: Int, data: Notice) {
-		binding.notice = data
-	}
+    override fun setItemView(binding: ItemNoticeBinding, position: Int, data: Notice) {
+        binding.notice = data
+    }
 }

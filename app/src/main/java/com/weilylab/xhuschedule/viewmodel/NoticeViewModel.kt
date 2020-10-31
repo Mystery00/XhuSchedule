@@ -23,23 +23,23 @@ import vip.mystery0.rx.empty
 import vip.mystery0.rx.launch
 
 class NoticeViewModel : ViewModel(), KoinComponent {
-	private val noticeRepository: NoticeRepository by inject()
-	val noticeList by lazy { MutableLiveData<PackageData<List<Notice>>>() }
+    private val noticeRepository: NoticeRepository by inject()
+    val noticeList by lazy { MutableLiveData<PackageData<List<Notice>>>() }
 
-	fun queryNotice() {
-		launch(noticeList) {
-			val list = noticeRepository.queryNoticeForAndroid()
-			if (list.isNullOrEmpty()) {
-				noticeList.empty()
-			} else {
-				noticeList.content(list)
-			}
-		}
-	}
+    fun queryNotice() {
+        launch(noticeList) {
+            val list = noticeRepository.queryNoticeForAndroid()
+            if (list.isNullOrEmpty()) {
+                noticeList.empty()
+            } else {
+                noticeList.content(list)
+            }
+        }
+    }
 
-	fun markListAsRead(list: List<Notice>) {
-		GlobalScope.launch {
-			noticeRepository.markListAsRead(list)
-		}
-	}
+    fun markListAsRead(list: List<Notice>) {
+        GlobalScope.launch {
+            noticeRepository.markListAsRead(list)
+        }
+    }
 }

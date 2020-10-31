@@ -13,11 +13,11 @@ import android.content.Context
 import androidx.core.content.edit
 
 object JRSCConfig {
-	private val sp by lazy { APP.context.getSharedPreferences("jinrishici", Context.MODE_PRIVATE) }
+    private val sp by lazy { APP.context.getSharedPreferences("jinrishici", Context.MODE_PRIVATE) }
 
-	var token: String?
-		set(value) = sp.edit {
-			putString("key_token", value)
-		}
-		get() = sp.getString("key_token", null)
+    var token: String?
+        set(value) = sp.edit {
+            putString("key_token", value)
+        }
+        get() = sp.getString("key_token", null)
 }

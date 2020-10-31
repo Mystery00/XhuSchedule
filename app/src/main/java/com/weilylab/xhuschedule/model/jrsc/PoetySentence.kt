@@ -11,18 +11,18 @@ package com.weilylab.xhuschedule.model.jrsc
 import java.io.Serializable
 
 class PoetySentence : Serializable {
-	lateinit var data: DataBean
+    lateinit var data: DataBean
 
-	class DataBean {
-		lateinit var content: String
-		lateinit var origin: OriginBean
+    class DataBean {
+        lateinit var content: String
+        lateinit var origin: OriginBean
 
-		class OriginBean {
-			lateinit var title: String
-			lateinit var dynasty: String
-			lateinit var author: String
-			lateinit var content: List<String>
-			var translate: List<String>? = null
-		}
-	}
+        class OriginBean {
+            lateinit var title: String
+            lateinit var dynasty: String
+            lateinit var author: String
+            lateinit var content: List<String>
+            var translate: List<String>? = null
+        }
+    }
 }

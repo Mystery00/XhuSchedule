@@ -25,51 +25,51 @@ import java.util.*
 import kotlin.collections.HashMap
 
 class QueryExpScoreViewModel : ViewModel(), KoinComponent {
-	private val studentRepository: StudentRepository by inject()
-	private val scoreRepository: ScoreRepository by inject()
+    private val studentRepository: StudentRepository by inject()
+    private val scoreRepository: ScoreRepository by inject()
 
-	val studentList by lazy { MutableLiveData<List<Student>>() }
-	val studentInfoList by lazy { MutableLiveData<Map<Student, StudentInfo?>>() }
-	val scoreList by lazy { MutableLiveData<PackageData<List<ExpScore>>>() }
-	val student by lazy { MutableLiveData<Student>() }
-	val year by lazy { MutableLiveData<String>() }
-	val term by lazy { MutableLiveData<String>() }
+    val studentList by lazy { MutableLiveData<List<Student>>() }
+    val studentInfoList by lazy { MutableLiveData<Map<Student, StudentInfo?>>() }
+    val scoreList by lazy { MutableLiveData<PackageData<List<ExpScore>>>() }
+    val student by lazy { MutableLiveData<Student>() }
+    val year by lazy { MutableLiveData<String>() }
+    val term by lazy { MutableLiveData<String>() }
 
-	fun init() {
-		launch(scoreList) {
-			val studentArray = studentRepository.queryAllStudentList()
-			studentList.postValue(studentArray)
-			val main = studentArray.find { it.isMain }
-			if (main == null) {
-				student.postValue(null)
-				return@launch
-			}
-			student.postValue(main)
-			val map = HashMap<Student, StudentInfo>()
-			studentArray.forEach {
-				try {
-					val info = studentRepository.queryStudentInfo(it, fromCache = true)
-					map[it] = info
-				} catch (e: Exception) {
-					Logs.w(e)
-				}
-			}
-			studentInfoList.postValue(map)
-			year.postValue(CalendarUtil.getSelectArray(null).last())
-			val month = Calendar.getInstance().get(Calendar.MONTH)
-			term.postValue(if (month in Calendar.MARCH until Calendar.SEPTEMBER) "2" else "1")
-		}
-	}
+    fun init() {
+        launch(scoreList) {
+            val studentArray = studentRepository.queryAllStudentList()
+            studentList.postValue(studentArray)
+            val main = studentArray.find { it.isMain }
+            if (main == null) {
+                student.postValue(null)
+                return@launch
+            }
+            student.postValue(main)
+            val map = HashMap<Student, StudentInfo>()
+            studentArray.forEach {
+                try {
+                    val info = studentRepository.queryStudentInfo(it, fromCache = true)
+                    map[it] = info
+                } catch (e: Exception) {
+                    Logs.w(e)
+                }
+            }
+            studentInfoList.postValue(map)
+            year.postValue(CalendarUtil.getSelectArray(null).last())
+            val month = Calendar.getInstance().get(Calendar.MONTH)
+            term.postValue(if (month in Calendar.MARCH until Calendar.SEPTEMBER) "2" else "1")
+        }
+    }
 
-	fun query(student: Student, year: String, term: String) {
-		scoreList.loading()
-		launch(scoreList) {
-			val list = scoreRepository.queryExpScoreOnline(student, year, term)
-			if (list.isNullOrEmpty()) {
-				scoreList.empty()
-			} else {
-				scoreList.content(list)
-			}
-		}
-	}
+    fun query(student: Student, year: String, term: String) {
+        scoreList.loading()
+        launch(scoreList) {
+            val list = scoreRepository.queryExpScoreOnline(student, year, term)
+            if (list.isNullOrEmpty()) {
+                scoreList.empty()
+            } else {
+                scoreList.content(list)
+            }
+        }
+    }
 }

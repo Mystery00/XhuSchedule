@@ -17,33 +17,33 @@ import android.os.Parcelable
  * 原文地址：http://blog.csdn.net/a1018875550/article/details/51832700
  */
 class Download : Parcelable {
-	var progress = 0
-	var currentFileSize = 0L
-	var totalFileSize = 0L
+    var progress = 0
+    var currentFileSize = 0L
+    var totalFileSize = 0L
 
-	override fun describeContents(): Int = 0
+    override fun describeContents(): Int = 0
 
-	override fun writeToParcel(dest: Parcel, flags: Int) {
-		dest.writeInt(this.progress)
-		dest.writeLong(this.currentFileSize)
-		dest.writeLong(this.totalFileSize)
-	}
+    override fun writeToParcel(dest: Parcel, flags: Int) {
+        dest.writeInt(this.progress)
+        dest.writeLong(this.currentFileSize)
+        dest.writeLong(this.totalFileSize)
+    }
 
-	constructor()
+    constructor()
 
-	private constructor(parcel: Parcel) {
-		this.progress = parcel.readInt()
-		this.currentFileSize = parcel.readLong()
-		this.totalFileSize = parcel.readLong()
-	}
+    private constructor(parcel: Parcel) {
+        this.progress = parcel.readInt()
+        this.currentFileSize = parcel.readLong()
+        this.totalFileSize = parcel.readLong()
+    }
 
-	companion object CREATOR : Parcelable.Creator<Download> {
-		override fun createFromParcel(parcel: Parcel): Download {
-			return Download(parcel)
-		}
+    companion object CREATOR : Parcelable.Creator<Download> {
+        override fun createFromParcel(parcel: Parcel): Download {
+            return Download(parcel)
+        }
 
-		override fun newArray(size: Int): Array<Download?> {
-			return arrayOfNulls(size)
-		}
-	}
+        override fun newArray(size: Int): Array<Download?> {
+            return arrayOfNulls(size)
+        }
+    }
 }

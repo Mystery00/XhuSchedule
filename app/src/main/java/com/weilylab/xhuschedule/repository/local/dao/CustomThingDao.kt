@@ -14,15 +14,15 @@ import com.weilylab.xhuschedule.model.CustomThing
 
 @Dao
 interface CustomThingDao {
-	@Insert
-	suspend fun addThing(thing: CustomThing): Long
+    @Insert
+    suspend fun addThing(thing: CustomThing): Long
 
-	@Delete
-	suspend fun deleteThing(thing: CustomThing): Int
+    @Delete
+    suspend fun deleteThing(thing: CustomThing): Int
 
-	@Update
-	suspend fun updateThing(thing: CustomThing)
+    @Update
+    suspend fun updateThing(thing: CustomThing)
 
-	@Query("select * from tb_custom_business")
-	suspend fun queryAllThings(): List<CustomThing>
+    @Query("select * from tb_custom_business")
+    suspend fun queryAllThings(): List<CustomThing>
 }

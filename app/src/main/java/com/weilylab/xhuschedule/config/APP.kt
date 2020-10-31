@@ -44,86 +44,86 @@ import java.io.File
  * Created by myste.
  */
 class APP : MultiDexApplication() {
-	override fun onCreate() {
-		super.onCreate()
-		context = applicationContext
-		instance = this
-		startKoin {
-			logsLogger(Level.ERROR)
-			androidContext(this@APP)
-			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
-				modules(listOf(appModule, shortcutModule, databaseModule, networkModule, repositoryModule, viewModelModule))
-			} else {
-				modules(listOf(appModule, databaseModule, networkModule, repositoryModule, viewModelModule))
-			}
-		}
-		val info = context.packageManager.getApplicationInfo(context.packageName, PackageManager.GET_META_DATA)
-		val debug = info.metaData.getBoolean("DEBUG")
-		CrashHandler.config {
-			setFileNameSuffix("log")
-					.setDir(File(externalCacheDir, "crash"))
-					.setAutoClean(true)
-					.setDebug(debug)
-		}.init()
-		NotificationUtil.initChannelID(this)//初始化NotificationChannelID
-		ToolsClient.initWithContext(this)
-		registerActivityLifecycle()
-		if (PackageUtil.isQQApplicationAvailable())
-			tencent = try {
-				Tencent.createInstance("1106663023", CondomContext.wrap(applicationContext, "Tencent"))
-			} catch (ignore: Exception) {
-				Tencent.createInstance("1106663023", applicationContext)
-			}
-		if (PackageUtil.isWeiXinApplicationAvailable())
-			wxAPI = try {
-				WXAPIFactory.createWXAPI(CondomContext.wrap(applicationContext, "WeiXin"), "wx41799887957cbba8", false)
-			} catch (ignore: Exception) {
-				WXAPIFactory.createWXAPI(applicationContext, "wx41799887957cbba8", false)
-			}
-		if (PackageUtil.isWeiBoApplicationAvailable())
-			try {
-				WbSdk.install(CondomContext.wrap(applicationContext, "WeiBo"), AuthInfo(CondomContext.wrap(applicationContext, "WeiBo"), "2170085314", "https://api.weibo.com/oauth2/default.html", "statuses/share"))
-			} catch (ignore: Exception) {
-				WbSdk.install(CondomContext.wrap(applicationContext, "WeiBo"), AuthInfo(applicationContext, "2170085314", "https://api.weibo.com/oauth2/default.html", "statuses/share"))
-			}
-		Logs.setConfig {
-			it.setShowLog(debug)
-		}
-	}
+    override fun onCreate() {
+        super.onCreate()
+        context = applicationContext
+        instance = this
+        startKoin {
+            logsLogger(Level.ERROR)
+            androidContext(this@APP)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
+                modules(listOf(appModule, shortcutModule, databaseModule, networkModule, repositoryModule, viewModelModule))
+            } else {
+                modules(listOf(appModule, databaseModule, networkModule, repositoryModule, viewModelModule))
+            }
+        }
+        val info = context.packageManager.getApplicationInfo(context.packageName, PackageManager.GET_META_DATA)
+        val debug = info.metaData.getBoolean("DEBUG")
+        CrashHandler.config {
+            setFileNameSuffix("log")
+                    .setDir(File(externalCacheDir, "crash"))
+                    .setAutoClean(true)
+                    .setDebug(debug)
+        }.init()
+        NotificationUtil.initChannelID(this)//初始化NotificationChannelID
+        ToolsClient.initWithContext(this)
+        registerActivityLifecycle()
+        if (PackageUtil.isQQApplicationAvailable())
+            tencent = try {
+                Tencent.createInstance("1106663023", CondomContext.wrap(applicationContext, "Tencent"))
+            } catch (ignore: Exception) {
+                Tencent.createInstance("1106663023", applicationContext)
+            }
+        if (PackageUtil.isWeiXinApplicationAvailable())
+            wxAPI = try {
+                WXAPIFactory.createWXAPI(CondomContext.wrap(applicationContext, "WeiXin"), "wx41799887957cbba8", false)
+            } catch (ignore: Exception) {
+                WXAPIFactory.createWXAPI(applicationContext, "wx41799887957cbba8", false)
+            }
+        if (PackageUtil.isWeiBoApplicationAvailable())
+            try {
+                WbSdk.install(CondomContext.wrap(applicationContext, "WeiBo"), AuthInfo(CondomContext.wrap(applicationContext, "WeiBo"), "2170085314", "https://api.weibo.com/oauth2/default.html", "statuses/share"))
+            } catch (ignore: Exception) {
+                WbSdk.install(CondomContext.wrap(applicationContext, "WeiBo"), AuthInfo(applicationContext, "2170085314", "https://api.weibo.com/oauth2/default.html", "statuses/share"))
+            }
+        Logs.setConfig {
+            it.setShowLog(debug)
+        }
+    }
 
-	companion object {
-		@SuppressLint("StaticFieldLeak")
-		lateinit var context: Context
-			private set
+    companion object {
+        @SuppressLint("StaticFieldLeak")
+        lateinit var context: Context
+            private set
 
-		lateinit var instance: Application
-			private set
+        lateinit var instance: Application
+            private set
 
-		var tencent: Tencent? = null
-			private set
+        var tencent: Tencent? = null
+            private set
 
-		var wxAPI: IWXAPI? = null
-			private set
-	}
+        var wxAPI: IWXAPI? = null
+            private set
+    }
 }
 
 fun Context.toCustomTabs(url: String) {
-	try {
-		val builder = CustomTabsIntent.Builder()
-		val intent = builder.build()
-		intent.launchUrl(this, Uri.parse(url))
-	} catch (e: Exception) {
-		loadInBrowser(url)
-	}
+    try {
+        val builder = CustomTabsIntent.Builder()
+        val intent = builder.build()
+        intent.launchUrl(this, Uri.parse(url))
+    } catch (e: Exception) {
+        loadInBrowser(url)
+    }
 }
 
 fun Context.loadInBrowser(url: String) {
-	try {
-		val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url)).apply {
-			flags = Intent.FLAG_ACTIVITY_NEW_TASK
-		}
-		startActivity(intent)
-	} catch (e: ActivityNotFoundException) {
-		toastLong(R.string.hint_no_browser)
-	}
+    try {
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url)).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK
+        }
+        startActivity(intent)
+    } catch (e: ActivityNotFoundException) {
+        toastLong(R.string.hint_no_browser)
+    }
 }

@@ -10,5 +10,5 @@
 package com.weilylab.xhuschedule.model.response
 
 class PublicKeyResponse : CloudResponse() {
-	lateinit var data: String
+    lateinit var data: String
 }

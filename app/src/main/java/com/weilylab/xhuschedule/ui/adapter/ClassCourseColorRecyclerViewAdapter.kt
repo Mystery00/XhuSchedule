@@ -24,31 +24,31 @@ import org.greenrobot.eventbus.EventBus
 import vip.mystery0.tools.base.binding.BaseBindingRecyclerViewAdapter
 
 class ClassCourseColorRecyclerViewAdapter(private val context: Context,
-										  private val classCourseColorViewModel: ClassCourseColorViewModel,
-										  private val eventBus: EventBus) : BaseBindingRecyclerViewAdapter<Course, ItemClassCourseColorBinding>(R.layout.item_class_course_color) {
-	override fun setItemView(binding: ItemClassCourseColorBinding, position: Int, data: Course) {
-		binding.textView.text = data.name
-		binding.imageView.setColorFilter(data.schedule.extras["colorInt"] as Int)
-		binding.imageView.setOnClickListener {
-			val colorPickerDialog = ColorPickerDialog.newBuilder()
-					.setDialogType(ColorPickerDialog.TYPE_PRESETS)
-					.setColor(data.schedule.extras["colorInt"] as Int)
-					.setShowAlphaSlider(false)
-					.setShowColorShades(false)
-					.create()
-			colorPickerDialog.setColorPickerDialogListener(object : ColorPickerDialogListener {
-				override fun onDialogDismissed(dialogId: Int) {
-				}
+                                          private val classCourseColorViewModel: ClassCourseColorViewModel,
+                                          private val eventBus: EventBus) : BaseBindingRecyclerViewAdapter<Course, ItemClassCourseColorBinding>(R.layout.item_class_course_color) {
+    override fun setItemView(binding: ItemClassCourseColorBinding, position: Int, data: Course) {
+        binding.textView.text = data.name
+        binding.imageView.setColorFilter(data.schedule.extras["colorInt"] as Int)
+        binding.imageView.setOnClickListener {
+            val colorPickerDialog = ColorPickerDialog.newBuilder()
+                    .setDialogType(ColorPickerDialog.TYPE_PRESETS)
+                    .setColor(data.schedule.extras["colorInt"] as Int)
+                    .setShowAlphaSlider(false)
+                    .setShowColorShades(false)
+                    .create()
+            colorPickerDialog.setColorPickerDialogListener(object : ColorPickerDialogListener {
+                override fun onDialogDismissed(dialogId: Int) {
+                }
 
-				override fun onColorSelected(dialogId: Int, color: Int) {
-					val newColor = ConfigUtil.toHexEncoding(color)
-					data.color = newColor
-					notifyItemChanged(position)
-					classCourseColorViewModel.updateCourseColor(data, newColor)
-					eventBus.post(UIConfigEvent(arrayListOf(UI.MAIN_INIT)))
-				}
-			})
-			colorPickerDialog.show((context as FragmentActivity).supportFragmentManager, "color-picker-dialog")
-		}
-	}
+                override fun onColorSelected(dialogId: Int, color: Int) {
+                    val newColor = ConfigUtil.toHexEncoding(color)
+                    data.color = newColor
+                    notifyItemChanged(position)
+                    classCourseColorViewModel.updateCourseColor(data, newColor)
+                    eventBus.post(UIConfigEvent(arrayListOf(UI.MAIN_INIT)))
+                }
+            })
+            colorPickerDialog.show((context as FragmentActivity).supportFragmentManager, "color-picker-dialog")
+        }
+    }
 }

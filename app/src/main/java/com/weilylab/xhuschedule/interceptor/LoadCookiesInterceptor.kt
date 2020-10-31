@@ -15,28 +15,28 @@ import okhttp3.Response
 import java.util.*
 
 class LoadCookiesInterceptor : Interceptor {
-	override fun intercept(chain: Interceptor.Chain): Response {
-		val request = chain.request()
-		val builder = request.newBuilder()
-		val host = request.url.host
-		var username: String? = null
-		when (request.method.toLowerCase(Locale.CHINA)) {
-			"get" -> {
-				val list = request.url.queryParameterValues("username")
-				username = if (list.isNotEmpty()) list[0] else null
-			}
-			"post" -> {
-				if (request.body is FormBody) {
-					val formBody = request.body as FormBody
-					username = (0 until formBody.size)
-							.firstOrNull { formBody.encodedName(it) == "username" }
-							?.let { formBody.encodedValue(it) }
-				}
-			}
-		}
-		if (username != null && CookieManger.getCookie(username, host) != null) {
-			builder.addHeader("Cookie", CookieManger.getCookie(username, host)!!)
-		}
-		return chain.proceed(builder.build())
-	}
+    override fun intercept(chain: Interceptor.Chain): Response {
+        val request = chain.request()
+        val builder = request.newBuilder()
+        val host = request.url.host
+        var username: String? = null
+        when (request.method.toLowerCase(Locale.CHINA)) {
+            "get" -> {
+                val list = request.url.queryParameterValues("username")
+                username = if (list.isNotEmpty()) list[0] else null
+            }
+            "post" -> {
+                if (request.body is FormBody) {
+                    val formBody = request.body as FormBody
+                    username = (0 until formBody.size)
+                            .firstOrNull { formBody.encodedName(it) == "username" }
+                            ?.let { formBody.encodedValue(it) }
+                }
+            }
+        }
+        if (username != null && CookieManger.getCookie(username, host) != null) {
+            builder.addHeader("Cookie", CookieManger.getCookie(username, host)!!)
+        }
+        return chain.proceed(builder.build())
+    }
 }

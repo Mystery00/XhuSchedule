@@ -24,64 +24,64 @@ import vip.mystery0.tools.factory.toJson
 import vip.mystery0.tools.utils.isConnectInternet
 
 class CustomThingRepository : KoinComponent {
-	private val customThingDao: CustomThingDao by inject()
+    private val customThingDao: CustomThingDao by inject()
 
-	private val userAPI: UserAPI by inject()
+    private val userAPI: UserAPI by inject()
 
-	private val studentRepository: StudentRepository by inject()
+    private val studentRepository: StudentRepository by inject()
 
-	suspend fun getToday() = customThingDao.queryAllThings().filter { c -> CalendarUtil.isThingOnDay(c) }
+    suspend fun getToday() = customThingDao.queryAllThings().filter { c -> CalendarUtil.isThingOnDay(c) }
 
-	suspend fun getAll(): List<CustomThing> = customThingDao.queryAllThings()
+    suspend fun getAll(): List<CustomThing> = customThingDao.queryAllThings()
 
-	suspend fun save(thing: CustomThing) = customThingDao.addThing(thing)
+    suspend fun save(thing: CustomThing) = customThingDao.addThing(thing)
 
-	suspend fun update(thing: CustomThing) = customThingDao.updateThing(thing)
+    suspend fun update(thing: CustomThing) = customThingDao.updateThing(thing)
 
-	suspend fun delete(thing: CustomThing) = customThingDao.deleteThing(thing)
+    suspend fun delete(thing: CustomThing) = customThingDao.deleteThing(thing)
 
-	suspend fun syncCustomThingForLocal() {
-		val student = studentRepository.queryMainStudent()
-				?: throw ResourceException(R.string.hint_action_not_login)
-		if (isConnectInternet()) {
-			val key = "customThing"
-			val response = userAPI.getUserData(student.username, key).redoAfterLogin(student) {
-				userAPI.getUserData(student.username, key)
-			}
-			if (response.isSuccessful) {
-				if (response.value.isBlank()) {
-					return
-				}
-				val courseList = response.value.fromJson<SyncCustomThing>().list
-				val savedList = customThingDao.queryAllThings()
-				savedList.forEach { thing -> delete(thing) }
-				courseList.forEach { thing -> save(thing) }
-				return
-			} else {
-				throw Exception(response.msg)
-			}
-		} else {
-			throw ResourceException(R.string.hint_network_error)
-		}
-	}
+    suspend fun syncCustomThingForLocal() {
+        val student = studentRepository.queryMainStudent()
+                ?: throw ResourceException(R.string.hint_action_not_login)
+        if (isConnectInternet()) {
+            val key = "customThing"
+            val response = userAPI.getUserData(student.username, key).redoAfterLogin(student) {
+                userAPI.getUserData(student.username, key)
+            }
+            if (response.isSuccessful) {
+                if (response.value.isBlank()) {
+                    return
+                }
+                val courseList = response.value.fromJson<SyncCustomThing>().list
+                val savedList = customThingDao.queryAllThings()
+                savedList.forEach { thing -> delete(thing) }
+                courseList.forEach { thing -> save(thing) }
+                return
+            } else {
+                throw Exception(response.msg)
+            }
+        } else {
+            throw ResourceException(R.string.hint_network_error)
+        }
+    }
 
-	suspend fun syncCustomThingForServer() {
-		val student = studentRepository.queryMainStudent()
-				?: throw ResourceException(R.string.hint_action_not_login)
-		if (isConnectInternet()) {
-			val key = "customThing"
-			val localList = customThingDao.queryAllThings()
-			val value = SyncCustomThing(localList).toJson()
-			val response = userAPI.setUserData(student.username, key, value).redoAfterLogin(student) {
-				userAPI.setUserData(student.username, key, value)
-			}
-			if (response.isSuccessful) {
-				return
-			} else {
-				throw Exception(response.msg)
-			}
-		} else {
-			throw ResourceException(R.string.hint_network_error)
-		}
-	}
+    suspend fun syncCustomThingForServer() {
+        val student = studentRepository.queryMainStudent()
+                ?: throw ResourceException(R.string.hint_action_not_login)
+        if (isConnectInternet()) {
+            val key = "customThing"
+            val localList = customThingDao.queryAllThings()
+            val value = SyncCustomThing(localList).toJson()
+            val response = userAPI.setUserData(student.username, key, value).redoAfterLogin(student) {
+                userAPI.setUserData(student.username, key, value)
+            }
+            if (response.isSuccessful) {
+                return
+            } else {
+                throw Exception(response.msg)
+            }
+        } else {
+            throw ResourceException(R.string.hint_network_error)
+        }
+    }
 }

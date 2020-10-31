@@ -15,7 +15,7 @@ import retrofit2.http.FormUrlEncoded
 import retrofit2.http.POST
 
 interface TestAPI {
-	@FormUrlEncoded
-	@POST("/Test/getTests")
-	suspend fun getTests(@Field("username") username: String): TestResponse
+    @FormUrlEncoded
+    @POST("/Test/getTests")
+    suspend fun getTests(@Field("username") username: String): TestResponse
 }

@@ -10,5 +10,5 @@
 package com.weilylab.xhuschedule.repository
 
 class DebugDataKeeper {
-	val data = HashMap<String, Any>()
+    val data = HashMap<String, Any>()
 }

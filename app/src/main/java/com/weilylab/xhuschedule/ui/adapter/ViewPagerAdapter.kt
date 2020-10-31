@@ -19,11 +19,11 @@ import java.util.*
  */
 class ViewPagerAdapter(fragmentManager: FragmentManager) : FragmentPagerAdapter(fragmentManager, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
 
-	private val fragmentList = ArrayList<BaseBottomNavigationFragment<*>>()
+    private val fragmentList = ArrayList<BaseBottomNavigationFragment<*>>()
 
-	fun addFragment(fragment: BaseBottomNavigationFragment<*>) = fragmentList.add(fragment)
+    fun addFragment(fragment: BaseBottomNavigationFragment<*>) = fragmentList.add(fragment)
 
-	override fun getItem(position: Int) = fragmentList[position]
+    override fun getItem(position: Int) = fragmentList[position]
 
-	override fun getCount(): Int = fragmentList.size
+    override fun getCount(): Int = fragmentList.size
 }

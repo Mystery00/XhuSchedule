@@ -32,87 +32,87 @@ import vip.mystery0.tools.utils.dpTopx
 import vip.mystery0.tools.utils.toDateTimeString
 
 class TableFragment : BaseBottomNavigationFragment<FragmentTableBinding>(R.layout.fragment_table) {
-	companion object {
-		fun newInstance() = TableFragment()
-	}
+    companion object {
+        fun newInstance() = TableFragment()
+    }
 
-	private val bottomNavigationViewModel: BottomNavigationViewModel by sharedViewModel()
+    private val bottomNavigationViewModel: BottomNavigationViewModel by sharedViewModel()
 
-	private val courseListObserver = object : DataObserver<List<Schedule>> {
-		override fun contentNoEmpty(data: List<Schedule>) {
-			binding.timeTableView
-					.data(data)
-					.isShowNotCurWeek(ConfigurationUtil.isShowNotWeek)
-					.updateView()
-			bottomNavigationViewModel.week.value?.let {
-				binding.timeTableView.changeWeekOnly(it)
-				binding.timeTableView.onDateBuildListener()
-						.onUpdateDate(binding.timeTableView.curWeek(), it)
-			}
-		}
-	}
+    private val courseListObserver = object : DataObserver<List<Schedule>> {
+        override fun contentNoEmpty(data: List<Schedule>) {
+            binding.timeTableView
+                    .data(data)
+                    .isShowNotCurWeek(ConfigurationUtil.isShowNotWeek)
+                    .updateView()
+            bottomNavigationViewModel.week.value?.let {
+                binding.timeTableView.changeWeekOnly(it)
+                binding.timeTableView.onDateBuildListener()
+                        .onUpdateDate(binding.timeTableView.curWeek(), it)
+            }
+        }
+    }
 
-	override fun initView() {
-		initViewModel()
-		ColorPoolHelper.initColorPool(binding.timeTableView.colorPool())
-		binding.timeTableView
-				.curWeek(1)
-				.isShowNotCurWeek(ConfigurationUtil.isShowNotWeek)
-				.monthWidthDp(20)
-				.alpha(0.1f, 0.06f, 0.8f)
-				.callback(CustomDateAdapter())
-				.callback(CustomItemBuildAdapter(requireActivity(), binding.timeTableView))
-				.isShowFlaglayout(false)
+    override fun initView() {
+        initViewModel()
+        ColorPoolHelper.initColorPool(binding.timeTableView.colorPool())
+        binding.timeTableView
+                .curWeek(1)
+                .isShowNotCurWeek(ConfigurationUtil.isShowNotWeek)
+                .monthWidthDp(20)
+                .alpha(0.1f, 0.06f, 0.8f)
+                .callback(CustomDateAdapter())
+                .callback(CustomItemBuildAdapter(requireActivity(), binding.timeTableView))
+                .isShowFlaglayout(false)
 //				.callback(FlagLayoutClickAdapter(binding.timeTableView))
 //				.callback(SpaceItemClickAdapter(binding.timeTableView))
-				.callback(OnSlideBuildAdapter()
-						.setBackground(Color.BLACK)
-						.setTextSize(12f)
-						.setTextColor(Color.WHITE))
-				.showView()
-	}
+                .callback(OnSlideBuildAdapter()
+                        .setBackground(Color.BLACK)
+                        .setTextSize(12f)
+                        .setTextColor(Color.WHITE))
+                .showView()
+    }
 
-	private fun initViewModel() {
-		bottomNavigationViewModel.courseList.observe(requireActivity(), courseListObserver)
-		bottomNavigationViewModel.week.observe(requireActivity(), Observer {
-			(binding.timeTableView.onItemBuildListener() as CustomItemBuildAdapter).week = it
-			binding.timeTableView.changeWeekOnly(it)
-			binding.timeTableView.onDateBuildListener()
-					.onUpdateDate(binding.timeTableView.curWeek(), it)
-		})
-		bottomNavigationViewModel.startDateTime.observe(requireActivity(), Observer {
-			binding.timeTableView.curWeek(it.toDateTimeString())
-		})
-	}
+    private fun initViewModel() {
+        bottomNavigationViewModel.courseList.observe(requireActivity(), courseListObserver)
+        bottomNavigationViewModel.week.observe(requireActivity(), Observer {
+            (binding.timeTableView.onItemBuildListener() as CustomItemBuildAdapter).week = it
+            binding.timeTableView.changeWeekOnly(it)
+            binding.timeTableView.onDateBuildListener()
+                    .onUpdateDate(binding.timeTableView.curWeek(), it)
+        })
+        bottomNavigationViewModel.startDateTime.observe(requireActivity(), Observer {
+            binding.timeTableView.curWeek(it.toDateTimeString())
+        })
+    }
 
-	override fun monitor() {
-		super.monitor()
-		binding.timeTableView
-				.callback(ISchedule.OnItemClickListener { _, scheduleList ->
-					bottomNavigationViewModel.showCourse.postValue(scheduleList)
-				})
-		binding.timeTableView.viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
-			override fun onGlobalLayout() {
-				binding.timeTableView.viewTreeObserver.removeOnGlobalLayoutListener(this)
-				val timeTableHeight = binding.timeTableView.height - dpTopx(35F)
-				val itemHeight = binding.timeTableView.itemHeight()
-				if (itemHeight * 11 < timeTableHeight)
-					binding.timeTableView.itemHeight(timeTableHeight / 11).updateView()
-			}
-		})
-		SpaceScheduleHelper.onSpaceScheduleClickListener = { day, start, isTwice ->
-			Logs.i("monitor: $day $start $isTwice")
-		}
-	}
+    override fun monitor() {
+        super.monitor()
+        binding.timeTableView
+                .callback(ISchedule.OnItemClickListener { _, scheduleList ->
+                    bottomNavigationViewModel.showCourse.postValue(scheduleList)
+                })
+        binding.timeTableView.viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
+            override fun onGlobalLayout() {
+                binding.timeTableView.viewTreeObserver.removeOnGlobalLayoutListener(this)
+                val timeTableHeight = binding.timeTableView.height - dpTopx(35F)
+                val itemHeight = binding.timeTableView.itemHeight()
+                if (itemHeight * 11 < timeTableHeight)
+                    binding.timeTableView.itemHeight(timeTableHeight / 11).updateView()
+            }
+        })
+        SpaceScheduleHelper.onSpaceScheduleClickListener = { day, start, isTwice ->
+            Logs.i("monitor: $day $start $isTwice")
+        }
+    }
 
-	override fun updateTitle() {
-		bottomNavigationViewModel.week.value?.let {
-			val whenTime = CalendarUtil.whenBeginSchool(bottomNavigationViewModel.startDateTime.value!!)
-			if (it <= 0 && whenTime > 0) {
-				bottomNavigationViewModel.title.postValue(Pair(javaClass, getString(R.string.hint_remain_day_of_start_term, whenTime)))
-			} else {
-				bottomNavigationViewModel.title.postValue(Pair(javaClass, getString(R.string.hint_week_number, it)))
-			}
-		}
-	}
+    override fun updateTitle() {
+        bottomNavigationViewModel.week.value?.let {
+            val whenTime = CalendarUtil.whenBeginSchool(bottomNavigationViewModel.startDateTime.value!!)
+            if (it <= 0 && whenTime > 0) {
+                bottomNavigationViewModel.title.postValue(Pair(javaClass, getString(R.string.hint_remain_day_of_start_term, whenTime)))
+            } else {
+                bottomNavigationViewModel.title.postValue(Pair(javaClass, getString(R.string.hint_week_number, it)))
+            }
+        }
+    }
 }

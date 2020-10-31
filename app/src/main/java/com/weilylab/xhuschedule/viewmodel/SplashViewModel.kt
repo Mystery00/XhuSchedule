@@ -26,50 +26,50 @@ import vip.mystery0.tools.utils.sha1
 import java.io.File
 
 class SplashViewModel : ViewModel(), KoinComponent {
-	private val splashRepository: SplashRepository by inject()
-	private val debugDataKeeper: DebugDataKeeper by inject()
-	val splashData by lazy { MediatorLiveData<PackageData<Pair<Splash, Boolean>>>() }
-	val splashFile by lazy { MediatorLiveData<PackageData<Pair<Splash, File>>>() }
+    private val splashRepository: SplashRepository by inject()
+    private val debugDataKeeper: DebugDataKeeper by inject()
+    val splashData by lazy { MediatorLiveData<PackageData<Pair<Splash, Boolean>>>() }
+    val splashFile by lazy { MediatorLiveData<PackageData<Pair<Splash, File>>>() }
 
-	fun requestSplash() {
-		launch(splashData) {
-			val splash = splashRepository.requestSplash()
-			debugDataKeeper.data["splashUrl"] = splash.splashUrl
-			debugDataKeeper.data["splashTime"] = splash.splashTime
-			debugDataKeeper.data["splashLocationUrl"] = splash.locationUrl
-			if (splash.enable) {
-				val fileName = splash.splashUrl.sha1()
-				val splashFile = getSplashImageFile(fileName)
-				if (splashFile != null && splashFile.exists()) {
-					val md5 = splashFile.md5()
-					if (splash.imageMD5 == md5)
-						splashData.content(splash to true)
-					else {
-						splashFile.delete()
-						splashData.empty()
-					}
-				} else {
-					splashData.content(splash to false)
-				}
-			} else
-				splashData.empty()
-		}
-	}
+    fun requestSplash() {
+        launch(splashData) {
+            val splash = splashRepository.requestSplash()
+            debugDataKeeper.data["splashUrl"] = splash.splashUrl
+            debugDataKeeper.data["splashTime"] = splash.splashTime
+            debugDataKeeper.data["splashLocationUrl"] = splash.locationUrl
+            if (splash.enable) {
+                val fileName = splash.splashUrl.sha1()
+                val splashFile = getSplashImageFile(fileName)
+                if (splashFile != null && splashFile.exists()) {
+                    val md5 = splashFile.md5()
+                    if (splash.imageMD5 == md5)
+                        splashData.content(splash to true)
+                    else {
+                        splashFile.delete()
+                        splashData.empty()
+                    }
+                } else {
+                    splashData.content(splash to false)
+                }
+            } else
+                splashData.empty()
+        }
+    }
 
-	fun getSplash() {
-		launch(splashFile) {
-			val splash = splashRepository.getSplash()
-			if (splash.enable) {
-				val fileName = splash.splashUrl.sha1()
-				val file = getSplashImageFile(fileName)
-				if (file != null && file.exists()) {
-					splashFile.content(splash to file)
-				} else {
-					splashFile.empty()
-				}
-			} else {
-				splashFile.empty()
-			}
-		}
-	}
+    fun getSplash() {
+        launch(splashFile) {
+            val splash = splashRepository.getSplash()
+            if (splash.enable) {
+                val fileName = splash.splashUrl.sha1()
+                val file = getSplashImageFile(fileName)
+                if (file != null && file.exists()) {
+                    splashFile.content(splash to file)
+                } else {
+                    splashFile.empty()
+                }
+            } else {
+                splashFile.empty()
+            }
+        }
+    }
 }
