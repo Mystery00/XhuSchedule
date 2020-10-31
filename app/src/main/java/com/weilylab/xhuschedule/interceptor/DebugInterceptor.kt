@@ -17,7 +17,7 @@ import okhttp3.logging.HttpLoggingInterceptor
 class DebugInterceptor : Interceptor {
 	private val httpLoggingInterceptor by lazy {
 		val interceptor = HttpLoggingInterceptor()
-		interceptor.level = HttpLoggingInterceptor.Level.BASIC
+		interceptor.level = HttpLoggingInterceptor.Level.BODY
 		interceptor
 	}
 

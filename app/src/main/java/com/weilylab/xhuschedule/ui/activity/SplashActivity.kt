@@ -36,77 +36,77 @@ import vip.mystery0.tools.utils.sha1
  * Created by mystery0.
  */
 class SplashActivity : XhuBaseActivity(null, false) {
-	private val splashViewModel: SplashViewModel by viewModel()
-	private val initRepository: InitRepository by inject()
-	private val alarmManager: AlarmManager by inject()
+    private val splashViewModel: SplashViewModel by viewModel()
+    private val initRepository: InitRepository by inject()
+    private val alarmManager: AlarmManager by inject()
 
-	private val splashObserver = object : DataObserver<Pair<Splash, Boolean>> {
-		override fun empty() {
-			gotoMain()
-		}
+    private val splashObserver = object : DataObserver<Pair<Splash, Boolean>> {
+        override fun empty() {
+            gotoMain()
+        }
 
-		override fun error(e: Throwable?) {
-			Logs.w(e)
-			empty()
-		}
+        override fun error(e: Throwable?) {
+            Logs.w(e)
+            empty()
+        }
 
-		override fun contentNoEmpty(data: Pair<Splash, Boolean>) {
-			super.contentNoEmpty(data)
-			if (data.second)
-				gotoSplashImage()
-			else {
-				val intent = Intent(this@SplashActivity, DownloadSplashIntentService::class.java)
-				intent.putExtra(IntentConstant.INTENT_TAG_NAME_QINIU_PATH, data.first.splashUrl)
-				intent.putExtra(IntentConstant.INTENT_TAG_NAME_SPLASH_FILE_NAME, data.first.splashUrl.sha1())
-				startService(intent)
-				empty()
-			}
-		}
-	}
+        override fun contentNoEmpty(data: Pair<Splash, Boolean>) {
+            super.contentNoEmpty(data)
+            if (data.second)
+                gotoSplashImage()
+            else {
+                val intent = Intent(this@SplashActivity, DownloadSplashIntentService::class.java)
+                intent.putExtra(IntentConstant.INTENT_TAG_NAME_QINIU_PATH, data.first.splashUrl)
+                intent.putExtra(IntentConstant.INTENT_TAG_NAME_SPLASH_FILE_NAME, data.first.splashUrl.sha1())
+                DownloadSplashIntentService.enqueueWork(this@SplashActivity, intent)
+                empty()
+            }
+        }
+    }
 
-	override fun onCreate(savedInstanceState: Bundle?) {
-		@Suppress("DEPRECATION")
-		window.decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or View.SYSTEM_UI_FLAG_FULLSCREEN)
-		when (ConfigurationUtil.nightMode) {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        @Suppress("DEPRECATION")
+        window.decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or View.SYSTEM_UI_FLAG_FULLSCREEN)
+        when (ConfigurationUtil.nightMode) {
 			0 -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY)
 			1 -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
 			2 -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
 			3 -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
-		}
-		super.onCreate(savedInstanceState)
-	}
+        }
+        super.onCreate(savedInstanceState)
+    }
 
-	override fun initView() {
-		super.initView()
-		if (ConfigurationUtil.firstEnter) {
-			startActivity(Intent(this, GuideActivity::class.java))
-			finish()
-			return
-		}
-	}
+    override fun initView() {
+        super.initView()
+        if (ConfigurationUtil.firstEnter) {
+            startActivity(Intent(this, GuideActivity::class.java))
+            finish()
+            return
+        }
+    }
 
-	override fun initData() {
-		super.initData()
-		initViewModel()
-		splashViewModel.requestSplash()
-		ContextCompat.startForegroundService(this, Intent(APP.context, CheckUpdateService::class.java))
-		ConfigUtil.setTrigger(this, alarmManager)
-		launch {
-			ConfigUtil.getCurrentYearAndTerm(initRepository.getStartTime())
-		}
-	}
+    override fun initData() {
+        super.initData()
+        initViewModel()
+        splashViewModel.requestSplash()
+        ContextCompat.startForegroundService(this, Intent(APP.context, CheckUpdateService::class.java))
+        ConfigUtil.setTrigger(this, alarmManager)
+        launch {
+            ConfigUtil.getCurrentYearAndTerm(initRepository.getStartTime())
+        }
+    }
 
-	private fun initViewModel() {
-		splashViewModel.splashData.observe(this, splashObserver)
-	}
+    private fun initViewModel() {
+        splashViewModel.splashData.observe(this, splashObserver)
+    }
 
-	private fun gotoMain() {
-		startActivity(Intent(this, BottomNavigationActivity::class.java))
-		finish()
-	}
+    private fun gotoMain() {
+        startActivity(Intent(this, BottomNavigationActivity::class.java))
+        finish()
+    }
 
-	private fun gotoSplashImage() {
-		startActivity(Intent(this, SplashImageActivity::class.java))
-		finish()
-	}
+    private fun gotoSplashImage() {
+        startActivity(Intent(this, SplashImageActivity::class.java))
+        finish()
+    }
 }
