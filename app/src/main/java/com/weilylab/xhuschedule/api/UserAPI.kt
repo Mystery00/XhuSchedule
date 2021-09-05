@@ -11,7 +11,7 @@ package com.weilylab.xhuschedule.api
 
 import com.weilylab.xhuschedule.model.response.BaseResponse
 import com.weilylab.xhuschedule.model.response.GetUserDataResponse
-import com.weilylab.xhuschedule.model.response.LoginResponse
+import com.weilylab.xhuschedule.model.response.OriginLoginResponse
 import com.weilylab.xhuschedule.model.response.SetUserDataResponse
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
@@ -23,7 +23,7 @@ interface UserAPI {
     suspend fun autoLogin(
         @Field("username") username: String,
         @Field("password") password: String
-    ): LoginResponse
+    ): OriginLoginResponse
 
     @FormUrlEncoded
     @POST("/User/setUserData")

@@ -39,6 +39,10 @@
             android:summary="@string/summary_tint_navigation_bar"
             android:title="@string/title_tint_navigation_bar" />
 
+        <CheckBoxPreference
+            android:key="@string/key_encrypt_password"
+            android:summary="@string/summary_encrypt_password"
+            android:title="@string/title_encrypt_password" />
 
     </PreferenceCategory>
 

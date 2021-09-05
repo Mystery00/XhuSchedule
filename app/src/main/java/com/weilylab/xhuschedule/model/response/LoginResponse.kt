@@ -17,3 +17,23 @@ class LoginData {
     lateinit var cookie: String
     lateinit var fbToken: String
 }
+
+class OriginLoginResponse {
+    lateinit var rt: String
+    lateinit var msg: String
+    lateinit var fbToken: String
+
+    fun toResponse(): LoginResponse =
+        LoginResponse().apply {
+            if (rt == "0") {
+                message = "success"
+                code = 0
+                data = LoginData().apply {
+                    fbToken = this@OriginLoginResponse.fbToken
+                }
+            } else {
+                message = msg
+                code = rt.toInt()
+            }
+        }
+}

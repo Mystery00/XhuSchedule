@@ -73,8 +73,13 @@ class SettingsPreferenceFragment : XhuBasePreferenceFragment(R.xml.preference_se
     private val userImgPreference by lazy { findPreferenceById<Preference>(R.string.key_user_img) }
     private val backgroundImgPreference by lazy { findPreferenceById<Preference>(R.string.key_background_img) }
     private val nightModePreference by lazy { findPreferenceById<Preference>(R.string.key_night_mode) }
-    private val enableViewPagerTransformPreference by lazy { findPreferenceById<CheckBoxPreference>(R.string.key_enable_viewpager_transform) }
+    private val enableViewPagerTransformPreference by lazy {
+        findPreferenceById<CheckBoxPreference>(
+            R.string.key_enable_viewpager_transform
+        )
+    }
     private val tintNavigationBarPreference by lazy { findPreferenceById<CheckBoxPreference>(R.string.key_tint_navigation_bar) }
+    private val encryptPasswordPreference by lazy { findPreferenceById<CheckBoxPreference>(R.string.key_encrypt_password) }
     private val useInAppImageSelectorPreference by lazy { findPreferenceById<CheckBoxPreference>(R.string.key_use_in_app_image_selector) }
     private val resetUserImgPreference by lazy { findPreferenceById<Preference>(R.string.key_reset_user_img) }
     private val resetBackgroundPreference by lazy { findPreferenceById<Preference>(R.string.key_reset_background_img) }
@@ -90,14 +95,19 @@ class SettingsPreferenceFragment : XhuBasePreferenceFragment(R.xml.preference_se
 
     private val dialog: Dialog by lazy {
         ZLoadingDialog(requireActivity())
-                .setLoadingBuilder(Z_TYPE.SINGLE_CIRCLE)
-                .setHintText(getString(R.string.hint_dialog_check_update))
-                .setHintTextSize(16F)
-                .setCanceledOnTouchOutside(false)
-                .setDialogBackgroundColor(ContextCompat.getColor(requireActivity(), R.color.colorWhiteBackground))
-                .setLoadingColor(ContextCompat.getColor(requireActivity(), R.color.colorAccent))
-                .setHintTextColor(ContextCompat.getColor(requireActivity(), R.color.colorAccent))
-                .create()
+            .setLoadingBuilder(Z_TYPE.SINGLE_CIRCLE)
+            .setHintText(getString(R.string.hint_dialog_check_update))
+            .setHintTextSize(16F)
+            .setCanceledOnTouchOutside(false)
+            .setDialogBackgroundColor(
+                ContextCompat.getColor(
+                    requireActivity(),
+                    R.color.colorWhiteBackground
+                )
+            )
+            .setLoadingColor(ContextCompat.getColor(requireActivity(), R.color.colorAccent))
+            .setHintTextColor(ContextCompat.getColor(requireActivity(), R.color.colorAccent))
+            .create()
     }
 
     override fun initPreference() {
@@ -106,17 +116,20 @@ class SettingsPreferenceFragment : XhuBasePreferenceFragment(R.xml.preference_se
         disableJRSCPreference.isChecked = ConfigurationUtil.disableJRSC
         tintNavigationBarPreference.isChecked = ConfigurationUtil.tintNavigationBar
         tintNavigationBarPreference.isEnabled = Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
+        encryptPasswordPreference.isChecked = ConfigurationUtil.encryptPassword
         useInAppImageSelectorPreference.isChecked = ConfigurationUtil.useInAppImageSelector
         autoCheckUpdatePreference.isChecked = ConfigurationUtil.autoCheckUpdate
         notificationCoursePreference.isChecked = ConfigurationUtil.notificationCourse
         notificationExamPreference.isChecked = ConfigurationUtil.notificationExam
-        notificationTimePreference.summary = getString(R.string.summary_notification_time, ConfigurationUtil.notificationTime)
+        notificationTimePreference.summary =
+            getString(R.string.summary_notification_time, ConfigurationUtil.notificationTime)
 
         if (sdkIsAfter(AndroidVersionCode.VERSION_Q, false)) {
             useInAppImageSelectorPreference.isChecked = false
             ConfigurationUtil.useInAppImageSelector = false
             useInAppImageSelectorPreference.isEnabled = false
-            useInAppImageSelectorPreference.summary = getString(R.string.summary_use_in_app_image_selector_q)
+            useInAppImageSelectorPreference.summary =
+                getString(R.string.summary_use_in_app_image_selector_q)
         }
     }
 
@@ -134,131 +147,164 @@ class SettingsPreferenceFragment : XhuBasePreferenceFragment(R.xml.preference_se
             val itemArray = resources.getStringArray(R.array.night_mode)
             var selectedIndex = ConfigurationUtil.nightMode
             AlertDialog.Builder(requireActivity())
-                    .setTitle(R.string.title_night_mode)
-                    .setSingleChoiceItems(itemArray, selectedIndex) { _, index ->
-                        selectedIndex = index
-                    }
-                    .setPositiveButton(R.string.action_ok) { _, _ ->
-                        if (ConfigurationUtil.nightMode != selectedIndex) {
-                            ConfigurationUtil.nightMode = selectedIndex
-                            snackBarMessage(R.string.hint_need_restart, {
-                                setAction(R.string.action_restart) {
-                                    val intent = requireActivity().packageManager.getLaunchIntentForPackage(requireActivity().packageName)
-                                    intent?.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
-                                    requireActivity().startActivity(intent)
-                                    requireActivity().finish()
-                                }
-                            }, Snackbar.LENGTH_SHORT)
-                        }
-                    }
-                    .setNegativeButton(R.string.action_cancel, null)
-                    .show()
-            true
-        }
-        enableViewPagerTransformPreference.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, _ ->
-            ConfigurationUtil.enableViewPagerTransform = !enableViewPagerTransformPreference.isChecked
-            snackBarMessage(R.string.hint_need_restart, {
-                setAction(R.string.action_restart) {
-                    val intent = requireActivity().packageManager.getLaunchIntentForPackage(requireActivity().packageName)
-                    intent?.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
-                    requireActivity().startActivity(intent)
-                    requireActivity().finish()
+                .setTitle(R.string.title_night_mode)
+                .setSingleChoiceItems(itemArray, selectedIndex) { _, index ->
+                    selectedIndex = index
                 }
-            }, Snackbar.LENGTH_SHORT)
-            true
-        }
-        tintNavigationBarPreference.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, _ ->
-            ConfigurationUtil.tintNavigationBar = !tintNavigationBarPreference.isChecked
-            snackBarMessage(R.string.hint_need_restart, {
-                setAction(R.string.action_restart) {
-                    val intent = requireActivity().packageManager.getLaunchIntentForPackage(requireActivity().packageName)
-                    intent?.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
-                    requireActivity().startActivity(intent)
-                    requireActivity().finish()
+                .setPositiveButton(R.string.action_ok) { _, _ ->
+                    if (ConfigurationUtil.nightMode != selectedIndex) {
+                        ConfigurationUtil.nightMode = selectedIndex
+                        snackBarMessage(R.string.hint_need_restart, {
+                            setAction(R.string.action_restart) {
+                                val intent =
+                                    requireActivity().packageManager.getLaunchIntentForPackage(
+                                        requireActivity().packageName
+                                    )
+                                intent?.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                                requireActivity().startActivity(intent)
+                                requireActivity().finish()
+                            }
+                        }, Snackbar.LENGTH_SHORT)
+                    }
                 }
-            }, Snackbar.LENGTH_SHORT)
+                .setNegativeButton(R.string.action_cancel, null)
+                .show()
             true
         }
-        useInAppImageSelectorPreference.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, _ ->
-            ConfigurationUtil.useInAppImageSelector = !useInAppImageSelectorPreference.isChecked
-            true
-        }
+        enableViewPagerTransformPreference.onPreferenceChangeListener =
+            Preference.OnPreferenceChangeListener { _, _ ->
+                ConfigurationUtil.enableViewPagerTransform =
+                    !enableViewPagerTransformPreference.isChecked
+                snackBarMessage(R.string.hint_need_restart, {
+                    setAction(R.string.action_restart) {
+                        val intent = requireActivity().packageManager.getLaunchIntentForPackage(
+                            requireActivity().packageName
+                        )
+                        intent?.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                        requireActivity().startActivity(intent)
+                        requireActivity().finish()
+                    }
+                }, Snackbar.LENGTH_SHORT)
+                true
+            }
+        tintNavigationBarPreference.onPreferenceChangeListener =
+            Preference.OnPreferenceChangeListener { _, _ ->
+                ConfigurationUtil.tintNavigationBar = !tintNavigationBarPreference.isChecked
+                snackBarMessage(R.string.hint_need_restart, {
+                    setAction(R.string.action_restart) {
+                        val intent = requireActivity().packageManager.getLaunchIntentForPackage(
+                            requireActivity().packageName
+                        )
+                        intent?.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                        requireActivity().startActivity(intent)
+                        requireActivity().finish()
+                    }
+                }, Snackbar.LENGTH_SHORT)
+                true
+            }
+        encryptPasswordPreference.onPreferenceChangeListener =
+            Preference.OnPreferenceChangeListener { _, _ ->
+                ConfigurationUtil.encryptPassword = !encryptPasswordPreference.isChecked
+                true
+            }
+        useInAppImageSelectorPreference.onPreferenceChangeListener =
+            Preference.OnPreferenceChangeListener { _, _ ->
+                ConfigurationUtil.useInAppImageSelector = !useInAppImageSelectorPreference.isChecked
+                true
+            }
         resetUserImgPreference.onPreferenceClickListener = Preference.OnPreferenceClickListener {
             AlertDialog.Builder(requireActivity())
-                    .setTitle(R.string.hint_confirm_reset_user_img)
-                    .setMessage("")
-                    .setPositiveButton(R.string.action_ok) { _, _ ->
-                        ConfigurationUtil.customUserImage = ""
-                        eventBus.post(UIConfigEvent(arrayListOf(UI.USER_IMG)))
-                    }
-                    .setNegativeButton(R.string.action_cancel, null)
-                    .show()
+                .setTitle(R.string.hint_confirm_reset_user_img)
+                .setMessage("")
+                .setPositiveButton(R.string.action_ok) { _, _ ->
+                    ConfigurationUtil.customUserImage = ""
+                    eventBus.post(UIConfigEvent(arrayListOf(UI.USER_IMG)))
+                }
+                .setNegativeButton(R.string.action_cancel, null)
+                .show()
             true
         }
         resetBackgroundPreference.onPreferenceClickListener = Preference.OnPreferenceClickListener {
             AlertDialog.Builder(requireActivity())
-                    .setTitle(R.string.hint_confirm_reset_background_img)
-                    .setMessage("")
-                    .setPositiveButton(R.string.action_ok) { _, _ ->
-                        ConfigurationUtil.customBackgroundImage = ""
-                        eventBus.post(UIConfigEvent(arrayListOf(UI.BACKGROUND_IMG)))
-                    }
-                    .setNegativeButton(R.string.action_cancel, null)
-                    .show()
-            true
-        }
-        notificationCoursePreference.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, _ ->
-            ConfigurationUtil.notificationCourse = !notificationCoursePreference.isChecked
-            true
-        }
-        notificationExamPreference.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, _ ->
-            ConfigurationUtil.notificationExam = !notificationExamPreference.isChecked
-            true
-        }
-        notificationTimePreference.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-            val time = ConfigurationUtil.notificationTime
-            val oldHour: Int
-            val oldMinute: Int
-            if (time == "") {
-                val calendar = Calendar.getInstance()
-                oldHour = calendar.get(Calendar.HOUR_OF_DAY)
-                oldMinute = calendar.get(Calendar.MINUTE)
-            } else {
-                val array = time.split(':')
-                oldHour = array[0].toInt()
-                oldMinute = array[1].toInt()
-            }
-            TimePickerDialog(requireActivity(), TimePickerDialog.OnTimeSetListener { _, hourOfDay, minute ->
-                val hourString = if (hourOfDay < 10) "0$hourOfDay" else hourOfDay.toString()
-                val minuteString = if (minute < 10) "0$minute" else minute.toString()
-                val newString = "$hourString:$minuteString"
-                ConfigurationUtil.notificationTime = newString
-                notificationTimePreference.summary = getString(R.string.summary_notification_time, ConfigurationUtil.notificationTime)
-                ConfigUtil.setTrigger(requireActivity(), alarmManager)
-            }, oldHour, oldMinute, true)
-                    .show()
-            true
-        }
-        disableJRSCPreference.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, _ ->
-            ConfigurationUtil.disableJRSC = !disableJRSCPreference.isChecked
-            snackBarMessage(R.string.hint_need_restart, {
-                setAction(R.string.action_restart) {
-                    val intent = requireActivity().packageManager.getLaunchIntentForPackage(requireActivity().packageName)
-                    intent?.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
-                    requireActivity().startActivity(intent)
-                    requireActivity().finish()
+                .setTitle(R.string.hint_confirm_reset_background_img)
+                .setMessage("")
+                .setPositiveButton(R.string.action_ok) { _, _ ->
+                    ConfigurationUtil.customBackgroundImage = ""
+                    eventBus.post(UIConfigEvent(arrayListOf(UI.BACKGROUND_IMG)))
                 }
-            }, Snackbar.LENGTH_SHORT)
+                .setNegativeButton(R.string.action_cancel, null)
+                .show()
             true
         }
-        showJRSCTranslationPreference.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, _ ->
-            ConfigurationUtil.showJRSCTranslation = !showJRSCTranslationPreference.isChecked
-            true
-        }
-        autoCheckUpdatePreference.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, _ ->
-            ConfigurationUtil.autoCheckUpdate = !autoCheckUpdatePreference.isChecked
-            true
-        }
+        notificationCoursePreference.onPreferenceChangeListener =
+            Preference.OnPreferenceChangeListener { _, _ ->
+                ConfigurationUtil.notificationCourse = !notificationCoursePreference.isChecked
+                true
+            }
+        notificationExamPreference.onPreferenceChangeListener =
+            Preference.OnPreferenceChangeListener { _, _ ->
+                ConfigurationUtil.notificationExam = !notificationExamPreference.isChecked
+                true
+            }
+        notificationTimePreference.onPreferenceClickListener =
+            Preference.OnPreferenceClickListener {
+                val time = ConfigurationUtil.notificationTime
+                val oldHour: Int
+                val oldMinute: Int
+                if (time == "") {
+                    val calendar = Calendar.getInstance()
+                    oldHour = calendar.get(Calendar.HOUR_OF_DAY)
+                    oldMinute = calendar.get(Calendar.MINUTE)
+                } else {
+                    val array = time.split(':')
+                    oldHour = array[0].toInt()
+                    oldMinute = array[1].toInt()
+                }
+                TimePickerDialog(
+                    requireActivity(),
+                    TimePickerDialog.OnTimeSetListener { _, hourOfDay, minute ->
+                        val hourString = if (hourOfDay < 10) "0$hourOfDay" else hourOfDay.toString()
+                        val minuteString = if (minute < 10) "0$minute" else minute.toString()
+                        val newString = "$hourString:$minuteString"
+                        ConfigurationUtil.notificationTime = newString
+                        notificationTimePreference.summary = getString(
+                            R.string.summary_notification_time,
+                            ConfigurationUtil.notificationTime
+                        )
+                        ConfigUtil.setTrigger(requireActivity(), alarmManager)
+                    },
+                    oldHour,
+                    oldMinute,
+                    true
+                )
+                    .show()
+                true
+            }
+        disableJRSCPreference.onPreferenceChangeListener =
+            Preference.OnPreferenceChangeListener { _, _ ->
+                ConfigurationUtil.disableJRSC = !disableJRSCPreference.isChecked
+                snackBarMessage(R.string.hint_need_restart, {
+                    setAction(R.string.action_restart) {
+                        val intent = requireActivity().packageManager.getLaunchIntentForPackage(
+                            requireActivity().packageName
+                        )
+                        intent?.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                        requireActivity().startActivity(intent)
+                        requireActivity().finish()
+                    }
+                }, Snackbar.LENGTH_SHORT)
+                true
+            }
+        showJRSCTranslationPreference.onPreferenceChangeListener =
+            Preference.OnPreferenceChangeListener { _, _ ->
+                ConfigurationUtil.showJRSCTranslation = !showJRSCTranslationPreference.isChecked
+                true
+            }
+        autoCheckUpdatePreference.onPreferenceChangeListener =
+            Preference.OnPreferenceChangeListener { _, _ ->
+                ConfigurationUtil.autoCheckUpdate = !autoCheckUpdatePreference.isChecked
+                true
+            }
         weixinPreference.onPreferenceClickListener = Preference.OnPreferenceClickListener {
             ShareUtil.linkWeiXinMiniProgram(requireActivity())
             true
@@ -281,21 +327,31 @@ class SettingsPreferenceFragment : XhuBasePreferenceFragment(R.xml.preference_se
             requestPermissionsOnFragment(arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE)) { code, array ->
                 if (array.isEmpty() || array[0] == PackageManager.PERMISSION_GRANTED) {
                     Matisse.from(this)
-                            .choose(MimeType.of(MimeType.JPEG, MimeType.PNG, MimeType.BMP))
-                            .showSingleMediaType(true)
-                            .countable(false)
-                            .maxSelectable(1)
-                            .restrictOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
-                            .thumbnailScale(0.85f)
-                            .imageEngine(CustomGlideEngine())
-                            .theme(if (ContextCompat.getColor(requireActivity(), R.color.isNight) == Color.WHITE) R.style.Matisse_Zhihu else R.style.Matisse_Dracula)
-                            .forResult(requestCode)
+                        .choose(MimeType.of(MimeType.JPEG, MimeType.PNG, MimeType.BMP))
+                        .showSingleMediaType(true)
+                        .countable(false)
+                        .maxSelectable(1)
+                        .restrictOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
+                        .thumbnailScale(0.85f)
+                        .imageEngine(CustomGlideEngine())
+                        .theme(
+                            if (ContextCompat.getColor(
+                                    requireActivity(),
+                                    R.color.isNight
+                                ) == Color.WHITE
+                            ) R.style.Matisse_Zhihu else R.style.Matisse_Dracula
+                        )
+                        .forResult(requestCode)
                 } else {
-                    Snackbar.make(requireActivity().window.decorView, R.string.hint_permission_deny, Snackbar.LENGTH_LONG)
-                            .setAction(R.string.action_re_request) {
-                                reRequestPermission(code)
-                            }
-                            .show()
+                    Snackbar.make(
+                        requireActivity().window.decorView,
+                        R.string.hint_permission_deny,
+                        Snackbar.LENGTH_LONG
+                    )
+                        .setAction(R.string.action_re_request) {
+                            reRequestPermission(code)
+                        }
+                        .show()
                 }
             }
         else {
@@ -317,30 +373,37 @@ class SettingsPreferenceFragment : XhuBasePreferenceFragment(R.xml.preference_se
                 cropImage(Matisse.obtainResult(data)[0], REQUEST_CROP_USER, 500, 500)
             }
             REQUEST_CHOOSE_BACKGROUND -> if (resultCode == Activity.RESULT_OK) {
-                cropImage(Matisse.obtainResult(data)[0], REQUEST_CROP_BACKGROUND, screenWidth, screenHeight)
+                cropImage(
+                    Matisse.obtainResult(data)[0],
+                    REQUEST_CROP_BACKGROUND,
+                    screenWidth,
+                    screenHeight
+                )
             }
             REQUEST_CROP_USER -> if (resultCode == Activity.RESULT_OK) {
                 val file = getFile(requestCode)
                 ConfigurationUtil.customUserImage = file.absolutePath
                 eventBus.post(UIConfigEvent(arrayListOf(UI.USER_IMG)))
                 Toast.makeText(requireActivity(), R.string.hint_custom_img, Toast.LENGTH_SHORT)
-                        .show()
+                    .show()
             }
             REQUEST_CROP_BACKGROUND -> if (resultCode == Activity.RESULT_OK) {
                 val file = getFile(requestCode)
                 ConfigurationUtil.customBackgroundImage = file.absolutePath
                 eventBus.post(UIConfigEvent(arrayListOf(UI.BACKGROUND_IMG)))
                 Toast.makeText(requireActivity(), R.string.hint_custom_img, Toast.LENGTH_SHORT)
-                        .show()
+                    .show()
             }
         }
     }
 
-    private fun getFile(cropCode: Int): File = getImageFile(when (cropCode) {
-        REQUEST_CROP_USER -> FileUtil.UI_IMAGE_USER_IMG
-        REQUEST_CROP_BACKGROUND -> FileUtil.UI_IMAGE_BACKGROUND
-        else -> throw NullPointerException("null")
-    })!!
+    private fun getFile(cropCode: Int): File = getImageFile(
+        when (cropCode) {
+            REQUEST_CROP_USER -> FileUtil.UI_IMAGE_USER_IMG
+            REQUEST_CROP_BACKGROUND -> FileUtil.UI_IMAGE_BACKGROUND
+            else -> throw NullPointerException("null")
+        }
+    )!!
 
     private fun cropImage(uri: Uri, cropCode: Int, width: Int, height: Int) {
         val saveFile = getFile(cropCode)
@@ -348,9 +411,9 @@ class SettingsPreferenceFragment : XhuBasePreferenceFragment(R.xml.preference_se
             saveFile.parentFile!!.mkdirs()
         val destinationUri = Uri.fromFile(saveFile)
         UCrop.of(uri, destinationUri)
-                .withAspectRatio(width.toFloat(), height.toFloat())
-                .withMaxResultSize(width * 10, height * 10)
-                .start(requireActivity(), this, cropCode)
+            .withAspectRatio(width.toFloat(), height.toFloat())
+            .withMaxResultSize(width * 10, height * 10)
+            .start(requireActivity(), this, cropCode)
     }
 
     private fun showCheckUpdateDialog() {
@@ -364,7 +427,11 @@ class SettingsPreferenceFragment : XhuBasePreferenceFragment(R.xml.preference_se
         toast(R.string.hint_check_update_done)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         eventBus.register(this)
         return super.onCreateView(inflater, container, savedInstanceState)
     }

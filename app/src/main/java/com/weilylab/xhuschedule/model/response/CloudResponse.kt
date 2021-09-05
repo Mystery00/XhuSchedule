@@ -12,7 +12,7 @@ package com.weilylab.xhuschedule.model.response
 import org.koin.core.KoinComponent
 
 abstract class CloudResponse : KoinComponent {
-    val code: Int = -1
+    var code: Int = -1
     lateinit var message: String
 
     val isSuccessful: Boolean

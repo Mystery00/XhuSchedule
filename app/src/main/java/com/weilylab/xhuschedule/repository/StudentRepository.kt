@@ -79,17 +79,19 @@ class StudentRepository : KoinComponent {
             val encryptPassword = RSAUtil.encryptString(plainPassword, publicKey)
             loginResponse =
                 xhuScheduleCloudAPI.login(LoginParam(student.username, encryptPassword, publicKey))
+            if (loginResponse.isSuccessful) {
+                CookieManger.putCookie(
+                    student.username,
+                    Constants.SERVER_HOST,
+                    loginResponse.data.cookie
+                )
+            }
         } else {
-            loginResponse = userAPI.autoLogin(student.username, plainPassword)
+            loginResponse = userAPI.autoLogin(student.username, plainPassword).toResponse()
             secretKey = null
         }
         if (loginResponse.isSuccessful) {
             //存储意见反馈的token
-            CookieManger.putCookie(
-                student.username,
-                Constants.SERVER_HOST,
-                loginResponse.data.cookie
-            )
             feedBackRepository.registerFeedBackToken(student, loginResponse.data.fbToken)
             student.key = secretKey
             student.password = if (secretKey == null) plainPassword else AESUtils.aesEncrypt(
