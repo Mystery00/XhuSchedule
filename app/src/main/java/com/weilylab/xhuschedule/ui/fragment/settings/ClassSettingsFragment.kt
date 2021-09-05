@@ -314,26 +314,40 @@ class ClassSettingsFragment : XhuBasePreferenceFragment(R.xml.preference_class) 
             true
         }
         toCalendarManagementPreference.setOnPreferenceClickListener {
-            settingsViewModel.getAllCalendarAccount { list ->
-                if (list.isEmpty()) {
-                    toast(R.string.hint_no_calendar_account)
-                    return@getAllCalendarAccount
-                }
-                val checked = BooleanArray(list.size)
-                MaterialAlertDialogBuilder(requireActivity())
-                        .setTitle(R.string.hint_dialog_export_calendar_remove)
-                        .setMultiChoiceItems(list.map { it.first }.toTypedArray(), checked) { _, index, b ->
-                            checked[index] = b
+            requestPermissionsOnFragment(
+                arrayOf(
+                    Manifest.permission.WRITE_CALENDAR,
+                    Manifest.permission.READ_CALENDAR
+                )
+            ) { _, result ->
+                if (result.isEmpty() || result[0] == PackageManager.PERMISSION_GRANTED || result[1] == PackageManager.PERMISSION_GRANTED) {
+                    settingsViewModel.getAllCalendarAccount { list ->
+                        if (list.isEmpty()) {
+                            toast(R.string.hint_no_calendar_account)
+                            return@getAllCalendarAccount
                         }
-                        .setPositiveButton(R.string.action_remove) { _, _ ->
-                            list.forEachIndexed { index, pair ->
-                                if (checked[index]) {
-                                    deleteCalendarAccount(requireContext(), pair.second)
+                        val checked = BooleanArray(list.size)
+                        MaterialAlertDialogBuilder(requireActivity())
+                            .setTitle(R.string.hint_dialog_export_calendar_remove)
+                            .setMultiChoiceItems(
+                                list.map { it.first }.toTypedArray(),
+                                checked
+                            ) { _, index, b ->
+                                checked[index] = b
+                            }
+                            .setPositiveButton(R.string.action_remove) { _, _ ->
+                                list.forEachIndexed { index, pair ->
+                                    if (checked[index]) {
+                                        deleteCalendarAccount(requireContext(), pair.second)
+                                    }
                                 }
                             }
-                        }
-                        .setNegativeButton(android.R.string.cancel, null)
-                        .show()
+                            .setNegativeButton(android.R.string.cancel, null)
+                            .show()
+                    }
+                } else {
+                    toast(R.string.error_no_calendar_permission)
+                }
             }
             true
         }

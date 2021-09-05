@@ -11,6 +11,7 @@ package com.weilylab.xhuschedule.ui.activity
 
 import android.app.AlarmManager
 import android.content.Intent
+import android.content.pm.ShortcutManager
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -39,6 +40,7 @@ class SplashActivity : XhuBaseActivity(null, false) {
     private val splashViewModel: SplashViewModel by viewModel()
     private val initRepository: InitRepository by inject()
     private val alarmManager: AlarmManager by inject()
+    private val shortcutManager: ShortcutManager by inject()
 
     private val splashObserver = object : DataObserver<Pair<Splash, Boolean>> {
         override fun empty() {
@@ -57,7 +59,10 @@ class SplashActivity : XhuBaseActivity(null, false) {
             else {
                 val intent = Intent(this@SplashActivity, DownloadSplashIntentService::class.java)
                 intent.putExtra(IntentConstant.INTENT_TAG_NAME_QINIU_PATH, data.first.splashUrl)
-                intent.putExtra(IntentConstant.INTENT_TAG_NAME_SPLASH_FILE_NAME, data.first.splashUrl.sha1())
+                intent.putExtra(
+                    IntentConstant.INTENT_TAG_NAME_SPLASH_FILE_NAME,
+                    data.first.splashUrl.sha1()
+                )
                 DownloadSplashIntentService.enqueueWork(this@SplashActivity, intent)
                 empty()
             }
@@ -66,12 +71,13 @@ class SplashActivity : XhuBaseActivity(null, false) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         @Suppress("DEPRECATION")
-        window.decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or View.SYSTEM_UI_FLAG_FULLSCREEN)
+        window.decorView.systemUiVisibility =
+            (View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or View.SYSTEM_UI_FLAG_FULLSCREEN)
         when (ConfigurationUtil.nightMode) {
-			0 -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY)
-			1 -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-			2 -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-			3 -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
+            0 -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY)
+            1 -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+            2 -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+            3 -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
         }
         super.onCreate(savedInstanceState)
     }
@@ -89,7 +95,10 @@ class SplashActivity : XhuBaseActivity(null, false) {
         super.initData()
         initViewModel()
         splashViewModel.requestSplash()
-        ContextCompat.startForegroundService(this, Intent(APP.context, CheckUpdateService::class.java))
+        ContextCompat.startForegroundService(
+            this,
+            Intent(APP.context, CheckUpdateService::class.java)
+        )
         ConfigUtil.setTrigger(this, alarmManager)
         launch {
             ConfigUtil.getCurrentYearAndTerm(initRepository.getStartTime())

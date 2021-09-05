@@ -10,6 +10,7 @@
 package com.weilylab.xhuschedule.repository
 
 import com.weilylab.xhuschedule.R
+import com.weilylab.xhuschedule.api.UserAPI
 import com.weilylab.xhuschedule.api.XhuScheduleCloudAPI
 import com.weilylab.xhuschedule.constant.Constants
 import com.weilylab.xhuschedule.constant.ResponseCodeConstants
@@ -17,8 +18,10 @@ import com.weilylab.xhuschedule.interceptor.CookieManger
 import com.weilylab.xhuschedule.model.LoginParam
 import com.weilylab.xhuschedule.model.Student
 import com.weilylab.xhuschedule.model.StudentInfo
+import com.weilylab.xhuschedule.model.response.LoginResponse
 import com.weilylab.xhuschedule.repository.local.dao.StudentDao
 import com.weilylab.xhuschedule.utils.AESUtils
+import com.weilylab.xhuschedule.utils.ConfigurationUtil
 import com.weilylab.xhuschedule.utils.RSAUtil
 import com.weilylab.xhuschedule.utils.generateSeed
 import org.koin.core.KoinComponent
@@ -32,6 +35,7 @@ class StudentRepository : KoinComponent {
     private val feedBackRepository: FeedBackRepository by inject()
 
     private val xhuScheduleCloudAPI: XhuScheduleCloudAPI by inject()
+    private val userAPI: UserAPI by inject()
 
     suspend fun login(student: Student): Student {
         val studentList = studentDao.queryAllStudentList()
@@ -56,11 +60,6 @@ class StudentRepository : KoinComponent {
     }
 
     suspend fun doLoginOnly(student: Student) {
-        val publicKeyResponse = xhuScheduleCloudAPI.getPublicKey(student.username)
-        if (!publicKeyResponse.isSuccessful) {
-            throw ResourceException(R.string.error_get_public_key_failed)
-        }
-        val publicKey = publicKeyResponse.data
         var secretKey = student.key
         var plainPassword: String = student.password
         if (secretKey.isNullOrBlank()) {
@@ -69,14 +68,34 @@ class StudentRepository : KoinComponent {
             //如果密钥不为空，说明是加密数据，解密出原始信息
             plainPassword = AESUtils.aesDecrypt(secretKey, plainPassword)
         }
-        val encryptPassword = RSAUtil.encryptString(plainPassword, publicKey)
-        val loginResponse = xhuScheduleCloudAPI.login(LoginParam(student.username, encryptPassword, publicKey))
+
+        val loginResponse: LoginResponse
+        if (ConfigurationUtil.encryptPassword) {
+            val publicKeyResponse = xhuScheduleCloudAPI.getPublicKey(student.username)
+            if (!publicKeyResponse.isSuccessful) {
+                throw ResourceException(R.string.error_get_public_key_failed)
+            }
+            val publicKey = publicKeyResponse.data
+            val encryptPassword = RSAUtil.encryptString(plainPassword, publicKey)
+            loginResponse =
+                xhuScheduleCloudAPI.login(LoginParam(student.username, encryptPassword, publicKey))
+        } else {
+            loginResponse = userAPI.autoLogin(student.username, plainPassword)
+            secretKey = null
+        }
         if (loginResponse.isSuccessful) {
             //存储意见反馈的token
-            CookieManger.putCookie(student.username, Constants.SERVER_HOST, loginResponse.data.cookie)
+            CookieManger.putCookie(
+                student.username,
+                Constants.SERVER_HOST,
+                loginResponse.data.cookie
+            )
             feedBackRepository.registerFeedBackToken(student, loginResponse.data.fbToken)
             student.key = secretKey
-            student.password = AESUtils.aesEncrypt(secretKey, plainPassword)
+            student.password = if (secretKey == null) plainPassword else AESUtils.aesEncrypt(
+                secretKey,
+                plainPassword
+            )
             if (student.id == 0) {
                 val save = studentDao.queryStudentByUsername(student.username)
                 student.id = save?.id ?: 0

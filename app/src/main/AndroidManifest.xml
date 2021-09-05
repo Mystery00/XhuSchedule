@@ -28,7 +28,6 @@
 
     <application
         android:name=".config.APP"
-        android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:networkSecurityConfig="@xml/network_security_config"
@@ -36,7 +35,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:replace="android:networkSecurityConfig"
-        tools:targetApi="n">
+        tools:targetApi="S">
 
         <meta-data
             android:name="DEBUG"
@@ -48,8 +47,9 @@
 
         <activity
             android:name=".ui.activity.SplashActivity"
+            android:exported="true"
             android:label="@string/app_name"
-            android:screenOrientation="portrait"
+            android:screenOrientation="fullSensor"
             android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -68,73 +68,74 @@
         </activity>
         <activity
             android:name=".ui.activity.GuideActivity"
-            android:screenOrientation="portrait"
+            android:screenOrientation="fullSensor"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".ui.activity.SplashImageActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="fullSensor" />
         <activity
             android:name=".ui.activity.LoginActivity"
-            android:screenOrientation="portrait"
+            android:screenOrientation="fullSensor"
             android:theme="@style/AppTheme.NoActionBar.Immersive"
             android:windowSoftInputMode="adjustPan" />
         <activity
             android:name="com.yalantis.ucrop.UCropActivity"
-            android:screenOrientation="portrait"
+            android:screenOrientation="fullSensor"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".ui.activity.SettingsActivity"
             android:label="@string/title_activity_settings"
-            android:screenOrientation="portrait"
+            android:screenOrientation="fullSensor"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".ui.activity.NoticeActivity"
             android:label="@string/title_activity_notice"
-            android:screenOrientation="portrait"
+            android:screenOrientation="fullSensor"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".ui.activity.BottomNavigationActivity"
-            android:screenOrientation="portrait"
+            android:screenOrientation="fullSensor"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".ui.activity.QueryTestActivity"
             android:label="@string/title_activity_query_test"
-            android:screenOrientation="portrait"
+            android:screenOrientation="fullSensor"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".ui.activity.QueryClassScoreActivity"
             android:label="@string/title_query_score_class"
-            android:screenOrientation="portrait"
+            android:screenOrientation="fullSensor"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".ui.activity.QueryClassroomActivity"
             android:label="@string/title_query_score_classroom"
-            android:screenOrientation="portrait"
+            android:screenOrientation="fullSensor"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".ui.activity.QueryExpScoreActivity"
             android:label="@string/title_query_score_experiment"
-            android:screenOrientation="portrait"
+            android:screenOrientation="fullSensor"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".ui.activity.FeedbackActivity"
             android:label="@string/title_activity_feedback"
-            android:screenOrientation="portrait"
+            android:screenOrientation="fullSensor"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".ui.activity.QueryCetScoreFirstActivity"
-            android:screenOrientation="portrait"
+            android:screenOrientation="fullSensor"
             android:theme="@style/SuwThemeMaterial.Light" />
         <activity
             android:name=".ui.activity.QueryCetScoreSecondActivity"
-            android:screenOrientation="portrait"
+            android:screenOrientation="fullSensor"
             android:theme="@style/SuwThemeMaterial.Light" />
         <activity
             android:name=".ui.activity.QueryCetScoreShowActivity"
-            android:screenOrientation="portrait"
+            android:screenOrientation="fullSensor"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".ui.activity.GotoQQGroupActivity"
+            android:exported="true"
             android:theme="@android:style/Theme.NoDisplay">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -148,23 +149,41 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".ui.activity.GotoSettingsActivity"
+            android:exported="true"
+            android:theme="@android:style/Theme.NoDisplay">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="goto_xhuschedule_settings"
+                    android:scheme="xhuschedule" />
+            </intent-filter>
+        </activity>
+        <activity
             android:name=".ui.activity.ClassCourseColorActivity"
-            android:screenOrientation="portrait"
+            android:screenOrientation="fullSensor"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".ui.activity.CustomStartTimeActivity"
-            android:screenOrientation="portrait"
+            android:screenOrientation="fullSensor"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".ui.activity.WebViewActivity"
+            android:screenOrientation="fullSensor"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".ui.activity.CustomCourseActivity"
             android:label="@string/title_action_custom_course"
+            android:screenOrientation="fullSensor"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".ui.activity.CustomThingActivity"
             android:label="@string/title_action_custom_thing"
+            android:screenOrientation="fullSensor"
             android:theme="@style/AppTheme.NoActionBar" />
 
         <service
@@ -190,6 +209,7 @@
 
         <receiver
             android:name=".ui.widget.TodayCourseWidget"
+            android:exported="true"
             android:label="@string/widget_title_query_today_course">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
@@ -200,6 +220,7 @@
         </receiver>
         <receiver
             android:name=".ui.widget.TestListWidget"
+            android:exported="true"
             android:label="@string/widget_title_query_test">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
@@ -223,6 +244,7 @@
             android:name="com.tencent.tauth.AuthActivity"
             android:launchMode="singleTask"
             android:noHistory="true"
+            android:exported="true"
             android:process="${applicationId}.sb">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />

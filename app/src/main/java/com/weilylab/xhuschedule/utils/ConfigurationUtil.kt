@@ -15,18 +15,29 @@ import com.weilylab.xhuschedule.config.APP
 import com.weilylab.xhuschedule.constant.SharedPreferenceConstant
 
 object ConfigurationUtil {
-    private val sharedPreferences by lazy { APP.context.getSharedPreferences(SharedPreferenceConstant.FILE_NAME_CONFIG, Context.MODE_PRIVATE) }
+    private val sharedPreferences by lazy {
+        APP.context.getSharedPreferences(
+            SharedPreferenceConstant.FILE_NAME_CONFIG,
+            Context.MODE_PRIVATE
+        )
+    }
 
     var firstEnter: Boolean
         set(value) = sharedPreferences.edit {
             putBoolean(SharedPreferenceConstant.FIELD_CONFIG_FIRST_ENTER, value)
         }
-        get() = sharedPreferences.getBoolean(SharedPreferenceConstant.FIELD_CONFIG_FIRST_ENTER, true)
+        get() = sharedPreferences.getBoolean(
+            SharedPreferenceConstant.FIELD_CONFIG_FIRST_ENTER,
+            true
+        )
     var isEnableMultiUserMode: Boolean
         set(value) = sharedPreferences.edit {
             putBoolean(SharedPreferenceConstant.FIELD_ENABLE_MULTI_USER_MODE, value)
         }
-        get() = sharedPreferences.getBoolean(SharedPreferenceConstant.FIELD_ENABLE_MULTI_USER_MODE, false)
+        get() = sharedPreferences.getBoolean(
+            SharedPreferenceConstant.FIELD_ENABLE_MULTI_USER_MODE,
+            false
+        )
     var isShowNotWeek: Boolean
         set(value) = sharedPreferences.edit {
             putBoolean(SharedPreferenceConstant.FIELD_SHOW_NOT_WEEK, value)
@@ -46,7 +57,10 @@ object ConfigurationUtil {
         set(value) = sharedPreferences.edit {
             putString(SharedPreferenceConstant.FIELD_CUSTOM_BACKGROUND_IMAGE, value)
         }
-        get() = sharedPreferences.getString(SharedPreferenceConstant.FIELD_CUSTOM_BACKGROUND_IMAGE, "")!!
+        get() = sharedPreferences.getString(
+            SharedPreferenceConstant.FIELD_CUSTOM_BACKGROUND_IMAGE,
+            ""
+        )!!
     var nightMode: Int
         set(value) = sharedPreferences.edit {
             putInt(SharedPreferenceConstant.FIELD_NIGHT_MODE, value)
@@ -81,7 +95,10 @@ object ConfigurationUtil {
         set(value) = sharedPreferences.edit {
             putBoolean(SharedPreferenceConstant.FIELD_NOTIFICATION_COURSE, value)
         }
-        get() = sharedPreferences.getBoolean(SharedPreferenceConstant.FIELD_NOTIFICATION_COURSE, true)
+        get() = sharedPreferences.getBoolean(
+            SharedPreferenceConstant.FIELD_NOTIFICATION_COURSE,
+            true
+        )
     var notificationExam: Boolean
         set(value) = sharedPreferences.edit {
             putBoolean(SharedPreferenceConstant.FIELD_NOTIFICATION_EXAM, value)
@@ -91,12 +108,18 @@ object ConfigurationUtil {
         set(value) = sharedPreferences.edit {
             putString(SharedPreferenceConstant.FIELD_NOTIFICATION_TIME, value)
         }
-        get() = sharedPreferences.getString(SharedPreferenceConstant.FIELD_NOTIFICATION_TIME, "20:00")!!
+        get() = sharedPreferences.getString(
+            SharedPreferenceConstant.FIELD_NOTIFICATION_TIME,
+            "20:00"
+        )!!
     var ignoreUpdateVersion: String
         set(value) = sharedPreferences.edit {
             putString(SharedPreferenceConstant.FIELD_IGNORE_UPDATE_VERSION, value)
         }
-        get() = sharedPreferences.getString(SharedPreferenceConstant.FIELD_IGNORE_UPDATE_VERSION, "")!!
+        get() = sharedPreferences.getString(
+            SharedPreferenceConstant.FIELD_IGNORE_UPDATE_VERSION,
+            ""
+        )!!
     var startTime: String
         set(value) = sharedPreferences.edit {
             putString(SharedPreferenceConstant.FIELD_START_DATE_TIME, value)
@@ -106,12 +129,18 @@ object ConfigurationUtil {
         set(value) = sharedPreferences.edit {
             putString(SharedPreferenceConstant.FIELD_CUSTOM_START_DATE_TIME, value)
         }
-        get() = sharedPreferences.getString(SharedPreferenceConstant.FIELD_CUSTOM_START_DATE_TIME, "")!!
+        get() = sharedPreferences.getString(
+            SharedPreferenceConstant.FIELD_CUSTOM_START_DATE_TIME,
+            ""
+        )!!
     var isCustomStartTime: Boolean
         set(value) = sharedPreferences.edit {
             putBoolean(SharedPreferenceConstant.FIELD_IS_CUSTOM_START_DATE_TIME, value)
         }
-        get() = sharedPreferences.getBoolean(SharedPreferenceConstant.FIELD_IS_CUSTOM_START_DATE_TIME, false)
+        get() = sharedPreferences.getBoolean(
+            SharedPreferenceConstant.FIELD_IS_CUSTOM_START_DATE_TIME,
+            false
+        )
     var currentYear: String
         set(value) = sharedPreferences.edit {
             putString(SharedPreferenceConstant.FIELD_CURRENT_YEAR, value)
@@ -126,7 +155,10 @@ object ConfigurationUtil {
         set(value) = sharedPreferences.edit {
             putBoolean(SharedPreferenceConstant.FIELD_CUSTOM_YEAR_AND_TERM, value)
         }
-        get() = sharedPreferences.getBoolean(SharedPreferenceConstant.FIELD_CUSTOM_YEAR_AND_TERM, false)
+        get() = sharedPreferences.getBoolean(
+            SharedPreferenceConstant.FIELD_CUSTOM_YEAR_AND_TERM,
+            false
+        )
     var lastUpdateDate: String
         set(value) = sharedPreferences.edit {
             putString(SharedPreferenceConstant.FIELD_LAST_UPDATE_DATE, value)
@@ -141,7 +173,10 @@ object ConfigurationUtil {
         set(value) = sharedPreferences.edit {
             putBoolean(SharedPreferenceConstant.FIELD_ENABLE_VIEW_PAGER_TRANSFORM, value)
         }
-        get() = sharedPreferences.getBoolean(SharedPreferenceConstant.FIELD_ENABLE_VIEW_PAGER_TRANSFORM, false)
+        get() = sharedPreferences.getBoolean(
+            SharedPreferenceConstant.FIELD_ENABLE_VIEW_PAGER_TRANSFORM,
+            false
+        )
     var disableJRSC: Boolean
         set(value) = sharedPreferences.edit {
             putBoolean(SharedPreferenceConstant.FIELD_DISABLE_JRSC, value)
@@ -151,25 +186,45 @@ object ConfigurationUtil {
         set(value) = sharedPreferences.edit {
             putBoolean(SharedPreferenceConstant.FIELD_SHOW_JRSC_TRANSLATION, value)
         }
-        get() = sharedPreferences.getBoolean(SharedPreferenceConstant.FIELD_SHOW_JRSC_TRANSLATION, false)
+        get() = sharedPreferences.getBoolean(
+            SharedPreferenceConstant.FIELD_SHOW_JRSC_TRANSLATION,
+            false
+        )
     var tintNavigationBar: Boolean
         set(value) = sharedPreferences.edit {
             putBoolean(SharedPreferenceConstant.FIELD_TINT_NAVIGATION_BAR, value)
         }
-        get() = sharedPreferences.getBoolean(SharedPreferenceConstant.FIELD_TINT_NAVIGATION_BAR, false)
+        get() = sharedPreferences.getBoolean(
+            SharedPreferenceConstant.FIELD_TINT_NAVIGATION_BAR,
+            false
+        )
     var showCustomThingFirst: Boolean
         set(value) = sharedPreferences.edit {
             putBoolean(SharedPreferenceConstant.FIELD_SHOW_CUSTOM_THING_FIRST, value)
         }
-        get() = sharedPreferences.getBoolean(SharedPreferenceConstant.FIELD_SHOW_CUSTOM_THING_FIRST, false)
+        get() = sharedPreferences.getBoolean(
+            SharedPreferenceConstant.FIELD_SHOW_CUSTOM_THING_FIRST,
+            false
+        )
     var showTomorrowCourseAfterTime: String
         set(value) = sharedPreferences.edit {
             putString(SharedPreferenceConstant.FIELD_SHOW_TOMORROW_COURSE_AFTER, value)
         }
-        get() = sharedPreferences.getString(SharedPreferenceConstant.FIELD_SHOW_TOMORROW_COURSE_AFTER, "disable")!!
+        get() = sharedPreferences.getString(
+            SharedPreferenceConstant.FIELD_SHOW_TOMORROW_COURSE_AFTER,
+            "disable"
+        )!!
     var useInAppImageSelector: Boolean
         set(value) = sharedPreferences.edit {
             putBoolean(SharedPreferenceConstant.FIELD_USE_IN_APP_IMAGE_SELECTOR, value)
         }
-        get() = sharedPreferences.getBoolean(SharedPreferenceConstant.FIELD_USE_IN_APP_IMAGE_SELECTOR, false)
+        get() = sharedPreferences.getBoolean(
+            SharedPreferenceConstant.FIELD_USE_IN_APP_IMAGE_SELECTOR,
+            false
+        )
+    var encryptPassword: Boolean
+        set(value) = sharedPreferences.edit {
+            putBoolean(SharedPreferenceConstant.FIELD_ENCRYPT_PASSWORD, value)
+        }
+        get() = sharedPreferences.getBoolean(SharedPreferenceConstant.FIELD_ENCRYPT_PASSWORD, true)
 }

@@ -50,13 +50,14 @@ object ConfigUtil {
     fun showUpdateLog(context: Context) {
         val logArray = context.resources.getStringArray(R.array.update_log)
         MaterialAlertDialogBuilder(context)
-                .setTitle("${context.getString(R.string.app_name)} V${context.getString(R.string.app_version_name)} 更新日志")
-                .setMessage(logArray.joinToString("\n"))
-                .setPositiveButton(R.string.action_ok, null)
-                .setOnDismissListener {
-                    ConfigurationUtil.updatedVersion = context.getString(R.string.app_version_code).toInt()
-                }
-                .show()
+            .setTitle("${context.getString(R.string.app_name)} V${context.getString(R.string.app_version_name)} 更新日志")
+            .setMessage(logArray.joinToString("\n"))
+            .setPositiveButton(R.string.action_ok, null)
+            .setOnDismissListener {
+                ConfigurationUtil.updatedVersion =
+                    context.getString(R.string.app_version_code).toInt()
+            }
+            .show()
     }
 
     fun setTrigger(context: Context, alarmManager: AlarmManager) {
@@ -64,7 +65,12 @@ object ConfigUtil {
             return
         val alarmIntent = Intent(context, NotificationService::class.java)
         val pendingIntent = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            PendingIntent.getForegroundService(context, 0, alarmIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+            PendingIntent.getForegroundService(
+                context,
+                0,
+                alarmIntent,
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+            )
         } else {
             PendingIntent.getService(context, 0, alarmIntent, PendingIntent.FLAG_UPDATE_CURRENT)
         }
@@ -91,20 +97,19 @@ object ConfigUtil {
 
     @Suppress("DEPRECATION")
     fun setStatusBar(activity: Activity) {
-        when {
-            Build.VERSION.SDK_INT >= Build.VERSION_CODES.M -> {//6.0
-                activity.window.statusBarColor = Color.WHITE
-                if (ConfigurationUtil.tintNavigationBar && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    activity.window.navigationBarColor = Color.WHITE
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                        activity.window.insetsController?.setSystemBarsAppearance(WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS or WindowInsetsController.APPEARANCE_LIGHT_NAVIGATION_BARS,
-                                WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS or WindowInsetsController.APPEARANCE_LIGHT_NAVIGATION_BARS)
-                    } else {
-                        activity.window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR or View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR
-                    }
-                } else
-                    activity.window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+        activity.window.statusBarColor = Color.WHITE
+        if (ConfigurationUtil.tintNavigationBar && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            activity.window.navigationBarColor = Color.WHITE
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                activity.window.insetsController?.setSystemBarsAppearance(
+                    WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS or WindowInsetsController.APPEARANCE_LIGHT_NAVIGATION_BARS,
+                    WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS or WindowInsetsController.APPEARANCE_LIGHT_NAVIGATION_BARS
+                )
+            } else {
+                activity.window.decorView.systemUiVisibility =
+                    View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR or View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR
             }
-        }
+        } else
+            activity.window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
     }
 }
