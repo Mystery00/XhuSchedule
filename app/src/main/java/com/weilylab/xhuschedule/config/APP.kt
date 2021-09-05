@@ -20,8 +20,6 @@ import android.os.Build
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.multidex.MultiDexApplication
 import com.oasisfeng.condom.CondomContext
-import com.sina.weibo.sdk.WbSdk
-import com.sina.weibo.sdk.auth.AuthInfo
 import com.tencent.mm.opensdk.openapi.IWXAPI
 import com.tencent.mm.opensdk.openapi.WXAPIFactory
 import com.tencent.tauth.Tencent
@@ -31,10 +29,7 @@ import com.weilylab.xhuschedule.utils.NotificationUtil
 import com.weilylab.xhuschedule.utils.PackageUtil
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
-import org.koin.core.logger.Level
 import vip.mystery0.crashhandler.CrashHandler
-import vip.mystery0.logs.Logs
-import vip.mystery0.logs.logsLogger
 import vip.mystery0.tools.ToolsClient
 import vip.mystery0.tools.utils.registerActivityLifecycle
 import vip.mystery0.tools.utils.toastLong
@@ -49,46 +44,63 @@ class APP : MultiDexApplication() {
         context = applicationContext
         instance = this
         startKoin {
-            logsLogger(Level.ERROR)
             androidContext(this@APP)
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
-                modules(listOf(appModule, shortcutModule, databaseModule, networkModule, repositoryModule, viewModelModule))
+                modules(
+                    listOf(
+                        appModule,
+                        shortcutModule,
+                        databaseModule,
+                        networkModule,
+                        repositoryModule,
+                        viewModelModule
+                    )
+                )
             } else {
-                modules(listOf(appModule, databaseModule, networkModule, repositoryModule, viewModelModule))
+                modules(
+                    listOf(
+                        appModule,
+                        databaseModule,
+                        networkModule,
+                        repositoryModule,
+                        viewModelModule
+                    )
+                )
             }
         }
-        val info = context.packageManager.getApplicationInfo(context.packageName, PackageManager.GET_META_DATA)
+        val info = context.packageManager.getApplicationInfo(
+            context.packageName,
+            PackageManager.GET_META_DATA
+        )
         val debug = info.metaData.getBoolean("DEBUG")
         CrashHandler.config {
             setFileNameSuffix("log")
-                    .setDir(File(externalCacheDir, "crash"))
-                    .setAutoClean(true)
-                    .setDebug(debug)
+                .setDir(File(externalCacheDir, "crash"))
+                .setAutoClean(true)
+                .setDebug(debug)
         }.init()
         NotificationUtil.initChannelID(this)//初始化NotificationChannelID
         ToolsClient.initWithContext(this)
         registerActivityLifecycle()
         if (PackageUtil.isQQApplicationAvailable())
             tencent = try {
-                Tencent.createInstance("1106663023", CondomContext.wrap(applicationContext, "Tencent"))
+                Tencent.createInstance(
+                    "1106663023",
+                    CondomContext.wrap(applicationContext, "Tencent")
+                )
             } catch (ignore: Exception) {
                 Tencent.createInstance("1106663023", applicationContext)
             }
         if (PackageUtil.isWeiXinApplicationAvailable())
             wxAPI = try {
-                WXAPIFactory.createWXAPI(CondomContext.wrap(applicationContext, "WeiXin"), "wx41799887957cbba8", false)
+                WXAPIFactory.createWXAPI(
+                    CondomContext.wrap(applicationContext, "WeiXin"),
+                    "wx41799887957cbba8",
+                    false
+                )
             } catch (ignore: Exception) {
                 WXAPIFactory.createWXAPI(applicationContext, "wx41799887957cbba8", false)
             }
-        if (PackageUtil.isWeiBoApplicationAvailable())
-            try {
-                WbSdk.install(CondomContext.wrap(applicationContext, "WeiBo"), AuthInfo(CondomContext.wrap(applicationContext, "WeiBo"), "2170085314", "https://api.weibo.com/oauth2/default.html", "statuses/share"))
-            } catch (ignore: Exception) {
-                WbSdk.install(CondomContext.wrap(applicationContext, "WeiBo"), AuthInfo(applicationContext, "2170085314", "https://api.weibo.com/oauth2/default.html", "statuses/share"))
-            }
-        Logs.setConfig {
-            it.setShowLog(debug)
-        }
     }
 
     companion object {

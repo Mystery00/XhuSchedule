@@ -10,6 +10,7 @@
 package com.weilylab.xhuschedule.ui.activity
 
 import android.app.Dialog
+import android.util.Log
 import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
@@ -26,7 +27,6 @@ import kotlinx.android.synthetic.main.content_class_course_color.*
 import org.greenrobot.eventbus.EventBus
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import vip.mystery0.logs.Logs
 import vip.mystery0.rx.DataObserver
 import vip.mystery0.tools.toastLong
 
@@ -35,7 +35,13 @@ class ClassCourseColorActivity : XhuBaseActivity(R.layout.activity_class_course_
     private val eventBus: EventBus by inject()
 
     private lateinit var viewStubBinding: LayoutNullDataViewBinding
-    private val classCourseColorRecyclerViewAdapter: ClassCourseColorRecyclerViewAdapter by lazy { ClassCourseColorRecyclerViewAdapter(this, classCourseColorViewModel, eventBus) }
+    private val classCourseColorRecyclerViewAdapter: ClassCourseColorRecyclerViewAdapter by lazy {
+        ClassCourseColorRecyclerViewAdapter(
+            this,
+            classCourseColorViewModel,
+            eventBus
+        )
+    }
     private val dialog: Dialog by lazy { buildDialog(" ") }
 
     private val classCourseColorObserver = object : DataObserver<List<Course>> {
@@ -56,7 +62,7 @@ class ClassCourseColorActivity : XhuBaseActivity(R.layout.activity_class_course_
         }
 
         override fun error(e: Throwable?) {
-            Logs.w(e)
+            Log.w(TAG, "error: ", e)
             hideDialog()
             hideNoDataLayout()
             e.toastLong(this@ClassCourseColorActivity)
@@ -69,7 +75,12 @@ class ClassCourseColorActivity : XhuBaseActivity(R.layout.activity_class_course_
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         recyclerView.layoutManager = LinearLayoutManager(this)
         val dividerItemDecoration = DividerItemDecoration(this, DividerItemDecoration.VERTICAL)
-        dividerItemDecoration.setDrawable(ContextCompat.getDrawable(this, R.drawable.divider_query_test)!!)
+        dividerItemDecoration.setDrawable(
+            ContextCompat.getDrawable(
+                this,
+                R.drawable.divider_query_test
+            )!!
+        )
         recyclerView.addItemDecoration(dividerItemDecoration)
         recyclerView.adapter = classCourseColorRecyclerViewAdapter
     }
@@ -89,7 +100,9 @@ class ClassCourseColorActivity : XhuBaseActivity(R.layout.activity_class_course_
         toolbar.setNavigationOnClickListener {
             finish()
         }
-        nullDataViewStub.setOnInflateListener { _, inflated -> viewStubBinding = DataBindingUtil.bind(inflated)!! }
+        nullDataViewStub.setOnInflateListener { _, inflated ->
+            viewStubBinding = DataBindingUtil.bind(inflated)!!
+        }
     }
 
     private fun showDialog() {
@@ -115,5 +128,9 @@ class ClassCourseColorActivity : XhuBaseActivity(R.layout.activity_class_course_
         if (::viewStubBinding.isInitialized)
             viewStubBinding.root.visibility = View.GONE
         recyclerView.visibility = View.VISIBLE
+    }
+
+    companion object {
+        private const val TAG = "ClassCourseColorActivit"
     }
 }

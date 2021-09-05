@@ -12,6 +12,7 @@ package com.weilylab.xhuschedule.ui.activity
 import android.app.Activity
 import android.app.Dialog
 import android.text.TextUtils
+import android.util.Log
 import android.view.View
 import android.view.WindowManager
 import com.weilylab.xhuschedule.R
@@ -20,7 +21,6 @@ import com.weilylab.xhuschedule.model.Student
 import com.weilylab.xhuschedule.viewmodel.LoginViewModel
 import kotlinx.android.synthetic.main.activity_login.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import vip.mystery0.logs.Logs
 import vip.mystery0.rx.DataObserver
 
 class LoginActivity : XhuBaseActivity(R.layout.activity_login, false) {
@@ -36,7 +36,7 @@ class LoginActivity : XhuBaseActivity(R.layout.activity_login, false) {
         }
 
         override fun error(e: Throwable?) {
-            Logs.w(e)
+            Log.e(TAG, "error: ", e)
             hideDialog()
             toastLong(e)
         }
@@ -49,7 +49,8 @@ class LoginActivity : XhuBaseActivity(R.layout.activity_login, false) {
     override fun inflateView(layoutId: Int) {
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.P) {
             window.attributes = window.attributes.apply {
-                layoutInDisplayCutoutMode = WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES
+                layoutInDisplayCutoutMode =
+                    WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES
             }
         }
         super.inflateView(layoutId)
@@ -117,5 +118,9 @@ class LoginActivity : XhuBaseActivity(R.layout.activity_login, false) {
     private fun hideDialog() {
         if (dialog.isShowing)
             dialog.dismiss()
+    }
+
+    companion object {
+        private const val TAG = "LoginActivity"
     }
 }

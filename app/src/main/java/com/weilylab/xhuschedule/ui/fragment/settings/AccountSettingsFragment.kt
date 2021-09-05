@@ -11,6 +11,7 @@ package com.weilylab.xhuschedule.ui.fragment.settings
 
 import android.app.Activity
 import android.content.Intent
+import android.util.Log
 import androidx.appcompat.app.AlertDialog
 import androidx.preference.CheckBoxPreference
 import androidx.preference.Preference
@@ -26,11 +27,11 @@ import com.weilylab.xhuschedule.viewmodel.SettingsViewModel
 import org.greenrobot.eventbus.EventBus
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import vip.mystery0.logs.Logs
 import vip.mystery0.rx.DataObserver
 
 class AccountSettingsFragment : XhuBasePreferenceFragment(R.xml.preference_account) {
     companion object {
+        private const val TAG = "AccountSettingsFragment"
         const val ADD_ACCOUNT_CODE = 233
     }
 
@@ -53,22 +54,24 @@ class AccountSettingsFragment : XhuBasePreferenceFragment(R.xml.preference_accou
     }
 
     private fun initViewModel() {
-        settingsViewModel.studentList.observe(requireActivity(), object : DataObserver<List<Student>> {
-            override fun contentNoEmpty(data: List<Student>) {
-                super.contentNoEmpty(data)
-                initStudentCategory(data)
-            }
+        settingsViewModel.studentList.observe(
+            requireActivity(),
+            object : DataObserver<List<Student>> {
+                override fun contentNoEmpty(data: List<Student>) {
+                    super.contentNoEmpty(data)
+                    initStudentCategory(data)
+                }
 
-            override fun empty() {
-                super.empty()
-                initStudentCategory(emptyList())
-            }
+                override fun empty() {
+                    super.empty()
+                    initStudentCategory(emptyList())
+                }
 
-            override fun error(e: Throwable?) {
-                super.error(e)
-                Logs.w(e)
-            }
-        })
+                override fun error(e: Throwable?) {
+                    super.error(e)
+                    Log.e(TAG, "error: ", e)
+                }
+            })
     }
 
     override fun monitor() {
@@ -82,20 +85,20 @@ class AccountSettingsFragment : XhuBasePreferenceFragment(R.xml.preference_accou
                 val valueArray = Array(it.size) { i -> "${it[i].username}(${it[i].studentName})" }
                 val checkedArray = BooleanArray(it.size) { false }
                 AlertDialog.Builder(requireActivity())
-                        .setTitle(R.string.title_del_account)
-                        .setMultiChoiceItems(valueArray, checkedArray) { _, which, isChecked ->
-                            checkedArray[which] = isChecked
+                    .setTitle(R.string.title_del_account)
+                    .setMultiChoiceItems(valueArray, checkedArray) { _, which, isChecked ->
+                        checkedArray[which] = isChecked
+                    }
+                    .setPositiveButton(android.R.string.ok) { _, _ ->
+                        val needDeleteStudentList = ArrayList<Student>()
+                        checkedArray.forEachIndexed { index, bool ->
+                            if (bool) needDeleteStudentList.add(it[index])
                         }
-                        .setPositiveButton(android.R.string.ok) { _, _ ->
-                            val needDeleteStudentList = ArrayList<Student>()
-                            checkedArray.forEachIndexed { index, bool ->
-                                if (bool) needDeleteStudentList.add(it[index])
-                            }
-                            settingsViewModel.deleteStudentList(needDeleteStudentList)
-                            eventBus.post(UIConfigEvent(arrayListOf(UI.MAIN_INIT)))
-                        }
-                        .setNegativeButton(android.R.string.cancel, null)
-                        .show()
+                        settingsViewModel.deleteStudentList(needDeleteStudentList)
+                        eventBus.post(UIConfigEvent(arrayListOf(UI.MAIN_INIT)))
+                    }
+                    .setNegativeButton(android.R.string.cancel, null)
+                    .show()
             }
             true
         }
@@ -105,28 +108,34 @@ class AccountSettingsFragment : XhuBasePreferenceFragment(R.xml.preference_accou
                 val oldMainIndex = it.indexOfFirst { s -> s.isMain }
                 var newMainIndex = oldMainIndex
                 AlertDialog.Builder(requireActivity())
-                        .setTitle(R.string.title_set_main_account)
-                        .setSingleChoiceItems(valueArray, oldMainIndex) { _, which ->
-                            newMainIndex = which
-                        }
-                        .setPositiveButton(android.R.string.ok) { _, _ ->
-                            if (oldMainIndex == newMainIndex)
-                                return@setPositiveButton
-                            val oldMainStudent = it[oldMainIndex]
-                            val newMainStudent = it[newMainIndex]
-                            oldMainStudent.isMain = false
-                            newMainStudent.isMain = true
-                            settingsViewModel.updateStudentList(arrayListOf(oldMainStudent, newMainStudent))
-                            eventBus.post(UIConfigEvent(arrayListOf(UI.MAIN_INIT)))
-                        }
-                        .show()
+                    .setTitle(R.string.title_set_main_account)
+                    .setSingleChoiceItems(valueArray, oldMainIndex) { _, which ->
+                        newMainIndex = which
+                    }
+                    .setPositiveButton(android.R.string.ok) { _, _ ->
+                        if (oldMainIndex == newMainIndex)
+                            return@setPositiveButton
+                        val oldMainStudent = it[oldMainIndex]
+                        val newMainStudent = it[newMainIndex]
+                        oldMainStudent.isMain = false
+                        newMainStudent.isMain = true
+                        settingsViewModel.updateStudentList(
+                            arrayListOf(
+                                oldMainStudent,
+                                newMainStudent
+                            )
+                        )
+                        eventBus.post(UIConfigEvent(arrayListOf(UI.MAIN_INIT)))
+                    }
+                    .show()
             }
             true
         }
-        enableMultiUserModePreference.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, _ ->
-            val isEnableMultiUserMode = !enableMultiUserModePreference.isChecked
-            if (isEnableMultiUserMode)
-                AlertDialog.Builder(requireActivity())
+        enableMultiUserModePreference.onPreferenceChangeListener =
+            Preference.OnPreferenceChangeListener { _, _ ->
+                val isEnableMultiUserMode = !enableMultiUserModePreference.isChecked
+                if (isEnableMultiUserMode)
+                    AlertDialog.Builder(requireActivity())
                         .setTitle(" ")
                         .setMessage(R.string.warning_enable_multi_user_mode)
                         .setPositiveButton(R.string.action_open) { _, _ ->
@@ -140,16 +149,18 @@ class AccountSettingsFragment : XhuBasePreferenceFragment(R.xml.preference_accou
                             setMainAccountPreference.isEnabled = true
                         }
                         .setOnDismissListener {
-                            enableMultiUserModePreference.isChecked = ConfigurationUtil.isEnableMultiUserMode
-                            setMainAccountPreference.isEnabled = !ConfigurationUtil.isEnableMultiUserMode
+                            enableMultiUserModePreference.isChecked =
+                                ConfigurationUtil.isEnableMultiUserMode
+                            setMainAccountPreference.isEnabled =
+                                !ConfigurationUtil.isEnableMultiUserMode
                         }
                         .show()
-            else {
-                ConfigurationUtil.isEnableMultiUserMode = false
-                setMainAccountPreference.isEnabled = true
+                else {
+                    ConfigurationUtil.isEnableMultiUserMode = false
+                    setMainAccountPreference.isEnabled = true
+                }
+                true
             }
-            true
-        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

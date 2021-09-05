@@ -9,6 +9,7 @@
 
 package com.weilylab.xhuschedule.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.weilylab.xhuschedule.model.Course
@@ -21,7 +22,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.koin.core.KoinComponent
 import org.koin.core.inject
-import vip.mystery0.logs.Logs
 import vip.mystery0.rx.*
 import java.util.*
 import kotlin.collections.HashMap
@@ -59,7 +59,7 @@ class CustomCourseViewModel : ViewModel(), KoinComponent {
                         student?.studentName = info.name
                     }
                 } catch (e: Exception) {
-                    Logs.w(e)
+                    Log.e(TAG, "init: ", e)
                 }
             }
             if (infoMap.isNullOrEmpty()) {
@@ -129,5 +129,9 @@ class CustomCourseViewModel : ViewModel(), KoinComponent {
             customCourseRepository.syncCustomCourseForServer(student)
             getAllCustomCourseInCoroutine()
         }
+    }
+
+    companion object {
+        private const val TAG = "CustomCourseViewModel"
     }
 }

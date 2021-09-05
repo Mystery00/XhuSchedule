@@ -9,6 +9,7 @@
 
 package com.weilylab.xhuschedule.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -22,7 +23,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.koin.core.KoinComponent
 import org.koin.core.inject
-import vip.mystery0.logs.Logs
 import vip.mystery0.rx.PackageData
 import vip.mystery0.rx.content
 import vip.mystery0.rx.empty
@@ -111,7 +111,7 @@ class SettingsViewModel : ViewModel(), KoinComponent {
                         val info = studentRepository.queryStudentInfo(it, fromCache = true)
                         infoList.add(info)
                     } catch (e: Exception) {
-                        Logs.w(e)
+                        Log.e(TAG, "queryAllStudentInfoListAndThen: ", e)
                     }
                 }
                 if (infoList.isNullOrEmpty()) {
@@ -139,14 +139,19 @@ class SettingsViewModel : ViewModel(), KoinComponent {
 
     fun getSchoolCalendarUrl(block: (String?) -> Unit) {
         viewModelScope.launch(CoroutineExceptionHandler { _, throwable ->
-            Logs.wm(throwable)
+            Log.e(TAG, "getSchoolCalendarUrl: ", throwable)
             block(null)
         }) {
             schoolCalendarRepository.getUrl(block)
         }
     }
 
-    fun exportToCalendar(studentList: List<Student>, remindList: List<Int>, exportCustomCourse: Boolean, exportCustomThing: Boolean) {
+    fun exportToCalendar(
+        studentList: List<Student>,
+        remindList: List<Int>,
+        exportCustomCourse: Boolean,
+        exportCustomThing: Boolean
+    ) {
         launch(exportCalendar) {
             val context = context()
             withContext(Dispatchers.Default) {
@@ -160,10 +165,20 @@ class SettingsViewModel : ViewModel(), KoinComponent {
                     val accountName = "${student.username}(${currentYear}第${currentTerm}学期)@西瓜课表"
                     deleteAllEvent(context, accountName)
                     val all = ArrayList<Course>()
-                    val courseList = courseRepository.queryCourseByUsernameAndTerm(student, currentYear, currentTerm, fromCache = true, throwError = true)
+                    val courseList = courseRepository.queryCourseByUsernameAndTerm(
+                        student,
+                        currentYear,
+                        currentTerm,
+                        fromCache = true,
+                        throwError = true
+                    )
                     all.addAll(courseList)
                     if (exportCustomCourse) {
-                        val customCourseList = courseRepository.queryCustomCourseByTerm(student, currentYear, currentTerm)
+                        val customCourseList = courseRepository.queryCustomCourseByTerm(
+                            student,
+                            currentYear,
+                            currentTerm
+                        )
                         all.addAll(customCourseList)
                     }
                     all.forEach { course ->
@@ -180,13 +195,13 @@ class SettingsViewModel : ViewModel(), KoinComponent {
                             val start = CalendarUtil.parseMillis(date, startTime)
                             val end = CalendarUtil.parseMillis(date, endTime)
                             val calendarEvent = CalendarEvent(
-                                    course.name,
-                                    start,
-                                    end,
-                                    course.location,
-                                    "",
-                                    allDay = false,
-                                    hasAlarm = hasAlarm
+                                course.name,
+                                start,
+                                end,
+                                course.location,
+                                "",
+                                allDay = false,
+                                hasAlarm = hasAlarm
                             )
                             if (course.teacher.isNotBlank())
                                 calendarEvent.attendees.add(CalendarAttendee(course.teacher))
@@ -200,13 +215,13 @@ class SettingsViewModel : ViewModel(), KoinComponent {
                                 val start = CalendarUtil.parseMillis(date, startTime)
                                 val end = CalendarUtil.parseMillis(date, endTime)
                                 val calendarEvent = CalendarEvent(
-                                        course.name,
-                                        start,
-                                        end,
-                                        course.location,
-                                        "",
-                                        allDay = false,
-                                        hasAlarm = hasAlarm
+                                    course.name,
+                                    start,
+                                    end,
+                                    course.location,
+                                    "",
+                                    allDay = false,
+                                    hasAlarm = hasAlarm
                                 )
                                 calendarEvent.attendees.add(CalendarAttendee(course.teacher))
                                 calendarEvent.reminder.addAll(remindList)
@@ -219,13 +234,13 @@ class SettingsViewModel : ViewModel(), KoinComponent {
                         customThingList.forEach { thing ->
                             val pair = CalendarUtil.parseCustomThingStartTime(thing)
                             val calendarEvent = CalendarEvent(
-                                    thing.title,
-                                    pair.first,
-                                    pair.second,
-                                    thing.location,
-                                    thing.mark,
-                                    allDay = thing.isAllDay,
-                                    hasAlarm = hasAlarm
+                                thing.title,
+                                pair.first,
+                                pair.second,
+                                thing.location,
+                                thing.mark,
+                                allDay = thing.isAllDay,
+                                hasAlarm = hasAlarm
                             )
                             calendarEvent.reminder.addAll(remindList)
                             addEvent(context, accountName, calendarEvent)
@@ -247,5 +262,9 @@ class SettingsViewModel : ViewModel(), KoinComponent {
                 listener(accountList)
             }
         }
+    }
+
+    companion object {
+        private const val TAG = "SettingsViewModel"
     }
 }

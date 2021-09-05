@@ -15,6 +15,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Environment
 import android.text.TextUtils
+import android.util.Log
 import androidx.core.app.JobIntentService
 import androidx.core.content.FileProvider
 import com.weilylab.xhuschedule.R
@@ -29,7 +30,6 @@ import com.weilylab.xhuschedule.utils.BsPatch
 import kotlinx.coroutines.*
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
-import vip.mystery0.logs.Logs
 import vip.mystery0.tools.utils.copyToFile
 import vip.mystery0.tools.utils.md5
 import java.io.File
@@ -69,7 +69,7 @@ class DownloadService : JobIntentService() {
         if (!file.parentFile!!.exists())
             file.parentFile!!.mkdirs()
         if (TextUtils.isEmpty(type) || TextUtils.isEmpty(qiniuPath)) {
-            Logs.i("onHandleIntent: 格式错误")
+            Log.i(TAG, "onHandleWork: 格式错误")
             return
         }
         download(this, type!!, qiniuPath!!, file, apkMD5!!, patchMD5!!)
@@ -100,7 +100,7 @@ class DownloadService : JobIntentService() {
 
     private fun download(context: Context, type: String, qiniuPath: String, file: File, apkMD5: String, patchMD5: String) {
         GlobalScope.launch(CoroutineExceptionHandler { _, throwable ->
-            Logs.wtf(TAG, "download: ", throwable)
+            Log.w(TAG, "download: ", throwable)
             DownloadNotification.downloadError(context)
         }) {
             DownloadNotification.notify(context, qiniuPath)

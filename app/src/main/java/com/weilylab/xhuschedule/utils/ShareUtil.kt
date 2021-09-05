@@ -15,10 +15,6 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.widget.Toast
-import com.sina.weibo.sdk.api.ImageObject
-import com.sina.weibo.sdk.api.TextObject
-import com.sina.weibo.sdk.api.WeiboMultiMessage
-import com.sina.weibo.sdk.share.WbShareHandler
 import com.tencent.connect.share.QQShare
 import com.tencent.mm.opensdk.modelbiz.WXLaunchMiniProgram
 import com.tencent.mm.opensdk.modelmsg.SendMessageToWX
@@ -44,11 +40,17 @@ object ShareUtil {
             ShareType.QQ -> {//分享到qq
                 if (PackageUtil.isQQApplicationAvailable() || APP.tencent != null) {
                     val params = Bundle()
-                    params.putString(QQShare.SHARE_TO_QQ_TITLE, context.getString(R.string.app_name))
+                    params.putString(
+                        QQShare.SHARE_TO_QQ_TITLE,
+                        context.getString(R.string.app_name)
+                    )
                     params.putString(QQShare.SHARE_TO_QQ_SUMMARY, getRandomText(context))
                     params.putString(QQShare.SHARE_TO_QQ_TARGET_URL, Constants.SHARE_TARGET_URL)
                     params.putString(QQShare.SHARE_TO_QQ_IMAGE_URL, Constants.SHARE_IMAGE_URL)
-                    params.putString(QQShare.SHARE_TO_QQ_APP_NAME, context.getString(R.string.app_name))
+                    params.putString(
+                        QQShare.SHARE_TO_QQ_APP_NAME,
+                        context.getString(R.string.app_name)
+                    )
                     APP.tencent!!.shareToQQ(currentActivity(), params, object : IUiListener {
                         override fun onComplete(p0: Any?) {
                         }
@@ -61,18 +63,27 @@ object ShareUtil {
                     })
                 } else {
                     Toast.makeText(context, R.string.hint_no_qq, Toast.LENGTH_SHORT)
-                            .show()
+                        .show()
                 }
             }
             ShareType.QZONE -> {//分享到空间
                 if (PackageUtil.isQQApplicationAvailable() || APP.tencent != null) {
                     val params = Bundle()
-                    params.putString(QQShare.SHARE_TO_QQ_TITLE, context.getString(R.string.app_name))
+                    params.putString(
+                        QQShare.SHARE_TO_QQ_TITLE,
+                        context.getString(R.string.app_name)
+                    )
                     params.putString(QQShare.SHARE_TO_QQ_SUMMARY, getRandomText(context))
                     params.putString(QQShare.SHARE_TO_QQ_TARGET_URL, Constants.SHARE_TARGET_URL)
                     params.putString(QQShare.SHARE_TO_QQ_IMAGE_URL, Constants.SHARE_IMAGE_URL)
-                    params.putString(QQShare.SHARE_TO_QQ_APP_NAME, context.getString(R.string.app_name))
-                    params.putInt(QQShare.SHARE_TO_QQ_EXT_INT, QQShare.SHARE_TO_QQ_FLAG_QZONE_AUTO_OPEN)
+                    params.putString(
+                        QQShare.SHARE_TO_QQ_APP_NAME,
+                        context.getString(R.string.app_name)
+                    )
+                    params.putInt(
+                        QQShare.SHARE_TO_QQ_EXT_INT,
+                        QQShare.SHARE_TO_QQ_FLAG_QZONE_AUTO_OPEN
+                    )
                     APP.tencent!!.shareToQQ(currentActivity(), params, object : IUiListener {
                         override fun onComplete(p0: Any?) {
                         }
@@ -85,30 +96,18 @@ object ShareUtil {
                     })
                 } else {
                     Toast.makeText(context, R.string.hint_no_qq, Toast.LENGTH_SHORT)
-                            .show()
+                        .show()
                 }
             }
             ShareType.WEIBO -> {//分享到微博
-                if (PackageUtil.isWeiBoApplicationAvailable()) {
-                    val shareHandler = WbShareHandler(currentActivity())
-                    shareHandler.registerApp()
-                    val weiboMultiMessage = WeiboMultiMessage()
-                    val imageObject = ImageObject()
-                    imageObject.setImageObject(BitmapFactory.decodeResource(context.resources, R.mipmap.share_launcher))
-                    weiboMultiMessage.mediaObject = imageObject
-                    val textObject = TextObject()
-                    textObject.text = getRandomText(context)
-                    weiboMultiMessage.textObject = textObject
-                    shareHandler.shareMessage(weiboMultiMessage, false)
-                } else {
-                    Toast.makeText(context, R.string.hint_no_weibo, Toast.LENGTH_SHORT)
-                            .show()
-                }
+                Toast.makeText(context, "不支持分享到微博", Toast.LENGTH_SHORT)
+                    .show()
             }
             ShareType.WEIXIN -> {//分享到微信
                 if (PackageUtil.isWeiXinApplicationAvailable() || APP.wxAPI != null) {
                     val wxAPI = APP.wxAPI
-                    val bitmap = BitmapFactory.decodeResource(context.resources, R.mipmap.share_launcher)
+                    val bitmap =
+                        BitmapFactory.decodeResource(context.resources, R.mipmap.share_launcher)
                     val wxWebpageObject = WXWebpageObject()
                     wxWebpageObject.webpageUrl = Constants.SHARE_TARGET_URL
 
@@ -126,13 +125,14 @@ object ShareUtil {
                     wxAPI!!.sendReq(request)
                 } else {
                     Toast.makeText(context, R.string.hint_no_weixin, Toast.LENGTH_SHORT)
-                            .show()
+                        .show()
                 }
             }
             ShareType.FRIEND -> {//分享到朋友圈
                 if (PackageUtil.isWeiXinApplicationAvailable() || APP.wxAPI != null) {
                     val wxAPI = APP.wxAPI
-                    val bitmap = BitmapFactory.decodeResource(context.resources, R.mipmap.share_launcher)
+                    val bitmap =
+                        BitmapFactory.decodeResource(context.resources, R.mipmap.share_launcher)
                     val wxWebpageObject = WXWebpageObject()
                     wxWebpageObject.webpageUrl = Constants.SHARE_TARGET_URL
 
@@ -150,7 +150,7 @@ object ShareUtil {
                     wxAPI!!.sendReq(req)
                 } else {
                     Toast.makeText(context, R.string.hint_no_weixin, Toast.LENGTH_SHORT)
-                            .show()
+                        .show()
                 }
             }
             ShareType.SYSTEM -> {//系统分享
@@ -174,7 +174,7 @@ object ShareUtil {
             wxAPI.sendReq(req)
         } else {
             Toast.makeText(context, R.string.hint_no_weixin, Toast.LENGTH_SHORT)
-                    .show()
+                .show()
         }
     }
 

@@ -9,6 +9,7 @@
 
 package com.weilylab.xhuschedule.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.weilylab.xhuschedule.model.ClassScore
@@ -19,7 +20,6 @@ import com.weilylab.xhuschedule.repository.StudentRepository
 import com.weilylab.xhuschedule.utils.CalendarUtil
 import org.koin.core.KoinComponent
 import org.koin.core.inject
-import vip.mystery0.logs.Logs
 import vip.mystery0.rx.*
 import java.util.*
 import kotlin.collections.HashMap
@@ -51,7 +51,7 @@ class QueryClassScoreViewModel : ViewModel(), KoinComponent {
                     val info = studentRepository.queryStudentInfo(it, fromCache = true)
                     map[it] = info
                 } catch (e: Exception) {
-                    Logs.w(e)
+                    Log.e(TAG, "init: ", e)
                 }
             }
             studentInfoList.postValue(map)
@@ -71,5 +71,9 @@ class QueryClassScoreViewModel : ViewModel(), KoinComponent {
                 scoreList.content(list)
             }
         }
+    }
+
+    companion object {
+        private const val TAG = "QueryClassScoreViewMode"
     }
 }

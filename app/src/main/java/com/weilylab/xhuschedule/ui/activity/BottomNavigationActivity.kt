@@ -19,6 +19,7 @@ import android.content.res.Configuration
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -61,7 +62,6 @@ import org.greenrobot.eventbus.ThreadMode
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import vip.mystery0.bottomTabView.BottomTabItem
-import vip.mystery0.logs.Logs
 import vip.mystery0.rx.DataObserver
 import vip.mystery0.tools.utils.dpTopx
 import vip.mystery0.tools.utils.screenWidth
@@ -80,7 +80,7 @@ class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_naviga
     private var showLoading = false
     private val loadingAnimation: ObjectAnimator by lazy {
         val animation = ObjectAnimator.ofFloat(imageSync, "rotation", 0F, 360F)
-                .setDuration(1000)
+            .setDuration(1000)
         animation.repeatCount = ValueAnimator.INFINITE
         animation.addListener(object : Animator.AnimatorListener {
             override fun onAnimationStart(p0: Animator?) {
@@ -103,7 +103,11 @@ class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_naviga
     }
 
     private var isShowWeekView = false
-    private val showAdapter: ShowCourseRecyclerViewAdapter by lazy { ShowCourseRecyclerViewAdapter(this) }
+    private val showAdapter: ShowCourseRecyclerViewAdapter by lazy {
+        ShowCourseRecyclerViewAdapter(
+            this
+        )
+    }
 
     private val studentListObserver = object : DataObserver<List<Student>> {
         override fun loading() {
@@ -113,7 +117,10 @@ class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_naviga
 
         override fun empty() {
             super.empty()
-            startActivityForResult(Intent(this@BottomNavigationActivity, LoginActivity::class.java), ADD_ACCOUNT_CODE)
+            startActivityForResult(
+                Intent(this@BottomNavigationActivity, LoginActivity::class.java),
+                ADD_ACCOUNT_CODE
+            )
             hideDialog()
         }
 
@@ -124,7 +131,7 @@ class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_naviga
 
         override fun error(e: Throwable?) {
             super.error(e)
-            Logs.w(e)
+            Log.e(TAG, "error: ", e)
             toastLong(e)
             hideDialog()
         }
@@ -141,7 +148,7 @@ class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_naviga
         }
 
         override fun error(e: Throwable?) {
-            Logs.w(e)
+            Log.e(TAG, "error: ", e)
             toastLong(e)
             cancelLoading()
         }
@@ -165,7 +172,7 @@ class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_naviga
         }
 
         override fun error(e: Throwable?) {
-            Logs.w(e)
+            Log.w(TAG, e)
             toastLong(e)
             cancelLoading()
         }
@@ -209,28 +216,47 @@ class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_naviga
         if (ConfigurationUtil.enableViewPagerTransform)
             viewPager.setPageTransformer(true, ZoomOutPageTransformer())
         weekView.data(emptyList())
-                .curWeek(1)
-                .callback(IWeekView.OnWeekItemClickedListener {
-                    bottomNavigationViewModel.week.postValue(it)
-                    configWeekView(viewPager.currentItem)
-                    viewPagerAdapter.getItem(viewPager.currentItem).updateTitle()
-                })
-                .showView()
-        bottomNavigationView.config { it.setGradientColors(intArrayOf(Color.parseColor("#0297fe"), Color.parseColor("#0fc8ff"))) }
-                .setMenuList(arrayListOf(
-                        BottomTabItem(
-                                if (CalendarUtil.shouldShowTomorrowInfo()) getString(R.string.nav_tomorrow)
-                                else getString(R.string.nav_today),
-                                R.drawable.ic_today_selected,
-                                R.drawable.ic_today),
-                        BottomTabItem(getString(R.string.nav_week), R.drawable.ic_week_selected, R.drawable.ic_week),
-                        BottomTabItem(getString(R.string.nav_profile), R.drawable.ic_profile_selected, R.drawable.ic_profile)
-                ))
-                .init()
+            .curWeek(1)
+            .callback(IWeekView.OnWeekItemClickedListener {
+                bottomNavigationViewModel.week.postValue(it)
+                configWeekView(viewPager.currentItem)
+                viewPagerAdapter.getItem(viewPager.currentItem).updateTitle()
+            })
+            .showView()
+        bottomNavigationView.config {
+            it.setGradientColors(
+                intArrayOf(
+                    Color.parseColor("#0297fe"),
+                    Color.parseColor("#0fc8ff")
+                )
+            )
+        }
+            .setMenuList(
+                arrayListOf(
+                    BottomTabItem(
+                        if (CalendarUtil.shouldShowTomorrowInfo()) getString(R.string.nav_tomorrow)
+                        else getString(R.string.nav_today),
+                        R.drawable.ic_today_selected,
+                        R.drawable.ic_today
+                    ),
+                    BottomTabItem(
+                        getString(R.string.nav_week),
+                        R.drawable.ic_week_selected,
+                        R.drawable.ic_week
+                    ),
+                    BottomTabItem(
+                        getString(R.string.nav_profile),
+                        R.drawable.ic_profile_selected,
+                        R.drawable.ic_profile
+                    )
+                )
+            )
+            .init()
     }
 
     private fun showBackground() {
-        val isDark = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
+        val isDark =
+            resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
         if (isDark) {
             backgroundImageView.setBackgroundResource(R.color.colorTableBackground)
             return
@@ -360,12 +386,16 @@ class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_naviga
 
     private fun initPopupWindow() {
         dialogShowCourseBinding = DialogShowCourseBinding.inflate(LayoutInflater.from(this))
-        dialogShowCourseBinding.recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+        dialogShowCourseBinding.recyclerView.layoutManager =
+            LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         dialogShowCourseBinding.recyclerView.adapter = showAdapter
-        dialogShowCourseBinding.recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+        dialogShowCourseBinding.recyclerView.addOnScrollListener(object :
+            RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                val horizontalOffset = recyclerView.computeHorizontalScrollOffset().toFloat() / screenWidth
-                val params = dialogShowCourseBinding.point.layoutParams as ConstraintLayout.LayoutParams
+                val horizontalOffset =
+                    recyclerView.computeHorizontalScrollOffset().toFloat() / screenWidth
+                val params =
+                    dialogShowCourseBinding.point.layoutParams as ConstraintLayout.LayoutParams
                 super.onScrolled(recyclerView, dx, dy)
                 params.leftMargin = (distance * horizontalOffset).roundToInt()
                 dialogShowCourseBinding.point.layoutParams = params
@@ -373,7 +403,8 @@ class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_naviga
         })
         PagerSnapHelper().attachToRecyclerView(dialogShowCourseBinding.recyclerView)
         val viewSize = screenWidth - dpTopx(96F)
-        popupWindow = PopupWindow(dialogShowCourseBinding.root, ViewGroup.LayoutParams.MATCH_PARENT, viewSize)
+        popupWindow =
+            PopupWindow(dialogShowCourseBinding.root, ViewGroup.LayoutParams.MATCH_PARENT, viewSize)
         popupWindow.isOutsideTouchable = true
         popupWindow.isFocusable = true
         popupWindow.animationStyle = R.style.ShowCourseAnimation
@@ -466,8 +497,15 @@ class BottomNavigationActivity : XhuBaseActivity(R.layout.activity_bottom_naviga
             bottomNavigationViewModel.queryNewFeedbackMessage()
         }
         if (uiConfigEvent.refreshUI.contains(UI.MENU)) {
-            bottomNavigationView.findItem(0).name = if (CalendarUtil.shouldShowTomorrowInfo()) getString(R.string.nav_tomorrow) else getString(R.string.nav_today)
+            bottomNavigationView.findItem(0).name =
+                if (CalendarUtil.shouldShowTomorrowInfo()) getString(R.string.nav_tomorrow) else getString(
+                    R.string.nav_today
+                )
             bottomNavigationView.init()
         }
+    }
+
+    companion object {
+        private const val TAG = "BottomNavigationActivit"
     }
 }

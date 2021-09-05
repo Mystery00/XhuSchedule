@@ -10,6 +10,7 @@
 package com.weilylab.xhuschedule.ui.activity
 
 import android.app.Dialog
+import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.GravityCompat
@@ -25,14 +26,17 @@ import com.weilylab.xhuschedule.utils.CalendarUtil
 import com.weilylab.xhuschedule.viewmodel.QueryExpScoreViewModel
 import kotlinx.android.synthetic.main.activity_query_exp_score.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import vip.mystery0.logs.Logs
 import vip.mystery0.rx.PackageDataObserver
 import vip.mystery0.tools.toastLong
 import vip.mystery0.tools.utils.screenWidth
 
 class QueryExpScoreActivity : XhuBaseActivity(R.layout.activity_query_exp_score) {
     private val queryExpScoreViewModel: QueryExpScoreViewModel by viewModel()
-    private val queryExpScoreRecyclerViewAdapter: QueryExpScoreRecyclerViewAdapter by lazy { QueryExpScoreRecyclerViewAdapter(this) }
+    private val queryExpScoreRecyclerViewAdapter: QueryExpScoreRecyclerViewAdapter by lazy {
+        QueryExpScoreRecyclerViewAdapter(
+            this
+        )
+    }
     private var hasData = false
     private val dialog: Dialog by lazy { buildDialog(R.string.hint_dialog_init) }
 
@@ -52,7 +56,7 @@ class QueryExpScoreActivity : XhuBaseActivity(R.layout.activity_query_exp_score)
         }
 
         override fun error(data: List<ExpScore>?, e: Throwable?) {
-            Logs.wtfm("scoreListObserver: ", e)
+            Log.e(TAG, "error: ", e)
             dismissLoading()
             e.toastLong(this@QueryExpScoreActivity)
         }
@@ -123,20 +127,21 @@ class QueryExpScoreActivity : XhuBaseActivity(R.layout.activity_query_exp_score)
                 toastLong(R.string.hint_action_not_login)
                 return@setOnClickListener
             }
-            val studentTextArray = Array(studentList.size) { i -> "${studentList[i].studentName}(${studentList[i].username})" }
+            val studentTextArray =
+                Array(studentList.size) { i -> "${studentList[i].studentName}(${studentList[i].username})" }
             var nowIndex = studentList.indexOf(queryExpScoreViewModel.student.value)
             if (nowIndex == -1) nowIndex = 0
             var selectIndex = nowIndex
             AlertDialog.Builder(this)
-                    .setTitle(R.string.hint_dialog_choose_student)
-                    .setSingleChoiceItems(studentTextArray, nowIndex) { _, index ->
-                        selectIndex = index
-                    }
-                    .setPositiveButton(R.string.action_ok) { _, _ ->
-                        queryExpScoreViewModel.student.postValue(studentList[selectIndex])
-                    }
-                    .setNegativeButton(R.string.action_cancel, null)
-                    .show()
+                .setTitle(R.string.hint_dialog_choose_student)
+                .setSingleChoiceItems(studentTextArray, nowIndex) { _, index ->
+                    selectIndex = index
+                }
+                .setPositiveButton(R.string.action_ok) { _, _ ->
+                    queryExpScoreViewModel.student.postValue(studentList[selectIndex])
+                }
+                .setNegativeButton(R.string.action_cancel, null)
+                .show()
         }
         textViewYear.setOnClickListener {
             val studentInfoList = queryExpScoreViewModel.studentInfoList.value
@@ -150,15 +155,15 @@ class QueryExpScoreActivity : XhuBaseActivity(R.layout.activity_query_exp_score)
             if (nowIndex == -1) nowIndex = 0
             var selectIndex = nowIndex
             AlertDialog.Builder(this)
-                    .setTitle(R.string.hint_dialog_choose_year)
-                    .setSingleChoiceItems(yearTextArray, nowIndex) { _, index ->
-                        selectIndex = index
-                    }
-                    .setPositiveButton(R.string.action_ok) { _, _ ->
-                        queryExpScoreViewModel.year.postValue(yearTextArray[selectIndex])
-                    }
-                    .setNegativeButton(R.string.action_cancel, null)
-                    .show()
+                .setTitle(R.string.hint_dialog_choose_year)
+                .setSingleChoiceItems(yearTextArray, nowIndex) { _, index ->
+                    selectIndex = index
+                }
+                .setPositiveButton(R.string.action_ok) { _, _ ->
+                    queryExpScoreViewModel.year.postValue(yearTextArray[selectIndex])
+                }
+                .setNegativeButton(R.string.action_cancel, null)
+                .show()
         }
         textViewTerm.setOnClickListener {
             val termTextArray = Array(2) { i -> (i + 1).toString() }
@@ -166,15 +171,15 @@ class QueryExpScoreActivity : XhuBaseActivity(R.layout.activity_query_exp_score)
             if (nowIndex == -1) nowIndex = 0
             var selectIndex = nowIndex
             AlertDialog.Builder(this)
-                    .setTitle(R.string.hint_dialog_choose_term)
-                    .setSingleChoiceItems(termTextArray, nowIndex) { _, index ->
-                        selectIndex = index
-                    }
-                    .setPositiveButton(R.string.action_ok) { _, _ ->
-                        queryExpScoreViewModel.term.postValue(termTextArray[selectIndex])
-                    }
-                    .setNegativeButton(R.string.action_cancel, null)
-                    .show()
+                .setTitle(R.string.hint_dialog_choose_term)
+                .setSingleChoiceItems(termTextArray, nowIndex) { _, index ->
+                    selectIndex = index
+                }
+                .setPositiveButton(R.string.action_ok) { _, _ ->
+                    queryExpScoreViewModel.term.postValue(termTextArray[selectIndex])
+                }
+                .setNegativeButton(R.string.action_cancel, null)
+                .show()
         }
         queryButton.setOnClickListener {
             val student = queryExpScoreViewModel.student.value
@@ -182,7 +187,11 @@ class QueryExpScoreActivity : XhuBaseActivity(R.layout.activity_query_exp_score)
                 toastLong(R.string.hint_action_not_login)
                 return@setOnClickListener
             }
-            queryExpScoreViewModel.query(student, queryExpScoreViewModel.year.value!!, queryExpScoreViewModel.term.value!!)
+            queryExpScoreViewModel.query(
+                student,
+                queryExpScoreViewModel.year.value!!,
+                queryExpScoreViewModel.term.value!!
+            )
         }
     }
 
@@ -218,5 +227,9 @@ class QueryExpScoreActivity : XhuBaseActivity(R.layout.activity_query_exp_score)
     private fun showContent() {
         dismissLoading()
         drawerLayout.openDrawer(GravityCompat.END)
+    }
+
+    companion object {
+        private const val TAG = "QueryExpScoreActivity"
     }
 }

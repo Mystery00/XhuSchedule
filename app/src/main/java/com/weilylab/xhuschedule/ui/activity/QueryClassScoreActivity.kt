@@ -15,6 +15,7 @@ import android.content.pm.ShortcutInfo
 import android.content.pm.ShortcutManager
 import android.graphics.drawable.Icon
 import android.os.Build
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -34,7 +35,6 @@ import com.weilylab.xhuschedule.viewmodel.QueryClassScoreViewModel
 import kotlinx.android.synthetic.main.activity_query_class_score.*
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import vip.mystery0.logs.Logs
 import vip.mystery0.rx.PackageDataObserver
 import vip.mystery0.tools.toastLong
 import vip.mystery0.tools.utils.screenWidth
@@ -63,7 +63,7 @@ class QueryClassScoreActivity : XhuBaseActivity(R.layout.activity_query_class_sc
         }
 
         override fun error(data: List<ClassScore>?, e: Throwable?) {
-            Logs.wtfm("scoreListObserver: ", e)
+            Log.e(TAG, "error: ", e)
             dismissLoading()
             e.toastLong(this@QueryClassScoreActivity)
         }
@@ -285,5 +285,9 @@ class QueryClassScoreActivity : XhuBaseActivity(R.layout.activity_query_class_sc
     private fun showContent() {
         dismissLoading()
         drawerLayout.openDrawer(GravityCompat.END)
+    }
+
+    companion object {
+        private const val TAG = "QueryClassScoreActivity"
     }
 }

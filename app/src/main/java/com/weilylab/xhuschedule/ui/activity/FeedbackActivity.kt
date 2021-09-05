@@ -12,6 +12,7 @@ package com.weilylab.xhuschedule.ui.activity
 import android.app.Dialog
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -28,7 +29,6 @@ import kotlinx.android.synthetic.main.content_feedback.*
 import org.greenrobot.eventbus.EventBus
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import vip.mystery0.logs.Logs
 import vip.mystery0.rx.DataObserver
 import vip.mystery0.tools.ResourceException
 
@@ -56,7 +56,7 @@ class FeedbackActivity : XhuBaseActivity(R.layout.activity_feedback) {
         }
 
         override fun error(e: Throwable?) {
-            Logs.w(e)
+            Log.e(TAG, "error: ", e)
             hideRefresh()
             toastLong(e)
             if (e is ResourceException && feedBackViewModel.mainStudent.value == null) {
@@ -206,12 +206,21 @@ class FeedbackActivity : XhuBaseActivity(R.layout.activity_feedback) {
         val lastShowMessage = feedBackMessageAdapter.items[feedBackMessageAdapter.items.size - 1]
         val sameMessage = messageList[feedBackMessageAdapter.items.size - 1]
         if (lastShowMessage.id == sameMessage.id && lastShowMessage.createTime == sameMessage.createTime) {
-            feedBackMessageAdapter.items.addAll(messageList.subList(feedBackMessageAdapter.items.size, messageList.lastIndex + 1))
+            feedBackMessageAdapter.items.addAll(
+                messageList.subList(
+                    feedBackMessageAdapter.items.size,
+                    messageList.lastIndex + 1
+                )
+            )
             recyclerView.scrollToPosition(feedBackMessageAdapter.items.size - 1)
         } else {
             feedBackMessageAdapter.items.clear()
             feedBackMessageAdapter.items.addAll(messageList)
             recyclerView.scrollToPosition(messageList.size - 1)
         }
+    }
+
+    companion object {
+        private const val TAG = "FeedbackActivity"
     }
 }

@@ -12,6 +12,7 @@ package com.weilylab.xhuschedule.ui.activity
 import android.app.AlarmManager
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat
@@ -28,7 +29,6 @@ import com.weilylab.xhuschedule.viewmodel.SplashViewModel
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import vip.mystery0.logs.Logs
 import vip.mystery0.rx.DataObserver
 import vip.mystery0.tools.utils.sha1
 
@@ -46,7 +46,7 @@ class SplashActivity : XhuBaseActivity(null, false) {
         }
 
         override fun error(e: Throwable?) {
-            Logs.w(e)
+            Log.e(TAG, "error: ", e)
             empty()
         }
 
@@ -108,5 +108,9 @@ class SplashActivity : XhuBaseActivity(null, false) {
     private fun gotoSplashImage() {
         startActivity(Intent(this, SplashImageActivity::class.java))
         finish()
+    }
+
+    companion object {
+        private const val TAG = "SplashActivity"
     }
 }

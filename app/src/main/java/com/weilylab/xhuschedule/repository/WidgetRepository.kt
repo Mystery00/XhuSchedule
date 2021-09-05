@@ -10,6 +10,7 @@
 package com.weilylab.xhuschedule.repository
 
 import android.graphics.Color
+import android.util.Log
 import com.weilylab.xhuschedule.config.ColorPoolHelper
 import com.weilylab.xhuschedule.model.Test
 import com.weilylab.xhuschedule.utils.CalendarUtil
@@ -17,7 +18,6 @@ import com.weilylab.xhuschedule.utils.ConfigurationUtil
 import com.zhuangfei.timetable.model.Schedule
 import org.koin.core.KoinComponent
 import org.koin.core.inject
-import vip.mystery0.logs.Logs
 import vip.mystery0.tools.utils.md5
 import java.util.*
 import kotlin.collections.ArrayList
@@ -38,9 +38,15 @@ class WidgetRepository : KoinComponent {
         val mainStudent = studentRepository.queryMainStudent() ?: return emptyList()
         val week = CalendarUtil.getWeekFromCalendar(initRepository.getStartDateTime())
         val weekIndex = CalendarUtil.getWeekIndex()
-        return courseRepository.queryCourseByUsernameAndTerm(mainStudent, ConfigurationUtil.currentYear, ConfigurationUtil.currentTerm, fromCache = true, throwError = true)
-                .map { it.schedule }
-                .filter { it.day == weekIndex && it.weekList.contains(week) }
+        return courseRepository.queryCourseByUsernameAndTerm(
+            mainStudent,
+            ConfigurationUtil.currentYear,
+            ConfigurationUtil.currentTerm,
+            fromCache = true,
+            throwError = true
+        )
+            .map { it.schedule }
+            .filter { it.day == weekIndex && it.weekList.contains(week) }
     }
 
     /**
@@ -51,7 +57,7 @@ class WidgetRepository : KoinComponent {
     suspend fun queryTests(): List<Test> {
         val mainStudent = studentRepository.queryMainStudent() ?: return emptyList()
         return sortTests(testRepository.queryAll(mainStudent)
-                .filter { it.date != "" || it.testno != "" || it.time != "" || it.location != "" })
+            .filter { it.date != "" || it.testno != "" || it.time != "" || it.location != "" })
     }
 
     /**
@@ -64,7 +70,7 @@ class WidgetRepository : KoinComponent {
         val tests = ArrayList<Test>()
         studentList.forEach { student ->
             tests.addAll(testRepository.queryAll(student)
-                    .filter { it.date != "" || it.testno != "" || it.time != "" || it.location != "" })
+                .filter { it.date != "" || it.testno != "" || it.time != "" || it.location != "" })
         }
         return sortTests(tests)
     }
@@ -105,9 +111,23 @@ class WidgetRepository : KoinComponent {
             val startTimeArray = this.time.split('-')[0].split(':')
             val endTimeArray = this.time.split('-')[1].split(':')
             val startCalendar = Calendar.getInstance()
-            startCalendar.set(dayArray[0].toInt(), dayArray[1].toInt() - 1, dayArray[2].toInt(), startTimeArray[0].toInt(), startTimeArray[1].toInt(), 0)
+            startCalendar.set(
+                dayArray[0].toInt(),
+                dayArray[1].toInt() - 1,
+                dayArray[2].toInt(),
+                startTimeArray[0].toInt(),
+                startTimeArray[1].toInt(),
+                0
+            )
             val endCalendar = Calendar.getInstance()
-            endCalendar.set(dayArray[0].toInt(), dayArray[1].toInt() - 1, dayArray[2].toInt(), endTimeArray[0].toInt(), endTimeArray[1].toInt(), 0)
+            endCalendar.set(
+                dayArray[0].toInt(),
+                dayArray[1].toInt() - 1,
+                dayArray[2].toInt(),
+                endTimeArray[0].toInt(),
+                endTimeArray[1].toInt(),
+                0
+            )
             val startTime = startCalendar.timeInMillis
             val endTime = endCalendar.timeInMillis
             return if (now > endTime)//考试已结束
@@ -115,8 +135,12 @@ class WidgetRepository : KoinComponent {
             else
                 startTime
         } catch (e: Exception) {
-            Logs.wtf("formatTestDate: ", e)
+            Log.e(TAG, "formatTestDate: ", e)
             now
         }
+    }
+
+    companion object {
+        private const val TAG = "WidgetRepository"
     }
 }

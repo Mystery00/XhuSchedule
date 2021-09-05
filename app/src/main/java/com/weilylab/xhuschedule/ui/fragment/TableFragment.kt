@@ -10,6 +10,7 @@
 package com.weilylab.xhuschedule.ui.fragment
 
 import android.graphics.Color
+import android.util.Log
 import android.view.ViewTreeObserver
 import androidx.lifecycle.Observer
 import com.weilylab.xhuschedule.R
@@ -26,13 +27,13 @@ import com.zhuangfei.timetable.listener.ISchedule
 import com.zhuangfei.timetable.listener.OnSlideBuildAdapter
 import com.zhuangfei.timetable.model.Schedule
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
-import vip.mystery0.logs.Logs
 import vip.mystery0.rx.DataObserver
 import vip.mystery0.tools.utils.dpTopx
 import vip.mystery0.tools.utils.toDateTimeString
 
 class TableFragment : BaseBottomNavigationFragment<FragmentTableBinding>(R.layout.fragment_table) {
     companion object {
+        private const val TAG = "TableFragment"
         fun newInstance() = TableFragment()
     }
 
@@ -101,7 +102,7 @@ class TableFragment : BaseBottomNavigationFragment<FragmentTableBinding>(R.layou
             }
         })
         SpaceScheduleHelper.onSpaceScheduleClickListener = { day, start, isTwice ->
-            Logs.i("monitor: $day $start $isTwice")
+            Log.i(TAG, "monitor: $day $start $isTwice")
         }
     }
 

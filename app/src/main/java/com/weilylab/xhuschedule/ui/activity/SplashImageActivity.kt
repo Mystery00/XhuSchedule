@@ -11,6 +11,7 @@ package com.weilylab.xhuschedule.ui.activity
 
 import android.content.Intent
 import android.net.Uri
+import android.util.Log
 import android.view.View
 import android.view.WindowInsets
 import android.view.WindowInsetsController
@@ -23,7 +24,6 @@ import com.weilylab.xhuschedule.model.Splash
 import com.weilylab.xhuschedule.viewmodel.SplashViewModel
 import kotlinx.android.synthetic.main.activity_splash_image.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import vip.mystery0.logs.Logs
 import vip.mystery0.rx.DataObserver
 import vip.mystery0.tools.utils.screenHeight
 import vip.mystery0.tools.utils.screenWidth
@@ -77,7 +77,7 @@ class SplashImageActivity : XhuBaseActivity(R.layout.activity_splash_image, fals
 
             override fun error(e: Throwable?) {
                 super.error(e)
-                Logs.w(e)
+                Log.e(TAG, "error: ", e)
                 empty()
             }
 
@@ -107,5 +107,9 @@ class SplashImageActivity : XhuBaseActivity(R.layout.activity_splash_image, fals
     private fun gotoMain() {
         startActivity(Intent(this, BottomNavigationActivity::class.java))
         finish()
+    }
+
+    companion object {
+        private const val TAG = "SplashImageActivity"
     }
 }

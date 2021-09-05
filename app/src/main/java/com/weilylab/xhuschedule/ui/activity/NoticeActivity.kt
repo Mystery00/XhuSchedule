@@ -9,6 +9,7 @@
 
 package com.weilylab.xhuschedule.ui.activity
 
+import android.util.Log
 import android.view.View
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -25,7 +26,6 @@ import kotlinx.android.synthetic.main.activity_notice.*
 import org.greenrobot.eventbus.EventBus
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import vip.mystery0.logs.Logs
 import vip.mystery0.rx.DataObserver
 
 class NoticeActivity : XhuBaseActivity(R.layout.activity_notice) {
@@ -47,7 +47,7 @@ class NoticeActivity : XhuBaseActivity(R.layout.activity_notice) {
         }
 
         override fun error(e: Throwable?) {
-            Logs.w(e)
+            Log.e(TAG, "error: ", e)
             hideRefresh()
             hideNoDataLayout()
             toastLong(e)
@@ -133,5 +133,9 @@ class NoticeActivity : XhuBaseActivity(R.layout.activity_notice) {
         noticeViewModel.markListAsRead(noticeAdapter.items)
         eventBus.post(UIConfigEvent(arrayListOf(UI.NOTICE_DOT)))
         super.onDestroy()
+    }
+
+    companion object {
+        private const val TAG = "NoticeActivity"
     }
 }

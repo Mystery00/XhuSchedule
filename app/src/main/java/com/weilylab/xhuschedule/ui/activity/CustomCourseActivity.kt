@@ -12,6 +12,7 @@ package com.weilylab.xhuschedule.ui.activity
 import android.app.Dialog
 import android.content.res.ColorStateList
 import android.graphics.Color
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -46,14 +47,17 @@ import org.greenrobot.eventbus.EventBus
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.KoinComponent
-import vip.mystery0.logs.Logs
 import vip.mystery0.rx.DataObserver
 
 class CustomCourseActivity : XhuBaseActivity(R.layout.activity_custom_course), KoinComponent {
     private val customCourseViewModel: CustomCourseViewModel by viewModel()
     private val eventBus: EventBus by inject()
     private val customCourseAdapter: CustomCourseAdapter by lazy { CustomCourseAdapter(this) }
-    private val customCourseWeekAdapter: CustomCourseWeekAdapter by lazy { CustomCourseWeekAdapter(this) }
+    private val customCourseWeekAdapter: CustomCourseWeekAdapter by lazy {
+        CustomCourseWeekAdapter(
+            this
+        )
+    }
     private lateinit var viewStubBinding: LayoutNullDataViewBinding
     private val behavior by lazy { BottomSheetBehavior.from(nestedScrollView) }
     private var isUpdate = false
@@ -72,7 +76,7 @@ class CustomCourseActivity : XhuBaseActivity(R.layout.activity_custom_course), K
 
         override fun error(e: Throwable?) {
             dialog.dismiss()
-            Logs.w(e)
+            Log.e(TAG, "error: ", e)
             toastLong(R.string.error_init_failed)
             finish()
         }
@@ -118,7 +122,7 @@ class CustomCourseActivity : XhuBaseActivity(R.layout.activity_custom_course), K
         }
 
         override fun error(e: Throwable?) {
-            Logs.w(e)
+            Log.e(TAG, "error: ", e)
             hideRefresh()
             checkData()
             toastLong(e)
@@ -137,13 +141,15 @@ class CustomCourseActivity : XhuBaseActivity(R.layout.activity_custom_course), K
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = customCourseAdapter
-        recyclerViewWeek.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+        recyclerViewWeek.layoutManager =
+            LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         recyclerViewWeek.adapter = customCourseWeekAdapter
         swipeRefreshLayout.setColorSchemeResources(
-                android.R.color.holo_blue_light,
-                android.R.color.holo_green_light,
-                android.R.color.holo_orange_light,
-                android.R.color.holo_red_light)
+            android.R.color.holo_blue_light,
+            android.R.color.holo_green_light,
+            android.R.color.holo_orange_light,
+            android.R.color.holo_red_light
+        )
         swipeRefreshLayout.setDistanceToTriggerSync(100)
         hideAddLayout()
         initExpand()
@@ -164,11 +170,18 @@ class CustomCourseActivity : XhuBaseActivity(R.layout.activity_custom_course), K
         super.monitor()
         toolbar.setNavigationOnClickListener { finish() }
         swipeRefreshLayout.setOnRefreshListener { refresh() }
-        nullDataViewStub.setOnInflateListener { _, inflated -> viewStubBinding = DataBindingUtil.bind(inflated)!! }
+        nullDataViewStub.setOnInflateListener { _, inflated ->
+            viewStubBinding = DataBindingUtil.bind(inflated)!!
+        }
         floatingActionButton.setOnClickListener { showAddLayout() }
         customCourseAdapter.setOnClickListener { showAddLayout(it) }
-        ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
-            override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder): Boolean {
+        ItemTouchHelper(object :
+            ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
+            override fun onMove(
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder,
+                target: RecyclerView.ViewHolder
+            ): Boolean {
                 return false
             }
 
@@ -177,23 +190,27 @@ class CustomCourseActivity : XhuBaseActivity(R.layout.activity_custom_course), K
                 if (customCourseAdapter.items[position] is Course) {
                     val item = customCourseAdapter.items.removeAt(position) as Course
                     checkData()
-                    Snackbar.make(coordinatorLayout, R.string.hint_delete_done_snackbar, Snackbar.LENGTH_LONG)
-                            .setAction(R.string.action_cancel_do) {
-                                customCourseAdapter.items.add(position, item)
-                                checkData()
-                            }
-                            .addCallback(object : Snackbar.Callback() {
-                                override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
-                                    if (event != DISMISS_EVENT_ACTION) {
-                                        customCourseViewModel.deleteCustomCourse(item) {
-                                            eventBus.post(UIConfigEvent(arrayListOf(UI.MAIN_INIT)))
-                                            customCourseAdapter.updateMap()
-                                        }
-                                        super.onDismissed(transientBottomBar, event)
+                    Snackbar.make(
+                        coordinatorLayout,
+                        R.string.hint_delete_done_snackbar,
+                        Snackbar.LENGTH_LONG
+                    )
+                        .setAction(R.string.action_cancel_do) {
+                            customCourseAdapter.items.add(position, item)
+                            checkData()
+                        }
+                        .addCallback(object : Snackbar.Callback() {
+                            override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
+                                if (event != DISMISS_EVENT_ACTION) {
+                                    customCourseViewModel.deleteCustomCourse(item) {
+                                        eventBus.post(UIConfigEvent(arrayListOf(UI.MAIN_INIT)))
+                                        customCourseAdapter.updateMap()
                                     }
+                                    super.onDismissed(transientBottomBar, event)
                                 }
-                            })
-                            .show()
+                            }
+                        })
+                        .show()
                 } else {
                     customCourseAdapter.notifyItemChanged(position)
                 }
@@ -205,42 +222,43 @@ class CustomCourseActivity : XhuBaseActivity(R.layout.activity_custom_course), K
             val now = customCourseViewModel.time.value!!
             var selectIndex = now.first - 1
             AlertDialog.Builder(this)
-                    .setTitle(R.string.hint_dialog_custom_course_choose_time_start)
-                    .setSingleChoiceItems(timeStartTextArray, selectIndex) { _, index ->
-                        selectIndex = index
-                    }
-                    .setPositiveButton(R.string.action_ok) { _, _ ->
-                        newTime[0] = selectIndex + 1
-                        val timeEndTextArray = Array(11 - newTime[0] + 1) { i -> (i + newTime[0]).toString() }
-                        selectIndex = 0
-                        AlertDialog.Builder(this)
-                                .setTitle(R.string.hint_dialog_custom_course_choose_time_end)
-                                .setSingleChoiceItems(timeEndTextArray, selectIndex) { _, index ->
-                                    selectIndex = index
-                                }
-                                .setPositiveButton(R.string.action_ok) { _, _ ->
-                                    newTime[1] = selectIndex + newTime[0]
-                                    customCourseViewModel.time.value = Pair(newTime[0], newTime[1])
-                                }
-                                .setNegativeButton(R.string.action_cancel, null)
-                                .show()
-                    }
-                    .setNegativeButton(R.string.action_cancel, null)
-                    .show()
+                .setTitle(R.string.hint_dialog_custom_course_choose_time_start)
+                .setSingleChoiceItems(timeStartTextArray, selectIndex) { _, index ->
+                    selectIndex = index
+                }
+                .setPositiveButton(R.string.action_ok) { _, _ ->
+                    newTime[0] = selectIndex + 1
+                    val timeEndTextArray =
+                        Array(11 - newTime[0] + 1) { i -> (i + newTime[0]).toString() }
+                    selectIndex = 0
+                    AlertDialog.Builder(this)
+                        .setTitle(R.string.hint_dialog_custom_course_choose_time_end)
+                        .setSingleChoiceItems(timeEndTextArray, selectIndex) { _, index ->
+                            selectIndex = index
+                        }
+                        .setPositiveButton(R.string.action_ok) { _, _ ->
+                            newTime[1] = selectIndex + newTime[0]
+                            customCourseViewModel.time.value = Pair(newTime[0], newTime[1])
+                        }
+                        .setNegativeButton(R.string.action_cancel, null)
+                        .show()
+                }
+                .setNegativeButton(R.string.action_cancel, null)
+                .show()
         }
         textViewWeekIndex.setOnClickListener {
             val termTextArray = Array(7) { i -> CalendarUtil.getWeekIndexInString(i + 1) }
             var selectIndex = customCourseViewModel.weekIndex.value!! - 1
             AlertDialog.Builder(this)
-                    .setTitle(R.string.hint_dialog_custom_course_choose_week_index)
-                    .setSingleChoiceItems(termTextArray, selectIndex) { _, index ->
-                        selectIndex = index
-                    }
-                    .setPositiveButton(R.string.action_ok) { _, _ ->
-                        customCourseViewModel.weekIndex.value = selectIndex + 1
-                    }
-                    .setNegativeButton(R.string.action_cancel, null)
-                    .show()
+                .setTitle(R.string.hint_dialog_custom_course_choose_week_index)
+                .setSingleChoiceItems(termTextArray, selectIndex) { _, index ->
+                    selectIndex = index
+                }
+                .setPositiveButton(R.string.action_ok) { _, _ ->
+                    customCourseViewModel.weekIndex.value = selectIndex + 1
+                }
+                .setNegativeButton(R.string.action_cancel, null)
+                .show()
         }
         textViewStudent.setOnClickListener {
             if (customCourseViewModel.studentList.value == null || customCourseViewModel.studentList.value!!.isEmpty()) {
@@ -249,20 +267,21 @@ class CustomCourseActivity : XhuBaseActivity(R.layout.activity_custom_course), K
             }
             val map = customCourseViewModel.studentInfoList.value!!.data!!
             val studentList = map.keys.toList()
-            val studentTextArray = Array(studentList.size) { i -> "${studentList[i].studentName}(${studentList[i].username})" }
+            val studentTextArray =
+                Array(studentList.size) { i -> "${studentList[i].studentName}(${studentList[i].username})" }
             var nowIndex = studentList.indexOf(customCourseViewModel.mainStudent.value)
             if (nowIndex == -1) nowIndex = 0
             var selectIndex = nowIndex
             AlertDialog.Builder(this)
-                    .setTitle(R.string.hint_dialog_custom_course_choose_student)
-                    .setSingleChoiceItems(studentTextArray, nowIndex) { _, index ->
-                        selectIndex = index
-                    }
-                    .setPositiveButton(R.string.action_ok) { _, _ ->
-                        customCourseViewModel.mainStudent.value = studentList[selectIndex]
-                    }
-                    .setNegativeButton(R.string.action_cancel, null)
-                    .show()
+                .setTitle(R.string.hint_dialog_custom_course_choose_student)
+                .setSingleChoiceItems(studentTextArray, nowIndex) { _, index ->
+                    selectIndex = index
+                }
+                .setPositiveButton(R.string.action_ok) { _, _ ->
+                    customCourseViewModel.mainStudent.value = studentList[selectIndex]
+                }
+                .setNegativeButton(R.string.action_cancel, null)
+                .show()
         }
         textViewYear.setOnClickListener {
             if (customCourseViewModel.studentList.value == null || customCourseViewModel.studentList.value!!.isEmpty()) {
@@ -276,15 +295,15 @@ class CustomCourseActivity : XhuBaseActivity(R.layout.activity_custom_course), K
             if (nowIndex == -1) nowIndex = 0
             var selectIndex = nowIndex
             AlertDialog.Builder(this)
-                    .setTitle(R.string.hint_dialog_custom_course_choose_year)
-                    .setSingleChoiceItems(yearTextArray, nowIndex) { _, index ->
-                        selectIndex = index
-                    }
-                    .setPositiveButton(R.string.action_ok) { _, _ ->
-                        customCourseViewModel.year.value = yearTextArray[selectIndex]
-                    }
-                    .setNegativeButton(R.string.action_cancel, null)
-                    .show()
+                .setTitle(R.string.hint_dialog_custom_course_choose_year)
+                .setSingleChoiceItems(yearTextArray, nowIndex) { _, index ->
+                    selectIndex = index
+                }
+                .setPositiveButton(R.string.action_ok) { _, _ ->
+                    customCourseViewModel.year.value = yearTextArray[selectIndex]
+                }
+                .setNegativeButton(R.string.action_cancel, null)
+                .show()
         }
         textViewTerm.setOnClickListener {
             val termTextArray = Array(2) { i -> (i + 1).toString() }
@@ -292,25 +311,25 @@ class CustomCourseActivity : XhuBaseActivity(R.layout.activity_custom_course), K
             if (nowIndex == -1) nowIndex = 0
             var selectIndex = nowIndex
             AlertDialog.Builder(this)
-                    .setTitle(R.string.hint_dialog_custom_course_choose_term)
-                    .setSingleChoiceItems(termTextArray, nowIndex) { _, index ->
-                        selectIndex = index
-                    }
-                    .setPositiveButton(R.string.action_ok) { _, _ ->
-                        customCourseViewModel.term.value = termTextArray[selectIndex]
-                    }
-                    .setNegativeButton(R.string.action_cancel, null)
-                    .show()
+                .setTitle(R.string.hint_dialog_custom_course_choose_term)
+                .setSingleChoiceItems(termTextArray, nowIndex) { _, index ->
+                    selectIndex = index
+                }
+                .setPositiveButton(R.string.action_ok) { _, _ ->
+                    customCourseViewModel.term.value = termTextArray[selectIndex]
+                }
+                .setNegativeButton(R.string.action_cancel, null)
+                .show()
         }
         imageViewClose.setOnClickListener { hideAddLayout() }
         textViewColor.setOnClickListener {
             val color = imageViewColor.imageTintList!!.defaultColor
             val colorPickerDialog = ColorPickerDialog.newBuilder()
-                    .setDialogType(ColorPickerDialog.TYPE_PRESETS)
-                    .setColor(color)
-                    .setShowAlphaSlider(false)
-                    .setShowColorShades(false)
-                    .create()
+                .setDialogType(ColorPickerDialog.TYPE_PRESETS)
+                .setColor(color)
+                .setShowAlphaSlider(false)
+                .setShowColorShades(false)
+                .create()
             colorPickerDialog.setColorPickerDialogListener(object : ColorPickerDialogListener {
                 override fun onDialogDismissed(dialogId: Int) {
                 }
@@ -391,7 +410,8 @@ class CustomCourseActivity : XhuBaseActivity(R.layout.activity_custom_course), K
             editTextTeacher.setText("")
             customCourseWeekAdapter.selectedList.clear()
             editTextLocation.setText("")
-            imageViewColor.imageTintList = ColorStateList.valueOf(ContextCompat.getColor(this, R.color.colorAccent))
+            imageViewColor.imageTintList =
+                ColorStateList.valueOf(ContextCompat.getColor(this, R.color.colorAccent))
         }
         isUpdate = data != null
         buttonSave.setOnClickListener {
@@ -412,13 +432,13 @@ class CustomCourseActivity : XhuBaseActivity(R.layout.activity_custom_course), K
         course.name = editTextName.text.toString()
         if (course.name == "") {
             Snackbar.make(imageViewClose, R.string.hint_empty_couse_name, Snackbar.LENGTH_LONG)
-                    .show()
+                .show()
             return
         }
         course.teacher = editTextTeacher.text.toString()
         if (customCourseWeekAdapter.selectedList.isEmpty()) {
             Snackbar.make(imageViewClose, R.string.hint_empty_couse_week, Snackbar.LENGTH_LONG)
-                    .show()
+                .show()
             return
         }
         course.week = customCourseWeekAdapter.selectedList.joinToString(",")
@@ -511,5 +531,9 @@ class CustomCourseActivity : XhuBaseActivity(R.layout.activity_custom_course), K
     override fun onDestroy() {
         super.onDestroy()
         customCourseAdapter.release()
+    }
+
+    companion object {
+        private const val TAG = "CustomCourseActivity"
     }
 }

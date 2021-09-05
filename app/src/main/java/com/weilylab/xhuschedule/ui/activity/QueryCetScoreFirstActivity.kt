@@ -17,6 +17,7 @@ import android.graphics.Bitmap
 import android.graphics.drawable.Icon
 import android.os.Build
 import android.text.TextUtils
+import android.util.Log
 import android.view.View
 import android.widget.ScrollView
 import androidx.core.content.ContextCompat
@@ -28,7 +29,6 @@ import com.weilylab.xhuschedule.model.Student
 import com.weilylab.xhuschedule.viewmodel.QueryCetScoreViewModelHelper
 import kotlinx.android.synthetic.main.activity_query_cet_score_first.*
 import org.koin.android.ext.android.inject
-import vip.mystery0.logs.Logs
 import vip.mystery0.rx.DataObserver
 
 class QueryCetScoreFirstActivity : XhuBaseActivity(R.layout.activity_query_cet_score_first) {
@@ -59,7 +59,7 @@ class QueryCetScoreFirstActivity : XhuBaseActivity(R.layout.activity_query_cet_s
         }
 
         override fun error(e: Throwable?) {
-            Logs.w(e)
+            Log.e(TAG, "error: ", e)
             hideDialog()
             toastLong(e)
         }
@@ -169,5 +169,9 @@ class QueryCetScoreFirstActivity : XhuBaseActivity(R.layout.activity_query_cet_s
     private fun hideDialog() {
         if (dialog.isShowing)
             dialog.dismiss()
+    }
+
+    companion object {
+        private const val TAG = "QueryCetScoreFirstActiv"
     }
 }

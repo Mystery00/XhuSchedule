@@ -15,6 +15,7 @@ import android.content.pm.ShortcutInfo
 import android.content.pm.ShortcutManager
 import android.graphics.drawable.Icon
 import android.os.Build
+import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.GravityCompat
@@ -30,14 +31,17 @@ import com.weilylab.xhuschedule.viewmodel.QueryClassroomViewModel
 import kotlinx.android.synthetic.main.activity_query_class_room.*
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import vip.mystery0.logs.Logs
 import vip.mystery0.rx.DataObserver
 import vip.mystery0.tools.utils.screenWidth
 
 class QueryClassroomActivity : XhuBaseActivity(R.layout.activity_query_class_room) {
     private val queryClassroomViewModel: QueryClassroomViewModel by viewModel()
     private val shortcutManager: ShortcutManager by inject()
-    private val queryClassroomRecyclerViewAdapter: QueryClassroomRecyclerViewAdapter by lazy { QueryClassroomRecyclerViewAdapter(this) }
+    private val queryClassroomRecyclerViewAdapter: QueryClassroomRecyclerViewAdapter by lazy {
+        QueryClassroomRecyclerViewAdapter(
+            this
+        )
+    }
     private var hasData = false
     private val dialog: Dialog by lazy { buildDialog(R.string.hint_dialog_init) }
 
@@ -57,7 +61,7 @@ class QueryClassroomActivity : XhuBaseActivity(R.layout.activity_query_class_roo
         }
 
         override fun error(e: Throwable?) {
-            Logs.w(e)
+            Log.e(TAG, "error: ", e)
             dismissLoading()
             toastLong(e)
         }
@@ -90,10 +94,10 @@ class QueryClassroomActivity : XhuBaseActivity(R.layout.activity_query_class_roo
             val intent = Intent(this, QueryClassroomActivity::class.java)
             intent.action = "com.weilylab.xhuschedule.QUERY_CLASSROOM"
             val shortcutInfoBuilder = ShortcutInfo.Builder(this, "shortcut_title_query_classroom")
-                    .setShortLabel(getString(R.string.shortcut_title_query_classroom))
-                    .setLongLabel(getString(R.string.shortcut_title_query_classroom))
-                    .setIcon(Icon.createWithResource(this, R.mipmap.ic_short_query_classroom))
-                    .setIntent(intent)
+                .setShortLabel(getString(R.string.shortcut_title_query_classroom))
+                .setLongLabel(getString(R.string.shortcut_title_query_classroom))
+                .setIcon(Icon.createWithResource(this, R.mipmap.ic_short_query_classroom))
+                .setIntent(intent)
             shortcutManager.addDynamicShortcuts(listOf(shortcutInfoBuilder.build()))
         }
     }
@@ -153,15 +157,15 @@ class QueryClassroomActivity : XhuBaseActivity(R.layout.activity_query_class_roo
             if (nowIndex == -1) nowIndex = 0
             var selectIndex = nowIndex
             AlertDialog.Builder(this)
-                    .setTitle(R.string.hint_dialog_choose_location)
-                    .setSingleChoiceItems(array, nowIndex) { _, index ->
-                        selectIndex = index
-                    }
-                    .setPositiveButton(R.string.action_ok) { _, _ ->
-                        queryClassroomViewModel.location.value = array[selectIndex]
-                    }
-                    .setNegativeButton(R.string.action_cancel, null)
-                    .show()
+                .setTitle(R.string.hint_dialog_choose_location)
+                .setSingleChoiceItems(array, nowIndex) { _, index ->
+                    selectIndex = index
+                }
+                .setPositiveButton(R.string.action_ok) { _, _ ->
+                    queryClassroomViewModel.location.value = array[selectIndex]
+                }
+                .setNegativeButton(R.string.action_cancel, null)
+                .show()
         }
         textViewWeek.setOnClickListener {
             if (queryClassroomViewModel.student.value == null) {
@@ -176,15 +180,17 @@ class QueryClassroomActivity : XhuBaseActivity(R.layout.activity_query_class_roo
                 BooleanArray(20) { i -> text.contains((i + 1).toString()) }
             }
             AlertDialog.Builder(this)
-                    .setTitle(R.string.hint_dialog_choose_week)
-                    .setMultiChoiceItems(array, checked) { _, index, b ->
-                        checked[index] = b
-                    }
-                    .setPositiveButton(R.string.action_ok) { _, _ ->
-                        queryClassroomViewModel.week.value = checked.mapIndexed { index, b -> if (b) index + 1 else 0 }.filter { it != 0 }.joinToString(",")
-                    }
-                    .setNegativeButton(R.string.action_cancel, null)
-                    .show()
+                .setTitle(R.string.hint_dialog_choose_week)
+                .setMultiChoiceItems(array, checked) { _, index, b ->
+                    checked[index] = b
+                }
+                .setPositiveButton(R.string.action_ok) { _, _ ->
+                    queryClassroomViewModel.week.value =
+                        checked.mapIndexed { index, b -> if (b) index + 1 else 0 }
+                            .filter { it != 0 }.joinToString(",")
+                }
+                .setNegativeButton(R.string.action_cancel, null)
+                .show()
         }
         textViewDay.setOnClickListener {
             if (queryClassroomViewModel.student.value == null) {
@@ -199,15 +205,17 @@ class QueryClassroomActivity : XhuBaseActivity(R.layout.activity_query_class_roo
                 BooleanArray(20) { i -> text.contains((i + 1).toString()) }
             }
             AlertDialog.Builder(this)
-                    .setTitle(R.string.hint_dialog_choose_day)
-                    .setMultiChoiceItems(array, checked) { _, index, b ->
-                        checked[index] = b
-                    }
-                    .setPositiveButton(R.string.action_ok) { _, _ ->
-                        queryClassroomViewModel.day.value = checked.mapIndexed { index, b -> if (b) index + 1 else 0 }.filter { it != 0 }.joinToString(",")
-                    }
-                    .setNegativeButton(R.string.action_cancel, null)
-                    .show()
+                .setTitle(R.string.hint_dialog_choose_day)
+                .setMultiChoiceItems(array, checked) { _, index, b ->
+                    checked[index] = b
+                }
+                .setPositiveButton(R.string.action_ok) { _, _ ->
+                    queryClassroomViewModel.day.value =
+                        checked.mapIndexed { index, b -> if (b) index + 1 else 0 }
+                            .filter { it != 0 }.joinToString(",")
+                }
+                .setNegativeButton(R.string.action_cancel, null)
+                .show()
         }
         textViewTime.setOnClickListener {
             if (queryClassroomViewModel.student.value == null) {
@@ -222,15 +230,17 @@ class QueryClassroomActivity : XhuBaseActivity(R.layout.activity_query_class_roo
                 BooleanArray(20) { i -> text.contains((i + 1).toString()) }
             }
             AlertDialog.Builder(this)
-                    .setTitle(R.string.hint_dialog_choose_time)
-                    .setMultiChoiceItems(array, checked) { _, index, b ->
-                        checked[index] = b
-                    }
-                    .setPositiveButton(R.string.action_ok) { _, _ ->
-                        queryClassroomViewModel.time.value = checked.mapIndexed { index, b -> if (b) index + 1 else 0 }.filter { it != 0 }.joinToString(",")
-                    }
-                    .setNegativeButton(R.string.action_cancel, null)
-                    .show()
+                .setTitle(R.string.hint_dialog_choose_time)
+                .setMultiChoiceItems(array, checked) { _, index, b ->
+                    checked[index] = b
+                }
+                .setPositiveButton(R.string.action_ok) { _, _ ->
+                    queryClassroomViewModel.time.value =
+                        checked.mapIndexed { index, b -> if (b) index + 1 else 0 }
+                            .filter { it != 0 }.joinToString(",")
+                }
+                .setNegativeButton(R.string.action_cancel, null)
+                .show()
         }
         queryButton.setOnClickListener {
             val student = queryClassroomViewModel.student.value
@@ -294,5 +304,9 @@ class QueryClassroomActivity : XhuBaseActivity(R.layout.activity_query_class_roo
     private fun showContent() {
         dismissLoading()
         drawerLayout.openDrawer(GravityCompat.END)
+    }
+
+    companion object {
+        private const val TAG = "QueryClassroomActivity"
     }
 }

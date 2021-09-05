@@ -11,6 +11,7 @@ package com.weilylab.xhuschedule.service
 
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import androidx.core.app.JobIntentService
 import com.weilylab.xhuschedule.api.QiniuAPI
 import com.weilylab.xhuschedule.constant.IntentConstant
@@ -18,7 +19,6 @@ import com.weilylab.xhuschedule.repository.DebugDataKeeper
 import com.weilylab.xhuschedule.utils.getSplashImageFile
 import kotlinx.coroutines.*
 import org.koin.android.ext.android.inject
-import vip.mystery0.logs.Logs
 import vip.mystery0.tools.utils.copyToFile
 import vip.mystery0.tools.utils.md5
 
@@ -44,7 +44,7 @@ class DownloadSplashIntentService : JobIntentService() {
             file.parentFile!!.mkdirs()
         if (!file.exists())
             GlobalScope.launch(CoroutineExceptionHandler { _, throwable ->
-                Logs.wtf(TAG, "download: ", throwable)
+                Log.w(TAG, "onHandleWork: ", throwable)
                 debugDataKeeper.data["downloadSplashError"] = throwable.message
                         ?: "empty error message"
             }) {

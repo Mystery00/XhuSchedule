@@ -15,6 +15,7 @@ import android.content.pm.ShortcutInfo
 import android.content.pm.ShortcutManager
 import android.graphics.drawable.Icon
 import android.os.Build
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -37,7 +38,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import vip.mystery0.logs.Logs
 import vip.mystery0.rx.DataObserver
 
 class QueryTestActivity : XhuBaseActivity(R.layout.activity_query_test) {
@@ -46,7 +46,11 @@ class QueryTestActivity : XhuBaseActivity(R.layout.activity_query_test) {
     private lateinit var menu: Menu
     private lateinit var viewStubBinding: LayoutNullDataViewBinding
     private val dialog: Dialog by lazy { buildDialog(R.string.hint_dialog_get_tests) }
-    private val queryTestRecyclerViewAdapter: QueryTestRecyclerViewAdapter by lazy { QueryTestRecyclerViewAdapter(this) }
+    private val queryTestRecyclerViewAdapter: QueryTestRecyclerViewAdapter by lazy {
+        QueryTestRecyclerViewAdapter(
+            this
+        )
+    }
 
     private val queryTestListObserver = object : DataObserver<List<Test>> {
         override fun loading() {
@@ -61,7 +65,7 @@ class QueryTestActivity : XhuBaseActivity(R.layout.activity_query_test) {
         }
 
         override fun error(e: Throwable?) {
-            Logs.w(e)
+            Log.e(TAG, "error: ", e)
             hideDialog()
             hideNoDataLayout()
             toastLong(e)
@@ -84,7 +88,12 @@ class QueryTestActivity : XhuBaseActivity(R.layout.activity_query_test) {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         recyclerView.layoutManager = LinearLayoutManager(this)
         val dividerItemDecoration = DividerItemDecoration(this, DividerItemDecoration.VERTICAL)
-        dividerItemDecoration.setDrawable(ContextCompat.getDrawable(this, R.drawable.divider_query_test)!!)
+        dividerItemDecoration.setDrawable(
+            ContextCompat.getDrawable(
+                this,
+                R.drawable.divider_query_test
+            )!!
+        )
         recyclerView.addItemDecoration(dividerItemDecoration)
         recyclerView.adapter = queryTestRecyclerViewAdapter
     }
@@ -98,10 +107,10 @@ class QueryTestActivity : XhuBaseActivity(R.layout.activity_query_test) {
             val intent = Intent(this, QueryTestActivity::class.java)
             intent.action = "com.weilylab.xhuschedule.QUERY_TEST"
             val shortcutInfoBuilder = ShortcutInfo.Builder(this, "shortcut_title_query_test")
-                    .setShortLabel(getString(R.string.shortcut_title_query_test))
-                    .setLongLabel(getString(R.string.shortcut_title_query_test))
-                    .setIcon(Icon.createWithResource(this, R.mipmap.ic_short_query_test))
-                    .setIntent(intent)
+                .setShortLabel(getString(R.string.shortcut_title_query_test))
+                .setLongLabel(getString(R.string.shortcut_title_query_test))
+                .setIcon(Icon.createWithResource(this, R.mipmap.ic_short_query_test))
+                .setIntent(intent)
             shortcutManager.addDynamicShortcuts(listOf(shortcutInfoBuilder.build()))
         }
     }
@@ -111,7 +120,9 @@ class QueryTestActivity : XhuBaseActivity(R.layout.activity_query_test) {
         toolbar.setNavigationOnClickListener {
             finish()
         }
-        nullDataViewStub.setOnInflateListener { _, inflated -> viewStubBinding = DataBindingUtil.bind(inflated)!! }
+        nullDataViewStub.setOnInflateListener { _, inflated ->
+            viewStubBinding = DataBindingUtil.bind(inflated)!!
+        }
     }
 
     private fun initViewModel() {
@@ -211,5 +222,9 @@ class QueryTestActivity : XhuBaseActivity(R.layout.activity_query_test) {
                 return super.onOptionsItemSelected(item)
             }
         }
+    }
+
+    companion object {
+        private const val TAG = "QueryTestActivity"
     }
 }

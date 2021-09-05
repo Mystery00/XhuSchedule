@@ -17,6 +17,7 @@ import android.content.Intent
 import android.graphics.Color
 import android.os.Build
 import android.provider.Settings
+import android.util.Log
 import android.view.View
 import android.view.WindowInsetsController
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -24,11 +25,11 @@ import com.weilylab.xhuschedule.BuildConfig
 import com.weilylab.xhuschedule.R
 import com.weilylab.xhuschedule.config.APP
 import com.weilylab.xhuschedule.service.NotificationService
-import vip.mystery0.logs.Logs
 import vip.mystery0.tools.utils.toColorString
 import java.util.*
 
 object ConfigUtil {
+    private const val TAG = "ConfigUtil"
     private var lastClick = 0L
 
     fun isTwiceClick(): Boolean {
@@ -69,7 +70,7 @@ object ConfigUtil {
         }
         alarmManager.cancel(pendingIntent)//关闭定时器
         alarmManager.set(AlarmManager.RTC_WAKEUP, CalendarUtil.getNotificationTime(), pendingIntent)
-        Logs.i("setTrigger: 设置定时任务")
+        Log.i(TAG, "setTrigger: 设置定时任务")
     }
 
     fun toHexEncoding(color: Int): String = color.toColorString()

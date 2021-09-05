@@ -11,6 +11,7 @@ package com.weilylab.xhuschedule.ui.fragment
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -33,12 +34,12 @@ import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
-import vip.mystery0.logs.Logs
 import vip.mystery0.rx.DataObserver
 import java.io.File
 
 class ProfileFragment : BaseBottomNavigationFragment<FragmentProfileBinding>(R.layout.fragment_profile) {
     companion object {
+        private const val TAG = "ProfileFragment"
         fun newInstance() = ProfileFragment()
     }
 
@@ -78,7 +79,7 @@ class ProfileFragment : BaseBottomNavigationFragment<FragmentProfileBinding>(R.l
 
             override fun error(e: Throwable?) {
                 super.error(e)
-                Logs.w(e)
+                Log.e(TAG, "error: ", e)
                 binding.redDotView.visibility = View.GONE
             }
 
@@ -95,7 +96,7 @@ class ProfileFragment : BaseBottomNavigationFragment<FragmentProfileBinding>(R.l
 
             override fun error(e: Throwable?) {
                 super.error(e)
-                Logs.w(e)
+                Log.e(TAG, "error: ", e)
                 binding.feedBackRedDotView.visibility = View.GONE
             }
 

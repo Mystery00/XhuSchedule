@@ -9,13 +9,15 @@
 
 package com.weilylab.xhuschedule.utils
 
+import android.util.Log
 import com.weilylab.xhuschedule.model.CustomThing
 import com.weilylab.xhuschedule.model.Test
-import vip.mystery0.logs.Logs
 import java.text.SimpleDateFormat
 import java.util.*
 
 object CalendarUtil {
+    private const val TAG = "CalendarUtil"
+
     fun getWeekFromCalendar(startDateTime: Calendar): Int {
         val now = Calendar.getInstance()
         now.set(Calendar.HOUR_OF_DAY, 0)
@@ -111,7 +113,7 @@ object CalendarUtil {
                 else -> "考试中"
             }
         } catch (e: Exception) {
-            Logs.wtf("getTestDateText: ", e)
+            Log.e(TAG, "getTestDateText: ", e)
             return test.date
         }
     }

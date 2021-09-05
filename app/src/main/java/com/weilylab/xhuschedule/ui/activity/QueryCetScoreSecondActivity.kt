@@ -13,6 +13,7 @@ import android.app.Dialog
 import android.content.Intent
 import android.graphics.Bitmap
 import android.text.TextUtils
+import android.util.Log
 import android.widget.ScrollView
 import androidx.core.content.ContextCompat
 import com.android.setupwizardlib.view.NavigationBar
@@ -21,7 +22,6 @@ import com.weilylab.xhuschedule.base.XhuBaseActivity
 import com.weilylab.xhuschedule.model.CetScore
 import com.weilylab.xhuschedule.viewmodel.QueryCetScoreViewModelHelper
 import kotlinx.android.synthetic.main.activity_query_cet_score_second.*
-import vip.mystery0.logs.Logs
 import vip.mystery0.rx.DataObserver
 
 class QueryCetScoreSecondActivity : XhuBaseActivity(R.layout.activity_query_cet_score_second) {
@@ -44,7 +44,7 @@ class QueryCetScoreSecondActivity : XhuBaseActivity(R.layout.activity_query_cet_
         }
 
         override fun error(e: Throwable?) {
-            Logs.w(e)
+            Log.e(TAG, "error: ", e)
             hideVCodeDialog()
             toastLong(e)
         }
@@ -53,7 +53,12 @@ class QueryCetScoreSecondActivity : XhuBaseActivity(R.layout.activity_query_cet_
     private val cetScoreObserver = object : DataObserver<CetScore> {
         override fun contentNoEmpty(data: CetScore) {
             hideDialog()
-            startActivity(Intent(this@QueryCetScoreSecondActivity, QueryCetScoreShowActivity::class.java))
+            startActivity(
+                Intent(
+                    this@QueryCetScoreSecondActivity,
+                    QueryCetScoreShowActivity::class.java
+                )
+            )
             finish()
         }
 
@@ -67,7 +72,7 @@ class QueryCetScoreSecondActivity : XhuBaseActivity(R.layout.activity_query_cet_
         }
 
         override fun error(e: Throwable?) {
-            Logs.w(e)
+            Log.e(TAG, "error: ", e)
             hideDialog()
             toastLong(e)
         }
@@ -102,7 +107,8 @@ class QueryCetScoreSecondActivity : XhuBaseActivity(R.layout.activity_query_cet_
         imageView.setOnClickListener {
             QueryCetScoreViewModelHelper.getCetVCode(this)
         }
-        setupLayout.navigationBar.setNavigationBarListener(object : NavigationBar.NavigationBarListener {
+        setupLayout.navigationBar.setNavigationBarListener(object :
+            NavigationBar.NavigationBarListener {
             override fun onNavigateBack() {
                 finish()
             }
@@ -156,5 +162,9 @@ class QueryCetScoreSecondActivity : XhuBaseActivity(R.layout.activity_query_cet_
     private fun hideDialog() {
         if (dialog.isShowing)
             dialog.dismiss()
+    }
+
+    companion object {
+        private const val TAG = "QueryCetScoreSecondActi"
     }
 }
